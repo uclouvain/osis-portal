@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"POT-Creation-Date: 2018-11-12 14:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,190 +17,216 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "acronym"
-msgstr "Acronym"
+#: templates/performance_result.html:53
+msgid "academic_year"
+msgstr ""
 
-msgid "course"
-msgstr "Course"
-
-msgid "credits"
-msgstr "Credits"
-
-msgid "dont_have_the_score_yet"
-msgstr "The score are yet to be published."
-
-msgid "ects"
-msgstr "ECTS"
-
-msgid "explanation_B"
-msgstr "B - Credit (Bologne)"
-
-msgid "explanation_EPM"
-msgstr "EPM - Course reported (Epreuve modifiée)"
-
-msgid "explanation_I"
-msgstr "I - first inscription"
-
-msgid "explanation_P"
-msgstr "P - partial examination"
-
-msgid "explanation_RJ"
-msgstr "R,J - score reported"
-
-msgid "explanation_T"
-msgstr "T - score of a test"
-
-msgid "explanation_TV"
-msgstr "TV - Evaluation satisfactory (score doesn't count)"
-
-msgid "explanation_W"
-msgstr "W - Evaluation not satisfactory (score doesn't count)"
-
-msgid "explanation_Y"
-msgstr "Y - Second inscription"
-
-msgid "first_name"
-msgstr "First Name"
-
-msgid "generated"
-msgstr "Generated on"
-
-msgid "inscr"
-msgstr "Inscr."
-
-msgid "jan"
-msgstr "Jan."
-
-msgid "june"
-msgstr "June"
-
-msgid "last_name"
-msgstr "Last Name"
-
-msgid "legend"
-msgstr "Legend"
-
-msgid "matricule_number"
-msgstr "Registration Number"
-
-msgid "mean"
-msgstr "Mean"
-
-msgid "mention"
-msgstr "Mention"
-
-msgid "no_results"
-msgstr "No results to show."
-
-msgid "no_student_with_this_registration_id"
-msgstr "No student with this registration id"
-
-msgid "performance"
-msgstr "Exam marks and registration state"
-
-msgid "my_performance"
-msgstr "My exam marks and regisration state"
-
-msgid "performance_administration"
-msgstr "Exam marks and registration state administration"
-
-msgid "performance_results"
-msgstr "Results"
-
-
-
-msgid "program"
-msgstr "Program"
-
-msgid "registration_id"
-msgstr "Registration Id"
-
-msgid "sept"
-msgstr "Sept."
-
-msgid "student_performance"
-msgstr "Exam marks and registration state of a student"
-
-msgid "text_mean_exprimed_for_20"
-msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
-
-msgid "title"
-msgstr "Title"
-
-msgid "total_ects_inscription"
-msgstr "Total ECTS / Enrollment"
-
-msgid "year"
-msgstr "Year"
-
-msgid "success_mean"
-msgstr "Success mean"
-
-msgid "general_mean"
-msgstr "General mean"
-
-msgid "credited"
-msgstr "Credited"
-
-msgid "next_update"
-msgstr "Date of the next document regeneration"
-
-msgid "performance_result_fetch_timed_out"
-msgstr "The server is actually overloaded. Please excuse us and try again later."
-
-msgid "performance_results_general_legal_announcement"
-msgstr "This component reflects the status of the information stored in the official databases of the university at the "
-"time of publication and according to the rules of publication decided by the secretariat of your faculty."
-
-msgid "performance_result_note_legal_announcement"
-msgstr "This results are intended as communication between faculty and students. Only the appendix to the diploma, "
-"which lists all the courses taken during a program of study and points obtained, can be considered as an official "
-"transcript."
-
-msgid "performance_result_note_not_autorized"
-msgstr "The publication of the notes from the {} session was not authorized by our faculty."
-
-msgid "CESSATION"
-msgstr "Interruption"
-
-msgid "CYCLE"
-msgstr "Cycle"
-
-msgid "CONDITION"
-msgstr "Condition"
-
-msgid "INSCRIT"
-msgstr "Registered"
-
-msgid "JANUARY"
-msgstr "january"
-
-msgid "JUNE"
-msgstr "june"
-
-msgid "SEPTEMBER"
-msgstr "september"
-
-msgid "cycle_advancement"
-msgstr "Cycle credits advancement"
-
-msgid "cycle_advancement_explanations"
-msgstr "Acquired cycle credits are included in the cycle mean. Only acquired progression credits are accounted for requested credits."
-
+#: templates/performance_result.html:167
 msgid "acquired_charge_credits"
 msgstr "Acquired charge credits"
 
+#: templates/performance_result.html:168
 msgid "acquired_progression_credits"
 msgstr "Acquired progression credits"
 
-msgid "cycle_total_credits"
-msgstr "Cycle"
+#: templates/performance_home.html:69
+msgid "acronym"
+msgstr "Acronym"
 
-msgid "courses_registration_validated"
-msgstr "Your courses registration has been validated by the jury."
+#: templates/performance_result.html:122
+msgid "course"
+msgstr "Course"
 
+#: templates/performance_result.html:86
 msgid "courses_registration_not_validated"
 msgstr "Your courses registration is being processed"
 
+#: templates/performance_result.html:82
+msgid "courses_registration_validated"
+msgstr "Your courses registration has been validated by the jury."
+
+#: templates/performance_result.html:129
+msgid "credited"
+msgstr "Credited"
+
+#: templates/performance_result.html:159
+msgid "cycle_advancement"
+msgstr "Cycle credits advancement"
+
+#: templates/performance_result.html:162
+msgid "cycle_advancement_explanations"
+msgstr ""
+"Acquired cycle credits are included in the cycle mean. Only acquired "
+"progression credits are accounted for requested credits."
+
+#: templates/performance_result.html:171
+msgid "cycle_total_credits"
+msgstr "Cycle"
+
+#: templates/performance_home.html:62
+msgid "dont_have_the_score_yet"
+msgstr "The score are yet to be published."
+
+#: templates/performance_result.html:96 templates/performance_result.html:124
+msgid "ects"
+msgstr "ECTS"
+
+#: tests/views/test_main.py:116 tests/views/test_main.py:188
+#, fuzzy
+#| msgid "registration_id"
+msgid "error_multiple_registration_id"
+msgstr "Registration Id"
+
+#: templates/admin/performance_administration.html:32
+#: templates/admin/performance_home_admin.html:31
+#: templates/admin/performance_result_admin.html:30
+#, fuzzy
+#| msgid "performance_administration"
+msgid "faculty_administration"
+msgstr "Exam marks and registration state administration"
+
+#: templates/performance_home.html:48 templates/performance_result.html:50
+msgid "first_name"
+msgstr "First Name"
+
+#: templates/performance_result.html:111
+msgid "general_mean"
+msgstr "General mean"
+
+#: templates/performance_result.html:74
+msgid "generated"
+msgstr "Generated on"
+
+#: templates/performance_result.html:125
+msgid "inscr"
+msgstr "Inscr."
+
+#: templates/performance_result.html:97 templates/performance_result.html:126
+msgid "jan"
+msgstr "Jan."
+
+#: templates/performance_result.html:98 templates/performance_result.html:127
+msgid "june"
+msgstr "June"
+
+#: templates/performance_home.html:48 templates/performance_result.html:50
+msgid "last_name"
+msgstr "Last Name"
+
+#: templates/performance_result.html:138
 msgid "learning_unitys_outside_catalog"
-msgstr "This registration is \"out of catalog\" or \"preemptive\" and the associated credits are not accounted in the requested credits."
+msgstr ""
+"This registration is \"out of catalog\" or \"preemptive\" and the associated "
+"credits are not accounted in the requested credits."
+
+#: templates/performance_result.html:151
+msgid "legend"
+msgstr "Legend"
+
+#: templates/performance_home.html:53
+msgid "matricule_number"
+msgstr "Registration Number"
+
+#: templates/performance_result.html:105
+msgid "mean"
+msgstr "Mean"
+
+#: templates/performance_result.html:114
+msgid "mention"
+msgstr "Mention"
+
+#: templates/performance_home.html:33
+#: templates/performance_home_student.html:30
+#: templates/performance_result.html:33
+#: templates/performance_result_student.html:30
+msgid "my_performance"
+msgstr "My exam marks and regisration state"
+
+#: templates/performance_result.html:71
+msgid "next_update"
+msgstr "Date of the next document regeneration"
+
+#: templates/performance_result.html:45
+msgid "no_results"
+msgstr "No results to show."
+
+#: tests/views/test_main.py:278
+msgid "no_student_with_this_registration_id"
+msgstr "No student with this registration id"
+
+#: templates/admin/performance_home_admin.html:33
+msgid "performance"
+msgstr "Exam marks and registration state"
+
+#: templates/admin/performance_administration.html:33
+#: templates/admin/performance_home_admin.html:32
+#: templates/admin/performance_result_admin.html:31
+msgid "performance_administration"
+msgstr "Exam marks and registration state administration"
+
+#: templates/performance_result.html:62
+msgid "performance_result_fetch_timed_out"
+msgstr ""
+"The server is actually overloaded. Please excuse us and try again later."
+
+#: templates/performance_result.html:39
+msgid "performance_result_note_legal_announcement"
+msgstr ""
+"This results are intended as communication between faculty and students. "
+"Only the appendix to the diploma, which lists all the courses taken during a "
+"program of study and points obtained, can be considered as an official "
+"transcript."
+
+#: tests/views/test_main.py:233 tests/views/test_main.py:422 views/main.py:67
+msgid "performance_result_note_not_autorized"
+msgstr ""
+"The publication of the notes from the {} session was not authorized by our "
+"faculty."
+
+#: templates/admin/performance_result_admin.html:32
+#: templates/performance_result_student.html:31
+msgid "performance_results"
+msgstr "Results"
+
+#: templates/performance_home.html:40
+msgid "performance_results_general_legal_announcement"
+msgstr ""
+"This component reflects the status of the information stored in the official "
+"databases of the university at the time of publication and according to the "
+"rules of publication decided by the secretariat of your faculty."
+
+#: templates/performance_home.html:70 templates/performance_result.html:56
+msgid "program"
+msgstr "Program"
+
+#: templates/admin/performance_administration.html:60
+msgid "registration_id"
+msgstr "Registration Id"
+
+#: templates/performance_result.html:99 templates/performance_result.html:128
+msgid "sept"
+msgstr "Sept."
+
+#: templates/admin/performance_administration.html:41
+msgid "student_performance"
+msgstr "Exam marks and registration state of a student"
+
+#: templates/performance_result.html:108
+msgid "success_mean"
+msgstr "Success mean"
+
+#: templates/performance_result.html:134
+msgid "text_mean_exprimed_for_20"
+msgstr "Attention : From June 2009, the score is expressed to a maximum of 20."
+
+#: templates/performance_result.html:123
+msgid "title"
+msgstr "Title"
+
+#: templates/performance_result.html:102
+msgid "total_ects_inscription"
+msgstr "Total ECTS / Enrollment"
+
+#: templates/performance_home.html:68
+msgid "year"
+msgstr "Year"
