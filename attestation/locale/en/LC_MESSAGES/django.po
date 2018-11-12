@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"POT-Creation-Date: 2018-11-12 14:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,47 +17,76 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "my_attestations"
-msgstr "My attestations"
-
-msgid "attestation_type"
-msgstr "Attestation type"
-
-msgid "printed"
-msgstr "Printed"
-
-msgid "available"
-msgstr "Available"
-
-msgid "download"
-msgstr "Download"
-
-msgid "ABC"
-msgstr "Regular registration (family allowances, health mutual, ...)"
-
-msgid "DE"
-msgstr "Provisional student card and public transport notice"
-
-msgid "AVIS"
-msgstr "Notice of registration and invoice"
-
-msgid "ECHEANCE"
-msgstr "Notice of maturity"
-
-msgid "desc_lnk_my_attestations"
-msgstr "Download your attestation as pdf"
-
-msgid "attestation_administration"
-msgstr "Attestation administration"
-
-msgid "student_attestations"
-msgstr "Student attestations"
-
+#: templates/attestation_home.html:34 templates/attestation_home.html:40
+#: templates/attestation_home_admin.html:32
+#: templates/attestation_home_student.html:30
 msgid "attestation"
 msgstr "Attestation"
 
+#: templates/admin/attestation_administration.html:31
+#: templates/attestation_home.html:32 templates/attestation_home_admin.html:31
+msgid "attestation_administration"
+msgstr "Attestation administration"
+
+#: templates/attestation_content.html:52 templates/attestation_home.html:74
+msgid "attestation_type"
+msgstr "Attestation type"
+
+#: templates/attestation_content.html:31 templates/attestation_home.html:50
+msgid "attestations_for_academic_year"
+msgstr "Attestations for academic year"
+
+#: templates/attestation_content.html:54 templates/attestation_home.html:76
+msgid "available"
+msgstr "Available"
+
+#: tests/views/test_main.py:197 tests/views/test_main.py:362 views/main.py:80
+#: views/main.py:112
+#, fuzzy
+#| msgid "student_attestations"
+msgid "error_fetching_attestation"
+msgstr "Student attestations"
+
+#: tests/views/test_main.py:90 tests/views/test_main.py:180
+msgid "error_multiple_registration_id"
+msgstr ""
+
+#: templates/admin/attestation_administration.html:30
+#: templates/attestation_home.html:31 templates/attestation_home_admin.html:30
+#, fuzzy
+#| msgid "attestation_administration"
+msgid "faculty_administration"
+msgstr "Attestation administration"
+
+#: templates/attestation_home.html:57
+msgid "first_name"
+msgstr ""
+
+#: templates/attestation_home.html:57
+msgid "last_name"
+msgstr ""
+
+#: templates/attestation_content.html:46 templates/attestation_home.html:68
 msgid "no_attestation_available"
 msgstr "No attestation available"
 
-msgid "attestations_for_academic_year"
-msgstr "Attestations for academic year"
+#: tests/views/test_main.py:282
+#, fuzzy
+#| msgid "student_attestations"
+msgid "no_student_with_this_registration_id"
+msgstr "Student attestations"
+
+#: templates/attestation_content.html:53 templates/attestation_home.html:75
+msgid "printed"
+msgstr "Printed"
+
+#: templates/admin/attestation_administration.html:58
+#: templates/attestation_content.html:41 templates/attestation_home.html:61
+#, fuzzy
+#| msgid "attestation"
+msgid "registration_id"
+msgstr "Attestation"
+
+#: templates/admin/attestation_administration.html:39
+msgid "student_attestations"
+msgstr "Student attestations"
