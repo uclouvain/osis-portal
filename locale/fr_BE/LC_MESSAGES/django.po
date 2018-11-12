@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"POT-Creation-Date: 2018-11-12 14:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,153 +16,186 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: templates/hospitals.html:83 templates/student_resume.html:113
 msgid "address"
 msgstr "Adresse"
 
+#: templates/cohort_selection.html:47
 msgid "affectation_available_since"
 msgstr "Les affections sont disponibles depuis"
 
-msgid "city"
-msgstr "Ville"
-
-msgid "civility"
-msgstr "Civilité"
-
+#: templates/student_resume.html:55
 msgid "choices_received_by_administration"
 msgstr "Choix reçus de l'administration"
 
+#: templates/internship_home.html:49 templates/internship_home.html:54
 msgid "choose_internships"
 msgstr "Encodez vos choix de stages"
 
+#: templates/internship_selection.html:56
 msgid "choose_speciality"
 msgstr "Choisissez une spécialité"
 
+#: templates/hospitals.html:57 templates/hospitals.html:85
+msgid "city"
+msgstr "Ville"
+
+#: templates/student_resume.html:122
 msgid "contest"
 msgstr "Concours"
 
-msgid "doctor"
-msgstr "Docteur"
+#: templates/hospitals.html:86
+msgid "country"
+msgstr ""
 
-msgid "edit"
-msgstr "Modifier"
+#: templates/student_resume.html:95
+msgid "email"
+msgstr ""
 
-msgid "edit_information"
-msgstr "Modifier information"
-
+#: templates/cohort_selection.html:44
 msgid "enrollments_from"
 msgstr "Inscriptions du"
 
+#: views/main.py:63 views/main.py:66
+msgid "error_does_not_belong_to_any_cohort"
+msgstr ""
+"Il semblerait que vous ne soyez pas inscrit aux stages, nous vous "
+"recommandons de contacter votre secrétariat."
+
+#: forms/form_offer_preference.py:33
 msgid "first_choice"
 msgstr "Premier choix"
 
+#: templates/student_resume.html:77
+#, fuzzy
+#| msgid "first_choice"
+msgid "first_name"
+msgstr "Premier choix"
+
+#: forms/form_offer_preference.py:36
 msgid "fourth_choice"
 msgstr "Quatrième choix"
 
+#: templates/student_resume.html:90
+msgid "gender"
+msgstr ""
+
+#: models/internship_student_information.py:43
 msgid "generalist"
 msgstr "Généraliste"
 
-msgid "GENERALIST"
-msgstr "Généraliste"
-
+#: templates/internship_home.html:71
 msgid "hospital_list"
 msgstr "Liste des hôpitaux"
 
+#: templates/hospitals.html:32 templates/hospitals.html:38
 msgid "hospitals"
 msgstr "Hôpitaux"
 
-msgid "internship"
-msgstr "stage"
-
-msgid "internships"
-msgstr "Stages"
-
+#: templates/student_resume.html:60
 msgid "internship_affectation"
 msgstr "Affectation de stages"
 
-msgid "internship_selection_warning_message"
-msgstr "<p>Si vous séléctionnez <strong>'Stage personnel'</strong> alors vous vous engagez à trouver un stage par vous"
-       " mêmes. Le nombre de <strong>'Stage personnel'</strong> est <strong>limité à 2 maximum</strong>.</p>"
-       "<p>Séléctionnez <strong>'Stage à l'étranger'</strong> seulement si vous avez <strong>été séléctionné "
-       "</strong> pour un stage à l'étranger et avez confirmé votre départ.</p>"
-       "<p>Si vous envisagez de passer le <strong>'concours de Médecine générale'</strong> en première session,<strong> "
-       " vous ne pouvez choisir une spécialité que parmis les suivantes: <br> "
-       "<strong>chirurgie ou assimilé, dermatologie, gériatrie, gynécologie-obstétrique, médecine interne, médecine "
-       "physique, neurologie, ophtamologie, O.R.L, orthopédie, pédiatrie, psychiatrie, soins palliatifs, urgences, "
-       "urologie.</strong></p>"
-
-msgid "masters"
-msgstr "Maîtres de stage"
-
-msgid "master_list"
-msgstr "Liste des maîtres de stage"
-
-msgid "mobile_phone"
-msgstr "Numéro de téléphone"
-
-msgid "number_first_choice"
-msgstr "Nombre de 1er choix"
-
-msgid "organization"
-msgstr "Hôpital"
-
-msgid "preference"
-msgstr "Préférence"
-
-msgid "professor"
-msgstr "Professeur"
-
-msgid "reference"
-msgstr "Référence"
-
-msgid "second_choice"
-msgstr "Second choix"
-
-msgid "selection"
-msgstr "sélection"
-
-msgid "select_cohort"
-msgstr "Sélectionnez une cohorte"
-
-msgid "select_contest"
-msgstr "<strong>AVANT</strong> de faire vos choix, suivez le lien pour séléctionner la filière (généraliste ou "
-       "spécialiste) que vous comptez suivre à ce stade. Si cette donnée n'est pas correcte, le système risque de "
-       "vous imposer des choix non compatibles."
-
-msgid "selection_is_closed"
-msgstr "Vous ne pouvez plus soumettre vos choix."
-
-msgid "specialist"
-msgstr "Spécialiste"
-
-msgid "SPECIALIST"
-msgstr "Spécialiste"
-
-msgid "speciality"
-msgstr "Spécialité"
-
-msgid "student_information"
-msgstr "Information de l'étudiant"
-
-msgid "student_max"
-msgstr "Nombre maximum d'étudiants"
-
-msgid "student_resume"
-msgstr "Résumé de vos choix et affectations"
-
-msgid "submit_choices"
-msgstr "Soumettre vos choix"
-
-msgid "third_choice"
-msgstr "Troisième choix"
-
-msgid "to"
-msgstr "au"
-
-msgid "website"
-msgstr "Site web"
-
+#: views/selection.py:141
 msgid "internship_choice_successfully_saved"
 msgstr "Vos choix ont bien été sauvés !"
 
-msgid "error_does_not_belong_to_any_cohort"
-msgstr "Il semblerait que vous ne soyez pas inscrit aux stages, nous vous recommandons de contacter votre secrétariat."
+#: templates/cohort_selection.html:30 templates/hospitals.html:31
+#: templates/internship_home.html:31 templates/internship_home.html:37
+#: templates/internship_selection.html:32
+#: templates/internship_selection.html:38
+#: templates/internship_selection_closed.html:31
+#: templates/internship_selection_closed.html:37
+#: templates/student_resume.html:31
+msgid "internships"
+msgstr "Stages"
+
+#: templates/student_resume.html:108
+msgid "language"
+msgstr ""
+
+#: templates/student_resume.html:72
+msgid "last_name"
+msgstr ""
+
+#: templates/student_resume.html:103
+msgid "mobile_phone"
+msgstr "Numéro de téléphone"
+
+#: templates/hospitals.html:82
+msgid "name"
+msgstr ""
+
+#: templates/internship_selection.html:93
+msgid "number_first_choice"
+msgstr "Nombre de 1er choix"
+
+#: templates/hospitals.html:51 templates/internship_selection.html:91
+msgid "organization"
+msgstr "Hôpital"
+
+#: templates/hospitals.html:84
+msgid "postal_code"
+msgstr ""
+
+#: templates/internship_selection.html:94
+msgid "preference"
+msgstr "Préférence"
+
+#: templates/hospitals.html:81
+msgid "reference"
+msgstr "Référence"
+
+#: templates/student_resume.html:82
+msgid "registration_id"
+msgstr ""
+
+#: forms/form_offer_preference.py:34
+msgid "second_choice"
+msgstr "Second choix"
+
+#: templates/cohort_selection.html:36
+msgid "select_cohort"
+msgstr "Sélectionnez une cohorte"
+
+#: templates/internship_selection.html:33
+#: templates/internship_selection_closed.html:32
+msgid "selection"
+msgstr "sélection"
+
+#: templates/internship_selection_closed.html:42
+msgid "selection_is_closed"
+msgstr "Vous ne pouvez plus soumettre vos choix."
+
+#: models/internship_student_information.py:42
+msgid "specialist"
+msgstr "Spécialiste"
+
+#: templates/student_resume.html:49
+msgid "student_information"
+msgstr "Information de l'étudiant"
+
+#: templates/internship_selection.html:92
+msgid "student_max"
+msgstr "Nombre maximum d'étudiants"
+
+#: templates/internship_home.html:63 templates/student_resume.html:32
+#: templates/student_resume.html:38
+msgid "student_resume"
+msgstr "Résumé de vos choix et affectations"
+
+#: templates/internship_selection.html:122
+msgid "submit_choices"
+msgstr "Soumettre vos choix"
+
+#: forms/form_offer_preference.py:35
+msgid "third_choice"
+msgstr "Troisième choix"
+
+#: templates/cohort_selection.html:44
+msgid "to"
+msgstr "au"
+
+#: templates/hospitals.html:87
+msgid "website"
+msgstr "Site web"
