@@ -31,25 +31,18 @@
 
 {% block modal_body %}
     <div style="text-align: center;">
-        {% if program %}
-            <input type="hidden" id="url" data-url="{% url 'exam_enrollment_form' program.id %}" />
-        {% else %}
-            <input type="hidden" id="url" data-url="{% url 'exam_enrollment_form_direct' %}" />
-        {% endif %}
-
         <a type="button" class="btn btn-primary" href="{% url 'performance_home' %}">
             {% trans "Consult all the status of my exam enrollments" %}
         </a>
         <br><br>
-        <button type="button" class="btn btn-primary" onclick="submit_exam_enrollment();">
-            {% trans "Register to exams or update my exam enrollments" %}
-        </button>
+        {% if program %}
+            <a type="button" class="btn btn-primary" href="{% url 'exam_enrollment_form' program.id %}">
+        {% else %}
+            <a type="button" class="btn btn-primary" href="{% url 'exam_enrollment_form_direct' %}">
+        {% endif %}
+                {% trans "Register to exams or update my exam enrollments" %}
+            </a>
     </div>
-    <script>
-        function submit_exam_enrollment(){
-            document.location.href = $("#url").attr("data-url");
-        }
-    </script>
 {% endblock %}
 
 {% block modal_footer %}
