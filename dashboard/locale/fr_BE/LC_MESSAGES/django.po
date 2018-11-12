@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"POT-Creation-Date: 2018-11-12 14:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,89 +16,140 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "absent_pdf_legend"
-msgstr "A=Absent"
+#: templates/faculty_administrator_dashboard.html:68
+#, fuzzy
+#| msgid "faculty_administration"
+msgid "applications_administration"
+msgstr "Administration facultaire"
 
-msgid "academic_year"
-msgstr "Année académique"
+#: templates/faculty_administrator_dashboard.html:57
+#, fuzzy
+#| msgid "faculty_administration"
+msgid "attestation_administration"
+msgstr "Administration facultaire"
 
-msgid "ask_papersheet"
-msgstr "Demander les feuilles de notes"
+#: templates/faculty_administrator_dashboard.html:77
+#, fuzzy
+#| msgid "faculty_administration"
+msgid "attribution_administration"
+msgstr "Administration facultaire"
 
-msgid "cheating_pdf_legend"
-msgstr "T=Tricherie"
-
+#: templates/dashboard.html:31
 msgid "dashboard"
 msgstr "Tableau de bord"
 
-msgid "download_my_scores_sheets"
-msgstr "Télécharger mes feuilles de notes en PDF pour l'encodage papier."
+#: templates/student_dashboard.html:33
+#, fuzzy
+#| msgid "desc_lnk_performance"
+msgid "desc_lnk_exam_enrollment"
+msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
+#: templates/student_dashboard.html:44
 msgid "desc_lnk_internships"
 msgstr "Gestion des stages des étudiants."
 
+#: templates/tutor_dashboard.html:19
+msgid "desc_lnk_my_applications"
+msgstr ""
+
+#: templates/student_dashboard.html:19
+#, fuzzy
+#| msgid "desc_lnk_internships"
+msgid "desc_lnk_my_attestations"
+msgstr "Gestion des stages des étudiants."
+
+#: templates/tutor_dashboard.html:34
+#, fuzzy
+#| msgid "desc_lnk_internships"
+msgid "desc_lnk_my_students_list"
+msgstr "Gestion des stages des étudiants."
+
+#: templates/tutor_dashboard.html:27
+msgid "desc_lnk_my_teaching_charge"
+msgstr ""
+
+#: templates/student_dashboard.html:9
 msgid "desc_lnk_performance"
 msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
+#: templates/tutor_dashboard.html:9
 msgid "desc_lnk_scores_encoding"
 msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
 
-msgid "institution_denomination"
-msgstr "Université catholique de Louvain"
+#: views/main.py:51
+msgid "error_multiple_registration_id"
+msgstr ""
+"Un problème a été détecté au niveau de votre inscription : deux NOMAS sont "
+"affectés à votre utilisateur. Veuillez prendre contact avec le service des "
+"inscriptions (SIC) afin de résoudre le problème. Merci."
 
-msgid "learning_unit_responsible"
-msgstr "Responsable du cours"
+#: templates/tutor_dashboard.html:33
+msgid "exam_student_list"
+msgstr ""
 
-msgid "my_scores_sheets"
-msgstr "Mes feuilles de notes"
+#: templates/student_dashboard.html:30
+msgid "exams_enrollment"
+msgstr ""
 
-msgid "no_score_to_encode"
-msgstr "Vous n'avez aucune note à encoder. Vous n'avez donc pas de PDF disponible."
-
-msgid "numbered_score"
-msgstr "Note chiffrée"
-
-msgid "online_scores_encoding"
-msgstr "Encodage de notes en ligne"
-
-msgid "return_doc_to_administrator"
-msgstr "Veuillez envoyer ce formulaire au secrétariat de l'entité gestionnaire avant le %s."
-
-msgid "scores_encoding"
-msgstr "Encodage de notes"
-
-msgid "use_vpn"
-msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
-
-msgid "use_vpn_with_link_start"
-msgstr "Ceci nécessite un <a href=\""
-
-msgid "use_vpn_with_link_end"
-msgstr "\" target=\"_blank\" >accès VPN</a> en dehors du réseau de l'UCL."
-
-msgid "scores_sheets"
-msgstr "Feuilles de notes"
-
-msgid "scores_sheets_admin"
-msgstr "Administration des feuilles de notes"
-
-msgid "scores_sheet_loading"
-msgstr "Récupération des feuilles de notes en cours."
-
-msgid "scores_sheet_unavailable"
-msgstr "Les feuilles de notes ne sont pas disponibles pour l'instant."
-
-msgid "scores_sheet_ready"
-msgstr "Les feuilles de notes sont prêtes !"
-
-msgid "unauthorized_decimal"
-msgstr "Attention : décimales non autorisées pour ce cours"
-
+#: templates/dashboard_admin_menu.html:31
+#: templates/faculty_administrator_dashboard.html:34
 msgid "faculty_administration"
 msgstr "Administration facultaire"
 
-msgid "error_multiple_registration_id"
-msgstr "Un problème a été détecté au niveau de votre inscription : deux NOMAS sont affectés à votre utilisateur. Veuillez prendre contact avec le service des inscriptions (SIC) afin de résoudre le problème. Merci."
+#: templates/student_dashboard.html:43
+#, fuzzy
+#| msgid "desc_lnk_internships"
+msgid "internships"
+msgstr "Gestion des stages des étudiants."
 
+#: templates/faculty_administrator_dashboard.html:101
+msgid "lists_of_students_exams_enrollments"
+msgstr ""
+
+#: templates/tutor_dashboard.html:43
 msgid "manage_educational_information"
 msgstr "Gérer les informations pédagogiques"
+
+#: templates/tutor_dashboard.html:18
+msgid "my_applications"
+msgstr ""
+
+#: templates/student_dashboard.html:18
+msgid "my_attestations"
+msgstr ""
+
+#: templates/tutor_dashboard.html:26
+msgid "my_teaching_charge"
+msgstr ""
+
+#: templates/student_dashboard.html:8
+#, fuzzy
+#| msgid "desc_lnk_performance"
+msgid "performance"
+msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
+
+#: templates/faculty_administrator_dashboard.html:45
+#, fuzzy
+#| msgid "faculty_administration"
+msgid "performance_administration"
+msgstr "Administration facultaire"
+
+#: templates/tutor_dashboard.html:8
+msgid "scores_encoding"
+msgstr "Encodage de notes"
+
+#: templates/faculty_administrator_dashboard.html:89
+msgid "scores_sheets_admin"
+msgstr "Administration des feuilles de notes"
+
+#: templates/tutor_dashboard.html:54
+msgid "use_vpn"
+msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
+
+#: templates/tutor_dashboard.html:50
+msgid "use_vpn_with_link_end"
+msgstr "\" target=\"_blank\" >accès VPN</a> en dehors du réseau de l'UCL."
+
+#: templates/tutor_dashboard.html:50
+msgid "use_vpn_with_link_start"
+msgstr "Ceci nécessite un <a href=\""

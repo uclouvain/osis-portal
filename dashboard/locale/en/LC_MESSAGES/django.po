@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"POT-Creation-Date: 2018-11-12 14:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,86 +16,140 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "absent_pdf_legend"
-msgstr "A=Absent"
+#: templates/faculty_administrator_dashboard.html:68
+#, fuzzy
+#| msgid "faculty_administration"
+msgid "applications_administration"
+msgstr "Faculty administration"
 
-msgid "ask_papersheet"
-msgstr "Ask scores sheets"
+#: templates/faculty_administrator_dashboard.html:57
+#, fuzzy
+#| msgid "faculty_administration"
+msgid "attestation_administration"
+msgstr "Faculty administration"
 
-msgid "cheating_pdf_legend"
-msgstr "T=Cheating"
+#: templates/faculty_administrator_dashboard.html:77
+#, fuzzy
+#| msgid "faculty_administration"
+msgid "attribution_administration"
+msgstr "Faculty administration"
 
+#: templates/dashboard.html:31
 msgid "dashboard"
 msgstr "Dashboard"
 
-msgid "download_my_scores_sheets"
-msgstr "Download my PDF scores sheets for paper encoding."
+#: templates/student_dashboard.html:33
+#, fuzzy
+#| msgid "desc_lnk_performance"
+msgid "desc_lnk_exam_enrollment"
+msgstr "Show the student results and registration state."
 
+#: templates/student_dashboard.html:44
 msgid "desc_lnk_internships"
 msgstr "This process controls students internships."
 
+#: templates/tutor_dashboard.html:19
+msgid "desc_lnk_my_applications"
+msgstr ""
+
+#: templates/student_dashboard.html:19
+#, fuzzy
+#| msgid "desc_lnk_internships"
+msgid "desc_lnk_my_attestations"
+msgstr "This process controls students internships."
+
+#: templates/tutor_dashboard.html:34
+#, fuzzy
+#| msgid "desc_lnk_internships"
+msgid "desc_lnk_my_students_list"
+msgstr "This process controls students internships."
+
+#: templates/tutor_dashboard.html:27
+msgid "desc_lnk_my_teaching_charge"
+msgstr ""
+
+#: templates/student_dashboard.html:9
 msgid "desc_lnk_performance"
 msgstr "Show the student results and registration state."
 
+#: templates/tutor_dashboard.html:9
 msgid "desc_lnk_scores_encoding"
 msgstr "Get scores encoding papersheet and encode scores of your students."
 
-msgid "institution_denomination"
-msgstr "Université catholique de Louvain"
+#: views/main.py:51
+msgid "error_multiple_registration_id"
+msgstr ""
+"A problem was detected with your registration : 2 registration id's are "
+"linked to your user. Please contact the registration departement (SIC). "
+"Thank you."
 
-msgid "learning_unit_responsible"
-msgstr "Learning unit's responsible"
+#: templates/tutor_dashboard.html:33
+msgid "exam_student_list"
+msgstr ""
 
-msgid "my_scores_sheets"
-msgstr "My scores sheets"
+#: templates/student_dashboard.html:30
+msgid "exams_enrollment"
+msgstr ""
 
-msgid "no_score_to_encode"
-msgstr "There are no scores to encode. So there's no PDF available."
-
-msgid "numbered_score"
-msgstr "Numbered scores"
-
-msgid "online_scores_encoding"
-msgstr "Online Scores Encoding"
-
-msgid "return_doc_to_administrator"
-msgstr "Please return this document to the administrative office before %s."
-
-msgid "scores_encoding"
-msgstr "Scores Encoding"
-
-msgid "use_vpn"
-msgstr "This requires a VPN access outside UCL."
-
-msgid "use_vpn_with_link_start"
-msgstr "This requires a <a href=\""
-
-msgid "use_vpn_with_link_end"
-msgstr "\" target=\"_blank\" >VPN access</a> outside UCL."
-
-msgid "scores_sheets"
-msgstr "Scores sheets"
-
-msgid "scores_sheets_admin"
-msgstr "Scores sheets administration"
-
-msgid "scores_sheet_loading"
-msgstr "Scores sheets are loading."
-
-msgid "scores_sheet_unavailable"
-msgstr "Scores sheets are not available for now."
-
-msgid "scores_sheet_ready"
-msgstr "Scores sheets are ready !"
-
-msgid "unauthorized_decimal"
-msgstr "Unauthorized decimal for this learning unit"
-
+#: templates/dashboard_admin_menu.html:31
+#: templates/faculty_administrator_dashboard.html:34
 msgid "faculty_administration"
 msgstr "Faculty administration"
 
-msgid "error_multiple_registration_id"
-msgstr "A problem was detected with your registration : 2 registration id's are linked to your user. Please contact the registration departement (SIC). Thank you."
+#: templates/student_dashboard.html:43
+#, fuzzy
+#| msgid "desc_lnk_internships"
+msgid "internships"
+msgstr "This process controls students internships."
 
+#: templates/faculty_administrator_dashboard.html:101
+msgid "lists_of_students_exams_enrollments"
+msgstr ""
+
+#: templates/tutor_dashboard.html:43
 msgid "manage_educational_information"
 msgstr "Manage educational information"
+
+#: templates/tutor_dashboard.html:18
+msgid "my_applications"
+msgstr ""
+
+#: templates/student_dashboard.html:18
+msgid "my_attestations"
+msgstr ""
+
+#: templates/tutor_dashboard.html:26
+msgid "my_teaching_charge"
+msgstr ""
+
+#: templates/student_dashboard.html:8
+#, fuzzy
+#| msgid "desc_lnk_performance"
+msgid "performance"
+msgstr "Show the student results and registration state."
+
+#: templates/faculty_administrator_dashboard.html:45
+#, fuzzy
+#| msgid "faculty_administration"
+msgid "performance_administration"
+msgstr "Faculty administration"
+
+#: templates/tutor_dashboard.html:8
+msgid "scores_encoding"
+msgstr "Scores Encoding"
+
+#: templates/faculty_administrator_dashboard.html:89
+msgid "scores_sheets_admin"
+msgstr "Scores sheets administration"
+
+#: templates/tutor_dashboard.html:54
+msgid "use_vpn"
+msgstr "This requires a VPN access outside UCL."
+
+#: templates/tutor_dashboard.html:50
+msgid "use_vpn_with_link_end"
+msgstr "\" target=\"_blank\" >VPN access</a> outside UCL."
+
+#: templates/tutor_dashboard.html:50
+msgid "use_vpn_with_link_start"
+msgstr "This requires a <a href=\""
