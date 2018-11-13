@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 14:26+0100\n"
+"POT-Creation-Date: 2018-11-13 15:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,64 +16,118 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/faculty_administrator_dashboard.html:68
-#, fuzzy
-#| msgid "faculty_administration"
-msgid "Applications administration"
-msgstr ""
-
-#: templates/faculty_administrator_dashboard.html:57
-#, fuzzy
-#| msgid "faculty_administration"
-msgid "Attestations administration"
-msgstr ""
-
-#: templates/faculty_administrator_dashboard.html:77
-#, fuzzy
-#| msgid "faculty_administration"
-msgid "Faculty administration"
-msgstr ""
-
 #: templates/dashboard.html:31
 msgid "Dashboard"
 msgstr ""
 
+#: templates/dashboard_admin_menu.html:31
+#: templates/faculty_administrator_dashboard.html:34
+#: templates/faculty_administrator_dashboard.html:77
+msgid "Faculty administration"
+msgstr ""
+
+#: templates/faculty_administrator_dashboard.html:45
+msgid "Performance administration"
+msgstr ""
+
+#: templates/faculty_administrator_dashboard.html:57
+msgid "Attestations administration"
+msgstr ""
+
+#: templates/faculty_administrator_dashboard.html:68
+msgid "Applications administration"
+msgstr ""
+
+#: templates/faculty_administrator_dashboard.html:89
+msgid "Scores sheets administration"
+msgstr ""
+
+#: templates/faculty_administrator_dashboard.html:101
+msgid "Lists of students exams enrollments"
+msgstr ""
+
+#: templates/student_dashboard.html:8
+msgid "Performance"
+msgstr ""
+
+#: templates/student_dashboard.html:9
+msgid "Show the performance module."
+msgstr ""
+
+#: templates/student_dashboard.html:18
+msgid "My attestations"
+msgstr ""
+
+#: templates/student_dashboard.html:19
+msgid "This process controls my attestations."
+msgstr ""
+
+#: templates/student_dashboard.html:30
+msgid "Exams enrollment"
+msgstr ""
+
 #: templates/student_dashboard.html:33
-#, fuzzy
-#| msgid "desc_lnk_performance"
 msgid "Show the student results and registration state."
+msgstr ""
+
+#: templates/student_dashboard.html:43
+msgid "Internships"
 msgstr ""
 
 #: templates/student_dashboard.html:44
 msgid "This process controls students internships."
 msgstr ""
 
+#: templates/tutor_dashboard.html:8
+msgid "Scores encoding"
+msgstr ""
+
+#: templates/tutor_dashboard.html:9
+msgid "Get scores encoding papersheet and encode scores of your students."
+msgstr ""
+
+#: templates/tutor_dashboard.html:18
+msgid "My applications"
+msgstr ""
+
 #: templates/tutor_dashboard.html:19
 msgid "This process controls my applications"
 msgstr ""
 
-#: templates/student_dashboard.html:19
-#, fuzzy
-#| msgid "desc_lnk_internships"
-msgid "This process controls my attestations."
-msgstr ""
-
-#: templates/tutor_dashboard.html:34
-#, fuzzy
-#| msgid "desc_lnk_internships"
-msgid "This process controls the students internship."
+#: templates/tutor_dashboard.html:26
+msgid "My teaching charge"
 msgstr ""
 
 #: templates/tutor_dashboard.html:27
 msgid "This process controls the teaching charge."
 msgstr ""
 
-#: templates/student_dashboard.html:9
-msgid "Show the student results and registration state."
+#: templates/tutor_dashboard.html:33
+msgid "Exam student list"
 msgstr ""
 
-#: templates/tutor_dashboard.html:9
-msgid "Get scores encoding papersheet and encode scores of your students."
+#: templates/tutor_dashboard.html:34
+msgid "This process controls the students internship."
+msgstr ""
+
+#: templates/tutor_dashboard.html:43
+msgid "Manage educational information"
+msgstr ""
+
+#: templates/tutor_dashboard.html:50
+msgid "This requires a"
+msgstr ""
+
+#: templates/tutor_dashboard.html:50
+msgid "VPN access "
+msgstr ""
+
+#: templates/tutor_dashboard.html:50
+msgid "outside UCL."
+msgstr ""
+
+#: templates/tutor_dashboard.html:54
+msgid "This requires a VPN access outside UCL."
 msgstr ""
 
 #: views/main.py:51
@@ -82,70 +136,3 @@ msgstr ""
 "A problem was detected with your registration : 2 registration id's are "
 "linked to your user. Please contact the registration departement (SIC). "
 "Thank you."
-
-#: templates/tutor_dashboard.html:33
-msgid "Exam student list"
-msgstr ""
-
-#: templates/student_dashboard.html:30
-msgid "Exams enrollment"
-msgstr ""
-
-#: templates/student_dashboard.html:43
-#, fuzzy
-#| msgid "desc_lnk_internships"
-msgid "Internships"
-msgstr ""
-
-#: templates/faculty_administrator_dashboard.html:101
-msgid "Lists of students exams enrollments"
-msgstr ""
-
-#: templates/tutor_dashboard.html:43
-msgid "Manage educational information"
-msgstr ""
-
-#: templates/tutor_dashboard.html:18
-msgid "My applications"
-msgstr ""
-
-#: templates/student_dashboard.html:18
-msgid "My attestations"
-msgstr ""
-
-#: templates/tutor_dashboard.html:26
-msgid "My teaching charge"
-msgstr ""
-
-#: templates/student_dashboard.html:8
-#, fuzzy
-#| msgid "desc_lnk_performance"
-msgid "Performance"
-msgstr ""
-
-#: templates/faculty_administrator_dashboard.html:45
-#, fuzzy
-#| msgid "faculty_administration"
-msgid "Performance administration"
-msgstr ""
-
-#: templates/tutor_dashboard.html:8
-msgid "Scores encoding"
-msgstr ""
-
-#: templates/faculty_administrator_dashboard.html:89
-msgid "Scores sheets administration"
-msgstr ""
-
-#: templates/tutor_dashboard.html:54
-msgid "This requires a VPN access outside UCL."
-msgstr ""
-
-msgid "This requires a"
-msgstr ""
-
-msgid "VPN access"
-msgstr ""
-
-msgid "outside UCL."
-msgstr ""
