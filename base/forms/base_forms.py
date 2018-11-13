@@ -38,7 +38,7 @@ class RegistrationIdForm(forms.Form):
         if registration_id:
             student = std_model.find_by_registration_id(registration_id)
             if student is None:
-                self.add_error('registration_id', _('no_student_with_this_registration_id'))
+                self.add_error('registration_id', _('no student with this registration_id'))
 
 
 class GlobalIdForm(forms.Form):
@@ -50,7 +50,7 @@ class GlobalIdForm(forms.Form):
         if global_id:
             tutor = tutor_model.find_by_person_global_id(global_id)
             if tutor is None:
-                self.add_error('global_id', _('no_tutor_with_this_global_id'))
+                self.add_error('global_id', _('no tutor with this global_id'))
 
 
 class BootstrapModelForm(forms.ModelForm):
