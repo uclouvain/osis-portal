@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 15:54+0100\n"
+"POT-Creation-Date: 2018-11-13 16:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: views/main.py:52
+msgid ""
+"A problem was detected with your registration : 2 registration id's are "
+"linked to your user. Please contact the registration departement (SIC). "
+"Thank you."
+msgstr ""
+"Un problème a été détecté au niveau de votre inscription : deux NOMAS sont "
+"affectés à votre utilisateur. Veuillez prendre contact avec le service des "
+"inscriptions (SIC) afin de résoudre le problème. Merci."
 
 #: templates/faculty_administrator_dashboard.html:68
 #, fuzzy
@@ -31,16 +41,6 @@ msgstr "Administration des attestations"
 #: templates/dashboard.html:31
 msgid "Dashboard"
 msgstr "Tableau de bord"
-
-#: views/main.py:51
-msgid ""
-"A problem was detected with your registration : 2 registration id's are "
-"linked to your user. Please contact the registration departement (SIC). "
-"Thank you."
-msgstr ""
-"Un problème a été détecté au niveau de votre inscription : deux NOMAS sont "
-"affectés à votre utilisateur. Veuillez prendre contact avec le service des "
-"inscriptions (SIC) afin de résoudre le problème. Merci."
 
 #: templates/tutor_dashboard.html:33
 msgid "Exam student list"

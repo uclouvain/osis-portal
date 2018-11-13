@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 15:54+0100\n"
+"POT-Creation-Date: 2018-11-13 16:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: views/main.py:52
+msgid ""
+"A problem was detected with your registration : 2 registration id's are "
+"linked to your user. Please contact the registration departement (SIC). "
+"Thank you."
+msgstr ""
 
 #: templates/faculty_administrator_dashboard.html:68
 msgid "Applications administration"
@@ -26,13 +33,6 @@ msgstr ""
 
 #: templates/dashboard.html:31
 msgid "Dashboard"
-msgstr ""
-
-#: views/main.py:51
-msgid ""
-"A problem was detected with your registration : 2 registration id's are "
-"linked to your user. Please contact the registration departement (SIC). "
-"Thank you."
 msgstr ""
 
 #: templates/tutor_dashboard.html:33
