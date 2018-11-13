@@ -194,7 +194,7 @@ class DownloadAttestationTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('Student attestations'))
+        self.assertEqual(messages[0].message, _('error_fetching_attestation'))
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
            side_effect=lambda global_id, year, attestation_type, username: open_sample_pdf())
@@ -279,7 +279,7 @@ class SelectStudentAttestationTest(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, "admin/attestation_administration.html")
 
-        self.assertFormError(response, 'form', 'registration_id', _('No student with this registration id'))
+        self.assertFormError(response, 'form', 'registration_id', _('no_student_with_this_registration_id'))
 
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses', side_effect=lambda x: None)
     def test_valid_post_request_but_no_attestation(self, mock_fetch_json_attestation_statuses):
@@ -359,7 +359,7 @@ class DownloadStudentAttestation(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('Student attestations'))
+        self.assertEqual(messages[0].message, _('error_fetching_attestation'))
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
            side_effect=lambda global_id, year, attestation_type, username: open_sample_pdf())
