@@ -20,73 +20,69 @@ msgstr ""
 #: templates/attestation_home.html:34 templates/attestation_home.html:40
 #: templates/attestation_home_admin.html:32
 #: templates/attestation_home_student.html:30
-msgid "attestation"
+msgid "Attestation"
 msgstr "Attestation"
 
 #: templates/admin/attestation_administration.html:31
 #: templates/attestation_home.html:32 templates/attestation_home_admin.html:31
-msgid "attestation_administration"
+msgid "Attestation administration"
 msgstr "Administration des attestations"
 
 #: templates/attestation_content.html:52 templates/attestation_home.html:74
-msgid "attestation_type"
+msgid "Attestation type"
 msgstr "Type d'attestation"
 
 #: templates/attestation_content.html:31 templates/attestation_home.html:50
-msgid "attestations_for_academic_year"
+msgid "Attestations for academic year"
 msgstr "Attestations pour l'année académique"
 
 #: templates/attestation_content.html:54 templates/attestation_home.html:76
-msgid "available"
+msgid "Available"
 msgstr "Disponible"
 
 #: tests/views/test_main.py:197 tests/views/test_main.py:362 views/main.py:80
 #: views/main.py:112
 #, fuzzy
 #| msgid "student_attestations"
-msgid "error_fetching_attestation"
+msgid "Student attestations"
 msgstr "Attestations de l'étudiant"
 
 #: tests/views/test_main.py:90 tests/views/test_main.py:180
-msgid "error_multiple_registration_id"
-msgstr ""
+msgid "Error multiple registration id"
+msgstr "Erreur d'id d'enregistrement multiple"
 
 #: templates/admin/attestation_administration.html:30
 #: templates/attestation_home.html:31 templates/attestation_home_admin.html:30
 #, fuzzy
 #| msgid "attestation_administration"
-msgid "faculty_administration"
-msgstr "Administration des attestations"
+msgid "Faculty administration"
+msgstr "Administration des facultés"
 
 #: templates/attestation_home.html:57
-msgid "first_name"
-msgstr ""
+msgid "First name"
+msgstr "Prénom"
 
 #: templates/attestation_home.html:57
-msgid "last_name"
-msgstr ""
+msgid "Last name"
+msgstr "Nom"
 
 #: templates/attestation_content.html:46 templates/attestation_home.html:68
-msgid "no_attestation_available"
+msgid "No attestation available"
 msgstr "Aucune attestation disponible"
 
 #: tests/views/test_main.py:282
 #, fuzzy
 #| msgid "student_attestations"
-msgid "no_student_with_this_registration_id"
-msgstr "Attestations de l'étudiant"
+msgid "No student with this registration id"
+msgstr "Pas d'étudiant avec cet id d'enregistrement"
 
 #: templates/attestation_content.html:53 templates/attestation_home.html:75
-msgid "printed"
+msgid "Printed"
 msgstr "Imprimée"
 
 #: templates/admin/attestation_administration.html:58
 #: templates/attestation_content.html:41 templates/attestation_home.html:61
 #, fuzzy
 #| msgid "attestation"
-msgid "registration_id"
-msgstr "Attestation"
-
-#: templates/admin/attestation_administration.html:39
-msgid "student_attestations"
-msgstr "Attestations de l'étudiant"
+msgid "Registration id"
+msgstr "Id d'enregistrement"
