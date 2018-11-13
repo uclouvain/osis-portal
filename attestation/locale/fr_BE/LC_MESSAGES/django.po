@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 15:21+0100\n"
+"POT-Creation-Date: 2018-11-13 16:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: templates/attestation_home.html:34 templates/attestation_home.html:40
+#: templates/attestation_home_admin.html:32
+#: templates/attestation_home_student.html:30
+msgid "Attestation"
+msgstr "Attestation"
+
+#: templates/admin/attestation_administration.html:31
+#: templates/attestation_home.html:32 templates/attestation_home_admin.html:31
+msgid "Attestation administration"
+msgstr "Administration des attestations"
+
+#: templates/attestation_content.html:52 templates/attestation_home.html:74
+msgid "Attestation type"
+msgstr "Type d'attestation"
+
+#: templates/attestation_content.html:31 templates/attestation_home.html:50
+msgid "Attestations for academic year"
+msgstr "Attestations pour l'année académique"
+
+#: templates/attestation_content.html:54 templates/attestation_home.html:76
+msgid "Available"
+msgstr "Disponible"
+
+#: tests/views/test_main.py:90 tests/views/test_main.py:180
+msgid "Error multiple registration id"
+msgstr "Erreur d'id d'enregistrement multiple"
+
 #: templates/admin/attestation_administration.html:30
 #: templates/attestation_home.html:31 templates/attestation_home_admin.html:30
 #, fuzzy
@@ -24,18 +51,27 @@ msgstr ""
 msgid "Faculty administration"
 msgstr "Administration des facultés"
 
-#: templates/admin/attestation_administration.html:31
-#: templates/attestation_home.html:32 templates/attestation_home_admin.html:31
-msgid "Attestation administration"
-msgstr "Administration des attestations"
+#: templates/attestation_home.html:57
+msgid "First name"
+msgstr "Prénom"
 
-#: templates/admin/attestation_administration.html:39
-#: tests/views/test_main.py:197 tests/views/test_main.py:362 views/main.py:80
-#: views/main.py:112
+#: templates/attestation_home.html:57
+msgid "Last name"
+msgstr "Nom"
+
+#: templates/attestation_content.html:46 templates/attestation_home.html:68
+msgid "No attestation available"
+msgstr "Aucune attestation disponible"
+
+#: tests/views/test_main.py:282
 #, fuzzy
 #| msgid "student_attestations"
-msgid "Student attestations"
-msgstr "Attestations de l'étudiant"
+msgid "No student with this registration id"
+msgstr "Pas d'étudiant avec cet id d'enregistrement"
+
+#: templates/attestation_content.html:53 templates/attestation_home.html:75
+msgid "Printed"
+msgstr "Imprimée"
 
 #: templates/admin/attestation_administration.html:58
 #: templates/attestation_content.html:41 templates/attestation_home.html:61
@@ -44,46 +80,10 @@ msgstr "Attestations de l'étudiant"
 msgid "Registration id"
 msgstr "Id d'enregistrement"
 
-#: templates/attestation_content.html:31 templates/attestation_home.html:50
-msgid "Attestations for academic year"
-msgstr "Attestations pour l'année académique"
-
-#: templates/attestation_content.html:46 templates/attestation_home.html:68
-msgid "No attestation available"
-msgstr "Aucune attestation disponible"
-
-#: templates/attestation_content.html:52 templates/attestation_home.html:74
-msgid "Attestation type"
-msgstr "Type d'attestation"
-
-#: templates/attestation_content.html:53 templates/attestation_home.html:75
-msgid "Printed"
-msgstr "Imprimée"
-
-#: templates/attestation_content.html:54 templates/attestation_home.html:76
-msgid "Available"
-msgstr "Disponible"
-
-#: templates/attestation_home.html:34 templates/attestation_home.html:40
-#: templates/attestation_home_admin.html:32
-#: templates/attestation_home_student.html:30
-msgid "Attestation"
-msgstr "Attestation"
-
-#: templates/attestation_home.html:57
-msgid "Last name"
-msgstr "Nom"
-
-#: templates/attestation_home.html:57
-msgid "First name"
-msgstr "Prénom"
-
-#: tests/views/test_main.py:90 tests/views/test_main.py:180
-msgid "Error multiple registration id"
-msgstr "Erreur d'id d'enregistrement multiple"
-
-#: tests/views/test_main.py:282
+#: templates/admin/attestation_administration.html:39
+#: tests/views/test_main.py:197 tests/views/test_main.py:362 views/main.py:80
+#: views/main.py:112
 #, fuzzy
 #| msgid "student_attestations"
-msgid "No student with this registration id"
-msgstr "Pas d'étudiant avec cet id d'enregistrement"
+msgid "Student attestations"
+msgstr "Attestations de l'étudiant"
