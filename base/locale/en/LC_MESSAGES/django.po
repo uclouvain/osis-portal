@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 16:07+0100\n"
+"POT-Creation-Date: 2018-11-13 17:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,23 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: templates/access_denied.html:34
-#, fuzzy
-#| msgid "acces_denied"
 msgid "Access denied"
-msgstr "Access denied"
+msgstr ""
 
 #: templates/admin/administration_layout.html:7
 #: templates/admin/data_maintenance.html:29 templates/layout.html:83
-#, fuzzy
-#| msgid "administration"
 msgid "Administration"
-msgstr "Administration"
+msgstr ""
 
 #: templates/admin/data_maintenance.html:69
-#, fuzzy
-#| msgid "are_you_sure"
 msgid "Are you sure ?"
-msgstr "Are you sure ?"
+msgstr ""
 
 #: templates/logged_out.html:37
 msgid "Click here to reconnect"
@@ -51,28 +45,20 @@ msgstr ""
 
 #: templates/admin/data.html:51 templates/admin/data_maintenance.html:31
 #: templates/admin/data_maintenance.html:35
-#, fuzzy
-#| msgid "data_maintenance"
 msgid "Data maintenance"
-msgstr "Data maintenance"
+msgstr ""
 
 #: templates/admin/data.html:52
-#, fuzzy
-#| msgid "data_maintenance"
 msgid "Data maintenance via SQL"
-msgstr "Data maintenance"
+msgstr ""
 
 #: templates/admin/data.html:45
-#, fuzzy
-#| msgid "data_management"
 msgid "Data management"
-msgstr "Data management"
+msgstr ""
 
 #: templates/admin/data.html:46
-#, fuzzy
-#| msgid "data_management"
 msgid "Data management by entity"
-msgstr "Data management"
+msgstr ""
 
 #: templates/upload_file_form.html:61 templates/upload_file_list.html:57
 msgid "Description"
@@ -91,34 +77,24 @@ msgid "File name"
 msgstr ""
 
 #: templates/admin/data_maintenance.html:45
-#, fuzzy
-#| msgid "forbidden_sql_keywords"
 msgid "Forbidden SQL keywords"
-msgstr "Forbidden SQL keywords"
+msgstr ""
 
 #: templates/page_not_found.html:34
-#, fuzzy
-#| msgid "page_not_found"
 msgid "Page not found"
-msgstr "Page not found"
+msgstr ""
 
 #: templates/admin/data_maintenance.html:58
-#, fuzzy
-#| msgid "result"
 msgid "Result"
-msgstr "Result"
+msgstr ""
 
 #: templates/admin/data_maintenance.html:42
-#, fuzzy
-#| msgid "sql_command"
 msgid "SQL command"
-msgstr "SQL command"
+msgstr ""
 
 #: templates/admin/data_maintenance.html:44
-#, fuzzy
-#| msgid "sql_readonly"
 msgid "SQL readonly"
-msgstr "SQL readonly"
+msgstr ""
 
 #: templates/server_error.html:34
 msgid "Unexpected error occurred"
