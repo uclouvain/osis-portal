@@ -142,7 +142,7 @@ msgstr "Gestion de ma charge d'enseignement"
 
 #: templates/tutor_dashboard.html:50
 msgid "This requires a"
-msgstr "Ceci nécessite un "
+msgstr "Ceci nécessite un"
 
 #: templates/tutor_dashboard.html:54
 msgid "This requires a VPN access outside UCL."
@@ -151,7 +151,7 @@ msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
 #: templates/tutor_dashboard.html:50
 #, fuzzy
 #| msgid "VPN access"
-msgid "VPN access "
+msgid "VPN access"
 msgstr "accès VPN"
 
 #: templates/tutor_dashboard.html:50
