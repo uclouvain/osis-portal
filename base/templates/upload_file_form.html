@@ -27,7 +27,7 @@
 
 <div class="row">
     <div class="col-md-2 col-lg-offset-1" style="text-align:right">
-        <label for="txt_file" {% if form.file.errors %} style="color:red;" {% endif %}>{% trans 'file' %}</label>
+        <label for="txt_file" {% if form.file.errors %} style="color:red;" {% endif %}>{% trans 'File' %}</label>
     </div>
     <div class="col-md-4">
         <input type="file" id="txt_file"  name="file" style="margin:-6px;" value="{{ form.file_name.value | default_if_none:'' }}">
@@ -36,7 +36,7 @@
 <br>
 <div class="row">
     <div class="col-md-2 col-lg-offset-1" style="text-align:right">
-        <label for="txt_file_name" {% if form.file_name.errors %} style="color:red;" {% endif %}>{% trans 'file_name' %}</label>
+        <label for="txt_file_name" {% if form.file_name.errors %} style="color:red;" {% endif %}>{% trans 'File name' %}</label>
     </div>
     <div class="col-md-4">
         <input class="form-control" id="txt_file_name"  name="file_name" style="margin:-6px;" value="{{ form.file_name.value | default_if_none:'' }}">
@@ -45,7 +45,7 @@
 <br>
 <div class="row">
     <div class="col-md-2 col-lg-offset-1" style="text-align:right">
-        <label for="txt_content_type">{% trans 'content_type' %}</label>
+        <label for="txt_content_type">{% trans 'Content type' %}</label>
     </div>
     <div class="col-md-3">
         <select class="form-control" id="txt_content_type"  name="content_type" style="margin:-6px;">
@@ -58,7 +58,7 @@
 <br>
 <div class="row">
     <div class="col-md-2 col-lg-offset-1" style="text-align:right">
-        <label for="txt_description">{% trans 'description' %}</label>
+        <label for="txt_description">{% trans 'Description' %}</label>
     </div>
     <div class="col-md-3">
         <select class="form-control" id="txt_description"  name="description" style="margin:-6px;">
