@@ -183,37 +183,3 @@ msgstr ""
 #: templates/registration/login.html:42
 msgid "user"
 msgstr ""
-
-#~ msgid "data"
-#~ msgstr "Data"
-
-#~ msgid "administration"
-#~ msgstr "Administration"
-
-#~ msgid "data_maintenance"
-#~ msgstr "Data maintenance"
-
-#~ msgid "desc_lnk_data_maintenance"
-#~ msgstr "Data maintenance by SQL"
-
-#~ msgid "desc_lnk_data_management"
-#~ msgstr "Management of data by entity"
-
-#~ msgid "msg_error_username_password_not_matching"
-#~ msgstr "Invalid Username or Password"
-
-#~ msgid "redirect_to_login"
-#~ msgstr "Click to reconnect"
-
-#~ msgid "server_error"
-#~ msgstr "A server error occurred."
-
-#~ msgid "server_error_message"
-#~ msgstr ""
-#~ "We have been automatically informed about this problem. Do not hesitate "
-#~ "to help us to solve this problem by contacting the <a href='https://"
-#~ "uclouvain.be/ServiceDesk' target='_blank'>Service Desk</a> to describe "
-#~ "what you intended to do in more details."
-
-#~ msgid "succesfull_logout"
-#~ msgstr "You are succesfully logout."
