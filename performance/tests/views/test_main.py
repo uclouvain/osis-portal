@@ -282,7 +282,7 @@ class SelectStudentTest(TestCase):
 
         self.assertIsInstance(response.context['form'], RegistrationIdForm)
 
-        self.assertFormError(response, 'form', 'registration_id', _('no_student_with_this_registration_id'))
+        self.assertFormError(response, 'form', 'registration_id', _('No student with this registration id'))
 
     def test_valid_post_request(self):
         response = self.client.post(self.url, data={'registration_id': self.student.registration_id})
