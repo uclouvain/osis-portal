@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 16:40+0100\n"
+"POT-Creation-Date: 2018-11-13 16:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,10 +62,8 @@ msgid "No attestation available"
 msgstr ""
 
 #: tests/views/test_main.py:282
-#, fuzzy
-#| msgid "student_attestations"
 msgid "No student with this registration id"
-msgstr "Student attestations"
+msgstr ""
 
 #: templates/attestation_content.html:53 templates/attestation_home.html:75
 msgid "Printed"
@@ -79,7 +77,5 @@ msgstr ""
 #: templates/admin/attestation_administration.html:39
 #: tests/views/test_main.py:197 tests/views/test_main.py:362 views/main.py:80
 #: views/main.py:112
-#, fuzzy
-#| msgid "student_attestations"
 msgid "Student attestations"
-msgstr "Student attestations"
+msgstr ""
