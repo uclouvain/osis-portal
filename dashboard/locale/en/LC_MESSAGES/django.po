@@ -29,11 +29,11 @@ msgid "Dashboard"
 msgstr ""
 
 #: views/main.py:51
-msgid "Error multiple registration id"
-msgstr ""
+msgid ""
 "A problem was detected with your registration : 2 registration id's are "
 "linked to your user. Please contact the registration departement (SIC). "
 "Thank you."
+msgstr ""
 
 #: templates/tutor_dashboard.html:33
 msgid "Exam student list"
