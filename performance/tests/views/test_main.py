@@ -113,7 +113,7 @@ class ViewPerformanceHomeTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('Error multiple registration id'))
+        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
 
     def test_with_empty_programs_list(self):
         response = self.client.get(self.url)
@@ -185,7 +185,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('Error multiple registration id'))
+        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
 
     def test_when_none_student_performance(self):
         self.student_performance.delete()
