@@ -5,8 +5,8 @@
 <div class="grid-item">
     <i class="fa fa-hashtag"></i>
     <div class="description">
-        <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></h4>
-        <p>{% trans 'desc_lnk_scores_encoding' %}</p>
+        <h4 class="media-heading"><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'Scores encoding' %}</a></h4>
+        <p>{% trans 'Get scores encoding papersheet and encode scores of your students.' %}</p>
     </div>
 </div>
 
@@ -15,23 +15,23 @@
         <div class="grid-item">
             <i class="fa fa-id-card-o"></i>
             <div class="description">
-                <h4 class="media-heading"><a href="{% url 'applications_overview' %}" id="lnk_my_applications">{% trans 'my_applications' %}</a></h4>
-                <p>{% trans 'desc_lnk_my_applications' %}</p>
+                <h4 class="media-heading"><a href="{% url 'applications_overview' %}" id="lnk_my_applications">{% trans 'My applications' %}</a></h4>
+                <p>{% trans 'This process controls my applications' %}</p>
             </div>
         </div>
    {% endif %}
    <div class="grid-item">
         <i class="fa fa-list-alt"></i>
         <div class="description">
-            <h4 class="media-heading"><a href="{% url 'attribution_home' %}" id="lnk_my_teaching_charge">{% trans 'my_teaching_charge' %}</a></h4>
-            <p>{% trans 'desc_lnk_my_teaching_charge' %}</p>
+            <h4 class="media-heading"><a href="{% url 'attribution_home' %}" id="lnk_my_teaching_charge">{% trans 'My teaching charge' %}</a></h4>
+            <p>{% trans 'This process controls the teaching charge.' %}</p>
         </div>
    </div>
    <div class="grid-item">
         <i class="fa fa-file-excel-o"></i>
         <div class="description">
-            <h4 class="media-heading"><a href="{% url 'students_list' %}" id="lnk_my_students_list">{% trans 'exam_student_list' %}</a></h4>
-            <p>{% trans 'desc_lnk_my_students_list' %}</p>
+            <h4 class="media-heading"><a href="{% url 'students_list' %}" id="lnk_my_students_list">{% trans 'Exam student list' %}</a></h4>
+            <p>{% trans 'This process controls the students internship.' %}</p>
         </div>
     </div>
 
@@ -40,18 +40,18 @@
         <div class="description">
             <h4 class="media-heading">
                 <a href="{{manage_courses_url}}" id="lnk_manage_courses">
-                    {% trans 'manage_educational_information' %}
+                    {% trans 'Manage educational information' %}
                 </a>
             </h4>
             <p>
                 <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
                 {% if osis_vpn_help_url %}
                     <span class="dashboard-vpn-warning">
-                    {% trans 'use_vpn_with_link_start' %}{{osis_vpn_help_url}}{% trans 'use_vpn_with_link_end' %}
+                    {% trans 'This requires a' %} <a href="{{osis_vpn_help_url}}" target="_blank" >{% trans 'VPN access ' %} </a> {% trans 'outside UCL.' %}"
                </span>
                 {% else %}
                     <span class="dashboard-vpn-warning">
-                    {% trans 'use_vpn' %}
+                    {% trans 'This requires a VPN access outside UCL.' %}
                 </span>
                 {% endif %}
             </p>

@@ -48,7 +48,7 @@ def faculty_administration(request):
 
 
 def show_multiple_registration_id_error(request):
-    messages.add_message(request, messages.ERROR, _('error_multiple_registration_id'))
+    messages.add_message(request, messages.ERROR, _('Error multiple registration id'))
     return home(request)
 
 

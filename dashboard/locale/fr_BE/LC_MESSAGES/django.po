@@ -19,137 +19,133 @@ msgstr ""
 #: templates/faculty_administrator_dashboard.html:68
 #, fuzzy
 #| msgid "faculty_administration"
-msgid "applications_administration"
-msgstr "Administration facultaire"
+msgid "Applications administration"
+msgstr "Administration d'application"
 
 #: templates/faculty_administrator_dashboard.html:57
 #, fuzzy
 #| msgid "faculty_administration"
-msgid "attestation_administration"
-msgstr "Administration facultaire"
+msgid "Attestations administration"
+msgstr "Administration des attestations"
 
 #: templates/faculty_administrator_dashboard.html:77
 #, fuzzy
 #| msgid "faculty_administration"
-msgid "attribution_administration"
+msgid "Faculty administration"
 msgstr "Administration facultaire"
 
 #: templates/dashboard.html:31
-msgid "dashboard"
+msgid "Dashboard"
 msgstr "Tableau de bord"
 
 #: templates/student_dashboard.html:33
 #, fuzzy
 #| msgid "desc_lnk_performance"
-msgid "desc_lnk_exam_enrollment"
+msgid "Show the student results and registration state."
 msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
 #: templates/student_dashboard.html:44
-msgid "desc_lnk_internships"
+msgid "This process controls students internships."
 msgstr "Gestion des stages des étudiants."
 
 #: templates/tutor_dashboard.html:19
-msgid "desc_lnk_my_applications"
-msgstr ""
+msgid "This process controls my applications"
+msgstr "Gestion de mes applications"
 
 #: templates/student_dashboard.html:19
 #, fuzzy
 #| msgid "desc_lnk_internships"
-msgid "desc_lnk_my_attestations"
-msgstr "Gestion des stages des étudiants."
+msgid "This process controls my attestations."
+msgstr "Gestion de mes attestations."
 
 #: templates/tutor_dashboard.html:34
 #, fuzzy
 #| msgid "desc_lnk_internships"
-msgid "desc_lnk_my_students_list"
+msgid "This process controls the students internship."
 msgstr "Gestion des stages des étudiants."
 
 #: templates/tutor_dashboard.html:27
-msgid "desc_lnk_my_teaching_charge"
-msgstr ""
+msgid "This process controls the teaching charge."
+msgstr "Gestion de ma charge d'enseignement"
 
 #: templates/student_dashboard.html:9
-msgid "desc_lnk_performance"
+msgid "Show the student results and registration state."
 msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
 #: templates/tutor_dashboard.html:9
-msgid "desc_lnk_scores_encoding"
+msgid "Get scores encoding papersheet and encode scores of your students."
 msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
 
 #: views/main.py:51
-msgid "error_multiple_registration_id"
+msgid "Error multiple registration id"
 msgstr ""
 "Un problème a été détecté au niveau de votre inscription : deux NOMAS sont "
 "affectés à votre utilisateur. Veuillez prendre contact avec le service des "
 "inscriptions (SIC) afin de résoudre le problème. Merci."
 
 #: templates/tutor_dashboard.html:33
-msgid "exam_student_list"
-msgstr ""
+msgid "Exam student list"
+msgstr "Liste des examens d'étudiant"
 
 #: templates/student_dashboard.html:30
-msgid "exams_enrollment"
-msgstr ""
-
-#: templates/dashboard_admin_menu.html:31
-#: templates/faculty_administrator_dashboard.html:34
-msgid "faculty_administration"
-msgstr "Administration facultaire"
+msgid "Exams enrollment"
+msgstr "Inscriptions aux examens"
 
 #: templates/student_dashboard.html:43
 #, fuzzy
 #| msgid "desc_lnk_internships"
-msgid "internships"
-msgstr "Gestion des stages des étudiants."
+msgid "Internships"
+msgstr "Stages"
 
 #: templates/faculty_administrator_dashboard.html:101
-msgid "lists_of_students_exams_enrollments"
-msgstr ""
+msgid "Lists of students exams enrollments"
+msgstr "Liste des étudiants inscrits aux examens"
 
 #: templates/tutor_dashboard.html:43
-msgid "manage_educational_information"
+msgid "Manage educational information"
 msgstr "Gérer les informations pédagogiques"
 
 #: templates/tutor_dashboard.html:18
-msgid "my_applications"
-msgstr ""
+msgid "My applications"
+msgstr "Mes applications"
 
 #: templates/student_dashboard.html:18
-msgid "my_attestations"
-msgstr ""
+msgid "My attestations"
+msgstr "Mes attestations"
 
 #: templates/tutor_dashboard.html:26
-msgid "my_teaching_charge"
-msgstr ""
+msgid "My teaching charge"
+msgstr "Ma charge d'enseignement"
 
 #: templates/student_dashboard.html:8
 #, fuzzy
 #| msgid "desc_lnk_performance"
-msgid "performance"
-msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
+msgid "Performance"
+msgstr ""
 
 #: templates/faculty_administrator_dashboard.html:45
 #, fuzzy
 #| msgid "faculty_administration"
-msgid "performance_administration"
-msgstr "Administration facultaire"
+msgid "Performance administration"
+msgstr "Gestion performance"
 
 #: templates/tutor_dashboard.html:8
-msgid "scores_encoding"
+msgid "Scores encoding"
 msgstr "Encodage de notes"
 
 #: templates/faculty_administrator_dashboard.html:89
-msgid "scores_sheets_admin"
+msgid "Scores sheets administration"
 msgstr "Administration des feuilles de notes"
 
 #: templates/tutor_dashboard.html:54
-msgid "use_vpn"
+msgid "This requires a VPN access outside UCL."
 msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
 
-#: templates/tutor_dashboard.html:50
-msgid "use_vpn_with_link_end"
-msgstr "\" target=\"_blank\" >accès VPN</a> en dehors du réseau de l'UCL."
+msgid "This requires a"
+msgstr "Ceci nécessite un "
 
-#: templates/tutor_dashboard.html:50
-msgid "use_vpn_with_link_start"
-msgstr "Ceci nécessite un <a href=\""
+msgid "VPN access"
+msgstr "accès VPN"
+
+msgid "outside UCL."
+msgstr "en dehors du réseau de l'UCL."
