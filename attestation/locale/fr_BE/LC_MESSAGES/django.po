@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 16:52+0100\n"
+"POT-Creation-Date: 2018-11-13 17:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: tests/views/test_main.py:80 tests/views/test_main.py:172
-#: tests/views/test_main.py:280
 msgid ""
 "A problem was detected with your registration : 2 registration id's are "
 "linked to your user. Please contact the registration departement (SIC). "
@@ -82,9 +81,13 @@ msgid "Registration id"
 msgstr "Id d'enregistrement"
 
 #: templates/admin/attestation_administration.html:39
-#: tests/views/test_main.py:201 tests/views/test_main.py:368 views/main.py:80
+#: tests/views/test_main.py:201 tests/views/test_main.py:366 views/main.py:80
 #: views/main.py:112
 #, fuzzy
 #| msgid "student_attestations"
 msgid "Student attestations"
 msgstr "Attestations de l'étudiant"
+
+#: tests/views/test_main.py:286
+msgid "no_student_with_this_registration_id"
+msgstr ""

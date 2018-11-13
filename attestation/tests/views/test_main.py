@@ -277,15 +277,13 @@ class SelectStudentAttestationTest(TestCase):
 
     def test_invalid_post_request(self):
         self.client.force_login(self.person.user)
-        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-                "contact the registration departement (SIC). Thank you.")
 
         response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, "admin/attestation_administration.html")
 
-        self.assertFormError(response, 'form', 'registration_id', msg)
+        self.assertFormError(response, 'form', 'registration_id', _('no_student_with_this_registration_id'))
 
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses', side_effect=lambda x: None)
     def test_valid_post_request_but_no_attestation(self, mock_fetch_json_attestation_statuses):
