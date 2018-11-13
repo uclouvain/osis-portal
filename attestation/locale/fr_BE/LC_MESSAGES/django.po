@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 16:46+0100\n"
+"POT-Creation-Date: 2018-11-13 16:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,17 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: tests/views/test_main.py:80 tests/views/test_main.py:172
+#: tests/views/test_main.py:280
+msgid ""
+"A problem was detected with your registration : 2 registration id's are "
+"linked to your user. Please contact the registration departement (SIC). "
+"Thank you."
+msgstr ""
+"Un problème a été détecté au niveau de votre inscription : deux NOMAS sont "
+"affectés à votre utilisateur. Veuillez prendre contact avec le service des "
+"inscriptions (SIC) afin de résoudre le problème. Merci."
 
 #: templates/attestation_home.html:34 templates/attestation_home.html:40
 #: templates/attestation_home_admin.html:32
@@ -40,10 +51,6 @@ msgstr "Attestations pour l'année académique"
 msgid "Available"
 msgstr "Disponible"
 
-#: tests/views/test_main.py:90 tests/views/test_main.py:180
-msgid "Error multiple registration id"
-msgstr "Erreur d'id d'enregistrement multiple"
-
 #: templates/admin/attestation_administration.html:30
 #: templates/attestation_home.html:31 templates/attestation_home_admin.html:30
 #, fuzzy
@@ -63,12 +70,6 @@ msgstr "Nom"
 msgid "No attestation available"
 msgstr "Aucune attestation disponible"
 
-#: tests/views/test_main.py:282
-#, fuzzy
-#| msgid "student_attestations"
-msgid "No student with this registration id"
-msgstr "Pas d'étudiant avec cet id d'enregistrement"
-
 #: templates/attestation_content.html:53 templates/attestation_home.html:75
 msgid "Printed"
 msgstr "Imprimée"
@@ -81,18 +82,9 @@ msgid "Registration id"
 msgstr "Id d'enregistrement"
 
 #: templates/admin/attestation_administration.html:39
-#: tests/views/test_main.py:197 tests/views/test_main.py:362 views/main.py:80
+#: tests/views/test_main.py:201 tests/views/test_main.py:368 views/main.py:80
 #: views/main.py:112
 #, fuzzy
 #| msgid "student_attestations"
 msgid "Student attestations"
 msgstr "Attestations de l'étudiant"
-
-#~ msgid ""
-#~ "A problem was detected with your registration : 2 registration id's are "
-#~ "linked to your user. Please contact the registration departement (SIC). "
-#~ "Thank you."
-#~ msgstr ""
-#~ "Un problème a été détecté au niveau de votre inscription : deux NOMAS "
-#~ "sont affectés à votre utilisateur. Veuillez prendre contact avec le "
-#~ "service des inscriptions (SIC) afin de résoudre le problème. Merci."
