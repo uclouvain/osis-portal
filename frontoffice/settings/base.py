@@ -214,9 +214,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 # If you want to change the default settings,
 # you have to redefine the LANGUAGE_CODE and LANGUAGES vars in environment settings (ex: dev.py)
-LANGUAGE_CODE = 'fr-be'
+LANGUAGE_CODE = 'fr_BE-be'
 LANGUAGES = [
-    ('fr-be', _('French')),
+    ('fr_BE-be', _('French')),
     ('en', _('English')),
 ]
 # You can change default values for internalizations settings in your .env file

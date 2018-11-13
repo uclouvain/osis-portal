@@ -149,7 +149,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(blank=True, max_length=255, null=True)),
                 ('phone', models.CharField(blank=True, max_length=30, null=True)),
                 ('phone_mobile', models.CharField(blank=True, max_length=30, null=True)),
-                ('language', models.CharField(choices=[('fr-be', 'French'), ('en', 'English')], default='fr-be', max_length=30, null=True)),
+                ('language', models.CharField(choices=[('fr_BE-be', 'French'), ('en', 'English')], default='fr_BE-be', max_length=30, null=True)),
                 ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
