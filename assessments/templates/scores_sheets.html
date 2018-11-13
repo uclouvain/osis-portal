@@ -27,13 +27,13 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-        <li><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'scores_encoding' %}</a></li>
-        <li class="active">{% trans 'my_scores_sheets' %}</li>
+        <li><a href="{% url 'scores_encoding' %}" id="lnk_score_encoding">{% trans 'Scores Encoding' %}</a></li>
+        <li class="active">{% trans 'My scores sheets' %}</li>
 {% endblock %}
 
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'my_scores_sheets' %}</h2>
+    <h2>{% trans 'My scores sheets' %}</h2>
 </div>
 
 <div class="panel panel-default">
@@ -43,10 +43,10 @@
         </div>
         <div>
             <button id="lnk_ask_papersheet" onclick="ask_papersheet()" class="btn btn-lg btn-primary" style="display: none;">
-                {% trans 'ask_papersheet' %}
+                {% trans 'Ask scores sheets' %}
             </button>
             <a href="{% url 'scores_download' person.global_id %}" id="lnk_scores_download" class="btn btn-lg btn-primary" style="display: none;">
-                {% trans 'download' %}
+                {% trans 'Download' %}
             </a>
         </div>
     </div>
@@ -84,8 +84,8 @@
         }
 
         window.onload = function() {
-            var scores_in_db_and_uptodate = '{{scores_in_db_and_uptodate|safe}}'
-            var scores_sheets_unavailable = '{{scores_sheets_unavailable|safe}}'
+            var scores_in_db_and_uptodate = '{{ scores_in_db_and_uptodate|safe }}'
+            var scores_sheets_unavailable = '{{ scores_sheets_unavailable|safe }}'
 
             if(scores_in_db_and_uptodate == 'False'){
                 hide(message_box);
@@ -94,12 +94,12 @@
             else if(scores_sheets_unavailable == 'True') {
                 show(message_box, 'block');
                 set_class(message_box, "alert alert-warning");
-                show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %}");
+                show_message_in_container(status_message, "{% trans 'Scores sheets are not available for now.' %}");
                 show(lnk_ask_papersheet, 'inline-block');
             }
             else{
                 set_class(message_box, "alert alert-success");
-                show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+                show_message_in_container(status_message, "{% trans 'Scores sheets are ready!' %}");
                 show(lnk_scores_download, 'inline-block');
             }
         };
@@ -108,7 +108,8 @@
             disable(lnk_ask_papersheet);
             show(message_box, 'block');
             set_class(message_box, "alert alert-info");
-            show_message_in_container(status_message, "<i class=\"fa fa-spinner fa-spin fa-fw\"></i> {% trans 'scores_sheet_loading' %}");
+            show_message_in_container(status_message, "<i class=\"fa fa-spinner fa-spin fa-fw\"></i> " +
+                "{% trans 'Scores sheets are loading.' %}");
 
             send_request();
         }
@@ -122,7 +123,7 @@
                 },
                 error: function () {
                     set_class(message_box, "alert alert-warning");
-                    show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                    show_message_in_container(status_message, "{% trans 'Scores sheets are not available for now.' %} ");
                     enable(lnk_ask_papersheet);
                 }
             });
@@ -134,7 +135,7 @@
                 url: "{% url 'check_papersheet' person.global_id %}",
                 success: function () {
                     set_class(message_box, "alert alert-success");
-                    show_message_in_container(status_message, "{% trans 'scores_sheet_ready' %}");
+                    show_message_in_container(status_message, "{% trans 'Scores sheets are ready!' %}");
                     hide(lnk_ask_papersheet);
                     show(lnk_scores_download, 'inline-block');
                 },
@@ -147,7 +148,8 @@
                     }
                     else {
                         set_class(message_box, "alert alert-warning");
-                        show_message_in_container(status_message, "{% trans 'scores_sheet_unavailable' %} ");
+                        show_message_in_container(status_message,
+                            "{% trans 'Scores sheets are not available for now.' %} ");
                         enable(lnk_ask_papersheet);
                     }
                 }

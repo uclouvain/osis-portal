@@ -176,7 +176,7 @@ def download_papersheet(request, global_id=None):
 
     pdf = print_scores(person.global_id)
     if pdf:
-        filename = "%s.pdf" % _('scores_sheet')
+        filename = "%s.pdf" % _('Score sheet')
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
         response.write(pdf)
