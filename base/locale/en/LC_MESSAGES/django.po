@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"POT-Creation-Date: 2018-11-13 16:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,59 +17,203 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "acces_denied"
+#: templates/access_denied.html:34
+#, fuzzy
+#| msgid "acces_denied"
+msgid "Access denied"
 msgstr "Access denied"
 
-msgid "administration"
+#: templates/admin/administration_layout.html:7
+#: templates/admin/data_maintenance.html:29 templates/layout.html:83
+#, fuzzy
+#| msgid "administration"
+msgid "Administration"
 msgstr "Administration"
 
-msgid "data"
-msgstr "Data"
-
-msgid "data_management"
-msgstr "Data management"
-
-msgid "desc_lnk_data_management"
-msgstr "Management of data by entity"
-
-msgid "page_not_found"
-msgstr "Page not found"
-
-msgid "server_error"
-msgstr "A server error occurred."
-
-msgid "server_error_message"
-msgstr ""
-  "We have been automatically informed about this problem. Do not hesitate to help us to solve this problem by "
-  "contacting the <a href='https://uclouvain.be/ServiceDesk' target='_blank'>Service Desk</a> to describe what you "
-  "intended to do in more details."
-
-msgid "succesfull_logout"
-msgstr "You are succesfully logout."
-
-msgid "redirect_to_login"
-msgstr "Click to reconnect"
-
-msgid "sql_command"
-msgstr "SQL command"
-
-msgid "data_maintenance"
-msgstr "Data maintenance"
-
-msgid "desc_lnk_data_maintenance"
-msgstr "Data maintenance by SQL"
-
-msgid "forbidden_sql_keywords"
-msgstr "Forbidden SQL keywords"
-
-msgid "result"
-msgstr "Result"
-
-msgid "are_you_sure"
+#: templates/admin/data_maintenance.html:69
+#, fuzzy
+#| msgid "are_you_sure"
+msgid "Are you sure ?"
 msgstr "Are you sure ?"
 
-msgid "sql_readonly"
+#: templates/logged_out.html:37
+msgid "Click here to reconnect"
+msgstr ""
+
+#: templates/upload_file_form.html:48 templates/upload_file_list.html:49
+msgid "Content type"
+msgstr ""
+
+#: templates/admin/data.html:31 templates/admin/data.html:36
+#: templates/admin/data_maintenance.html:30 templates/layout.html:88
+msgid "Data"
+msgstr ""
+
+#: templates/admin/data.html:51 templates/admin/data_maintenance.html:31
+#: templates/admin/data_maintenance.html:35
+#, fuzzy
+#| msgid "data_maintenance"
+msgid "Data maintenance"
+msgstr "Data maintenance"
+
+#: templates/admin/data.html:52
+#, fuzzy
+#| msgid "data_maintenance"
+msgid "Data maintenance via SQL"
+msgstr "Data maintenance"
+
+#: templates/admin/data.html:45
+#, fuzzy
+#| msgid "data_management"
+msgid "Data management"
+msgstr "Data management"
+
+#: templates/admin/data.html:46
+#, fuzzy
+#| msgid "data_management"
+msgid "Data management by entity"
+msgstr "Data management"
+
+#: templates/upload_file_form.html:61 templates/upload_file_list.html:57
+msgid "Description"
+msgstr ""
+
+#: templates/server_error.html:38
+msgid "Do not hesitate to help us to solve this problem by contacting the"
+msgstr ""
+
+#: templates/upload_file_form.html:30 templates/upload_file_list.html:41
+msgid "File"
+msgstr ""
+
+#: templates/upload_file_form.html:39 templates/upload_file_list.html:33
+msgid "File name"
+msgstr ""
+
+#: templates/admin/data_maintenance.html:45
+#, fuzzy
+#| msgid "forbidden_sql_keywords"
+msgid "Forbidden SQL keywords"
+msgstr "Forbidden SQL keywords"
+
+#: templates/page_not_found.html:34
+#, fuzzy
+#| msgid "page_not_found"
+msgid "Page not found"
+msgstr "Page not found"
+
+#: templates/admin/data_maintenance.html:58
+#, fuzzy
+#| msgid "result"
+msgid "Result"
+msgstr "Result"
+
+#: templates/admin/data_maintenance.html:42
+#, fuzzy
+#| msgid "sql_command"
+msgid "SQL command"
+msgstr "SQL command"
+
+#: templates/admin/data_maintenance.html:44
+#, fuzzy
+#| msgid "sql_readonly"
+msgid "SQL readonly"
 msgstr "SQL readonly"
 
-msgid "msg_error_username_password_not_matching"
-msgstr "Invalid Username or Password"
+#: templates/server_error.html:34
+msgid "Unexpected error occurred"
+msgstr ""
+
+#: templates/registration/login.html:34
+msgid "Username or password not valid"
+msgstr ""
+
+#: templates/server_error.html:37
+msgid "We have been automatically informed about this problem."
+msgstr ""
+
+#: templates/logged_out.html:36
+msgid "You are now logged out"
+msgstr ""
+
+#: templates/admin/data_maintenance.html:52
+msgid "execute"
+msgstr ""
+
+#: models/person.py:48
+msgid "female"
+msgstr ""
+
+#: templates/registration/login.html:31
+msgid "log in"
+msgstr ""
+
+#: templates/logged_out.html:31
+msgid "logout"
+msgstr ""
+
+#: models/person.py:49
+msgid "male"
+msgstr ""
+
+#: forms/base_forms.py:41
+msgid "no student with this registration_id"
+msgstr ""
+
+#: forms/base_forms.py:53
+msgid "no tutor with this global_id"
+msgstr ""
+
+#: templates/registration/login.html:46
+msgid "password"
+msgstr ""
+
+#: templates/admin/data_maintenance.html:53
+msgid "reset"
+msgstr ""
+
+#: templates/server_error.html:40
+msgid "to describe what you intended to do in more details."
+msgstr ""
+
+#: models/person.py:50
+msgid "unknown"
+msgstr ""
+
+#: templates/registration/login.html:42
+msgid "user"
+msgstr ""
+
+#~ msgid "data"
+#~ msgstr "Data"
+
+#~ msgid "administration"
+#~ msgstr "Administration"
+
+#~ msgid "data_maintenance"
+#~ msgstr "Data maintenance"
+
+#~ msgid "desc_lnk_data_maintenance"
+#~ msgstr "Data maintenance by SQL"
+
+#~ msgid "desc_lnk_data_management"
+#~ msgstr "Management of data by entity"
+
+#~ msgid "msg_error_username_password_not_matching"
+#~ msgstr "Invalid Username or Password"
+
+#~ msgid "redirect_to_login"
+#~ msgstr "Click to reconnect"
+
+#~ msgid "server_error"
+#~ msgstr "A server error occurred."
+
+#~ msgid "server_error_message"
+#~ msgstr ""
+#~ "We have been automatically informed about this problem. Do not hesitate "
+#~ "to help us to solve this problem by contacting the <a href='https://"
+#~ "uclouvain.be/ServiceDesk' target='_blank'>Service Desk</a> to describe "
+#~ "what you intended to do in more details."
+
+#~ msgid "succesfull_logout"
+#~ msgstr "You are succesfully logout."

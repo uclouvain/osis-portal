@@ -28,10 +28,10 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-  <h1>{% trans 'log-in' %}</h1>
+  <h1>{% trans 'log in' %}</h1>
   {% if form.errors %}
     <p class="text-danger">
-      {% trans 'msg_error_username_password_not_matching' %}
+      {% trans 'Username or password not valid' %}
     </p>
   {% endif %}
   <br>
