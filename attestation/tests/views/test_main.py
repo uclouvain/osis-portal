@@ -87,7 +87,7 @@ class HomeTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+        self.assertEqual(messages[0].message, _('Error multiple registration id'))
 
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses', side_effect=lambda x: None)
     def test_when_not_receive_attestation_statuses(self, mock_fetch_json_attestation_statuses):
@@ -177,7 +177,7 @@ class DownloadAttestationTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+        self.assertEqual(messages[0].message, _('Error multiple registration id'))
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
            side_effect=lambda global_id, year, attestation_type, username: None)
