@@ -113,7 +113,9 @@ class ViewPerformanceHomeTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+        self.assertEqual(messages[0].message,
+                         _("A problem was detected with your registration : 2 registration id's are linked to "
+                           "your user. Please contact the registration departement (SIC). Thank you."))
 
     def test_with_empty_programs_list(self):
         response = self.client.get(self.url)
@@ -185,7 +187,9 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+        self.assertEqual(messages[0].message,
+                         _("A problem was detected with your registration : 2 registration id's are linked to "
+                           "your user. Please contact the registration departement (SIC). Thank you."))
 
     def test_when_none_student_performance(self):
         self.student_performance.delete()
@@ -229,8 +233,11 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
         self.assertEqual(response.context['update_date'], self.student_performance.update_date)
         self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = _(
+            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
+                           % {"session_month": _(self.student_performance.session_locked)}
         self.assertEqual(response.context['not_authorized_message'],
-                         _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+                         response_message)
 
 
 class SelectStudentTest(TestCase):
@@ -418,8 +425,10 @@ class VisualizeStudentResult(TestCase):
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
         self.assertEqual(response.context['update_date'], self.student_performance.update_date)
         self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = _('The publication of the notes from the %(session_month)s session was not authorized by our faculty.')\
+               % {"session_month": _(self.student_performance.session_locked)}
         self.assertEqual(response.context['not_authorized_message'],
-                         _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+                         response_message)
 
 
 class ViewPerformanceByAcronymAndYear(TestCase):

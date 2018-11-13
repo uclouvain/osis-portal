@@ -18,162 +18,168 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: templates/performance_result.html:53
-msgid "academic_year"
-msgstr ""
+msgid "Academic Year"
+msgstr "Année académique"
 
 #: templates/performance_result.html:167
-msgid "acquired_charge_credits"
+msgid "Acquired Charge Credits"
 msgstr "Crédits acquis de charge"
 
 #: templates/performance_result.html:168
-msgid "acquired_progression_credits"
+msgid "Acquired Progression Credits"
 msgstr "Crédits acquis de progression"
 
 #: templates/performance_home.html:69
-msgid "acronym"
+msgid "Acronym"
 msgstr "Sigle"
 
 #: templates/performance_result.html:122
-msgid "course"
+msgid "Course"
 msgstr "Cours"
 
 #: templates/performance_result.html:86
-msgid "courses_registration_not_validated"
+msgid "Your courses registration is being processed"
 msgstr "Votre inscription aux cours est en cours de traitement."
 
 #: templates/performance_result.html:82
-msgid "courses_registration_validated"
+msgid "Your courses registration has been validated by the jury."
 msgstr "Votre inscription aux cours a été validée par le jury."
 
 #: templates/performance_result.html:129
-msgid "credited"
+msgid "Credited"
 msgstr "Crédité"
 
 #: templates/performance_result.html:159
-msgid "cycle_advancement"
+msgid "Cycle credits advancement"
 msgstr "Progression des crédits dans le programme"
 
 #: templates/performance_result.html:162
-msgid "cycle_advancement_explanations"
+msgid "Acquired cycle credits are included in the cycle mean. Only acquired progression credits are accounted for"
+      " requested credits."
 msgstr ""
 "Les crédits acquis de charge sont tous inclus dans la moyenne de cycle. "
 "Seuls les crédits acquis de progression sont pris en compte pour atteindre "
 "le nombre de crédits requis."
 
 #: templates/performance_result.html:171
-msgid "cycle_total_credits"
+msgid "Cycle"
 msgstr "Cycle d'études"
 
 #: templates/performance_home.html:62
-msgid "dont_have_the_score_yet"
+msgid "The score are yet to be published."
 msgstr "Vos résultats ne sont pas encore disponibles."
 
 #: templates/performance_result.html:96 templates/performance_result.html:124
-msgid "ects"
+msgid "ECTS"
 msgstr "ECTS"
 
 #: tests/views/test_main.py:116 tests/views/test_main.py:188
 #, fuzzy
 #| msgid "registration_id"
-msgid "error_multiple_registration_id"
-msgstr "Noma"
+msgid "A problem was detected with your registration : 2 registration id's are linked to your user. Please contact the "
+      "registration departement (SIC). Thank you."
+msgstr "Un problème a été détecté au niveau de votre inscription : deux NOMAS sont affectés à votre utilisateur. "
+       "Veuillez prendre contact avec le service des inscriptions (SIC) afin de résoudre le problème. Merci."
 
 #: templates/admin/performance_administration.html:32
 #: templates/admin/performance_home_admin.html:31
 #: templates/admin/performance_result_admin.html:30
 #, fuzzy
 #| msgid "performance_administration"
-msgid "faculty_administration"
+msgid "Exam marks and registration state administration"
 msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
 #: templates/performance_home.html:48 templates/performance_result.html:50
-msgid "first_name"
+msgid "First Name"
 msgstr "Prénom"
 
 #: templates/performance_result.html:111
-msgid "general_mean"
+msgid "General mean"
 msgstr "Moyenne générale"
 
 #: templates/performance_result.html:74
-msgid "generated"
+msgid "Generated on"
 msgstr "Générée le"
 
 #: templates/performance_result.html:125
-msgid "inscr"
+msgid "Inscr"
 msgstr "Inscr."
 
 #: templates/performance_result.html:97 templates/performance_result.html:126
-msgid "jan"
+msgid "Jan."
 msgstr "Janv."
 
 #: templates/performance_result.html:98 templates/performance_result.html:127
-msgid "june"
+msgid "June"
 msgstr "Juin"
 
 #: templates/performance_home.html:48 templates/performance_result.html:50
-msgid "last_name"
+msgid "Last Name"
 msgstr "Nom"
 
 #: templates/performance_result.html:138
-msgid "learning_unitys_outside_catalog"
+msgid "This registration is \"out of catalog\" or \"preemptive\" and the associated "
+      "credits are not accounted in the requested credits."
 msgstr ""
 "Cette inscription est \"hors programme\" ou \"supplémentaire\" et les "
 "crédits associés ne sont pas pris en compte pour atteindre le nombre de "
 "crédits requis."
 
 #: templates/performance_result.html:151
-msgid "legend"
+msgid "Legend"
 msgstr "Légende"
 
 #: templates/performance_home.html:53
-msgid "matricule_number"
+msgid "Registration Number"
 msgstr "Matricule"
 
 #: templates/performance_result.html:105
-msgid "mean"
+msgid "Mean"
 msgstr "Moyenne"
 
 #: templates/performance_result.html:114
-msgid "mention"
+msgid "Mention"
 msgstr "Mention"
 
 #: templates/performance_home.html:33
 #: templates/performance_home_student.html:30
 #: templates/performance_result.html:33
 #: templates/performance_result_student.html:30
-msgid "my_performance"
+msgid "My exam marks and regisration state"
 msgstr "Mon état d'inscription aux cours et mes notes d'examen"
 
 #: templates/performance_result.html:71
-msgid "next_update"
+msgid "Date of the next document regeneration"
 msgstr "Date de la prochaine mise à jour du document"
 
 #: templates/performance_result.html:45
-msgid "no_results"
+msgid "No results to show."
 msgstr "Vous n'avez aucune note."
 
 #: tests/views/test_main.py:278
-msgid "no_student_with_this_registration_id"
+msgid "No student with this registration id"
 msgstr "Aucun étudiant avec ce noma!"
 
 #: templates/admin/performance_home_admin.html:33
-msgid "performance"
+msgid "Exam marks and registration state"
 msgstr "Etat d'inscription aux cours et notes d'examens"
 
 #: templates/admin/performance_administration.html:33
 #: templates/admin/performance_home_admin.html:32
 #: templates/admin/performance_result_admin.html:31
-msgid "performance_administration"
+msgid "Exam marks and registration state administration"
 msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
 #: templates/performance_result.html:62
-msgid "performance_result_fetch_timed_out"
+msgid "The server is actually overloaded. Please excuse us and try again later."
 msgstr ""
 "Le nombre important d'utilisateurs empêche momentanément la mise à jour de "
 "vos notes. Veuillez nous en excuser et réessayer un peu plus tard."
 
 #: templates/performance_result.html:39
-msgid "performance_result_note_legal_announcement"
+msgid "This results are intended as communication between faculty and students. "
+      "Only the appendix to the diploma, which lists all the courses taken during a "
+      "program of study and points obtained, can be considered as an official transcript."
 msgstr ""
 "Cette feuille de résultats est destinée à la communication entre la faculté "
 "et les étudiants. Seule l'annexe au diplôme que l'étudiant reçoit avec celui-"
@@ -182,57 +188,59 @@ msgstr ""
 "officiel."
 
 #: tests/views/test_main.py:233 tests/views/test_main.py:422 views/main.py:67
-msgid "performance_result_note_not_autorized"
+msgid "The publication of the notes from the %(session_month)s session was not authorized by our faculty."
 msgstr ""
-"La diffusion des notes de la session de {} n'a pas encore été autorisée par "
+"La diffusion des notes de la session de %(session_month)s n'a pas encore été autorisée par "
 "votre faculté."
 
 #: templates/admin/performance_result_admin.html:32
 #: templates/performance_result_student.html:31
-msgid "performance_results"
+msgid "Results"
 msgstr "Résultats"
 
 #: templates/performance_home.html:40
-msgid "performance_results_general_legal_announcement"
+msgid "This component reflects the status of the information stored in the official "
+      "databases of the university at the time of publication and according to the "
+      "rules of publication decided by the secretariat of your faculty."
 msgstr ""
 "Ce composant reflète l'état des informations enregistrées dans les bases de "
 "données officielles de l'université au moment de leur affichage et selon des "
 "modalités de diffusion décidées par le secrétariat de votre faculté."
 
 #: templates/performance_home.html:70 templates/performance_result.html:56
-msgid "program"
+msgid "Program"
 msgstr "Programme"
 
 #: templates/admin/performance_administration.html:60
-msgid "registration_id"
+msgid "Registration Id"
 msgstr "Noma"
 
 #: templates/performance_result.html:99 templates/performance_result.html:128
-msgid "sept"
+msgid "Sept."
 msgstr "Sept."
 
 #: templates/admin/performance_administration.html:41
-msgid "student_performance"
+msgid "Exam marks and registration state of a student"
 msgstr "Etat d'inscription aux cours et notes d'examens d'un étudiant"
 
 #: templates/performance_result.html:108
-msgid "success_mean"
+msgid "Success mean"
 msgstr "Moyenne de réussite"
 
 #: templates/performance_result.html:134
-msgid "text_mean_exprimed_for_20"
+msgid "Attention : From June 2009, the score is expressed to a maximum of 20."
 msgstr ""
 "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de "
 "20."
 
 #: templates/performance_result.html:123
-msgid "title"
+msgid "Title"
 msgstr "Titre"
 
 #: templates/performance_result.html:102
-msgid "total_ects_inscription"
+msgid "Total ECTS / Enrollment"
 msgstr "Total ECTS / Inscription"
 
 #: templates/performance_home.html:68
-msgid "year"
+msgid "Year"
 msgstr "Année"
