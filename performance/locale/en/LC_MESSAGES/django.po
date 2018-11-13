@@ -159,11 +159,6 @@ msgstr ""
 msgid "Exam marks and registration state"
 msgstr ""
 
-#: templates/admin/performance_administration.html:33
-#: templates/admin/performance_home_admin.html:32
-#: templates/admin/performance_result_admin.html:31
-msgid "Exam marks and registration state administration"
-msgstr ""
 
 #: templates/performance_result.html:62
 msgid "The server is actually overloaded. Please excuse us and try again later."
