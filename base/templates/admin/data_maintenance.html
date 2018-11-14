@@ -26,23 +26,23 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-<li>{% trans 'administration' %}</li>
-<li><a href="{% url 'data' %}">{% trans 'data' %}</a></li>
-<li class="active">{% trans 'data_maintenance' %}</li>
+<li>{% trans 'Administration' %}</li>
+<li><a href="{% url 'data' %}">{% trans 'Data' %}</a></li>
+<li class="active">{% trans 'Data maintenance' %}</li>
 {% endblock %}
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'data_maintenance' %}</h2>
+    <h2>{% trans 'Data maintenance' %}</h2>
 </div>
 <div class="panel panel-default">
     <div class="panel-body">
         <form id="form_data_maintenance" method="post" action="{% url 'data_maintenance' %}" >
             {% csrf_token %}
             <div class="form-group">
-                <label for="txa_sql_command">{% trans 'sql_command' %}</label>
+                <label for="txa_sql_command">{% trans 'SQL command' %}</label>
                 <textarea id="txa_sql_command" name="sql_command" class="form-control" rows="10">{{ sql_command | default_if_none:'' }}</textarea>
-                <br><label>{% trans 'sql_readonly' %} :</label> {{ sql_readonly|yesno:"Yes,No" }}
-                <br><label>{% trans 'forbidden_sql_keywords' %} :</label>
+                <br><label>{% trans 'SQL readonly' %} :</label> {{ sql_readonly|yesno:"Yes,No" }}
+                <br><label>{% trans 'Forbidden SQL keywords' %} :</label>
                 {% for word in forbidden_sql_keywords %}
                     {{ word }}{% if not forloop.last %} - {% endif %}
                 {% endfor %}
@@ -55,7 +55,7 @@
             {% if results %}
                 <br><br>
                 <div class="form-group">
-                    <label for="txa_result">{% trans 'result' %}</label>
+                    <label for="txa_result">{% trans 'Result' %}</label>
                     <textarea id="txa_result" class="form-control" rows="10">{% for result in results %}{{ result }}{% endfor %}</textarea>
                 </div>
             {% endif %}
@@ -66,7 +66,7 @@
 {% block script %}
 <script>
     $('#bt_reset').click(function() {
-        if(confirm('{% trans 'are_you_sure' %}')) {
+        if(confirm('{% trans 'Are you sure ?' %}')) {
             $('#txa_sql_command').val('');
         }
     });
