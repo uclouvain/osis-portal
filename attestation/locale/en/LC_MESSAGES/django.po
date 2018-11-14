@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 17:26+0100\n"
+"POT-Creation-Date: 2018-11-14 16:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,8 +77,4 @@ msgstr ""
 #: tests/views/test_main.py:201 tests/views/test_main.py:366 views/main.py:80
 #: views/main.py:112
 msgid "Student attestations"
-msgstr ""
-
-#: tests/views/test_main.py:286
-msgid "no student with this registration_id"
 msgstr ""

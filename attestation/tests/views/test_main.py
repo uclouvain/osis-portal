@@ -282,8 +282,8 @@ class SelectStudentAttestationTest(TestCase):
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, "admin/attestation_administration.html")
-
-        self.assertFormError(response, 'form', 'registration_id', _('no student with this registration_id'))
+        # Message valided in base test
+        self.assertEqual(len(response.context['form'].errors), 1)
 
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses', side_effect=lambda x: None)
     def test_valid_post_request_but_no_attestation(self, mock_fetch_json_attestation_statuses):

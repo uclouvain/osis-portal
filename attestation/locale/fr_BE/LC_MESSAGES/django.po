@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 17:26+0100\n"
+"POT-Creation-Date: 2018-11-14 16:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,8 +52,6 @@ msgstr "Disponible"
 
 #: templates/admin/attestation_administration.html:30
 #: templates/attestation_home.html:31 templates/attestation_home_admin.html:30
-#, fuzzy
-#| msgid "attestation_administration"
 msgid "Faculty administration"
 msgstr "Administration des facultés"
 
@@ -75,21 +73,11 @@ msgstr "Imprimée"
 
 #: templates/admin/attestation_administration.html:58
 #: templates/attestation_content.html:41 templates/attestation_home.html:61
-#, fuzzy
-#| msgid "attestation"
 msgid "Registration id"
 msgstr "Id d'enregistrement"
 
 #: templates/admin/attestation_administration.html:39
 #: tests/views/test_main.py:201 tests/views/test_main.py:366 views/main.py:80
 #: views/main.py:112
-#, fuzzy
-#| msgid "student_attestations"
 msgid "Student attestations"
 msgstr "Attestations de l'étudiant"
-
-#: tests/views/test_main.py:286
-#, fuzzy
-#| msgid "No student with this registration id"
-msgid "no student with this registration_id"
-msgstr "Aucun étudiant avec ce noma!"
