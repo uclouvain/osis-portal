@@ -104,6 +104,8 @@ class ViewPerformanceHomeTest(TestCase):
 
     def test_multiple_students_objects_for_one_user(self):
         StudentFactory(person=self.student.person)
+        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
+                "contact the registration departement (SIC). Thank you.")
 
         response = self.client.get(self.url)
 
@@ -113,7 +115,7 @@ class ViewPerformanceHomeTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+        self.assertEqual(messages[0].message, msg)
 
     def test_with_empty_programs_list(self):
         response = self.client.get(self.url)
@@ -176,6 +178,8 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
     def test_multiple_students_objects_for_one_user(self):
         StudentFactory(person=self.student.person)
+        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
+                "contact the registration departement (SIC). Thank you.")
 
         response = self.client.get(self.url)
 
@@ -185,7 +189,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+        self.assertEqual(messages[0].message, msg)
 
     def test_when_none_student_performance(self):
         self.student_performance.delete()
@@ -272,10 +276,9 @@ class SelectStudentTest(TestCase):
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'admin/performance_administration.html')
-
         self.assertIsInstance(response.context['form'], RegistrationIdForm)
-
-        self.assertFormError(response, 'form', 'registration_id', _('no_student_with_this_registration_id'))
+        # Message valided in base test
+        self.assertEqual(len(response.context['form'].errors), 1)
 
     def test_valid_post_request(self):
         response = self.client.post(self.url, data={'registration_id': self.student.registration_id})
