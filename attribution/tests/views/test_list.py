@@ -119,7 +119,7 @@ class StudentsListTest(TestCase):
         # Create an enrollment to exam [NOT enrolled]
         off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
         LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment,
-                                      enrollment_state=None)
+                                      enrollment_state="")
 
         url = reverse('attribution_students', kwargs={
             'learning_unit_year_id': a_learning_unit_year.id,

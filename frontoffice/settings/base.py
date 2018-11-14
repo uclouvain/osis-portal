@@ -354,7 +354,13 @@ ATTESTATION_CONFIG = {
 
 
 # Continuing education settings
-ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_ACTIVATION_DAYS = int(os.environ.get('IUFC_ACCOUNT_ACTIVATION_DAYS', 7))
+IUFC_CONFIG = {
+    'ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION': os.environ.get('IUFC_ACTIVATION_MAIL_OUTSIDE_PRODUCTION',
+                                                             'false').lower() == 'true',
+    'PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION': os.environ.get('IUFC_PASSWORD_RESET_MAIL_OUTSIDE_PRODUCTION',
+                                                                 'false').lower() == 'true'
+}
 
 if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
     from .functional_tests import *

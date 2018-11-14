@@ -50,6 +50,9 @@ class LearningUnitYear(SerializableModel):
     subtype = models.CharField(max_length=50, blank=True, null=True,
                                choices=learning_unit_year_subtypes.LEARNING_UNIT_YEAR_SUBTYPES)
 
+    class Meta:
+        unique_together = (('learning_unit', 'academic_year'), ('acronym', 'academic_year'))
+
     def __str__(self):
         return u"%s - %s" % (self.academic_year, self.acronym)
 
