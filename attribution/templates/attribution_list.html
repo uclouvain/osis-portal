@@ -28,23 +28,23 @@
     <thead>
         <tr>
             <th colspan="2"></th>
-            <th colspan="2">{% trans 'learning_unit_volumes' %}</th>
-            <th colspan="2" style="border-left: 1px solid;">{% trans 'vacant' %} </th>
-            <th colspan="6" style="border-left: 1px solid;">{% trans 'charge' %} </th>
+            <th colspan="2">{% trans 'Learning unit volumes' %}</th>
+            <th colspan="2" style="border-left: 1px solid;">{% trans 'Vacant' %} </th>
+            <th colspan="6" style="border-left: 1px solid;">{% trans 'Charge' %} </th>
         </tr>
         <tr>
-            <th>{% trans 'code'%}</th>
-            <th>{% trans 'title'%}</th>
-            <th>{% trans 'lecturing_hours'%}</th>
-            <th>{% trans 'practical_hours'%}</th>
-            <th style="border-left: 1px solid;">{% trans 'lecturing_hours'%}</th>
-            <th>{% trans 'practical_hours'%}</th>
-            <th style="border-left: 1px solid;">{% trans 'lecturing_hours_allocated'%}</th>
-            <th>{% trans 'practical_hours_allocated'%}</th>
-            <th>{% trans 'function'%}</th>
-            <th>{% trans 'start' %}</th>
-            <th>{% trans 'end' %}</th>
-            <th>{% trans 'teachers' %}</th>
+            <th>{% trans 'Code'%}</th>
+            <th>{% trans 'Title'%}</th>
+            <th>{% trans 'Vol.1'%}</th>
+            <th>{% trans 'Vol.2'%}</th>
+            <th style="border-left: 1px solid;">{% trans 'Vol.1'%}</th>
+            <th>{% trans 'Vol.2'%}</th>
+            <th style="border-left: 1px solid;">{% trans 'Vol.1'%}</th>
+            <th>{% trans 'Vol.2'%}</th>
+            <th>{% trans 'Function'%}</th>
+            <th>{% trans 'Start' %}</th>
+            <th>{% trans 'End' %}</th>
+            <th>{% trans 'Teachers' %}</th>
         </tr>
     </thead>
     {% for attribution in attributions %}
@@ -66,7 +66,7 @@
                 {% with teacher_number=forloop.counter0 %}
                     <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
                        aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}" style="border:0;padding:0;"
-                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'display_teachers' %}">
+                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'Display teachers' %}">
                         <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
                     </a>
                 {% endwith %}
@@ -85,7 +85,7 @@
     {% endfor %}
     <tfoot>
         <tr>
-            <td colspan="6" ><label class="pull-right">{% trans 'total' %}</label></td>
+            <td colspan="6" ><label class="pull-right">{% trans 'Total' %}</label></td>
             <td>{{ tot_lecturing|default_if_none:'0,0' }}</td>
             <td>{{ tot_practical|default_if_none:'0,0' }}</td>
             <td colspan="4"></td>

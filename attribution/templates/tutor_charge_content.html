@@ -24,14 +24,14 @@
 * at the root of the source code of this program.  If not,
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
-<h1>{% trans 'tutor_charge' %}</h1>
+<h1>{% trans 'Teaching charge' %}</h1>
 <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 
 
 {% if error %}
 <div id="warning_no_address_found" class="alert alert-dismissible alert-warning">
      <button type="button" class="close" data-dismiss="alert">&times;</button>
-     <p><span class="fa fa-info-circle" aria-hidden="true"></span> {% trans 'error_retrieving_attributions_charge' %}</p>
+     <p><span class="fa fa-info-circle" aria-hidden="true"></span> {% trans 'The volume of charge is not available at the moment. Please try again later.' %}</p>
  </div>
  {% endif %}
 
@@ -54,17 +54,17 @@
 {% if attributions %}
     <table class="table table-striped table-hover">
         <tr>
-            <th>{% trans 'code'%}</th>
-            <th>{% trans 'title'%}</th>
-            <th>{% trans 'start' %}</th>
-            <th>{% trans 'lecturing_hours'%}</th>
-            <th>{% trans 'practical_hours'%}</th>
+            <th>{% trans 'Code'%}</th>
+            <th>{% trans 'Title'%}</th>
+            <th>{% trans 'Start' %}</th>
+            <th>{% trans 'Vol.1'%}</th>
+            <th>{% trans 'Vol.2'%}</th>
             <th>%</th>
-            <th>{% trans 'weight' %}</th>
-            <th>{% trans 'students' %}</th>
-            <th>{% trans 'schedule'%}</th>
-            <th>{% trans 'email'%}</th>
-            <th>{% trans 'function'%}</th>
+            <th>{% trans 'Weight' %}</th>
+            <th>{% trans 'Students' %}</th>
+            <th>{% trans 'Schedule'%}</th>
+            <th>{% trans 'Email'%}</th>
+            <th>{% trans 'Function'%}</th>
         </tr>
         {% for attribution in attributions %}
             <tr>
@@ -89,7 +89,7 @@
         {% endfor %}
         <tr>
             <td></td>
-            <td ><label>{% trans 'total' %}</label></td>
+            <td ><label>{% trans 'Total' %}</label></td>
             <td></td>
             <td>{%if not error%}{{ tot_lecturing }}{%endif%}</td>
             <td>{%if not error%}{{ tot_practical }}{%endif%}</td>
@@ -98,5 +98,5 @@
     </table>
 {% else %}
     <br>
-    <div class="alert alert-info" role="alert">{% trans 'no_teaching_charge' %} {{ academic_year }}</div>
+    <div class="alert alert-info" role="alert">{% trans 'No teaching charge in ' %} {{ academic_year }}</div>
 {% endif %}

@@ -171,7 +171,7 @@ class ListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['my_learning_units'], [])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
                                            'ATTRIBUTION_PATH': '/path'})
@@ -193,7 +193,7 @@ class ListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['my_learning_units'], [a_learning_unit_year])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     def test_when_trying_to_access_other_tutor_students_list(self):
         an_other_tutor = TutorFactory()
@@ -213,7 +213,7 @@ class ListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], an_other_tutor.person)
         self.assertEqual(response.context['my_learning_units'], [])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
                                            'ATTRIBUTION_PATH': '/path'})
@@ -317,7 +317,7 @@ class AdminListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['learning_units'], [])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
                                            'ATTRIBUTION_PATH': '/path'})
@@ -340,7 +340,7 @@ class AdminListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['learning_units'], [a_learning_unit_year])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
                                            'ATTRIBUTION_PATH': '/path'})
