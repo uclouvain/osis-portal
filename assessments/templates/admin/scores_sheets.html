@@ -27,8 +27,12 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-    <li class="active">{% trans 'scores_sheets_admin' %}</li>
+    <li>
+        <a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">
+            {% trans 'Faculty administration' %}
+        </a>
+    </li>
+    <li class="active">{% trans 'Scores sheets administration' %}</li>
 {% endblock %}
 
 
@@ -36,7 +40,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans 'scores_sheets' %}
+            {% trans 'Scores sheets' %}
         </div>
         <div class="panel-body">
             <form action="{% url 'scores_sheets_admin' %}" name="scores_sheets_admin" method="post" target="_blank">
@@ -55,7 +59,7 @@
                 <div class="row text-center">
                     <div class="form-group col-md-3 col-md-offset-4">
                         <input id="global_id" name="global_id" class="form-control" type="text"
-                               placeholder="{% trans 'global_id' %}">
+                               placeholder="{% trans 'Global id' %}">
                     </div>
                     <div class="col-md-1">
                         <button type="submit" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i>
