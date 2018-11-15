@@ -413,11 +413,6 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: templates/students_list.html:33 templates/tutor_charge.html:34
-#: templates/tutor_charge_content.html:27
-msgid "Teaching charge"
-msgstr ""
-
 #: templates/applications_list.html:31 templates/attribution_list.html:32
 #: templates/attribution_renewal_list.html:41
 #: templates/attribution_vacant_list.html:85
