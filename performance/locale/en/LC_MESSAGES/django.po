@@ -25,15 +25,15 @@ msgid ""
 msgstr ""
 
 #: templates/performance_result.html:53
-msgid "Academic Year"
+msgid "Academic year"
 msgstr ""
 
 #: templates/performance_result.html:167
-msgid "Acquired Charge Credits"
+msgid "Acquired charge credits"
 msgstr ""
 
 #: templates/performance_result.html:168
-msgid "Acquired Progression Credits"
+msgid "Acquired progression credits"
 msgstr ""
 
 #: templates/performance_result.html:162

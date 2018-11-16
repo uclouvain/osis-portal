@@ -30,15 +30,15 @@ msgstr ""
 "inscriptions (SIC) afin de résoudre le problème. Merci."
 
 #: templates/performance_result.html:53
-msgid "Academic Year"
+msgid "Academic year"
 msgstr "Année académique"
 
 #: templates/performance_result.html:167
-msgid "Acquired Charge Credits"
+msgid "Acquired charge credits"
 msgstr "Crédits acquis de charge"
 
 #: templates/performance_result.html:168
-msgid "Acquired Progression Credits"
+msgid "Acquired progression credits"
 msgstr "Crédits acquis de progression"
 
 #: templates/performance_result.html:162
