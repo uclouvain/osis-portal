@@ -33,13 +33,13 @@
     {% block breadcrumb %}
         {% if perms.base.is_faculty_administrator %}
             <li><a href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}" id="lnk_applications">
-                {% trans 'applications_of' %} {{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }}
+                {% trans 'Applications of ' %} {{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }}
                 </a>
             </li>
         {% else %}
-            <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
+            <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'My applications' %}</a></li>
         {% endif %}
-        <li>{% trans 'my_application' %}</li>
+        <li>{% trans 'My application' %}</li>
     {% endblock %}
     <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
        target="help" id="lnk_user_manual_section"><span
@@ -50,7 +50,7 @@
 {% endblock %}
 {% block content %}
     <div class="panel panel-default" id="pnl_application_form">
-        <div class="panel-heading">{% trans 'application' %}</div>
+        <div class="panel-heading">{% trans 'Application' %}</div>
         <div class="panel-body">
             <form class="form" role="form"
                   action="{% url 'create_or_update_tutor_application' learning_container_year_id=learning_container_year.id %}"
@@ -69,12 +69,12 @@
 
                 <div class="row">
                     <div class="col-md-2">
-                        <label>{% trans 'code' %}</label>
+                        <label>{% trans 'Code' %}</label>
                         <br>
                         {{ form.learning_unit_year.acronym }}
                     </div>
                     <div class="col-md-6">
-                        <label>{% trans 'title' %}</label>
+                        <label>{% trans 'Title' %}</label>
                         <br>
                         {{ form.learning_unit_year.complete_title}}
                     </div>
@@ -82,14 +82,14 @@
                 <br>
                 <div class="row">
                     <div class="col-md-2">
-                        <label>{% trans 'lecturing_hours_vacant' %}</label>
+                        <label>{% trans 'Vol.1 vacant' %}</label>
                         <br>
                         <span name="max_charge_lecturing">
                             {{ form.attribution_vacant.LECTURING| default_if_none:'' }}
                         </span>
                     </div>
                     <div class="col-md-2">
-                        <label>{% trans 'practical_hours_vacant' %}</label>
+                        <label>{% trans 'Vol.2 vacant' %}</label>
                         <br>
                         <span name="max_charge_practical">
                             {{ form.attribution_vacant.PRACTICAL_EXERCISES| default_if_none:'' }}
@@ -99,7 +99,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-2">
-                        <label>{% trans 'lecturing_hours_applied' %}</label>
+                        <label>{% trans 'Vol.1 applied' %}</label>
                         <br>
                         {{ form.charge_lecturing_asked }}
                         {% if form.charge_lecturing_asked.errors %}
@@ -107,7 +107,7 @@
                         {% endif %}
                     </div>
                     <div class="col-md-2">
-                        <label>{% trans 'practical_hours_applied' %}</label>
+                        <label>{% trans 'Vol.2 applied' %}</label>
                         <br>
                          {{ form.charge_practical_asked }}
                          {% if form.charge_practical_asked.errors %}
@@ -118,7 +118,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12">
-                         <label>{% trans 'pedagogy_proposal' %}</label>
+                         <label>{% trans 'Pedagogy proposal' %}</label>
                          <br>
                          {{ form.course_summary }}
                     </div>
@@ -126,7 +126,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-12">
-                         <label>{% trans 'remark' %}</label>
+                         <label>{% trans 'Remark' %}</label>
                          <br>
                          {{ form.remark }}
                          {% if form.remark.errors %}
@@ -139,19 +139,19 @@
                     <div class="col-md-12">
                          <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                                      title="{% if not can_be_saved %}
-                                                {% trans 'wait_validation_epc' %}
+                                                {% trans 'Wait validation' %}
                                             {% endif %}">
-                            <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'submit' %}"
+                            <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'Submit' %}"
                                 {% if not can_be_saved %} disabled {% endif %}>
                                 <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-                                {% trans 'submit' %}
+                                {% trans 'Submit' %}
                             </button>
                          </div>
 
                         <a class="btn btn-default"
                            href="{% url 'applications_overview' %}"
-                           title="{% trans 'cancel' %}">
-                            {% trans 'cancel'|title %}
+                           title="{% trans 'Cancel' %}">
+                            {% trans 'Cancel' %}
                         </a>
                     </div>
                 </div>
