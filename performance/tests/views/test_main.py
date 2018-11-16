@@ -27,17 +27,17 @@ import json
 
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
-from base.forms.base_forms import RegistrationIdForm
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
-from base.tests.factories.student import StudentFactory
+import performance.tests.models.test_student_performance
+from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.student import StudentFactory
 from performance.models.enums import offer_registration_state
 from performance.tests.factories.student_performance import StudentPerformanceFactory
-import performance.tests.models.test_student_performance
 from performance.views import main
 
 OK = 200
@@ -48,8 +48,10 @@ class TestMain(TestCase):
     def setUp(self):
         self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
         self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points2.json")
-        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points3.json")
+        self.json_points = performance.tests.models.test_student_performance.load_json_file(
+            "performance/tests/ressources/points2.json")
+        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
+            "performance/tests/ressources/points3.json")
 
     def test_convert_student_performance_to_dic(self):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
@@ -233,8 +235,11 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
         self.assertEqual(response.context['update_date'], self.student_performance.update_date)
         self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = _(
+            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
+                           % {"session_month": _(self.student_performance.session_locked)}
         self.assertEqual(response.context['not_authorized_message'],
-                         _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+                         response_message)
 
 
 class SelectStudentTest(TestCase):
@@ -421,8 +426,11 @@ class VisualizeStudentResult(TestCase):
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
         self.assertEqual(response.context['update_date'], self.student_performance.update_date)
         self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = _(
+            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
+                           % {"session_month": _(self.student_performance.session_locked)}
         self.assertEqual(response.context['not_authorized_message'],
-                         _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+                         response_message)
 
 
 class ViewPerformanceByAcronymAndYear(TestCase):

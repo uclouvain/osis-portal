@@ -30,14 +30,14 @@
 
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'my_performance' %}</h2>
+    <h2>{% trans 'My exam marks and regisration state' %}</h2>
 </div>
 
 {% include "template_messages.html" %}
 
 {% if student %}
 <div class="alert alert-info" role="alert">
-    {% trans 'performance_results_general_legal_announcement' %}
+    {% trans 'This component reflects the status of the information stored in the official databases of the university at the time of publication and according to the rules of publication decided by the secretariat of your faculty.' %}
 </div>
 
 <div class="panel panel-default">
@@ -45,12 +45,12 @@
         <!-- Student info -->
         <div class="row">
             <div class="col-md-6">
-                <label>{% trans 'last_name' %}, {% trans 'first_name' %}</label>
+                <label>{% trans 'Last Name' %}, {% trans 'First Name' %}</label>
                 <br>
                 {{ student.person.last_name }}, {{ student.person.first_name }}
             </div>
             <div class="col-md-6">
-                <label>{% trans 'matricule_number' %}</label>
+                <label>{% trans 'Registration Number' %}</label>
                 <br>
                 {{ student.registration_id }}
             </div>
@@ -59,15 +59,15 @@
         {% if not programs %}
         <br>
         <br>
-        <p class="text-warning"> {% trans 'dont_have_the_score_yet' %} </p>
+        <p class="text-warning"> {% trans 'The score are yet to be published.' %} </p>
         {% endif %}
     </div>
     {% if programs %}
         <table id="table_academic_years" class="table table-hover">
             <tr>
-                <th>{% trans 'year' %}</th>
-                <th>{% trans 'acronym' %}</th>
-                <th>{% trans 'program' %}</th>
+                <th>{% trans 'Year' %}</th>
+                <th>{% trans 'Acronym' %}</th>
+                <th>{% trans 'Program' %}</th>
             </tr>
             {% for row in programs %}
             <tr>
