@@ -77,7 +77,7 @@ def download_attestation(request, academic_year, attestation_type):
     if attestation_pdf:
         return _make_pdf_attestation(attestation_pdf, attestation_type)
     else:
-        messages.add_message(request, messages.ERROR, _('error_fetching_attestation'))
+        messages.add_message(request, messages.ERROR, _('Student attestations'))
         return home(request)
 
 
@@ -109,7 +109,7 @@ def download_student_attestation(request, global_id, academic_year, attestation_
     else:
         person = person_mdl.find_by_global_id(global_id)
         student = student_mdl.find_by_person(person)
-        messages.add_message(request, messages.ERROR, _('error_fetching_attestation'))
+        messages.add_message(request, messages.ERROR, _('Student attestations'))
         return visualize_student_attestations(request, student.registration_id)
 
 

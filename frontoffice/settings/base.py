@@ -364,3 +364,11 @@ IUFC_CONFIG = {
 
 if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
     from .functional_tests import *
+
+# IUFC API
+URL_CONTINUING_EDUCATION_FILE_API = os.environ.get(
+    "URL_CONTINUING_EDUCATION_FILE_API",
+    ""
+)
+
+OSIS_PORTAL_TOKEN = os.environ.get("OSIS_PORTAL_TOKEN", "")
