@@ -90,8 +90,6 @@ msgstr "ECTS"
 #: templates/admin/performance_home_admin.html:32
 #: templates/admin/performance_result_admin.html:30
 #: templates/admin/performance_result_admin.html:31
-#, fuzzy
-#| msgid "performance_administration"
 msgid "Exam marks and registration state administration"
 msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
@@ -112,8 +110,6 @@ msgid "Generated on"
 msgstr "Générée le"
 
 #: templates/performance_result.html:125
-#, fuzzy
-#| msgid "Inscr"
 msgid "Inscr."
 msgstr "Inscr."
 
@@ -208,10 +204,6 @@ msgstr ""
 "modalités de diffusion décidées par le secrétariat de votre faculté."
 
 #: templates/performance_result.html:138
-#, fuzzy
-#| msgid ""
-#| "This registration is \"out of catalog\" or \"preemptive\" and the "
-#| "associated credits are not accounted in the requested credits."
 msgid ""
 "This registration is \\\"out of catalog\\\" or \\\"preemptive\\\" and the "
 "associated credits are not accounted in the requested credits."
@@ -256,11 +248,3 @@ msgstr "Votre inscription aux cours est en cours de traitement."
 #: templates/admin/performance_home_admin.html:33
 msgid "performance"
 msgstr ""
-
-#, fuzzy
-#~| msgid "No student with this registration id"
-#~ msgid "No student with this registration id"
-#~ msgstr "Aucun étudiant avec ce noma!"
-
-#~ msgid "Exam marks and registration state"
-#~ msgstr "Etat d'inscription aux cours et notes d'examens"
