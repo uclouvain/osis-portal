@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-16 10:00+0100\n"
+"POT-Creation-Date: 2018-11-16 10:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,6 +89,10 @@ msgstr ""
 #: templates/attribution_list.html:69
 #: templates/attribution_vacant_list.html:126
 msgid "Display teachers"
+msgstr ""
+
+#: templates/tutor_charge_content.html:63
+msgid "ECT"
 msgstr ""
 
 #: templates/tutor_charge_content.html:66
@@ -412,10 +416,6 @@ msgstr ""
 #: templates/applications_list.html:61 templates/applications_list.html:85
 #: templates/applications_list.html:97
 msgid "Wait validation"
-msgstr ""
-
-#: templates/tutor_charge_content.html:63
-msgid "ECT"
 msgstr ""
 
 #: templates/attribution_vacant_list.html:135

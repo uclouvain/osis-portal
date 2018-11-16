@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-16 10:00+0100\n"
+"POT-Creation-Date: 2018-11-16 10:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,6 +94,10 @@ msgstr "Sigle"
 #: templates/attribution_vacant_list.html:126
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
+
+#: templates/tutor_charge_content.html:63
+msgid "ECT"
+msgstr "ECT"
 
 #: templates/tutor_charge_content.html:66
 msgid "Email"
@@ -430,10 +434,6 @@ msgstr "Vol.2 vacant"
 #: templates/applications_list.html:97
 msgid "Wait validation"
 msgstr "En attente de validation"
-
-#: templates/tutor_charge_content.html:63
-msgid "ECT"
-msgstr "ECT"
 
 #: templates/attribution_vacant_list.html:135
 msgid "You already apply to this course."
