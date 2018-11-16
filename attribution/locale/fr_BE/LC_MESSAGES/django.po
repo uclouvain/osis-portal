@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-16 09:52+0100\n"
+"POT-Creation-Date: 2018-11-16 09:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,30 +18,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: business/tutor_application.py:93 business/tutor_application.py:102
-msgid "applications_in_pending_state"
-msgstr "La candidature est en attente de validation."
+msgid "Applications in pending state"
+msgstr "Administration des candidatures"
 
 #: business/tutor_application.py:127
-msgid "no_application_found"
+msgid "No application found"
 msgstr "Pas de candidature trouvée"
 
 #: business/tutor_application.py:135 templates/admin/students_exam_list.html:64
 #: templates/list/students_exam.html:54
-msgid "acronym"
-msgstr ""
+msgid "Acronym"
+msgstr "Sigle"
 
 #: business/tutor_application.py:218 templates/application_form.html:142
 #: templates/applications_list.html:61 templates/applications_list.html:85
 #: templates/applications_list.html:97
-msgid "wait_validation_epc"
+msgid "Wait validation"
 msgstr "En attente de validation"
 
 #: forms/application.py:64
-msgid "charge_lecturing_asked_or_charge_practical_asked_must_be_filled"
+msgid "Lecturing charge or practical charge must be filled"
 msgstr "Le vol.1 postulé ou le vol.2 postulé doit être rempli"
 
 #: forms/application.py:77 forms/application.py:86
-msgid "too_much"
+msgid "Too much"
 msgstr "Trop élevé"
 
 #: templates/admin/applications_administration.html:30
@@ -51,85 +51,82 @@ msgstr "Trop élevé"
 #: templates/tutor_charge_admin.html:32
 #, fuzzy
 #| msgid "attribution_administration"
-msgid "faculty_administration"
-msgstr "Administration des attributions"
+msgid "Faculties administration"
+msgstr "Administration des facultés"
 
 #: templates/admin/applications_administration.html:31
-msgid "applications_administration"
-msgstr "Administration des candidatures"
+#, fuzzy
+#| msgid "Attribution administration"
+msgid "Applications administration"
+msgstr "Administration des attributions"
 
 #: templates/admin/applications_administration.html:39
-#, fuzzy
-#| msgid "application"
-msgid "applications"
+#: templates/application_form.html:53 templates/applications_list.html:32
+msgid "Application"
 msgstr "Candidature"
 
 #: templates/admin/applications_administration.html:59
 #: templates/admin/attribution_administration.html:58
 #: templates/admin/students_list.html:57
-msgid "global_id"
+msgid "Global id"
 msgstr "Matricule fgs"
 
 #: templates/admin/attribution_administration.html:31
 #: templates/students_list_admin.html:34 templates/tutor_charge_admin.html:33
-msgid "attribution_administration"
+msgid "Attribution administration"
 msgstr "Administration des attributions"
 
 #: templates/admin/attribution_administration.html:39
-msgid "attributions"
+msgid "Attributions"
 msgstr "Attributions"
 
 #: templates/admin/students_exam_list.html:37
 #: templates/admin/students_list.html:31 templates/admin/students_list.html:38
-msgid "lists_of_students_exams_enrollments"
+msgid "Lists of students enrollments to exams"
 msgstr "Administration des listes des inscriptions des étudiants aux examens"
 
 #: templates/admin/students_exam_list.html:41
 #: templates/admin/students_exam_list.html:46
-msgid "exam_and_student_list"
+msgid "List of students enrolled to exams of "
 msgstr "Listes des étudiants inscrits aux examens de "
 
 #: templates/admin/students_exam_list.html:54
 #: templates/list/students_exam.html:44
-msgid "hlp_enrollment_exam_list"
+msgid "Choose the learning units you want to consider in the list"
 msgstr ""
 "Choisissez dans vos cours ceux que vous voulez considérer dans la liste "
 "produite"
 
 #: templates/admin/students_exam_list.html:76
 #: templates/list/students_exam.html:66
-msgid "no_learning_units"
+msgid "You aren't teaching for any learning unit"
 msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 
 #: templates/admin/students_exam_list.html:82
 #: templates/admin/students_exam_list.html:83
 #: templates/list/students_exam.html:72 templates/list/students_exam.html:74
-msgid "produce_xls"
+msgid "Produce xls"
 msgstr "Produire xls"
 
 #: templates/admin/students_exam_list.html:91
 #: templates/list/students_exam.html:81
-msgid "desc_lnk_my_students_list_legend"
+msgid "Legend to help you understanding the xls file"
 msgstr "Légende pour mieux comprendre le fichier xls"
 
 #: templates/application_form.html:36 templates/attribution_vacant_list.html:37
-msgid "applications_of"
-msgstr "Applications de "
+msgid "Applications of "
+msgstr "Candidatures de "
 
 #: templates/application_form.html:40 templates/attribution_overview.html:34
 #: templates/attribution_overview.html:46
 #: templates/attribution_overview.html:52
 #: templates/attribution_vacant_list.html:41
-msgid "my_applications"
+msgid "My applications"
 msgstr "Mes candidatures"
 
 #: templates/application_form.html:42
-msgid "my_application"
+msgid "My application"
 msgstr "Ma candidature"
-
-#: templates/application_form.html:53 templates/applications_list.html:32
-msgid "application"
-msgstr "Candidature"
 
 #: templates/application_form.html:72 templates/applications_list.html:35
 #: templates/attribution_list.html:36
@@ -137,7 +134,7 @@ msgstr "Candidature"
 #: templates/attribution_vacant_list.html:65
 #: templates/attribution_vacant_list.html:90
 #: templates/tutor_charge_content.html:57
-msgid "code"
+msgid "Code"
 msgstr "Sigle"
 
 #: templates/application_form.html:77 templates/applications_list.html:36
@@ -145,142 +142,131 @@ msgstr "Sigle"
 #: templates/attribution_renewal_list.html:55
 #: templates/attribution_vacant_list.html:91
 #: templates/tutor_charge_content.html:58
-msgid "title"
+msgid "Title"
 msgstr "Intitulé"
 
 #: templates/application_form.html:85
-msgid "lecturing_hours_vacant"
+msgid "Vol.1 vacant"
 msgstr "Vol.1 vacant"
 
 #: templates/application_form.html:92
-msgid "practical_hours_vacant"
+msgid "Vol.2 vacant"
 msgstr "Vol.2 vacant"
 
 #: templates/application_form.html:102
-msgid "lecturing_hours_applied"
+msgid "Vol.1 applied"
 msgstr "Vol.1 postulé"
 
 #: templates/application_form.html:110
-msgid "practical_hours_applied"
+msgid "Vol.2 applied"
 msgstr "Vol.2 postulé"
 
 #: templates/application_form.html:121
-msgid "pedagogy_proposal"
+msgid "Pedagogy proposal"
 msgstr "Votre proposition d'organisation pédagogique"
 
 #: templates/application_form.html:129
-msgid "remark"
+msgid "Remark"
 msgstr "Remarque"
 
 #: templates/application_form.html:144 templates/application_form.html:147
-msgid "submit"
+msgid "Submit"
 msgstr "Soumettre"
 
 #: templates/application_form.html:153 templates/application_form.html:154
-msgid "cancel"
-msgstr "annuler"
+msgid "Cancel"
+msgstr "Annuler"
 
 #: templates/applications_list.html:31 templates/attribution_list.html:32
 #: templates/attribution_renewal_list.html:41
 #: templates/attribution_vacant_list.html:85
-msgid "vacant"
+msgid "Vacant"
 msgstr "Vacant"
 
 #: templates/applications_list.html:37 templates/applications_list.html:39
 #: templates/attribution_list.html:38 templates/attribution_list.html:40
+#: templates/attribution_list.html:42
 #: templates/attribution_renewal_list.html:56
 #: templates/attribution_renewal_list.html:58
+#: templates/attribution_renewal_list.html:62
 #: templates/attribution_vacant_list.html:92
 #: templates/attribution_vacant_list.html:94 templates/teachers.html:32
 #: templates/tutor_charge_content.html:60
-msgid "lecturing_hours"
+msgid "Vol.1"
 msgstr "Vol.1"
 
 #: templates/applications_list.html:38 templates/applications_list.html:40
 #: templates/attribution_list.html:39 templates/attribution_list.html:41
+#: templates/attribution_list.html:43
 #: templates/attribution_renewal_list.html:57
 #: templates/attribution_renewal_list.html:59
+#: templates/attribution_renewal_list.html:63
 #: templates/attribution_vacant_list.html:93
 #: templates/attribution_vacant_list.html:95 templates/teachers.html:33
 #: templates/tutor_charge_content.html:61
-msgid "practical_hours"
+msgid "Vol.2"
 msgstr "Vol.2"
 
 #: templates/applications_list.html:50 templates/applications_list.html:66
 #: templates/attribution_vacant_list.html:104
 #: templates/attribution_vacant_list.html:111
-msgid "learning_unit_specifications"
+msgid "Specifications"
 msgstr "Cahier de charges"
 
 #: templates/applications_list.html:105
-msgid "remove"
+msgid "Cancel the application"
 msgstr "Annuler la candidature"
 
 #: templates/attribution_access_denied.html:38
+#: tests/views/test_online_application.py:107 views/online_application.py:57
 #, fuzzy
 #| msgid "application_denied"
-msgid "acces_denied"
+msgid "The period of online application is closed"
 msgstr ""
-"La période d'encodage des candidatures en ligne est fermée pour le moment."
-
-#: templates/attribution_access_denied.html:38
-#: tests/views/test_online_application.py:107 views/online_application.py:57
-msgid "application_denied"
-msgstr ""
-"La période d'encodage des candidatures en ligne est fermée pour le moment."
+"La période d'encodage des candidatures en ligne est fermée pour le moment"
 
 #: templates/attribution_list.html:31
 #: templates/attribution_renewal_list.html:40
 #: templates/attribution_vacant_list.html:84
-msgid "learning_unit_volumes"
+msgid "Learning unit volumes"
 msgstr "Volumes unité d'enseignement"
 
 #: templates/attribution_list.html:33
-msgid "charge"
+msgid "Charge"
 msgstr "Charge"
-
-#: templates/attribution_list.html:42
-#: templates/attribution_renewal_list.html:62
-msgid "lecturing_hours_allocated"
-msgstr "Vol.1"
-
-#: templates/attribution_list.html:43
-#: templates/attribution_renewal_list.html:63
-msgid "practical_hours_allocated"
-msgstr "Vol.2"
 
 #: templates/attribution_list.html:44
 #: templates/attribution_renewal_list.html:64 templates/teachers.html:34
 #: templates/tutor_charge_content.html:67
-msgid "function"
+msgid "Function"
 msgstr "Fonction"
 
 #: templates/attribution_list.html:45
 #: templates/attribution_renewal_list.html:60
 #: templates/tutor_charge_content.html:59
-msgid "start"
+msgid "Start"
 msgstr "Début"
 
 #: templates/attribution_list.html:46
 #: templates/attribution_renewal_list.html:61
-msgid "end"
+msgid "End"
 msgstr "Fin"
 
 #: templates/attribution_list.html:47 templates/attribution_vacant_list.html:96
-msgid "teachers"
+msgid "Teachers"
 msgstr "Enseignants"
 
 #: templates/attribution_list.html:69
 #: templates/attribution_vacant_list.html:126
-msgid "display_teachers"
+msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
 #: templates/attribution_list.html:88 templates/tutor_charge_content.html:92
-msgid "total"
+msgid "Total"
 msgstr "Total"
 
 #: templates/attribution_overview.html:45
-msgid "application_period"
+msgid "Application period from "
 msgstr "Période de candidature en ligne du "
 
 #: templates/attribution_overview.html:45
@@ -288,186 +274,187 @@ msgid "to"
 msgstr "au"
 
 #: templates/attribution_overview.html:63
-msgid "confirm_applications_by_mail"
+msgid "To receive a confirmation email with the applications"
 msgstr ""
 "Pour recevoir un email de confirmation avec toutes les candidatures en ligne"
 
 #: templates/attribution_overview.html:71
 #: templates/attribution_vacant_list.html:143
-msgid "create_an_tutor_application"
+msgid "New application"
 msgstr "Nouvelle candidature"
 
 #: templates/attribution_overview.html:78
-msgid "no_tutor_application"
+msgid "No application"
 msgstr "Aucune candidature"
 
 #: templates/attribution_overview.html:85
-msgid "my_charges_vacant"
+msgid "My charges now vacant"
 msgstr "Mes charges échues"
 
 #: templates/attribution_overview.html:85
-msgid "without_application"
-msgstr "(sans candidature)"
+msgid "without application"
+msgstr "sans candidature"
 
 #: templates/attribution_overview.html:94
-msgid "my_charges"
+msgid "My charges"
 msgstr "Mes charges"
 
 #: templates/attribution_renewal_list.html:46
 #: templates/attribution_renewal_list.html:106
-msgid "desc_renewable"
+msgid "Reproduce identically in the following year"
 msgstr "Reproduire à l'identique l'année suivante"
 
 #: templates/attribution_renewal_list.html:47
 #: templates/attribution_renewal_list.html:107
-msgid "renew"
+msgid "Renew"
 msgstr "Reconduire"
 
 #: templates/attribution_renewal_list.html:51
-msgid "select_all"
+msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
 
 #: templates/attribution_renewal_list.html:81
-msgid "non_renewable"
+msgid "Non-renewable"
 msgstr "Non-reconductible"
 
 #: templates/attribution_vacant_list.html:43
-msgid "course_search"
+msgid "Vacant course search"
 msgstr "Recherche de cours vacant"
 
 #: templates/attribution_vacant_list.html:55
-msgid "learning_unit_vacant"
+msgid "Vacant learning unit"
 msgstr "Cours vacant"
 
 #: templates/attribution_vacant_list.html:62
-msgid "lu_search_explanation"
+msgid ""
+"To find a vacant learning unit to candidate to, introduce the code and click "
+"on the button"
 msgstr ""
 "Pour poser une candidature à un cours vacant dont vous n'assuriez pas la "
 "charge, veuillez introduire ci-après le sigle du cours et cliquer sur le "
 "bouton 'loupe'"
 
 #: templates/attribution_vacant_list.html:70
-msgid "vacant_learning_unit_year_search"
+msgid "Please enter the code of the course to which you would like to apply"
 msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
 
 #: templates/attribution_vacant_list.html:135
-msgid "no_application_possible"
+msgid "You already apply to this course."
 msgstr "Vous avez déjà candidaté pour ce cours."
 
 #: templates/attribution_vacant_list.html:137
-msgid "team_mngt_no_application_possible"
+msgid ""
+"This course is team-managed. The application to this activity is based on a "
+"paper transmission."
 msgstr ""
 "Ce cours est géré en équipe. La candidature des équipes d'enseignants "
 "s'effectue via la procédure papier."
 
 #: templates/attribution_vacant_list.html:162
-msgid "no_activity"
+msgid "No vacant corresponding course"
 msgstr "Pas d'activité vacante correspondante"
 
 #: templates/list/students_exam.html:32 templates/list/students_exam.html:36
-msgid "exam_student_list"
+msgid "List of students enrolled to my exams"
 msgstr "Listes des étudiants inscrits à mes examens"
 
-#: templates/students_list.html:33 templates/tutor_charge.html:34
+#: templates/students_list.html:33 templates/students_list_admin.html:35
+#: templates/tutor_charge.html:34 templates/tutor_charge_admin.html:34
 #: templates/tutor_charge_content.html:27
-msgid "tutor_charge"
+msgid "Teaching charge"
 msgstr "Charge d'enseignement"
 
 #: templates/students_list.html:34 templates/students_list_admin.html:37
 #: templates/tutor_charge_content.html:64
-msgid "students"
+msgid "Students"
 msgstr "Etudiants"
 
-#: templates/students_list_admin.html:35 templates/tutor_charge_admin.html:34
-msgid "teaching_charge"
-msgstr "Charge d'enseignement"
-
 #: templates/students_list_content.html:31
-msgid "students_learning_unit"
-msgstr "  étudiants inscrits au cours "
+msgid "students enrolled from"
+msgstr "  étudiants inscrits au cours"
 
 #: templates/students_list_content.html:33
-msgid "no_student_learning_unit"
+msgid "No students enrolled"
 msgstr "Aucun étudiant inscrit au cours"
 
 #: templates/students_list_content.html:38
-msgid "desc_export_xls_list"
+msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
 #: templates/students_list_content.html:39
-msgid "export_xls_list"
+msgid "Export list (Excel)"
 msgstr "Exporter liste (Excel)"
 
 #: templates/students_list_content.html:46
-msgid "program"
+msgid "Pgrm"
 msgstr "Pgrm"
 
 #: templates/students_list_content.html:47
-msgid "activity"
+msgid "Activity"
 msgstr "Activité"
 
-#: templates/students_list_content.html:49
-msgid "student"
+#: templates/students_list_content.html:49 templates/teachers.html:31
+msgid "Last name"
 msgstr "Nom"
 
 #: templates/students_list_content.html:50
-msgid "registration_id"
+msgid "Registration id"
 msgstr "Noma"
 
 #: templates/students_list_content.html:51
 #: templates/students_list_content.html:53
 #: templates/students_list_content.html:55
-msgid "status"
+msgid "State"
 msgstr "Etat"
 
 #: templates/students_list_content.html:52
-msgid "january"
+msgid "Jan."
 msgstr "Jan."
 
 #: templates/students_list_content.html:54
-msgid "june"
+msgid "June"
 msgstr "Juin"
 
 #: templates/students_list_content.html:56
-msgid "september"
+msgid "Sept."
 msgstr "Sept."
 
-#: templates/teachers.html:31
-msgid "lastname"
-msgstr ""
-
 #: templates/tutor_charge_content.html:34
-msgid "error_retrieving_attributions_charge"
+msgid ""
+"The volume of charge is not available at the moment. Please try again later."
 msgstr ""
 "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez "
 "réessayer plus tard."
 
 #: templates/tutor_charge_content.html:63
-msgid "weight"
+msgid "Weight"
 msgstr "ECT"
 
 #: templates/tutor_charge_content.html:65
-msgid "schedule"
+msgid "Schedule"
 msgstr "Horaire"
 
 #: templates/tutor_charge_content.html:66
-msgid "email"
+msgid "Email"
 msgstr "Email"
 
 #: templates/tutor_charge_content.html:101
-msgid "no_teaching_charge"
+msgid "No teaching charge in "
 msgstr "Pas de charge d'enseignement en "
 
 #: tests/views/test_list.py:174 tests/views/test_list.py:196
 #: tests/views/test_list.py:216 tests/views/test_list.py:320
 #: tests/views/test_list.py:343 views/list.py:113 views/list.py:194
-msgid "no_data"
+msgid "No data found"
 msgstr "Aucune donnée trouvée"
 
 #: tests/views/test_online_application.py:187 views/online_application.py:181
-msgid "no_attribution_renewed"
+msgid "No attribution renewed"
 msgstr "Pas d'attribution renouvelée"
 
 #: views/online_application.py:294
-msgid "applications_mail_sent"
+msgid "An email with your applications have been sent"
 msgstr "Un email contenant vos candidatures vous a été envoyé"
+
+#~ msgid "applications_in_pending_state"
+#~ msgstr "La candidature est en attente de validation."

@@ -29,11 +29,11 @@
     <ol class="breadcrumb">
         <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                           aria-hidden="true"></span></a></li>
-        <li class="active">{% trans 'exam_student_list' %}</li>
+        <li class="active">{% trans 'List of students enrolled to my exams' %}</li>
     </ol>
 {% endblock %}
 {% block content %}
-    <h1>{% trans 'exam_student_list' %}</h1>
+    <h1>{% trans 'List of students enrolled to my exams' %}</h1>
     {% if msg_error %}
         <br>
         <div class="alert alert-info">{{ msg_error }}</div>
@@ -41,7 +41,7 @@
     {% endif %}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div>{% trans 'hlp_enrollment_exam_list' %}</div>
+            <div>{% trans 'Choose the learning units you want to consider in the list' %}</div>
             <br>
             <form action="{% url 'students_list_create' %}" method="post">
             <div class="row">
@@ -51,7 +51,7 @@
                         <table class="table">
                             <thead>
                                 <th></th>
-                                <th>{% trans 'acronym' %}</th>
+                                <th>{% trans 'Acronym' %}</th>
                             </thead>
                             <tbody>
                                 {% for learning_unit_yr in my_learning_units %}
@@ -63,22 +63,22 @@
                             </tbody>
                         </table>
                     {% else %}
-                        <div class="alert alert-info">{% trans 'no_learning_units' %}</div>
+                        <div class="alert alert-info">{% trans "You aren't teaching for any learning unit" %}</div>
                     {% endif %}
                 </div>
             </div>
             <br>
             {% if my_learning_units %}
-                <button class="btn btn-success pull-right" id="bt_produce_xls" type="submit" title="{% trans 'produce_xls' %}" disabled >
+                <button class="btn btn-success pull-right" id="bt_produce_xls" type="submit" title="{% trans 'Produce xls' %}" disabled >
                     <i class="fa fa-table" aria-hidden="true" style="padding-left:10px;"></i>
-                    {% trans 'produce_xls' %}
+                    {% trans 'Produce xls' %}
                 </button>
 
                 <div>
                     <br>
                     <br>
                     <br>
-                    <label>{% trans 'desc_lnk_my_students_list_legend' %}</label>
+                    <label>{% trans 'Legend to help you understanding the xls file' %}</label>
                     <table class="table table-bordered">
                         <tr><td>Fac charge</td><td>Faculté responsable du cahier de charge</td></tr>
                         <tr><td>Comm charge</td><td>Commission/Ecole responsable du cahier de charge</td></tr>

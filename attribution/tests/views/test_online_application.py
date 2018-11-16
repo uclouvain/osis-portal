@@ -104,7 +104,7 @@ class TestOnlineApplication(TestCase):
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'warning')
-        self.assertEqual(messages[0].message, _('application_denied'))
+        self.assertEqual(messages[0].message, _('The period of online application is closed'))
 
     def test_applictions_overview(self):
         url = reverse('applications_overview')
@@ -184,7 +184,7 @@ class TestOnlineApplication(TestCase):
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('no_attribution_renewed'))
+        self.assertEqual(messages[0].message, _('No attribution renewed'))
 
     def test_renew_applications_method_not_allowed(self):
         url = reverse('renew_applications')

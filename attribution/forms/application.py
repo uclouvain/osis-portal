@@ -61,7 +61,7 @@ class ApplicationForm(BootstrapForm):
         cleaned_data = super(ApplicationForm, self).clean()
 
         if not cleaned_data.get('charge_lecturing_asked') and not cleaned_data.get('charge_practical_asked'):
-            raise forms.ValidationError(_('charge_lecturing_asked_or_charge_practical_asked_must_be_filled'))
+            raise forms.ValidationError(_('Lecturing charge or practical charge must be filled'))
 
     def clean_acronym(self):
         return self.learning_container_year.acronym
@@ -74,7 +74,7 @@ class ApplicationForm(BootstrapForm):
         if data_cleaned is not None:
             max_value = self.attribution_vacant.get(learning_component_year_type.LECTURING, 0)
             if data_cleaned > max_value:
-                self.add_error('charge_lecturing_asked', "{0} (max: {1})".format(_('too_much'), max_value))
+                self.add_error('charge_lecturing_asked', "{0} (max: {1})".format(_('Too much'), max_value))
             return Decimal('{:.1f}'.format(data_cleaned))
         return Decimal('0.0')
 
@@ -83,7 +83,7 @@ class ApplicationForm(BootstrapForm):
         if data_cleaned is not None:
             max_value = self.attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
             if data_cleaned > max_value:
-                self.add_error('charge_practical_asked', "{0} (max: {1})".format(_('too_much'), max_value))
+                self.add_error('charge_practical_asked', "{0} (max: {1})".format(_('Too much'), max_value))
             return Decimal('{:.1f}'.format(data_cleaned))
         return Decimal('0.0')
 

@@ -32,7 +32,7 @@ $('document').ready(function(){
 
     //Show confirm popup before delete application
     $("button[id^='lnk_application_delete_']").click(function() {
-        return confirm(gettext('confirm_application_delete'));
+        return confirm(gettext('Are you sure you want to delete the application?'));
     });
 });
 
