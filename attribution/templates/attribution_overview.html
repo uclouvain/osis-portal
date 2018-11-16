@@ -42,7 +42,7 @@
 {% endblock %}
 
 {% block content %}
-    <small style="color:black;font-family:Verdana;" class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans 'Application period from '%}{{ application_academic_calendar.start_date | default_if_none:''|date:"d/m/Y"}} {% trans 'to' %} {{ application_academic_calendar.end_date | default_if_none:''|date:"d/m/Y" }}</small>
+    <small style="color:black;font-family:Verdana;" class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans 'Application period from'%} {{ application_academic_calendar.start_date | default_if_none:''|date:"d/m/Y"}} {% trans 'to' %} {{ application_academic_calendar.end_date | default_if_none:''|date:"d/m/Y" }}</small>
     <h1>{% trans 'My applications' %}</h1>
     <h2>{{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }} - {{ a_tutor.person.global_id }}</h2>
 

@@ -36,7 +36,7 @@ msgid "Application"
 msgstr ""
 
 #: templates/attribution_overview.html:45
-msgid "Application period from "
+msgid "Application period from"
 msgstr ""
 
 #: templates/admin/applications_administration.html:31
@@ -415,7 +415,7 @@ msgid "Wait validation"
 msgstr ""
 
 #: templates/tutor_charge_content.html:63
-msgid "Weight"
+msgid "ECT"
 msgstr ""
 
 #: templates/attribution_vacant_list.html:135

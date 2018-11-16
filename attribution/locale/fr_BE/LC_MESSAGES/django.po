@@ -36,8 +36,8 @@ msgid "Application"
 msgstr "Candidature"
 
 #: templates/attribution_overview.html:45
-msgid "Application period from "
-msgstr "Période de candidature en ligne du "
+msgid "Application period from"
+msgstr "Période de candidature en ligne du"
 
 #: templates/admin/applications_administration.html:31
 #, fuzzy
@@ -432,7 +432,7 @@ msgid "Wait validation"
 msgstr "En attente de validation"
 
 #: templates/tutor_charge_content.html:63
-msgid "Weight"
+msgid "ECT"
 msgstr "ECT"
 
 #: templates/attribution_vacant_list.html:135
@@ -455,6 +455,3 @@ msgstr "au"
 #: templates/attribution_overview.html:85
 msgid "without application"
 msgstr "sans candidature"
-
-#~ msgid "applications_in_pending_state"
-#~ msgstr "La candidature est en attente de validation."
