@@ -26,6 +26,7 @@
 ############################################################################
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
+from django.template.defaulttags import register as reg
 
 register = template.Library()
 
@@ -37,3 +38,9 @@ def choice_for_offer(internship_choices, offer, internship):
         return str(choice)
     except ObjectDoesNotExist:
         return None
+
+
+@reg.filter
+def get_item(dictionary, key):
+    val = dictionary.get(key)
+    return val if val else ""
