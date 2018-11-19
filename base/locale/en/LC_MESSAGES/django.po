@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 17:09+0100\n"
+"POT-Creation-Date: 2018-11-19 13:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,17 +21,33 @@ msgstr ""
 msgid "Access denied"
 msgstr ""
 
+#: models/education_group_year.py:42
+msgid "Acronym"
+msgstr ""
+
 #: templates/admin/administration_layout.html:7
 #: templates/admin/data_maintenance.html:29 templates/layout.html:83
 msgid "Administration"
+msgstr ""
+
+#: models/education_group_year.py:89
+msgid "Administration entity"
 msgstr ""
 
 #: templates/admin/data_maintenance.html:69
 msgid "Are you sure ?"
 msgstr ""
 
+#: models/education_group_type.py:44
+msgid "Category"
+msgstr ""
+
 #: templates/logged_out.html:37
 msgid "Click here to reconnect"
+msgstr ""
+
+#: models/education_group_year.py:49
+msgid "Code"
 msgstr ""
 
 #: templates/upload_file_form.html:48 templates/upload_file_list.html:49
@@ -68,6 +84,14 @@ msgstr ""
 msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr ""
 
+#: models/education_group_year.py:94
+msgid "Education group year"
+msgstr ""
+
+#: models/education_group.py:47
+msgid "End"
+msgstr ""
+
 #: templates/upload_file_form.html:30 templates/upload_file_list.html:41
 msgid "File"
 msgstr ""
@@ -78,6 +102,18 @@ msgstr ""
 
 #: templates/admin/data_maintenance.html:45
 msgid "Forbidden SQL keywords"
+msgstr ""
+
+#: models/enums/education_group_categories.py:35
+msgid "Group"
+msgstr ""
+
+#: models/education_group_year.py:81
+msgid "Management entity"
+msgstr ""
+
+#: models/enums/education_group_categories.py:34
+msgid "Mini-Training"
 msgstr ""
 
 #: templates/page_not_found.html:34
@@ -96,6 +132,22 @@ msgstr ""
 msgid "SQL readonly"
 msgstr ""
 
+#: models/education_group.py:41
+msgid "Start"
+msgstr ""
+
+#: models/education_group_year.py:54
+msgid "Title in French"
+msgstr ""
+
+#: models/enums/education_group_categories.py:33
+msgid "Training"
+msgstr ""
+
+#: models/education_group_type.py:49 models/education_group_year.py:71
+msgid "Type of training"
+msgstr ""
+
 #: templates/server_error.html:34
 msgid "Unexpected error occurred"
 msgstr ""
@@ -104,12 +156,20 @@ msgstr ""
 msgid "Username or password not valid"
 msgstr ""
 
+#: models/education_group_year.py:59
+msgid "Validity"
+msgstr ""
+
 #: templates/server_error.html:37
 msgid "We have been automatically informed about this problem."
 msgstr ""
 
 #: templates/logged_out.html:36
 msgid "You are now logged out"
+msgstr ""
+
+#: models/education_group_year.py:76
+msgid "dissertation"
 msgstr ""
 
 #: templates/admin/data_maintenance.html:52
