@@ -34,7 +34,3 @@ CATEGORIES = (
     (MINI_TRAINING, _("Mini-Training")),
     (GROUP, _("Group")),
 )
-
-TRAINING_CATEGORIES = (
-    TRAINING, MINI_TRAINING
-)
