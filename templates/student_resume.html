@@ -159,10 +159,10 @@
                         Address: {{ affectation.organization.location }}
                         <br>
                         {% with organization=affectation.organization  speciality=affectation.speciality %}
-                            {% with master=masters|get_item:organization|get_item:speciality %}
-                                {% if master %}
+                            {% with offer=offers|get_item:organization|get_item:speciality %}
+                                {% if offer %}
                                     {% trans 'Master' %} :
-                                    {{ master.master }}
+                                    {{ offer.master }}
                                 {% endif %}
                             {% endwith %}
                         {% endwith %}
