@@ -25,19 +25,21 @@
 #
 ############################################################################
 import datetime
+
 from django.contrib.auth.decorators import login_required, permission_required
 
-from base.views import layout
-from internship.models import internship_student_information as mdl_student_information
-from internship.models import internship_student_affectation_stat as mdl_student_affectation
-from internship.models import internship_choice as mdl_internship_choice
-from internship.models import internship as mdl_internship
-from internship.models import period as mdl_period
-from internship.models import internship_speciality as mdl_internship_speciality
-from internship.models import cohort as mdl_internship_cohort
 from base.models import student as mdl_student
+from base.views import layout
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
+from internship.models import cohort as mdl_internship_cohort
+from internship.models import internship as mdl_internship
+from internship.models import internship_choice as mdl_internship_choice
+from internship.models import internship_offer as mdl_internship_offer
+from internship.models import internship_speciality as mdl_internship_speciality
+from internship.models import internship_student_affectation_stat as mdl_student_affectation
+from internship.models import internship_student_information as mdl_student_information
+from internship.models import period as mdl_period
 
 
 @login_required
@@ -57,13 +59,26 @@ def view_student_resume(request, cohort_id):
     student_choices = mdl_internship_choice.search(student=student, specialities=specialities)
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
     publication_allowed = cohort.publication_start_date <= datetime.date.today()
+    masters = {}
+    for affectation in student_affectations:
+        master = mdl_internship_offer.find_offer(
+            cohort=cohort,
+            speciality=affectation.speciality,
+            organization=affectation.organization
+        ).first()
+        try:
+            masters[affectation.organization].update({affectation.speciality: master})
+        except KeyError:
+            masters.update({affectation.organization: {affectation.speciality: master}})
     return layout.render(request, "student_resume.html", {"student": student,
                                                           "student_information": student_information,
                                                           "student_affectations": student_affectations,
                                                           "student_choices": student_choices,
                                                           "internships": internships,
                                                           "publication_allowed": publication_allowed,
-                                                          "cohort": cohort})
+                                                          "cohort": cohort,
+                                                          "masters": masters
+                                                          })
 
 
 def save_from_form(form, person, cohort):

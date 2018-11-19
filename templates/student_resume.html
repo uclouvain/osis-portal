@@ -157,6 +157,15 @@
                         {{ affectation.speciality.name }} | {{ affectation.organization }}
                         <br>
                         Address: {{ affectation.organization.location }}
+                        <br>
+                        {% with organization=affectation.organization  speciality=affectation.speciality %}
+                            {% with master=masters|get_item:organization|get_item:speciality %}
+                                {% if master %}
+                                    {% trans 'Master' %} :
+                                    {{ master.master }}
+                                {% endif %}
+                            {% endwith %}
+                        {% endwith %}
                     </div>
                 {% endfor %}
             </div>
