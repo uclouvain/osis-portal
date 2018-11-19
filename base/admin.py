@@ -26,6 +26,7 @@
 from base.models import *
 from django.contrib import admin
 
+from base.models import education_group, education_group_type, education_group_year
 
 admin.site.register(academic_calendar.AcademicCalendar,
                     academic_calendar.AcademicCalendarAdmin)
@@ -35,6 +36,15 @@ admin.site.register(academic_year.AcademicYear,
 
 admin.site.register(campus.Campus,
                     campus.CampusAdmin)
+
+admin.site.register(education_group.EducationGroup,
+                    education_group.EducationGroupAdmin)
+
+admin.site.register(education_group_type.EducationGroupType,
+                    education_group_type.EducationGroupTypeAdmin)
+
+admin.site.register(education_group_year.EducationGroupYear,
+                    education_group_year.EducationGroupYearAdmin)
 
 admin.site.register(entity.Entity,
                     entity.EntityAdmin)
