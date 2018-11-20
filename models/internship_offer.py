@@ -83,3 +83,7 @@ def find_by_pk(a_pk):
 
 def cohort_open_for_selection(cohort):
     return InternshipOffer.objects.filter(selectable=True, cohort=cohort).count() > 0
+
+
+def find_offer(speciality, cohort, organization):
+    return InternshipOffer.objects.filter(cohort=cohort, organization=organization, speciality=speciality)
