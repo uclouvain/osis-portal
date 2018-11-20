@@ -3,11 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 14:54+0100\n"
+"POT-Creation-Date: 2018-11-20 16:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,88 +18,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: templates/hospitals.html:83 templates/student_resume.html:113
-msgid "address"
-msgstr "Address"
-
-#: templates/cohort_selection.html:47
-msgid "affectation_available_since"
-msgstr "Affectations are available since"
-
-#: templates/student_resume.html:55
-msgid "choices_received_by_administration"
-msgstr "Choices received by administration"
-
-#: templates/internship_home.html:49 templates/internship_home.html:54
-msgid "choose_internships"
-msgstr "Submit your internship choices"
-
-#: templates/internship_selection.html:56
-msgid "choose_speciality"
-msgstr "Choose a speciality"
-
-#: templates/hospitals.html:57 templates/hospitals.html:85
-msgid "city"
-msgstr "City"
-
-#: templates/student_resume.html:122
-msgid "contest"
-msgstr "Contest"
-
-#: templates/hospitals.html:86
-msgid "country"
+msgid "Address"
 msgstr ""
 
-#: templates/student_resume.html:95
-msgid "email"
+#: templates/cohort_selection.html:47
+msgid "Affections are available from"
+msgstr ""
+
+#: templates/student_resume.html:55
+msgid "Choices received by administration"
+msgstr ""
+
+#: templates/internship_selection.html:56
+msgid "Choose a speciality"
+msgstr ""
+
+#: templates/hospitals.html:57 templates/hospitals.html:85
+msgid "City"
+msgstr ""
+
+#: templates/student_resume.html:122
+msgid "Contest"
+msgstr ""
+
+#: templates/hospitals.html:86
+msgid "Country"
 msgstr ""
 
 #: templates/cohort_selection.html:44
-msgid "enrollments_from"
-msgstr "Enrollments from"
-
-#: views/main.py:63 views/main.py:66
-msgid "error_does_not_belong_to_any_cohort"
+msgid "Enrollments from"
 msgstr ""
-"It seems you are not subscribed to internships, you may want to check with "
-"your administration."
 
 #: forms/form_offer_preference.py:33
-msgid "first_choice"
-msgstr "First choice"
+msgid "First choice"
+msgstr ""
 
 #: templates/student_resume.html:77
-#, fuzzy
-#| msgid "first_choice"
-msgid "first_name"
-msgstr "First choice"
+msgid "First name"
+msgstr ""
 
 #: forms/form_offer_preference.py:36
-msgid "fourth_choice"
-msgstr "Fourth choice"
-
-#: templates/student_resume.html:90
-msgid "gender"
+msgid "Fourth choice"
 msgstr ""
 
 #: models/internship_student_information.py:43
-msgid "generalist"
-msgstr "Generalist"
+msgid "Generalist"
+msgstr ""
+
+#: templates/hospitals.html:51 templates/internship_selection.html:91
+msgid "Hospital"
+msgstr ""
 
 #: templates/internship_home.html:71
-msgid "hospital_list"
-msgstr "Hospital list"
+msgid "Hospital list"
+msgstr ""
 
 #: templates/hospitals.html:32 templates/hospitals.html:38
-msgid "hospitals"
-msgstr "Hospitals"
+msgid "Hospitals"
+msgstr ""
 
 #: templates/student_resume.html:60
-msgid "internship_affectation"
-msgstr "Internship affectation"
-
-#: views/selection.py:141
-msgid "internship_choice_successfully_saved"
-msgstr "Your internship choices have been saved!"
+msgid "Internship affectation"
+msgstr ""
 
 #: templates/cohort_selection.html:30 templates/hospitals.html:31
 #: templates/internship_home.html:31 templates/internship_home.html:37
@@ -107,95 +88,113 @@ msgstr "Your internship choices have been saved!"
 #: templates/internship_selection_closed.html:31
 #: templates/internship_selection_closed.html:37
 #: templates/student_resume.html:31
-msgid "internships"
-msgstr "Internships"
+msgid "Internships"
+msgstr ""
+
+#: views/main.py:66 views/main.py:73
+msgid ""
+"It seems you are not subscribed to internships, you may want to check with "
+"your administration."
+msgstr ""
+
+#: templates/internship_selection.html:92
+msgid "Maximum number of students"
+msgstr ""
+
+#: templates/student_resume.html:103
+msgid "Mobile phone"
+msgstr ""
+
+#: templates/internship_selection.html:93
+msgid "Number of first choice"
+msgstr ""
+
+#: templates/internship_selection.html:94
+msgid "Preference"
+msgstr ""
+
+#: templates/hospitals.html:81
+msgid "Reference"
+msgstr ""
+
+#: templates/student_resume.html:82
+msgid "Registration id"
+msgstr ""
+
+#: forms/form_offer_preference.py:34
+msgid "Second choice"
+msgstr ""
+
+#: templates/cohort_selection.html:36
+msgid "Select a cohort"
+msgstr ""
+
+#: models/internship_student_information.py:42
+msgid "Specialist"
+msgstr ""
+
+#: templates/student_resume.html:49
+msgid "Student information"
+msgstr ""
+
+#: templates/internship_selection.html:122
+msgid "Submit choices"
+msgstr ""
+
+#: templates/internship_home.html:49 templates/internship_home.html:54
+msgid "Submit your internship choices"
+msgstr ""
+
+#: templates/internship_home.html:63 templates/student_resume.html:32
+#: templates/student_resume.html:38
+msgid "Sump up of your choices and your affectations"
+msgstr ""
+
+#: forms/form_offer_preference.py:35
+msgid "Third choice"
+msgstr ""
+
+#: templates/hospitals.html:87
+msgid "Website"
+msgstr ""
+
+#: templates/internship_selection_closed.html:42
+msgid "You can no longer submit your choices."
+msgstr ""
+
+#: views/selection.py:141
+msgid "Your internship choices have been saved !"
+msgstr ""
+
+#: templates/student_resume.html:95
+msgid "email"
+msgstr ""
+
+#: templates/student_resume.html:90
+msgid "gender"
+msgstr ""
 
 #: templates/student_resume.html:108
 msgid "language"
 msgstr ""
 
 #: templates/student_resume.html:72
-msgid "last_name"
+msgid "last name"
 msgstr ""
-
-#: templates/student_resume.html:103
-msgid "mobile_phone"
-msgstr "Mobile phone"
 
 #: templates/hospitals.html:82
 msgid "name"
 msgstr ""
 
-#: templates/internship_selection.html:93
-msgid "number_first_choice"
-msgstr "Number of first choice"
-
-#: templates/hospitals.html:51 templates/internship_selection.html:91
-msgid "organization"
-msgstr "Hospital"
-
 #: templates/hospitals.html:84
-msgid "postal_code"
+msgid "postal code"
 msgstr ""
-
-#: templates/internship_selection.html:94
-msgid "preference"
-msgstr "Preference"
-
-#: templates/hospitals.html:81
-msgid "reference"
-msgstr "Reference"
-
-#: templates/student_resume.html:82
-msgid "registration_id"
-msgstr ""
-
-#: forms/form_offer_preference.py:34
-msgid "second_choice"
-msgstr "Second choice"
-
-#: templates/cohort_selection.html:36
-msgid "select_cohort"
-msgstr "Select a Cohort"
 
 #: templates/internship_selection.html:33
 #: templates/internship_selection_closed.html:32
 msgid "selection"
-msgstr "selection"
-
-#: templates/internship_selection_closed.html:42
-msgid "selection_is_closed"
-msgstr "The selection is closed."
-
-#: models/internship_student_information.py:42
-msgid "specialist"
-msgstr "Specialist"
-
-#: templates/student_resume.html:49
-msgid "student_information"
-msgstr "Student information"
-
-#: templates/internship_selection.html:92
-msgid "student_max"
-msgstr "Maximum number of students"
-
-#: templates/internship_home.html:63 templates/student_resume.html:32
-#: templates/student_resume.html:38
-msgid "student_resume"
-msgstr "Sump up of your choices and your affectations"
-
-#: templates/internship_selection.html:122
-msgid "submit_choices"
-msgstr "Submit choices"
-
-#: forms/form_offer_preference.py:35
-msgid "third_choice"
-msgstr "Third choice"
+msgstr ""
 
 #: templates/cohort_selection.html:44
 msgid "to"
-msgstr "to"
-
-#: templates/hospitals.html:87
-msgid "website"
-msgstr "Website"
+msgstr ""

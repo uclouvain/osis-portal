@@ -138,7 +138,7 @@ def _handle_formset_to_save(request, selectable_offers, student, current_interns
         if formset.is_valid():
             _remove_previous_choices(student, current_internship, speciality)
             _save_student_choices(formset, student, current_internship, speciality)
-            messages.add_message(request, messages.SUCCESS, _('internship_choice_successfully_saved'))
+            messages.add_message(request, messages.SUCCESS, _('Your internship choices have been saved !'))
     else:
         formset = offer_preference_formset()
 

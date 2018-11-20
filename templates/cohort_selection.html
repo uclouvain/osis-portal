@@ -27,13 +27,13 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li class="active">{% trans 'internships' %}</li>
+    <li class="active">{% trans 'Internships' %}</li>
 {% endblock %}
 
 
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'select_cohort' %}</h2>
+    <h2>{% trans 'Select a cohort' %}</h2>
 </div>
 
 <div class="list-group">
@@ -41,10 +41,10 @@
         <a href="{% url 'internship_home' cohort_id=cohort.id %}" class="list-group-item">
             <h4 class="list-group-item-heading">{{ cohort }}</h4>
             {% if cohort.enrollment_active %}
-                <p class="list-group-item-text">{% trans 'enrollments_from' %} {{ cohort.subscription_start_date }} {% trans 'to' %} {{ cohort.subscription_end_date }}.</p>
+                <p class="list-group-item-text">{% trans 'Enrollments from' %} {{ cohort.subscription_start_date }} {% trans 'to' %} {{ cohort.subscription_end_date }}.</p>
             {% endif %}
             {% if cohort.publication_active %}
-                <p class="list-group-item-text">{% trans 'affectation_available_since' %} {{ cohort.publication_start_date }}</p>
+                <p class="list-group-item-text">{% trans 'Affections are available from' %} {{ cohort.publication_start_date }}</p>
             {% endif %}
         </a>
     {% endfor %}
