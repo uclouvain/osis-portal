@@ -28,18 +28,18 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
-    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'internships' %}</a></li>
+    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
     <li class="active">{% trans 'selection' %}</li>
 {% endblock %}
 
 {% block content %}
 <div class="page-header">
-    <h2>{% trans 'internships' %}</h2>
+    <h2>{% trans 'Internships' %}</h2>
 </div>
 
 <div class="panel panel-default">
     <div class="panel-body">
-        {% trans "selection_is_closed" %}
+        {% trans "You can no longer submit your choices." %}
     </div>
 </div>
 {% endblock %}

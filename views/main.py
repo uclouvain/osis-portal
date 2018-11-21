@@ -60,10 +60,18 @@ def view_cohort_selection(request):
             cohorts = [subscription.cohort for subscription in cohort_subscriptions]
             return layout.render(request, "cohort_selection.html", {'cohorts': cohorts})
         else:
-            messages.add_message(request, messages.ERROR, _('error_does_not_belong_to_any_cohort'))
+            messages.add_message(
+                request,
+                messages.ERROR,
+                _('It seems you are not subscribed to internships, you may want to check with your administration.')
+            )
             return redirect(dash_main_view.home)
     else:
-        messages.add_message(request, messages.ERROR, _('error_does_not_belong_to_any_cohort'))
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('It seems you are not subscribed to internships, you may want to check with your administration.')
+        )
         return redirect(dash_main_view.home)
 
 
