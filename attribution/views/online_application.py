@@ -54,7 +54,7 @@ from decimal import Decimal
 @login_required
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def outside_period(request):
-    text = _('application_denied')
+    text = _('The period of online application is closed')
     messages.add_message(request, messages.WARNING, "%s" % text)
     return layout.render(request, "attribution_access_denied.html", {})
 
@@ -178,7 +178,7 @@ def renew_applications(request):
                                  if attrib.get('acronym') in learning_container_year_acronyms and \
                                     attrib.get('is_renewable', False)]
     if not attribution_to_renew_list:
-        messages.add_message(request, messages.ERROR, _('no_attribution_renewed'))
+        messages.add_message(request, messages.ERROR, _('No attribution renewed'))
         return redirect('applications_overview')
 
     l_containers_years = mdl_base.learning_container_year.search(id=[
@@ -291,5 +291,5 @@ def send_mail_applications_summary(request):
     if error_msg:
         messages.add_message(request, messages.ERROR, _(error_msg))
     else:
-        messages.add_message(request, messages.INFO, _('applications_mail_sent'))
+        messages.add_message(request, messages.INFO, _('An email with your applications have been sent'))
     return redirect('applications_overview')

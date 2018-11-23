@@ -29,8 +29,8 @@
 {% block title %}Exam Marks Faculty Administration{% endblock %}
 
 {% block breadcrumb %}
-    <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-    <li class="active">{% trans 'performance_administration' %}</li>
+    <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'Exam marks and registration state administration' %}</a></li>
+    <li class="active">{% trans 'Exam marks and registration state administration' %}</li>
 {% endblock %}
 
 
@@ -38,7 +38,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans 'student_performance' %}
+            {% trans 'Exam marks and registration state of a student' %}
         </div>
         <div class="panel-body">
             <form action="{% url 'performance_administration' %}" name="select_student" method="post">
@@ -57,7 +57,7 @@
                 <div class="row text-center">
                     <div class="form-group col-md-3 col-md-offset-4">
                         <input id="registration_id" name="registration_id" class="form-control" type="text"
-                               placeholder="{% trans 'registration_id' %}">
+                               placeholder="{% trans 'Registration Id' %}">
                     </div>
                     <div class="col-md-1">
                         <button type="submit" class="btn btn-default" id="btn_search_perfs" ><i class="fa fa-search" aria-hidden="true"></i>

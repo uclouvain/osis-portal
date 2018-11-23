@@ -90,7 +90,7 @@ def create_or_update_application(global_id, application):
             if can_be_updated(application_found):
                 return _update_application(global_id, application)
             else:
-                raise ValueError(_("applications_in_pending_state"))
+                raise ValueError(_("Applications in pending state"))
     return _create_application(global_id, application)
 
 
@@ -99,7 +99,7 @@ def set_pending_flag(global_id, application, flag=None):
         application['pending'] = flag
         return _update_application(global_id, application)
     else:
-        raise ValueError(_("applications_in_pending_state"))
+        raise ValueError(_("Applications in pending state"))
 
 
 def validate_application(global_id, acronym, year):
@@ -124,7 +124,7 @@ def delete_application(global_id, acronym, year):
 def send_mail_applications_summary(global_id):
     application_list = get_application_list(global_id)
     if not application_list:
-        return _('no_application_found')
+        return _('No application found')
     person = mdl_base.person.find_by_global_id(global_id)
 
     html_template_ref = 'applications_confirmation_html'
@@ -132,7 +132,7 @@ def send_mail_applications_summary(global_id):
     receivers = [message_config.create_receiver(person.id, person.email, person.language)]
     applications = _get_applications_table(application_list)
     table_applications = message_config.create_table('applications',
-                                                     [_('acronym'),'Vol. 1','Vol. 2'],
+                                                     [_('Acronym'),'Vol. 1','Vol. 2'],
                                                      applications)
     template_base_data = {
         'first_name': person.first_name,
@@ -215,7 +215,7 @@ def _find_application(acronym, year, applications_list):
 
 def _get_applications_table(application_list):
     applications = []
-    validation_str = "({})".format(_('wait_validation_epc'))
+    validation_str = "({})".format(_('Wait validation'))
     for application in application_list:
         applications.append(("{} {}".format(validation_str if application.get('pending') else '',
                                             application.get('acronym', '')),

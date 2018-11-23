@@ -216,7 +216,7 @@ class DownloadPaperSheetTest(TestCase):
         self.assertEqual(response.get('Content-Type'),
                          'application/pdf')
         self.assertEqual(response.get('Content-Disposition'),
-                         'attachment; filename="%s"' % ("%s.pdf" % _('scores_sheet')))
+                         'attachment; filename="%s"' % ("%s.pdf" % _('Scores sheet')))
 
     def test_when_person_not_exist_as_faculty_administrator(self):
         self.__set_user_as_faculty_administrator()
@@ -247,7 +247,7 @@ class DownloadPaperSheetTest(TestCase):
         self.assertEqual(response.get('Content-Type'),
                          'application/pdf')
         self.assertEqual(response.get('Content-Disposition'),
-                         'attachment; filename="%s"' % ("%s.pdf" % _('scores_sheet')))
+                         'attachment; filename="%s"' % ("%s.pdf" % _('Scores sheet')))
 
     def __set_user_as_faculty_administrator(self):
         faculty_admin_permission = Permission.objects.get(codename="is_faculty_administrator")

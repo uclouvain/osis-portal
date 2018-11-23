@@ -28,16 +28,16 @@
     <thead>
         <tr>
             <th colspan="2"></th>
-            <th colspan="2" style="border-left: 1px solid;">{% trans 'vacant' %}</th>
-            <th colspan="4" style="border-left: 1px solid;">{% trans 'application' %}</th>
+            <th colspan="2" style="border-left: 1px solid;">{% trans 'Vacant' %}</th>
+            <th colspan="4" style="border-left: 1px solid;">{% trans 'Application' %}</th>
         </tr>
         <tr>
-            <th>{% trans 'code'%}</th>
-            <th>{% trans 'title'%}</th>
-            <th style="border-left: 1px solid black;">{% trans 'lecturing_hours'%}</th>
-            <th>{% trans 'practical_hours'%}</th>
-            <th style="border-left: 1px solid black;">{% trans 'lecturing_hours'%}</th>
-            <th>{% trans 'practical_hours'%}</th>
+            <th>{% trans 'Code'%}</th>
+            <th>{% trans 'Title'%}</th>
+            <th style="border-left: 1px solid black;">{% trans 'Vol.1'%}</th>
+            <th>{% trans 'Vol.2'%}</th>
+            <th style="border-left: 1px solid black;">{% trans 'Vol.1'%}</th>
+            <th>{% trans 'Vol.2'%}</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
         </tr>
@@ -47,7 +47,7 @@
             <tr>
                 <td>
                     {% if not application.pending %}
-                        <a title="{%trans 'learning_unit_specifications'%}"
+                        <a title="{%trans 'Specifications'%}"
                            id="lnk_application_edit_acronym_{{ application.learning_container_year_id }}"
                            href="{{application.learning_container_year_id | get_url_learning_unit_year }}"
                            target="_blank">
@@ -58,12 +58,12 @@
                              {{ application.acronym }}
                          </span>
                          <br>
-                         <span class="small font-italic">({% trans 'wait_validation_epc' %})</span>
+                         <span class="small font-italic">({% trans 'Wait validation' %})</span>
                     {% endif %}
                 </td>
                 <td>
                     {% if not application.pending %}
-                        <a title="{%trans 'learning_unit_specifications'%}"
+                        <a title="{%trans 'Specifications'%}"
                            id="lnk_application_edit_title_{{ application.learning_container_year_id}}"
                            href="{{application.learning_container_year_id | get_url_learning_unit_year }}"
                            target="_blank">
@@ -82,7 +82,7 @@
                 <td colspan="2" style="width:130px;">
                     <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                          title="{% if application.pending %}
-                                    {% trans 'wait_validation_epc' %}
+                                    {% trans 'Wait validation' %}
                                 {% endif %}">
                         <a class="btn btn-primary {%if application.pending %} disabled {% endif %}"
                            id="lnk_application_edit_{{ application.learning_container_year_id }}"
@@ -94,7 +94,7 @@
                     </div>
                     <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                                      title="{% if application.pending %}
-                                                {% trans 'wait_validation_epc' %}
+                                                {% trans 'Wait validation' %}
                                             {% endif %}">
                         <form action="{% url 'delete_tutor_application' application.learning_container_year_id %}"
                               id="form_delete_{{ application.learning_container_year_id }}"
@@ -102,7 +102,7 @@
                             {% csrf_token %}
                             <button class="btn btn-warning"
                                     id="lnk_application_delete_{{ application.learning_container_year_id }}"
-                                    type="submit" title="{% trans 'remove' %}"
+                                    type="submit" title="{% trans 'Cancel the application' %}"
                                     {%if application.pending %} disabled {% endif %}>
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                         </form>

@@ -28,16 +28,16 @@
 
 {% block breadcrumb %}
     {% if perms.base.is_faculty_administrator %}
-        <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-        <li><a id="lnk_attestation_administration" href="{% url 'attestation_administration' %}">{% trans 'attestation_administration' %}</a></li>
+        <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'Faculty administration' %}</a></li>
+        <li><a id="lnk_attestation_administration" href="{% url 'attestation_administration' %}">{% trans 'Attestation administration' %}</a></li>
     {% endif %}
-    <li class="active">{% trans 'attestation' %}</li>
+    <li class="active">{% trans 'Attestation' %}</li>
 {% endblock %}
 
 
 {% block content %}
     <div class="page-header">
-        <h2>{% trans 'attestation' %}</h2>
+        <h2>{% trans 'Attestation' %}</h2>
     </div>
 
     {% include "template_messages.html" %}
@@ -47,33 +47,33 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-6" id="academic_year">
-                    <h4>{% trans 'attestations_for_academic_year' %} {% if formated_academic_year %}{{ formated_academic_year }}{% endif %}</h4>
+                    <h4>{% trans 'Attestations for academic year' %} {% if formated_academic_year %}{{ formated_academic_year }}{% endif %}</h4>
                 </div>
             </div>
         </div>
         <div class="panel-body">
         <div class="row">
             <div class="col-md-6">
-                <label><b>{% trans 'last_name' %}, {% trans 'first_name' %}</b></label><br>
+                <label><b>{% trans 'Last name' %}, {% trans 'First name' %}</b></label><br>
                 {{ student.person.first_name }}, {{ student.person.last_name }}
             </div>
             <div class="col-md-6">
-                <b>{% trans 'registration_id' %}</b><br>
+                <b>{% trans 'Registration id' %}</b><br>
                 {{ student.registration_id }}
             </div>
         </div>
 
         <br/>
         {% if not available %}
-            <div class="alert alert-info" role="alert">{% trans 'no_attestation_available' %}</div>
+            <div class="alert alert-info" role="alert">{% trans 'No attestation available' %}</div>
         {% else %}
             <div>
             <table class="table table-responsive">
                 <thead>
                     <tr>
-                        <th>{% trans 'attestation_type' %}</th>
-                        <th class="text-center">{% trans 'printed' %}</th>
-                        <th class="text-center">{% trans 'available' %}</th>
+                        <th>{% trans 'Attestation type' %}</th>
+                        <th class="text-center">{% trans 'Printed' %}</th>
+                        <th class="text-center">{% trans 'Available' %}</th>
                     </tr>
                 </thead>
                 <tbody>

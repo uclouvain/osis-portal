@@ -27,17 +27,17 @@ import json
 
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
-from base.forms.base_forms import RegistrationIdForm
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
-from base.tests.factories.student import StudentFactory
+import performance.tests.models.test_student_performance
+from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.student import StudentFactory
 from performance.models.enums import offer_registration_state
 from performance.tests.factories.student_performance import StudentPerformanceFactory
-import performance.tests.models.test_student_performance
 from performance.views import main
 
 OK = 200
@@ -48,8 +48,10 @@ class TestMain(TestCase):
     def setUp(self):
         self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
         self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points2.json")
-        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points3.json")
+        self.json_points = performance.tests.models.test_student_performance.load_json_file(
+            "performance/tests/ressources/points2.json")
+        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
+            "performance/tests/ressources/points3.json")
 
     def test_convert_student_performance_to_dic(self):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
@@ -104,6 +106,8 @@ class ViewPerformanceHomeTest(TestCase):
 
     def test_multiple_students_objects_for_one_user(self):
         StudentFactory(person=self.student.person)
+        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
+                "contact the registration departement (SIC). Thank you.")
 
         response = self.client.get(self.url)
 
@@ -113,7 +117,7 @@ class ViewPerformanceHomeTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+        self.assertEqual(messages[0].message, msg)
 
     def test_with_empty_programs_list(self):
         response = self.client.get(self.url)
@@ -176,6 +180,8 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
     def test_multiple_students_objects_for_one_user(self):
         StudentFactory(person=self.student.person)
+        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
+                "contact the registration departement (SIC). Thank you.")
 
         response = self.client.get(self.url)
 
@@ -185,7 +191,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('error_multiple_registration_id'))
+        self.assertEqual(messages[0].message, msg)
 
     def test_when_none_student_performance(self):
         self.student_performance.delete()
@@ -229,8 +235,11 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
         self.assertEqual(response.context['update_date'], self.student_performance.update_date)
         self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = _(
+            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
+                           % {"session_month": _(self.student_performance.session_locked)}
         self.assertEqual(response.context['not_authorized_message'],
-                         _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+                         response_message)
 
 
 class SelectStudentTest(TestCase):
@@ -272,10 +281,9 @@ class SelectStudentTest(TestCase):
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'admin/performance_administration.html')
-
         self.assertIsInstance(response.context['form'], RegistrationIdForm)
-
-        self.assertFormError(response, 'form', 'registration_id', _('no_student_with_this_registration_id'))
+        # Message valided in base test
+        self.assertEqual(len(response.context['form'].errors), 1)
 
     def test_valid_post_request(self):
         response = self.client.post(self.url, data={'registration_id': self.student.registration_id})
@@ -418,8 +426,11 @@ class VisualizeStudentResult(TestCase):
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
         self.assertEqual(response.context['update_date'], self.student_performance.update_date)
         self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = _(
+            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
+                           % {"session_month": _(self.student_performance.session_locked)}
         self.assertEqual(response.context['not_authorized_message'],
-                         _('performance_result_note_not_autorized').format(_(self.student_performance.session_locked)))
+                         response_message)
 
 
 class ViewPerformanceByAcronymAndYear(TestCase):

@@ -44,13 +44,12 @@ def home(request):
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def faculty_administration(request):
-    return layout.render(request, "faculty_administrator_dashboard.html", {'online_application_opened': permission.is_online_application_opened(request.user)})
+    return layout.render(request, "faculty_administrator_dashboard.html",
+                         {'online_application_opened': permission.is_online_application_opened(request.user)})
 
 
 def show_multiple_registration_id_error(request):
-    messages.add_message(request, messages.ERROR, _('error_multiple_registration_id'))
+    msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
+            "contact the registration departement (SIC). Thank you.")
+    messages.add_message(request, messages.ERROR, msg)
     return home(request)
-
-
-
-
