@@ -161,7 +161,7 @@
                         {% with organization=affectation.organization  speciality=affectation.speciality %}
                             {% with offer=offers|get_item:organization|get_item:speciality %}
                                 {% if offer %}
-                                    {% trans 'Master' %} :
+                                    {% trans 'Internship master' %} :
                                     {{ offer.master }}
                                 {% endif %}
                             {% endwith %}
