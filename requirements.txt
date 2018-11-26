@@ -16,7 +16,7 @@ factory-boy==2.8.1
 pendulum==1.2.0
 django-dotenv==1.4.1
 unicodecsv==0.14.1
-requests==2.18.3
+requests==2.19.1
 openpyxl==2.4.9
 coverage==4.4
 
