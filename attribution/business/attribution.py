@@ -23,15 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import collections
 from decimal import Decimal
 from itertools import chain
-import collections
 
+from attribution import models as mdl_attribution
 from attribution.models.enums import function
 from base import models as mdl_base
-from attribution import models as mdl_attribution
-from base.models.enums import learning_component_year_type
 from base.business import learning_unit_year_with_context
+from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
 
 NO_CHARGE = 0.0
@@ -70,12 +70,12 @@ def get_attribution_vacant_list(acronym_filter, academic_year):
                                        vacant_declaration_type.OPEN_FOR_EXTERNS]
     attribution_vacant = {}
     learning_containers_year_ids = list(mdl_base.learning_container_year.search(acronym=acronym_filter,
-                                                                                academic_year=academic_year)\
-                                                                        .filter(team=False,
-                                                                                type_declaration_vacant__in=
-                                                                                type_delcaration_vacant_allowed)\
-                                                                        .values_list('id', flat=True))
-    learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects\
+                                                                                academic_year=academic_year) \
+                                        .filter(team=False,
+                                                type_declaration_vacant__in=
+                                                type_delcaration_vacant_allowed) \
+                                        .values_list('id', flat=True))
+    learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects \
         .filter(learning_unit_year__learning_container_year_id__in=learning_containers_year_ids) \
         .exclude(learning_component_year__volume_declared_vacant__isnull=True)
     for learn_unit_comp in learning_unit_components:
@@ -104,16 +104,17 @@ def get_attribution_vacant(learning_container_year):
 def _append_team_and_volume_declared_vacant(attribution_list, academic_year):
     acronym_list = [attribution.get('acronym') for attribution in attribution_list]
     l_container_ids = list(mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year)
-                                                           .values_list('id', flat=True))
+                           .values_list('id', flat=True))
     l_components = mdl_base.learning_component_year.search(learning_container_year=l_container_ids)
 
     for attribution in attribution_list:
         volumes_declared_vacant = _get_volume_declared_vacant(attribution, l_components)
         is_team = _get_is_team(attribution, l_components)
         attribution.update({
-          'volume_lecturing_vacant': volumes_declared_vacant[learning_component_year_type.LECTURING],
-          'volume_practical_exercices_vacant': volumes_declared_vacant[learning_component_year_type.PRACTICAL_EXERCISES],
-          'team': is_team
+            'volume_lecturing_vacant': volumes_declared_vacant[learning_component_year_type.LECTURING],
+            'volume_practical_exercices_vacant': volumes_declared_vacant[
+                learning_component_year_type.PRACTICAL_EXERCISES],
+            'team': is_team
         })
     return attribution_list
 
@@ -125,7 +126,7 @@ def _get_volume_declared_vacant(attribution, l_component_year_list):
     }
     for l_component_year in l_component_year_list:
         if l_component_year.learning_container_year.acronym == attribution.get('acronym') and \
-           l_component_year.volume_declared_vacant is not None:
+                l_component_year.volume_declared_vacant is not None:
             volumes_declared_vacant[l_component_year.type] += l_component_year.volume_declared_vacant
     return volumes_declared_vacant
 
@@ -151,7 +152,7 @@ def _append_start_and_end_academic_year(attribution_list):
 
 
 def _get_academic_year_related(year, academic_years):
-    return next((academic_year for academic_year in academic_years if academic_year.year == year ), None)
+    return next((academic_year for academic_year in academic_years if academic_year.year == year), None)
 
 
 def _filter_by_years(attribution_list, academic_year):
@@ -166,10 +167,12 @@ def _order_by_acronym_and_function(attribution_list):
         :param attribution_list: List of attributions to sort
         :return:
     """
+
     def _sort(key):
         acronym = key.get('acronym', '')
         function = key.get('function', '')
         return "%s %s" % (acronym, function)
+
     return sorted(attribution_list, key=lambda k: _sort(k))
 
 
@@ -200,11 +203,13 @@ def _filter_attribution_about_to_expire(attribution_list, academic_year):
 def _format_str_volume_to_decimal(attribution_list):
     for attribution in attribution_list:
         if learning_component_year_type.LECTURING in attribution:
-            attribution[learning_component_year_type.LECTURING] = Decimal(attribution[learning_component_year_type.LECTURING])
+            attribution[learning_component_year_type.LECTURING] = Decimal(
+                attribution[learning_component_year_type.LECTURING])
         else:
             attribution[learning_component_year_type.LECTURING] = NO_CHARGE
         if learning_component_year_type.PRACTICAL_EXERCISES in attribution:
-            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(attribution[learning_component_year_type.PRACTICAL_EXERCISES])
+            attribution[learning_component_year_type.PRACTICAL_EXERCISES] = Decimal(
+                attribution[learning_component_year_type.PRACTICAL_EXERCISES])
         else:
             attribution[learning_component_year_type.PRACTICAL_EXERCISES] = NO_CHARGE
     return attribution_list
@@ -242,16 +247,15 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
     next_year_attribution_vacant = attribution_with_vacant_next_year['attribution_vacant']
 
     current_volume_lecturing = attribution_with_vacant_next_year.get(learning_component_year_type.LECTURING, NO_CHARGE)
-    current_volume_practical_exercices = attribution_with_vacant_next_year.get(learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
-
-    if current_volume_lecturing == current_volume_practical_exercices == 0:
-        return 'cannot_renew_zero_volume'
+    current_volume_practical_exercices = attribution_with_vacant_next_year.get(
+        learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
 
     next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, NO_CHARGE)
     if current_volume_lecturing > next_volume_lecturing:
         return 'volume_next_year_lower_than_current'
 
-    next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
+    next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES,
+                                                                       NO_CHARGE)
     if current_volume_practical_exercices > next_volume_practical_exercices:
         return 'volume_next_year_lower_than_current'
 
@@ -309,7 +313,8 @@ def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
     for teacher in teachers:
         for an_attribution in teacher.attributions:
             if an_attribution['acronym'] == learning_unit_acronym and an_attribution['year'] == application_yr:
-                an_attribution[PERSON_KEY] = next((person for person in person_list if person.global_id==teacher.global_id))
+                an_attribution[PERSON_KEY] = next(
+                    (person for person in person_list if person.global_id == teacher.global_id))
                 teachers_data.append(an_attribution)
 
     return teachers_data if len(teachers_data) > 0 else None
