@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-21 08:53+0100\n"
+"POT-Creation-Date: 2018-11-26 11:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,6 +81,10 @@ msgstr ""
 msgid "Internship affectation"
 msgstr ""
 
+#: templates/student_resume.html:164
+msgid "Internship master"
+msgstr ""
+
 #: templates/cohort_selection.html:30 templates/hospitals.html:31
 #: templates/internship_home.html:31 templates/internship_home.html:37
 #: templates/internship_selection.html:32
@@ -95,10 +99,6 @@ msgstr ""
 msgid ""
 "It seems you are not subscribed to internships, you may want to check with "
 "your administration."
-msgstr ""
-
-#: templates/student_resume.html:164
-msgid "Master"
 msgstr ""
 
 #: templates/internship_selection.html:92

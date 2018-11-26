@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-21 08:53+0100\n"
+"POT-Creation-Date: 2018-11-26 11:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: templates/hospitals.html:83 templates/student_resume.html:113
-#, fuzzy
-#| msgid "address"
 msgid "Address"
 msgstr "Adresse"
 
@@ -82,6 +80,10 @@ msgstr "Hôpitaux"
 msgid "Internship affectation"
 msgstr "Affectation de stages"
 
+#: templates/student_resume.html:164
+msgid "Internship master"
+msgstr "Maître de stage"
+
 #: templates/cohort_selection.html:30 templates/hospitals.html:31
 #: templates/internship_home.html:31 templates/internship_home.html:37
 #: templates/internship_selection.html:32
@@ -99,10 +101,6 @@ msgid ""
 msgstr ""
 "Il semblerait que vous ne soyez pas inscrit aux stages, nous vous "
 "recommandons de contacter votre secrétariat."
-
-#: templates/student_resume.html:164
-msgid "Master"
-msgstr ""
 
 #: templates/internship_selection.html:92
 msgid "Maximum number of students"
