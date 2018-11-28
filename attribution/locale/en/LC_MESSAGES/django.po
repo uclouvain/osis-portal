@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-28 10:56+0100\n"
+"POT-Creation-Date: 2018-11-28 16:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: business/attribution.py:268
+#: business/attribution.py:268 tests/business/test_attribution.py:201
 msgid "A substitute can not renew his function of substitute"
 msgstr ""
 
@@ -330,7 +330,10 @@ msgid "The period of online application is closed"
 msgstr ""
 
 #: business/attribution.py:257 business/attribution.py:262
-msgid "The vacant volume of the next academic year is lower than the current one"
+#: tests/business/test_attribution.py:155
+#: tests/business/test_attribution.py:166
+msgid ""
+"The vacant volume of the next academic year is lower than the current one"
 msgstr ""
 
 #: templates/tutor_charge_content.html:34
