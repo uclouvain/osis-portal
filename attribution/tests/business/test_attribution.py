@@ -151,11 +151,12 @@ class AttributionTest(TestCase):
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
-                         'volume_next_year_lower_than_current')
+                         "Le volume vacant de l'année suivante est inférieur à celui actuellement affecté")
 
     def test_get_attribution_list_about_to_expire_volume_zero_is_renewable(self):
         self.attrib.attributions = [
-            {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
+            {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
+             'weight': '5.00',
              'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
              'end_year': self.current_academic_year.year, 'is_substitute': False}
         ]
@@ -190,7 +191,8 @@ class AttributionTest(TestCase):
 
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
-        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'already_applied')
+        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
+                         'An application has already been submitted')
 
     def test_calculate_effective_volume(self):
         vol_tot = 10.0
@@ -319,7 +321,8 @@ def _get_attributions_dict(current_year):
     previous_year = current_year - 1
     future_year = current_year + 1
     return [
-        {'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '22.5',
+        {'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00',
+         'LECTURING': '22.5',
          'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year,
          'is_substitute': False},
         {'year': current_year, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
@@ -327,7 +330,8 @@ def _get_attributions_dict(current_year):
          'end_year': future_year, 'is_substitute': False},
         {'year': current_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
          'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013, 'is_substitute': False},
-        {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
+        {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
+         'LECTURING': '20.5',
          'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
          'end_year': current_year, 'is_substitute': False}
     ]

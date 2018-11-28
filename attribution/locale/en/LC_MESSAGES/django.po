@@ -330,7 +330,7 @@ msgid "The period of online application is closed"
 msgstr ""
 
 #: business/attribution.py:257 business/attribution.py:262
-msgid "The vacant volume of the following year is less than the current one"
+msgid "The vacant volume of the next academic year is lower than the current one"
 msgstr ""
 
 #: templates/tutor_charge_content.html:34

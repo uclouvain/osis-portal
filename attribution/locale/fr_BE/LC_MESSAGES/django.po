@@ -341,7 +341,7 @@ msgstr ""
 "La période d'encodage des candidatures en ligne est fermée pour le moment"
 
 #: business/attribution.py:257 business/attribution.py:262
-msgid "The vacant volume of the following year is less than the current one"
+msgid "The vacant volume of the next academic year is lower than the current one"
 msgstr "Le volume vacant de l'année suivante est inférieur à celui actuellement affecté"
 
 #: templates/tutor_charge_content.html:34
