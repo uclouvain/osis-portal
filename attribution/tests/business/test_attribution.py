@@ -222,7 +222,7 @@ class AttributionTest(TestCase):
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
-                         'An application has already been submitted')
+                         _('An application has already been submitted'))
 
     def test_calculate_effective_volume(self):
         vol_tot = 10.0
