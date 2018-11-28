@@ -262,6 +262,9 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
     if _has_already_applied(attribution_with_vacant_next_year, application_list):
         return 'already_applied'
 
+    if attribution_with_vacant_next_year['is_substitute']:
+        return 'cannot_renew_substitute'
+
     return None
 
 
