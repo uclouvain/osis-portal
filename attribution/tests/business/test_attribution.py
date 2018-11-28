@@ -28,6 +28,7 @@ from decimal import Decimal
 
 from django.contrib.auth.models import Group
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
 from attribution.business import attribution
 from attribution.tests.factories.attribution import AttributionNewFactory
@@ -151,7 +152,7 @@ class AttributionTest(TestCase):
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
-                         "Le volume vacant de l'année suivante est inférieur à celui actuellement affecté")
+                         _("The vacant volume of the next academic year is lower than the current one"))
 
     def test_get_attribution_list_about_to_expire_volume_lecturing__lower(self):
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
@@ -162,7 +163,7 @@ class AttributionTest(TestCase):
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
-                         "Le volume vacant de l'année suivante est inférieur à celui actuellement affecté")
+                         _("The vacant volume of the next academic year is lower than the current one"))
 
     def test_get_attribution_list_about_to_expire_volume_zero_is_renewable(self):
         self.attrib.attributions = [
@@ -344,5 +345,5 @@ def _get_attributions_dict(current_year):
         {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
          'LECTURING': '20.5',
          'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
-         'end_year': current_year, 'is_substitute': True}
+         'end_year': current_year, 'is_substitute': False}
     ]
