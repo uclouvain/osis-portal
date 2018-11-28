@@ -156,7 +156,8 @@ class AttributionTest(TestCase):
     def test_get_attribution_list_about_to_expire_volume_zero_is_renewable(self):
         self.attrib.attributions = [
             {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
-             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': self.current_academic_year.year}
+             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
+             'end_year': self.current_academic_year.year, 'is_substitute': False}
         ]
         self.attrib.save()
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
@@ -178,7 +179,8 @@ class AttributionTest(TestCase):
             'charge_lecturing_asked': 30,
             'charge_practical_asked': 30,
             'acronym': "LAGRO1530",
-            'year': next_academic_year.year
+            'year': next_academic_year.year,
+            'is_substitute': False
         }]
         self.attrib.applications = application
         self.attrib.save()
@@ -327,5 +329,5 @@ def _get_attributions_dict(current_year):
          'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013, 'is_substitute': False},
         {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
          'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
-         'end_year': current_year,'is_substitute': False}
+         'end_year': current_year, 'is_substitute': False}
     ]
