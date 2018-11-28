@@ -57,9 +57,6 @@ class ApplicationForm(BootstrapForm):
             learning_container_year=self.learning_container_year
         )
 
-    def clean(self):
-        super(ApplicationForm, self).clean()
-
     def clean_acronym(self):
         return self.learning_container_year.acronym
 
