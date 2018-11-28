@@ -385,7 +385,8 @@ def _get_attribution_example(learning_container_year, volume_lecturing, volume_p
         learning_component_year_type.PRACTICAL_EXERCISES: volume_practical_exercice,
         'start_year': start_year,
         'end_year': end_year,
-        'function': function.HOLDER
+        'function': function.HOLDER,
+        'is_substitute': False
     }
 
 

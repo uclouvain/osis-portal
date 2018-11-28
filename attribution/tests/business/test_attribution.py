@@ -28,6 +28,7 @@ from decimal import Decimal
 
 from django.contrib.auth.models import Group
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
 from attribution.business import attribution
 from attribution.tests.factories.attribution import AttributionNewFactory
@@ -142,7 +143,7 @@ class AttributionTest(TestCase):
         self.assertTrue(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertIsNone(attribution_list_about_to_expired[0]['not_renewable_reason'])
 
-    def test_get_attribution_list_about_to_expire_volume_lower(self):
+    def test_get_attribution_list_about_to_expire_volume_pratical_lower(self):
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
         next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
         _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(1), Decimal(30))
@@ -151,12 +152,25 @@ class AttributionTest(TestCase):
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
-                         'volume_next_year_lower_than_current')
+                         _("The vacant volume of the next academic year is lower than the current one"))
+
+    def test_get_attribution_list_about_to_expire_volume_lecturing__lower(self):
+        _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
+        next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
+        _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(30), Decimal(1))
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
+                                                                                             self.current_academic_year)
+        self.assertEqual(len(attribution_list_about_to_expired), 1)
+        self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
+        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
+                         _("The vacant volume of the next academic year is lower than the current one"))
 
     def test_get_attribution_list_about_to_expire_volume_zero_is_renewable(self):
         self.attrib.attributions = [
-            {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
-             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': self.current_academic_year.year}
+            {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
+             'weight': '5.00',
+             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
+             'end_year': self.current_academic_year.year, 'is_substitute': False}
         ]
         self.attrib.save()
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
@@ -168,6 +182,24 @@ class AttributionTest(TestCase):
         self.assertTrue(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], None)
 
+    def test_get_attribution_list_with_substitute_is_not_renewable(self):
+        self.attrib.attributions = [
+            {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
+             'weight': '5.00',
+             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
+             'end_year': self.current_academic_year.year, 'is_substitute': True}
+        ]
+        self.attrib.save()
+        _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
+        next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
+        _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(30), Decimal(30))
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
+                                                                                             self.current_academic_year)
+        self.assertEqual(len(attribution_list_about_to_expired), 1)
+        self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
+        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
+                         _('A substitute can not renew his function of substitute'))
+
     def test_get_attribution_list_about_to_expire_already_applied(self):
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
         next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
@@ -178,7 +210,8 @@ class AttributionTest(TestCase):
             'charge_lecturing_asked': 30,
             'charge_practical_asked': 30,
             'acronym': "LAGRO1530",
-            'year': next_academic_year.year
+            'year': next_academic_year.year,
+            'is_substitute': False
         }]
         self.attrib.applications = application
         self.attrib.save()
@@ -188,7 +221,8 @@ class AttributionTest(TestCase):
 
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
-        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], 'already_applied')
+        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
+                         _('An application has already been submitted'))
 
     def test_calculate_effective_volume(self):
         vol_tot = 10.0
@@ -317,12 +351,17 @@ def _get_attributions_dict(current_year):
     previous_year = current_year - 1
     future_year = current_year + 1
     return [
-        {'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '22.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year},
+        {'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00',
+         'LECTURING': '22.5',
+         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year,
+         'is_substitute': False},
         {'year': current_year, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
-         'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015, 'end_year': future_year},
+         'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015,
+         'end_year': future_year, 'is_substitute': False},
         {'year': current_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013},
-        {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': current_year}
+         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013, 'is_substitute': False},
+        {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
+         'LECTURING': '20.5',
+         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
+         'end_year': current_year, 'is_substitute': False}
     ]

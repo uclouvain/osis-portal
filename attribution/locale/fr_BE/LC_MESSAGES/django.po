@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-16 10:40+0100\n"
+"POT-Creation-Date: 2018-11-28 16:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: business/attribution.py:268 tests/business/test_attribution.py:201
+msgid "A substitute can not renew his function of substitute"
+msgstr "Un suppléant ne peut pas reconduire sa fonction de suppléant"
 
 #: business/tutor_application.py:135 templates/admin/students_exam_list.html:64
 #: templates/list/students_exam.html:54
@@ -25,6 +29,10 @@ msgstr "Sigle"
 #: templates/students_list_content.html:47
 msgid "Activity"
 msgstr "Activité"
+
+#: business/attribution.py:265
+msgid "An application has already been submitted"
+msgstr "Une candidature a déjà été soumise"
 
 #: views/online_application.py:294
 msgid "An email with your applications have been sent"
@@ -40,8 +48,6 @@ msgid "Application period from"
 msgstr "Période de candidature en ligne du"
 
 #: templates/admin/applications_administration.html:31
-#, fuzzy
-#| msgid "Attribution administration"
 msgid "Applications administration"
 msgstr "Administration des attributions"
 
@@ -121,8 +127,6 @@ msgstr "Exporter la liste des étudiants au format Excel"
 #: templates/admin/students_exam_list.html:32
 #: templates/admin/students_list.html:30 templates/students_list_admin.html:33
 #: templates/tutor_charge_admin.html:32
-#, fuzzy
-#| msgid "attribution_administration"
 msgid "Faculties administration"
 msgstr "Administration des facultés"
 
@@ -190,11 +194,11 @@ msgstr "Ma candidature"
 msgid "My applications"
 msgstr "Mes candidatures"
 
-#: templates/attribution_overview.html:94
+#: templates/attribution_overview.html:93
 msgid "My charges"
 msgstr "Mes charges"
 
-#: templates/attribution_overview.html:85
+#: templates/attribution_overview.html:84
 msgid "My charges now vacant"
 msgstr "Mes charges échues"
 
@@ -324,11 +328,18 @@ msgstr "Charge d'enseignement"
 
 #: templates/attribution_access_denied.html:38
 #: tests/views/test_online_application.py:107 views/online_application.py:57
-#, fuzzy
-#| msgid "application_denied"
 msgid "The period of online application is closed"
 msgstr ""
 "La période d'encodage des candidatures en ligne est fermée pour le moment"
+
+#: business/attribution.py:257 business/attribution.py:262
+#: tests/business/test_attribution.py:155
+#: tests/business/test_attribution.py:166
+msgid ""
+"The vacant volume of the next academic year is lower than the current one"
+msgstr ""
+"Le volume vacant de l'année suivante est inférieur à celui actuellement "
+"affecté"
 
 #: templates/tutor_charge_content.html:34
 msgid ""
@@ -452,6 +463,6 @@ msgstr "  étudiants inscrits au cours"
 msgid "to"
 msgstr "au"
 
-#: templates/attribution_overview.html:85
+#: templates/attribution_overview.html:84
 msgid "without application"
 msgstr "sans candidature"

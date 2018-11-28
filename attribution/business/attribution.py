@@ -27,6 +27,8 @@ import collections
 from decimal import Decimal
 from itertools import chain
 
+from django.utils.translation import ugettext_lazy as _
+
 from attribution import models as mdl_attribution
 from attribution.models.enums import function
 from base import models as mdl_base
@@ -252,15 +254,18 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
 
     next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, NO_CHARGE)
     if current_volume_lecturing > next_volume_lecturing:
-        return 'volume_next_year_lower_than_current'
+        return _('The vacant volume of the next academic year is lower than the current one')
 
     next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES,
                                                                        NO_CHARGE)
     if current_volume_practical_exercices > next_volume_practical_exercices:
-        return 'volume_next_year_lower_than_current'
+        return _('The vacant volume of the next academic year is lower than the current one')
 
     if _has_already_applied(attribution_with_vacant_next_year, application_list):
-        return 'already_applied'
+        return _('An application has already been submitted')
+
+    if attribution_with_vacant_next_year['is_substitute']:
+        return _('A substitute can not renew his function of substitute')
 
     return None
 
