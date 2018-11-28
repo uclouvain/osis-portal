@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-28 16:15+0100\n"
+"POT-Creation-Date: 2018-11-28 17:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Activity"
 msgstr ""
 
-#: business/attribution.py:265
+#: business/attribution.py:265 tests/business/test_attribution.py:225
 msgid "An application has already been submitted"
 msgstr ""
 
@@ -156,10 +156,6 @@ msgstr ""
 #: templates/attribution_renewal_list.html:40
 #: templates/attribution_vacant_list.html:84
 msgid "Learning unit volumes"
-msgstr ""
-
-#: forms/application.py:64
-msgid "Lecturing charge or practical charge must be filled"
 msgstr ""
 
 #: templates/admin/students_exam_list.html:91
@@ -365,7 +361,7 @@ msgstr ""
 msgid "To receive a confirmation email with the applications"
 msgstr ""
 
-#: forms/application.py:77 forms/application.py:86
+#: forms/application.py:76 forms/application.py:85
 msgid "Too much"
 msgstr ""
 
