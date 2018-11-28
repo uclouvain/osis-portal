@@ -182,6 +182,24 @@ class AttributionTest(TestCase):
         self.assertTrue(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'], None)
 
+    def test_get_attribution_list_with_substitute_is_not_renewable(self):
+        self.attrib.attributions = [
+            {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
+             'weight': '5.00',
+             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
+             'end_year': self.current_academic_year.year, 'is_substitute': True}
+        ]
+        self.attrib.save()
+        _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
+        next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
+        _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(30), Decimal(30))
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
+                                                                                             self.current_academic_year)
+        self.assertEqual(len(attribution_list_about_to_expired), 1)
+        self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
+        self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
+                         _("A substitute can not renew his function of substitute"))
+
     def test_get_attribution_list_about_to_expire_already_applied(self):
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
         next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
