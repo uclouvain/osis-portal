@@ -57,6 +57,12 @@ class ApplicationForm(BootstrapForm):
             learning_container_year=self.learning_container_year
         )
 
+    def clean(self):
+        cleaned_data = super(ApplicationForm, self).clean()
+
+        if cleaned_data.get('charge_lecturing_asked') is None and cleaned_data.get('charge_practical_asked') is None:
+            raise forms.ValidationError(_('Lecturing charge or practical charge must be filled'))
+
     def clean_acronym(self):
         return self.learning_container_year.acronym
 
