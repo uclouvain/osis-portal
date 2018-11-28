@@ -318,11 +318,14 @@ def _get_attributions_dict(current_year):
     future_year = current_year + 1
     return [
         {'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '22.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year},
+         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year,
+         'is_substitute': False},
         {'year': current_year, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
-         'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015, 'end_year': future_year},
+         'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015,
+         'end_year': future_year, 'is_substitute': False},
         {'year': current_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013},
+         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013, 'is_substitute': False},
         {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': current_year}
+         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
+         'end_year': current_year,'is_substitute': False}
     ]
