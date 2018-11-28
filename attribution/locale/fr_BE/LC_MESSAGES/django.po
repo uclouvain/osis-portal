@@ -31,8 +31,6 @@ msgid "Activity"
 msgstr "Activité"
 
 #: business/attribution.py:265
-#, fuzzy
-#| msgid "Applications in pending state"
 msgid "An application has already been submitted"
 msgstr "Une candidature a déjà été soumise"
 
@@ -50,8 +48,6 @@ msgid "Application period from"
 msgstr "Période de candidature en ligne du"
 
 #: templates/admin/applications_administration.html:31
-#, fuzzy
-#| msgid "Attribution administration"
 msgid "Applications administration"
 msgstr "Administration des attributions"
 
@@ -131,8 +127,6 @@ msgstr "Exporter la liste des étudiants au format Excel"
 #: templates/admin/students_exam_list.html:32
 #: templates/admin/students_list.html:30 templates/students_list_admin.html:33
 #: templates/tutor_charge_admin.html:32
-#, fuzzy
-#| msgid "attribution_administration"
 msgid "Faculties administration"
 msgstr "Administration des facultés"
 
@@ -334,8 +328,6 @@ msgstr "Charge d'enseignement"
 
 #: templates/attribution_access_denied.html:38
 #: tests/views/test_online_application.py:107 views/online_application.py:57
-#, fuzzy
-#| msgid "application_denied"
 msgid "The period of online application is closed"
 msgstr ""
 "La période d'encodage des candidatures en ligne est fermée pour le moment"
