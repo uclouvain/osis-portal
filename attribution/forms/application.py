@@ -60,8 +60,7 @@ class ApplicationForm(BootstrapForm):
     def clean(self):
         cleaned_data = super(ApplicationForm, self).clean()
 
-        if not cleaned_data.get('charge_lecturing_asked') and not cleaned_data.get('charge_practical_asked'):
-            raise forms.ValidationError(_('Lecturing charge or practical charge must be filled'))
+
 
     def clean_acronym(self):
         return self.learning_container_year.acronym
