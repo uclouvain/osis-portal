@@ -36,6 +36,7 @@ class EducationGroupYearAdmin(SerializableModelAdmin):
 
 
 class EducationGroupYear(SerializableModel):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     acronym = models.CharField(
         max_length=40,
         db_index=True,

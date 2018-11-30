@@ -37,6 +37,7 @@ class EducationGroupTypeAdmin(SerializableModelAdmin):
 
 
 class EducationGroupType(SerializableModel):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(
         max_length=25,
         choices=education_group_categories.CATEGORIES,
