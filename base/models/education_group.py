@@ -35,6 +35,7 @@ class EducationGroupAdmin(SerializableModelAdmin):
 
 
 class EducationGroup(SerializableModel):
+    external_id = models.CharField(max_length=100, blank=True, null=True)
     start_year = models.PositiveIntegerField(
         blank=True,
         null=True,
