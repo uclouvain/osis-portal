@@ -23,9 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
-from django.core.exceptions import ObjectDoesNotExist
+
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -43,6 +44,12 @@ class AcademicYear(SerializableModel):
     @property
     def name(self):
         return self.__str__()
+
+    def next(self):
+        return AcademicYear.objects.get(year=self.year + 1)
+
+    def past(self):
+        return AcademicYear.objects.get(year=self.year - 1)
 
     def __str__(self):
         return u"%s-%s" % (self.year, str(self.year + 1)[-2:])
