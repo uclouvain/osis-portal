@@ -28,9 +28,6 @@ import string
 
 import factory.fuzzy
 from django.utils import timezone
-from faker import Faker
-
-fake = Faker()
 
 
 class AcademicYearFactory(factory.django.DjangoModelFactory):
