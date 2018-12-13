@@ -29,9 +29,6 @@ import factory
 import factory.fuzzy
 from django.utils import timezone
 from factory.django import DjangoModelFactory
-from faker import Faker
-
-fake = Faker()
 
 
 class EducationGroupFactory(DjangoModelFactory):
