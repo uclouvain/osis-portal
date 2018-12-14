@@ -23,33 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 import string
 
+import factory
 import factory.fuzzy
 from django.utils import timezone
+from factory.django import DjangoModelFactory
 
 
-class AcademicYearFactory(factory.django.DjangoModelFactory):
+class EducationGroupFactory(DjangoModelFactory):
     class Meta:
-        model = "base.AcademicYear"
+        model = "base.EducationGroup"
 
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
-    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))
-
-
-def create_current_academic_year():
-    now = datetime.datetime.now()
-    ref_date = datetime.datetime(now.year, 9, 15)
-    if now < ref_date:
-        start_date = datetime.date(now.year - 1, 9, 15)
-    else:
-        start_date = datetime.date(now.year, 9, 15)
-
-    return AcademicYearFactory(
-        year=start_date.year,
-        start_date=start_date,
-        end_date=datetime.date(start_date.year + 1, start_date.month, 30)
-    )
+    start_year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
+    end_year = factory.LazyAttribute(lambda obj: factory.fuzzy.FuzzyInteger(obj.start_year + 1,
+                                                                            obj.start_year + 9).fuzz())
