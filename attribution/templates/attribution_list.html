@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% load i18n %}
+{% load i18n function %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -57,7 +57,7 @@
             <td>{{ attribution.volume_practical_exercices_vacant| floatformat:1 }}</td>
             <td style="border-left: 1px solid;">{{ attribution.LECTURING }}</td>
             <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
-            <td>{% trans attribution.function %}</td>
+            <td>{{ attribution.function|function_text }}</td>
             <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
             <td>

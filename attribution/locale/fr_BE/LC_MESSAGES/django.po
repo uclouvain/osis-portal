@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-28 16:15+0100\n"
+"POT-Creation-Date: 2018-12-14 14:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr "Sigle"
 msgid "Activity"
 msgstr "Activité"
 
-#: business/attribution.py:265
+#: business/attribution.py:265 tests/business/test_attribution.py:225
 msgid "An application has already been submitted"
 msgstr "Une candidature a déjà été soumise"
 
@@ -87,6 +87,10 @@ msgstr ""
 "Choisissez dans vos cours ceux que vous voulez considérer dans la liste "
 "produite"
 
+#: models/enums/function.py:42
+msgid "Co-holder"
+msgstr "Co-titulaire"
+
 #: templates/application_form.html:72 templates/applications_list.html:35
 #: templates/attribution_list.html:36
 #: templates/attribution_renewal_list.html:54
@@ -95,6 +99,26 @@ msgstr ""
 #: templates/tutor_charge_content.html:57
 msgid "Code"
 msgstr "Sigle"
+
+#: models/enums/function.py:40
+msgid "Coordinator"
+msgstr "Coordinateur(trice)"
+
+#: models/enums/function.py:43
+msgid "Deputy"
+msgstr "Suppléant"
+
+#: models/enums/function.py:44
+msgid "Deputy authority"
+msgstr "Suppléant d'autorité"
+
+#: models/enums/function.py:45
+msgid "Deputy sabbatical"
+msgstr "Suppléant sabbatique"
+
+#: models/enums/function.py:46
+msgid "Deputy temporary"
+msgstr "Suppléant temporaire"
 
 #: templates/attribution_list.html:69
 #: templates/attribution_vacant_list.html:126
@@ -141,6 +165,18 @@ msgstr "Fonction"
 #: templates/admin/students_list.html:57
 msgid "Global id"
 msgstr "Matricule fgs"
+
+#: models/enums/function.py:41
+msgid "Holder"
+msgstr "Titulaire"
+
+#: models/enums/function.py:49
+msgid "Internship co-supervisor"
+msgstr "Co-directeur de stage"
+
+#: models/enums/function.py:48
+msgid "Internship supervisor"
+msgstr "Directeur de stage"
 
 #: templates/students_list_content.html:52
 msgid "Jan."
@@ -258,6 +294,10 @@ msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
 #: templates/list/students_exam.html:72 templates/list/students_exam.html:74
 msgid "Produce xls"
 msgstr "Produire xls"
+
+#: models/enums/function.py:47
+msgid "Professor"
+msgstr "Professeur"
 
 #: templates/students_list_content.html:50
 msgid "Registration id"
