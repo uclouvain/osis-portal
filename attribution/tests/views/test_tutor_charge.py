@@ -45,6 +45,8 @@ from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from attribution.tests.factories.attribution import AttributionFactory
+from base.models.enums import learning_unit_year_subtypes
+from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
 
 URL_ADE = "url_ade"
 
@@ -168,7 +170,9 @@ class TutorChargeTest(TestCase):
             'acronym': ACRONYM,
             'specific_title': TITLE,
             'academic_year': an_academic_yr,
-            'weight': WEIGHT})
+            'weight': WEIGHT,
+            'subtype': learning_unit_year_subtypes.FULL,
+        })
         a_learning_unit_year.learning_container_year = a_container_year
         a_learning_unit_year.save()
         a_learning_unit_component_lecture = self.create_learning_unit_component(component_type.LECTURING,
@@ -334,6 +338,25 @@ class TutorChargeTest(TestCase):
         self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
         self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
 
+
+    def test_get_learning_unit_enrollments_list(self):
+        luy_full = self.data[0]['learning_unit_year']
+        luy_partim = test_learning_unit_year.create_learning_unit_year({
+            'acronym': "{}A".format(ACRONYM),
+            'specific_title': TITLE,
+            'academic_year': self.data[0]['academic_year'],
+            'weight': WEIGHT,
+            'subtype': learning_unit_year_subtypes.PARTIM,
+        })
+        luy_partim.learning_container_year = luy_full.learning_container_year
+        luy_partim.save()
+        cpt = 0
+        while cpt < 5:
+            LearningUnitEnrollmentFactory(learning_unit_year=luy_full)
+            LearningUnitEnrollmentFactory(learning_unit_year=luy_partim)
+            cpt +=1
+        # The students of the partim don't have to be in the result list
+        self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(luy_full)), 5)
 
 ACCESS_DENIED = 401
 
