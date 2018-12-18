@@ -350,11 +350,9 @@ class TutorChargeTest(TestCase):
         })
         luy_partim.learning_container_year = luy_full.learning_container_year
         luy_partim.save()
-        cpt = 0
-        while cpt < 5:
+        for i in range(5):
             LearningUnitEnrollmentFactory(learning_unit_year=luy_full)
             LearningUnitEnrollmentFactory(learning_unit_year=luy_partim)
-            cpt +=1
         # The students of the partim don't have to be in the result list
         self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(luy_full)), 5)
 
