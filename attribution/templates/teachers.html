@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% load i18n %}
+{% load i18n function %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -45,9 +45,7 @@
                         {{ t.PRACTICAL_EXERCISES |floatformat:1 }}
                     </td>
                     <td>
-                        {% if t.function %}
-                            {% trans t.function %}
-                        {% endif %}
+                        {{ t.function|function_text }}
                     </td>
                 </tr>
             {% endfor %}
