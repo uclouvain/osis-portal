@@ -129,3 +129,7 @@ def find_first_by_exact_acronym(academic_year_id, acronym):
 def get_full_by_learning_container_year_id(learning_container_year_id):
     return LearningUnitYear.objects.get(learning_container_year__id=learning_container_year_id,
                                         subtype=learning_unit_year_subtypes.FULL)
+
+
+def find_by_learning_container_yr_and_subtype(learning_container_yr_id, a_subtype):
+    return LearningUnitYear.objects.filter(learning_container_year=learning_container_yr_id, subtype=a_subtype)
