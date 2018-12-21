@@ -27,11 +27,12 @@ from decimal import Decimal
 
 from django import forms
 from django.core.validators import MinValueValidator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, pgettext
 
 from attribution.business import attribution
 from base.forms.base_forms import BootstrapForm
 from base.models.enums import learning_component_year_type
+from base.models.entity_version import search
 
 MAXIMUM_REMARK_LENGTH = 250
 
@@ -89,7 +90,15 @@ class ApplicationForm(BootstrapForm):
 
 
 class VacantAttributionFilterForm(BootstrapForm):
+    faculty = forms.ModelChoiceField(
+        queryset= search(entity_type="FACULTY"),
+        widget=forms.Select(),
+        empty_label=pgettext("plural", "All"),
+        required=False,
+    )
+
     learning_container_acronym = forms.CharField(required=True, max_length=15)
+
 
     def clean_learning_container_acronym(self):
         data_cleaned = self.cleaned_data['learning_container_acronym']

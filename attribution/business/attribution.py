@@ -67,16 +67,21 @@ def get_volumes_total(attribution_list):
     return dict(volumes_total)
 
 
-def get_attribution_vacant_list(acronym_filter, academic_year):
-    type_delcaration_vacant_allowed = [vacant_declaration_type.RESEVED_FOR_INTERNS,
+def get_attribution_vacant_list(acronym_filter, academic_year, faculty=None):
+    type_declaration_vacant_allowed = [vacant_declaration_type.RESEVED_FOR_INTERNS,
                                        vacant_declaration_type.OPEN_FOR_EXTERNS]
     attribution_vacant = {}
-    learning_containers_year_ids = list(mdl_base.learning_container_year.search(acronym=acronym_filter,
-                                                                                academic_year=academic_year) \
-                                        .filter(team=False,
-                                                type_declaration_vacant__in=
-                                                type_delcaration_vacant_allowed) \
-                                        .values_list('id', flat=True))
+    learning_container_yrs = mdl_base.learning_container_year.search(acronym=acronym_filter,
+                                                                     academic_year=academic_year) \
+        .filter(team=False,
+                type_declaration_vacant__in=
+                type_declaration_vacant_allowed)
+
+    if faculty:
+        learning_containers_year_ids = _filter_by_faculty(academic_year, faculty, learning_container_yrs)
+    else:
+        learning_containers_year_ids = list(learning_container_yrs)
+
     learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects \
         .filter(learning_unit_year__learning_container_year_id__in=learning_containers_year_ids) \
         .exclude(learning_component_year__volume_declared_vacant__isnull=True)
@@ -323,3 +328,25 @@ def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
                 teachers_data.append(an_attribution)
 
     return teachers_data if len(teachers_data) > 0 else None
+
+
+def _filter_by_faculty(academic_year, faculty, learning_container_yrs):
+    learning_containers_year_ids = []
+
+    for learning_container_yr in learning_container_yrs:
+        allocation_entity_container_yrs = mdl_base.entity_container_year.EntityContainerYear.objects.filter(
+            learning_container_year=learning_container_yr,
+            type="ALLOCATION_ENTITY"
+        )
+        for allocation_entity_container_yr in allocation_entity_container_yrs:
+
+            ev = mdl_base.entity_version.get_last_version_by_entity_id(allocation_entity_container_yr.entity.id)
+
+            if ev:
+                faculty_entity = ev.find_faculty_version(academic_year)
+
+                learning_containers_year_ids.append(learning_container_yr.id) if faculty_entity and faculty_entity == faculty else None
+
+
+
+    return learning_containers_year_ids
