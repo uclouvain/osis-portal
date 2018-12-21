@@ -339,14 +339,11 @@ def _filter_by_faculty(academic_year, faculty, learning_container_yrs):
             type="ALLOCATION_ENTITY"
         )
         for allocation_entity_container_yr in allocation_entity_container_yrs:
-
-            ev = mdl_base.entity_version.get_last_version_by_entity_id(allocation_entity_container_yr.entity.id)
-
-            if ev:
-                faculty_entity = ev.find_faculty_version(academic_year)
-
-                learning_containers_year_ids.append(learning_container_yr.id) if faculty_entity and faculty_entity == faculty else None
-
-
-
+            entity_vers = mdl_base.entity_version.get_last_version_by_entity_id(
+                allocation_entity_container_yr.entity.id
+            )
+            if entity_vers:
+                faculty_entity = entity_vers.find_faculty_version(academic_year)
+                learning_containers_year_ids.append(
+                    learning_container_yr.id) if faculty_entity and faculty_entity == faculty else None
     return learning_containers_year_ids

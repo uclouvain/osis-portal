@@ -91,14 +91,13 @@ class ApplicationForm(BootstrapForm):
 
 class VacantAttributionFilterForm(BootstrapForm):
     faculty = forms.ModelChoiceField(
-        queryset= search(entity_type="FACULTY"),
+        queryset=search(entity_type="FACULTY"),
         widget=forms.Select(),
         empty_label=pgettext("plural", "All"),
         required=False,
     )
 
     learning_container_acronym = forms.CharField(required=True, max_length=15)
-
 
     def clean_learning_container_acronym(self):
         data_cleaned = self.cleaned_data['learning_container_acronym']

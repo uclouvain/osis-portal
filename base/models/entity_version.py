@@ -34,7 +34,7 @@ from osis_common.utils.datetime import get_tzinfo
 
 
 class EntityVersionAdmin(SerializableModelAdmin):
-    list_display = ('id', 'entity', 'acronym', 'parent' )
+    list_display = ('id', 'entity', 'acronym', 'parent')
     search_fields = ['entity__id']
     raw_id_fields = ('entity', 'parent')
 
@@ -96,14 +96,15 @@ class EntityVersion(SerializableModel):
             if entity_version.__contains_given_date(start_date):
                 return entity_version
 
+
 def search(**kwargs):
     queryset = EntityVersion.objects
 
     if 'entity_type' in kwargs:
         queryset = queryset.filter(entity_type__exact=kwargs['entity_type'])
 
-
     return queryset
+
 
 def get_last_version_by_entity_id(entity_id):
     now = datetime.datetime.now(get_tzinfo())
@@ -111,6 +112,7 @@ def get_last_version_by_entity_id(entity_id):
     if res:
         return res.latest('start_date')
     return None
+
 
 def find_latest_version_by_entity(entity, date):
     return EntityVersion.objects.current(date).entity(entity).select_related('entity', 'parent').first()
