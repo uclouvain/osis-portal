@@ -37,7 +37,7 @@ from base.models.enums import academic_calendar_type
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
 from base.tests.factories.academic_calendar import AcademicCalendarFactory
-from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
@@ -64,11 +64,11 @@ class TestOnlineApplication(TestCase):
 
         # Create current academic year
         today = datetime.datetime.today()
-        self.current_academic_year = AcademicYearFactory(year=today.year, start_date=today)
+        self.current_academic_year = create_current_academic_year()
 
         # Create application year
         # Application is always next year
-        self.application_academic_year = AcademicYearFactory(year=today.year + 1)
+        self.application_academic_year = AcademicYearFactory(year=self.current_academic_year.year + 1)
 
         # Create Event to allow teacher to register
         start_date = datetime.datetime.today() - datetime.timedelta(days=10)

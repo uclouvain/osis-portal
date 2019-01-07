@@ -34,7 +34,7 @@ from attribution.business import attribution
 from attribution.tests.factories.attribution import AttributionNewFactory
 from base.models.academic_year import AcademicYear
 from base.models.enums import learning_component_year_type, component_type
-from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
@@ -51,7 +51,7 @@ class AttributionTest(TestCase):
         TutorFactory(person=self.person)
 
         _create_multiple_academic_year()
-        self.current_academic_year = AcademicYear.objects.get(year=datetime.date.today().year)
+        self.current_academic_year = create_current_academic_year()
 
         # Creation Json which will be store on attribution
         attributions = _get_attributions_dict(self.current_academic_year.year)
@@ -202,6 +202,7 @@ class AttributionTest(TestCase):
 
     def test_get_attribution_list_about_to_expire_already_applied(self):
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
+        print(self.current_academic_year.year)
         next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
         _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(30), Decimal(30))
         application = [{
