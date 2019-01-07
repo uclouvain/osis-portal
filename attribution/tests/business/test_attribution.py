@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 from decimal import Decimal
 
 from django.contrib.auth.models import Group
@@ -68,6 +67,10 @@ class AttributionTest(TestCase):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             academic_year_2016)
         self.assertEqual(len(attribution_list), 1)
+
+        attribution_list = attribution.get_attribution_list(self.person.global_id)
+        self.assertEqual(len(attribution_list), 3)
+
 
     def test_get_attribution_list_empty(self):
         academic_year = AcademicYearFactory(year=1990)
@@ -318,6 +321,16 @@ class AttributionTest(TestCase):
         self.assertEqual(an_attribution['lecturing_vol'], Decimal(75))  # VOLUME_TOTAL * PLANNED_CLASSES
         self.assertRaises(KeyError, lambda: an_attribution['practical_exercises_vol'])
 
+    def test_get_attribution_vacant_None(self):
+        learning_container_yr = LearningContainerYearFactory()
+        self.assertIsNone(attribution.get_attribution_vacant(learning_container_yr))
+
+    def test_format_no_volume(self):
+        attributions_without_volume = [
+            {'year': 2018, 'acronym': 'LBIR1200'}]
+        attributions_formalized = attribution._format_str_volume_to_decimal(attributions_without_volume)
+        self.assertEqual(attributions_formalized[0]['LECTURING'], 0.0)
+        self.assertEqual(attributions_formalized[0]['PRACTICAL_EXERCISES'], 0.0)
 
 def _create_multiple_academic_year():
     for year in range(2000, 2025):

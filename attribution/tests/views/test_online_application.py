@@ -46,6 +46,10 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.user import UserFactory
 from base.models.enums import component_type, learning_unit_year_subtypes
+from base.tests.factories.entity import EntityFactory
+from base.tests.factories.entity_version import EntityVersionFactory
+from base.tests.factories.entity_container_year import EntityContainerYearFactory
+from base.models.enums import entity_container_year_link_type as entity_types
 
 
 class TestOnlineApplication(TestCase):
@@ -79,6 +83,17 @@ class TestOnlineApplication(TestCase):
             start_date=start_date,
             end_date=end_date
         )
+        self.agro_entity = EntityFactory()
+        self.agro_entity_version = EntityVersionFactory(entity=self.agro_entity, acronym="AGRO",
+                                                        entity_type='FACULTY',
+                                                        start_date=self.academic_calendar.start_date,
+                                                        end_date=self.academic_calendar.end_date)
+
+        self.drt_entity = EntityFactory()
+        self.drt_entity_version = EntityVersionFactory(entity=self.drt_entity, acronym="DRT",
+                                                       entity_type='FACULTY',
+                                                       start_date=self.academic_calendar.start_date,
+                                                       end_date=self.academic_calendar.end_date)
 
         # Creation context with multiple learning container year
         self._create_multiple_learning_container_year()
@@ -87,6 +102,7 @@ class TestOnlineApplication(TestCase):
             applications=self._get_default_application_list(),
             attributions=self._get_default_attribution_list()
         )
+
 
     def test_redirection_to_outside_encoding_period(self):
         # Remove teaching charge application event
@@ -152,6 +168,19 @@ class TestOnlineApplication(TestCase):
         self.assertTrue((next(attrib for attrib in context['attributions_vacant']
                               if attrib.get('acronym') == self.lagro1600_next.acronym and
                               attrib.get('already_applied')), False))
+
+    def test_search_vacant_attribution_search_list_by_faculty(self):
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(
+            url, data={
+                'learning_container_acronym': 'LAGRO',
+                'faculty': self.agro_entity_version.id
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['attributions_vacant']), 2)
+
 
     def test_search_vacant_attribution_with_delcaration_vac_not_allowed(self):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
@@ -297,6 +326,7 @@ class TestOnlineApplication(TestCase):
             context['applications'][0]['LECTURING']
 
     def _create_multiple_learning_container_year(self):
+        # ici
         # Creation learning container for current academic year
         self.lbir1200_current = _create_learning_container_with_components("LBIR1200", self.current_academic_year)
         self.lbir1300_current = _create_learning_container_with_components("LBIR1300", self.current_academic_year)
@@ -311,6 +341,8 @@ class TestOnlineApplication(TestCase):
                                                                          54, 7)
         self.lagro2500_next = _create_learning_container_with_components("LAGRO2500", self.application_academic_year,
                                                                          0, 70)
+        self._create_entity_container_yrs()
+
 
     def _get_default_application_list(self):
         return [
@@ -325,6 +357,28 @@ class TestOnlineApplication(TestCase):
             # Attribution in next year
             _get_attribution_example(self.lagro2500_next, '29', '10', 2015, 2020)
         ]
+
+    def _create_entity_container_yrs(self):
+        EntityContainerYearFactory(learning_container_year=self.lbir1200_current,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lbir1300_current,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lbir1200_next,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lbir1300_next,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lagro1600_next,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lagro2500_next,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.ldroi1500_current,
+                                   entity=self.drt_entity)
 
 
 def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None,
