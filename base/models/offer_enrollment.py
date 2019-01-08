@@ -32,11 +32,12 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class OfferEnrollmentAdmin(SerializableModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment', 'enrollment_state')
-    fieldsets = ((None, {'fields': ('offer_year', 'student', 'date_enrollment', 'enrollment_state')}),)
-    raw_id_fields = ('offer_year', 'student')
+    list_display = ('offer_year', 'student', 'date_enrollment', 'enrollment_state', 'education_group_year')
+    fieldsets = ((None, {'fields': ('offer_year', 'student', 'date_enrollment', 'enrollment_state',
+                                    'education_group_year')}),)
+    raw_id_fields = ('offer_year', 'student', 'education_group_year')
     search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name',
-                     'student__registration_id', 'enrollment_state']
+                     'student__registration_id', 'enrollment_state', 'education_group_year__acronym']
 
 
 class OfferEnrollment(SerializableModel):
@@ -45,6 +46,7 @@ class OfferEnrollment(SerializableModel):
     offer_year = models.ForeignKey(OfferYear)
     student = models.ForeignKey('Student')
     enrollment_state = models.CharField(max_length=15, choices=offer_enrollment_state.STATES, blank=True, null=True)
+    education_group_year = models.ForeignKey('EducationGroupYear', null=True, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return u"%s - %s" % (self.student, self.offer_year)
