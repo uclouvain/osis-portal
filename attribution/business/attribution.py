@@ -354,10 +354,9 @@ def _get_learning_unit_components(academic_year, acronym_filter, faculty):
             team=False,
             type_declaration_vacant__in=type_declaration_vacant_allowed
         )
-        learning_containers_year_ids = list(learning_container_yrs)
 
         learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects \
-            .filter(learning_unit_year__learning_container_year_id__in=learning_containers_year_ids) \
+            .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs) \
             .exclude(learning_component_year__volume_declared_vacant__isnull=True)
     return learning_unit_components
 
