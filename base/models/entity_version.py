@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import collections
-import datetime
 
 from django.db import models, connection
 from django.db.models import Q
@@ -140,30 +139,6 @@ class EntityVersion(SerializableModel):
             self.acronym,
         )
 
-    def find_faculty_version(self, academic_yr):
-        if self.entity_type == entity_type.FACULTY:
-            return self
-        # There is no faculty above the sector
-        elif self.entity_type == entity_type.SECTOR:
-            return None
-        else:
-            parent_entity_version = self._find_latest_version_by_parent(academic_yr.start_date)
-            if parent_entity_version:
-                return parent_entity_version.find_faculty_version(academic_yr)
-
-    def _find_latest_version_by_parent(self, start_date):
-        if not self.parent:
-            return None
-
-        # if a prefetch exist on the parent
-        entity_versions = getattr(self.parent, 'entity_versions', None)
-        if not entity_versions:
-            return find_latest_version_by_entity(self.parent, start_date)
-
-        for entity_version in entity_versions:
-            if entity_version.__contains_given_date(start_date):
-                return entity_version
-
 
 def search(**kwargs):
     queryset = EntityVersion.objects
@@ -172,15 +147,3 @@ def search(**kwargs):
         queryset = queryset.filter(entity_type__exact=kwargs['entity_type'])
 
     return queryset
-
-
-def get_last_version_by_entity_id(entity_id):
-    now = datetime.datetime.now()
-    res = EntityVersion.objects.current(now).filter(entity__id=entity_id)
-    if res:
-        return res.latest('start_date')
-    return None
-
-
-def find_latest_version_by_entity(entity, date):
-    return EntityVersion.objects.current(date).entity(entity).select_related('entity', 'parent').first()
