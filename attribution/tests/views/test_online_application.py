@@ -50,6 +50,7 @@ from base.tests.factories.entity import EntityFactory
 from base.tests.factories.entity_version import EntityVersionFactory
 from base.tests.factories.entity_container_year import EntityContainerYearFactory
 from base.models.enums import entity_container_year_link_type as entity_types
+from base.models.learning_unit_year import LearningUnitYear
 
 
 class TestOnlineApplication(TestCase):
@@ -67,7 +68,6 @@ class TestOnlineApplication(TestCase):
         self.client.force_login(user)
 
         # Create current academic year
-        today = datetime.datetime.today()
         self.current_academic_year = create_current_academic_year()
 
         # Create application year
@@ -122,7 +122,7 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(messages[0].tags, 'warning')
         self.assertEqual(messages[0].message, _('The period of online application is closed'))
 
-    def test_applictions_overview(self):
+    def test_applications_overview(self):
         url = reverse('applications_overview')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -149,7 +149,8 @@ class TestOnlineApplication(TestCase):
         context = response.context[0]
         self.assertEqual(context['a_tutor'], self.tutor)
         self.assertTrue(context['search_form'])
-        self.assertFalse(context['attributions_vacant'])
+        self.assertEqual(len(context['attributions_vacant']),
+                         len(self._get_default_application_list()) + len(self._get_default_attribution_list()))
 
     def test_search_vacant_attribution_post_not_allowed(self):
         url = reverse('vacant_attributions_search')
@@ -182,7 +183,7 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(len(context['attributions_vacant']), 2)
 
 
-    def test_search_vacant_attribution_with_delcaration_vac_not_allowed(self):
+    def test_search_vacant_attribution_with_declaration_vac_not_allowed(self):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
         self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
         # Creation learning container for next academic year [==> application academic year]
@@ -383,7 +384,7 @@ class TestOnlineApplication(TestCase):
 def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None,
                                                volume_practical_exercices=None,
                                                subtype=learning_unit_year_subtypes.FULL,
-                                               type_declaration_vacant=vacant_declaration_type.RESEVED_FOR_INTERNS):
+                                               type_declaration_vacant=vacant_declaration_type.RESERVED_FOR_INTERNS):
     l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year,
                                                type_declaration_vacant=type_declaration_vacant)
     return _link_components_and_learning_unit_year_to_container(l_container, l_container.acronym,

@@ -97,7 +97,7 @@ class VacantAttributionFilterForm(BootstrapForm):
         required=False,
     )
 
-    learning_container_acronym = forms.CharField(required=True, max_length=15)
+    learning_container_acronym = forms.CharField(required=False, max_length=15)
 
     def clean_learning_container_acronym(self):
         data_cleaned = self.cleaned_data['learning_container_acronym']
