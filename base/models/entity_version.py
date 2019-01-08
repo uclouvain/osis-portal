@@ -117,6 +117,7 @@ class EntityVersionQuerySet(models.QuerySet):
                 } for row in cursor.fetchall()
                 ]
 
+
 class EntityVersion(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
     entity = models.ForeignKey('Entity')
