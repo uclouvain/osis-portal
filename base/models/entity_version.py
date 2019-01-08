@@ -30,7 +30,6 @@ from django.db import models
 from base.models.enums import entity_type
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.utils.translation import ugettext_lazy as _
-from osis_common.utils.datetime import get_tzinfo
 
 
 class EntityVersionAdmin(SerializableModelAdmin):
@@ -107,7 +106,7 @@ def search(**kwargs):
 
 
 def get_last_version_by_entity_id(entity_id):
-    now = datetime.datetime.now(get_tzinfo())
+    now = datetime.datetime.now()
     res = EntityVersion.objects.current(now).filter(entity__id=entity_id)
     if res:
         return res.latest('start_date')

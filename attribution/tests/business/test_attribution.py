@@ -205,7 +205,6 @@ class AttributionTest(TestCase):
 
     def test_get_attribution_list_about_to_expire_already_applied(self):
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
-        print(self.current_academic_year.year)
         next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
         _create_learning_container_with_components("LAGRO1530", next_academic_year, Decimal(30), Decimal(30))
         application = [{
@@ -321,7 +320,7 @@ class AttributionTest(TestCase):
         self.assertEqual(an_attribution['lecturing_vol'], Decimal(75))  # VOLUME_TOTAL * PLANNED_CLASSES
         self.assertRaises(KeyError, lambda: an_attribution['practical_exercises_vol'])
 
-    def test_get_attribution_vacant_None(self):
+    def test_get_attribution_vacant_none(self):
         learning_container_yr = LearningContainerYearFactory()
         self.assertIsNone(attribution.get_attribution_vacant(learning_container_yr))
 

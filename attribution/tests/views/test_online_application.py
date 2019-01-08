@@ -326,7 +326,6 @@ class TestOnlineApplication(TestCase):
             context['applications'][0]['LECTURING']
 
     def _create_multiple_learning_container_year(self):
-        # ici
         # Creation learning container for current academic year
         self.lbir1200_current = _create_learning_container_with_components("LBIR1200", self.current_academic_year)
         self.lbir1300_current = _create_learning_container_with_components("LBIR1300", self.current_academic_year)
