@@ -43,4 +43,4 @@ class LearningContainerYearFactory(factory.django.DjangoModelFactory):
     academic_year = factory.SubFactory(AcademicYearFactory)
     common_title = factory.Sequence(lambda n: 'Learning container year - %d' % n)
     common_title_english = factory.Sequence(lambda n: 'Learning container year - %d' % n)
-    type_declaration_vacant = vacant_declaration_type.RESEVED_FOR_INTERNS
+    type_declaration_vacant = vacant_declaration_type.RESERVED_FOR_INTERNS

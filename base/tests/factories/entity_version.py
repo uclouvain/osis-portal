@@ -23,9 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 import factory
-from base.models.enums import entity_type
 from base.tests.factories.entity import EntityFactory
 
 
@@ -34,4 +32,4 @@ class EntityVersionFactory(factory.DjangoModelFactory):
         model = 'base.EntityVersion'
 
     entity = factory.SubFactory(EntityFactory)
-
+    acronym = factory.Faker('text', max_nb_chars=20)

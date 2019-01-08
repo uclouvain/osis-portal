@@ -58,10 +58,14 @@
             <div class="row">
                 <!-- Search vacant -->
                 <form method="get" action="{% url 'vacant_attributions_search' %}">
-                    <div class="col-md-10">
+                    <div class="col-md-8">
                         <p class="text-muted">{% trans 'To find a vacant learning unit to candidate to, introduce the code and click on the button' %}</p>
                     </div>
-                    <div class="col-md-2 ">
+                    <div class="col-md-2">
+                        <label for="learning_container_acronym_id">{% trans 'Faculty' %}</label>
+                        {{ search_form.faculty}}
+                    </div>
+                    <div class="col-md-2">
                         <label for="learning_container_acronym_id">{% trans 'Code' %}</label>
                         <div class="input-group">
                             {{ search_form.learning_container_acronym}}

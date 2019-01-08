@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 from decimal import Decimal
 
 from django.contrib.auth.models import Group
@@ -34,7 +33,7 @@ from attribution.business import attribution
 from attribution.tests.factories.attribution import AttributionNewFactory
 from base.models.academic_year import AcademicYear
 from base.models.enums import learning_component_year_type, component_type
-from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
@@ -51,7 +50,7 @@ class AttributionTest(TestCase):
         TutorFactory(person=self.person)
 
         _create_multiple_academic_year()
-        self.current_academic_year = AcademicYear.objects.get(year=datetime.date.today().year)
+        self.current_academic_year = create_current_academic_year()
 
         # Creation Json which will be store on attribution
         attributions = _get_attributions_dict(self.current_academic_year.year)
@@ -68,6 +67,10 @@ class AttributionTest(TestCase):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             academic_year_2016)
         self.assertEqual(len(attribution_list), 1)
+
+        attribution_list = attribution.get_attribution_list(self.person.global_id)
+        self.assertEqual(len(attribution_list), 3)
+
 
     def test_get_attribution_list_empty(self):
         academic_year = AcademicYearFactory(year=1990)
@@ -317,6 +320,16 @@ class AttributionTest(TestCase):
         self.assertEqual(an_attribution['lecturing_vol'], Decimal(75))  # VOLUME_TOTAL * PLANNED_CLASSES
         self.assertRaises(KeyError, lambda: an_attribution['practical_exercises_vol'])
 
+    def test_get_attribution_vacant_none(self):
+        learning_container_yr = LearningContainerYearFactory()
+        self.assertIsNone(attribution.get_attribution_vacant(learning_container_yr))
+
+    def test_format_no_volume(self):
+        attributions_without_volume = [
+            {'year': 2018, 'acronym': 'LBIR1200'}]
+        attributions_formalized = attribution._format_str_volume_to_decimal(attributions_without_volume)
+        self.assertEqual(attributions_formalized[0]['LECTURING'], 0.0)
+        self.assertEqual(attributions_formalized[0]['PRACTICAL_EXERCISES'], 0.0)
 
 def _create_multiple_academic_year():
     for year in range(2000, 2025):
