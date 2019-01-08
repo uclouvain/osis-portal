@@ -348,11 +348,12 @@ def _get_learning_unit_components(academic_year, acronym_filter, faculty):
     if faculty:
         learning_unit_components = _get_learning_unit_components_by_faculty(academic_year, acronym_filter, faculty)
     else:
-        learning_container_yrs = mdl_base.learning_container_year.search(acronym=acronym_filter,
-                                                                         academic_year=academic_year) \
-            .filter(team=False,
-                    type_declaration_vacant__in=
-                    type_declaration_vacant_allowed)
+        learning_container_yrs = mdl_base.learning_container_year.search(
+            acronym=acronym_filter,
+            academic_year=academic_year).filter(
+            team=False,
+            type_declaration_vacant__in=type_declaration_vacant_allowed
+        )
         learning_containers_year_ids = list(learning_container_yrs)
 
         learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects \
@@ -368,17 +369,15 @@ def _get_learning_unit_components_by_faculty(academic_year, acronym_filter, facu
     ).current(
         OuterRef('academic_year__start_date')
     ).values('acronym')[:1]
-    learning_units = mdl_base.learning_unit_year.search(acronym=acronym_filter, academic_year_id=academic_year)
-    learning_units = learning_units.select_related(
+    learning_unit_years = mdl_base.learning_unit_year.search(acronym=acronym_filter, academic_year_id=academic_year)
+    learning_unit_years = learning_unit_years.select_related(
         'academic_year', 'learning_container_year__academic_year'
     ).order_by('academic_year__year', 'acronym').annotate(
         entity_allocation=Subquery(entity_allocation),
     )
-    learning_units = get_filter_learning_container_ids(faculty, learning_units)
-    learning_containers_year_ids = []
-    for l in list(learning_units):
-        learning_containers_year_ids.append(l.id)
+    learning_unit_years = get_filter_learning_container_ids(faculty, learning_unit_years)
+    learning_unit_years_ids = learning_unit_years.values_list('id', flat=True)
     learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects \
-        .filter(learning_unit_year_id__in=learning_containers_year_ids) \
+        .filter(learning_unit_year_id__in=learning_unit_years_ids) \
         .exclude(learning_component_year__volume_declared_vacant__isnull=True)
     return learning_unit_components
