@@ -80,7 +80,7 @@ def search(academic_year_id=None, acronym=None, learning_container_year_id=None,
         queryset = queryset.filter(academic_year=academic_year_id)
 
     if acronym:
-        queryset = queryset.filter(acronym__iexact=acronym)
+        queryset = queryset.filter(acronym__icontains=acronym)
 
     if learning_container_year_id is not None:
         if isinstance(learning_container_year_id, list):

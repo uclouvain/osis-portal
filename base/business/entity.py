@@ -23,18 +23,20 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.utils.translation import ugettext_lazy as _
 
-RESERVED_FOR_INTERNS = "RESEVED_FOR_INTERNS"
-OPEN_FOR_EXTERNS = "OPEN_FOR_EXTERNS"
-EXCEPTIONAL_PROCEDURE = "EXCEPTIONAL_PROCEDURE"
-VACANT_NOT_PUBLISH = "VACANT_NOT_PUBLISH"
-DO_NOT_ASSIGN = "DO_NOT_ASSIGN"
+from base.models.entity import Entity
+from base.models.entity_version import EntityVersion
 
-DECLARATION_TYPE = (
-    (RESERVED_FOR_INTERNS, _(RESERVED_FOR_INTERNS)),
-    (OPEN_FOR_EXTERNS, _(OPEN_FOR_EXTERNS)),
-    (EXCEPTIONAL_PROCEDURE, _(EXCEPTIONAL_PROCEDURE)),
-    (VACANT_NOT_PUBLISH, _(VACANT_NOT_PUBLISH)),
-    (DO_NOT_ASSIGN, _(DO_NOT_ASSIGN))
-)
+
+def get_entities_ids(entity_acronym, with_entity_subordinated):
+    if entity_acronym:
+        entity_versions = EntityVersion.objects.filter(acronym__iregex=entity_acronym)
+        entities_ids = set(entity_versions.values_list('entity', flat=True))
+
+        if with_entity_subordinated:
+            list_descendants = EntityVersion.objects.get_tree(
+                Entity.objects.filter(entityversion__acronym__iregex=entity_acronym)
+            )
+            entities_ids |= {row["entity_id"] for row in list_descendants}
+        return list(entities_ids)
+    return []

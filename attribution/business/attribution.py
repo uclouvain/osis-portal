@@ -35,6 +35,9 @@ from base import models as mdl_base
 from base.business import learning_unit_year_with_context
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
+from base.models.enums import entity_container_year_link_type as entity_types
+from django.db.models import OuterRef, Subquery, Exists, Prefetch
+from base.business.entity import get_entities_ids
 
 NO_CHARGE = 0.0
 
@@ -67,19 +70,14 @@ def get_volumes_total(attribution_list):
     return dict(volumes_total)
 
 
-def get_attribution_vacant_list(acronym_filter, academic_year):
-    type_delcaration_vacant_allowed = [vacant_declaration_type.RESEVED_FOR_INTERNS,
-                                       vacant_declaration_type.OPEN_FOR_EXTERNS]
+def get_attribution_vacant_list(acronym_filter, academic_year, faculty=None):
     attribution_vacant = {}
-    learning_containers_year_ids = list(mdl_base.learning_container_year.search(acronym=acronym_filter,
-                                                                                academic_year=academic_year) \
-                                        .filter(team=False,
-                                                type_declaration_vacant__in=
-                                                type_delcaration_vacant_allowed) \
-                                        .values_list('id', flat=True))
-    learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects \
-        .filter(learning_unit_year__learning_container_year_id__in=learning_containers_year_ids) \
-        .exclude(learning_component_year__volume_declared_vacant__isnull=True)
+
+    learning_unit_components = _get_learning_unit_components(
+        academic_year,
+        acronym_filter,
+        faculty
+    )
     for learn_unit_comp in learning_unit_components:
         l_component_year = learn_unit_comp.learning_component_year
         key = l_component_year.learning_container_year.id
@@ -323,3 +321,62 @@ def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
                 teachers_data.append(an_attribution)
 
     return teachers_data if len(teachers_data) > 0 else None
+
+
+def get_filter_learning_container_ids(entity_version, qs):
+    """
+    Append a filter on the queryset if entities are given in the search
+
+    :param qs: LearningUnitYearQuerySet
+    :return: queryset
+    """
+
+    if entity_version:
+        allocation_entity_ids = get_entities_ids(entity_version.acronym, True)
+        qs = qs.filter(
+            learning_container_year__entitycontaineryear__entity__in=allocation_entity_ids,
+            learning_container_year__entitycontaineryear__type=entity_types.ALLOCATION_ENTITY
+        )
+
+    return qs
+
+
+def _get_learning_unit_components(academic_year, acronym_filter, faculty):
+    type_declaration_vacant_allowed = [vacant_declaration_type.RESERVED_FOR_INTERNS,
+                                       vacant_declaration_type.OPEN_FOR_EXTERNS]
+
+    if faculty:
+        learning_unit_components = _get_learning_unit_components_by_faculty(academic_year, acronym_filter, faculty)
+    else:
+        learning_container_yrs = mdl_base.learning_container_year.search(
+            acronym=acronym_filter,
+            academic_year=academic_year).filter(
+            team=False,
+            type_declaration_vacant__in=type_declaration_vacant_allowed
+        )
+
+        learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects \
+            .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs) \
+            .exclude(learning_component_year__volume_declared_vacant__isnull=True)
+    return learning_unit_components
+
+
+def _get_learning_unit_components_by_faculty(academic_year, acronym_filter, faculty):
+    entity_allocation = mdl_base.entity_version.EntityVersion.objects.filter(
+        entity__entitycontaineryear__learning_container_year__learningunityear=OuterRef('pk'),
+        entity__entitycontaineryear__type=entity_types.ALLOCATION_ENTITY
+    ).current(
+        OuterRef('academic_year__start_date')
+    ).values('acronym')[:1]
+    learning_unit_years = mdl_base.learning_unit_year.search(acronym=acronym_filter, academic_year_id=academic_year)
+    learning_unit_years = learning_unit_years.select_related(
+        'academic_year', 'learning_container_year__academic_year'
+    ).order_by('academic_year__year', 'acronym').annotate(
+        entity_allocation=Subquery(entity_allocation),
+    )
+    learning_unit_years = get_filter_learning_container_ids(faculty, learning_unit_years)
+    learning_unit_years_ids = learning_unit_years.values_list('id', flat=True)
+    learning_unit_components = mdl_base.learning_unit_component.LearningUnitComponent.objects \
+        .filter(learning_unit_year_id__in=learning_unit_years_ids) \
+        .exclude(learning_component_year__volume_declared_vacant__isnull=True)
+    return learning_unit_components
