@@ -97,7 +97,8 @@ class VacantAttributionFilterForm(BootstrapForm):
         required=False,
     )
 
-    learning_container_acronym = forms.CharField(required=False, max_length=15)
+    learning_container_acronym = forms.CharField(required=False, max_length=15,
+                                                 widget=forms.TextInput(attrs={'autofocus': 'autofocus'}))
 
     def clean_learning_container_acronym(self):
         data_cleaned = self.cleaned_data['learning_container_acronym']
