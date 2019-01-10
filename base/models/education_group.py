@@ -54,7 +54,7 @@ class EducationGroup(SerializableModel):
     @property
     def most_recent_acronym(self):
         qs = self.educationgroupyear_set.all()
-        if qs.count():
+        if qs:
             most_recent_education_group = qs.latest('academic_year__year')
             return most_recent_education_group.acronym
         return None

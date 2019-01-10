@@ -37,8 +37,14 @@ class EducationGroupTest(TestCase):
         self.education_group2 = EducationGroupFactory()
         self.academic_year = AcademicYearFactory(year=2018)
         self.academic_year2 = AcademicYearFactory(year=2020)
-        self.education_group_year1 = EducationGroupYearFactory(education_group= self.education_group, academic_year=self.academic_year)
-        self.education_group_year2 = EducationGroupYearFactory(education_group= self.education_group, academic_year=self.academic_year2)
+        self.education_group_year1 = EducationGroupYearFactory(
+            education_group= self.education_group,
+            academic_year=self.academic_year
+        )
+        self.education_group_year2 = EducationGroupYearFactory(
+            education_group= self.education_group,
+            academic_year=self.academic_year2
+        )
 
 
     def test_most_recent_acronym(self):
