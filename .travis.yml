@@ -1,0 +1,41 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=2f16fec2fde9a6e7cedc2e0f1d78ecbb890703af0df55d7c73fdfc3a27763411
+
+
+language: python
+python: "3.5.2"
+services:
+  - postgresql
+addons:
+    postgresql: "9.4"
+
+install:
+  - export PROJECT_DIR=`pwd`
+  - cd /tmp
+  - git clone https://github.com/uclouvain/osis-portal.git
+  - cd osis-portal
+  - git submodule init
+  - git submodule update
+  - pip install -r requirements.txt
+  - rm -Rf internship
+  - ln -s $PROJECT_DIR internship
+
+before_script:
+  - cp .env.example .env
+  - echo 'APPS_TO_TEST += ("internship",)' >> frontoffice/settings/local.py
+  - echo >> .env
+  - echo "POSTGRES_USER = 'postgres'" >> .env
+  - echo "POSTGRES_PASSWORD = ''" >> .env
+  - psql -c 'create database osis_portal_local;' -U postgres
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - python3 manage.py compilemessages && coverage run manage.py test --exclude-tag=selenium
+
+after_script:
+  - coverage xml
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+

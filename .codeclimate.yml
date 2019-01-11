@@ -1,11 +1,21 @@
-engines:
+version: "2"
+
+checks:
+  file-lines:
+    enabled: false
+  method-complexity:
+    config:
+      threshold: 8
+
+plugins:
   pep8:
     enabled: true
-    checks:
-      E501:
-        enabled: false
+  duplication:
+    enabled: true
+    config:
+        count_threshold: 3
 
-exclude_paths:
-- "migrations"
-- "tests"
-- "fixtures"
+exclude_patterns:
+- "/tests/"
+- "/migrations/"
+- "/fixtures/"
