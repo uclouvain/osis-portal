@@ -141,7 +141,8 @@ def search_vacant_attribution(request):
         application_academic_year = tutor_application.get_application_year()
         attributions_vacant = attribution.get_attribution_vacant_list(
             acronym_filter=form.cleaned_data['learning_container_acronym'],
-            academic_year=application_academic_year
+            academic_year=application_academic_year,
+            faculty=form.cleaned_data['faculty'],
         )
         attributions_vacant = tutor_application.mark_attribution_already_applied(
             attributions_vacant,

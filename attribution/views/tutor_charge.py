@@ -361,7 +361,12 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
 def get_learning_unit_enrollments_list(a_learning_unit_year):
     enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(
-        list(mdl_base.learning_unit_year.find_by_learning_container_year(a_learning_unit_year.learning_container_year)),
+        list(
+            mdl_base.learning_unit_year.find_by_learning_container_yr_and_subtype(
+                a_learning_unit_year.learning_container_year,
+                a_learning_unit_year.subtype,
+            )
+        ),
         offer_enrollment_states=enrollment_states,
         only_enrolled=True
     )

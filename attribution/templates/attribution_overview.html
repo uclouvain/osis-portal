@@ -49,22 +49,29 @@
     {% include "template_messages.html" %}
 
     <div class="panel panel-default" id="pnl_applications">
-        <div class="panel-heading">{% trans 'My applications'%} {{ application_year }}</div>
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-11">
+                    {% trans 'My applications'%} {{ application_year }}
+                </div>
+                <div class="col-md-1">
+                    {% if applications %}
+                        <form action="{% url 'email_tutor_application_confirmation' %}"
+                              method="POST"
+                              id="form_email_tutor_application_confirmation">
+                            {% csrf_token %}
+                            <button class="btn btn-primary pull-right"
+                                    id="btn_applications_email_confirmation"
+                                    type="submit" title="{%trans 'To receive a confirmation email with the applications'%}">
+                                <span class="glyphicon glyphicon-envelope" ></span>
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
         <div class="panel-body">
             <div class="clearfix">
-                {% if applications %}
-                <span class="pull-right" style="margin-left:10px;margin-right:10px;">
-                    <form action="{% url 'email_tutor_application_confirmation' %}"
-                          method="POST"
-                          id="form_email_tutor_application_confirmation">
-                        {% csrf_token %}
-                        <button class="btn btn-default"
-                                id="btn_applications_email_confirmtion"
-                                type="submit" title="{%trans 'To receive a confirmation email with the applications'%}">
-                            <span class="glyphicon glyphicon-envelope" ></span></button>
-                    </form>
-                </span>
-                {% endif %}
                 <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
                    href="{% url 'vacant_attributions_search'%}">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
