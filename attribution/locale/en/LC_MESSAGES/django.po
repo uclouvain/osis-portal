@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-14 14:44+0100\n"
+"POT-Creation-Date: 2019-01-14 13:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: business/attribution.py:268 tests/business/test_attribution.py:201
+#: business/attribution.py:266 tests/business/test_attribution.py:204
 msgid "A substitute can not renew his function of substitute"
 msgstr ""
 
@@ -30,11 +30,16 @@ msgstr ""
 msgid "Activity"
 msgstr ""
 
-#: business/attribution.py:265 tests/business/test_attribution.py:225
+#: forms/application.py:96
+msgctxt "plural"
+msgid "All"
+msgstr ""
+
+#: business/attribution.py:263 tests/business/test_attribution.py:228
 msgid "An application has already been submitted"
 msgstr ""
 
-#: views/online_application.py:294
+#: views/online_application.py:278
 msgid "An email with your applications have been sent"
 msgstr ""
 
@@ -92,8 +97,8 @@ msgstr ""
 #: templates/application_form.html:72 templates/applications_list.html:35
 #: templates/attribution_list.html:36
 #: templates/attribution_renewal_list.html:54
-#: templates/attribution_vacant_list.html:65
-#: templates/attribution_vacant_list.html:90
+#: templates/attribution_vacant_list.html:70
+#: templates/attribution_vacant_list.html:101
 #: templates/tutor_charge_content.html:57
 msgid "Code"
 msgstr ""
@@ -119,7 +124,7 @@ msgid "Deputy temporary"
 msgstr ""
 
 #: templates/attribution_list.html:69
-#: templates/attribution_vacant_list.html:126
+#: templates/attribution_vacant_list.html:137
 msgid "Display teachers"
 msgstr ""
 
@@ -150,6 +155,10 @@ msgstr ""
 #: templates/admin/students_list.html:30 templates/students_list_admin.html:33
 #: templates/tutor_charge_admin.html:32
 msgid "Faculties administration"
+msgstr ""
+
+#: templates/attribution_vacant_list.html:66
+msgid "Faculty"
 msgstr ""
 
 #: templates/attribution_list.html:44
@@ -190,11 +199,11 @@ msgstr ""
 
 #: templates/attribution_list.html:31
 #: templates/attribution_renewal_list.html:40
-#: templates/attribution_vacant_list.html:84
+#: templates/attribution_vacant_list.html:95
 msgid "Learning unit volumes"
 msgstr ""
 
-#: forms/application.py:64
+#: forms/application.py:65
 msgid "Lecturing charge or practical charge must be filled"
 msgstr ""
 
@@ -223,25 +232,25 @@ msgstr ""
 
 #: templates/application_form.html:40 templates/attribution_overview.html:34
 #: templates/attribution_overview.html:46
-#: templates/attribution_overview.html:52
+#: templates/attribution_overview.html:55
 #: templates/attribution_vacant_list.html:41
 msgid "My applications"
 msgstr ""
 
-#: templates/attribution_overview.html:93
+#: templates/attribution_overview.html:100
 msgid "My charges"
 msgstr ""
 
-#: templates/attribution_overview.html:84
+#: templates/attribution_overview.html:91
 msgid "My charges now vacant"
 msgstr ""
 
-#: templates/attribution_overview.html:71
-#: templates/attribution_vacant_list.html:143
+#: templates/attribution_overview.html:78
+#: templates/attribution_vacant_list.html:154
 msgid "New application"
 msgstr ""
 
-#: templates/attribution_overview.html:78
+#: templates/attribution_overview.html:85
 msgid "No application"
 msgstr ""
 
@@ -249,13 +258,13 @@ msgstr ""
 msgid "No application found"
 msgstr ""
 
-#: tests/views/test_online_application.py:187 views/online_application.py:181
+#: tests/views/test_online_application.py:216 views/online_application.py:165
 msgid "No attribution renewed"
 msgstr ""
 
-#: tests/views/test_list.py:174 tests/views/test_list.py:196
-#: tests/views/test_list.py:216 tests/views/test_list.py:320
-#: tests/views/test_list.py:343 views/list.py:113 views/list.py:194
+#: tests/views/test_list.py:175 tests/views/test_list.py:197
+#: tests/views/test_list.py:217 tests/views/test_list.py:321
+#: tests/views/test_list.py:344 views/list.py:113 views/list.py:194
 msgid "No data found"
 msgstr ""
 
@@ -267,7 +276,7 @@ msgstr "No students enrolled"
 msgid "No teaching charge in "
 msgstr ""
 
-#: templates/attribution_vacant_list.html:162
+#: templates/attribution_vacant_list.html:173
 msgid "No vacant corresponding course"
 msgstr ""
 
@@ -283,8 +292,12 @@ msgstr ""
 msgid "Pgrm"
 msgstr ""
 
-#: templates/attribution_vacant_list.html:70
+#: templates/attribution_vacant_list.html:75
 msgid "Please enter the code of the course to which you would like to apply"
+msgstr ""
+
+#: forms/application.py:121
+msgid "Please precise at least a faculty or a code (or a part of a code)"
 msgstr ""
 
 #: templates/admin/students_exam_list.html:82
@@ -328,8 +341,8 @@ msgid "Sept."
 msgstr ""
 
 #: templates/applications_list.html:50 templates/applications_list.html:66
-#: templates/attribution_vacant_list.html:104
-#: templates/attribution_vacant_list.html:111
+#: templates/attribution_vacant_list.html:115
+#: templates/attribution_vacant_list.html:122
 msgid "Specifications"
 msgstr ""
 
@@ -354,7 +367,8 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: templates/attribution_list.html:47 templates/attribution_vacant_list.html:96
+#: templates/attribution_list.html:47
+#: templates/attribution_vacant_list.html:107
 msgid "Teachers"
 msgstr ""
 
@@ -365,13 +379,13 @@ msgid "Teaching charge"
 msgstr ""
 
 #: templates/attribution_access_denied.html:38
-#: tests/views/test_online_application.py:107 views/online_application.py:57
+#: tests/views/test_online_application.py:123 views/online_application.py:57
 msgid "The period of online application is closed"
 msgstr ""
 
-#: business/attribution.py:257 business/attribution.py:262
-#: tests/business/test_attribution.py:155
-#: tests/business/test_attribution.py:166
+#: business/attribution.py:255 business/attribution.py:260
+#: tests/business/test_attribution.py:158
+#: tests/business/test_attribution.py:169
 msgid ""
 "The vacant volume of the next academic year is lower than the current one"
 msgstr ""
@@ -381,7 +395,7 @@ msgid ""
 "The volume of charge is not available at the moment. Please try again later."
 msgstr ""
 
-#: templates/attribution_vacant_list.html:137
+#: templates/attribution_vacant_list.html:148
 msgid ""
 "This course is team-managed. The application to this activity is based on a "
 "paper transmission."
@@ -390,22 +404,22 @@ msgstr ""
 #: templates/application_form.html:77 templates/applications_list.html:36
 #: templates/attribution_list.html:37
 #: templates/attribution_renewal_list.html:55
-#: templates/attribution_vacant_list.html:91
+#: templates/attribution_vacant_list.html:102
 #: templates/tutor_charge_content.html:58
 msgid "Title"
 msgstr ""
 
-#: templates/attribution_vacant_list.html:62
+#: templates/attribution_vacant_list.html:63
 msgid ""
 "To find a vacant learning unit to candidate to, introduce the code and click "
 "on the button"
 msgstr ""
 
-#: templates/attribution_overview.html:63
+#: templates/attribution_overview.html:65
 msgid "To receive a confirmation email with the applications"
 msgstr ""
 
-#: forms/application.py:77 forms/application.py:86
+#: forms/application.py:78 forms/application.py:87
 msgid "Too much"
 msgstr ""
 
@@ -415,7 +429,7 @@ msgstr ""
 
 #: templates/applications_list.html:31 templates/attribution_list.html:32
 #: templates/attribution_renewal_list.html:41
-#: templates/attribution_vacant_list.html:85
+#: templates/attribution_vacant_list.html:96
 msgid "Vacant"
 msgstr ""
 
@@ -423,7 +437,7 @@ msgstr ""
 msgid "Vacant course search"
 msgstr ""
 
-#: templates/attribution_vacant_list.html:55
+#: templates/attribution_vacant_list.html:56
 msgid "Vacant learning unit"
 msgstr ""
 
@@ -433,8 +447,8 @@ msgstr ""
 #: templates/attribution_renewal_list.html:56
 #: templates/attribution_renewal_list.html:58
 #: templates/attribution_renewal_list.html:62
-#: templates/attribution_vacant_list.html:92
-#: templates/attribution_vacant_list.html:94 templates/teachers.html:32
+#: templates/attribution_vacant_list.html:103
+#: templates/attribution_vacant_list.html:105 templates/teachers.html:32
 #: templates/tutor_charge_content.html:60
 msgid "Vol.1"
 msgstr ""
@@ -453,8 +467,8 @@ msgstr ""
 #: templates/attribution_renewal_list.html:57
 #: templates/attribution_renewal_list.html:59
 #: templates/attribution_renewal_list.html:63
-#: templates/attribution_vacant_list.html:93
-#: templates/attribution_vacant_list.html:95 templates/teachers.html:33
+#: templates/attribution_vacant_list.html:104
+#: templates/attribution_vacant_list.html:106 templates/teachers.html:33
 #: templates/tutor_charge_content.html:61
 msgid "Vol.2"
 msgstr ""
@@ -473,7 +487,7 @@ msgstr ""
 msgid "Wait validation"
 msgstr ""
 
-#: templates/attribution_vacant_list.html:135
+#: templates/attribution_vacant_list.html:146
 msgid "You already apply to this course."
 msgstr ""
 
@@ -490,6 +504,6 @@ msgstr ""
 msgid "to"
 msgstr ""
 
-#: templates/attribution_overview.html:84
+#: templates/attribution_overview.html:91
 msgid "without application"
 msgstr ""

@@ -39,16 +39,10 @@ from attribution.utils import tutor_application_epc
 from attribution.views.decorators.authorization import user_is_tutor_or_super_user
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
-from base.models.enums import learning_component_year_type
 from base.views import layout
 from base.models.enums import academic_calendar_type
-from attribution.models import attribution as mdl_attribution, attribution_new
-from django.http import HttpResponse
-from django.template.loader import render_to_string
 from django.conf import settings
-from base.business import learning_unit_year_with_context
 from base.models.enums import learning_component_year_type
-from decimal import Decimal
 
 
 @login_required
@@ -137,25 +131,8 @@ def search_vacant_attribution(request):
     tutor = mdl_base.tutor.find_by_user(request.user)
     attributions_vacant = None
     form = VacantAttributionFilterForm(data=request.GET)
-    if form.is_valid():
-        application_academic_year = tutor_application.get_application_year()
-        attributions_vacant = attribution.get_attribution_vacant_list(
-            acronym_filter=form.cleaned_data['learning_container_acronym'],
-            academic_year=application_academic_year,
-            faculty=form.cleaned_data['faculty'],
-        )
-        attributions_vacant = tutor_application.mark_attribution_already_applied(
-            attributions_vacant,
-            tutor.person.global_id,
-            application_academic_year
-        )
-        if attributions_vacant:
-            for an_attribution in attributions_vacant:
-                attribution.update_learning_unit_volume(an_attribution, application_academic_year)
-
-        for attrib in attributions_vacant:
-            attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
-                                                          application_academic_year.year)
+    if request.GET and form.is_valid():
+            attributions_vacant = _get_attributions_vacant(form, tutor)
 
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,
@@ -294,3 +271,24 @@ def send_mail_applications_summary(request):
     else:
         messages.add_message(request, messages.INFO, _('An email with your applications have been sent'))
     return redirect('applications_overview')
+
+
+def _get_attributions_vacant(form, tutor):
+    application_academic_year = tutor_application.get_application_year()
+    attributions_vacant = attribution.get_attribution_vacant_list(
+        acronym_filter=form.cleaned_data['learning_container_acronym'],
+        academic_year=application_academic_year,
+        faculty=form.cleaned_data['faculty'],
+    )
+    attributions_vacant = tutor_application.mark_attribution_already_applied(
+        attributions_vacant,
+        tutor.person.global_id,
+        application_academic_year
+    )
+    if attributions_vacant:
+        for an_attribution in attributions_vacant:
+            attribution.update_learning_unit_volume(an_attribution, application_academic_year)
+    for attrib in attributions_vacant:
+        attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
+                                                      application_academic_year.year)
+    return attributions_vacant
