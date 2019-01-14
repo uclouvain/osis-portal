@@ -139,23 +139,32 @@ def search_vacant_attribution(request):
     form = VacantAttributionFilterForm(data=request.GET)
     if form.is_valid():
         application_academic_year = tutor_application.get_application_year()
-        attributions_vacant = attribution.get_attribution_vacant_list(
-            acronym_filter=form.cleaned_data['learning_container_acronym'],
-            academic_year=application_academic_year,
-            faculty=form.cleaned_data['faculty'],
-        )
-        attributions_vacant = tutor_application.mark_attribution_already_applied(
-            attributions_vacant,
-            tutor.person.global_id,
-            application_academic_year
-        )
-        if attributions_vacant:
-            for an_attribution in attributions_vacant:
-                attribution.update_learning_unit_volume(an_attribution, application_academic_year)
+        if not (form.cleaned_data['faculty'] is None
+                and (form.cleaned_data['learning_container_acronym'] is None or len(
+                form.cleaned_data['learning_container_acronym']) == 0)):
+            attributions_vacant = attribution.get_attribution_vacant_list(
+                acronym_filter=form.cleaned_data['learning_container_acronym'],
+                academic_year=application_academic_year,
+                faculty=form.cleaned_data['faculty'],
+            )
+            attributions_vacant = tutor_application.mark_attribution_already_applied(
+                attributions_vacant,
+                tutor.person.global_id,
+                application_academic_year
+            )
+            if attributions_vacant:
+                for an_attribution in attributions_vacant:
+                    attribution.update_learning_unit_volume(an_attribution, application_academic_year)
 
-        for attrib in attributions_vacant:
-            attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
-                                                          application_academic_year.year)
+            for attrib in attributions_vacant:
+                attrib['teachers'] = attribution.get_teachers(attrib['acronym'],
+                                                              application_academic_year.year)
+        else:
+            if request.GET:
+                messages.add_message(request,
+                                     messages.WARNING,
+                                     _('Please precise at least a faculty or a code (or a part of a code)'))
+
 
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,
