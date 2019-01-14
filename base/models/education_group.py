@@ -60,6 +60,7 @@ class EducationGroup(SerializableModel):
             return most_recent_education_group.acronym
         return None
 
+
 def find_by_student(student):
     educ_goup_ids = offer_enrollment.find_by_student(student).values('education_group_year__education_group_id')
     return EducationGroup.objects.filter(pk__in=educ_goup_ids)
