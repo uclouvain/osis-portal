@@ -27,6 +27,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from base.models import offer_enrollment
+from base.models.enums import offer_enrollment_state
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
@@ -61,6 +62,10 @@ class EducationGroup(SerializableModel):
         return None
 
 
-def find_by_student(student):
-    educ_goup_ids = offer_enrollment.find_by_student(student).values('education_group_year__education_group_id')
+def find_by_student_enrollment_ok(student):
+    educ_goup_ids = offer_enrollment.find_by_student(student).filter(
+        enrollment_state__in=[
+            offer_enrollment_state.SUBSCRIBED,
+            offer_enrollment_state.PROVISORY
+        ]).values('education_group_year__education_group_id')
     return EducationGroup.objects.filter(pk__in=educ_goup_ids)

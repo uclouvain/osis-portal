@@ -72,6 +72,6 @@ class EducationGroupTest(TestCase):
         self.assertEqual(self.education_group.most_recent_acronym, self.education_group_year2.acronym)
         self.assertEqual(self.education_group3.most_recent_acronym, None)
 
-    def test_find_by_student(self):
-        self.assertCountEqual(education_group.find_by_student(self.student), [self.education_group2])
+    def test_find_by_student_enrollment_ok(self):
+        self.assertCountEqual(education_group.find_by_student_enrollment_ok(self.student), [self.education_group2])
 
