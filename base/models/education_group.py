@@ -54,9 +54,11 @@ class EducationGroup(SerializableModel):
 
     @property
     def most_recent_acronym(self):
-        most_recent_education_group = self.educationgroupyear_set.filter(education_group_id=self.id) \
-            .latest('academic_year__year')
-        return most_recent_education_group.acronym
+        qs = self.educationgroupyear_set.all()
+        if qs:
+            most_recent_education_group = qs.latest('academic_year__year')
+            return most_recent_education_group.acronym
+        return None
 
 def find_by_student(student):
     educ_goup_ids = offer_enrollment.find_by_student(student).values('education_group_year__education_group_id')
