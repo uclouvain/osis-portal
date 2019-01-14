@@ -39,16 +39,10 @@ from attribution.utils import tutor_application_epc
 from attribution.views.decorators.authorization import user_is_tutor_or_super_user
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
-from base.models.enums import learning_component_year_type
 from base.views import layout
 from base.models.enums import academic_calendar_type
-from attribution.models import attribution as mdl_attribution, attribution_new
-from django.http import HttpResponse
-from django.template.loader import render_to_string
 from django.conf import settings
-from base.business import learning_unit_year_with_context
 from base.models.enums import learning_component_year_type
-from decimal import Decimal
 
 
 @login_required
@@ -137,14 +131,8 @@ def search_vacant_attribution(request):
     tutor = mdl_base.tutor.find_by_user(request.user)
     attributions_vacant = None
     form = VacantAttributionFilterForm(data=request.GET)
-    if form.is_valid():
-        if _criteria_valid(form.cleaned_data['faculty'], form.cleaned_data['learning_container_acronym']):
+    if request.GET and form.is_valid():
             attributions_vacant = _get_attributions_vacant(form, tutor)
-        else:
-            if request.GET:
-                messages.add_message(request,
-                                     messages.WARNING,
-                                     _('Please precise at least a faculty or a code (or a part of a code)'))
 
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,
@@ -283,11 +271,6 @@ def send_mail_applications_summary(request):
     else:
         messages.add_message(request, messages.INFO, _('An email with your applications have been sent'))
     return redirect('applications_overview')
-
-
-def _criteria_valid(faculty, acronym):
-    return not (faculty is None
-                and (acronym is None or len(acronym) == 0))
 
 
 def _get_attributions_vacant(form, tutor):

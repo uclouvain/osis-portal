@@ -51,7 +51,7 @@
 {% endblock %}
 
 {% block content %}
-    {% include "template_messages.html" %}
+
     <div class="panel panel-default" id="pnl_charges">
         <div class="panel-heading">{% trans 'Vacant learning unit'%}</div>
 
@@ -75,11 +75,17 @@
                                     title="{% trans 'Please enter the code of the course to which you would like to apply' %}">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                 </button>
+
                              </div>
                          </div>
                     </div>
                 </form>
             </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="error">{{ search_form.errors.learning_container_acronym }}</span>
+            </div>
+        </div>
             <br>
             {% if attributions_vacant %}
                 <table class="table table-striped table-hover">

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-14 11:19+0100\n"
+"POT-Creation-Date: 2019-01-14 13:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid "An application has already been submitted"
 msgstr "Une candidature a déjà été soumise"
 
-#: views/online_application.py:301
+#: views/online_application.py:278
 msgid "An email with your applications have been sent"
 msgstr "Un email contenant vos candidatures vous a été envoyé"
 
@@ -100,7 +100,7 @@ msgstr "Co-titulaire"
 #: templates/attribution_list.html:36
 #: templates/attribution_renewal_list.html:54
 #: templates/attribution_vacant_list.html:70
-#: templates/attribution_vacant_list.html:96
+#: templates/attribution_vacant_list.html:101
 #: templates/tutor_charge_content.html:57
 msgid "Code"
 msgstr "Sigle"
@@ -126,7 +126,7 @@ msgid "Deputy temporary"
 msgstr "Suppléant temporaire"
 
 #: templates/attribution_list.html:69
-#: templates/attribution_vacant_list.html:132
+#: templates/attribution_vacant_list.html:137
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
@@ -201,7 +201,7 @@ msgstr "Nom"
 
 #: templates/attribution_list.html:31
 #: templates/attribution_renewal_list.html:40
-#: templates/attribution_vacant_list.html:90
+#: templates/attribution_vacant_list.html:95
 msgid "Learning unit volumes"
 msgstr "Volumes unité d'enseignement"
 
@@ -248,7 +248,7 @@ msgid "My charges now vacant"
 msgstr "Mes charges échues"
 
 #: templates/attribution_overview.html:78
-#: templates/attribution_vacant_list.html:149
+#: templates/attribution_vacant_list.html:154
 msgid "New application"
 msgstr "Nouvelle candidature"
 
@@ -260,7 +260,7 @@ msgstr "Aucune candidature"
 msgid "No application found"
 msgstr "Pas de candidature trouvée"
 
-#: tests/views/test_online_application.py:217 views/online_application.py:188
+#: tests/views/test_online_application.py:216 views/online_application.py:165
 msgid "No attribution renewed"
 msgstr "Pas d'attribution renouvelée"
 
@@ -278,7 +278,7 @@ msgstr "Aucun étudiant inscrit au cours"
 msgid "No teaching charge in "
 msgstr "Pas de charge d'enseignement en "
 
-#: templates/attribution_vacant_list.html:168
+#: templates/attribution_vacant_list.html:173
 msgid "No vacant corresponding course"
 msgstr "Pas d'activité vacante correspondante"
 
@@ -298,9 +298,11 @@ msgstr "Pgrm"
 msgid "Please enter the code of the course to which you would like to apply"
 msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
 
-#: views/online_application.py:163
+#: forms/application.py:121
 msgid "Please precise at least a faculty or a code (or a part of a code)"
-msgstr "Veuillez au minimum sélectionner une faculté ou introduire un code(complet ou partiel)"
+msgstr ""
+"Veuillez au minimum sélectionner une faculté ou introduire un code(complet "
+"ou partiel)"
 
 #: templates/admin/students_exam_list.html:82
 #: templates/admin/students_exam_list.html:83
@@ -343,8 +345,8 @@ msgid "Sept."
 msgstr "Sept."
 
 #: templates/applications_list.html:50 templates/applications_list.html:66
-#: templates/attribution_vacant_list.html:110
-#: templates/attribution_vacant_list.html:117
+#: templates/attribution_vacant_list.html:115
+#: templates/attribution_vacant_list.html:122
 msgid "Specifications"
 msgstr "Cahier de charges"
 
@@ -370,7 +372,7 @@ msgid "Submit"
 msgstr "Soumettre"
 
 #: templates/attribution_list.html:47
-#: templates/attribution_vacant_list.html:102
+#: templates/attribution_vacant_list.html:107
 msgid "Teachers"
 msgstr "Enseignants"
 
@@ -402,7 +404,7 @@ msgstr ""
 "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez "
 "réessayer plus tard."
 
-#: templates/attribution_vacant_list.html:143
+#: templates/attribution_vacant_list.html:148
 msgid ""
 "This course is team-managed. The application to this activity is based on a "
 "paper transmission."
@@ -413,7 +415,7 @@ msgstr ""
 #: templates/application_form.html:77 templates/applications_list.html:36
 #: templates/attribution_list.html:37
 #: templates/attribution_renewal_list.html:55
-#: templates/attribution_vacant_list.html:97
+#: templates/attribution_vacant_list.html:102
 #: templates/tutor_charge_content.html:58
 msgid "Title"
 msgstr "Intitulé"
@@ -442,7 +444,7 @@ msgstr "Total"
 
 #: templates/applications_list.html:31 templates/attribution_list.html:32
 #: templates/attribution_renewal_list.html:41
-#: templates/attribution_vacant_list.html:91
+#: templates/attribution_vacant_list.html:96
 msgid "Vacant"
 msgstr "Vacant"
 
@@ -460,8 +462,8 @@ msgstr "Cours vacant"
 #: templates/attribution_renewal_list.html:56
 #: templates/attribution_renewal_list.html:58
 #: templates/attribution_renewal_list.html:62
-#: templates/attribution_vacant_list.html:98
-#: templates/attribution_vacant_list.html:100 templates/teachers.html:32
+#: templates/attribution_vacant_list.html:103
+#: templates/attribution_vacant_list.html:105 templates/teachers.html:32
 #: templates/tutor_charge_content.html:60
 msgid "Vol.1"
 msgstr "Vol.1"
@@ -480,8 +482,8 @@ msgstr "Vol.1 vacant"
 #: templates/attribution_renewal_list.html:57
 #: templates/attribution_renewal_list.html:59
 #: templates/attribution_renewal_list.html:63
-#: templates/attribution_vacant_list.html:99
-#: templates/attribution_vacant_list.html:101 templates/teachers.html:33
+#: templates/attribution_vacant_list.html:104
+#: templates/attribution_vacant_list.html:106 templates/teachers.html:33
 #: templates/tutor_charge_content.html:61
 msgid "Vol.2"
 msgstr "Vol.2"
@@ -500,7 +502,7 @@ msgstr "Vol.2 vacant"
 msgid "Wait validation"
 msgstr "En attente de validation"
 
-#: templates/attribution_vacant_list.html:141
+#: templates/attribution_vacant_list.html:146
 msgid "You already apply to this course."
 msgstr "Vous avez déjà candidaté pour ce cours."
 
