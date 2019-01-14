@@ -99,3 +99,7 @@ class EducationGroupYear(SerializableModel):
             self.acronym,
             self.academic_year,
         )
+
+
+def find_by_education_groups(education_groups):
+    return EducationGroupYear.objects.filter(education_group__in=education_groups)

@@ -26,6 +26,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from base.models import offer_enrollment
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
@@ -58,3 +59,8 @@ class EducationGroup(SerializableModel):
             most_recent_education_group = qs.latest('academic_year__year')
             return most_recent_education_group.acronym
         return None
+
+
+def find_by_student(student):
+    educ_goup_ids = offer_enrollment.find_by_student(student).values('education_group_year__education_group_id')
+    return EducationGroup.objects.filter(pk__in=educ_goup_ids)
