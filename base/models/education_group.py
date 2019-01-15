@@ -61,7 +61,7 @@ class EducationGroup(SerializableModel):
         return None
 
 
-def find_by_student_and_enrollment_states(student, offer_enrollment_status):
+def find_by_student_and_enrollment_states(student, offer_enrollment_states):
     educ_goup_ids = offer_enrollment.find_by_student(student).filter(
-        enrollment_state__in=offer_enrollment_status).values('education_group_year__education_group_id')
+        enrollment_state__in=offer_enrollment_states).values('education_group_year__education_group_id')
     return EducationGroup.objects.filter(pk__in=educ_goup_ids)
