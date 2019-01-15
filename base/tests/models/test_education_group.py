@@ -28,6 +28,7 @@ import datetime
 from django.test import TestCase
 
 from base.models import education_group
+from base.models.enums import offer_enrollment_state
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
@@ -72,6 +73,9 @@ class EducationGroupTest(TestCase):
         self.assertEqual(self.education_group.most_recent_acronym, self.education_group_year2.acronym)
         self.assertEqual(self.education_group3.most_recent_acronym, None)
 
-    def test_find_by_student(self):
-        self.assertCountEqual(education_group.find_by_student(self.student), [self.education_group2])
+    def test_find_by_student_and_enrollment_states(self):
+        self.assertCountEqual(education_group.find_by_student_and_enrollment_states(
+            self.student,
+            [offer_enrollment_state.SUBSCRIBED, offer_enrollment_state.PROVISORY]),
+            [self.education_group2])
 
