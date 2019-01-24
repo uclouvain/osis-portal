@@ -23,13 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Case, When, Q, F
-from django.utils import timezone
+from django.utils.functional import cached_property
 
-from base.models.enums import entity_type
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -43,8 +40,17 @@ class Entity(SerializableModel):
     organization = models.ForeignKey('Organization', blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
 
+    @cached_property
+    def most_recent_acronym(self):
+        try:
+            most_recent_entity_version = self.entityversion_set.filter(entity_id=self.id).latest('start_date')
+            return most_recent_entity_version.acronym
+
+        except ObjectDoesNotExist:
+            return None
+
     class Meta:
         verbose_name_plural = "entities"
 
     def __str__(self):
-        return "{0}".format(self.id)
+        return "{0}".format(self.most_recent_acronym)
