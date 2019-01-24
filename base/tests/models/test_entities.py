@@ -103,3 +103,7 @@ class EntityTest(TestCase):
         most_recent_entity_version = EntityVersion.objects.get(start_date=most_recent_date,
                                                                entity=entity_instance)
         self.assertEqual(entity_instance.most_recent_acronym, most_recent_entity_version.acronym)
+
+    def test_most_recent_acronym_not_found(self):
+        entity_instance = EntityFactory()
+        self.assertEqual(entity_instance.most_recent_acronym, None)
