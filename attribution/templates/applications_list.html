@@ -54,7 +54,7 @@
                             {{ application.acronym }}
                         </a>
                     {% else %}
-                         <span {% if application.pending = 'delete' %} class="line-through" {% endif %}>
+                         <span {% if application.pending == 'delete' %} class="line-through" {% endif %}>
                              {{ application.acronym }}
                          </span>
                          <br>
@@ -70,7 +70,7 @@
                         {{ application.title }}
                         </a>
                     {% else %}
-                        <span {% if application.pending = 'delete' %} class="line-through" {% endif %}>
+                        <span {% if application.pending == 'delete' %} class="line-through" {% endif %}>
                              {{ application.title }}
                         </span>
                     {% endif %}
