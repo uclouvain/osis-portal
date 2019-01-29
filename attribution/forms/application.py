@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+
 from decimal import Decimal
 
 from django import forms
@@ -91,7 +93,7 @@ class ApplicationForm(BootstrapForm):
 
 class VacantAttributionFilterForm(BootstrapForm):
     faculty = forms.ModelChoiceField(
-        queryset=search(entity_type="FACULTY"),
+        queryset=search(entity_type="FACULTY", date=datetime.date.today()),
         widget=forms.Select(),
         empty_label=pgettext("plural", "All"),
         required=False,
