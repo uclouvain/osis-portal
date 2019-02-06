@@ -51,6 +51,8 @@ MESSAGE_STORAGE = os.environ.get('MESSAGE_STORAGE', 'django.contrib.messages.sto
 # Specific apps (all osis-portal modules except base and reference + env specific apps like sentry)
 # have to be defined in environment settings (ex: dev.py)
 INSTALLED_APPS = (
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
