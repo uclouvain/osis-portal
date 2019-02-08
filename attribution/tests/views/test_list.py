@@ -41,6 +41,10 @@ from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
+from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from attribution.tests.factories.attribution import AttributionFactory
+
 
 ACCESS_DENIED = 401
 METHOD_NOT_ALLOWED = 405
