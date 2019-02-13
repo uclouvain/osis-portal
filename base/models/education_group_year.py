@@ -62,7 +62,8 @@ class EducationGroupYear(SerializableModel):
 
     education_group = models.ForeignKey(
         'EducationGroup',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='education_groups_years'
     )
 
     education_group_type = models.ForeignKey(
