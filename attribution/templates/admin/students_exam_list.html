@@ -29,21 +29,21 @@
     <ol class="breadcrumb">
         <li>
             <a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">
-                {% trans 'faculty_administration' %}
+                {% trans 'Faculties administration' %}
             </a>
         </li>
         <li>
             <a id="lnk_lists_of_students_exams_enrollments" href="{% url 'lists_of_students_exams_enrollments' %}">
-                {% trans 'lists_of_students_exams_enrollments' %}
+                {% trans 'Lists of students enrollments to exams' %}
             </a>
         </li>
         <li class="active">
-            {% trans 'exam_and_student_list' %} {{ person.first_name }} {{ person.last_name }}
+            {% trans 'List of students enrolled to exams of ' %} {{ person.first_name }} {{ person.last_name }}
         </li>
     </ol>
 {% endblock %}
 {% block content %}
-    <h2>{% trans 'exam_and_student_list' %} {{ person.first_name }} {{ person.last_name }}</h2>
+    <h2>{% trans 'List of students enrolled to exams of ' %} {{ person.first_name }} {{ person.last_name }}</h2>
     {% if msg_error %}
         <br>
         <div class="alert alert-info">{{ msg_error }}</div>
@@ -51,7 +51,7 @@
     {% endif %}
     <div class="panel panel-default">
         <div class="panel-body">
-            <div>{% trans 'hlp_enrollment_exam_list' %}</div>
+            <div>{% trans 'Choose the learning units you want to consider in the list' %}</div>
             <br>
             <form action="{% url 'lists_of_students_exams_enrollments_create' person.global_id %}" method="post">
             <div class="row">
@@ -61,7 +61,7 @@
                         <table class="table">
                             <thead>
                                 <th></th>
-                                <th>{% trans 'acronym' %}</th>
+                                <th>{% trans 'Acronym' %}</th>
                             </thead>
                             <tbody>
                                 {% for learning_unit_yr in learning_units %}
@@ -73,14 +73,14 @@
                             </tbody>
                         </table>
                     {% else %}
-                        <div class="alert alert-info">{% trans 'no_learning_units' %}</div>
+                        <div class="alert alert-info">{% trans "You aren't teaching for any learning unit" %}</div>
                     {% endif %}
                 </div>
             </div>
             <br>
             {% if learning_units %}
-                <button class="btn btn-success pull-right" id="bt_produce_xls" type="submit" title="{% trans 'produce_xls' %}" disabled >
-                    {% trans 'produce_xls' %}
+                <button class="btn btn-success pull-right" id="bt_produce_xls" type="submit" title="{% trans 'Produce xls' %}" disabled >
+                    {% trans 'Produce xls' %}
                     <i class="fa fa-table" aria-hidden="true" style="padding-left:10px;"></i>
                 </button>
 
@@ -88,7 +88,7 @@
                     <br>
                     <br>
                     <br>
-                    <label>{% trans 'desc_lnk_my_students_list_legend' %}</label>
+                    <label>{% trans 'Legend to help you understanding the xls file' %}</label>
                     <table class="table table-bordered">
                         <tr><td>Fac charge</td><td>Faculté responsable du cahier de charge</td></tr>
                         <tr><td>Comm charge</td><td>Commission/Ecole responsable du cahier de charge</td></tr>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-03 08:56+0200\n"
+"POT-Creation-Date: 2018-11-14 16:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,47 +17,64 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "my_attestations"
-msgstr "My attestations"
+#: tests/views/test_main.py:80 tests/views/test_main.py:172
+msgid ""
+"A problem was detected with your registration : 2 registration id's are "
+"linked to your user. Please contact the registration departement (SIC). "
+"Thank you."
+msgstr ""
 
-msgid "attestation_type"
-msgstr "Attestation type"
+#: templates/attestation_home.html:34 templates/attestation_home.html:40
+#: templates/attestation_home_admin.html:32
+#: templates/attestation_home_student.html:30
+msgid "Attestation"
+msgstr ""
 
-msgid "printed"
-msgstr "Printed"
+#: templates/admin/attestation_administration.html:31
+#: templates/attestation_home.html:32 templates/attestation_home_admin.html:31
+msgid "Attestation administration"
+msgstr ""
 
-msgid "available"
-msgstr "Available"
+#: templates/attestation_content.html:52 templates/attestation_home.html:74
+msgid "Attestation type"
+msgstr ""
 
-msgid "download"
-msgstr "Download"
+#: templates/attestation_content.html:31 templates/attestation_home.html:50
+msgid "Attestations for academic year"
+msgstr ""
 
-msgid "ABC"
-msgstr "Regular registration (family allowances, health mutual, ...)"
+#: templates/attestation_content.html:54 templates/attestation_home.html:76
+msgid "Available"
+msgstr ""
 
-msgid "DE"
-msgstr "Provisional student card and public transport notice"
+#: templates/admin/attestation_administration.html:30
+#: templates/attestation_home.html:31 templates/attestation_home_admin.html:30
+msgid "Faculty administration"
+msgstr ""
 
-msgid "AVIS"
-msgstr "Notice of registration and invoice"
+#: templates/attestation_home.html:57
+msgid "First name"
+msgstr ""
 
-msgid "ECHEANCE"
-msgstr "Notice of maturity"
+#: templates/attestation_home.html:57
+msgid "Last name"
+msgstr ""
 
-msgid "desc_lnk_my_attestations"
-msgstr "Download your attestation as pdf"
+#: templates/attestation_content.html:46 templates/attestation_home.html:68
+msgid "No attestation available"
+msgstr ""
 
-msgid "attestation_administration"
-msgstr "Attestation administration"
+#: templates/attestation_content.html:53 templates/attestation_home.html:75
+msgid "Printed"
+msgstr ""
 
-msgid "student_attestations"
-msgstr "Student attestations"
+#: templates/admin/attestation_administration.html:58
+#: templates/attestation_content.html:41 templates/attestation_home.html:61
+msgid "Registration id"
+msgstr ""
 
-msgid "attestation"
-msgstr "Attestation"
-
-msgid "no_attestation_available"
-msgstr "No attestation available"
-
-msgid "attestations_for_academic_year"
-msgstr "Attestations for academic year"
+#: templates/admin/attestation_administration.html:39
+#: tests/views/test_main.py:201 tests/views/test_main.py:366 views/main.py:80
+#: views/main.py:112
+msgid "Student attestations"
+msgstr ""

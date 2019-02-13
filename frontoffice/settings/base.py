@@ -51,6 +51,8 @@ MESSAGE_STORAGE = os.environ.get('MESSAGE_STORAGE', 'django.contrib.messages.sto
 # Specific apps (all osis-portal modules except base and reference + env specific apps like sentry)
 # have to be defined in environment settings (ex: dev.py)
 INSTALLED_APPS = (
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -66,7 +68,10 @@ INSTALLED_APPS = (
     'reference',
     'base',
     'bootstrap3',
-    'django_registration'
+    'django_registration',
+    'hijack',
+    'compat',
+    'hijack_admin',
 )
 
 # Tests settings
@@ -328,6 +333,14 @@ REST_FRAMEWORK = {
     ]
 }
 
+
+# HIJACK
+HIJACK_LOGIN_REDIRECT_URL = '/'  # Where admins are redirected to after hijacking a user
+HIJACK_LOGOUT_REDIRECT_URL = '/admin/auth/user/'  # Where admins are redirected to after releasing a user
+HIJACK_ALLOW_GET_REQUESTS = True
+HIJACK_USE_BOOTSTRAP = True
+
+
 ATTRIBUTION_CONFIG = {
     'TIME_TABLE_URL': os.environ.get('ATTRIBUTION_TIME_TABLE_URL', ''),
     'TIME_TABLE_NUMBER': os.environ.get('ATTRIBUTION_TIME_TABLE_NUMBER', ''),
@@ -364,3 +377,11 @@ IUFC_CONFIG = {
 
 if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
     from .functional_tests import *
+
+# IUFC API
+URL_CONTINUING_EDUCATION_FILE_API = os.environ.get(
+    "URL_CONTINUING_EDUCATION_FILE_API",
+    ""
+)
+
+OSIS_PORTAL_TOKEN = os.environ.get("OSIS_PORTAL_TOKEN", "")

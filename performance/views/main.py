@@ -64,7 +64,8 @@ def __make_not_authorized_message(stud_perf):
     authorized = stud_perf.authorized if stud_perf else None
     session_month = stud_perf.session_locked if stud_perf else None
     if not authorized and session_month:
-        return _('performance_result_note_not_autorized').format(_(session_month))
+        return _('The publication of the notes from the %(session_month)s session was not authorized by our faculty.')\
+               % {"session_month": _(session_month)}
     else:
         return None
 

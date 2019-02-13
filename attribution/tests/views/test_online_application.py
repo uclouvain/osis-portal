@@ -46,6 +46,11 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.user import UserFactory
 from base.models.enums import component_type, learning_unit_year_subtypes
+from base.tests.factories.entity import EntityFactory
+from base.tests.factories.entity_version import EntityVersionFactory
+from base.tests.factories.entity_container_year import EntityContainerYearFactory
+from base.models.enums import entity_container_year_link_type as entity_types
+from base.models.learning_unit_year import LearningUnitYear
 
 
 class TestOnlineApplication(TestCase):
@@ -78,6 +83,17 @@ class TestOnlineApplication(TestCase):
             start_date=start_date,
             end_date=end_date
         )
+        self.agro_entity = EntityFactory()
+        self.agro_entity_version = EntityVersionFactory(entity=self.agro_entity, acronym="AGRO",
+                                                        entity_type='FACULTY',
+                                                        start_date=self.academic_calendar.start_date,
+                                                        end_date=self.academic_calendar.end_date)
+
+        self.drt_entity = EntityFactory()
+        self.drt_entity_version = EntityVersionFactory(entity=self.drt_entity, acronym="DRT",
+                                                       entity_type='FACULTY',
+                                                       start_date=self.academic_calendar.start_date,
+                                                       end_date=self.academic_calendar.end_date)
 
         # Creation context with multiple learning container year
         self._create_multiple_learning_container_year()
@@ -86,6 +102,7 @@ class TestOnlineApplication(TestCase):
             applications=self._get_default_application_list(),
             attributions=self._get_default_attribution_list()
         )
+
 
     def test_redirection_to_outside_encoding_period(self):
         # Remove teaching charge application event
@@ -103,9 +120,9 @@ class TestOnlineApplication(TestCase):
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'warning')
-        self.assertEqual(messages[0].message, _('application_denied'))
+        self.assertEqual(messages[0].message, _('The period of online application is closed'))
 
-    def test_applictions_overview(self):
+    def test_applications_overview(self):
         url = reverse('applications_overview')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -132,7 +149,7 @@ class TestOnlineApplication(TestCase):
         context = response.context[0]
         self.assertEqual(context['a_tutor'], self.tutor)
         self.assertTrue(context['search_form'])
-        self.assertFalse(context['attributions_vacant'])
+        self.assertIsNone(context['attributions_vacant'])
 
     def test_search_vacant_attribution_post_not_allowed(self):
         url = reverse('vacant_attributions_search')
@@ -152,7 +169,20 @@ class TestOnlineApplication(TestCase):
                               if attrib.get('acronym') == self.lagro1600_next.acronym and
                               attrib.get('already_applied')), False))
 
-    def test_search_vacant_attribution_with_delcaration_vac_not_allowed(self):
+    def test_search_vacant_attribution_search_list_by_faculty(self):
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(
+            url, data={
+                'learning_container_acronym': 'LAGRO',
+                'faculty': self.agro_entity_version.id
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['attributions_vacant']), 2)
+
+
+    def test_search_vacant_attribution_with_declaration_vac_not_allowed(self):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
         self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
         # Creation learning container for next academic year [==> application academic year]
@@ -183,7 +213,7 @@ class TestOnlineApplication(TestCase):
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('no_attribution_renewed'))
+        self.assertEqual(messages[0].message, _('No attribution renewed'))
 
     def test_renew_applications_method_not_allowed(self):
         url = reverse('renew_applications')
@@ -310,6 +340,8 @@ class TestOnlineApplication(TestCase):
                                                                          54, 7)
         self.lagro2500_next = _create_learning_container_with_components("LAGRO2500", self.application_academic_year,
                                                                          0, 70)
+        self._create_entity_container_yrs()
+
 
     def _get_default_application_list(self):
         return [
@@ -325,11 +357,33 @@ class TestOnlineApplication(TestCase):
             _get_attribution_example(self.lagro2500_next, '29', '10', 2015, 2020)
         ]
 
+    def _create_entity_container_yrs(self):
+        EntityContainerYearFactory(learning_container_year=self.lbir1200_current,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lbir1300_current,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lbir1200_next,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lbir1300_next,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lagro1600_next,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.lagro2500_next,
+                                   entity=self.agro_entity,
+                                   type=entity_types.ALLOCATION_ENTITY)
+        EntityContainerYearFactory(learning_container_year=self.ldroi1500_current,
+                                   entity=self.drt_entity)
+
 
 def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None,
                                                volume_practical_exercices=None,
                                                subtype=learning_unit_year_subtypes.FULL,
-                                               type_declaration_vacant=vacant_declaration_type.RESEVED_FOR_INTERNS):
+                                               type_declaration_vacant=vacant_declaration_type.RESERVED_FOR_INTERNS):
     l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year,
                                                type_declaration_vacant=type_declaration_vacant)
     return _link_components_and_learning_unit_year_to_container(l_container, l_container.acronym,
@@ -384,7 +438,8 @@ def _get_attribution_example(learning_container_year, volume_lecturing, volume_p
         learning_component_year_type.PRACTICAL_EXERCISES: volume_practical_exercice,
         'start_year': start_year,
         'end_year': end_year,
-        'function': function.HOLDER
+        'function': function.HOLDER,
+        'is_substitute': False
     }
 
 

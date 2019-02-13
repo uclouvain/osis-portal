@@ -26,8 +26,8 @@
 from datetime import datetime
 
 import factory
+
 from base.tests.factories.organization import OrganizationFactory
-from reference.tests.factories.country import CountryFactory
 
 
 class EntityFactory(factory.DjangoModelFactory):

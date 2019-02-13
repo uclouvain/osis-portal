@@ -30,11 +30,11 @@
         <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
                                                                           aria-hidden="true"></span></a></li>
     {% block breadcrumb %}
-            <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'faculty_administration' %}</a></li>
-            <li><a href="{% url 'attribution_administration'  %}" id="lnk_attribution_administration">{% trans 'attribution_administration' %}</a></li>
-            <li><a href="{% url 'attribution_admin_visualize_tutor' global_id %}">{% trans 'teaching_charge' %}</a></li>
+            <li><a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">{% trans 'Faculties administration' %}</a></li>
+            <li><a href="{% url 'attribution_administration'  %}" id="lnk_attribution_administration">{% trans 'Attribution administration' %}</a></li>
+            <li><a href="{% url 'attribution_admin_visualize_tutor' global_id %}">{% trans 'Teaching charge' %}</a></li>
 
-        <li class="active">{% trans 'students' %}</li>
+        <li class="active">{% trans 'Students' %}</li>
     {% endblock %}
 </ol>
 {% endblock %}

@@ -110,7 +110,7 @@ def list_build(request):
         return _make_xls_list(list_exam_enrollments_xls)
     else:
         data = get_learning_units(request.user)
-        data.update({'msg_error': _('no_data')})
+        data.update({'msg_error': _('No data found')})
         return render(request, "list/students_exam.html", data)
 
 
@@ -191,7 +191,7 @@ def list_build_by_person(request, global_id):
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
     else:
-        data.update({'msg_error': _('no_data')})
+        data.update({'msg_error': _('No data found')})
         return render(request, "admin/students_exam_list.html", data)
 
 

@@ -17,7 +17,8 @@
               "last_name": "Student3",
               "score": "16",
               "justification": "",
-              "deadline": ""
+              "deadline": "",
+              "enrollment_state_color": null
             }
           ],
           "acronym": "DROI1BA",
@@ -39,7 +40,8 @@
               "last_name": "Student5",
               "score": "15",
               "justification": "",
-              "deadline": ""
+              "deadline": "",
+              "enrollment_state_color": null
             }
           ],
           "acronym": "SINF2MA",

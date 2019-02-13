@@ -34,13 +34,13 @@
     {% block breadcrumb %}
         {% if perms.base.is_faculty_administrator %}
             <li><a href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}" id="lnk_applications">
-                {% trans 'applications_of' %} {{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }}
+                {% trans 'Applications of ' %} {{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }}
                 </a>
             </li>
         {% else %}
-            <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'my_applications' %}</a></li>
+            <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'My applications' %}</a></li>
         {% endif %}
-        <li>{% trans 'course_search' %}</li>
+        <li>{% trans 'Vacant course search' %}</li>
     {% endblock %}
     <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
        target="help" id="lnk_user_manual_section"><span
@@ -51,49 +51,60 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="panel panel-default" id="pnl_charges">
-        <div class="panel-heading">{% trans 'learning_unit_vacant'%}</div>
+        <div class="panel-heading">{% trans 'Vacant learning unit'%}</div>
 
         <div class="panel-body">
             <div class="row">
                 <!-- Search vacant -->
                 <form method="get" action="{% url 'vacant_attributions_search' %}">
-                    <div class="col-md-10">
-                        <p class="text-muted">{% trans 'lu_search_explanation' %}</p>
+                    <div class="col-md-8">
+                        <p class="text-muted">{% trans 'To find a vacant learning unit to candidate to, introduce the code and click on the button' %}</p>
                     </div>
-                    <div class="col-md-2 ">
-                        <label for="learning_container_acronym_id">{% trans 'code' %}</label>
+                    <div class="col-md-2">
+                        <label for="learning_container_acronym_id">{% trans 'Faculty' %}</label>
+                        {{ search_form.faculty}}
+                    </div>
+                    <div class="col-md-2">
+                        <label for="learning_container_acronym_id">{% trans 'Code' %}</label>
                         <div class="input-group">
                             {{ search_form.learning_container_acronym}}
                              <div class="input-group-btn">
                                   <button type="submit" id="bt_submit_vacant_attributions_search" class="btn btn-primary" role="button"
-                                    title="{% trans 'vacant_learning_unit_year_search' %}">
+                                    title="{% trans 'Please enter the code of the course to which you would like to apply' %}">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                 </button>
+
                              </div>
                          </div>
                     </div>
                 </form>
             </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="error">{{ search_form.errors.learning_container_acronym }}</span>
+            </div>
+        </div>
             <br>
             {% if attributions_vacant %}
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th colspan="2"></th>
-                            <th colspan="2">{% trans 'learning_unit_volumes' %}</th>
-                            <th colspan="2" style="border-left: 1px solid;">{% trans 'vacant' %}</th>
+                            <th colspan="2">{% trans 'Learning unit volumes' %}</th>
+                            <th colspan="2" style="border-left: 1px solid;">{% trans 'Vacant' %}</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
                         </tr>
                         <tr>
-                            <th>{% trans 'code'%}</th>
-                            <th>{% trans 'title'%}</th>
-                            <th>{% trans 'lecturing_hours'%}</th>
-                            <th>{% trans 'practical_hours'%}</th>
-                            <th style="border-left: 1px solid;">{% trans 'lecturing_hours'%}</th>
-                            <th>{% trans 'practical_hours'%}</th>
-                            <th>{% trans 'teachers'%}</th>
+                            <th>{% trans 'Code'%}</th>
+                            <th>{% trans 'Title'%}</th>
+                            <th>{% trans 'Vol.1'%}</th>
+                            <th>{% trans 'Vol.2'%}</th>
+                            <th style="border-left: 1px solid;">{% trans 'Vol.1'%}</th>
+                            <th>{% trans 'Vol.2'%}</th>
+                            <th>{% trans 'Teachers'%}</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -101,14 +112,14 @@
                         {% for attribution in attributions_vacant %}
                         <tr>
                             <td>
-                                 <a title="{% trans 'learning_unit_specifications' %}"
+                                 <a title="{% trans 'Specifications' %}"
                                     href="{{attribution.learning_container_year_id | get_url_learning_unit_year }}"
                                     target="_blank">
                                         {{ attribution.acronym }}
                                  </a>
                             </td>
                             <td>
-                                <a title="{% trans 'learning_unit_specifications' %}"
+                                <a title="{% trans 'Specifications' %}"
                                     href="{{attribution.learning_container_year_id | get_url_learning_unit_year }}"
                                     target="_blank">
                                     {{ attribution.title }}
@@ -123,7 +134,7 @@
                                 {% with teacher_number=forloop.counter0 %}
                                     <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
                                        aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}" style="border:0;padding:0;"
-                                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'display_teachers' %}">
+                                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'Display teachers' %}">
                                         <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
                                     </a>
                                 {% endwith %}
@@ -132,15 +143,15 @@
                             <td>
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                                      title="{% if attribution.already_applied %}
-                                                {% trans 'no_application_possible' %}
+                                                {% trans 'You already apply to this course.' %}
                                             {% elif attribution.team %}
-                                                {% trans 'team_mngt_no_application_possible' %}
+                                                {% trans 'This course is team-managed. The application to this activity is based on a paper transmission.' %}
                                             {% endif %}">
                                     <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
                                        href="{% url 'create_or_update_tutor_application' learning_container_year_id=attribution.learning_container_year_id %}"
                                        {% if attribution.already_applied or attribution.team %} disabled {% endif %}>
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                        {% trans 'create_an_tutor_application' %}
+                                        {% trans 'New application' %}
                                     </a>
                                 </div>
                             </td>
@@ -159,7 +170,7 @@
                     </tbody>
                 </table>
             {% elif request.GET.learning_container_acronym and not attributions_vacant %}
-                <div class="alert alert-info" role="alert">{% trans 'no_activity' %}</div>
+                <div class="alert alert-info" role="alert">{% trans 'No vacant corresponding course' %}</div>
             {% endif %}
         </div>
     </div>

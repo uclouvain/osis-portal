@@ -28,7 +28,7 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-md-6" id="academic_year">
-                <h4>{% trans 'attestations_for_academic_year' %} {% if formated_academic_year %}{{ formated_academic_year }}{% endif %}</h4>
+                <h4>{% trans 'Attestations for academic year' %} {% if formated_academic_year %}{{ formated_academic_year }}{% endif %}</h4>
             </div>
         </div>
     </div>
@@ -38,20 +38,20 @@
                 <b>{{ student.person.first_name }}, {{ student.person.last_name }}</b>
             </div>
             <div class="col-md-6" id="academic_year">
-                <b>{% trans 'registration_id' %}: </b>{{ student.registration_id }}
+                <b>{% trans 'Registration id' %}: </b>{{ student.registration_id }}
             </div>
         </div>
         <br/>
         {% if not available %}
-            <div class="alert alert-info" role="alert">{% trans 'no_attestation_available' %}</div>
+            <div class="alert alert-info" role="alert">{% trans 'No attestation available' %}</div>
         {% else %}
             <div>
                 <table class="table table-responsive">
                     <thead>
                     <tr>
-                        <th>{% trans 'attestation_type' %}</th>
-                        <th class="text-center">{% trans 'printed' %}</th>
-                        <th class="text-center">{% trans 'available' %}</th>
+                        <th>{% trans 'Attestation type' %}</th>
+                        <th class="text-center">{% trans 'Printed' %}</th>
+                        <th class="text-center">{% trans 'Available' %}</th>
                     </tr>
                     </thead>
                     <tbody>
