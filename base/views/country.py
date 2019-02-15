@@ -28,12 +28,11 @@ class CountryAutocomplete(autocomplete.Select2ListView):
 
     def get_country_list_from_osis(self, name_filter=None):
         header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-        url = 'http://localhost:18000/api/v1/reference/countries/'
-        if name_filter:
-            url = url + '?search=' + name_filter
+        url = settings.URL_COUNTRY_API
         response = requests.get(
             url=url,
-            headers=header_to_get
+            headers=header_to_get,
+            data={'search': name_filter or ""}
         )
 
         stream = io.BytesIO(response.content)
