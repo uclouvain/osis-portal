@@ -35,7 +35,7 @@ from reference.tests.factories.country import CountryFactory
 
 class TestCountryAutocomplete(TestCase):
     return_response = HttpResponse()
-    return_response.content = b'[{"name": "Narnia"}]'
+    return_response.content = b'{"results": [{"name": "Narnia"}]}'
 
     def setUp(self):
         self.url = reverse("country-autocomplete")
