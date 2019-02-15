@@ -34,25 +34,24 @@ from reference.tests.factories.country import CountryFactory
 
 
 class TestCountryAutocomplete(TestCase):
-    return_response = HttpResponse()
-    return_response.content = b'{"results": [{"name": "Narnia"}]}'
 
     def setUp(self):
         self.url = reverse("country-autocomplete")
         self.country = CountryFactory(name="Narnia")
         self.request = RequestFactory()
 
-    @mock.patch('requests.get', return_value=return_response)
+    @mock.patch('requests.get')
     def test_when_filter(self, mock_get):
+        mock_response = HttpResponse()
+        mock_response.content = '{"results": [{"name": "Narnia"}]}'
+        mock_get.return_value = mock_response
         response = self.client.get(self.url, data={'q': 'nar'})
 
         self.assertEqual(response.status_code, 200)
 
-        results = _get_results_from_autocomplete_response(response)
-
         expected_results = [{'id': 'Narnia', 'text': 'Narnia'}]
 
-        self.assertListEqual(results, expected_results)
+        self.assertListEqual(json.loads(response.content)['results'], expected_results)
 
 
 def _get_results_from_autocomplete_response(response):
