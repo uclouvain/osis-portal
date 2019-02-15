@@ -26,22 +26,24 @@
 import json
 from unittest import mock
 
-from django.test import TestCase
+from django.http import HttpResponse
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
-from base.tests.factories.user import SuperUserFactory
 from reference.tests.factories.country import CountryFactory
 
 
 class TestCountryAutocomplete(TestCase):
+    return_response = HttpResponse()
+    return_response.content = b'[{"name": "Narnia"}]'
+
     def setUp(self):
-        self.super_user = SuperUserFactory()
         self.url = reverse("country-autocomplete")
         self.country = CountryFactory(name="Narnia")
+        self.request = RequestFactory()
 
-    @mock.patch('base.views.country.CountryAutocomplete.get_country_list_from_osis', return_value=[{'name': 'Narnia'}])
-    def test_when_filter(self, mock_country):
-        self.client.force_login(user=self.super_user)
+    @mock.patch('requests.get', return_value=return_response)
+    def test_when_filter(self, mock_get):
         response = self.client.get(self.url, data={'q': 'nar'})
 
         self.assertEqual(response.status_code, 200)

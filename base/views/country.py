@@ -29,6 +29,7 @@ class CountryAutocomplete(autocomplete.Select2ListView):
     def get_country_list_from_osis(self, name_filter=None):
         header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
         url = settings.URL_COUNTRY_API
+
         response = requests.get(
             url=url,
             headers=header_to_get,
