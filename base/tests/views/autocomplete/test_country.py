@@ -23,27 +23,28 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
+from unittest import mock
 
-from base.views import administration, my_osis
-from base.views.autocomplete.country import CountryAutocomplete
-from base.views.autocomplete.education_group_year import TrainingAutocomplete
-from dashboard.views import main
+from django.http import HttpResponse
+from django.test import TestCase, RequestFactory
+from django.urls import reverse
 
-urlpatterns = [
-    url(r'^'+settings.ADMIN_URL+'data/$', administration.data, name='data'),
-    url(r'^'+settings.ADMIN_URL+'data/maintenance$', administration.data_maintenance, name='data_maintenance'),
-    url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
-    url(r'^$', main.home, name='home'),
-    url(
-        r'^country-autocomplete/$',
-        CountryAutocomplete.as_view(),
-        name='country-autocomplete',
-    ),
-    url(
-        r'^training-autocomplete/$',
-        TrainingAutocomplete.as_view(),
-        name='training-autocomplete',
-    ),
-]
+
+class TestCountryAutocomplete(TestCase):
+
+    def setUp(self):
+        self.url = reverse("country-autocomplete")
+        self.request = RequestFactory()
+
+    @mock.patch('requests.get')
+    def test_when_filter(self, mock_get):
+        mock_response = HttpResponse()
+        mock_response.json = lambda *args, **kwargs: {"results": [{"uuid": "ABCD", "name": "Narnia"}]}
+        mock_get.return_value = mock_response
+        response = self.client.get(self.url, data={'q': 'nar'})
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_results = [{'id': 'ABCD', 'text': 'Narnia'}]
+
+        self.assertListEqual(response.json()['results'], expected_results)

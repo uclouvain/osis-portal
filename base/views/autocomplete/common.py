@@ -23,29 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from unittest import mock
-
-from django.http import HttpResponse
-from django.test import TestCase, RequestFactory
-from django.urls import reverse
+import requests
+from django.conf import settings
 
 
-class TestCountryAutocomplete(TestCase):
+def get_list_from_osis(url, name_filter=None):
+    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    response = requests.get(
+        url=url,
+        headers=header_to_get,
+        data={'search': name_filter or ""}
+    )
 
-    def setUp(self):
-        self.url = reverse("country-autocomplete")
-        self.request = RequestFactory()
-
-    @mock.patch('requests.get')
-    def test_when_filter(self, mock_get):
-        mock_response = HttpResponse()
-        mock_response.content = '{"results": [{"uuid": "ABCD", "name": "Narnia"}]}'
-        mock_response.json = lambda *args, **kwargs: {"results": [{"uuid": "ABCD", "name": "Narnia"}]}
-        mock_get.return_value = mock_response
-        response = self.client.get(self.url, data={'q': 'nar'})
-
-        self.assertEqual(response.status_code, 200)
-
-        expected_results = [{'id': 'ABCD', 'text': 'Narnia'}]
-
-        self.assertListEqual(response.json()['results'], expected_results)
+    data = response.json()
+    if 'results' in data:
+        data = data['results']
+    return data
