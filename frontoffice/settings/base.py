@@ -389,4 +389,9 @@ URL_COUNTRY_API = os.environ.get(
     ""
 )
 
+URL_TRAINING_API = os.environ.get(
+    "URL_TRAINING_API",
+    ""
+)
+
 OSIS_PORTAL_TOKEN = os.environ.get("OSIS_PORTAL_TOKEN", "")
