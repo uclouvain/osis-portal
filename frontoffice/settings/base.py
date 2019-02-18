@@ -384,4 +384,9 @@ URL_CONTINUING_EDUCATION_FILE_API = os.environ.get(
     ""
 )
 
+URL_COUNTRY_API = os.environ.get(
+    "URL_COUNTRY_API",
+    ""
+)
+
 OSIS_PORTAL_TOKEN = os.environ.get("OSIS_PORTAL_TOKEN", "")
