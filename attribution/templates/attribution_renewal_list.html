@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% load i18n %}
+{% load i18n function %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -37,31 +37,31 @@
             </tr>
             <tr >
                 <th colspan="3"></th>
-                <th colspan="2" style="border-left: 1px solid;">{% trans 'learning_unit_volumes' %}</th>
-                <th colspan="2" class="text-center">{% trans 'vacant' %}</th>
+                <th colspan="2" style="border-left: 1px solid;">{% trans 'Learning unit volumes' %}</th>
+                <th colspan="2" class="text-center">{% trans 'Vacant' %}</th>
                 <th colspan="4" style="border-left: 1px solid;"></th>
             </tr>
             <tr >
                 <th class="text-center">
-                    <span id="spn_renew_title" title="{% trans 'desc_renewable'%}">
-                        {% trans 'renew' %}
+                    <span id="spn_renew_title" title="{% trans 'Reproduce identically in the following year'%}">
+                        {% trans 'Renew' %}
                         <input type="checkbox"
                                id="chb_renew_all"
                                name="attribution_renew_all"
-                               title="{% trans 'select_all' %}" disabled />
+                               title="{% trans 'Select/deselect all attributions to renew' %}" disabled />
                     </span>
                 </th>
-                <th style="vertical-align: top">{% trans 'code'%}</th>
-                <th style="vertical-align: top" >{% trans 'title'%}</th>
-                <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;" >{% trans 'lecturing_hours'%}</th>
-                <th style="vertical-align: top" >{% trans 'practical_hours'%}</th>
-                <th style="vertical-align: top;">{% trans 'lecturing_hours'%}</th>
-                <th style="vertical-align: top">{% trans 'practical_hours'%}</th>
-                <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'start' %}</th>
-                <th style="vertical-align: top">{% trans 'end' %}</th>
-                <th style="vertical-align: top">{% trans 'lecturing_hours_allocated'%} </th>
-                <th style="vertical-align: top">{% trans 'practical_hours_allocated'%}</th>
-                <th style="vertical-align: top">{% trans 'function'%}</th>
+                <th style="vertical-align: top">{% trans 'Code'%}</th>
+                <th style="vertical-align: top" >{% trans 'Title'%}</th>
+                <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;" >{% trans 'Vol.1'%}</th>
+                <th style="vertical-align: top" >{% trans 'Vol.2'%}</th>
+                <th style="vertical-align: top;">{% trans 'Vol.1'%}</th>
+                <th style="vertical-align: top">{% trans 'Vol.2'%}</th>
+                <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'Start' %}</th>
+                <th style="vertical-align: top">{% trans 'End' %}</th>
+                <th style="vertical-align: top">{% trans 'Vol.1'%} </th>
+                <th style="vertical-align: top">{% trans 'Vol.2'%}</th>
+                <th style="vertical-align: top">{% trans 'Function'%}</th>
 
             </tr>
         </thead>
@@ -78,7 +78,7 @@
                                        id="chb_attribution_renew_{{ forloop.counter }}"
                                        name="learning_container_year_{{ attribution.acronym }}"/>
                             {% else %}
-                                <span class="fa fa-exclamation-triangle" aria-hidden="true" title="{% trans 'non_renewable' %}"></span>
+                                <span class="fa fa-exclamation-triangle" aria-hidden="true" title="{% trans 'Non-renewable' %}"></span>
                             {% endif %}
                         </div>
                     </td>
@@ -92,7 +92,7 @@
                     <td>{{ attribution.end_academic_year|default_if_none:''}}</td>
                     <td>{{ attribution.LECTURING }}</td>
                     <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
-                    <td>{% trans attribution.function %}</td>
+                    <td>{{ attribution.function|function_text }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -103,8 +103,8 @@
                         class="btn btn-primary"
                         role="button"
                         type="submit"
-                        title="{% trans 'desc_renewable'%}">
-                    <span class="glyphicon glyphicon-repeat"></span> {% trans 'renew' %}</button>
+                        title="{% trans 'Reproduce identically in the following year'%}">
+                    <span class="glyphicon glyphicon-repeat"></span> {% trans 'Renew' %}</button>
                 </td>
             </tr>
         </tfoot>

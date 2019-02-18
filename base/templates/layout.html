@@ -1,7 +1,6 @@
 <!doctype html>
-{% load staticfiles %}
-{% load i18n %}
-{% load analytical %}
+{% load staticfiles i18n %}
+{% load analytical hijack_tags %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -46,12 +45,14 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}?version={{ js }}">
     <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}?version={{ js }}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'hijack/hijack-styles.css' %}"/>
 
     {% block style %}
     {% endblock %}
     {% analytical_head_bottom %}
 </head>
 <body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %} class="localmode" {% elif environment == 'QA' %} class="qamode" {% endif %}>
+    {% hijack_notification %}
     {% analytical_body_top %}
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -80,12 +81,12 @@
                         {% if perms.base.can_access_administration %}
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                   aria-expanded="false" id="bt_administrations">{% trans 'administration' %}</a>
+                                   aria-expanded="false" id="bt_administrations">{% trans 'Administration' %}</a>
                                 <ul class="dropdown-menu">
                                     {% if perms.base.is_administrator %}
                                     <li><a href="{% url 'data' %}" role="button" id="bt_data">
                                         <i class="fa fa-database" aria-hidden="true"></i>
-                                        {% trans 'data' %}</a></li>
+                                        {% trans 'Data' %}</a></li>
                                     {% endif %}
                                     {% if 'dashboard' in installed_apps %}
                                         {% include 'dashboard_admin_menu.html' %}
@@ -146,6 +147,14 @@
 
         {% block content %}
         {% endblock %}
+
+        <div class="modal fade" id="form-ajax-modal" role="dialog">
+            <div class="modal-dialog" id="modal_dialog_id">
+                <div class="modal-content" id="form-modal-ajax-content">
+                    {# loading ajax requests #}
+                </div>
+            </div>
+        </div>
         <br>
         <br>
     </div>
@@ -163,6 +172,7 @@
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
     <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+    <script type="text/javascript" src="{% static "js/modal_form_submit.js" %}"></script>
     {% block script %}
         <script type="text/javascript">
             // To avoid cut and paste on the email fields

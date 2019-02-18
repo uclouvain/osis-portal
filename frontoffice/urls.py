@@ -45,6 +45,7 @@ urlpatterns = (
     url(r'^logged_out/$', common.logged_out, name='logged_out'),
     url(r'^403/$', common.access_denied, name="error_403"),
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
+    url(r'^hijack/', include('hijack.urls', namespace='hijack')),
 )
 
 

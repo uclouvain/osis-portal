@@ -24,19 +24,23 @@
 #
 ##############################################################################
 import datetime
-import mock
 
+import mock
 from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
 from django.test import TestCase, override_settings
+from django.utils.translation import ugettext_lazy as _
 
+from attribution.tests.factories.attribution import AttributionFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
+from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
-from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from attribution.tests.factories.attribution import AttributionFactory
@@ -91,7 +95,9 @@ class StudentsListTest(TestCase):
 
     def test_with_attributions(self):
         today = datetime.datetime.today()
+
         an_academic_year = create_current_academic_year()
+
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
         AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
         response = self.client.get(self.url)
@@ -170,7 +176,7 @@ class ListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['my_learning_units'], [])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
                                            'ATTRIBUTION_PATH': '/path'})
@@ -179,7 +185,11 @@ class ListBuildTest(TestCase):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
-        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
+        learning_container_year = LearningContainerYearFactory(academic_year=an_academic_year)
+        a_learning_unit_year = LearningUnitYearFactory(
+            academic_year=an_academic_year,
+            learning_container_year=learning_container_year
+        )
         AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
 
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
@@ -192,7 +202,7 @@ class ListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['my_learning_units'], [a_learning_unit_year])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     def test_when_trying_to_access_other_tutor_students_list(self):
         an_other_tutor = TutorFactory()
@@ -212,7 +222,7 @@ class ListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], an_other_tutor.person)
         self.assertEqual(response.context['my_learning_units'], [])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
                                            'ATTRIBUTION_PATH': '/path'})
@@ -316,7 +326,7 @@ class AdminListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['learning_units'], [])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
                                            'ATTRIBUTION_PATH': '/path'})
@@ -339,7 +349,7 @@ class AdminListBuildTest(TestCase):
 
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['learning_units'], [a_learning_unit_year])
-        self.assertEqual(response.context['msg_error'], _('no_data'))
+        self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
                                            'ATTRIBUTION_PATH': '/path'})
