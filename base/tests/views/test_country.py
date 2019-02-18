@@ -51,7 +51,7 @@ class TestCountryAutocomplete(TestCase):
 
         expected_results = [{'id': 'Narnia', 'text': 'Narnia'}]
 
-        self.assertListEqual(json.loads(response.content)['results'], expected_results)
+        self.assertListEqual(response.json()['results'], expected_results)
 
 
 def _get_results_from_autocomplete_response(response):
