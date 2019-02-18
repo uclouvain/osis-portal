@@ -16,4 +16,3 @@ class CountryAutocomplete(autocomplete.Select2ListView):
                 for country in get_list_from_osis(settings.URL_COUNTRY_API, name_filter=self.q)
             ]
         }), content_type='application/json')
-
