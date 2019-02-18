@@ -1,9 +1,10 @@
 import json
 
-import requests
 from dal import autocomplete
 from django import http
 from django.conf import settings
+
+from base.views.autocomplete.common import get_list_from_osis
 
 
 class CountryAutocomplete(autocomplete.Select2ListView):
@@ -12,22 +13,7 @@ class CountryAutocomplete(autocomplete.Select2ListView):
         return http.HttpResponse(json.dumps({
             'results': [
                 {'id': country['uuid'], 'text': country['name']}
-                for country in get_country_list_from_osis(name_filter=self.q)
+                for country in get_list_from_osis(settings.URL_COUNTRY_API, name_filter=self.q)
             ]
         }), content_type='application/json')
 
-
-def get_country_list_from_osis(name_filter=None):
-    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    url = settings.URL_COUNTRY_API
-
-    response = requests.get(
-        url=url,
-        headers=header_to_get,
-        data={'search': name_filter or ""}
-    )
-
-    data = response.json()
-    if 'results' in data:
-        data = data['results']
-    return data
