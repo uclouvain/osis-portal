@@ -39,7 +39,6 @@ class TestCountryAutocomplete(TestCase):
     @mock.patch('requests.get')
     def test_when_filter(self, mock_get):
         mock_response = HttpResponse()
-        mock_response.content = '{"results": [{"uuid": "ABCD", "name": "Narnia"}]}'
         mock_response.json = lambda *args, **kwargs: {"results": [{"uuid": "ABCD", "name": "Narnia"}]}
         mock_get.return_value = mock_response
         response = self.client.get(self.url, data={'q': 'nar'})
