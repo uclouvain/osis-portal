@@ -11,7 +11,7 @@ class TrainingAutocomplete(autocomplete.Select2ListView):
     def get(self, request, *args, **kwargs):
         return http.HttpResponse(json.dumps({
             'results': [
-                {'id': training['uuid'], 'text': training['name']}
+                {'id': training['uuid'], 'text': training['acronym']}
                 for training in get_training_list_from_osis(name_filter=self.q)
             ]
         }), content_type='application/json')
