@@ -11,19 +11,18 @@ from rest_framework.parsers import JSONParser
 class CountryAutocomplete(autocomplete.Select2ListView):
 
     def get(self, request, *args, **kwargs):
-
-        if self.q:
-            results = self.get_countries_list(name_filter=self.q)
-
         return http.HttpResponse(json.dumps({
-            'results': [dict(id=x, text=x) for x in results]
+            'results': [
+                {'id': country['uuid'], 'text': country['name']}
+                for country in self.get_countries_list(name_filter=self.q)
+            ]
         }), content_type='application/json')
 
     def get_countries_list(self, name_filter=None):
         list_countries = []
         list_country = self.get_country_list_from_osis(name_filter)
         for country in list_country:
-            list_countries.append(country['name'])
+            list_countries.append({'uuid': country['uuid'], 'name': country['name']})
         return list_countries
 
     def get_country_list_from_osis(self, name_filter=None):

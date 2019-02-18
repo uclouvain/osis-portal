@@ -23,37 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
 from unittest import mock
 
 from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
-from reference.tests.factories.country import CountryFactory
-
 
 class TestCountryAutocomplete(TestCase):
 
     def setUp(self):
         self.url = reverse("country-autocomplete")
-        self.country = CountryFactory(name="Narnia")
         self.request = RequestFactory()
 
     @mock.patch('requests.get')
     def test_when_filter(self, mock_get):
         mock_response = HttpResponse()
-        mock_response.content = '{"results": [{"name": "Narnia"}]}'
+        mock_response.content = '{"results": [{"uuid": "ABCD", "name": "Narnia"}]}'
+        mock_response.json = lambda *args, **kwargs: {"results": [{"uuid": "ABCD", "name": "Narnia"}]}
         mock_get.return_value = mock_response
         response = self.client.get(self.url, data={'q': 'nar'})
 
         self.assertEqual(response.status_code, 200)
 
-        expected_results = [{'id': 'Narnia', 'text': 'Narnia'}]
+        expected_results = [{'id': 'ABCD', 'text': 'Narnia'}]
 
         self.assertListEqual(response.json()['results'], expected_results)
-
-
-def _get_results_from_autocomplete_response(response):
-    json_response = str(response.content, encoding='utf8')
-    return json.loads(json_response)['results']
