@@ -39,12 +39,16 @@ class TestTrainingAutocomplete(TestCase):
     @mock.patch('requests.get')
     def test_when_filter(self, mock_get):
         mock_response = HttpResponse()
-        mock_response.json = lambda *args, **kwargs: {"results": [{"uuid": "ABCD", "acronym": "TEST"}]}
+        mock_response.json = lambda *args, **kwargs: {"results": [{
+            "uuid": "ABCD",
+            "acronym": "TEST",
+            "academic_year": "2019"
+        }]}
         mock_get.return_value = mock_response
         response = self.client.get(self.url, data={'q': 'tes'})
 
         self.assertEqual(response.status_code, 200)
 
-        expected_results = [{'id': 'ABCD', 'text': 'TEST'}]
+        expected_results = [{'id': 'ABCD', 'text': 'TEST - 2019'}]
 
         self.assertListEqual(response.json()['results'], expected_results)
