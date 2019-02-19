@@ -42,9 +42,9 @@ def get_list_from_osis(url, name_filter=None):
     return data
 
 
-def get_country_list_from_osis():
-    return get_list_from_osis(settings.URL_COUNTRY_API)
+def get_country_list_from_osis(name_filter=None):
+    return get_list_from_osis(settings.URL_COUNTRY_API, name_filter)
 
 
-def get_training_list_from_osis():
-    return get_list_from_osis(settings.URL_TRAINING_API)
+def get_training_list_from_osis(name_filter=None):
+    return get_list_from_osis(settings.URL_TRAINING_API, name_filter)
