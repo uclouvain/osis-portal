@@ -29,12 +29,10 @@ from django.conf import settings
 
 def get_list_from_osis(url, name_filter=None):
     header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
-    if name_filter:
-        url = url + '?search=' + name_filter
     response = requests.get(
         url=url,
         headers=header_to_get,
-        # data={'search': name_filter or ""}
+        params={'search': name_filter or ""}
     )
     data = response.json()
     if 'results' in data:
