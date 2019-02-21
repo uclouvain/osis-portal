@@ -26,13 +26,19 @@
 import requests
 from django.conf import settings
 
+from base.models.academic_year import current_academic_year
+
 
 def get_list_from_osis(url, name_filter=None):
     header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
     response = requests.get(
         url=url,
         headers=header_to_get,
-        params={'search': name_filter or ""}
+        params={
+            'search': name_filter or "",
+            'from_year': current_academic_year().year+1,
+            'to_year': current_academic_year().year+2
+        }
     )
     data = response.json()
     if 'results' in data:
