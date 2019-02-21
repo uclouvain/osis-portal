@@ -262,6 +262,10 @@ EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, "base
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 25))
 SEND_BROKEN_LINK_EMAILS = os.environ.get('SEND_BROKEN_LINK_EMAILS', 'True').lower() == 'true'
+MAIL_SENDER_CLASSES = os.environ.get(
+    'MAIL_SENDER_CLASSES',
+    'osis_common.messaging.mail_sender_classes.MessageHistorySender'
+).split()
 
 
 # Authentication settings
