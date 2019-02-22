@@ -29,12 +29,15 @@ from django.http import HttpResponse
 from django.test import TestCase, RequestFactory
 from django.urls import reverse
 
+from base.tests.factories.academic_year import AcademicYearFactory
+
 
 class TestCountryAutocomplete(TestCase):
 
     def setUp(self):
         self.url = reverse("country-autocomplete")
         self.request = RequestFactory()
+        AcademicYearFactory(current=True)
 
     @mock.patch('requests.get')
     def test_when_filter(self, mock_get):
