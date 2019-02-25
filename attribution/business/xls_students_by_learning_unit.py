@@ -38,7 +38,9 @@ OPENPYXL_STRING_FORMAT = '@'
 
 def get_xls(student_list, a_learning_unit_year):
     xls = _make_xls_list(student_list)
-    filename = '{}_{}_{}.xlsx'.format(_('student_list'), a_learning_unit_year.acronym, a_learning_unit_year.academic_year.year)
+    filename = '{}_{}_{}.xlsx'.format(_('student_list'),
+                                      a_learning_unit_year.acronym, 
+                                      a_learning_unit_year.academic_year.year)
     response = HttpResponse(xls, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = "%s%s" % ("attachment; filename=", filename)
     return response
