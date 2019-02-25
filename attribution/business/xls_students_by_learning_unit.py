@@ -38,7 +38,7 @@ OPENPYXL_STRING_FORMAT = '@'
 
 def get_xls(student_list, a_learning_unit_year):
     xls = _make_xls_list(student_list)
-    filename = 'student_list_{}_{}.xlsx'.format(a_learning_unit_year.acronym, a_learning_unit_year.academic_year.year)
+    filename = '{}_{}_{}.xlsx'.format(_('student_list'), a_learning_unit_year.acronym, a_learning_unit_year.academic_year.year)
     response = HttpResponse(xls, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = "%s%s" % ("attachment; filename=", filename)
     return response
@@ -47,19 +47,19 @@ def get_xls(student_list, a_learning_unit_year):
 def _make_xls_list(student_list):
     workbook = Workbook()
     worksheet1 = workbook.active
-    worksheet1.title = "Students"
-    COLUMNS = ['program',
-               'activity',
-               'email',
-               'student',
-               'registration_id',
-               'status',
-               'january',
-               'status',
-               'june',
-               'status',
-               'september']
-    worksheet1.append(_(col) for col in COLUMNS)
+    worksheet1.title = _("Students")
+    COLUMNS = [_('Program'),
+               _('Learning unit'),
+               _('Email'),
+               _('Student'),
+               _('Registration id'),
+               _('State'),
+               _('January'),
+               _('State'),
+               _('June'),
+               _('State'),
+               _('September')]
+    worksheet1.append(col for col in COLUMNS)
     for student in student_list:
         worksheet1.append([student.get('program'),
                            student.get('acronym'),
