@@ -40,7 +40,6 @@ OPTIONAL_APPS = (
 OPTIONAL_MIDDLEWARES = ()
 OPTIONAL_INTERNAL_IPS = ()
 
-
 if DEBUG:
     AUTH_PASSWORD_VALIDATORS = {}
 
@@ -49,9 +48,9 @@ if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true" and DEBUG:
     OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
     OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
     DEBUG_TOOLBAR_CONFIG = {
-        'INTERCEPT_REDIRECTS': False,
+        'SHOW_TOOLBAR_CALLBACK': 'osis_common.middlewares.toolbar.show_toolbar',
+        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-2.1.4.min.js"),
     }
-
 
 INSTALLED_APPS += OPTIONAL_APPS
 APPS_TO_TEST += OPTIONAL_APPS

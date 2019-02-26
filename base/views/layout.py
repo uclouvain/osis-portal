@@ -29,9 +29,6 @@ from random import randint
 from osis_common.models import application_notice
 
 
-FORCE_CACHE_RENEW = randint(0, 1000)  # Aims to force the client to re-download the cache after each deployment
-
-
 def _check_notice(request, values):
     if 'subject' not in request.session and 'notice' not in request.session:
         notice = application_notice.find_current_notice()
@@ -48,5 +45,4 @@ def render(request, template, values=None):
     if not values:
         values = {}
     _check_notice(request, values)
-    values['js'] = FORCE_CACHE_RENEW
     return shortcuts.render(request, template, values)
