@@ -51,6 +51,8 @@ MESSAGE_STORAGE = os.environ.get('MESSAGE_STORAGE', 'django.contrib.messages.sto
 # Specific apps (all osis-portal modules except base and reference + env specific apps like sentry)
 # have to be defined in environment settings (ex: dev.py)
 INSTALLED_APPS = (
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -66,7 +68,10 @@ INSTALLED_APPS = (
     'reference',
     'base',
     'bootstrap3',
-    'django_registration'
+    'django_registration',
+    'hijack',
+    'compat',
+    'hijack_admin',
 )
 
 # Tests settings
@@ -257,6 +262,10 @@ EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, "base
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 25))
 SEND_BROKEN_LINK_EMAILS = os.environ.get('SEND_BROKEN_LINK_EMAILS', 'True').lower() == 'true'
+MAIL_SENDER_CLASSES = os.environ.get(
+    'MAIL_SENDER_CLASSES',
+    'osis_common.messaging.mail_sender_classes.MessageHistorySender'
+).split()
 
 
 # Authentication settings
@@ -328,6 +337,14 @@ REST_FRAMEWORK = {
     ]
 }
 
+
+# HIJACK
+HIJACK_LOGIN_REDIRECT_URL = '/'  # Where admins are redirected to after hijacking a user
+HIJACK_LOGOUT_REDIRECT_URL = '/admin/auth/user/'  # Where admins are redirected to after releasing a user
+HIJACK_ALLOW_GET_REQUESTS = True
+HIJACK_USE_BOOTSTRAP = True
+
+
 ATTRIBUTION_CONFIG = {
     'TIME_TABLE_URL': os.environ.get('ATTRIBUTION_TIME_TABLE_URL', ''),
     'TIME_TABLE_NUMBER': os.environ.get('ATTRIBUTION_TIME_TABLE_NUMBER', ''),
@@ -368,6 +385,16 @@ if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
 # IUFC API
 URL_CONTINUING_EDUCATION_FILE_API = os.environ.get(
     "URL_CONTINUING_EDUCATION_FILE_API",
+    ""
+)
+
+URL_COUNTRY_API = os.environ.get(
+    "URL_COUNTRY_API",
+    ""
+)
+
+URL_TRAINING_API = os.environ.get(
+    "URL_TRAINING_API",
     ""
 )
 

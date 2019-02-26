@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+
 from decimal import Decimal
 
 from django import forms
@@ -91,7 +93,7 @@ class ApplicationForm(BootstrapForm):
 
 class VacantAttributionFilterForm(BootstrapForm):
     faculty = forms.ModelChoiceField(
-        queryset=search(entity_type="FACULTY"),
+        queryset=search(entity_type="FACULTY", date=datetime.date.today()),
         widget=forms.Select(),
         empty_label=pgettext("plural", "All"),
         required=False,
@@ -105,3 +107,16 @@ class VacantAttributionFilterForm(BootstrapForm):
         if isinstance(data_cleaned, str):
             return data_cleaned.upper()
         return data_cleaned
+
+    def is_valid(self):
+        return super(VacantAttributionFilterForm, self).is_valid() and self._has_mininum_criteria()
+
+    def _has_mininum_criteria(self):
+        cleaned_data = super(VacantAttributionFilterForm, self).clean()
+        if cleaned_data['faculty'] is None \
+                and (cleaned_data['learning_container_acronym'] is None or len(
+                    cleaned_data['learning_container_acronym']) == 0):
+            self._errors['learning_container_acronym'] = _(
+                'Please precise at least a faculty or a code (or a part of a code)')
+            return False
+        return True

@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,16 +23,32 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from datetime import datetime
+import requests
+from django.conf import settings
 
-import factory
-
-from base.tests.factories.organization import OrganizationFactory
+from base.models.academic_year import current_academic_year
 
 
-class EntityFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'base.Entity'
+def get_list_from_osis(url, name_filter=None):
+    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    response = requests.get(
+        url=url,
+        headers=header_to_get,
+        params={
+            'search': name_filter or "",
+            'from_year': current_academic_year().year+1,
+            'to_year': current_academic_year().year+2
+        }
+    )
+    data = response.json()
+    if 'results' in data:
+        data = data['results']
+    return data
 
-    organization = factory.SubFactory(OrganizationFactory)
-    changed = factory.LazyFunction(datetime.now)
+
+def get_country_list_from_osis(name_filter=None):
+    return get_list_from_osis(settings.URL_COUNTRY_API, name_filter)
+
+
+def get_training_list_from_osis(name_filter=None):
+    return get_list_from_osis(settings.URL_TRAINING_API, name_filter)

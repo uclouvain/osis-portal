@@ -149,8 +149,7 @@ class TestOnlineApplication(TestCase):
         context = response.context[0]
         self.assertEqual(context['a_tutor'], self.tutor)
         self.assertTrue(context['search_form'])
-        self.assertEqual(len(context['attributions_vacant']),
-                         len(self._get_default_application_list()) + len(self._get_default_attribution_list()))
+        self.assertIsNone(context['attributions_vacant'])
 
     def test_search_vacant_attribution_post_not_allowed(self):
         url = reverse('vacant_attributions_search')

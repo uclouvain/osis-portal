@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,16 +23,31 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from datetime import datetime
+from unittest import mock
 
-import factory
+from django.http import HttpResponse
+from django.test import TestCase, RequestFactory
+from django.urls import reverse
 
-from base.tests.factories.organization import OrganizationFactory
+from base.tests.factories.academic_year import AcademicYearFactory
 
 
-class EntityFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'base.Entity'
+class TestCountryAutocomplete(TestCase):
 
-    organization = factory.SubFactory(OrganizationFactory)
-    changed = factory.LazyFunction(datetime.now)
+    def setUp(self):
+        self.url = reverse("country-autocomplete")
+        self.request = RequestFactory()
+        AcademicYearFactory(current=True)
+
+    @mock.patch('requests.get')
+    def test_when_filter(self, mock_get):
+        mock_response = HttpResponse()
+        mock_response.json = lambda *args, **kwargs: {"results": [{"uuid": "ABCD", "name": "Narnia"}]}
+        mock_get.return_value = mock_response
+        response = self.client.get(self.url, data={'q': 'nar'})
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_results = [{'id': 'ABCD', 'text': 'Narnia'}]
+
+        self.assertListEqual(response.json()['results'], expected_results)

@@ -146,4 +146,10 @@ def search(**kwargs):
     if 'entity_type' in kwargs:
         queryset = queryset.filter(entity_type__exact=kwargs['entity_type'])
 
-    return queryset
+    if 'date' in kwargs:
+        a_date = kwargs['date']
+        queryset = queryset.filter(Q(start_date__lte=a_date,
+                                   end_date__gte=a_date) |
+                                   Q(start_date__lte=a_date, end_date__isnull=True))
+
+    return queryset.order_by('acronym')

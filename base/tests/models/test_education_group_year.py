@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2018-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,16 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from datetime import datetime
+import datetime
 
-import factory
+from django.test import TestCase
 
-from base.tests.factories.organization import OrganizationFactory
+from base.models import education_group_year
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group import EducationGroupFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 
 
-class EntityFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'base.Entity'
 
-    organization = factory.SubFactory(OrganizationFactory)
-    changed = factory.LazyFunction(datetime.now)
+class TestEducationGroupYear(TestCase):
+    def setUp(self):
+        self.education_group = EducationGroupFactory()
+        now = datetime.date.today()
+        a_year = now.year
+        self.curent_academic_year = AcademicYearFactory(
+            year=a_year,
+            start_date=datetime.datetime(a_year, now.month, 1),
+            end_date=datetime.datetime(a_year + 1, now.month, 28)
+        )
+        self.education_group_year = EducationGroupYearFactory(education_group=self.education_group)
+
+    def test_find_by_education_groups(self):
+        self.assertCountEqual(education_group_year.find_by_education_groups([self.education_group]),
+                              [self.education_group_year])
