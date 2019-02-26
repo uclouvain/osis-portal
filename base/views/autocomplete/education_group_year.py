@@ -3,7 +3,8 @@ import json
 from dal import autocomplete
 from django import http
 
-from base.views.autocomplete.common import get_training_list_from_osis
+from base.models.academic_year import current_academic_year
+from base.utils.api_utils import get_training_list_from_osis
 
 
 class TrainingAutocomplete(autocomplete.Select2ListView):
@@ -12,6 +13,10 @@ class TrainingAutocomplete(autocomplete.Select2ListView):
         return http.HttpResponse(json.dumps({
             'results': [
                 {'id': training['uuid'], 'text': training['acronym'] + " - " + str(training['academic_year'])}
-                for training in get_training_list_from_osis(name_filter=self.q)
+                for training in get_training_list_from_osis(
+                    search=self.q,
+                    from_year=current_academic_year().year+1,
+                    to_year=current_academic_year().year+1
+                )['results']
             ]
         }), content_type='application/json')
