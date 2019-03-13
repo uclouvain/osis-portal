@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 17:38+0100\n"
+"POT-Creation-Date: 2019-03-13 16:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,10 +37,6 @@ msgstr "Année académique"
 msgid "Acquired charge credits"
 msgstr "Crédits acquis de charge"
 
-#: templates/performance_result.html:168
-msgid "Acquired progression credits"
-msgstr "Crédits acquis de progression"
-
 #: templates/performance_result.html:162
 msgid ""
 "Acquired cycle credits are included in the cycle mean. Only acquired "
@@ -49,6 +45,10 @@ msgstr ""
 "Les crédits acquis de charge sont tous inclus dans la moyenne de cycle. "
 "Seuls les crédits acquis de progression sont pris en compte pour atteindre "
 "le nombre de crédits requis."
+
+#: templates/performance_result.html:168
+msgid "Acquired progression credits"
+msgstr "Crédits acquis de progression"
 
 #: templates/performance_home.html:69
 msgid "Acronym"
@@ -117,7 +117,12 @@ msgstr "Inscr."
 msgid "Jan."
 msgstr "Janv."
 
-#: templates/performance_result.html:98 templates/performance_result.html:127
+#: models/enums/session_month.py:32
+msgid "January"
+msgstr "Janvier"
+
+#: models/enums/session_month.py:33 templates/performance_result.html:98
+#: templates/performance_result.html:127
 msgid "June"
 msgstr "Juin"
 
@@ -168,6 +173,10 @@ msgstr "Résultats"
 #: templates/performance_result.html:99 templates/performance_result.html:128
 msgid "Sept."
 msgstr "Sept."
+
+#: models/enums/session_month.py:34
+msgid "September"
+msgstr "Septembre"
 
 #: templates/performance_result.html:108
 msgid "Success mean"
