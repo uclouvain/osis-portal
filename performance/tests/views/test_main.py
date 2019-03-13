@@ -237,7 +237,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
             'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-                           % {"session_month": _(self.student_performance.session_locked)}
+                           % {"session_month": self.student_performance.get_session_locked_display()}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 
@@ -428,7 +428,7 @@ class VisualizeStudentResult(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
             'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-                           % {"session_month": _(self.student_performance.session_locked)}
+                           % {"session_month": self.student_performance.get_session_locked_display()}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 

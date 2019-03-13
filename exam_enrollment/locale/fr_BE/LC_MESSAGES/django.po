@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-30-01 13:05+0200\n"
+"POT-Creation-Date: 2019-03-13 15:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,135 +16,188 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "acronym"
-msgstr "Sigle"
+#: templates/exam_enrollment_form.html:59
+msgid "Academic year"
+msgstr "Année académique"
 
-msgid "choose_offer_for_exams_enrollment"
-msgstr "Sélectionnez le programme dans lequel vous désirez vous inscrire aux examens."
+#: templates/blocks/modal/exam_enrollment_confirm.html:50
+msgid "Cancel"
+msgstr "Annuler"
 
-msgid "desc_lnk_exam_enrollment"
-msgstr "Choisissez à quels examens vous désirez vous inscrire pour la prochaine session."
-
-msgid "exams_enrollment"
-msgstr "Inscription aux examens"
-
-msgid "exam_enrollment_form_submitted"
-msgstr "Formulaire d'inscription aux examens soumis avec succès."
-
-msgid "exam_enrollment_form_unavalaible_for_the_moment"
-msgstr "Votre formulaire d'inscription aux examens est actuellement indisponible. Veuillez réessayer plus tard."
-
-msgid "info_exam_enrollment_by_default"
-msgstr "<b>Vous êtes inscrit à tous les examens cochés ci-dessous. "
-       "<br>Si cela vous convient, vous n'avez aucune action à effectuer.</b>"
-       "<br>Vous pouvez modifier vos inscriptions aux examens en cochant/décochant les cases ci-dessous et "
-       "en cliquant sur 'Valider mes changements'."
-
-msgid "legend_exam_enrol_b"
-msgstr "B - Crédit"
-
-msgid "legend_exam_enrol_d"
-msgstr "D - Dispense"
-
-msgid "legend_exam_enrol_i"
-msgstr "I - Première inscription"
-
-msgid "legend_exam_enrol_j"
-msgstr "J - Report de note de janvier vers septembre"
-
-msgid "legend_exam_enrol_p"
-msgstr "P - Examen partiel"
-
-msgid "legend_exam_enrol_r"
-msgstr "R - Report de note de la session précédente"
-
-msgid "legend_exam_enrol_t"
-msgstr "T - Note résultant d'un test"
-
-msgid "legend_exam_enrol_v"
-msgstr "V - Évaluation satisfaisante (le note ne compte pas)"
-
-msgid "legend_exam_enrol_w"
-msgstr "W - Évaluation non satisfaisante (la note ne compte pas)"
-
-msgid "legend_exam_enrol_x"
-msgstr "X - Droit et sanction"
-
-msgid "legend_exam_enrol_y"
-msgstr "Y - Deuxième inscription"
-
-msgid "message_exam_enrolment_state"
-msgstr "Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans le récapitulatif "
-
-msgid "message_exam_enrolment_state_link_label"
-msgstr "'Mon état d'inscription aux cours et mes notes d'examen'"
-
-msgid "no_offer_enrollment_found"
-msgstr "Vous n'êtes inscrit à aucun programme d'étude pour l'année académique en cours ({})."
-
-msgid "no_exam_enrollment_avalaible"
-msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
-
-msgid "no_exam_enrollment_found"
-msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
-
-msgid "no_learning_unit_enrollment_found"
-msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
-
-msgid "outside_exam_enrollment_period"
-msgstr "Les inscriptions aux examens pour le programme {} sont actuellement fermées."
-
-msgid "program"
-msgstr "Programme"
-
-msgid "program_choice"
-msgstr "Choix du programme"
-
-msgid "registration_id"
-msgstr "Matricule"
-
-msgid "student"
-msgstr "Étudiant"
-
-msgid "student_can_not_enrol_to_exam"
-msgstr "Vous ne pouvez pas vous inscrire aux examens pour le moment. "
-       "Veuillez contacter votre gestionnaire pour plus d'informations."
-
-msgid "validate_changes"
-msgstr "Valider mes changements"
-
-msgid "year"
-msgstr "Année"
-
-msgid "offer_choice"
-msgstr "Choix de l'offre"
-
-msgid "form_unavailable"
-msgstr "Le formulaire d'inscription n'est pas disponible pour l'instant"
-
-msgid "exam_enrollment_form_loading"
-msgstr "Récupération du formulaire d'inscription aux examens."
-
-msgid "exam_enrollment_confirmation_message"
-msgstr "Etes-vous sûr de vouloir vous inscrit aux examens?"
-
-msgid "confirm"
-msgstr "Confirmer"
-
-msgid "Do you really want to register for exams or change your registration ?"
-msgstr "Souhaitez-vous réellement vous inscrire aux examens ou modifier votre inscription ?"
-
-msgid "yes"
-msgstr "oui"
-
-msgid "no"
-msgstr "non"
-
+#: templates/blocks/modal/exam_enrollment_confirm.html:35
 msgid "Consult all the status of my exam enrollments"
 msgstr "Consulter l'ensemble de mes états d'inscriptions aux examens"
 
+#: templates/exam_enrollment_form.html:96
+msgid "Credited"
+msgstr "Crédité"
+
+#: templates/exam_enrollment_form.html:54 templates/offer_choice.html:44
+msgid "First name"
+msgstr "Prénom"
+
+#: templates/exam_enrollment_form.html:54 templates/offer_choice.html:44
+msgid "Last name"
+msgstr "Nom"
+
+#: templates/blocks/modal/exam_enrollment_confirm.html:43
 msgid "Register to exams or update my exam enrollments"
 msgstr "M'inscrire aux examens ou modifier mon inscription aux examens"
 
+#: templates/blocks/modal/exam_enrollment_confirm.html:29
 msgid "Which action do you want to perform ?"
 msgstr "Quelle action souhaitez-vous effectuer ?"
+
+#: templates/offer_choice.html:70
+msgid "acronym"
+msgstr "Sigle"
+
+#: templates/offer_choice.html:56
+msgid "choose_offer_for_exams_enrollment"
+msgstr ""
+"Sélectionnez le programme dans lequel vous désirez vous inscrire aux examens."
+
+#: templates/exam_enrollment_form.html:89
+msgid "course"
+msgstr "Cours"
+
+#: templates/exam_enrollment_form.html:91
+msgid "ects"
+msgstr "Crédits"
+
+#: templates/exam_enrollment_form.html:47
+msgid "exam_enrollment_form_loading"
+msgstr "Récupération du formulaire d'inscription aux examens."
+
+#: views/exam_enrollment.py:235
+msgid "exam_enrollment_form_submitted"
+msgstr "Formulaire d'inscription aux examens soumis avec succès."
+
+#: templates/exam_enrollment_form.html:32
+#: templates/exam_enrollment_form.html:37 templates/offer_choice.html:36
+msgid "exams_enrollment"
+msgstr "Inscription aux examens"
+
+#: templates/exam_enrollment_form.html:267
+msgid "form_unavailable"
+msgstr "Le formulaire d'inscription n'est pas disponible pour l'instant"
+
+#: templates/exam_enrollment_form.html:76
+msgid "info_exam_enrollment_by_default"
+msgstr ""
+"<b>Vous êtes inscrit à tous les examens cochés ci-dessous. <br>Si cela vous "
+"convient, vous n'avez aucune action à effectuer.</b><br>Vous pouvez modifier "
+"vos inscriptions aux examens en cochant/décochant les cases ci-dessous et en "
+"cliquant sur 'Valider mes changements'."
+
+#: templates/exam_enrollment_form.html:92
+msgid "inscr"
+msgstr "Inscr"
+
+#: templates/exam_enrollment_form.html:93
+msgid "jan"
+msgstr "Jan"
+
+#: templates/exam_enrollment_form.html:94
+msgid "june"
+msgstr "Juin"
+
+#: templates/exam_enrollment_form.html:186
+msgid "legend"
+msgstr "Légende"
+
+#: templates/exam_enrollment_form.html:198
+msgid "legend_exam_enrol_b"
+msgstr "B - Crédit"
+
+#: templates/exam_enrollment_form.html:206
+msgid "legend_exam_enrol_d"
+msgstr "D - Dispense"
+
+#: templates/exam_enrollment_form.html:190
+msgid "legend_exam_enrol_i"
+msgstr "I - Première inscription"
+
+#: templates/exam_enrollment_form.html:194
+msgid "legend_exam_enrol_j"
+msgstr "J - Report de note de janvier vers septembre"
+
+#: templates/exam_enrollment_form.html:189
+msgid "legend_exam_enrol_p"
+msgstr "P - Examen partiel"
+
+#: templates/exam_enrollment_form.html:197
+msgid "legend_exam_enrol_r"
+msgstr "R - Report de note de la session précédente"
+
+#: templates/exam_enrollment_form.html:201
+msgid "legend_exam_enrol_t"
+msgstr "T - Note résultant d'un test"
+
+#: templates/exam_enrollment_form.html:202
+msgid "legend_exam_enrol_v"
+msgstr "V - Évaluation satisfaisante (le note ne compte pas)"
+
+#: templates/exam_enrollment_form.html:205
+msgid "legend_exam_enrol_w"
+msgstr "W - Évaluation non satisfaisante (la note ne compte pas)"
+
+#: templates/exam_enrollment_form.html:209
+msgid "legend_exam_enrol_x"
+msgstr "X - Droit et sanction"
+
+#: templates/exam_enrollment_form.html:193
+msgid "legend_exam_enrol_y"
+msgstr "Y - Deuxième inscription"
+
+#: templates/exam_enrollment_form.html:169
+msgid "message_exam_enrolment_state"
+msgstr ""
+"Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans "
+"le récapitulatif "
+
+#: templates/exam_enrollment_form.html:169
+msgid "message_exam_enrolment_state_link_label"
+msgstr "'Mon état d'inscription aux cours et mes notes d'examen'"
+
+#: views/exam_enrollment.py:112
+msgid "no_learning_unit_enrollment_found"
+msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
+
+#: templates/offer_choice.html:61 views/exam_enrollment.py:83
+msgid "no_offer_enrollment_found"
+msgstr ""
+"Vous n'êtes inscrit à aucun programme d'étude pour l'année académique en "
+"cours ({})."
+
+#: templates/exam_enrollment_form.html:31
+msgid "offer_choice"
+msgstr "Choix de l'offre"
+
+#: templates/exam_enrollment_form.html:64 templates/offer_choice.html:71
+msgid "program"
+msgstr "Programme"
+
+#: templates/offer_choice.html:30
+msgid "program_choice"
+msgstr "Choix du programme"
+
+#: templates/offer_choice.html:49
+msgid "registration_id"
+msgstr "Matricule"
+
+#: templates/exam_enrollment_form.html:95
+msgid "sept"
+msgstr "Sept"
+
+#: templates/exam_enrollment_form.html:90
+msgid "title"
+msgstr "Intitulé"
+
+#: templates/exam_enrollment_form.html:176
+msgid "validate_changes"
+msgstr "Valider mes changements"
+
+#: templates/offer_choice.html:69
+msgid "year"
+msgstr "Année"
