@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 17:38+0100\n"
+"POT-Creation-Date: 2019-03-13 16:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,14 +32,14 @@ msgstr ""
 msgid "Acquired charge credits"
 msgstr ""
 
-#: templates/performance_result.html:168
-msgid "Acquired progression credits"
-msgstr ""
-
 #: templates/performance_result.html:162
 msgid ""
 "Acquired cycle credits are included in the cycle mean. Only acquired "
 "progression credits are accounted for requested credits."
+msgstr ""
+
+#: templates/performance_result.html:168
+msgid "Acquired progression credits"
 msgstr ""
 
 #: templates/performance_home.html:69
@@ -107,7 +107,12 @@ msgstr ""
 msgid "Jan."
 msgstr ""
 
-#: templates/performance_result.html:98 templates/performance_result.html:127
+#: models/enums/session_month.py:32
+msgid "January"
+msgstr ""
+
+#: models/enums/session_month.py:33 templates/performance_result.html:98
+#: templates/performance_result.html:127
 msgid "June"
 msgstr ""
 
@@ -157,6 +162,10 @@ msgstr ""
 
 #: templates/performance_result.html:99 templates/performance_result.html:128
 msgid "Sept."
+msgstr ""
+
+#: models/enums/session_month.py:34
+msgid "September"
 msgstr ""
 
 #: templates/performance_result.html:108
