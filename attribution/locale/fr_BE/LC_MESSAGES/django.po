@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-14 13:39+0100\n"
+"POT-Creation-Date: 2019-02-25 12:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +26,7 @@ msgstr "Un suppléant ne peut pas reconduire sa fonction de suppléant"
 msgid "Acronym"
 msgstr "Sigle"
 
-#: templates/students_list_content.html:47
-msgid "Activity"
-msgstr "Activité"
-
-#: forms/application.py:96
+#: forms/application.py:98
 msgctxt "plural"
 msgid "All"
 msgstr ""
@@ -39,7 +35,7 @@ msgstr ""
 msgid "An application has already been submitted"
 msgstr "Une candidature a déjà été soumise"
 
-#: views/online_application.py:278
+#: views/online_application.py:272
 msgid "An email with your applications have been sent"
 msgstr "Un email contenant vos candidatures vous a été envoyé"
 
@@ -134,6 +130,7 @@ msgstr "Afficher les enseignants"
 msgid "ECT"
 msgstr "ECT"
 
+#: business/xls_students_by_learning_unit.py:53
 #: templates/tutor_charge_content.html:66
 msgid "Email"
 msgstr "Email"
@@ -191,6 +188,11 @@ msgstr "Directeur de stage"
 msgid "Jan."
 msgstr "Jan."
 
+#: business/xls_students_by_learning_unit.py:57
+msgid "January"
+msgstr ""
+
+#: business/xls_students_by_learning_unit.py:59
 #: templates/students_list_content.html:54
 msgid "June"
 msgstr "Juin"
@@ -199,13 +201,18 @@ msgstr "Juin"
 msgid "Last name"
 msgstr "Nom"
 
+#: business/xls_students_by_learning_unit.py:52
+#: templates/students_list_content.html:47
+msgid "Learning unit"
+msgstr "Unité d'enseignement"
+
 #: templates/attribution_list.html:31
 #: templates/attribution_renewal_list.html:40
 #: templates/attribution_vacant_list.html:95
 msgid "Learning unit volumes"
 msgstr "Volumes unité d'enseignement"
 
-#: forms/application.py:65
+#: forms/application.py:67
 msgid "Lecturing charge or practical charge must be filled"
 msgstr "Le vol.1 postulé ou le vol.2 postulé doit être rempli"
 
@@ -260,13 +267,13 @@ msgstr "Aucune candidature"
 msgid "No application found"
 msgstr "Pas de candidature trouvée"
 
-#: tests/views/test_online_application.py:216 views/online_application.py:165
+#: tests/views/test_online_application.py:216 views/online_application.py:159
 msgid "No attribution renewed"
 msgstr "Pas d'attribution renouvelée"
 
-#: tests/views/test_list.py:175 tests/views/test_list.py:197
-#: tests/views/test_list.py:217 tests/views/test_list.py:321
-#: tests/views/test_list.py:344 views/list.py:113 views/list.py:194
+#: tests/views/test_list.py:175 tests/views/test_list.py:201
+#: tests/views/test_list.py:221 tests/views/test_list.py:325
+#: tests/views/test_list.py:348 views/list.py:113 views/list.py:194
 msgid "No data found"
 msgstr "Aucune donnée trouvée"
 
@@ -298,7 +305,7 @@ msgstr "Pgrm"
 msgid "Please enter the code of the course to which you would like to apply"
 msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
 
-#: forms/application.py:121
+#: forms/application.py:120
 msgid "Please precise at least a faculty or a code (or a part of a code)"
 msgstr ""
 "Veuillez au minimum sélectionner une faculté ou introduire un code(complet "
@@ -314,6 +321,11 @@ msgstr "Produire xls"
 msgid "Professor"
 msgstr "Professeur"
 
+#: business/xls_students_by_learning_unit.py:51
+msgid "Program"
+msgstr ""
+
+#: business/xls_students_by_learning_unit.py:55
 #: templates/students_list_content.html:50
 msgid "Registration id"
 msgstr "Noma"
@@ -336,6 +348,10 @@ msgstr "Reproduire à l'identique l'année suivante"
 msgid "Schedule"
 msgstr "Horaire"
 
+#: templates/students_list.html:53 templates/students_list_admin.html:55
+msgid "Search"
+msgstr ""
+
 #: templates/attribution_renewal_list.html:51
 msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
@@ -343,6 +359,10 @@ msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
 #: templates/students_list_content.html:56
 msgid "Sept."
 msgstr "Sept."
+
+#: business/xls_students_by_learning_unit.py:61
+msgid "September"
+msgstr ""
 
 #: templates/applications_list.html:50 templates/applications_list.html:66
 #: templates/attribution_vacant_list.html:115
@@ -356,14 +376,21 @@ msgstr "Cahier de charges"
 msgid "Start"
 msgstr "Début"
 
+#: business/xls_students_by_learning_unit.py:56
+#: business/xls_students_by_learning_unit.py:58
+#: business/xls_students_by_learning_unit.py:60
 #: templates/students_list_content.html:51
 #: templates/students_list_content.html:53
 #: templates/students_list_content.html:55
 msgid "State"
 msgstr "Etat"
 
-#: templates/students_list.html:34 templates/students_list_admin.html:37
-#: templates/tutor_charge_content.html:64
+#: business/xls_students_by_learning_unit.py:54
+msgid "Student"
+msgstr "Etudiant"
+
+#: business/xls_students_by_learning_unit.py:50 templates/students_list.html:34
+#: templates/students_list_admin.html:37 templates/tutor_charge_content.html:64
 msgid "Students"
 msgstr "Etudiants"
 
@@ -383,7 +410,7 @@ msgid "Teaching charge"
 msgstr "Charge d'enseignement"
 
 #: templates/attribution_access_denied.html:38
-#: tests/views/test_online_application.py:123 views/online_application.py:57
+#: tests/views/test_online_application.py:123 views/online_application.py:51
 msgid "The period of online application is closed"
 msgstr ""
 "La période d'encodage des candidatures en ligne est fermée pour le moment"
@@ -434,7 +461,7 @@ msgid "To receive a confirmation email with the applications"
 msgstr ""
 "Pour recevoir un email de confirmation avec toutes les candidatures en ligne"
 
-#: forms/application.py:78 forms/application.py:87
+#: forms/application.py:80 forms/application.py:89
 msgid "Too much"
 msgstr "Trop élevé"
 
@@ -510,6 +537,10 @@ msgstr "Vous avez déjà candidaté pour ce cours."
 #: templates/list/students_exam.html:66
 msgid "You aren't teaching for any learning unit"
 msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
+
+#: business/xls_students_by_learning_unit.py:41
+msgid "student_list"
+msgstr "Liste_etudiants"
 
 #: templates/students_list_content.html:31
 msgid "students enrolled from"

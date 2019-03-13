@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,26 +23,35 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import shortcuts
-from random import randint
+from unittest import mock
 
-from osis_common.models import application_notice
+from django.http import HttpResponse
+from django.test import TestCase, RequestFactory
+from django.urls import reverse
 
-
-def _check_notice(request, values):
-    if 'subject' not in request.session and 'notice' not in request.session:
-        notice = application_notice.find_current_notice()
-        if notice:
-            request.session.set_expiry(3600)
-            request.session['subject'] = notice.subject
-            request.session['notice'] = notice.notice
-    if 'subject' in request.session and 'notice' in request.session:
-        values['subject'] = request.session['subject']
-        values['notice'] = request.session['notice']
+from base.tests.factories.academic_year import AcademicYearFactory
 
 
-def render(request, template, values=None):
-    if not values:
-        values = {}
-    _check_notice(request, values)
-    return shortcuts.render(request, template, values)
+class TestTrainingAutocomplete(TestCase):
+
+    def setUp(self):
+        self.url = reverse("training-autocomplete")
+        self.request = RequestFactory()
+        AcademicYearFactory(current=True)
+
+    @mock.patch('requests.get')
+    def test_when_filter(self, mock_get):
+        mock_response = HttpResponse()
+        mock_response.json = lambda *args, **kwargs: {"results": [{
+            "uuid": "ABCD",
+            "acronym": "TEST",
+            "academic_year": "2019"
+        }]}
+        mock_get.return_value = mock_response
+        response = self.client.get(self.url, data={'q': 'tes'})
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_results = [{'id': 'ABCD', 'text': 'TEST - 2019'}]
+
+        self.assertListEqual(response.json()['results'], expected_results)
