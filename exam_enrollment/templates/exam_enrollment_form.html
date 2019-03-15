@@ -51,12 +51,12 @@
                 <!-- Student information's-->
                 <div class="row">
                     <div class="col-md-3">
-                        <label>{% trans 'last_name' %}, {% trans 'first_name' %}</label>
+                        <label>{% trans 'Last name' %}, {% trans 'First name' %}</label>
                         <br>
                         {{ student.person.last_name}}, {{ student.person.first_name }}
                     </div>
                     <div class="col-md-3">
-                        <label>{% trans 'academic_year' %}</label>
+                        <label>{% trans 'Academic year' %}</label>
                         <br>
                         {{ academic_year }}
                     </div>
@@ -93,7 +93,7 @@
                             <th {% if current_number_session >= 1 %} colspan="2" {% endif %}  class="text-nowrap">{% trans 'jan' %} *</th>
                             <th {% if current_number_session >= 2 %} colspan="2" {% endif %}  class="text-nowrap">{% trans 'june' %} *</th>
                             <th {% if current_number_session >= 3 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'sept' %} *</th>
-                            <th>{% trans 'credited' %}</th>
+                            <th>{% trans 'Credited' %}</th>
                         </tr>
                         {% for exam_enrol in exam_enrollments %}
                             <tr>

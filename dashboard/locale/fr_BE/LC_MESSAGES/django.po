@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-13 16:21+0100\n"
+"POT-Creation-Date: 2019-03-12 15:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,14 +27,10 @@ msgstr ""
 "inscriptions (SIC) afin de résoudre le problème. Merci."
 
 #: templates/faculty_administrator_dashboard.html:68
-#, fuzzy
-#| msgid "faculty_administration"
 msgid "Applications administration"
-msgstr "Administration d'application"
+msgstr "Administration des candidatures en ligne"
 
 #: templates/faculty_administrator_dashboard.html:57
-#, fuzzy
-#| msgid "faculty_administration"
 msgid "Attestations administration"
 msgstr "Administration des attestations"
 
@@ -53,8 +49,6 @@ msgstr "Inscriptions aux examens"
 #: templates/dashboard_admin_menu.html:31
 #: templates/faculty_administrator_dashboard.html:34
 #: templates/faculty_administrator_dashboard.html:77
-#, fuzzy
-#| msgid "faculty_administration"
 msgid "Faculty administration"
 msgstr "Administration facultaire"
 
@@ -63,8 +57,6 @@ msgid "Get scores encoding papersheet and encode scores of your students."
 msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
 
 #: templates/student_dashboard.html:43
-#, fuzzy
-#| msgid "desc_lnk_internships"
 msgid "Internships"
 msgstr "Stages"
 
@@ -73,8 +65,8 @@ msgid "Lists of students exams enrollments"
 msgstr "Liste des étudiants inscrits aux examens"
 
 #: templates/tutor_dashboard.html:43
-msgid "Manage educational information"
-msgstr "Gérer les informations pédagogiques"
+msgid "Manage educational description fiche"
+msgstr "Gérer les fiches descriptives"
 
 #: templates/tutor_dashboard.html:18
 msgid "My applications"
@@ -111,8 +103,6 @@ msgid "Show the performance module."
 msgstr "Voir le module performance"
 
 #: templates/student_dashboard.html:33
-#, fuzzy
-#| msgid "desc_lnk_performance"
 msgid "Show the student results and registration state."
 msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
@@ -121,8 +111,6 @@ msgid "This process controls my applications"
 msgstr "Gestion de mes applications"
 
 #: templates/student_dashboard.html:19
-#, fuzzy
-#| msgid "desc_lnk_internships"
 msgid "This process controls my attestations."
 msgstr "Gestion de mes attestations."
 
@@ -131,8 +119,6 @@ msgid "This process controls students internships."
 msgstr "Gestion des stages des étudiants."
 
 #: templates/tutor_dashboard.html:34
-#, fuzzy
-#| msgid "desc_lnk_internships"
 msgid "This process controls the students internship."
 msgstr "Gestion des stages des étudiants."
 
@@ -149,8 +135,6 @@ msgid "This requires a VPN access outside UCL."
 msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
 
 #: templates/tutor_dashboard.html:50
-#, fuzzy
-#| msgid "VPN access"
 msgid "VPN access"
 msgstr "accès VPN"
 
