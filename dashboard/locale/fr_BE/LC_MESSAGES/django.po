@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-12 15:08+0100\n"
+"POT-Creation-Date: 2019-03-15 11:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgid "Lists of students exams enrollments"
 msgstr "Liste des étudiants inscrits aux examens"
 
 #: templates/tutor_dashboard.html:43
-msgid "Manage educational description fiche"
+msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
 
 #: templates/tutor_dashboard.html:18
