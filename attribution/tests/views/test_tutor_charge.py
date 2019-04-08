@@ -34,11 +34,9 @@ from django.core.urlresolvers import reverse
 from django.forms.formsets import BaseFormSet
 
 from attribution.views import tutor_charge
-from base.models.enums import component_type
 from attribution.models.enums import function
 from performance.tests.models import test_student_performance
-from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
-    test_learning_unit_component
+from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.academic_year import AcademicYearFactory
