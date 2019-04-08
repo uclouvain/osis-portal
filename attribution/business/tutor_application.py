@@ -147,19 +147,10 @@ def send_mail_applications_summary(global_id):
 
 def _resolve_learning_container_year_info(application_list, academic_year):
     acronym_list = [application.get('acronym') for application in application_list]
-    # full_learning_component_year = LearningComponentYear.objects\
-    #     .filter(learningunitcomponent__learning_unit_year__subtype=learning_unit_year_subtypes.FULL)
-    # prefetch_learning_component_year = Prefetch(
-    #     'learningunityear_set__learningcomponentyear_set',
-    #     LearningComponentYear.objects.filter(learning_unit_year__subtype=learning_unit_year_subtypes.FULL)
-    # )
-    l_container_years = mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year) \
-                                                        .prefetch_related('learningunityear_set__learningcomponentyear_set')
-    # learn_unit_years_type_full = mdl_base.learning_unit_year.LearningUnitYear.objects.filter(
-    #     subtype=learning_unit_year_subtypes.FULL,
-    #     learning_container_year_id__in=[lcy.id for lcy in l_container_years]
-    # )
-    # learn_unit_year_by_container_id = {luy.learning_container_year_id: luy for luy in learn_unit_years_type_full}
+    l_container_years = mdl_base.learning_container_year.search(
+        acronym=acronym_list,
+        academic_year=academic_year
+    ).prefetch_related('learningunityear_set__learningcomponentyear_set')
     for application in application_list:
         l_container_year = next((l_container_year for l_container_year in l_container_years if
                                  l_container_year.acronym == application.get('acronym')), None)
@@ -175,48 +166,6 @@ def _modify_application(application, l_container_year):
     application['title'] = learning_unit_year_full.complete_title
     for l_component_year in learning_unit_year_full.learningcomponentyear_set.all():
         application[l_component_year.type] = l_component_year.volume_declared_vacant
-
-
-#
-# def _resolve_learning_container_year_info(application_list, academic_year):
-#     acronym_list = [application.get('acronym') for application in application_list]
-#     # full_learning_component_year = LearningComponentYear.objects\
-#     #     .filter(learning_unit_year__subtype=learning_unit_year_subtypes.FULL)
-#     # prefetch_learning_component_year = Prefetch(
-#     #     'learningunityear_set__learningcomponentyear_set',
-#     #     queryset=LearningComponentYear.objects.filter(learning_unit_year__subtype='FULL'),
-#     #     to_attr='learning_components_full'
-#     #     to_attr='learning_components_full'
-#     # )
-#     # l_container_years = mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year) \
-#     #                                                     .prefetch_related(prefetch_learning_component_year).distinct()
-#     all_learning_units_year = LearningUnitYear.objects.filter(
-#         learning_container_year__acronym__in=acronym_list,
-#         academic_year=academic_year
-#     ).select_related('learning_unit_year').prefetch_related('learningcomponentyear_set')
-#     import pdb; pdb.set_trace()
-#     learn_unit_years_full = list(
-#         filter(lambda luy: luy.subtype == learning_unit_year_subtypes.FULL, all_learning_units_year)
-#     )
-#     # learn_unit_years = mdl_base.learning_unit_year.LearningUnitYear.objects.filter(
-#     #     subtype=learning_unit_year_subtypes.FULL,
-#     #     learning_container_year_id__in=[luy.learning_container_year.id for luy in learning_units_year]
-#     # )
-#     learn_unit_year_by_container_id = {luy.learning_container_year_id: luy for luy in learn_unit_years_full}
-#     for application in application_list:
-#         learning_unit_year = next((luy for luy in all_learning_units_year if
-#                                    luy.learning_container_year.acronym == application.get('acronym')), None)
-#         if learning_unit_year:
-#             _modify_application(application, learning_unit_year, learn_unit_year_by_container_id)
-#     return application_list
-#
-#
-# def _modify_application(application, learning_unit_year, learn_unit_year_by_container_id):
-#     container = learning_unit_year.learning_container_year
-#     application['learning_container_year_id'] = container.id
-#     application['title'] = learn_unit_year_by_container_id[container.id].complete_title
-#     for l_component_year in l_container_year.learning_components_full:
-#         application[l_component_year.type] = l_component_year.volume_declared_vacant
 
 
 def _create_application(global_id, application_to_create):
