@@ -232,10 +232,6 @@ class TutorChargeTest(TestCase):
         data_year = self.data[0]
         return data_year.get(key, None)
 
-    def test_sum_learning_unit_year_with_no_duration(self):
-        self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.create_learning_unit_year_without_duration())
-                         , 0)
-
     def test_calculate_percentage_allocation_charge(self):
         self.assertEqual(tutor_charge.calculate_attribution_format_percentage_allocation_charge(
             LEARNING_UNIT_LECTURING_DURATION, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION, LEARNING_UNIT_CHARGE), "75.0")
