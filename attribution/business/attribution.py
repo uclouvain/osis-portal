@@ -135,8 +135,14 @@ def _get_volume_declared_vacant(attribution, l_component_year_list):
 
 
 def _get_is_team(attribution, l_component_year_list):
-    return next((l_component_year.learning_unit_year.learning_container_year.team for l_component_year in l_component_year_list if
-                 l_component_year.learning_unit_year.learning_container_year.acronym == attribution.get('acronym')), False)
+    return next(
+        (
+            l_component_year.learning_unit_year.learning_container_year.team
+            for l_component_year in l_component_year_list if
+            l_component_year.learning_unit_year.learning_container_year.acronym == attribution.get('acronym')
+        ),
+        False
+    )
 
 
 def _append_start_and_end_academic_year(attribution_list):

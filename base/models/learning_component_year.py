@@ -55,4 +55,3 @@ class LearningComponentYear(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.learning_container_year.acronym)
-
