@@ -28,8 +28,10 @@ from collections import OrderedDict
 from django.db import models
 
 from base import models as mdl
+from base.models.entity_component_year import EntityComponentYear
 from base.models.enums import entity_container_year_link_type as entity_types
 from base.models.enums.learning_unit_year_subtypes import FULL
+from base.models.learning_component_year import LearningComponentYear
 from osis_common.utils.numbers import to_float_or_zero
 
 
@@ -57,18 +59,15 @@ def get_with_context(**learning_unit_year_data):
     )
 
     learning_component_prefetch = models.Prefetch(
-        'learningunitcomponent_set',
-        queryset=mdl.learning_unit_component.LearningUnitComponent.objects.all()
-            .order_by('learning_component_year__type', 'learning_component_year__acronym')
-            .select_related('learning_component_year')
-            .prefetch_related(
-            models.Prefetch('learning_component_year__entitycomponentyear_set',
-                            queryset=mdl.entity_component_year.EntityComponentYear.objects.all()
+        'learningcomponentyear_set',
+        queryset=LearningComponentYear.objects.all().order_by('type', 'acronym').prefetch_related(
+            models.Prefetch('entitycomponentyear_set',
+                            queryset=EntityComponentYear.objects.all()
                             .select_related('entity_container_year'),
                             to_attr='entity_components_year'
                             )
         ),
-        to_attr='learning_unit_components'
+        to_attr='learning_components'
     )
 
     learning_units = mdl.learning_unit_year.LearningUnitYear.objects.filter(subtype=FULL, **learning_unit_year_data) \
@@ -96,9 +95,8 @@ def append_latest_entities(learning_unit):
 
 def _append_components(learning_unit):
     learning_unit.components = OrderedDict()
-    if learning_unit.learning_unit_components:
-        for learning_unit_component in learning_unit.learning_unit_components:
-            component = learning_unit_component.learning_component_year
+    if learning_unit.learning_components:
+        for component in learning_unit.learning_components:
             entity_components_year = component.entity_components_year
             requirement_entities_volumes = _get_requirement_entities_volumes(entity_components_year)
             vol_req_entity = requirement_entities_volumes.get(entity_types.REQUIREMENT_ENTITY, 0) or 0
