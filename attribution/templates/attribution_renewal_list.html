@@ -83,7 +83,7 @@
                         </div>
                     </td>
                     <td>{{ attribution.acronym }}</td>
-                    <td>{{ attribution.title }}</td>
+                    <td>{% if attribution.title_next_yr %}{{ attribution.title_next_yr}}{% else %}{{attribution.title}}{% endif %}</td>
                     <td style="border-left: 1px solid;">{{ attribution.lecturing_vol }}</td>
                     <td>{{ attribution.practical_exercises_vol }}</td>
                     <td >{{ attribution.attribution_vacant.LECTURING }}</td>

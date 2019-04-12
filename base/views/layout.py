@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from django import shortcuts
-from random import randint
 
 from osis_common.models import application_notice
 
