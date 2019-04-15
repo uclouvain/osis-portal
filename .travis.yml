@@ -4,17 +4,19 @@ env:
 
 
 language: python
-python: "3.5.2"
+python: "3.5.5"
 services:
   - postgresql
 addons:
-    postgresql: "9.4"
+    postgresql: "9.6"
 
 install:
   - export PROJECT_DIR=`pwd`
   - cd /tmp
   - git clone https://github.com/uclouvain/osis-portal.git
   - cd osis-portal
+  - git checkout qa
+  - git pull origin qa
   - git submodule init
   - git submodule update
   - pip install -r requirements.txt
