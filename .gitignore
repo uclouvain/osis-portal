@@ -4,6 +4,7 @@ venv/
 base/tests/sent_mails/
 *.mo
 
+jsi18n/
 /cover.pdf
 /output.pdf
 /test.pdf
