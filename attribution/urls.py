@@ -79,6 +79,4 @@ urlpatterns = [
     ])),
     url(r'^list/students$', list.students_list, name='students_list'),
     url(r'^list/students/xls', list.list_build, name='students_list_create'),
-
-    url(r'^jsi18n/', javascript_catalog, js_info_dict),
 ]

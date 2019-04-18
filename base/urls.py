@@ -36,8 +36,9 @@ urlpatterns = [
     url(r'^'+settings.ADMIN_URL+'data/maintenance$', administration.data_maintenance, name='data_maintenance'),
     url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
     url(r'^$', main.home, name='home'),
+    # TODO :: to remove shibboleth
     url(
-        r'^country-autocomplete/$',
+        r'^continuing_education/country-autocomplete/$',
         CountryAutocomplete.as_view(),
         name='country-autocomplete',
     ),
