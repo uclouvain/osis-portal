@@ -42,7 +42,8 @@ class LearningComponentYearAdmin(SerializableModelAdmin):
 class LearningComponentYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
-    learning_container_year = models.ForeignKey('LearningContainerYear')
+    learning_container_year = models.ForeignKey('LearningContainerYear', null=True)
+    learning_unit_year = models.ForeignKey('LearningUnitYear', null=True)
     acronym = models.CharField(max_length=4, blank=True, null=True)
     type = models.CharField(max_length=30, choices=learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES,
                             blank=True, null=True, db_index=True)
@@ -54,16 +55,3 @@ class LearningComponentYear(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.learning_container_year.acronym)
-
-
-def search(*args, **kwargs):
-    qs = LearningComponentYear.objects.all()
-
-    if "learning_container_year" in kwargs:
-        if isinstance(kwargs['learning_container_year'], list):
-            qs = qs.filter(learning_container_year__in=kwargs['learning_container_year'])
-        else:
-            qs = qs.filter(learning_container_year=kwargs['learning_container_year'])
-
-    return qs.select_related('learning_container_year')\
-             .order_by('learning_container_year__acronym')

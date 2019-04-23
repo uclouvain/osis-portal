@@ -36,7 +36,6 @@ from base.models.enums import learning_component_year_type, component_type
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
@@ -331,6 +330,7 @@ class AttributionTest(TestCase):
         self.assertEqual(attributions_formalized[0]['LECTURING'], 0.0)
         self.assertEqual(attributions_formalized[0]['PRACTICAL_EXERCISES'], 0.0)
 
+
 def _create_multiple_academic_year():
     for year in range(2000, 2025):
         AcademicYearFactory(year=year)
@@ -343,21 +343,18 @@ def _create_learning_container_with_components(acronym, academic_year, volume_le
                                                    specific_title=l_container.common_title,
                                                    learning_container_year=l_container)
     if volume_lecturing:
-        a_component = LearningComponentYearFactory(
-            learning_container_year=l_container,
+        LearningComponentYearFactory(
+            learning_unit_year=a_learning_unit_year,
             type=learning_component_year_type.LECTURING,
             volume_declared_vacant=volume_lecturing
         )
-        LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year, learning_component_year=a_component,
-                                     type=component_type.LECTURING)
+
     if volume_practical_exercices:
-        a_component = LearningComponentYearFactory(
-            learning_container_year=l_container,
+        LearningComponentYearFactory(
+            learning_unit_year=a_learning_unit_year,
             type=learning_component_year_type.PRACTICAL_EXERCISES,
             volume_declared_vacant=volume_practical_exercices
         )
-        LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year, learning_component_year=a_component,
-                                     type=component_type.PRACTICAL_EXERCISES)
 
 
 def _get_attributions_dict(current_year):
