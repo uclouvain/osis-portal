@@ -30,20 +30,19 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class LearningComponentYearAdmin(SerializableModelAdmin):
-    list_display = ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant', 'planned_classes')
-    fieldsets = ((None, {'fields': ('learning_container_year', 'acronym', 'type', 'volume_declared_vacant',
+    list_display = ('learning_unit_year', 'acronym', 'type', 'volume_declared_vacant', 'planned_classes')
+    fieldsets = ((None, {'fields': ('learning_unit_year', 'acronym', 'type', 'volume_declared_vacant',
                                     'planned_classes', 'hourly_volume_total_annual', 'hourly_volume_partial_q1',
                                     'hourly_volume_partial_q2')}),)
-    search_fields = ['acronym', 'learning_container_year__acronym']
-    raw_id_fields = ('learning_container_year',)
-    list_filter = ('learning_container_year__academic_year',)
+    search_fields = ['acronym', 'learning_unit_year__acronym']
+    raw_id_fields = ('learning_unit_year',)
+    list_filter = ('learning_unit_year__academic_year',)
 
 
 class LearningComponentYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
-    learning_container_year = models.ForeignKey('LearningContainerYear', null=True)
-    learning_unit_year = models.ForeignKey('LearningUnitYear', null=True)
+    learning_unit_year = models.ForeignKey('LearningUnitYear')
     acronym = models.CharField(max_length=4, blank=True, null=True)
     type = models.CharField(max_length=30, choices=learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES,
                             blank=True, null=True, db_index=True)
@@ -54,4 +53,4 @@ class LearningComponentYear(SerializableModel):
     volume_declared_vacant = models.DecimalField(max_digits=6, decimal_places=1, blank=True, null=True)
 
     def __str__(self):
-        return u"%s - %s" % (self.acronym, self.learning_container_year.acronym)
+        return u"%s - %s" % (self.acronym, self.learning_unit_year.acronym)
