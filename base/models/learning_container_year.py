@@ -71,6 +71,7 @@ def find_by_acronym(acronym, academic_year=None):
     return qs.select_related('academic_year')
 
 
+# TODO :: remove this function and use querysets in Class based views
 def search(*args, **kwargs):
     qs = LearningContainerYear.objects.all()
 

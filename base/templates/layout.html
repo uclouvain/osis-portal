@@ -1,6 +1,6 @@
 <!doctype html>
 {% load staticfiles i18n %}
-{% load analytical hijack_tags %}
+ {% load statici18n analytical hijack_tags %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -42,8 +42,8 @@
     <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}?version={{ js }}">
-    <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}?version={{ js }}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'hijack/hijack-styles.css' %}"/>
 
@@ -135,7 +135,7 @@
     {% endif %}
     {% if subject %}
         <div class="container">
-            <div class="alert alert-warning" role="alert"><b>{{ subject }}</b><br>{{ notice }}</div>
+            <div class="alert alert-warning" role="alert"><b>{{ subject }}</b><br>{{ notice|safe }}</div>
         </div>
     {% endif %}
     <div class="container">
@@ -171,7 +171,7 @@
     <script src="{% static 'js/osis-portal.js' %}"></script>
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
-    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+     <script src="{% statici18n LANGUAGE_CODE %}"></script>
     <script type="text/javascript" src="{% static "js/modal_form_submit.js" %}"></script>
     {% block script %}
         <script type="text/javascript">

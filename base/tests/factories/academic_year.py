@@ -30,30 +30,6 @@ import factory.fuzzy
 from django.utils import timezone
 
 
-class AcademicYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.AcademicYear"
-
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
-    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))
-
-
-def create_current_academic_year():
-    now = datetime.datetime.now()
-    ref_date = datetime.datetime(now.year, 9, 15)
-    if now < ref_date:
-        start_date = datetime.date(now.year - 1, 9, 15)
-    else:
-        start_date = datetime.date(now.year, 9, 15)
-
-    return AcademicYearFactory(
-        year=start_date.year,
-        start_date=start_date,
-        end_date=datetime.date(start_date.year + 1, start_date.month, 30)
-    )
-
 def get_current_year():
     now = datetime.datetime.now()
     ref_date = datetime.datetime(now.year, 9, 15)
@@ -62,3 +38,23 @@ def get_current_year():
     else:
         start_date = datetime.date(now.year, 9, 15)
     return start_date.year
+
+
+class AcademicYearFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.AcademicYear"
+        django_get_or_create = ('year',)
+
+    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
+    start_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year, 9, 15))
+    end_date = factory.LazyAttribute(lambda obj: datetime.date(obj.year+1, 9, 30))
+
+    class Params:
+        current = factory.Trait(
+            year=get_current_year()
+        )
+
+
+def create_current_academic_year():
+    return AcademicYearFactory(year=get_current_year())

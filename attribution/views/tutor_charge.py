@@ -93,14 +93,6 @@ def get_person(a_user):
     return mdl_base.person.find_by_user(a_user)
 
 
-def sum_learning_unit_year_duration(a_learning_unit_year):
-    tot_duration = DURATION_NUL
-    for learning_unit_component in mdl_base.learning_unit_component.search(a_learning_unit_year, None):
-        if learning_unit_component.duration:
-            tot_duration += learning_unit_component.duration
-    return tot_duration
-
-
 def get_email_students(an_acronym, year):
     if string_utils.is_string_not_null_empty(an_acronym):
         if year >= YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST:
