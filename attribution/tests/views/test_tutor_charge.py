@@ -34,11 +34,9 @@ from django.core.urlresolvers import reverse
 from django.forms.formsets import BaseFormSet
 
 from attribution.views import tutor_charge
-from base.models.enums import component_type
 from attribution.models.enums import function
 from performance.tests.models import test_student_performance
-from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year, \
-    test_learning_unit_component
+from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -153,9 +151,6 @@ def mock_request_multiple_attributions_charge_with_missing_values(*args, **kwarg
 class TutorChargeTest(TestCase):
 
     def setUp(self):
-        self.init_data()
-
-    def init_data(self):
         self.create_tutor()
         self.data = []
         self.data.append(self.create_lu_yr_annual_data(CURRENT_YEAR))
@@ -175,13 +170,6 @@ class TutorChargeTest(TestCase):
         })
         a_learning_unit_year.learning_container_year = a_container_year
         a_learning_unit_year.save()
-        a_learning_unit_component_lecture = self.create_learning_unit_component(component_type.LECTURING,
-                                                                                LEARNING_UNIT_LECTURING_DURATION,
-                                                                                a_learning_unit_year)
-        a_learning_unit_component_practice = \
-            self.create_learning_unit_component(component_type.PRACTICAL_EXERCISES,
-                                                LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION,
-                                                a_learning_unit_year)
         an_attribution = AttributionFactory(function=function.CO_HOLDER,
                                             learning_unit_year=a_learning_unit_year,
                                             tutor=self.a_tutor,
@@ -189,8 +177,6 @@ class TutorChargeTest(TestCase):
 
         return {'academic_year':                   an_academic_yr,
                 'learning_unit_year':               a_learning_unit_year,
-                'learning_unit_component_lecture':  a_learning_unit_component_lecture,
-                'learning_unit_component_practice': a_learning_unit_component_practice,
                 'attribution':                      an_attribution}
 
     def create_tutor(self):
@@ -199,27 +185,8 @@ class TutorChargeTest(TestCase):
         Group.objects.get_or_create(name='tutors')
         self.a_tutor = test_tutor.create_tutor_with_person(self.a_person)
 
-    def create_learning_unit_component(self, a_component_type, duration, a_learning_unit_year):
-        return test_learning_unit_component.create_learning_unit_component({
-            'learning_unit_year': a_learning_unit_year,
-            'type': a_component_type,
-            'duration': duration})
-
     def create_user(self, username, email, password):
         return User.objects.create_user(username, email, password)
-
-    def calculate_formatted_percentage(self):
-        tot_allocation_charge = ATTRIBUTION_CHARGE_LECTURING_DURATION + ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION
-        tot_learning_unit_duration = LEARNING_UNIT_LECTURING_DURATION + LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION
-        percentange_expected = tot_allocation_charge * 100 / tot_learning_unit_duration
-        return tutor_charge.ONE_DECIMAL_FORMAT % (percentange_expected,)
-
-    def create_learning_unit_year_without_duration(self):
-        a_learning_unit_year_without_duration = test_learning_unit_year.create_learning_unit_year({
-            'acronym': ACRONYM,
-            'specific_title': TITLE,
-            'academic_year': test_academic_year.create_academic_year_with_year(2016)})
-        return a_learning_unit_year_without_duration
 
     def test_get_person_from_user(self):
         self.assertEqual(tutor_charge.get_person(self.a_user), self.a_person)
@@ -231,10 +198,6 @@ class TutorChargeTest(TestCase):
     def get_data(self, key):
         data_year = self.data[0]
         return data_year.get(key, None)
-
-    def test_sum_learning_unit_year_with_no_duration(self):
-        self.assertEqual(tutor_charge.sum_learning_unit_year_duration(self.create_learning_unit_year_without_duration())
-                         , 0)
 
     def test_calculate_percentage_allocation_charge(self):
         self.assertEqual(tutor_charge.calculate_attribution_format_percentage_allocation_charge(

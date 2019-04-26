@@ -26,11 +26,10 @@
 import datetime
 import operator
 
-import factory
 import factory.fuzzy
 
 from base.models.enums import learning_component_year_type
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from osis_common.utils.datetime import get_tzinfo
 
 
@@ -41,7 +40,7 @@ class LearningComponentYearFactory(factory.django.DjangoModelFactory):
     external_id = factory.Sequence(lambda n: '10000000%02d' % n)
     changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
                                           datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
-    learning_container_year = factory.SubFactory(LearningContainerYearFactory)
+    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
     acronym = factory.Sequence(lambda n: 'A%d' % n)
     type = factory.Iterator(learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES, getter=operator.itemgetter(0))
     volume_declared_vacant = factory.fuzzy.FuzzyDecimal(0, 50, precision=1)
