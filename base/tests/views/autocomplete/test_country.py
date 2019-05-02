@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,14 +23,31 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
+from unittest import mock
 
-from base.tests.factories.learning_unit_year import LearningUnitComponentFactory
-from attribution.tests.factories.tutor_application import TutorApplicationFactory
+from django.http import HttpResponse
+from django.test import TestCase, RequestFactory
+from django.urls import reverse
+
+from base.tests.factories.academic_year import AcademicYearFactory
 
 
-class ApplicationChargeFactory(factory.DjangoModelFactory):
-    tutor_application = factory.SubFactory(TutorApplicationFactory)
-    learning_unit_component = factory.SubFactory(LearningUnitComponentFactory)
-    allocation_charge = factory.fuzzy.FuzzyDecimal(9)
+class TestCountryAutocomplete(TestCase):
+
+    def setUp(self):
+        self.url = reverse("country-autocomplete")
+        self.request = RequestFactory()
+        AcademicYearFactory(current=True)
+
+    @mock.patch('requests.get')
+    def test_when_filter(self, mock_get):
+        mock_response = HttpResponse()
+        mock_response.json = lambda *args, **kwargs: {"results": [{"iso_code": "ABCD", "name": "Narnia"}]}
+        mock_get.return_value = mock_response
+        response = self.client.get(self.url, data={'q': 'nar'})
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_results = [{'id': 'ABCD', 'text': 'Narnia'}]
+
+        self.assertListEqual(response.json()['results'], expected_results)

@@ -231,7 +231,11 @@ class ListBuildTest(TestCase):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
-        a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
+        a_learning_container_year = LearningContainerYearFactory(academic_year=an_academic_year)
+        a_learning_unit_year = LearningUnitYearFactory(
+            academic_year=an_academic_year,
+            learning_container_year=a_learning_container_year
+        )
         AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
 
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)

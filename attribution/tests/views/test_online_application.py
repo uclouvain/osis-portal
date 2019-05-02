@@ -36,21 +36,20 @@ from attribution.utils import tutor_application_epc
 from base.models.enums import academic_calendar_type
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
+from base.models.learning_container_year import LearningContainerYear
 from base.tests.factories.academic_calendar import AcademicCalendarFactory
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.learning_unit_component import LearningUnitComponentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.user import UserFactory
-from base.models.enums import component_type, learning_unit_year_subtypes
+from base.models.enums import learning_unit_year_subtypes
 from base.tests.factories.entity import EntityFactory
 from base.tests.factories.entity_version import EntityVersionFactory
 from base.tests.factories.entity_container_year import EntityContainerYearFactory
 from base.models.enums import entity_container_year_link_type as entity_types
-from base.models.learning_unit_year import LearningUnitYear
 
 
 class TestOnlineApplication(TestCase):
@@ -72,7 +71,10 @@ class TestOnlineApplication(TestCase):
 
         # Create application year
         # Application is always next year
-        self.application_academic_year = AcademicYearFactory(year=self.current_academic_year.year + 1)
+        self.application_academic_year = AcademicYearFactory(
+
+            year=self.current_academic_year.year + 1
+        )
 
         # Create Event to allow teacher to register
         start_date = datetime.datetime.today() - datetime.timedelta(days=10)
@@ -102,7 +104,6 @@ class TestOnlineApplication(TestCase):
             applications=self._get_default_application_list(),
             attributions=self._get_default_attribution_list()
         )
-
 
     def test_redirection_to_outside_encoding_period(self):
         # Remove teaching charge application event
@@ -180,7 +181,6 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 200)
         context = response.context[-1]
         self.assertEqual(len(context['attributions_vacant']), 2)
-
 
     def test_search_vacant_attribution_with_declaration_vac_not_allowed(self):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
@@ -398,21 +398,17 @@ def _link_components_and_learning_unit_year_to_container(l_container, acronym,
                                                    specific_title=l_container.common_title, subtype=subtype,
                                                    learning_container_year=l_container)
     if volume_lecturing:
-        a_component = LearningComponentYearFactory(
-            learning_container_year=l_container,
+        LearningComponentYearFactory(
+            learning_unit_year=a_learning_unit_year,
             type=learning_component_year_type.LECTURING,
             volume_declared_vacant=volume_lecturing
         )
-        LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year, learning_component_year=a_component,
-                                     type=component_type.LECTURING)
     if volume_practical_exercices:
-        a_component = LearningComponentYearFactory(
-            learning_container_year=l_container,
+        LearningComponentYearFactory(
+            learning_unit_year=a_learning_unit_year,
             type=learning_component_year_type.PRACTICAL_EXERCISES,
             volume_declared_vacant=volume_practical_exercices
         )
-        LearningUnitComponentFactory(learning_unit_year=a_learning_unit_year, learning_component_year=a_component,
-                                     type=component_type.PRACTICAL_EXERCISES)
     return l_container
 
 

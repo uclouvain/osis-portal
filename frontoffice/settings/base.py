@@ -171,6 +171,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'base.views.common.common_context_processor',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -234,6 +235,7 @@ USE_TZ = os.environ.get('USE_TZ', 'True').lower() == 'true'
 # Static files (CSS, JavaScript, Images) and Media
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_URL = os.environ.get('STATIC_URL', '/static/')
+STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'base/static'))
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, "uploads"))
 MEDIA_URL = os.environ.get('MEDIA_URL',  '/media/')
 CONTENT_TYPES = ['application/csv', 'application/doc', 'application/pdf', 'application/xls', 'application/xml',
@@ -262,6 +264,10 @@ EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, "base
 EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 25))
 SEND_BROKEN_LINK_EMAILS = os.environ.get('SEND_BROKEN_LINK_EMAILS', 'True').lower() == 'true'
+MAIL_SENDER_CLASSES = os.environ.get(
+    'MAIL_SENDER_CLASSES',
+    'osis_common.messaging.mail_sender_classes.MessageHistorySender'
+).split()
 
 
 # Authentication settings
@@ -384,4 +390,19 @@ URL_CONTINUING_EDUCATION_FILE_API = os.environ.get(
     ""
 )
 
+URL_COUNTRY_API = os.environ.get(
+    "URL_COUNTRY_API",
+    ""
+)
+
+URL_TRAINING_API = os.environ.get(
+    "URL_TRAINING_API",
+    ""
+)
+
 OSIS_PORTAL_TOKEN = os.environ.get("OSIS_PORTAL_TOKEN", "")
+
+URL_AUTH_API = os.environ.get(
+    "URL_AUTH_API",
+    ""
+)

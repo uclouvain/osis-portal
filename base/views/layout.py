@@ -24,12 +24,8 @@
 #
 ##############################################################################
 from django import shortcuts
-from random import randint
 
 from osis_common.models import application_notice
-
-
-FORCE_CACHE_RENEW = randint(0, 1000)  # Aims to force the client to re-download the cache after each deployment
 
 
 def _check_notice(request, values):
@@ -48,5 +44,4 @@ def render(request, template, values=None):
     if not values:
         values = {}
     _check_notice(request, values)
-    values['js'] = FORCE_CACHE_RENEW
     return shortcuts.render(request, template, values)

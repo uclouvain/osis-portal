@@ -23,26 +23,35 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-import operator
+from unittest import mock
 
-import factory.fuzzy
+from django.http import HttpResponse
+from django.test import TestCase, RequestFactory
+from django.urls import reverse
 
-from base.models.enums import learning_component_year_type
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from osis_common.utils.datetime import get_tzinfo
-
-
-class LearningComponentYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.LearningComponentYear"
-
-    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
-    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
-                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
-    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
-    acronym = factory.Sequence(lambda n: 'A%d' % n)
-    type = factory.Iterator(learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES, getter=operator.itemgetter(0))
-    volume_declared_vacant = factory.fuzzy.FuzzyDecimal(0, 50, precision=1)
+from base.tests.factories.academic_year import AcademicYearFactory
 
 
+class TestTrainingAutocomplete(TestCase):
+
+    def setUp(self):
+        self.url = reverse("training-autocomplete")
+        self.request = RequestFactory()
+        AcademicYearFactory(current=True)
+
+    @mock.patch('requests.get')
+    def test_when_filter(self, mock_get):
+        mock_response = HttpResponse()
+        mock_response.json = lambda *args, **kwargs: {"results": [{
+            "uuid": "ABCD",
+            "acronym": "TEST",
+            "academic_year": "2019"
+        }]}
+        mock_get.return_value = mock_response
+        response = self.client.get(self.url, data={'q': 'tes'})
+
+        self.assertEqual(response.status_code, 200)
+
+        expected_results = [{'id': 'ABCD', 'text': 'TEST - 2019'}]
+
+        self.assertListEqual(response.json()['results'], expected_results)

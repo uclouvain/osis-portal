@@ -32,7 +32,6 @@ from base.models import entity_component_year
 from base.models import entity_version
 from base.models import external_offer
 from base.models import learning_unit
-from base.models import learning_unit_component
 from base.models import learning_unit_enrollment
 from base.models import learning_container
 from base.models import learning_container_year
