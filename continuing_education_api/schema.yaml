@@ -1,0 +1,292 @@
+openapi: 3.0.0
+info:
+  version: "0.1"
+  title: Continuing Education API
+  description: 'This API delivers data for the Continuing Education project.'
+  contact:
+    name: 'UCLouvain - OSIS'
+    url: https://github.com/uclouvain/osis
+
+servers:
+  - url: https://{environment}.osis.uclouvain.be/api/v1/continuing_education/
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev # Development server
+          - qa # Staging server
+          - test # Test server
+  - url: https://osis.uclouvain.be/api/v1/continuing_education/
+    description: Production server
+
+paths:
+  /admissions:
+    post:
+      description: Create a new admission.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdmissionPostPutPatch'
+      responses:
+        201:
+          description: Successful creation of a new admission
+
+  /admissions/{uuid}:
+    get:
+      description: Obtain information about a specific admission
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          description: The UUID of the admission
+          schema:
+            $ref: '#/components/schemas/Uuid'
+      responses:
+        200:
+          description: Successful get of an admission's data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdmissionGet'
+    put:
+      description: Edit an existing admission
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          description: The UUID of the admission
+          schema:
+            $ref: '#/components/schemas/Uuid'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdmissionPostPutPatch'
+      responses:
+        200:
+          description: Successful edit of an admission's data.
+
+    patch:
+      description: Edit a part of an existing admission
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          description: The UUID of the admission
+          schema:
+            $ref: '#/components/schemas/Uuid'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdmissionPostPutPatch'
+      responses:
+        200:
+          description: Successful edit of an admission's data.
+    
+    delete:
+      description: Delete an existing admission
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          description: The UUID of the admission
+          schema:
+            $ref: '#/components/schemas/Uuid'
+      responses:
+        204:
+          description: Successful delete of an admission.
+  
+  /persons/details:
+    get:
+      description: Obtain uuid of the connected person (participant)
+      responses:
+        200:
+          description: Successful get of the connected person's uuid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    $ref: '#/components/schemas/Uuid'
+
+components: 
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Enter your token in the format **Token &lt;token>**
+  schemas:
+    AdmissionGet:
+      allOf:
+        - $ref: '#/components/schemas/PersonGet'
+        - $ref: '#/components/schemas/AddressGet'
+        - type: object
+          properties:
+              birth_date:
+                type: string
+                example: "2000-01-01"
+              birth_location:
+                type: string
+                example: Brussels
+              birth_country:
+                $ref: '#/components/schemas/CountryName'
+              citizenship:
+                $ref: '#/components/schemas/CountryName'
+              formation:
+                $ref: '#/components/schemas/FormationBasicGet'
+              admission_email:
+                type: string
+                example: "jane_doe@personnalprovider.com"
+              state:
+                $ref: '#/components/schemas/StateEnum'
+              phone_mobile:
+                type: string
+                example: "000/00.00.00."
+              high_school_diploma:
+                type: boolean
+              high_school_graduation_year:
+                type: integer
+                example: 2009
+              last_degree_level:
+                type: string
+              last_degree_field:
+                type: string
+              last_degree_institution:
+                type: string
+              last_degree_graduation_year:
+                type: integer
+                example: 2019
+              other_educational_background:
+                type: string
+              professional_status:
+                type: string
+              current_occupation:
+                type: string
+              current_employer:
+                type: string
+              activity_sector:
+                type: string
+              past_professional_activities:
+                type: string
+              motivation:
+                type: string
+              professional_impact:
+                type: string
+              awareness_ucl_website:
+                type: boolean
+              awareness_formation_website:
+                type: boolean
+              awareness_press:
+                type: boolean
+              awareness_facebook:
+                type: boolean
+              awareness_linkedin:
+                type: boolean
+              awareness_customized_mail:
+                type: boolean
+              awareness_emailing:
+                type: boolean
+              awareness_other:
+                type: string
+    
+    AdmissionPostPutPatch:
+      allOf:
+        - $ref: '#/components/schemas/AdmissionGet'
+        - $ref: '#/components/schemas/AdressPostPutPatch'
+        - type: object
+          properties:
+              birth_country:
+                $ref: '#/components/schemas/CountryIsoCode'
+              citizenship:
+                $ref: '#/components/schemas/CountryIsoCode'
+              formation:
+                $ref: '#/components/schemas/Uuid'    
+    AddressGet:
+      type: object
+      properties:
+        location:
+          type: string
+          example: "Rue du Compas, 1"
+        postal_code:
+          type: string
+          example: "1348"
+        city:
+          type: string
+          example: Louvain-la-Neuve
+        country:
+          $ref: '#/components/schemas/CountryName'
+    
+    AdressPostPutPatch:
+      allOf:
+        - $ref: '#/components/schemas/AddressGet'
+        - type: object
+          properties:
+              country:
+                $ref: '#/components/schemas/CountryIsoCode'
+          
+    PersonGet:
+      allOf:
+        - $ref: '#/components/schemas/PersonBasic'
+        - type: object
+          properties:
+            gender:
+              type: string
+              enum: [F, M, U]
+    
+    PersonBasic:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Jane
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          format: email
+          example: jane.doe@provider.com
+    
+    FormationBasicGet:
+      type: object
+      properties:
+        acronym:
+          type: string
+          example: DROI2M
+        title_fr:
+          type: string
+          example : "Master en Droit"
+    
+    CountryName:
+      type: string
+      example: Belgium
+    
+    CountryIsoCode:
+      type: string
+      example: BE
+    
+    Uuid:
+      type: string
+      format: uuid
+      example: "abcd-efgh-ijkl-mnop-1234-5678"
+      
+    StateEnum:
+      type: string
+      enum:
+        - Accepted 
+        - Rejected 
+        - Waiting 
+        - Draft 
+        - Submitted 
+        - Registration submitted 
+        - Validated 
+
+security:
+  - Token: []
