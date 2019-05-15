@@ -26,6 +26,8 @@
 from base.models.enums import learning_component_year_type
 from django.db import models
 
+from base.models.enums.entity_container_year_link_type import REQUIREMENT_ENTITY, ADDITIONAL_REQUIREMENT_ENTITY_1, \
+    ADDITIONAL_REQUIREMENT_ENTITY_2
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
@@ -66,3 +68,14 @@ class LearningComponentYear(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.learning_unit_year.acronym)
+
+    @property
+    def repartition_volumes(self):
+        # TODO:: add unit tests
+        default_value = 0.0
+        return {
+            REQUIREMENT_ENTITY: float(self.repartition_volume_requirement_entity or default_value),
+            ADDITIONAL_REQUIREMENT_ENTITY_1: float(self.repartition_volume_additional_entity_1 or default_value),
+            ADDITIONAL_REQUIREMENT_ENTITY_2: float(self.repartition_volume_additional_entity_2 or default_value),
+        }
+
