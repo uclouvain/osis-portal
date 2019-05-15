@@ -71,7 +71,6 @@ class LearningComponentYear(SerializableModel):
 
     @property
     def repartition_volumes(self):
-        # TODO:: add unit tests
         default_value = 0.0
         return {
             REQUIREMENT_ENTITY: float(self.repartition_volume_requirement_entity or default_value),
