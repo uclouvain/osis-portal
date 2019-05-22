@@ -18,8 +18,6 @@ install:
   - git submodule init
   - git submodule update
   - pip install -r requirements.txt
-  - rm -Rf internship
-  - ln -s $PROJECT_DIR internship
 
 before_script:
   - cp .env.example .env
@@ -33,9 +31,9 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - python3 manage.py compilemessages && coverage run manage.py test --exclude-tag=selenium
+  - python3 manage.py compilemessages && coverage run manage.py test internship --exclude-tag=selenium
 
 after_script:
-  - coverage xml
+  - coverage xml --include='internship/*'
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
