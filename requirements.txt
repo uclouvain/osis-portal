@@ -18,6 +18,6 @@ django-dotenv==1.4.1
 unicodecsv==0.14.1
 requests==2.19.1
 openpyxl==2.4.9
-coverage==4.4
+coverage==4.5.3
 
 -r ./osis_common/requirements.txt
