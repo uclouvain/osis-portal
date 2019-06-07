@@ -365,7 +365,8 @@ def _get_learning_components(academic_year, acronym_filter, faculty):
         )
 
         learning_components = LearningComponentYear.objects \
-            .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs)\
+            .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs) \
+            .order_by('learning_unit_year__acronym')\
             .select_related('learning_unit_year__learning_container_year')\
             .exclude(volume_declared_vacant__isnull=True)
     return learning_components
@@ -389,4 +390,5 @@ def _get_learning_components_by_faculty(academic_year, acronym_filter, faculty):
     return LearningComponentYear.objects \
         .filter(learning_unit_year_id__in=learning_unit_years_ids)\
         .select_related('learning_unit_year__learning_container_year')\
-        .exclude(volume_declared_vacant__isnull=True)
+        .exclude(volume_declared_vacant__isnull=True)\
+        .order_by('learning_unit_year__acronym')\
