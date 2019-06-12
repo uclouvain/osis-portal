@@ -31,7 +31,7 @@ from django.shortcuts import redirect
 from django.utils import translation
 from base.views import layout
 from base.models import person as person_mdl
-
+from osis_common.models import application_notice
 
 def return_error_response(request, template, status_code):
     response = layout.render(request, template, {})
@@ -56,7 +56,34 @@ def common_context_processor(request):
         env = settings.ENVIRONMENT
     else:
         env = 'DEV'
-    return {'environment': env, 'installed_apps': settings.INSTALLED_APPS, 'debug': settings.DEBUG, 'logout_button': settings.LOGOUT_BUTTON}
+    context = {'environment': env,
+               'installed_apps': settings.INSTALLED_APPS,
+               'debug': settings.DEBUG,
+               'logout_button': settings.LOGOUT_BUTTON}
+    _check_notice(request, context)
+    _check_faculty_manager(request, context)
+    return context
+
+
+def _check_notice(request, context):
+    if 'subject' not in request.session and 'notice' not in request.session:
+        notice = application_notice.find_current_notice()
+        if notice:
+            request.session.set_expiry(3600)
+            request.session['subject'] = notice.subject
+            request.session['notice'] = notice.notice
+    if 'subject' in request.session and 'notice' in request.session:
+        context['subject'] = request.session['subject']
+        context['notice'] = request.session['notice']
+
+
+def _check_faculty_manager(request, context):
+    is_faculty_manager = False
+    if request.user.is_authenticated:
+        person = person_mdl.find_by_user(request.user)
+        if person.managed_programs:
+            is_faculty_manager = True
+    context['is_faculty_manager'] = is_faculty_manager
 
 
 def login(request):
@@ -85,4 +112,3 @@ def log_out(request):
 
 def logged_out(request):
     return layout.render(request, 'logged_out.html', {})
-
