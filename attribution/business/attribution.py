@@ -36,9 +36,10 @@ from base.business import learning_unit_year_with_context
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
 from base.models.enums import entity_container_year_link_type as entity_types
-from django.db.models import OuterRef, Subquery, Exists, Prefetch
+from django.db.models import OuterRef, Subquery
 from base.business.entity import get_entities_ids
 from base.models.learning_component_year import LearningComponentYear
+from collections import OrderedDict
 
 NO_CHARGE = 0.0
 
@@ -72,7 +73,7 @@ def get_volumes_total(attribution_list):
 
 
 def get_attribution_vacant_list(acronym_filter, academic_year, faculty=None):
-    attribution_vacant = {}
+    attribution_vacant = OrderedDict()
 
     learning_components = _get_learning_components(
         academic_year,
