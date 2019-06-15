@@ -99,33 +99,6 @@ class LoggedOutTest(TestCase):
         self.assertTemplateUsed(response, 'logged_out.html')
 
 
-class CommonContextProcessorTest(TestCase):
-    @override_settings(ENVIRONMENT='env')
-    def test_with_defined_environment(self):
-        return_value = common_context_processor(None)
-        expected = {
-            'environment': 'env',
-            'installed_apps': settings.INSTALLED_APPS,
-            'debug': settings.DEBUG,
-            'logout_button': settings.LOGOUT_BUTTON
-        }
-
-        self.assertDictEqual(return_value, expected)
-
-    @override_settings()
-    def test_with_no_defined_environment(self):
-        del settings.ENVIRONMENT
-        return_value = common_context_processor(None)
-        expected = {
-            'environment': 'DEV',
-            'installed_apps': settings.INSTALLED_APPS,
-            'debug': settings.DEBUG,
-            'logout_button': settings.LOGOUT_BUTTON
-        }
-
-        self.assertDictEqual(return_value, expected)
-
-
 
 
 

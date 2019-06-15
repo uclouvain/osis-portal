@@ -88,7 +88,7 @@ msgstr ""
 #, fuzzy
 #| msgid "faculty_administration"
 msgid "Performance administration"
-msgstr "Gestion performance"
+msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
 #: templates/tutor_dashboard.html:8
 msgid "Scores encoding"

@@ -31,13 +31,12 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext as _
 
-from base.models import student, person, offer_enrollment
+from base.models import student, offer_enrollment
 from performance import models as mdl_performance
 from base.forms.base_forms import RegistrationIdForm
 from base.views import layout
 from performance.models.enums import offer_registration_state
 from dashboard.views import main as dash_main_view
-from base.views import api
 
 # Students Views
 
@@ -142,18 +141,18 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
 # Admins Views
 
 @login_required
-@permission_required('base.is_faculty_manager', raise_exception=True)
 def select_student(request):
     """
     View to select a student to visualize his/her results.
     !!! Should only be accessible for staff having the rights.
     """
+    if not can_access_performance_administration(request):
+        raise PermissionDenied
     if request.method == "POST":
         form = RegistrationIdForm(request.POST)
         if form.is_valid():
             registration_id = form.cleaned_data['registration_id']
-            if not request.user.has_perm('base.is_faculty_administrator') \
-                    and not can_access_student_performance(request, registration_id):
+            if not can_access_student_performance(request, registration_id):
                 raise PermissionDenied
             return redirect(visualize_student_programs, registration_id=registration_id)
     else:
@@ -162,14 +161,13 @@ def select_student(request):
 
 
 @login_required
-@permission_required('base.is_faculty_manager', raise_exception=True)
 def visualize_student_programs(request, registration_id):
     """
     View to visualize a particular student list of academic programs.
     !!! Should only be accessible for staff having the rights.
     """
-    if not request.user.has_perm('base.is_faculty_administrator') \
-            and not can_access_student_performance(request, registration_id):
+    if not can_access_performance_administration(request) or \
+            not can_access_student_performance(request, registration_id):
         raise PermissionDenied
     stud = student.find_by_registration_id(registration_id)
     list_student_programs = None
@@ -183,15 +181,15 @@ def visualize_student_programs(request, registration_id):
 
 
 @login_required
-@permission_required('base.is_faculty_manager', raise_exception=True)
 def visualize_student_result(request, pk):
     """
     View to visualize a particular student program courses result.
     !!! Should only be accessible for staff having the rights.
     """
+    if not can_access_performance_administration(request):
+        raise PermissionDenied
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
-    if not request.user.has_perm('base.is_faculty_administrator') \
-            and not can_access_student_performance(request, stud_perf.registration_id):
+    if stud_perf and not can_access_student_performance(request, stud_perf.registration_id, stud_perf):
         raise PermissionDenied
     perf_data = __get_performance_data(stud_perf)
     return layout.render(request,
@@ -232,12 +230,26 @@ def check_right_access(student_performance, student):
     return student_performance and student and student_performance.registration_id == student.registration_id
 
 
-def can_access_student_performance(request, registration_id):
-    stud = student.find_by_registration_id(registration_id)
-    if stud:
-        student_offer_years = offer_enrollment.find_by_student(stud)
-        user_managed_programs = api.get_managed_programs(request)
-        for offer_year in student_offer_years:
-            if offer_year in user_managed_programs:
-                return True
+def can_access_performance_administration(request):
+    is_fac_admin = request.user.has_perm('base.is_faculty_administrator')
+    is_fac_manager = request.session.get('is_faculty_manager')
+    return is_fac_admin or is_fac_manager
+
+
+def can_access_student_performance(request, registration_id=None, stud_perf=None):
+    if request.user.has_perm('base.is_faculty_administrator'):
+        return True
+    elif registration_id:
+        user_managed_programs_in_session = request.session.get('managed_programs')
+        if user_managed_programs_in_session:
+            user_managed_programs = json.loads(user_managed_programs_in_session)
+            if stud_perf:
+                return stud_perf.acronym in user_managed_programs.get(str(stud_perf.academic_year), [])
+            else:
+                stud = student.find_by_registration_id(registration_id)
+                if stud:
+                    for stud_offer_enrollment in offer_enrollment.find_by_student(stud):
+                        if stud_offer_enrollment.offer_year.acronym in user_managed_programs.get(
+                                str(stud_offer_enrollment.offer_year.academic_year.year), []):
+                            return True
     return False

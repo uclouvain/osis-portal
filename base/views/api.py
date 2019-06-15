@@ -24,16 +24,18 @@
 #
 ##############################################################################
 import io
+import logging
+import traceback
 
 import requests
 from django.conf import settings
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
-from base.models import offer_year as mdl_offeryear
 
 REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
 API_URL = settings.URL_API_BASE_PERSON_ROLES
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def get_user_roles(global_id):
@@ -48,13 +50,20 @@ def get_user_roles(global_id):
     return transform_response_to_data(response)
 
 
-def get_managed_programs(global_id):
-    programs = set()
-    user_roles = get_user_roles(global_id)
-    for role in user_roles:
-        program = mdl_offeryear.find_by_acronym_and_year(role['program_manager']['acronym'],
-                                                         role['program_manager']['year'])
-        programs.add(program)
+def get_managed_programs_as_dict(global_id):
+    programs = dict()
+    try:
+        user_roles = get_user_roles(global_id).get('roles')
+        if user_roles and user_roles.get('program_manager'):
+            for program in user_roles.get('program_manager').get('scope'):
+                acronym = program.get('acronym')
+                year = program.get('year')
+                if programs.get(year):
+                    programs.get(year).append(acronym)
+                else:
+                    programs[year] = [acronym]
+    except Exception:
+        logger.error("Erreur  appel API")
     return programs
 
 

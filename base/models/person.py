@@ -27,11 +27,9 @@ import logging
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from base.views.api import get_managed_programs
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -81,10 +79,6 @@ class Person(SerializableModel):
             last_name = self.last_name + ","
 
         return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
-
-    @cached_property
-    def managed_programs(self):
-        return get_managed_programs(self.global_id)
 
     class Meta:
         permissions = (
