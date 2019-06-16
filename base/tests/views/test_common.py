@@ -236,12 +236,9 @@ class CommonContextProcessorTest(TestCase):
         self.client.force_login(self.user)
         self.response = self.client.get(self.url)
         self.request = self.response.wsgi_request
-        self.session = self.client.session
-        self.maxDiff = None
 
     @override_settings(ENVIRONMENT='env')
     def test_with_defined_environment(self):
-        self.client.get(self.url)
         return_value = common_context_processor(self.request)
         expected = {
             'environment': 'env',
@@ -255,7 +252,6 @@ class CommonContextProcessorTest(TestCase):
 
     @override_settings()
     def test_with_no_defined_environment(self):
-        self.client.get(self.url)
         del settings.ENVIRONMENT
         return_value = common_context_processor(self.request)
         expected = {
