@@ -85,16 +85,16 @@ def _set_managed_programs(request, context):
     1. Preconditions : user is authenticated and user is not a student.
     2. Check if the session key 'is_faculty_manager' is defined
         2.1. If yes, Context 'is_faculty_manager' is updated with value of Session 'is_faculty_manager'
-        2.2. In not :
+        2.2. If not :
             2.2.1: The managed programs are retrieved from osis with call to the api
             2.2.2: If the managed programs exists :
                 2.2.2.1: Context 'is_faculty_manager' value is set to True
                 2.2.2.2: Session 'is_faculty_manager'  value is set to True
-                2.2.2.1: Session 'managed_programs' value is set with the results of the api call
+                2.2.2.3: Session 'managed_programs' value is set with the results of the api call
             2.2.3: If not:
-                2.2.2.1: Context 'is_faculty_manager' value is set to False
-                2.2.2.2: Session 'is_faculty_manager'  value is set to False
-                2.2.2.1: Session 'managed_programs' value is set to None
+                2.2.3.1: Context 'is_faculty_manager' value is set to False
+                2.2.3.2: Session 'is_faculty_manager'  value is set to False
+                2.2.3.3: Session 'managed_programs' value is set to None
     """
     if request.user.is_authenticated and \
             (request.user.is_superuser or not request.user.has_perm('base.is_student')):

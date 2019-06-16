@@ -63,7 +63,8 @@ def get_managed_programs_as_dict(global_id):
                 else:
                     programs[year] = [acronym]
     except Exception:
-        logger.error("Erreur  appel API")
+        trace = traceback.format_exc()
+        logger.error(trace)
     return programs
 
 
