@@ -25,6 +25,7 @@
 ##############################################################################
 import json
 
+from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase, override_settings
 from django.core.urlresolvers import reverse
@@ -34,6 +35,7 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from base.tests.factories.user import UserFactory
 from base.views import common
+from base.views.common import common_context_processor
 from osis_common.tests.factories.application_notice import ApplicationNoticeFactory
 
 OK = 200
@@ -224,6 +226,46 @@ class NoticeTestCase(TestCase):
         self.assertEqual(self.session.get('notice'), self.notice.notice)
         self.assertEqual(context.get('subject'), self.notice.subject)
         self.assertEqual(context.get('notice'), self.notice.notice)
+
+
+class CommonContextProcessorTest(TestCase):
+
+    def setUp(self):
+        self.user = UserFactory()
+        self.url = reverse('dashboard_home')
+        self.client.force_login(self.user)
+        self.response = self.client.get(self.url)
+        self.request = self.response.wsgi_request
+        self.session = self.client.session
+        self.maxDiff = None
+
+    @override_settings(ENVIRONMENT='env')
+    def test_with_defined_environment(self):
+        self.client.get(self.url)
+        return_value = common_context_processor(self.request)
+        expected = {
+            'environment': 'env',
+            'installed_apps': settings.INSTALLED_APPS,
+            'debug': settings.DEBUG,
+            'logout_button': settings.LOGOUT_BUTTON,
+            'is_faculty_manager': False
+
+        }
+        self.assertDictEqual(return_value, expected)
+
+    @override_settings()
+    def test_with_no_defined_environment(self):
+        self.client.get(self.url)
+        del settings.ENVIRONMENT
+        return_value = common_context_processor(self.request)
+        expected = {
+            'environment': 'DEV',
+            'installed_apps': settings.INSTALLED_APPS,
+            'debug': settings.DEBUG,
+            'logout_button': settings.LOGOUT_BUTTON,
+            'is_faculty_manager': False
+        }
+        self.assertDictEqual(return_value, expected)
 
 
 
