@@ -26,8 +26,7 @@
 
 from django.test import TestCase
 
-from base.models.enums import entity_container_year_link_type as entity_types
-from base.tests.factories.entity_container_year import EntityContainerYearFactory
+from base.tests.factories.entity_version import EntityVersionFactory
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 
 
@@ -39,6 +38,9 @@ class LearningUnitYearWithContextTestCase(TestCase):
             repartition_volume_requirement_entity=20.0,
             repartition_volume_additional_entity_1=10.0,
             repartition_volume_additional_entity_2=15.0,
+            learning_unit_year__learning_container_year__requirement_entity=EntityVersionFactory().entity,
+            learning_unit_year__learning_container_year__additionnal_entity_1=EntityVersionFactory().entity,
+            learning_unit_year__learning_container_year__additionnal_entity_2=EntityVersionFactory().entity,
         )
         self.component_without_repartition = LearningComponentYearFactory(
             hourly_volume_total_annual=15.0,
@@ -49,17 +51,13 @@ class LearningUnitYearWithContextTestCase(TestCase):
         )
 
     def test_repartition_volumes_property(self):
-        entity_types_list = [
-            entity_types.REQUIREMENT_ENTITY,
-            entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1,
-            entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2
-        ]
-        entity_containers_year = [
-            EntityContainerYearFactory(
-                type=entity_types_list[x],
-                learning_container_year=self.component_with_repartition.learning_unit_year.learning_container_year
-            ) for x in range(3)
-        ]
+        # Set entities used for repartition volumes
+        # container_year = self.component_with_repartition.learning_unit_year.learning_container_year
+        # container_year.requirement_entity = EntityVersionFactory().entity,
+        # container_year.additionnal_entity_1 = EntityVersionFactory().entity,
+        # container_year.additionnal_entity_2 = EntityVersionFactory().entity,
+        # container_year.save()
+
         expected_result = {
             "REQUIREMENT_ENTITY": 20.0,
             "ADDITIONAL_REQUIREMENT_ENTITY_1": 10.0,
