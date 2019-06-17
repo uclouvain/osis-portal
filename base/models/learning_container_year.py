@@ -39,6 +39,16 @@ class LearningContainerYearAdmin(SerializableModelAdmin):
     list_filter = ('academic_year', 'in_charge', 'is_vacant',)
 
 
+class ForeignKeyEntityField(models.ForeignKey):
+    def __init__(self, *args, **kwargs):
+        kwargs.update({
+            'to': 'base.Entity',
+            'null': True,
+            'on_delete': models.PROTECT,
+        })
+        super(ForeignKeyEntityField, self).__init__(*args, **kwargs)
+
+
 class LearningContainerYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
@@ -52,6 +62,11 @@ class LearningContainerYear(SerializableModel):
     type_declaration_vacant = models.CharField(max_length=100, blank=True, null=True,
                                                choices=vacant_declaration_type.DECLARATION_TYPE)
     in_charge = models.BooleanField(default=False)
+
+    requirement_entity = ForeignKeyEntityField(blank=False, related_name='requirement_entities')
+    allocation_entity = ForeignKeyEntityField(blank=True, related_name='allocation_entities')
+    additionnal_entity_1 = ForeignKeyEntityField(blank=True, related_name='additionnal_entities_1')
+    additionnal_entity_2 = ForeignKeyEntityField(blank=True, related_name='additionnal_entities_2')
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.common_title)
