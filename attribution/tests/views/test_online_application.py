@@ -36,7 +36,6 @@ from attribution.utils import tutor_application_epc
 from base.models.enums import academic_calendar_type
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
-from base.models.learning_container_year import LearningContainerYear
 from base.tests.factories.academic_calendar import AcademicCalendarFactory
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
@@ -48,8 +47,6 @@ from base.tests.factories.user import UserFactory
 from base.models.enums import learning_unit_year_subtypes
 from base.tests.factories.entity import EntityFactory
 from base.tests.factories.entity_version import EntityVersionFactory
-from base.tests.factories.entity_container_year import EntityContainerYearFactory
-from base.models.enums import entity_container_year_link_type as entity_types
 
 
 class TestOnlineApplication(TestCase):
@@ -342,7 +339,6 @@ class TestOnlineApplication(TestCase):
                                                                          0, 70)
         self._create_entity_container_yrs()
 
-
     def _get_default_application_list(self):
         return [
             _get_application_example(self.lagro1600_next, '15', '0')
@@ -358,26 +354,20 @@ class TestOnlineApplication(TestCase):
         ]
 
     def _create_entity_container_yrs(self):
-        EntityContainerYearFactory(learning_container_year=self.lbir1200_current,
-                                   entity=self.agro_entity,
-                                   type=entity_types.ALLOCATION_ENTITY)
-        EntityContainerYearFactory(learning_container_year=self.lbir1300_current,
-                                   entity=self.agro_entity,
-                                   type=entity_types.ALLOCATION_ENTITY)
-        EntityContainerYearFactory(learning_container_year=self.lbir1200_next,
-                                   entity=self.agro_entity,
-                                   type=entity_types.ALLOCATION_ENTITY)
-        EntityContainerYearFactory(learning_container_year=self.lbir1300_next,
-                                   entity=self.agro_entity,
-                                   type=entity_types.ALLOCATION_ENTITY)
-        EntityContainerYearFactory(learning_container_year=self.lagro1600_next,
-                                   entity=self.agro_entity,
-                                   type=entity_types.ALLOCATION_ENTITY)
-        EntityContainerYearFactory(learning_container_year=self.lagro2500_next,
-                                   entity=self.agro_entity,
-                                   type=entity_types.ALLOCATION_ENTITY)
-        EntityContainerYearFactory(learning_container_year=self.ldroi1500_current,
-                                   entity=self.drt_entity)
+        self.lbir1200_current.allocation_entity = self.agro_entity
+        self.lbir1200_current.save()
+        self.lbir1300_current.allocation_entity = self.agro_entity
+        self.lbir1300_current.save()
+        self.lbir1200_next.allocation_entity = self.agro_entity
+        self.lbir1200_next.save()
+        self.lbir1300_next.allocation_entity = self.agro_entity
+        self.lbir1300_next.save()
+        self.lagro1600_next.allocation_entity = self.agro_entity
+        self.lagro1600_next.save()
+        self.lagro2500_next.allocation_entity = self.agro_entity
+        self.lagro2500_next.save()
+        self.ldroi1500_current.allocation_entity = self.drt_entity
+        self.ldroi1500_current.save()
 
 
 def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None,
