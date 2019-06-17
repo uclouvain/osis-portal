@@ -26,8 +26,10 @@
 from collections import OrderedDict
 
 from django.db import models
+from django.db.models import Prefetch
 
 from base import models as mdl
+from base.models.entity import Entity
 from base.models.enums import entity_container_year_link_type as entity_types
 from base.models.enums.learning_unit_year_subtypes import FULL
 from base.models.learning_component_year import LearningComponentYear
@@ -40,21 +42,22 @@ class LearningUnitYearWithContext:
 
 
 def get_with_context(**learning_unit_year_data):
-    entity_container_prefetch = models.Prefetch(
-        'learning_container_year__entitycontaineryear_set',
-        queryset=mdl.entity_container_year
-            .search(
-            link_type=[
-                entity_types.REQUIREMENT_ENTITY,
-                entity_types.ALLOCATION_ENTITY,
-                entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1,
-                entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2
-            ]
-        )
-            .prefetch_related(
-            models.Prefetch('entity__entityversion_set', to_attr='entity_versions')
-        ),
-        to_attr='entity_containers_year'
+    entity_version_prefetch = Entity.objects.all().prefetch_related(Prefetch('entityversion_set', to_attr='entity_versions'))
+    requirement_entity_prefetch = models.Prefetch(
+        'learning_container_year__requirement_entity',
+        queryset=entity_version_prefetch
+    )
+    allocation_entity_prefetch = models.Prefetch(
+        'learning_container_year__allocation_entity',
+        queryset=entity_version_prefetch
+    )
+    additionnal_entity_1_prefetch = models.Prefetch(
+        'learning_container_year__additionnal_entity_1',
+        queryset=entity_version_prefetch
+    )
+    additionnal_entity_2_prefetch = models.Prefetch(
+        'learning_container_year__additionnal_entity_2',
+        queryset=entity_version_prefetch
     )
 
     learning_component_prefetch = models.Prefetch(
@@ -65,7 +68,10 @@ def get_with_context(**learning_unit_year_data):
 
     learning_units = mdl.learning_unit_year.LearningUnitYear.objects.filter(subtype=FULL, **learning_unit_year_data) \
         .select_related('academic_year', 'learning_container_year') \
-        .prefetch_related(entity_container_prefetch) \
+        .prefetch_related(requirement_entity_prefetch) \
+        .prefetch_related(allocation_entity_prefetch) \
+        .prefetch_related(additionnal_entity_1_prefetch) \
+        .prefetch_related(additionnal_entity_2_prefetch) \
         .prefetch_related(learning_component_prefetch) \
         .order_by('academic_year__year', 'acronym')
 
