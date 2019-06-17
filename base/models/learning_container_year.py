@@ -65,8 +65,8 @@ class LearningContainerYear(SerializableModel):
 
     requirement_entity = ForeignKeyEntityField(blank=False, related_name='requirement_entities')
     allocation_entity = ForeignKeyEntityField(blank=True, related_name='allocation_entities')
-    additionnal_entity_1 = ForeignKeyEntityField(blank=True, related_name='additionnal_entities_1')
-    additionnal_entity_2 = ForeignKeyEntityField(blank=True, related_name='additionnal_entities_2')
+    additional_entity_1 = ForeignKeyEntityField(blank=True, related_name='additional_entities_1')
+    additional_entity_2 = ForeignKeyEntityField(blank=True, related_name='additional_entities_2')
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.common_title)

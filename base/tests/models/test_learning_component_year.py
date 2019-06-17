@@ -39,8 +39,8 @@ class LearningUnitYearWithContextTestCase(TestCase):
             repartition_volume_additional_entity_1=10.0,
             repartition_volume_additional_entity_2=15.0,
             learning_unit_year__learning_container_year__requirement_entity=EntityVersionFactory().entity,
-            learning_unit_year__learning_container_year__additionnal_entity_1=EntityVersionFactory().entity,
-            learning_unit_year__learning_container_year__additionnal_entity_2=EntityVersionFactory().entity,
+            learning_unit_year__learning_container_year__additional_entity_1=EntityVersionFactory().entity,
+            learning_unit_year__learning_container_year__additional_entity_2=EntityVersionFactory().entity,
         )
         self.component_without_repartition = LearningComponentYearFactory(
             hourly_volume_total_annual=15.0,
@@ -54,8 +54,8 @@ class LearningUnitYearWithContextTestCase(TestCase):
         # Set entities used for repartition volumes
         # container_year = self.component_with_repartition.learning_unit_year.learning_container_year
         # container_year.requirement_entity = EntityVersionFactory().entity,
-        # container_year.additionnal_entity_1 = EntityVersionFactory().entity,
-        # container_year.additionnal_entity_2 = EntityVersionFactory().entity,
+        # container_year.additional_entity_1 = EntityVersionFactory().entity,
+        # container_year.additional_entity_2 = EntityVersionFactory().entity,
         # container_year.save()
 
         expected_result = {
