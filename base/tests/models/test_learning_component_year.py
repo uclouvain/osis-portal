@@ -51,13 +51,6 @@ class LearningUnitYearWithContextTestCase(TestCase):
         )
 
     def test_repartition_volumes_property(self):
-        # Set entities used for repartition volumes
-        # container_year = self.component_with_repartition.learning_unit_year.learning_container_year
-        # container_year.requirement_entity = EntityVersionFactory().entity,
-        # container_year.additional_entity_1 = EntityVersionFactory().entity,
-        # container_year.additional_entity_2 = EntityVersionFactory().entity,
-        # container_year.save()
-
         expected_result = {
             "REQUIREMENT_ENTITY": 20.0,
             "ADDITIONAL_REQUIREMENT_ENTITY_1": 10.0,
