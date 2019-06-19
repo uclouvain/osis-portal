@@ -410,6 +410,6 @@ URL_AUTH_API = os.environ.get(
     ""
 )
 
-#BASE_API_TESTING
+# BASE_API_TESTING
 MOCK_USER_ROLES_API_CALL = os.environ.get('MOCK_USER_ROLES_API_CALL', 'True').lower() == 'true'
 USER_ROLES_API_MOCKED_FUNCT = os.environ.get('USER_ROLES_API_MOCKED_FUNCT', 'base.views.api.get_user_roles')

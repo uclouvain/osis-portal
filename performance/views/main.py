@@ -38,6 +38,7 @@ from base.views import layout
 from performance.models.enums import offer_registration_state
 from dashboard.views import main as dash_main_view
 
+
 # Students Views
 
 @login_required
