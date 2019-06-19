@@ -42,7 +42,9 @@ class LearningUnitYearWithContext:
 
 
 def get_with_context(**learning_unit_year_data):
-    entity_version_prefetch = Entity.objects.all().prefetch_related(Prefetch('entityversion_set', to_attr='entity_versions'))
+    entity_version_prefetch = Entity.objects.all().prefetch_related(
+        Prefetch('entityversion_set', to_attr='entity_versions')
+    )
     requirement_entity_prefetch = models.Prefetch(
         'learning_container_year__requirement_entity',
         queryset=entity_version_prefetch
