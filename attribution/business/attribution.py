@@ -33,6 +33,7 @@ from attribution import models as mdl_attribution
 from attribution.models.enums import function
 from base import models as mdl_base
 from base.business import learning_unit_year_with_context
+from base.models.entity_version import EntityVersion
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
 from base.models.enums import entity_container_year_link_type as entity_types
@@ -344,8 +345,7 @@ def get_filter_learning_container_ids(entity_version, qs):
     if entity_version:
         allocation_entity_ids = get_entities_ids(entity_version.acronym, True)
         qs = qs.filter(
-            learning_container_year__entitycontaineryear__entity__in=allocation_entity_ids,
-            learning_container_year__entitycontaineryear__type=entity_types.ALLOCATION_ENTITY
+            learning_container_year__allocation_entity__in=allocation_entity_ids
         )
 
     return qs
@@ -374,9 +374,8 @@ def _get_learning_components(academic_year, acronym_filter, faculty):
 
 
 def _get_learning_components_by_faculty(academic_year, acronym_filter, faculty):
-    entity_allocation = mdl_base.entity_version.EntityVersion.objects.filter(
-        entity__entitycontaineryear__learning_container_year__learningunityear=OuterRef('pk'),
-        entity__entitycontaineryear__type=entity_types.ALLOCATION_ENTITY
+    entity_allocation = EntityVersion.objects.filter(
+        entity=OuterRef('learning_container_year__allocation_entity'),
     ).current(
         OuterRef('academic_year__start_date')
     ).values('acronym')[:1]
