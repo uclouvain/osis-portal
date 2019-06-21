@@ -44,7 +44,7 @@
     {% for internship in internships %}
         {% if internship.speciality %}
         <li role="presentation" {% if current_internship.id == internship.id %} class="active" {% endif %}>
-            <a href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">
+            <a class="tab-content" href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">
                 {{ internship.name }}
             </a>
         </li>
@@ -57,7 +57,7 @@
             {% for internship in internships %}
                 {% if not internship.speciality %}
                         <li role="presentation" class="selective_internship {% if current_internship.id == internship.id %} active {% endif %}">
-                            <a href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">
+                            <a class="tab-content" href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">
                                 {{ internship.name }}
                             </a>
                         </li>
@@ -148,12 +148,47 @@
         {% endif %}
     </div>
 </form>
+
+<div class="modal fade" id="modalWarning" tabindex="-1" role="dialog" aria-labelledby="modalWarning">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {% trans 'Warning' %}
+                </h4>
+            </div>
+            <div class="modal-body">
+                {% blocktrans %}
+                You've made changes to your choices for {{ current_internship}} but you did not save them yet.
+                {% endblocktrans %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">{% trans "Save" %}</button>
+                <a id="proceed_without_save" type="button" class="btn btn-default">{% trans "Proceed without saving" %}</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}
     <script type="text/javascript">
         //set selective tab active when one child is active
         $("li.selective_internship.active").closest("li.dropdown").addClass("active");
+
+        //monitor form changed to warn user when tab is changed without save
+        form_changed = false;
+        $("#assign_preference").on("input", function(){
+           form_changed = true;
+        });
+
+        $(".tab-content").on('click', function(e){
+            if(form_changed){
+                $('#proceed_without_save').attr('href', e.target.href);
+                $('#modalWarning').modal('show');
+                e.preventDefault();
+            }
+        });
 
     </script>
 {% endblock %}
