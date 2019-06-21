@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-26 11:23+0100\n"
+"POT-Creation-Date: 2019-06-21 11:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr "Les affections sont disponibles depuis"
 msgid "Choices received by administration"
 msgstr "Choix reçus de l'administration"
 
-#: templates/internship_selection.html:56
+#: templates/internship_selection.html:77
 msgid "Choose a speciality"
 msgstr "Choisissez une spécialité"
 
@@ -64,7 +64,7 @@ msgstr "Quatrième choix"
 msgid "Generalist"
 msgstr "Généraliste"
 
-#: templates/hospitals.html:51 templates/internship_selection.html:91
+#: templates/hospitals.html:51 templates/internship_selection.html:112
 msgid "Hospital"
 msgstr "Hôpital"
 
@@ -102,7 +102,7 @@ msgstr ""
 "Il semblerait que vous ne soyez pas inscrit aux stages, nous vous "
 "recommandons de contacter votre secrétariat."
 
-#: templates/internship_selection.html:92
+#: templates/internship_selection.html:113
 msgid "Maximum number of students"
 msgstr "Nombre maximum d'étudiants"
 
@@ -110,11 +110,11 @@ msgstr "Nombre maximum d'étudiants"
 msgid "Mobile phone"
 msgstr "Numéro de téléphone"
 
-#: templates/internship_selection.html:93
+#: templates/internship_selection.html:114
 msgid "Number of first choice"
 msgstr "Nombre de 1er choix"
 
-#: templates/internship_selection.html:94
+#: templates/internship_selection.html:115
 msgid "Preference"
 msgstr "Préférence"
 
@@ -134,6 +134,10 @@ msgstr "Second choix"
 msgid "Select a cohort"
 msgstr "Sélectionnez une cohorte"
 
+#: templates/internship_selection.html:54
+msgid "Selective internships"
+msgstr "Stages au choix"
+
 #: models/internship_student_information.py:42
 msgid "Specialist"
 msgstr "Spécialiste"
@@ -142,7 +146,7 @@ msgstr "Spécialiste"
 msgid "Student information"
 msgstr "Information de l'étudiant"
 
-#: templates/internship_selection.html:122
+#: templates/internship_selection.html:143
 msgid "Submit choices"
 msgstr "Soumettre vos choix"
 

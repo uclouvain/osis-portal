@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-26 11:23+0100\n"
+"POT-Creation-Date: 2019-06-21 11:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Choices received by administration"
 msgstr ""
 
-#: templates/internship_selection.html:56
+#: templates/internship_selection.html:77
 msgid "Choose a speciality"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Generalist"
 msgstr ""
 
-#: templates/hospitals.html:51 templates/internship_selection.html:91
+#: templates/hospitals.html:51 templates/internship_selection.html:112
 msgid "Hospital"
 msgstr ""
 
@@ -101,7 +101,7 @@ msgid ""
 "your administration."
 msgstr ""
 
-#: templates/internship_selection.html:92
+#: templates/internship_selection.html:113
 msgid "Maximum number of students"
 msgstr ""
 
@@ -109,11 +109,11 @@ msgstr ""
 msgid "Mobile phone"
 msgstr ""
 
-#: templates/internship_selection.html:93
+#: templates/internship_selection.html:114
 msgid "Number of first choice"
 msgstr ""
 
-#: templates/internship_selection.html:94
+#: templates/internship_selection.html:115
 msgid "Preference"
 msgstr ""
 
@@ -133,6 +133,10 @@ msgstr ""
 msgid "Select a cohort"
 msgstr ""
 
+#: templates/internship_selection.html:54
+msgid "Selective internships"
+msgstr ""
+
 #: models/internship_student_information.py:42
 msgid "Specialist"
 msgstr ""
@@ -141,7 +145,7 @@ msgstr ""
 msgid "Student information"
 msgstr ""
 
-#: templates/internship_selection.html:122
+#: templates/internship_selection.html:143
 msgid "Submit choices"
 msgstr ""
 

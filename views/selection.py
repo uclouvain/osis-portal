@@ -48,7 +48,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     cohort = mdl_int.cohort.Cohort.objects.get(pk=cohort_id)
 
     if int(internship_id) < 1:
-        current_internship = mdl_int.internship.find_by_cohort(cohort).first()
+        current_internship = mdl_int.internship.find_by_cohort(cohort).order_by("speciality__name", "name").first()
         return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
 
     if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
