@@ -35,6 +35,11 @@
 
 {% block content %}
 <div class="page-header">
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">
+            <span class="glyphicon glyphicon-ok"></span> {% trans 'Submit choices' %}
+        </button>
+    </div>
     <h2>{% trans 'Internships' %}</h2>
 </div>
 
