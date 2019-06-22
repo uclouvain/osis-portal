@@ -78,22 +78,6 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     {% if request.user.is_authenticated %}
-                        {% if perms.base.can_access_administration %}
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                   aria-expanded="false" id="bt_administrations">{% trans 'Administration' %}</a>
-                                <ul class="dropdown-menu">
-                                    {% if perms.base.is_administrator %}
-                                    <li><a href="{% url 'data' %}" role="button" id="bt_data">
-                                        <i class="fa fa-database" aria-hidden="true"></i>
-                                        {% trans 'Data' %}</a></li>
-                                    {% endif %}
-                                    {% if 'dashboard' in installed_apps %}
-                                        {% include 'dashboard_admin_menu.html' %}
-                                    {% endif %}
-                                </ul>
-                            </li>
-                        {% endif %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
@@ -113,13 +97,21 @@
                                aria-expanded="false" id="bt_user">
                                 <i class="fa fa-user fa-lg" aria-hidden="true"></i>
                                 {{ request.user.first_name }}</a>
-                            {% if logout_button %}
                             <ul class="dropdown-menu">
+                                {% if perms.base.is_administrator %}
+                                    <li><a href="{% url 'data' %}" role="button" id="bt_data">
+                                        <i class="fa fa-database" aria-hidden="true"></i>
+                                        {% trans 'Data' %}</a></li>
+                                {% endif %}
+                                {% if 'dashboard' in installed_apps %}
+                                    {% include 'dashboard_admin_menu.html' %}
+                                {% endif %}
+                                {% if logout_button %}
                                 <li><a href="{% url 'logout' %}" id="lnk_logout">
                                     <i class="fa fa-power-off" aria-hidden="true"></i>
                                     Logout</a></li>
+                                {% endif %}
                             </ul>
-                            {% endif %}
                         </li>
                     {% endif %}
                 </ul>
