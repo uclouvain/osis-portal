@@ -238,22 +238,19 @@ def can_access_performance_administration(request):
 
 
 def can_access_student_performance(request, registration_id=None, stud_perf=None):
-    can_access = False
     if request.user.has_perm('base.is_faculty_administrator'):
-        can_access = True
+        return True
     elif registration_id:
         user_managed_programs_in_session = request.session.get('managed_programs')
         if user_managed_programs_in_session:
             user_managed_programs = json.loads(user_managed_programs_in_session)
             if stud_perf:
-                can_access = stud_perf.acronym in user_managed_programs.get(str(stud_perf.academic_year), [])
+                return stud_perf.acronym in user_managed_programs.get(str(stud_perf.academic_year), [])
             else:
                 stud = student.find_by_registration_id(registration_id)
-                if stud and (stud_offer_enrollment
-                             for stud_offer_enrollment
-                             in offer_enrollment.find_by_student(stud)
-                             if stud_offer_enrollment.offer_year.acronym
-                             in user_managed_programs.get(
-                                str(stud_offer_enrollment.offer_year.academic_year.year), [])):
-                    can_access = True
-    return can_access
+                if stud:
+                    for stud_offer_enrollment in offer_enrollment.find_by_student(stud):
+                        if stud_offer_enrollment.offer_year.acronym in user_managed_programs.get(
+                                str(stud_offer_enrollment.offer_year.academic_year.year), []):
+                            return True
+    return False
