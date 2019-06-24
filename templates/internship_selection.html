@@ -35,6 +35,11 @@
 
 {% block content %}
 <div class="page-header">
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">
+            <span class="glyphicon glyphicon-ok"></span> {% trans 'Submit choices' %}
+        </button>
+    </div>
     <h2>{% trans 'Internships' %}</h2>
 </div>
 
@@ -42,8 +47,29 @@
 
 <ul class="nav nav-tabs">
     {% for internship in internships %}
-        <li role="presentation" {% if current_internship.id == internship.id %} class="active" {% endif %}><a href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">{{ internship.name }}</a></li>
+        {% if internship.speciality %}
+        <li role="presentation" {% if current_internship.id == internship.id %} class="active" {% endif %}>
+            <a class="tab-content" href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">
+                {{ internship.name }}
+            </a>
+        </li>
+        {% endif %}
     {% endfor %}
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans 'Selective internships' %}
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            {% for internship in internships %}
+                {% if not internship.speciality %}
+                        <li role="presentation" class="selective_internship {% if current_internship.id == internship.id %} active {% endif %}">
+                            <a class="tab-content" href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">
+                                {{ internship.name }}
+                            </a>
+                        </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+      </li>
 </ul>
 <br>
 
@@ -53,6 +79,7 @@
             <form action="{% url 'assign_speciality' internship_id=current_internship.id cohort_id=cohort.id %}"  method="post">
                 {% csrf_token %}
                 <div class="fieldWrapper col-md-6 form-group">
+                <h3>{{ current_internship }}</h3>
                     <label for="speciality_selection">{% trans 'Choose a speciality' %}:</label>
                     <div class="row">
                         <div class="col-md-8">
@@ -126,4 +153,47 @@
         {% endif %}
     </div>
 </form>
+
+<div class="modal fade" id="modalWarning" tabindex="-1" role="dialog" aria-labelledby="modalWarning">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    {% trans 'Warning' %}
+                </h4>
+            </div>
+            <div class="modal-body">
+                {% blocktrans %}
+                You've made changes to your choices for {{ current_internship}} but you did not save them yet.
+                {% endblocktrans %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">{% trans "Save" %}</button>
+                <a id="proceed_without_save" type="button" class="btn btn-default">{% trans "Proceed without saving" %}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        //set selective tab active when one child is active
+        $("li.selective_internship.active").closest("li.dropdown").addClass("active");
+
+        //monitor form changed to warn user when tab is changed without save
+        form_changed = false;
+        $("#assign_preference").on("input", function(){
+           form_changed = true;
+        });
+
+        $(".tab-content").on('click', function(e){
+            if(form_changed){
+                $('#proceed_without_save').attr('href', e.target.href);
+                $('#modalWarning').modal('show');
+                e.preventDefault();
+            }
+        });
+
+    </script>
 {% endblock %}

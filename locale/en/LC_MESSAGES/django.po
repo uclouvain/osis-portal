@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-26 11:23+0100\n"
+"POT-Creation-Date: 2019-06-21 15:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: templates/internship_selection.html:161
+#, python-format
+msgid ""
+"\n"
+"                You've made changes to your choices for "
+"%(current_internship)s but you did not save them yet.\n"
+"                "
+msgstr ""
 
 #: templates/hospitals.html:83 templates/student_resume.html:113
 msgid "Address"
@@ -25,11 +34,29 @@ msgstr ""
 msgid "Affectations are available from"
 msgstr ""
 
+#: forms/form_offer_preference.py:57
+msgid "Cannot apply same preference on distinct offers"
+msgstr ""
+
+#: forms/form_offer_preference.py:59
+msgid "Cannot select same offer"
+msgstr ""
+
+#: views/selection.py:145
+#, python-format
+msgid "Choices for %(internship)s have been saved !"
+msgstr ""
+
+#: views/selection.py:160
+#, python-format
+msgid "Choices for %(internship)s have not been saved due to errors:"
+msgstr ""
+
 #: templates/student_resume.html:55
 msgid "Choices received by administration"
 msgstr ""
 
-#: templates/internship_selection.html:56
+#: templates/internship_selection.html:78
 msgid "Choose a speciality"
 msgstr ""
 
@@ -65,7 +92,7 @@ msgstr ""
 msgid "Generalist"
 msgstr ""
 
-#: templates/hospitals.html:51 templates/internship_selection.html:91
+#: templates/hospitals.html:51 templates/internship_selection.html:113
 msgid "Hospital"
 msgstr ""
 
@@ -101,7 +128,7 @@ msgid ""
 "your administration."
 msgstr ""
 
-#: templates/internship_selection.html:92
+#: templates/internship_selection.html:114
 msgid "Maximum number of students"
 msgstr ""
 
@@ -109,12 +136,16 @@ msgstr ""
 msgid "Mobile phone"
 msgstr ""
 
-#: templates/internship_selection.html:93
+#: templates/internship_selection.html:115
 msgid "Number of first choice"
 msgstr ""
 
-#: templates/internship_selection.html:94
+#: templates/internship_selection.html:116
 msgid "Preference"
+msgstr ""
+
+#: templates/internship_selection.html:167
+msgid "Proceed without saving"
 msgstr ""
 
 #: templates/hospitals.html:81
@@ -125,12 +156,20 @@ msgstr ""
 msgid "Registration id"
 msgstr ""
 
+#: templates/internship_selection.html:166
+msgid "Save"
+msgstr ""
+
 #: forms/form_offer_preference.py:34
 msgid "Second choice"
 msgstr ""
 
 #: templates/cohort_selection.html:36
 msgid "Select a cohort"
+msgstr ""
+
+#: templates/internship_selection.html:54
+msgid "Selective internships"
 msgstr ""
 
 #: models/internship_student_information.py:42
@@ -141,7 +180,7 @@ msgstr ""
 msgid "Student information"
 msgstr ""
 
-#: templates/internship_selection.html:122
+#: templates/internship_selection.html:144
 msgid "Submit choices"
 msgstr ""
 
@@ -158,16 +197,16 @@ msgstr ""
 msgid "Third choice"
 msgstr ""
 
+#: templates/internship_selection.html:157
+msgid "Warning"
+msgstr ""
+
 #: templates/hospitals.html:87
 msgid "Website"
 msgstr ""
 
 #: templates/internship_selection_closed.html:42
 msgid "You can no longer submit your choices."
-msgstr ""
-
-#: views/selection.py:141
-msgid "Your internship choices have been saved !"
 msgstr ""
 
 #: templates/student_resume.html:95

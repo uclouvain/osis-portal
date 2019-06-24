@@ -54,6 +54,6 @@ class OfferPreferenceFormSet(forms.BaseFormSet):
             preferences_made[preference] = preferences_made.get(preference, 0) + 1
             offers_selected[offer] = offers_selected.get(offer, 0) + 1
             if preferences_made[preference] > 1:
-                raise forms.ValidationError("Cannot apply same preference on distinct offers")
+                raise forms.ValidationError(_("Cannot apply same preference on distinct offers"))
             if offers_selected[offer] > 1:
-                raise forms.ValidationError("Cannot select same offer")
+                raise forms.ValidationError(_("Cannot select same offer"))

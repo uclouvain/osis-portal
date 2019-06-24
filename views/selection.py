@@ -27,6 +27,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.forms import formset_factory
 from django.shortcuts import redirect
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -48,7 +49,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     cohort = mdl_int.cohort.Cohort.objects.get(pk=cohort_id)
 
     if int(internship_id) < 1:
-        current_internship = mdl_int.internship.find_by_cohort(cohort).first()
+        current_internship = mdl_int.internship.find_by_cohort(cohort).order_by("speciality__name", "name").first()
         return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
 
     if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
@@ -138,11 +139,32 @@ def _handle_formset_to_save(request, selectable_offers, student, current_interns
         if formset.is_valid():
             _remove_previous_choices(student, current_internship, speciality)
             _save_student_choices(formset, student, current_internship, speciality)
-            messages.add_message(request, messages.SUCCESS, _('Your internship choices have been saved !'))
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                _('Choices for %(internship)s have been saved !') % {'internship': current_internship}
+            )
+        else:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                _build_error_message(formset.non_form_errors(), current_internship)
+            )
     else:
         formset = offer_preference_formset()
 
     return formset
+
+
+def _build_error_message(errors, current_internship):
+    error_message = _('Choices for %(internship)s have not been saved due to errors:') % {
+        'internship': current_internship
+    }
+    error_message += "<ul>"
+    for error in errors:
+        error_message += "<li>{}</li>".format(error)
+    error_message += "</ul>"
+    return mark_safe(error_message)
 
 
 def _remove_previous_choices(student, internship, speciality):
