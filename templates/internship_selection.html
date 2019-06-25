@@ -48,8 +48,8 @@
 <ul class="nav nav-tabs">
     {% for internship in internships %}
         {% if internship.speciality %}
-        <li role="presentation" {% if current_internship.id == internship.id %} class="active" {% endif %}>
-            <a class="tab-content" href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">
+        <li role="presentation" {% if current_internship == internship %} class="active" {% endif %}>
+            <a data-toggle="tab" href="#{{ internship.id }}">
                 {{ internship.name }}
             </a>
         </li>
@@ -62,7 +62,7 @@
             {% for internship in internships %}
                 {% if not internship.speciality %}
                         <li role="presentation" class="selective_internship {% if current_internship.id == internship.id %} active {% endif %}">
-                            <a class="tab-content" href="{% url 'select_specific_internship' internship_id=internship.id cohort_id=cohort.id %}">
+                            <a data-toggle="tab" href="#{{ internship.id }}">
                                 {{ internship.name }}
                             </a>
                         </li>
@@ -73,107 +73,115 @@
 </ul>
 <br>
 
-{% if current_internship.speciality == None %}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <form action="{% url 'assign_speciality' internship_id=current_internship.id cohort_id=cohort.id %}"  method="post">
-                {% csrf_token %}
-                <div class="fieldWrapper col-md-6 form-group">
-                <h3>{{ current_internship }}</h3>
-                    <label for="speciality_selection">{% trans 'Choose a speciality' %}:</label>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <select id="speciality_selection"
-                                    name="speciality_id"
-                                    class="form-control">
-                                <option value="">-----</option>
-                                {% for speciality in all_specialities %}
-                                    <option value="{{ speciality.id }}"
-                                        {% if speciality_id == speciality.id %} selected {% endif %}>
-                                        {{ speciality.name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-primary">
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </button>
+    <form id="assign_preference" method="post">
+    <div class="tab-content">
+            {% csrf_token %}
+            {% for internship in internships %}
+                    <div id="{{ internship.id }}" class="tab-pane fade
+                            {% if current_internship == internship %}
+                                in active
+                            {% endif %}
+                    ">
+                        <div class="panel panel-default">
+                            {% if not internship.speciality %}
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <form action="{% url 'assign_speciality' internship_id=current_internship.id cohort_id=cohort.id %}"  method="post">
+                                            {% csrf_token %}
+                                            <div class="fieldWrapper col-md-6 form-group">
+                                            <h3>{{ internship }}</h3>
+                                                <label for="speciality_selection">{% trans 'Choose a speciality' %}:</label>
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <select id="speciality_selection"
+                                                                name="speciality_id"
+                                                                class="form-control">
+                                                            <option value="">-----</option>
+                                                            {% for speciality in all_specialities %}
+                                                                <option value="{{ speciality.id }}"
+                                                                    {% if speciality_id == speciality.id %} selected {% endif %}>
+                                                                    {{ speciality.name }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <span class="glyphicon glyphicon-ok"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if internship.offers_forms  %}
+                                {{ internship.formset.management_form }}
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>{% trans 'Hospital' %}</th>
+                                            <th>{% trans 'Maximum number of students' %}</th>
+                                            <th>{% trans 'Number of first choice' %}</th>
+                                            <th>{% trans 'Preference' %}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for offer, form, number_first_choices in internship.offers_forms %}
+                                            <tr>
+                                                <td>{{ offer.organization }}</td>
+                                                <td>{{ offer.maximum_enrollments }}</td>
+                                                <td>{{ number_first_choices }}</td>
+                                                <td hidden>
+                                                    <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}"
+                                                           class="form-control" value="{{ offer.pk }}">
+                                                </td>
+                                                <td>
+                                                    <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
+                                                        {% for key, val in form.fields.preference.choices %}
+                                                            {% choice_for_offer internship.internship_choices offer internship as choice %}
+                                                            <option value="{{ key }}" {% if key == choice %} selected {% endif %}>{{ val }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+
+                                <div class="panel-footer">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-ok"></span> {% trans 'Submit choices' %}
+                                    </button>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-            </form>
+            {% endfor %}
         </div>
-    </div>
-{% endif %}
+    </form>
 
-<form id="assign_preference" method="post">
-    <div class="panel panel-default">
-        {% if offers_forms  %}
-            {% csrf_token %}
-            {{ formset.management_form }}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>{% trans 'Hospital' %}</th>
-                        <th>{% trans 'Maximum number of students' %}</th>
-                        <th>{% trans 'Number of first choice' %}</th>
-                        <th>{% trans 'Preference' %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for offer, form, number_first_choices in offers_forms %}
-                        <tr>
-                            <td>{{ offer.organization }}</td>
-                            <td>{{ offer.maximum_enrollments }}</td>
-                            <td>{{ number_first_choices }}</td>
-                            <td hidden>
-                                <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}" class="form-control" value="{{ offer.pk }}">
-                            </td>
-                            <td>
-                                <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
-                                    {% for key, val in form.fields.preference.choices %}
-                                        {% choice_for_offer internship_choices offer current_internship as choice %}
-                                        <option value="{{ key }}" {% if key == choice %} selected {% endif %}>{{ val }}</option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <div class="panel-footer">
-                {% if can_submit %}
-                    <button type="submit" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-ok"></span> {% trans 'Submit choices' %}
-                    </button>
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>
-</form>
-
-<div class="modal fade" id="modalWarning" tabindex="-1" role="dialog" aria-labelledby="modalWarning">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">
-                    {% trans 'Warning' %}
-                </h4>
-            </div>
-            <div class="modal-body">
-                {% blocktrans %}
-                You've made changes to your choices for {{ current_internship}} but you did not save them yet.
-                {% endblocktrans %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">{% trans "Save" %}</button>
-                <a id="proceed_without_save" type="button" class="btn btn-default">{% trans "Proceed without saving" %}</a>
-            </div>
-        </div>
-    </div>
-</div>
+{#<div class="modal fade" id="modalWarning" tabindex="-1" role="dialog" aria-labelledby="modalWarning">#}
+{#    <div class="modal-dialog" role="document">#}
+{#        <div class="modal-content">#}
+{#            <div class="modal-header">#}
+{#                <h4 class="modal-title">#}
+{#                    {% trans 'Warning' %}#}
+{#                </h4>#}
+{#            </div>#}
+{#            <div class="modal-body">#}
+{#                {% blocktrans %}#}
+{#                You've made changes to your choices for {{ current_internship}} but you did not save them yet.#}
+{#                {% endblocktrans %}#}
+{#            </div>#}
+{#            <div class="modal-footer">#}
+{#                <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">{% trans "Save" %}</button>#}
+{#                <a id="proceed_without_save" type="button" class="btn btn-default">{% trans "Proceed without saving" %}</a>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
 {% endblock %}
 
 {% block script %}
@@ -187,13 +195,13 @@
            form_changed = true;
         });
 
-        $(".tab-content").on('click', function(e){
+        /*$(".tab-content").on('click', function(e){
             if(form_changed){
                 $('#proceed_without_save').attr('href', e.target.href);
                 $('#modalWarning').modal('show');
                 e.preventDefault();
             }
-        });
+        });*/
 
     </script>
 {% endblock %}
