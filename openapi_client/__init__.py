@@ -39,7 +39,9 @@ from openapi_client.models.file_list_item import FileListItem
 from openapi_client.models.formation_basic import FormationBasic
 from openapi_client.models.inline_response200 import InlineResponse200
 from openapi_client.models.marital_status_enum import MaritalStatusEnum
-from openapi_client.models.paginated_serializer import PaginatedSerializer
+from openapi_client.models.paginated_admissions import PaginatedAdmissions
+from openapi_client.models.paginated_continuing_education_trainings import PaginatedContinuingEducationTrainings
+from openapi_client.models.paging import Paging
 from openapi_client.models.person_basic import PersonBasic
 from openapi_client.models.person_detail_serializer import PersonDetailSerializer
 from openapi_client.models.prospect import Prospect

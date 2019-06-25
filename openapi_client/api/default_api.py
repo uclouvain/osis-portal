@@ -43,7 +43,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param AdmissionPostSerializer admission_post_serializer: (required)
-        :return: None
+        :return: AdmissionDetailSerializer
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -65,7 +65,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param AdmissionPostSerializer admission_post_serializer: (required)
-        :return: None
+        :return: AdmissionDetailSerializer
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -105,6 +105,10 @@ class DefaultApi(object):
         body_params = None
         if 'admission_post_serializer' in local_var_params:
             body_params = local_var_params['admission_post_serializer']
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
         # HTTP header `Content-Type`
         header_params['Content-Type'] = self.api_client.select_header_content_type(  # noqa: E501
             ['application/json'])  # noqa: E501
@@ -113,14 +117,14 @@ class DefaultApi(object):
         auth_settings = ['Token']  # noqa: E501
 
         return self.api_client.call_api(
-            '/admissions', 'POST',
+            '/admissions/', 'POST',
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type=None,  # noqa: E501
+            response_type='AdmissionDetailSerializer',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
@@ -413,7 +417,7 @@ class DefaultApi(object):
         auth_settings = ['Token']  # noqa: E501
 
         return self.api_client.call_api(
-            '/admissions/{uuid}/files', 'GET',
+            '/admissions/{uuid}/files/', 'GET',
             path_params,
             query_params,
             header_params,
@@ -509,7 +513,7 @@ class DefaultApi(object):
         auth_settings = ['Token']  # noqa: E501
 
         return self.api_client.call_api(
-            '/admissions/{uuid}/files', 'POST',
+            '/admissions/{uuid}/files/', 'POST',
             path_params,
             query_params,
             header_params,
@@ -927,7 +931,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str uuid: The UUID of the participant (required)
-        :return: list[AdmissionListSerializer]
+        :return: PaginatedAdmissions
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -949,7 +953,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str uuid: The UUID of the participant (required)
-        :return: list[AdmissionListSerializer]
+        :return: PaginatedAdmissions
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -997,14 +1001,14 @@ class DefaultApi(object):
         auth_settings = ['Token']  # noqa: E501
 
         return self.api_client.call_api(
-            '/persons/{uuid}/admissions', 'GET',
+            '/persons/{uuid}/admissions/', 'GET',
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[AdmissionListSerializer]',  # noqa: E501
+            response_type='PaginatedAdmissions',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
@@ -1023,7 +1027,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str uuid: The UUID of the participant (required)
-        :return: list[AdmissionListSerializer]
+        :return: PaginatedAdmissions
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1045,7 +1049,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str uuid: The UUID of the participant (required)
-        :return: list[AdmissionListSerializer]
+        :return: PaginatedAdmissions
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1093,14 +1097,14 @@ class DefaultApi(object):
         auth_settings = ['Token']  # noqa: E501
 
         return self.api_client.call_api(
-            '/persons/{uuid}/registrations', 'GET',
+            '/persons/{uuid}/registrations/', 'GET',
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[AdmissionListSerializer]',  # noqa: E501
+            response_type='PaginatedAdmissions',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
@@ -1189,7 +1193,7 @@ class DefaultApi(object):
         auth_settings = ['Token']  # noqa: E501
 
         return self.api_client.call_api(
-            '/prospects', 'POST',
+            '/prospects/', 'POST',
             path_params,
             query_params,
             header_params,
@@ -1519,9 +1523,10 @@ class DefaultApi(object):
 
         :param async_req bool
         :param bool active: The active field of the trainings to get
+        :param str search: Search filter applied on acronym
         :param int offset: The number of items to skip before starting to collect the result set.
         :param int limit: The numbers of items to return.
-        :return: PaginatedSerializer
+        :return: PaginatedContinuingEducationTrainings
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -1543,16 +1548,17 @@ class DefaultApi(object):
 
         :param async_req bool
         :param bool active: The active field of the trainings to get
+        :param str search: Search filter applied on acronym
         :param int offset: The number of items to skip before starting to collect the result set.
         :param int limit: The numbers of items to return.
-        :return: PaginatedSerializer
+        :return: PaginatedContinuingEducationTrainings
                  If the method is called asynchronously,
                  returns the request thread.
         """
 
         local_var_params = locals()
 
-        all_params = ['active', 'offset', 'limit']  # noqa: E501
+        all_params = ['active', 'search', 'offset', 'limit']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -1580,6 +1586,8 @@ class DefaultApi(object):
         query_params = []
         if 'active' in local_var_params:
             query_params.append(('active', local_var_params['active']))  # noqa: E501
+        if 'search' in local_var_params:
+            query_params.append(('search', local_var_params['search']))  # noqa: E501
         if 'offset' in local_var_params:
             query_params.append(('offset', local_var_params['offset']))  # noqa: E501
         if 'limit' in local_var_params:
@@ -1599,14 +1607,14 @@ class DefaultApi(object):
         auth_settings = ['Token']  # noqa: E501
 
         return self.api_client.call_api(
-            '/trainings', 'GET',
+            '/trainings/', 'GET',
             path_params,
             query_params,
             header_params,
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='PaginatedSerializer',  # noqa: E501
+            response_type='PaginatedContinuingEducationTrainings',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501

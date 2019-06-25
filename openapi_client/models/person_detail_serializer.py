@@ -31,48 +31,14 @@ class PersonDetailSerializer(object):
                             and the value is json key in definition.
     """
     openapi_types = {
-        'gender': 'str'
     }
 
     attribute_map = {
-        'gender': 'gender'
     }
 
-    def __init__(self, gender=None):  # noqa: E501
+    def __init__(self):  # noqa: E501
         """PersonDetailSerializer - a model defined in OpenAPI"""  # noqa: E501
-
-        self._gender = None
         self.discriminator = None
-
-        if gender is not None:
-            self.gender = gender
-
-    @property
-    def gender(self):
-        """Gets the gender of this PersonDetailSerializer.  # noqa: E501
-
-
-        :return: The gender of this PersonDetailSerializer.  # noqa: E501
-        :rtype: str
-        """
-        return self._gender
-
-    @gender.setter
-    def gender(self, gender):
-        """Sets the gender of this PersonDetailSerializer.
-
-
-        :param gender: The gender of this PersonDetailSerializer.  # noqa: E501
-        :type: str
-        """
-        allowed_values = ["F", "M", "U"]  # noqa: E501
-        if gender not in allowed_values:
-            raise ValueError(
-                "Invalid value for `gender` ({0}), must be one of {1}"  # noqa: E501
-                .format(gender, allowed_values)
-            )
-
-        self._gender = gender
 
     def to_dict(self):
         """Returns the model properties as a dict"""
