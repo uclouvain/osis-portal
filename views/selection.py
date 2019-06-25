@@ -79,7 +79,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
 
     formset = _handle_formset_to_save(request, selectable_offers, student, current_internship, speciality)
 
-    first_choices_by_organization = get_first_choices_by_organization(speciality)
+    first_choices_by_organization = get_first_choices_by_organization(speciality, current_internship)
     offers_forms = zip_offers_formset_and_first_choices(formset, selectable_offers, first_choices_by_organization)
 
     return layout.render(request, "internship_selection.html",
@@ -111,8 +111,10 @@ def assign_speciality_for_internship(request, cohort_id, internship_id):
                     speciality_id=speciality_id)
 
 
-def get_first_choices_by_organization(speciality):
-    list_number_choices = mdl_int.internship_choice.get_number_first_choice_by_organization(speciality)
+def get_first_choices_by_organization(speciality, current_internship):
+    list_number_choices = mdl_int.internship_choice.get_number_first_choice_by_organization(
+        speciality, current_internship
+    )
     dict_number_choices_by_organization = dict()
     for number_first_choices in list_number_choices:
         dict_number_choices_by_organization[number_first_choices["organization"]] = \

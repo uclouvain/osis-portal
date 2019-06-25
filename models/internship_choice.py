@@ -74,7 +74,7 @@ def search(student=None, speciality=None, internship=None, specialities=None):
     return queryset if has_criteria else None
 
 
-def get_number_first_choice_by_organization(speciality):
-    return InternshipChoice.objects.filter(choice=1, speciality=speciality).values("organization")\
-        .annotate(models.Count("organization"))
-
+def get_number_first_choice_by_organization(speciality, internship):
+    return InternshipChoice.objects.filter(
+        choice=1, speciality=speciality, internship__speciality=internship.speciality
+    ).values("organization").annotate(models.Count("organization"))
