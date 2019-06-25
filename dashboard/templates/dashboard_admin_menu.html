@@ -25,7 +25,7 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% if perms.base.is_faculty_administrator %}
+{% if is_faculty_manager %}
 <li><a href="{% url 'faculty_administration' %}" role="button" id="bt_faculty_administration">
     <i class="fa fa-university" aria-hidden="true"></i>
     {% trans 'Faculty administration' %}</a></li>
