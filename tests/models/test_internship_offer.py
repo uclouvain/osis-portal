@@ -24,9 +24,10 @@
 #
 ##############################################################################
 from django.test import TestCase
+
 from internship.models import internship_offer
-from internship.tests.models import test_organization, test_internship_speciality
 from internship.tests.factories.cohort import CohortFactory
+from internship.tests.models import test_organization, test_internship_speciality
 
 
 def create_internship_offer(cohort=None):
@@ -65,7 +66,7 @@ class TestInternshipOffer(TestCase):
     def test_get_py_pk(self):
         pk = self.offer.pk
         actual_offer = internship_offer.find_by_pk(pk)
-        self.assertEquals(self.offer, actual_offer)
+        self.assertEqual(self.offer, actual_offer)
 
         pk = 45
         self.assertFalse(internship_offer.find_by_pk(pk))
