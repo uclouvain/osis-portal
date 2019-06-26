@@ -27,6 +27,14 @@
 * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block style %}
+    <style>
+        .alert{
+            display: block !important;
+        }
+    </style>
+{% endblock %}
+
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
     <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
@@ -86,8 +94,6 @@
                             {% if not internship.speciality %}
                                 <div class="panel panel-default">
                                     <div class="panel-body">
-                                        <form action="{% url 'assign_speciality' internship_id=current_internship.id cohort_id=cohort.id %}"  method="post">
-                                            {% csrf_token %}
                                             <div class="fieldWrapper col-md-6 form-group">
                                             <h3>{{ internship }}</h3>
                                                 <label for="speciality_selection">{% trans 'Choose a speciality' %}:</label>
@@ -105,14 +111,8 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-4">
-                                                        <button type="submit" class="btn btn-primary">
-                                                            <span class="glyphicon glyphicon-ok"></span>
-                                                        </button>
-                                                    </div>
                                                 </div>
                                             </div>
-                                        </form>
                                     </div>
                                 </div>
                             {% endif %}
@@ -188,20 +188,5 @@
     <script type="text/javascript">
         //set selective tab active when one child is active
         $("li.selective_internship.active").closest("li.dropdown").addClass("active");
-
-        //monitor form changed to warn user when tab is changed without save
-        form_changed = false;
-        $("#assign_preference").on("input", function(){
-           form_changed = true;
-        });
-
-        /*$(".tab-content").on('click', function(e){
-            if(form_changed){
-                $('#proceed_without_save').attr('href', e.target.href);
-                $('#modalWarning').modal('show');
-                e.preventDefault();
-            }
-        });*/
-
     </script>
 {% endblock %}
