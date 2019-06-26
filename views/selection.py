@@ -53,6 +53,8 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     if int(internship_id) < 1:
         current_internship = internships.first()
         return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
+    if request.POST:
+        internship_id = request.POST['current_internship']
     if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
         return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
 

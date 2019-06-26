@@ -57,7 +57,7 @@
     {% for internship in internships %}
         {% if internship.speciality %}
         <li role="presentation" {% if current_internship == internship %} class="active" {% endif %}>
-            <a data-toggle="tab" href="#{{ internship.id }}">
+            <a data-toggle="tab" data-id="{{ internship.id }}" href="#{{ internship.id }}">
                 {{ internship.name }}
             </a>
         </li>
@@ -82,6 +82,7 @@
 <br>
 
     <form id="assign_preference" method="post">
+    <input hidden id="current_internship_input" name="current_internship" value="{{ current_internship.id }}"/>
     <div class="tab-content">
             {% csrf_token %}
             {% for internship in internships %}
@@ -188,5 +189,10 @@
     <script type="text/javascript">
         //set selective tab active when one child is active
         $("li.selective_internship.active").closest("li.dropdown").addClass("active");
+
+        //keep current tab opened after submit
+        $(".nav-tabs a").on('click', function(e){
+            $("#current_internship_input").val(e.target.dataset.id);
+        });
     </script>
 {% endblock %}
