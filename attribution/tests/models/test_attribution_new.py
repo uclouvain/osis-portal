@@ -29,10 +29,10 @@ import datetime
 from django.test import TestCase
 
 from attribution import models as mdl_attribution
-from base.tests.factories.academic_year import AcademicYearFactory
 from attribution.tests.factories.attribution import AttributionNewFactory
-from base.tests.models import test_person
+from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.user import UserFactory
+from base.tests.models import test_person
 
 LCHM1111 = 'LCHM1111'
 YEAR_2016 = 2016
@@ -50,24 +50,24 @@ class AttributionNewTest(TestCase):
         AttributionNewFactory(global_id="123456789",
                               attributions=[])
         results = mdl_attribution.attribution_new.find_teachers(LCHM1111, YEAR_2017)
-        self.assertEquals(len(results), 0)
+        self.assertEqual(len(results), 0)
 
     def test_find_no_teachers_for_acronym(self):
         AttributionNewFactory(global_id="123456789",
                               attributions=[{'year': YEAR_2017, 'acronym': LCHM1111}])
         results = mdl_attribution.attribution_new.find_teachers("{}Z".format(LCHM1111), YEAR_2017)
-        self.assertEquals(len(results), 0)
+        self.assertEqual(len(results), 0)
 
     def test_find_no_teachers_for_year(self):
         AttributionNewFactory(global_id="123456789",
                               attributions=[{'year': YEAR_2017, 'acronym': LCHM1111}])
         results = mdl_attribution.attribution_new.find_teachers(LCHM1111, YEAR_2016)
-        self.assertEquals(len(results), 0)
+        self.assertEqual(len(results), 0)
 
     def test_find_teachers(self):
         build_attributions_for_2_teachers_on_a_learning_unit(LCHM1111, YEAR_2017)
         results = mdl_attribution.attribution_new.find_teachers(LCHM1111, YEAR_2017)
-        self.assertEquals(len(results), 2)
+        self.assertEqual(len(results), 2)
 
 
 def build_attributions_for_2_teachers_on_a_learning_unit(an_acronym, yr):
