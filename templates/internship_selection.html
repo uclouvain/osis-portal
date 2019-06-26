@@ -70,7 +70,7 @@
             {% for internship in internships %}
                 {% if not internship.speciality %}
                         <li role="presentation" class="selective_internship {% if current_internship.id == internship.id %} active {% endif %}">
-                            <a data-toggle="tab" href="#{{ internship.id }}">
+                            <a data-toggle="tab" data-id="{{ internship.id }}" href="#{{ internship.id }}">
                                 {{ internship.name }}
                             </a>
                         </li>
@@ -100,7 +100,7 @@
                                                 <label for="speciality_selection">{% trans 'Choose a speciality' %}:</label>
                                                 <div class="row">
                                                     <div class="col-md-8">
-                                                        <select id="speciality_selection"
+                                                        <select id="speciality_selection" onchange="get_selective_internship_preferences(this.value);"
                                                                 name="speciality_id"
                                                                 class="form-control">
                                                             <option value="">-----</option>
@@ -116,6 +116,7 @@
                                             </div>
                                     </div>
                                 </div>
+                                <div id="selective_internship_preferences_form_{{ internship.id }}"></div>
                             {% endif %}
                             {% if internship.offers_forms  %}
                                 {{ internship.formset.management_form }}
@@ -163,26 +164,6 @@
         </div>
     </form>
 
-{#<div class="modal fade" id="modalWarning" tabindex="-1" role="dialog" aria-labelledby="modalWarning">#}
-{#    <div class="modal-dialog" role="document">#}
-{#        <div class="modal-content">#}
-{#            <div class="modal-header">#}
-{#                <h4 class="modal-title">#}
-{#                    {% trans 'Warning' %}#}
-{#                </h4>#}
-{#            </div>#}
-{#            <div class="modal-body">#}
-{#                {% blocktrans %}#}
-{#                You've made changes to your choices for {{ current_internship}} but you did not save them yet.#}
-{#                {% endblocktrans %}#}
-{#            </div>#}
-{#            <div class="modal-footer">#}
-{#                <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">{% trans "Save" %}</button>#}
-{#                <a id="proceed_without_save" type="button" class="btn btn-default">{% trans "Proceed without saving" %}</a>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
 {% endblock %}
 
 {% block script %}
@@ -194,5 +175,21 @@
         $(".nav-tabs a").on('click', function(e){
             $("#current_internship_input").val(e.target.dataset.id);
         });
+
+        function get_selective_internship_preferences(specialty_id){
+            let internship_id = $("#current_internship_input").val()
+            $.ajax({
+                url: "ajax/selective_internship/",
+                data: {
+                    'student': {{ student.id }},
+                    'internship': internship_id,
+                    'specialty': specialty_id
+                },
+                success: function(response){
+                   $("#selective_internship_preferences_form_"+internship_id).html(response);
+                }
+            })
+        }
+
     </script>
 {% endblock %}

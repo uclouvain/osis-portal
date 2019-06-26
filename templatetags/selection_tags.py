@@ -38,6 +38,8 @@ def choice_for_offer(internship_choices, offer, internship):
         return str(choice)
     except ObjectDoesNotExist:
         return None
+    except ValueError:
+        return None
 
 
 @reg.filter

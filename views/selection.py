@@ -26,19 +26,21 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.forms import formset_factory
-from django.shortcuts import redirect
+from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.http import require_POST
 
 import base.models as mdl
 import internship.models as mdl_int
+from base.models.student import Student
 from base.views import layout
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.cohort_view_decorators import redirect_if_subscription_not_allowed
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
+from internship.models.cohort import Cohort
 from internship.models.internship import Internship
+from internship.models.internship_speciality import InternshipSpeciality
 
 
 @login_required
@@ -51,8 +53,7 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
     internships = Internship.objects.filter(cohort=cohort).order_by("speciality__name", "name")
 
     if int(internship_id) < 1:
-        current_internship = internships.first()
-        return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
+        internship_id = internships.first().id
     if request.POST:
         internship_id = request.POST['current_internship']
     if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
@@ -89,26 +90,41 @@ def view_internship_selection(request, cohort_id, internship_id=-1, speciality_i
             "internships": internships,
             "current_internship": current_internship,
             "all_specialities": specialities,
-            "cohort": cohort
+            "cohort": cohort,
+            "student": student,
         }
     )
 
 
-@require_POST
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
-def assign_speciality_for_internship(request, cohort_id, internship_id):
-    speciality_id = None
-    if request.method == "POST":
-        try:
-            speciality_id = int(request.POST.get("speciality_id", 0))
-        except ValueError:
-            speciality_id = 0
+@redirect_if_subscription_not_allowed
+def get_selective_internship_preferences(request, cohort_id):
+    cohort = Cohort.objects.get(pk=cohort_id)
+    internship = Internship.objects.get(pk=request.GET.get('internship'))
+    student = Student.objects.get(pk=request.GET.get('student'))
+    specialty = InternshipSpeciality.objects.get(pk=request.GET.get('specialty'))
 
-    return redirect("select_internship_speciality", cohort_id=cohort_id, internship_id=internship_id,
-                    speciality_id=speciality_id)
+    internship_choices = mdl_int.internship_choice.search(
+        student=student, internship=internship
+    )
+
+    selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(specialty, cohort)
+    formset = _handle_formset_to_save(request, selectable_offers, student, internship, specialty, [])
+    first_choices_by_organization = get_first_choices_by_organization(specialty, internship)
+    offers_forms = zip_offers_formset_and_first_choices(formset, selectable_offers, first_choices_by_organization)
+
+    return render(
+        request,
+        "fragment/internship_preferences.html",
+        {
+            "formset": formset,
+            "offers_forms": offers_forms,
+            "internship_choices": internship_choices
+        }
+    )
 
 
 def get_first_choices_by_organization(speciality, internship):
