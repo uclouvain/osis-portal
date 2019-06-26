@@ -78,14 +78,14 @@ class TestSearch(TestCase):
         self.assertListEqual([self.choice_2], choices)
 
     def test_get_number_first_choice_by_organization(self):
-        number_first_choice = list(mdl_internship_choice.get_number_first_choice_by_organization(self.speciality))
+        number_first_choice = list(mdl_internship_choice.get_number_first_choice_by_organization(self.speciality, self.internship))
         expected = [{"organization": self.organization.id, "organization__count": 3}]
         self.assertEqual(expected, number_first_choice)
 
         other_organization = test_organization.create_organization(reference="10")
         yet_another_internship = InternshipFactory(speciality=self.speciality)
         create_internship_choice(other_organization, self.student, self.speciality, yet_another_internship)
-        number_first_choice = list(mdl_internship_choice.get_number_first_choice_by_organization(self.speciality))
+        number_first_choice = list(mdl_internship_choice.get_number_first_choice_by_organization(self.speciality, self.internship))
         expected = [{"organization": self.organization.id, "organization__count": 3},
                     {"organization": other_organization.id, "organization__count": 1}]
         self.assertCountEqual(number_first_choice, expected)
