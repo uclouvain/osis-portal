@@ -69,7 +69,7 @@
         <ul class="dropdown-menu">
             {% for internship in internships %}
                 {% if not internship.speciality %}
-                        <li role="presentation" class="selective_internship {% if current_internship.id == internship.id %} active {% endif %}">
+                        <li role="presentation" class="selective_internship{% if current_internship.id == internship.id %} active {% endif %}">
                             <a data-toggle="tab" data-id="{{ internship.id }}" href="#{{ internship.id }}">
                                 {{ internship.name }}
                             </a>
@@ -100,13 +100,13 @@
                                                 <label for="speciality_selection">{% trans 'Choose a speciality' %}:</label>
                                                 <div class="row">
                                                     <div class="col-md-8">
-                                                        <select id="speciality_selection" onchange="get_selective_internship_preferences(this.value);"
-                                                                name="speciality_id"
+                                                        <select id="speciality_selection_{{ internship.id }}" onchange="get_selective_internship_preferences({{ internship.id }}, this.value);"
+                                                                name="{{ internship }}-speciality_id"
                                                                 class="form-control">
                                                             <option value="">-----</option>
                                                             {% for speciality in all_specialities %}
                                                                 <option value="{{ speciality.id }}"
-                                                                    {% if speciality_id == speciality.id %} selected {% endif %}>
+                                                                    {% if internship.chosen_specialty.id == speciality.id %} selected {% endif %}>
                                                                     {{ speciality.name }}
                                                                 </option>
                                                             {% endfor %}
@@ -118,7 +118,7 @@
                                 </div>
                                 <div id="selective_internship_preferences_form_{{ internship.id }}"></div>
                             {% endif %}
-                            {% if internship.offers_forms  %}
+                            {% if internship.offers_forms and internship.speciality  %}
                                 {{ internship.formset.management_form }}
                                 <table class="table table-striped">
                                     <thead>
@@ -173,11 +173,19 @@
 
         //keep current tab opened after submit
         $(".nav-tabs a").on('click', function(e){
-            $("#current_internship_input").val(e.target.dataset.id);
+            let internship_id = e.target.dataset.id;
+            $("#current_internship_input").val(internship_id);
         });
 
-        function get_selective_internship_preferences(specialty_id){
-            let internship_id = $("#current_internship_input").val()
+        $('.selective_internship a').each(function(e){
+            let internship_id = $(this)[0].dataset.id;
+            let specialty_id = $("#speciality_selection_"+internship_id)[0].value;
+            if(internship_id) {
+                get_selective_internship_preferences(internship_id, specialty_id);
+            }
+        });
+
+        function get_selective_internship_preferences(internship_id, specialty_id){
             $.ajax({
                 url: "ajax/selective_internship/",
                 data: {
@@ -187,6 +195,9 @@
                 },
                 success: function(response){
                    $("#selective_internship_preferences_form_"+internship_id).html(response);
+                },
+                error: function(){
+                    $("#selective_internship_preferences_form_"+internship_id).html('');
                 }
             })
         }
