@@ -400,9 +400,16 @@ URL_TRAINING_API = os.environ.get(
     ""
 )
 
+# BASE_API
+URL_API_BASE_PERSON_ROLES = os.environ.get("URL_API_BASE_PERSON_ROLES", "")
+
 OSIS_PORTAL_TOKEN = os.environ.get("OSIS_PORTAL_TOKEN", "")
 
 URL_AUTH_API = os.environ.get(
     "URL_AUTH_API",
     ""
 )
+
+# BASE_API_TESTING
+MOCK_USER_ROLES_API_CALL = os.environ.get('MOCK_USER_ROLES_API_CALL', 'True').lower() == 'true'
+USER_ROLES_API_MOCKED_FUNCT = os.environ.get('USER_ROLES_API_MOCKED_FUNCT', 'base.views.api.get_user_roles')
