@@ -36,7 +36,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body dashboard-grid">
-            {% if 'performance'  in installed_apps %}
+            {% if 'performance'  in installed_apps and is_faculty_manager %}
                 <div class="grid-item">
                     <i class="fa fa-line-chart"></i>
                     <div class="description">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% if 'attestation'  in installed_apps %}
+            {% if 'attestation'  in installed_apps and perms.base.faculty_administrator %}
                 <div class="grid-item">
                     <i class="fa fa-file-pdf-o"></i>
                     <div class="description">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% if 'attribution'  in installed_apps %}
+            {% if 'attribution'  in installed_apps and perms.base.faculty_administrator %}
                 {% if online_application_opened %}
                     <div class="grid-item">
                         <i class="fa fa-id-card-o"></i>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% if 'assessments'  in installed_apps %}
+            {% if 'assessments'  in installed_apps and perms.base.faculty_administrator %}
                 <div class="grid-item">
                     <i class="fa fa-file-pdf-o"></i>
                     <div class="description">
@@ -92,7 +92,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% if 'attribution'  in installed_apps %}
+            {% if 'attribution'  in installed_apps and perms.base.faculty_administrator %}
                 <div class="grid-item">
                     <i class="fa fa-file-pdf-o"></i>
                     <div class="description">

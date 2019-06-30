@@ -23,14 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from compat import DjangoJSONEncoder
 from django.conf import settings
 
 from django.contrib.auth.views import login as django_login
 from django.contrib.auth import authenticate, logout
+import json
 from django.shortcuts import redirect
 from django.utils import translation
-from base.views import layout
+from base.views import layout, api
 from base.models import person as person_mdl
+from osis_common.models import application_notice
 
 
 def return_error_response(request, template, status_code):
@@ -56,7 +59,66 @@ def common_context_processor(request):
         env = settings.ENVIRONMENT
     else:
         env = 'DEV'
-    return {'environment': env, 'installed_apps': settings.INSTALLED_APPS, 'debug': settings.DEBUG, 'logout_button': settings.LOGOUT_BUTTON}
+    context = {'environment': env,
+               'installed_apps': settings.INSTALLED_APPS,
+               'debug': settings.DEBUG,
+               'logout_button': settings.LOGOUT_BUTTON}
+    _check_notice(request, context)
+    _set_managed_programs(request, context)
+    return context
+
+
+def _check_notice(request, context):
+    if 'subject' not in request.session and 'notice' not in request.session:
+        notice = application_notice.find_current_notice()
+        if notice:
+            request.session.set_expiry(3600)
+            request.session['subject'] = notice.subject
+            request.session['notice'] = notice.notice
+    if 'subject' in request.session and 'notice' in request.session:
+        context['subject'] = request.session['subject']
+        context['notice'] = request.session['notice']
+
+
+def _set_managed_programs(request, context):
+    """
+    1. Preconditions : user is authenticated and user is not a student.
+    2. Check if the session key 'is_faculty_manager' is defined
+        2.1. If yes, Context 'is_faculty_manager' is updated with value of Session 'is_faculty_manager'
+        2.2. If not :
+            2.2.1: The managed programs are retrieved from osis with call to the api
+            2.2.2: If the managed programs exists :
+                2.2.2.1: Context 'is_faculty_manager' value is set to True
+                2.2.2.2: Session 'is_faculty_manager'  value is set to True
+                2.2.2.3: Session 'managed_programs' value is set with the results of the api call
+            2.2.3: If not:
+                2.2.3.1: Context 'is_faculty_manager' value is set to False
+                2.2.3.2: Session 'is_faculty_manager'  value is set to False
+                2.2.3.3: Session 'managed_programs' value is set to None
+    """
+    if request.user.is_authenticated and \
+            (request.user.is_superuser or not request.user.has_perm('base.is_student')):
+        if request.session.get('is_faculty_manager') is None:
+            if request.user.has_perm('base.is_faculty_administrator'):
+                context['is_faculty_manager'] = True
+                request.session['is_faculty_manager'] = True
+            else:
+                person = person_mdl.find_by_user(request.user)
+                if person:
+                    managed_programs_as_dict = api.get_managed_programs_as_dict(person.global_id)
+                    is_faculty_manager = False
+                    managed_programs = None
+                    if managed_programs_as_dict:
+                        is_faculty_manager = True
+                        managed_programs = json.dumps(managed_programs_as_dict, cls=DjangoJSONEncoder)
+                    context['is_faculty_manager'] = is_faculty_manager
+                else:
+                    is_faculty_manager = False
+                    managed_programs = None
+                request.session['is_faculty_manager'] = is_faculty_manager
+                request.session['managed_programs'] = managed_programs
+        else:
+            context['is_faculty_manager'] = request.session.get('is_faculty_manager')
 
 
 def login(request):
@@ -85,4 +147,3 @@ def log_out(request):
 
 def logged_out(request):
     return layout.render(request, 'logged_out.html', {})
-

@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,10 +23,28 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import shortcuts
+
+import json
+from django.test import TestCase
+
+from base.views import api
 
 
-def render(request, template, values=None):
-    if not values:
-        values = {}
-    return shortcuts.render(request, template, values)
+class TestApiTestCase(TestCase):
+
+    def setUp(self):
+        self.global_id = 12345678
+
+    def test_get_user_roles(self):
+        with open('osis_common/tests/ressources/person_roles_from_api.json') as json_file:
+            expected_data = json.load(json_file)
+            data = api.get_user_roles(self.global_id)
+            self.assertDictEqual(expected_data, data)
+
+    def test_get_managed_programs_as_dict(self):
+        expected_results = {
+            '2017': ['PHYS1BA', 'BIOL1BA'],
+            '2018': ['PHYS1BA', 'BIOL1BA']
+        }
+        results = api.get_managed_programs_as_dict(self.global_id)
+        self.assertDictEqual(expected_results, results)
