@@ -174,37 +174,37 @@ def _handle_formset_to_save(request, selectable_offers, student, internship, spe
     offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
                                                extra=len(selectable_offers), min_num=len(selectable_offers),
                                                max_num=len(selectable_offers), validate_min=True, validate_max=True)
+    formset = offer_preference_formset(prefix=internship)
     if request.method == 'POST':
         data = _filter_internship_form_data(request.POST, internship)
         if data:
             formset = offer_preference_formset(prefix=internship, data=data)
-            _save_preferences(formset, internship, request, saved_choices, speciality, student)
+            if formset.is_valid():
+                _save_preferences(formset, internship, speciality, student)
+                saved_choices.append(internship)
+            else:
+                _show_error_message(formset, internship, request)
         else:
-            formset = _handle_empty_formset(internship, offer_preference_formset, speciality, student)
-    else:
-        formset = offer_preference_formset(prefix=internship)
-
+            _handle_empty_formset(internship, speciality, student)
     return formset
 
 
-def _save_preferences(formset, internship, request, saved_choices, speciality, student):
-    if formset.is_valid():
-        _remove_previous_choices(student, internship, speciality)
-        _save_student_choices(formset, student, internship, speciality)
-        saved_choices.append(internship)
-    else:
-        messages.add_message(
-            request,
-            messages.ERROR,
-            _build_error_message(formset.non_form_errors(), internship)
-        )
+def _show_error_message(formset, internship, request):
+    messages.add_message(
+        request,
+        messages.ERROR,
+        _build_error_message(formset.non_form_errors(), internship)
+    )
 
 
-def _handle_empty_formset(internship, offer_preference_formset, speciality, student):
+def _save_preferences(formset, internship, speciality, student):
+    _remove_previous_choices(student, internship, speciality)
+    _save_student_choices(formset, student, internship, speciality)
+
+
+def _handle_empty_formset(internship, speciality, student):
     internship.chosen_specialty = None
     _remove_previous_choices(student, internship, speciality)
-    formset = offer_preference_formset(prefix=internship)
-    return formset
 
 
 def _build_error_message(errors, current_internship):
