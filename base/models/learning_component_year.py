@@ -26,6 +26,8 @@
 from base.models.enums import learning_component_year_type
 from django.db import models
 
+from base.models.enums.entity_container_year_link_type import REQUIREMENT_ENTITY, ADDITIONAL_REQUIREMENT_ENTITY_1, \
+    ADDITIONAL_REQUIREMENT_ENTITY_2
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
@@ -37,6 +39,14 @@ class LearningComponentYearAdmin(SerializableModelAdmin):
     search_fields = ['acronym', 'learning_unit_year__acronym']
     raw_id_fields = ('learning_unit_year',)
     list_filter = ('learning_unit_year__academic_year',)
+
+
+class RepartitionVolumeField(models.DecimalField):
+    def __init__(self, *args, **kwargs):
+        super(RepartitionVolumeField, self).__init__(*args, **kwargs)
+        self.blank = self.null = True
+        self.max_digits = 6
+        self.decimal_places = 2
 
 
 class LearningComponentYear(SerializableModel):
@@ -52,5 +62,18 @@ class LearningComponentYear(SerializableModel):
     hourly_volume_partial_q2 = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     volume_declared_vacant = models.DecimalField(max_digits=6, decimal_places=1, blank=True, null=True)
 
+    repartition_volume_requirement_entity = RepartitionVolumeField()
+    repartition_volume_additional_entity_1 = RepartitionVolumeField()
+    repartition_volume_additional_entity_2 = RepartitionVolumeField()
+
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.learning_unit_year.acronym)
+
+    @property
+    def repartition_volumes(self):
+        default_value = 0.0
+        return {
+            REQUIREMENT_ENTITY: float(self.repartition_volume_requirement_entity or default_value),
+            ADDITIONAL_REQUIREMENT_ENTITY_1: float(self.repartition_volume_additional_entity_1 or default_value),
+            ADDITIONAL_REQUIREMENT_ENTITY_2: float(self.repartition_volume_additional_entity_2 or default_value),
+        }
