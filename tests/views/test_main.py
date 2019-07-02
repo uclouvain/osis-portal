@@ -23,17 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase, Client
-
-import base.tests.models.test_student
 from django.contrib.auth.models import User, Permission
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ValidationError
-from internship.tests.models import test_internship_offer, test_organization, test_internship_speciality, \
-    test_internship_choice, test_internship_student_information
+from django.test import TestCase
+
+import base.tests.models.test_student
 from internship.models import internship_choice as mdl_internship_choice
 from internship.tests.factories.cohort import CohortFactory
 from internship.tests.factories.internship import InternshipFactory
+from internship.tests.models import test_internship_offer, test_organization, test_internship_speciality, \
+    test_internship_choice, test_internship_student_information
 
 
 class TestMain(TestCase):
@@ -63,26 +62,6 @@ class TestMain(TestCase):
 
         self.client.force_login(self.user)
         response = self.client.get(selection_url)
-        self.assertEqual(response.status_code, 302) # Now redirected to first internship
-
-    def test_can_access_specific_internship_selection(self):
-        selection_url = reverse("select_specific_internship", kwargs={'internship_id': self.internship.id, 'cohort_id': self.cohort.id})
-        response = self.client.get(selection_url)
-        self.assertEqual(response.status_code, 302)
-
-        self.client.force_login(self.user)
-        response = self.client.get(selection_url)
-        self.assertEqual(response.status_code, 200)
-
-    def test_can_access_internship_selection_with_speciality(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship.id,
-                                                                        'speciality_id': 1,
-                                                                        'cohort_id': self.cohort.id})
-        response = self.client.get(selection_url)
-        self.assertEqual(response.status_code, 302)
-
-        self.client.force_login(self.user)
-        response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 200)
 
 
@@ -97,12 +76,12 @@ class TestSelectInternship(TestCase):
         self.client.force_login(user)
 
         self.cohort = CohortFactory()
-        self.internship_1 = InternshipFactory(cohort=self.cohort)
-        self.internship_2 = InternshipFactory(cohort=self.cohort)
         self.student_information = test_internship_student_information.create_student_information(user, self.cohort, self.student.person)
 
         self.speciality_1 = test_internship_speciality.create_speciality(name="urgence", cohort=self.cohort)
         self.speciality_2 = test_internship_speciality.create_speciality(name="chirurgie", cohort=self.cohort)
+        self.internship_1 = InternshipFactory(name=self.speciality_1.name, cohort=self.cohort, speciality=self.speciality_1)
+        self.internship_2 = InternshipFactory(name=self.speciality_2.name, cohort=self.cohort, speciality=self.speciality_2)
 
         self.organization_1 = test_organization.create_organization(reference="01", cohort=self.cohort)
         self.organization_2 = test_organization.create_organization(reference="02", cohort=self.cohort)
@@ -119,101 +98,99 @@ class TestSelectInternship(TestCase):
         self.offer_6 = test_internship_offer.create_specific_internship_offer(self.organization_5, self.speciality_2, cohort=self.cohort)
 
     def test_with_zero_choices(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
-                                                                        'speciality_id': self.speciality_1.id,
-                                                                        'cohort_id': self.cohort.id})
-        self.assertRaises(ValidationError, self.client.post, selection_url, {})
+        selection_url = reverse("select_internship", kwargs={'cohort_id': self.cohort.id})
+        response = self.client.post(selection_url, data={})
+        self.assertEqual(response.status_code, 200)
 
     def test_with_one_choice(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_2.id,
-                                                                        'speciality_id': self.speciality_2.id,
-                                                                        'cohort_id': self.cohort.id})
-        response = self.client.post(selection_url, data={'form-TOTAL_FORMS': '2',
-                                         'form-INITIAL_FORMS': '0',
-                                         'form-MIN_NUM_FORMS': '2',
-                                         'form-MAX_NUM_FORMS': '2',
-                                         'form-0-offer': str(self.offer_5.id),
-                                         'form-0-preference': '1',
-                                         'form-1-offer': str(self.offer_6.id),
-                                         'form-1-preference': '0'})
+        selection_url = reverse("select_internship", kwargs={'cohort_id': self.cohort.id})
+        response = self.client.post(selection_url, data={
+            '{}-TOTAL_FORMS'.format(self.speciality_2.name): '2',
+            '{}-INITIAL_FORMS'.format(self.speciality_2.name): '0',
+            '{}-MIN_NUM_FORMS'.format(self.speciality_2.name): '2',
+            '{}-MAX_NUM_FORMS'.format(self.speciality_2.name): '2',
+            '{}-0-offer'.format(self.speciality_2.name): str(self.offer_5.id),
+            '{}-0-preference'.format(self.speciality_2.name): '1',
+            '{}-1-offer'.format(self.speciality_2.name): str(self.offer_6.id),
+            '{}-1-preference'.format(self.speciality_2.name): '0',
+            'current_internship'.format(self.speciality_2.name): self.internship_2.id,
+        })
         choices = list(mdl_internship_choice.search(student=self.student))
-
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(choices), 1)
         self.assertEqual(choices[0].organization, self.organization_1)
         self.assertEqual(choices[0].speciality, self.speciality_2)
         self.assertEqual(choices[0].internship_id, self.internship_2.id)
         self.assertEqual(choices[0].choice, 1)
 
-    def test_with_multiple_choice(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
-                                                                        'speciality_id': self.speciality_1.id,
-                                                                        'cohort_id': self.cohort.id})
-        self.client.post(selection_url, data={'form-TOTAL_FORMS': '4',
-                                         'form-INITIAL_FORMS': '0',
-                                         'form-MIN_NUM_FORMS': '4',
-                                         'form-MAX_NUM_FORMS': '4',
-                                         'form-0-offer': str(self.offer_1.id),
-                                         'form-0-preference': '1',
-                                         'form-1-offer': str(self.offer_2.id),
-                                         'form-1-preference': '2',
-                                         'form-2-offer': str(self.offer_3.id),
-                                         'form-2-preference': '3',
-                                         'form-3-offer': str(self.offer_4.id),
-                                         'form-3-preference': '4'
-                                         })
+    def test_with_multiple_internships_choices(self):
+        selection_url = reverse("select_internship", kwargs={'cohort_id': self.cohort.id})
+        response = self.client.post(selection_url, data={
+            '{}-TOTAL_FORMS'.format(self.speciality_1.name): '4',
+            '{}-INITIAL_FORMS'.format(self.speciality_1.name): '0',
+            '{}-MIN_NUM_FORMS'.format(self.speciality_1.name): '4',
+            '{}-MAX_NUM_FORMS'.format(self.speciality_1.name): '4',
+            '{}-0-offer'.format(self.speciality_1.name): str(self.offer_1.id),
+            '{}-0-preference'.format(self.speciality_1.name): '1',
+            '{}-1-offer'.format(self.speciality_1.name): str(self.offer_2.id),
+            '{}-1-preference'.format(self.speciality_1.name): '2',
+            '{}-2-offer'.format(self.speciality_1.name): str(self.offer_3.id),
+            '{}-2-preference'.format(self.speciality_1.name): '3',
+            '{}-3-offer'.format(self.speciality_1.name): str(self.offer_4.id),
+            '{}-3-preference'.format(self.speciality_1.name): '4',
+            '{}-TOTAL_FORMS'.format(self.speciality_2.name): '2',
+            '{}-INITIAL_FORMS'.format(self.speciality_2.name): '0',
+            '{}-MIN_NUM_FORMS'.format(self.speciality_2.name): '2',
+            '{}-MAX_NUM_FORMS'.format(self.speciality_2.name): '2',
+            '{}-0-offer'.format(self.speciality_2.name): str(self.offer_5.id),
+            '{}-0-preference'.format(self.speciality_2.name): '1',
+            '{}-1-offer'.format(self.speciality_2.name): str(self.offer_6.id),
+            '{}-1-preference'.format(self.speciality_2.name): '2',
+            'current_internship'.format(self.speciality_2.name): self.internship_2.id,
+        })
         choices = list(mdl_internship_choice.search(student=self.student))
-        self.assertEqual(len(choices), 4)
-
-        self.client.post(selection_url, data={'form-TOTAL_FORMS': '4',
-                                         'form-INITIAL_FORMS': '0',
-                                         'form-MIN_NUM_FORMS': '4',
-                                         'form-MAX_NUM_FORMS': '4',
-                                         'form-0-offer': str(self.offer_1.id),
-                                         'form-0-preference': '1',
-                                         'form-1-offer': str(self.offer_2.id),
-                                         'form-1-preference': '0',
-                                         'form-2-offer': str(self.offer_3.id),
-                                         'form-2-preference': '2',
-                                         'form-3-offer': str(self.offer_4.id),
-                                         'form-3-preference': '0'
-                                         })
-        choices = list(mdl_internship_choice.search(student=self.student))
-        self.assertEqual(len(choices), 2)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(choices), 6)
 
     def test_with_incorrect_speciality(self):
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_1.id,
-                                                                        'speciality_id': self.speciality_1.id,
-                                                                        'cohort_id': self.cohort.id})
-        self.client.post(selection_url, data={'form-TOTAL_FORMS': '4',
-                                         'form-INITIAL_FORMS': '0',
-                                         'form-MIN_NUM_FORMS': '4',
-                                         'form-MAX_NUM_FORMS': '4',
-                                         'form-0-offer': str(self.offer_1.id),
-                                         'form-0-preference': '1',
-                                         'form-1-offer': str(self.offer_5.id),
-                                         'form-1-preference': '2',
-                                         'form-2-offer': str(self.offer_3.id),
-                                         'form-2-preference': '0',
-                                         'form-3-offer': str(self.offer_4.id),
-                                         'form-3-preference': '0'
-                                         })
+        selection_url = reverse("select_internship", kwargs={'cohort_id': self.cohort.id})
+        self.client.post(selection_url, data={
+            '{}-TOTAL_FORMS'.format(self.speciality_1.name): '4',
+            '{}-INITIAL_FORMS'.format(self.speciality_1.name): '0',
+            '{}-MIN_NUM_FORMS'.format(self.speciality_1.name): '4',
+            '{}-MAX_NUM_FORMS'.format(self.speciality_1.name): '4',
+            '{}-0-offer'.format(self.speciality_1.name): str(self.offer_1.id),
+            '{}-0-preference'.format(self.speciality_1.name): '1',
+            '{}-1-offer'.format(self.speciality_1.name): str(self.offer_5.id),
+            '{}-1-preference'.format(self.speciality_1.name): '2',
+            '{}-2-offer'.format(self.speciality_1.name): str(self.offer_3.id),
+            '{}-2-preference'.format(self.speciality_1.name): '0',
+            '{}-3-offer'.format(self.speciality_1.name): str(self.offer_4.id),
+            '{}-3-preference'.format(self.speciality_1.name): '0',
+            'current_internship'.format(self.speciality_1.name): self.internship_1.id,
+        })
         choices = list(mdl_internship_choice.search(student=self.student))
         self.assertEqual(len(choices), 1)
 
     def test_replace_previous_choices(self):
-        previous_choice = test_internship_choice.create_internship_choice(test_organization.create_organization(),
-                                                                          self.student, self.speciality_1, self.internship_1)
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': self.internship_2.id,
-                                                                        'speciality_id': self.speciality_2.id,
-                                                                        'cohort_id': self.cohort.id})
-        self.client.post(selection_url, data={'form-TOTAL_FORMS': '2',
-                                         'form-INITIAL_FORMS': '0',
-                                         'form-MIN_NUM_FORMS': '2',
-                                         'form-MAX_NUM_FORMS': '2',
-                                         'form-0-offer': str(self.offer_5.id),
-                                         'form-0-preference': '1',
-                                         'form-1-offer': str(self.offer_6.id),
-                                         'form-1-preference': '0'})
+        previous_choice = test_internship_choice.create_internship_choice(
+            test_organization.create_organization(),
+            self.student, self.speciality_2, self.internship_1
+        )
+        choices = list(mdl_internship_choice.search(student=self.student, speciality=self.speciality_2))
+        self.assertEqual(len(choices), 1)
+        selection_url = reverse("select_internship", kwargs={'cohort_id': self.cohort.id})
+        self.client.post(selection_url, data={
+            '{}-TOTAL_FORMS'.format(self.speciality_2.name): '2',
+            '{}-INITIAL_FORMS'.format(self.speciality_2.name): '0',
+            '{}-MIN_NUM_FORMS'.format(self.speciality_2.name): '2',
+            '{}-MAX_NUM_FORMS'.format(self.speciality_2.name): '2',
+            '{}-0-offer'.format(self.speciality_2.name): str(self.offer_5.id),
+            '{}-0-preference'.format(self.speciality_2.name): '1',
+            '{}-1-offer'.format(self.speciality_2.name): str(self.offer_6.id),
+            '{}-1-preference'.format(self.speciality_2.name): '0',
+            'current_internship'.format(self.speciality_2.name): self.internship_2.id,
+        })
         choices = list(mdl_internship_choice.search(student=self.student, speciality=self.speciality_2))
         self.assertEqual(len(choices), 1)
         self.assertNotEqual(previous_choice, choices[0])
@@ -224,18 +201,22 @@ class TestSelectInternship(TestCase):
                                                                   acronym="SP")
         offer = test_internship_offer.create_specific_internship_offer(organization, speciality,
                                                                        title="Stage personnel")
-        choice_1 = test_internship_choice.create_internship_choice(organization, self.student, speciality, self.internship_1)
-        choice_2 = test_internship_choice.create_internship_choice(organization, self.student, speciality, self.internship_2)
-
-        selection_url = reverse("select_internship_speciality", kwargs={'internship_id': InternshipFactory(cohort=self.cohort).id,
-                                                                        'speciality_id': speciality.id,
-                                                                        'cohort_id': self.cohort.id})
-        self.client.post(selection_url, data={'form-TOTAL_FORMS': '1',
-                                         'form-INITIAL_FORMS': '0',
-                                         'form-MIN_NUM_FORMS': '1',
-                                         'form-MAX_NUM_FORMS': '1',
-                                         'form-0-offer': str(offer.id),
-                                         'form-0-preference': '1'})
+        choice_1 = test_internship_choice.create_internship_choice(
+            organization, self.student, speciality, self.internship_1
+        )
+        choice_2 = test_internship_choice.create_internship_choice(
+            organization, self.student, speciality, self.internship_2
+        )
+        selection_url = reverse("select_internship", kwargs={'cohort_id': self.cohort.id})
+        self.client.post(selection_url, data={
+            '{}-TOTAL_FORMS'.format(self.speciality_2.name): '2',
+            '{}-INITIAL_FORMS'.format(self.speciality_2.name): '0',
+            '{}-MIN_NUM_FORMS'.format(self.speciality_2.name): '2',
+            '{}-MAX_NUM_FORMS'.format(self.speciality_2.name): '2',
+            'form-0-offer': str(offer.id),
+            'form-0-preference': '1',
+            'current_internship'.format(self.speciality_2.name): self.internship_2.id,
+        })
         choices = list(mdl_internship_choice.search(student=self.student))
         self.assertEqual(len(choices), 2)
         self.assertIn(choice_1, choices)
@@ -251,11 +232,33 @@ def get_permission(codename):
     return Permission.objects.get(codename=codename)
 
 
-class TestMainAccess(TestCase):
-    def test_assign_speciality_for_internship_get_error(self):
-        url = reverse('assign_speciality', kwargs={
-            'cohort_id': 0,
-            'internship_id': 1,
+class TestAjaxSelectiveInternship(TestCase):
+    def setUp(self):
+        self.student = base.tests.models.test_student.create_student("45451298")
+        user = User.objects.create_user('user', 'user@test.com', 'userpass')
+        self.student.person.user = user
+        self.student.person.save()
+        add_permission(self.student.person.user, "can_access_internship")
+        self.client.force_login(user)
+        self.cohort = CohortFactory()
+        self.student_information = test_internship_student_information.create_student_information(
+            user,
+            self.cohort,
+            self.student.person
+        )
+        self.selective_internship = InternshipFactory(
+            name='Selective internship',
+            cohort=self.cohort,
+            speciality=None
+        )
+        self.specialty = test_internship_speciality.create_speciality(name="specialty", cohort=self.cohort)
+
+    def test_get_specialty_preferences(self):
+        selection_url = reverse("selective_internship_preferences", kwargs={'cohort_id': self.cohort.id})
+        response = self.client.get(selection_url, data={
+            'student': self.student.pk,
+            'internship': self.selective_internship.pk,
+            'specialty': self.specialty.pk
         })
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'fragment/internship_preferences.html')

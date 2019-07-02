@@ -31,15 +31,12 @@ urlpatterns = [
 
     url(r'^cohort/(?P<cohort_id>[0-9]+)/', include([
         url(r'^$', main.view_internship_home, name='internship_home'),
-        url(r'^selection/$', selection.view_internship_selection, name='select_internship'),
+        url(r'^selection/', include([
+            url(r'^$', selection.view_internship_selection, name='select_internship'),
+            url(r'^ajax/selective_internship/$', selection.get_selective_internship_preferences,
+                name='selective_internship_preferences'),
+        ])),
         url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
         url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-
-        url(r'^internship/(?P<internship_id>[0-9]+)/', include([
-            url(r'^speciality_assignment/$', selection.assign_speciality_for_internship, name='assign_speciality'),
-            url(r'^selection/$', selection.view_internship_selection, name='select_specific_internship'),
-            url(r'^selection/(?P<speciality_id>[0-9]+)/$', selection.view_internship_selection,
-                name='select_internship_speciality'),
-        ]))
     ]))
 ]

@@ -26,18 +26,22 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.forms import formset_factory
-from django.shortcuts import redirect
+from django.http import HttpResponseNotFound
+from django.shortcuts import render
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.http import require_POST
 
 import base.models as mdl
 import internship.models as mdl_int
+from base.models.student import Student
 from base.views import layout
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.cohort_view_decorators import redirect_if_subscription_not_allowed
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 from internship.forms.form_offer_preference import OfferPreferenceFormSet, OfferPreferenceForm
+from internship.models.cohort import Cohort
+from internship.models.internship import Internship
+from internship.models.internship_speciality import InternshipSpeciality
 
 
 @login_required
@@ -45,76 +49,110 @@ from internship.forms.form_offer_preference import OfferPreferenceFormSet, Offer
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @redirect_if_subscription_not_allowed
-def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
+def view_internship_selection(request, cohort_id, internship_id=None):
     cohort = mdl_int.cohort.Cohort.objects.get(pk=cohort_id)
-
-    if int(internship_id) < 1:
-        current_internship = mdl_int.internship.find_by_cohort(cohort).order_by("speciality__name", "name").first()
-        return redirect(view_internship_selection, cohort_id=cohort_id, internship_id=current_internship.id)
+    internships = Internship.objects.filter(cohort=cohort).order_by("speciality__name", "name")
 
     if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
         return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
 
-    internships = mdl_int.internship.find_by_cohort(cohort).order_by("speciality__name", "name")
+    if request.POST:
+        internship_id = request.POST['current_internship']
+    elif not internship_id:
+        internship_id = internships.first().pk
+
+    current_internship = internships.get(pk=internship_id)
 
     specialities = mdl_int.internship_speciality.find_selectables(cohort).order_by("name")
-    current_internship = internships.get(pk=internship_id)
     student = mdl.student.find_by_user(request.user)
-    internship_choices = mdl_int.internship_choice.search(student=student, internship=current_internship,
-                                                          specialities=specialities)
-    current_choice = internship_choices.first()
+    saved_choices = []
 
-    if current_choice is not None and int(speciality_id) < 0:
-        speciality_id = current_choice.speciality_id
+    for internship in internships:
+        internship.internship_choices = mdl_int.internship_choice.search(
+            student=student, internship=internship, specialities=specialities
+        )
+        specialty = _get_chosen_specialty(internship, request)
+        internship.chosen_specialty = specialty
 
-    if current_internship.speciality is not None:
-        speciality = current_internship.speciality
-    else:
-        speciality = specialities.filter(pk=speciality_id).first()
-        non_mandatory_offers = mdl_int.internship_offer.find_selectable_by_cohort(cohort=cohort)
-        speciality_ids = non_mandatory_offers.values_list("speciality_id", flat=True)
-        specialities = specialities.filter(id__in=speciality_ids).order_by("name")
+        selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(specialty,
+                                                                                              cohort)
+        internship.formset = _handle_formset_to_save(request, selectable_offers, student, internship, specialty,
+                                                     saved_choices)
+        first_choices_by_organization = get_first_choices_by_organization(specialty, internship)
+        internship.offers_forms = zip_offers_formset_and_first_choices(internship.formset, selectable_offers,
+                                                                       first_choices_by_organization)
+    if saved_choices:
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _build_choices_saved_success_message(saved_choices)
+        )
 
-    selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(speciality, cohort)
-
-    formset = _handle_formset_to_save(request, selectable_offers, student, current_internship, speciality)
-
-    first_choices_by_organization = get_first_choices_by_organization(speciality, current_internship)
-    offers_forms = zip_offers_formset_and_first_choices(formset, selectable_offers, first_choices_by_organization)
-
-    return layout.render(request, "internship_selection.html",
-                         {"internships": internships,
-                          "current_internship": current_internship,
-                          "all_specialities": specialities,
-                          "formset": formset,
-                          "offers_forms": offers_forms,
-                          "speciality_id": int(speciality_id),
-                          "internship_choices": internship_choices,
-                          "can_submit": len(selectable_offers) > 0,
-                          "cohort": cohort})
+    return layout.render(
+        request,
+        "internship_selection.html",
+        {
+            "internships": internships,
+            "current_internship": current_internship,
+            "all_specialities": specialities,
+            "cohort": cohort,
+            "student": student,
+        }
+    )
 
 
-@require_POST
+def _get_chosen_specialty(internship, request):
+    specialty = internship.speciality
+    if internship.internship_choices.exists():
+        specialty = internship.internship_choices.first().speciality
+    specialty = _get_post_chosen_specialty(internship, request, specialty)
+    return specialty
+
+
+def _get_post_chosen_specialty(internship, request, specialty):
+    if '{}-speciality_id'.format(internship) in request.POST:
+        specialty_id = request.POST['{}-speciality_id'.format(internship)] or None
+        if not internship.speciality and specialty_id:
+            specialty = InternshipSpeciality.objects.get(pk=specialty_id)
+    return specialty
+
+
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
-def assign_speciality_for_internship(request, cohort_id, internship_id):
-    speciality_id = None
-    if request.method == "POST":
-        try:
-            speciality_id = int(request.POST.get("speciality_id", 0))
-        except ValueError:
-            speciality_id = 0
+@redirect_if_subscription_not_allowed
+def get_selective_internship_preferences(request, cohort_id):
+    cohort = Cohort.objects.get(pk=cohort_id)
+    internship = Internship.objects.get(pk=request.GET.get('internship'))
+    student = Student.objects.get(pk=request.GET.get('student'))
+    if not request.GET.get('specialty'):
+        return HttpResponseNotFound(reason="No specialty provided")
+    specialty = InternshipSpeciality.objects.get(pk=request.GET.get('specialty'))
 
-    return redirect("select_internship_speciality", cohort_id=cohort_id, internship_id=internship_id,
-                    speciality_id=speciality_id)
-
-
-def get_first_choices_by_organization(speciality, current_internship):
-    list_number_choices = mdl_int.internship_choice.get_number_first_choice_by_organization(
-        speciality, current_internship
+    internship_choices = mdl_int.internship_choice.search(
+        student=student, internship=internship
     )
+
+    selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(specialty, cohort)
+    formset = _handle_formset_to_save(request, selectable_offers, student, internship, specialty, [])
+    first_choices_by_organization = get_first_choices_by_organization(specialty, internship)
+    offers_forms = zip_offers_formset_and_first_choices(formset, selectable_offers, first_choices_by_organization)
+
+    return render(
+        request,
+        "fragment/internship_preferences.html",
+        {
+            "internship": internship,
+            "formset": formset,
+            "offers_forms": offers_forms,
+            "internship_choices": internship_choices
+        }
+    )
+
+
+def get_first_choices_by_organization(speciality, internship):
+    list_number_choices = mdl_int.internship_choice.get_number_first_choice_by_organization(speciality, internship)
     dict_number_choices_by_organization = dict()
     for number_first_choices in list_number_choices:
         dict_number_choices_by_organization[number_first_choices["organization"]] = \
@@ -131,31 +169,57 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
     return zipped_data
 
 
-def _handle_formset_to_save(request, selectable_offers, student, current_internship, speciality):
-    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
-                                               extra=len(selectable_offers), min_num=len(selectable_offers),
-                                               max_num=len(selectable_offers), validate_min=True, validate_max=True)
-
+def _handle_formset_to_save(request, selectable_offers, student, internship, speciality, saved_choices):
+    offer_preference_formset = _build_offer_preference_formset(internship, selectable_offers, speciality)
+    formset = offer_preference_formset(prefix=internship)
     if request.method == 'POST':
-        formset = offer_preference_formset(request.POST)
-        if formset.is_valid():
-            _remove_previous_choices(student, current_internship, speciality)
-            _save_student_choices(formset, student, current_internship, speciality)
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                _('Choices for %(internship)s have been saved !') % {'internship': current_internship}
-            )
+        data = _filter_internship_form_data(request.POST, internship)
+        if data:
+            formset = offer_preference_formset(prefix=internship, data=data)
+            if formset.is_valid():
+                _save_preferences(formset, internship, speciality, student)
+                saved_choices.append(internship)
+            else:
+                _show_error_message(formset, internship, request)
         else:
-            messages.add_message(
-                request,
-                messages.ERROR,
-                _build_error_message(formset.non_form_errors(), current_internship)
-            )
-    else:
-        formset = offer_preference_formset()
-
+            _handle_empty_formset(internship, speciality, student)
     return formset
+
+
+def _build_offer_preference_formset(internship, selectable_offers, speciality):
+    if not internship.speciality:
+        selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(
+            speciality,
+            internship.cohort
+        )
+    offer_preference_formset = formset_factory(
+        OfferPreferenceForm,
+        formset=OfferPreferenceFormSet,
+        extra=len(selectable_offers),
+        min_num=len(selectable_offers),
+        max_num=len(selectable_offers),
+        validate_min=True,
+        validate_max=True
+    )
+    return offer_preference_formset
+
+
+def _show_error_message(formset, internship, request):
+    messages.add_message(
+        request,
+        messages.ERROR,
+        _build_error_message(formset.non_form_errors(), internship)
+    )
+
+
+def _save_preferences(formset, internship, speciality, student):
+    _remove_previous_choices(student, internship, speciality)
+    _save_student_choices(formset, student, internship, speciality)
+
+
+def _handle_empty_formset(internship, speciality, student):
+    internship.chosen_specialty = None
+    _remove_previous_choices(student, internship, speciality)
 
 
 def _build_error_message(errors, current_internship):
@@ -167,6 +231,12 @@ def _build_error_message(errors, current_internship):
         error_message += "<li>{}</li>".format(error)
     error_message += "</ul>"
     return mark_safe(error_message)
+
+
+def _build_choices_saved_success_message(saved_choices):
+    success_message = _('Choices have been successfully saved for: ')
+    success_message += ", ".join([internship.name for internship in saved_choices])
+    return mark_safe(success_message)
 
 
 def _remove_previous_choices(student, internship, speciality):
@@ -197,6 +267,10 @@ def _save_student_choice(form, student, internship, speciality):
                                                                            internship=internship,
                                                                            priority=False)
             internship_choice.save()
+
+
+def _filter_internship_form_data(data, internship):
+    return {key: value for (key, value) in data.items() if internship.name in key and 'speciality_id' not in key}
 
 
 def has_been_selected(preference_value):
