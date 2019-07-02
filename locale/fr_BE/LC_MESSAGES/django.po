@@ -224,26 +224,3 @@ msgstr "sélection"
 #: templates/cohort_selection.html:44
 msgid "to"
 msgstr "au"
-
-#~ msgid ""
-#~ "\n"
-#~ "                You've made changes to your choices for "
-#~ "%(current_internship)s but you did not save them yet.\n"
-#~ "                "
-#~ msgstr ""
-#~ "\n"
-#~ "                Vous avez fait des changements de choix pour "
-#~ "%(current_internship)s mais vous ne les avez pas encore enregistrés.\n"
-#~ "                "
-
-#~ msgid "Choices for %(internship)s have been saved !"
-#~ msgstr "Vos choix pour %(internship)s ont bien été enregistrés !"
-
-#~ msgid "Proceed without saving"
-#~ msgstr "Continuer sans enregistrer"
-
-#~ msgid "Save"
-#~ msgstr "Enregistrer"
-
-#~ msgid "Warning"
-#~ msgstr "Attention"
