@@ -33,12 +33,14 @@ from attribution import models as mdl_attribution
 from attribution.models.enums import function
 from base import models as mdl_base
 from base.business import learning_unit_year_with_context
+from base.models.entity_version import EntityVersion
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
 from base.models.enums import entity_container_year_link_type as entity_types
-from django.db.models import OuterRef, Subquery, Exists, Prefetch
+from django.db.models import OuterRef, Subquery
 from base.business.entity import get_entities_ids
 from base.models.learning_component_year import LearningComponentYear
+from collections import OrderedDict
 
 NO_CHARGE = 0.0
 
@@ -72,7 +74,7 @@ def get_volumes_total(attribution_list):
 
 
 def get_attribution_vacant_list(acronym_filter, academic_year, faculty=None):
-    attribution_vacant = {}
+    attribution_vacant = OrderedDict()
 
     learning_components = _get_learning_components(
         academic_year,
@@ -343,8 +345,7 @@ def get_filter_learning_container_ids(entity_version, qs):
     if entity_version:
         allocation_entity_ids = get_entities_ids(entity_version.acronym, True)
         qs = qs.filter(
-            learning_container_year__entitycontaineryear__entity__in=allocation_entity_ids,
-            learning_container_year__entitycontaineryear__type=entity_types.ALLOCATION_ENTITY
+            learning_container_year__allocation_entity__in=allocation_entity_ids
         )
 
     return qs
@@ -365,16 +366,16 @@ def _get_learning_components(academic_year, acronym_filter, faculty):
         )
 
         learning_components = LearningComponentYear.objects \
-            .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs)\
+            .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs) \
+            .order_by('learning_unit_year__acronym')\
             .select_related('learning_unit_year__learning_container_year')\
             .exclude(volume_declared_vacant__isnull=True)
     return learning_components
 
 
 def _get_learning_components_by_faculty(academic_year, acronym_filter, faculty):
-    entity_allocation = mdl_base.entity_version.EntityVersion.objects.filter(
-        entity__entitycontaineryear__learning_container_year__learningunityear=OuterRef('pk'),
-        entity__entitycontaineryear__type=entity_types.ALLOCATION_ENTITY
+    entity_allocation = EntityVersion.objects.filter(
+        entity=OuterRef('learning_container_year__allocation_entity'),
     ).current(
         OuterRef('academic_year__start_date')
     ).values('acronym')[:1]
@@ -389,4 +390,5 @@ def _get_learning_components_by_faculty(academic_year, acronym_filter, faculty):
     return LearningComponentYear.objects \
         .filter(learning_unit_year_id__in=learning_unit_years_ids)\
         .select_related('learning_unit_year__learning_container_year')\
-        .exclude(volume_declared_vacant__isnull=True)
+        .exclude(volume_declared_vacant__isnull=True)\
+        .order_by('learning_unit_year__acronym')
