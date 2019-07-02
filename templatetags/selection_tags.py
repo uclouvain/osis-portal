@@ -40,9 +40,7 @@ def choice_for_offer(internship_choices, offer, internship):
             internship=internship
         ).choice
         return str(choice)
-    except ObjectDoesNotExist:
-        return None
-    except ValueError:
+    except (ObjectDoesNotExist, ValueError):
         return None
 
 

@@ -49,18 +49,20 @@ from internship.models.internship_speciality import InternshipSpeciality
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @redirect_if_subscription_not_allowed
-def view_internship_selection(request, cohort_id, internship_id=-1, speciality_id=-1):
+def view_internship_selection(request, cohort_id, internship_id=None):
     cohort = mdl_int.cohort.Cohort.objects.get(pk=cohort_id)
     internships = Internship.objects.filter(cohort=cohort).order_by("speciality__name", "name")
 
-    if int(internship_id) < 1:
-        internship_id = internships.first().id
-    if request.POST:
-        internship_id = request.POST['current_internship']
     if not mdl_int.internship_offer.cohort_open_for_selection(cohort):
         return layout.render(request, "internship_selection_closed.html", {'cohort': cohort})
 
+    if request.POST:
+        internship_id = request.POST['current_internship']
+    elif not internship_id:
+        internship_id = internships.first().pk
+
     current_internship = internships.get(pk=internship_id)
+
     specialities = mdl_int.internship_speciality.find_selectables(cohort).order_by("name")
     student = mdl.student.find_by_user(request.user)
     saved_choices = []
