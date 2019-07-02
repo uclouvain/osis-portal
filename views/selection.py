@@ -168,12 +168,7 @@ def zip_offers_formset_and_first_choices(formset, internships_offers, number_cho
 
 
 def _handle_formset_to_save(request, selectable_offers, student, internship, speciality, saved_choices):
-    if not internship.speciality:
-        selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(speciality,
-                                                                                              internship.cohort)
-    offer_preference_formset = formset_factory(OfferPreferenceForm, formset=OfferPreferenceFormSet,
-                                               extra=len(selectable_offers), min_num=len(selectable_offers),
-                                               max_num=len(selectable_offers), validate_min=True, validate_max=True)
+    offer_preference_formset = _build_offer_preference_formset(internship, selectable_offers, speciality)
     formset = offer_preference_formset(prefix=internship)
     if request.method == 'POST':
         data = _filter_internship_form_data(request.POST, internship)
@@ -187,6 +182,24 @@ def _handle_formset_to_save(request, selectable_offers, student, internship, spe
         else:
             _handle_empty_formset(internship, speciality, student)
     return formset
+
+
+def _build_offer_preference_formset(internship, selectable_offers, speciality):
+    if not internship.speciality:
+        selectable_offers = mdl_int.internship_offer.find_selectable_by_speciality_and_cohort(
+            speciality,
+            internship.cohort
+        )
+    offer_preference_formset = formset_factory(
+        OfferPreferenceForm,
+        formset=OfferPreferenceFormSet,
+        extra=len(selectable_offers),
+        min_num=len(selectable_offers),
+        max_num=len(selectable_offers),
+        validate_min=True,
+        validate_max=True
+    )
+    return offer_preference_formset
 
 
 def _show_error_message(formset, internship, request):
