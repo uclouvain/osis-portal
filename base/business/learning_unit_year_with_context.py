@@ -26,9 +26,10 @@
 from collections import OrderedDict
 
 from django.db import models
+from django.db.models import Prefetch
 
 from base import models as mdl
-from base.models.entity_component_year import EntityComponentYear
+from base.models.entity import Entity
 from base.models.enums import entity_container_year_link_type as entity_types
 from base.models.enums.learning_unit_year_subtypes import FULL
 from base.models.learning_component_year import LearningComponentYear
@@ -41,38 +42,38 @@ class LearningUnitYearWithContext:
 
 
 def get_with_context(**learning_unit_year_data):
-    entity_container_prefetch = models.Prefetch(
-        'learning_container_year__entitycontaineryear_set',
-        queryset=mdl.entity_container_year
-            .search(
-            link_type=[
-                entity_types.REQUIREMENT_ENTITY,
-                entity_types.ALLOCATION_ENTITY,
-                entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1,
-                entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2
-            ]
-        )
-            .prefetch_related(
-            models.Prefetch('entity__entityversion_set', to_attr='entity_versions')
-        ),
-        to_attr='entity_containers_year'
+    entity_version_prefetch = Entity.objects.all().prefetch_related(
+        Prefetch('entityversion_set', to_attr='entity_versions')
+    )
+    requirement_entity_prefetch = models.Prefetch(
+        'learning_container_year__requirement_entity',
+        queryset=entity_version_prefetch
+    )
+    allocation_entity_prefetch = models.Prefetch(
+        'learning_container_year__allocation_entity',
+        queryset=entity_version_prefetch
+    )
+    additional_entity_1_prefetch = models.Prefetch(
+        'learning_container_year__additional_entity_1',
+        queryset=entity_version_prefetch
+    )
+    additional_entity_2_prefetch = models.Prefetch(
+        'learning_container_year__additional_entity_2',
+        queryset=entity_version_prefetch
     )
 
     learning_component_prefetch = models.Prefetch(
         'learningcomponentyear_set',
-        queryset=LearningComponentYear.objects.all().order_by('type', 'acronym').prefetch_related(
-            models.Prefetch('entitycomponentyear_set',
-                            queryset=EntityComponentYear.objects.all()
-                            .select_related('entity_container_year'),
-                            to_attr='entity_components_year'
-                            )
-        ),
+        queryset=LearningComponentYear.objects.all().order_by('type', 'acronym'),
         to_attr='learning_components'
     )
 
     learning_units = mdl.learning_unit_year.LearningUnitYear.objects.filter(subtype=FULL, **learning_unit_year_data) \
         .select_related('academic_year', 'learning_container_year') \
-        .prefetch_related(entity_container_prefetch) \
+        .prefetch_related(requirement_entity_prefetch) \
+        .prefetch_related(allocation_entity_prefetch) \
+        .prefetch_related(additional_entity_1_prefetch) \
+        .prefetch_related(additional_entity_2_prefetch) \
         .prefetch_related(learning_component_prefetch) \
         .order_by('academic_year__year', 'acronym')
 
@@ -93,47 +94,31 @@ def append_latest_entities(learning_unit):
     return learning_unit
 
 
-def _append_components(learning_unit):
-    learning_unit.components = OrderedDict()
-    if learning_unit.learning_components:
-        for component in learning_unit.learning_components:
-            entity_components_year = component.entity_components_year
-            requirement_entities_volumes = _get_requirement_entities_volumes(entity_components_year)
-            vol_req_entity = requirement_entities_volumes.get(entity_types.REQUIREMENT_ENTITY, 0) or 0
-            vol_add_req_entity_1 = requirement_entities_volumes.get(entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1, 0) or 0
-            vol_add_req_entity_2 = requirement_entities_volumes.get(entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2, 0) or 0
+def _append_components(learning_unit_year):
+    learning_unit_year.components = OrderedDict()
+    if learning_unit_year.learning_components:
+        for component in learning_unit_year.learning_components:
+            req_entities_volumes = _get_requirement_entities_volumes(component)
+            vol_req_entity = req_entities_volumes.get(entity_types.REQUIREMENT_ENTITY, 0) or 0
+            vol_add_req_entity_1 = req_entities_volumes.get(entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1, 0) or 0
+            vol_add_req_entity_2 = req_entities_volumes.get(entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2, 0) or 0
             volume_global = vol_req_entity + vol_add_req_entity_1 + vol_add_req_entity_2
+            planned_classes = component.planned_classes or 0
 
-            learning_unit.components[component] = {
+            learning_unit_year.components[component] = {
                 'VOLUME_TOTAL': to_float_or_zero(component.hourly_volume_total_annual),
                 'VOLUME_Q1': to_float_or_zero(component.hourly_volume_partial_q1),
                 'VOLUME_Q2': to_float_or_zero(component.hourly_volume_partial_q2),
-                'PLANNED_CLASSES': component.planned_classes or 1,
+                'PLANNED_CLASSES': planned_classes,
                 'VOLUME_' + entity_types.REQUIREMENT_ENTITY: vol_req_entity,
                 'VOLUME_' + entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1: vol_add_req_entity_1,
                 'VOLUME_' + entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2: vol_add_req_entity_2,
                 'VOLUME_TOTAL_REQUIREMENT_ENTITIES': volume_global,
             }
-    return learning_unit
+    return learning_unit_year
 
 
-def _get_requirement_entities_volumes(entity_components_year):
-    needed_entity_types = [
-        entity_types.REQUIREMENT_ENTITY,
-        entity_types.ADDITIONAL_REQUIREMENT_ENTITY_1,
-        entity_types.ADDITIONAL_REQUIREMENT_ENTITY_2
-    ]
+def _get_requirement_entities_volumes(learning_component):
     return {
-        entity_type: _get_floated_only_element_of_list([ecy.repartition_volume for ecy in entity_components_year
-                                                        if ecy.entity_container_year.type == entity_type], default=0)
-        for entity_type in needed_entity_types
-        }
-
-
-def _get_floated_only_element_of_list(a_list, default=None):
-    len_of_list = len(a_list)
-    if not len_of_list:
-        return default
-    elif len_of_list == 1:
-        return float(a_list[0]) if a_list[0] else 0.0
-    raise ValueError("The provided list should contain 0 or 1 elements")
+        key: value for key, value in learning_component.repartition_volumes.items()
+    }

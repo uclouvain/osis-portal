@@ -254,4 +254,3 @@ def can_access_student_performance(request, registration_id=None, stud_perf=None
                                 str(stud_offer_enrollment.offer_year.academic_year.year), []):
                             return True
     return False
-
