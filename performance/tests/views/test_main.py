@@ -536,3 +536,44 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         self.client.force_login(self.student.person.user)
         url = reverse('performance_student_by_acronym_and_year', args=[self.acronym_with_space_input, self.valid_year])
         self.__test_access_ok(url)
+
+
+class ManagedProgramsTestCase(TestCase):
+
+    def setUp(self):
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
+        self.student = StudentFactory()
+        self.person = PersonFactory()
+        self.url = reverse('home')
+
+    def test_with_student(self):
+        self.client.force_login(self.student.person.user)
+        response = self.client.get(self.url)
+        main._set_managed_programs_if_not(response.wsgi_request)
+        session = self.client.session
+        self.assertFalse(session.get('is_faculty_manager'))
+        self.assertIsNone(session.get('managed_programs'))
+
+    def test_with_managed_programs(self):
+        self.client.force_login(self.person.user)
+        response = self.client.get(self.url)
+        main._set_managed_programs_if_not(response.wsgi_request)
+        session = self.client.session
+        self.assertTrue(session.get('is_faculty_manager'))
+        self.assertIsNotNone(session.get('managed_programs'))
+        self.assertEqual(json.dumps({'2017': ['PHYS1BA', 'BIOL1BA'], '2018': ['PHYS1BA', 'BIOL1BA']},
+                                    cls=DjangoJSONEncoder), session.get('managed_programs'))
+
+    def test_without_pgms(self):
+        patcher = patch('base.views.api.get_managed_programs_as_dict')
+        mock_api_call = patcher.start()
+        mock_api_call.return_value = {}
+        self.client.force_login(self.person.user)
+        response = self.client.get(self.url)
+        main._set_managed_programs_if_not(response.wsgi_request)
+        session = self.client.session
+        self.assertFalse(session.get('is_faculty_manager'))
+        self.assertIsNone(session.get('managed_programs'))
+
