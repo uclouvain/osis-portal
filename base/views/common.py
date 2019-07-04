@@ -117,6 +117,7 @@ def _set_managed_programs(request, context):
         elif not request.user.is_superuser:
             request.session['is_faculty_manager'] = False
             request.session['managed_programs'] = None
+            context['is_faculty_manager'] = False
 
 
 def get_managed_program_as_dict(user):
