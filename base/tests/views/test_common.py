@@ -135,6 +135,14 @@ class TestManagedPrograms(TestCase):
         self.assertIsNone(context.get('is_faculty_manager', None))
         self.assertTrue(context.get('dummy', None) == 'dummy')
 
+    def test_get_program_managed_as_dict(self):
+        managed_programs = common.get_managed_program_as_dict(self.person.user)
+        expected_managed_programs = {
+            '2017': ['PHYS1BA', 'BIOL1BA'],
+            '2018': ['PHYS1BA', 'BIOL1BA']
+        }
+        self.assertDictEqual(expected_managed_programs, managed_programs)
+
     # 2.1. If session key 'is_faculty_manager' is defined :
     # Context 'is_faculty_manager' is updated with value of Session 'is_faculty_manager'
     def test_already_defined(self):
