@@ -96,29 +96,36 @@ def _set_managed_programs(request, context):
                 2.2.3.2: Session 'is_faculty_manager'  value is set to False
                 2.2.3.3: Session 'managed_programs' value is set to None
     """
-    if request.user.is_authenticated and \
-            (request.user.is_superuser or not request.user.has_perm('base.is_student')):
-        if request.session.get('is_faculty_manager') is None:
-            if request.user.has_perm('base.is_faculty_administrator'):
-                context['is_faculty_manager'] = True
-                request.session['is_faculty_manager'] = True
-            else:
-                person = person_mdl.find_by_user(request.user)
-                if person:
-                    managed_programs_as_dict = api.get_managed_programs_as_dict(person.global_id)
+    if request.user.is_authenticated:
+        if request.user.is_superuser or not request.user.has_perm('base.is_student'):
+            if request.session.get('is_faculty_manager') is None:
+                if request.user.has_perm('base.is_faculty_administrator'):
+                    context['is_faculty_manager'] = True
+                    request.session['is_faculty_manager'] = True
+                else:
                     is_faculty_manager = False
                     managed_programs = None
+                    managed_programs_as_dict = get_managed_program_as_dict(request.user)
                     if managed_programs_as_dict:
                         is_faculty_manager = True
                         managed_programs = json.dumps(managed_programs_as_dict, cls=DjangoJSONEncoder)
                     context['is_faculty_manager'] = is_faculty_manager
-                else:
-                    is_faculty_manager = False
-                    managed_programs = None
-                request.session['is_faculty_manager'] = is_faculty_manager
-                request.session['managed_programs'] = managed_programs
-        else:
-            context['is_faculty_manager'] = request.session.get('is_faculty_manager')
+                    request.session['is_faculty_manager'] = is_faculty_manager
+                    request.session['managed_programs'] = managed_programs
+            else:
+                context['is_faculty_manager'] = request.session.get('is_faculty_manager')
+        elif not request.user.is_superuser:
+            request.session['is_faculty_manager'] = False
+            request.session['managed_programs'] = None
+            context['is_faculty_manager'] = False
+
+
+def get_managed_program_as_dict(user):
+    managed_programs_as_dict = None
+    person = person_mdl.find_by_user(user)
+    if person:
+        managed_programs_as_dict = api.get_managed_programs_as_dict(person.global_id)
+    return managed_programs_as_dict
 
 
 def login(request):
