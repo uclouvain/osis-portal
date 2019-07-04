@@ -127,7 +127,6 @@ def get_managed_program_as_dict(user):
     return managed_programs_as_dict
 
 
-
 def login(request):
     if request.method == 'POST':
         username = request.POST['username']

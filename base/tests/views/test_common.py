@@ -123,8 +123,7 @@ class TestManagedPrograms(TestCase):
         response = self.client.get(self.url)
         context = {'dummy': 'dummy'}
         common._set_managed_programs(response.wsgi_request, context)
-        self.assertTrue(len(context) == 1)
-        self.assertIsNone(context.get('is_faculty_manager', None))
+        self.assertFalse(context.get('is_faculty_manager', None))
         self.assertTrue(context.get('dummy', None) == 'dummy')
 
     def test_not_authenticated(self):

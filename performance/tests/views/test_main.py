@@ -31,6 +31,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
+from mock import patch
 
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
@@ -260,6 +261,10 @@ class SelectStudentTest(TestCase):
         self.assertRedirects(response, "/login/?next={}".format(self.url))
 
     def test_user_has_not_permission(self):
+        patcher = patch('base.views.api.get_managed_programs_as_dict')
+        mock_api_call = patcher.start()
+        mock_api_call.return_value = {}
+        self.client.logout()
         a_person = PersonFactory()
         self.client.force_login(a_person.user)
 
