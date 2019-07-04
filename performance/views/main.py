@@ -260,6 +260,10 @@ def can_access_student_performance(request, registration_id=None, stud_perf=None
 
 
 def _set_managed_programs_if_not(request):
+    if request.user.has_perm('base.is_student'):
+        request.session['is_faculty_manager'] = False
+        request.session['managed_programs'] = None
+        request.session.save()
     if request.session.get('is_faculty_manager', None) is None:
         managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
         if managed_programs_as_dict:
