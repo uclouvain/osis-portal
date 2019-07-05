@@ -207,7 +207,7 @@ class ExamEnrollmentFormTest(TestCase):
         mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
             document='{"error_message": "outside_exam_enrollment_period",'
                      '"registration_id":" 12345678",'
-                     '"current_number_session" :null,'
+                     '"current_number_session": null,'
                      '"legende": null,'
                      '"offer_year_acronym": "DROI1BA",'
                      '"exam_enrollments": null}'
