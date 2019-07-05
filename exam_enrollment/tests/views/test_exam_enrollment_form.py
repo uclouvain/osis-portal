@@ -221,6 +221,45 @@ class ExamEnrollmentFormTest(TestCase):
         )
 
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_no_learning_unit_enrollment_found(
+            self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": "no_learning_unit_enrollment_found",'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertEqual(
+            error_message,
+            _("no_learning_unit_enrollment_found").format(self.off_year.acronym)
+        )
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_no_error(
+            self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": null,'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertIsNone(error_message)
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     @patch('exam_enrollment.views.exam_enrollment._get_student_programs')
     @patch('exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form')
     @patch('base.models.academic_year.current_academic_year')
