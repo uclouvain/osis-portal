@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 15:09+0100\n"
+"POT-Creation-Date: 2019-07-05 13:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,6 +48,10 @@ msgstr "M'inscrire aux examens ou modifier mon inscription aux examens"
 msgid "Which action do you want to perform ?"
 msgstr "Quelle action souhaitez-vous effectuer ?"
 
+#: views/exam_enrollment.py:149
+msgid "You are outside the exams enrollment period"
+msgstr "Vous êtes en dehors de la période d'inscription aux examens"
+
 #: templates/offer_choice.html:70
 msgid "acronym"
 msgstr "Sigle"
@@ -69,7 +73,7 @@ msgstr "Crédits"
 msgid "exam_enrollment_form_loading"
 msgstr "Récupération du formulaire d'inscription aux examens."
 
-#: views/exam_enrollment.py:235
+#: views/exam_enrollment.py:240
 msgid "exam_enrollment_form_submitted"
 msgstr "Formulaire d'inscription aux examens soumis avec succès."
 
