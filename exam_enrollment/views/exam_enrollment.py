@@ -40,7 +40,7 @@ from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.http import HttpResponse, response
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
 
 from base import models as mdl_base
@@ -125,13 +125,8 @@ def _get_exam_enrollment_form(off_year, request, stud):
             logger.exception("Json data is not valid")
             data = {}
 
-        if data.get('error_message'):
-            error_message = _(data.get('error_message')).format(off_year.acronym)
-        else:
-            error_message = data.get('error_message')
-
         return layout.render(request, 'exam_enrollment_form.html',
-                             {'error_message': error_message,
+                             {'error_message': _get_error_message(data, off_year),
                               'exam_enrollments': data.get('exam_enrollments'),
                               'student': stud,
                               'current_number_session': data.get('current_number_session'),
@@ -147,6 +142,16 @@ def _get_exam_enrollment_form(off_year, request, stud):
                               'academic_year': mdl_base.academic_year.current_academic_year(),
                               'program': mdl_base.offer_year.find_by_id(off_year.id),
                               'request_timeout': request_timeout})
+
+
+def _get_error_message(data, off_year):
+    if data.get('error_message') == 'outside_exam_enrollment_period':
+        error_message = _("You are outside the exams enrollment period")
+    elif data.get('error_message'):
+        error_message = _(data.get('error_message')).format(off_year.acronym)
+    else:
+        error_message = data.get('error_message')
+    return error_message
 
 
 def ask_exam_enrollment_form(stud, off_year):
