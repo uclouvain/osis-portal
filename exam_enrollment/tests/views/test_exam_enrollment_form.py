@@ -26,14 +26,15 @@
 import json
 import random
 import warnings
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase, Client
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
@@ -196,6 +197,67 @@ class ExamEnrollmentFormTest(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_outside_period(self,
+                                                      mock_get_exam_enrollment_request,
+                                                      mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": "outside_exam_enrollment_period",'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertEqual(
+            error_message,
+            _("You are outside the exams enrollment period")
+        )
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_no_learning_unit_enrollment_found(
+            self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": "no_learning_unit_enrollment_found",'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertEqual(
+            error_message,
+            _("no_learning_unit_enrollment_found").format(self.off_year.acronym)
+        )
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_no_error(
+            self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": null,'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertIsNone(error_message)
 
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     @patch('exam_enrollment.views.exam_enrollment._get_student_programs')

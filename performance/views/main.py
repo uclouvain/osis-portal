@@ -27,6 +27,7 @@
 import json
 
 from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
+from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext as _
@@ -34,7 +35,7 @@ from django.utils.translation import ugettext as _
 from base.models import student, offer_enrollment
 from performance import models as mdl_performance
 from base.forms.base_forms import RegistrationIdForm
-from base.views import layout
+from base.views import layout, common
 from performance.models.enums import offer_registration_state
 from dashboard.views import main as dash_main_view
 
@@ -232,28 +233,41 @@ def check_right_access(student_performance, student):
 
 
 def can_access_performance_administration(request):
+    _set_managed_programs_if_not(request)
     is_fac_admin = request.user.has_perm('base.is_faculty_administrator')
     is_fac_manager = request.session.get('is_faculty_manager')
     return is_fac_admin or is_fac_manager
 
 
 def can_access_student_performance(request, registration_id=None, stud_perf=None):
-    can_access = False
+    _set_managed_programs_if_not(request)
     if request.user.has_perm('base.is_faculty_administrator'):
-        can_access = True
-    elif registration_id:
+        return True
+    if registration_id:
         user_managed_programs_in_session = request.session.get('managed_programs')
         if user_managed_programs_in_session:
             user_managed_programs = json.loads(user_managed_programs_in_session)
             if stud_perf:
-                can_access = stud_perf.acronym in user_managed_programs.get(str(stud_perf.academic_year), [])
+                return stud_perf.acronym in user_managed_programs.get(str(stud_perf.academic_year), [])
             else:
                 stud = student.find_by_registration_id(registration_id)
-                if stud and (stud_offer_enrollment
-                             for stud_offer_enrollment
-                             in offer_enrollment.find_by_student(stud)
-                             if stud_offer_enrollment.offer_year.acronym
-                             in user_managed_programs.get(
-                                str(stud_offer_enrollment.offer_year.academic_year.year), [])):
-                    can_access = True
-    return can_access
+                if stud:
+                    for stud_offer_enrollment in offer_enrollment.find_by_student(stud):
+                        if stud_offer_enrollment.offer_year.acronym in user_managed_programs.get(
+                                str(stud_offer_enrollment.offer_year.academic_year.year), []):
+                            return True
+    return False
+
+
+def _set_managed_programs_if_not(request):
+    if request.user.has_perm('base.is_student'):
+        request.session['is_faculty_manager'] = False
+        request.session['managed_programs'] = None
+        request.session.save()
+    if request.session.get('is_faculty_manager', None) is None:
+        managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
+        if managed_programs_as_dict:
+            request.session['is_faculty_manager'] = True
+            managed_programs = json.dumps(managed_programs_as_dict, cls=DjangoJSONEncoder)
+            request.session['managed_programs'] = managed_programs
+            request.session.save()
