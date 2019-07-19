@@ -35,12 +35,13 @@ from openapi_client.models.continuing_education_training_serializer import Conti
 from openapi_client.models.file import File
 from openapi_client.models.file_category_enum import FileCategoryEnum
 from openapi_client.models.file_content import FileContent
-from openapi_client.models.file_list_item import FileListItem
+from openapi_client.models.file_list_serializer import FileListSerializer
 from openapi_client.models.formation_basic import FormationBasic
 from openapi_client.models.inline_response200 import InlineResponse200
 from openapi_client.models.marital_status_enum import MaritalStatusEnum
 from openapi_client.models.paginated_admissions import PaginatedAdmissions
 from openapi_client.models.paginated_continuing_education_trainings import PaginatedContinuingEducationTrainings
+from openapi_client.models.paginated_files import PaginatedFiles
 from openapi_client.models.paging import Paging
 from openapi_client.models.person_basic import PersonBasic
 from openapi_client.models.person_detail_serializer import PersonDetailSerializer

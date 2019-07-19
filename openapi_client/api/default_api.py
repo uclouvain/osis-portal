@@ -347,7 +347,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str uuid: The UUID of the admission (required)
-        :return: list[FileListItem]
+        :return: PaginatedFiles
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -369,7 +369,7 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str uuid: The UUID of the admission (required)
-        :return: list[FileListItem]
+        :return: PaginatedFiles
                  If the method is called asynchronously,
                  returns the request thread.
         """
@@ -424,7 +424,7 @@ class DefaultApi(object):
             body=body_params,
             post_params=form_params,
             files=local_var_files,
-            response_type='list[FileListItem]',  # noqa: E501
+            response_type='PaginatedFiles',  # noqa: E501
             auth_settings=auth_settings,
             async_req=local_var_params.get('async_req'),
             _return_http_data_only=local_var_params.get('_return_http_data_only'),  # noqa: E501
@@ -443,6 +443,8 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str uuid: The UUID of the admission (required)
+        :param object file: File information
+        :param str content: Content of the file to upload
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
@@ -465,6 +467,8 @@ class DefaultApi(object):
 
         :param async_req bool
         :param str uuid: The UUID of the admission (required)
+        :param object file: File information
+        :param str content: Content of the file to upload
         :return: None
                  If the method is called asynchronously,
                  returns the request thread.
@@ -472,7 +476,7 @@ class DefaultApi(object):
 
         local_var_params = locals()
 
-        all_params = ['uuid']  # noqa: E501
+        all_params = ['uuid', 'file', 'content']  # noqa: E501
         all_params.append('async_req')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
@@ -503,6 +507,10 @@ class DefaultApi(object):
 
         form_params = []
         local_var_files = {}
+        if 'file' in local_var_params:
+            form_params.append(('file', local_var_params['file']))  # noqa: E501
+        if 'content' in local_var_params:
+            form_params.append(('content', local_var_params['content']))  # noqa: E501
 
         body_params = None
         # HTTP header `Content-Type`
