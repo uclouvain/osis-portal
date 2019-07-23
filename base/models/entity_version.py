@@ -119,7 +119,7 @@ class EntityVersionQuerySet(models.QuerySet):
 
 class EntityVersion(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
-    entity = models.ForeignKey('Entity')
+    entity = models.ForeignKey('Entity', on_delete=models.PROTECT)
     acronym = models.CharField(db_index=True, max_length=20, null=True, blank=True)
     entity_type = models.CharField(
         choices=entity_type.ENTITY_TYPES,
@@ -128,7 +128,7 @@ class EntityVersion(SerializableModel):
         blank=True,
         verbose_name=_("Type")
     )
-    parent = models.ForeignKey('Entity', related_name='parent_of', blank=True, null=True)
+    parent = models.ForeignKey('Entity', related_name='parent_of', blank=True, null=True, on_delete=models.PROTECT)
     start_date = models.DateField(db_index=True)
     end_date = models.DateField(db_index=True, blank=True, null=True)
 

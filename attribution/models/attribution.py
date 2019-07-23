@@ -40,8 +40,9 @@ class AttributionAdmin(SerializableModelAdmin):
 class Attribution(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     function = models.CharField(max_length=35, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
-    learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
-    tutor = models.ForeignKey('base.Tutor')
+    learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None,
+                                           on_delete=models.PROTECT)
+    tutor = models.ForeignKey('base.Tutor', on_delete=models.PROTECT)
     start_year = models.IntegerField(blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)
     summary_responsible = models.BooleanField(default=False)
