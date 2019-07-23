@@ -28,7 +28,7 @@ import json
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase, override_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from mock import patch
 
 from base.tests.factories.person import PersonFactory

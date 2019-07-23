@@ -30,7 +30,7 @@ from requests.exceptions import RequestException
 from django.contrib.auth.models import User, Group, Permission
 from django.test import TestCase, override_settings
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms.formsets import BaseFormSet
 
 from attribution.views import tutor_charge

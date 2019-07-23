@@ -27,8 +27,8 @@ import datetime
 
 import mock
 from django.contrib.auth.models import Group, Permission
-from django.core.urlresolvers import reverse
 from django.test import TestCase, override_settings
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from attribution.tests.factories.attribution import AttributionFactory
@@ -41,10 +41,6 @@ from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
-from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from attribution.tests.factories.attribution import AttributionFactory
-
 
 ACCESS_DENIED = 401
 METHOD_NOT_ALLOWED = 405
