@@ -43,7 +43,7 @@ class TutorAdmin(SerializableModelAdmin):
 class Tutor(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True)
-    person = models.OneToOneField('Person', on_delete=models.PROTECT)
+    person = models.OneToOneField('Person', on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s" % self.person
