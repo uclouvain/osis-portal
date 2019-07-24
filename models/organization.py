@@ -42,8 +42,8 @@ class Organization(SerializableModel):
     location = models.CharField(max_length=255, blank=True, null=True)
     postal_code = models.CharField(max_length=20, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
-    country = models.ForeignKey('reference.Country', blank=True, null=True)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
+    country = models.ForeignKey('reference.Country', blank=True, null=True, on_delete=models.CASCADE)
+    cohort = models.ForeignKey('internship.Cohort', null=False, on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s" % self.name

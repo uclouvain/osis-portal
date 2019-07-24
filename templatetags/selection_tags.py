@@ -31,7 +31,7 @@ from django.template.defaulttags import register as reg
 register = template.Library()
 
 
-@register.assignment_tag
+@register.simple_tag()
 def choice_for_offer(internship_choices, offer, internship):
     try:
         choice = internship_choices.get(

@@ -30,7 +30,7 @@ import base.models as mdl_base
 from internship.models import internship_student_information
 from functools import wraps
 from dashboard.views import main as dash_main_view
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import redirect
 from django.core.exceptions import MultipleObjectsReturned
 from internship.models.cohort import Cohort

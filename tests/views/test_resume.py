@@ -27,7 +27,7 @@ from django.test import TestCase, Client
 
 import base.tests.models.test_student
 from django.contrib.auth.models import User, Permission
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from internship.tests.models import test_internship_student_information
 from internship.tests.factories.cohort import CohortFactory
 

@@ -36,8 +36,8 @@ class InternshipAdmin(SerializableModelAdmin):
 
 class Internship(SerializableModel):
     name = models.CharField(max_length=255, blank=False)
-    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True, blank=True)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
+    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True, blank=True, on_delete=models.CASCADE)
+    cohort = models.ForeignKey('internship.Cohort', null=False, on_delete=models.CASCADE)
     length_in_periods = models.IntegerField(null=False, default=1)
 
     def __str__(self):

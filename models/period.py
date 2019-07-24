@@ -37,7 +37,7 @@ class Period(SerializableModel):
     name = models.CharField(max_length=255)
     date_start = models.DateField(blank=False)
     date_end = models.DateField(blank=False)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
+    cohort = models.ForeignKey('internship.Cohort', null=False, on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s" % self.name
