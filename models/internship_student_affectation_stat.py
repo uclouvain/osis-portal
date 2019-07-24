@@ -41,7 +41,7 @@ class InternshipStudentAffectationStatAdmin(SerializableModelAdmin):
 
 class InternshipStudentAffectationStat(SerializableModel):
     student = models.ForeignKey('base.Student', on_delete=models.PROTECT)
-    organization = models.ForeignKey('internship.Organization',on_delete=models.CASCADE)
+    organization = models.ForeignKey('internship.Organization', on_delete=models.CASCADE)
     speciality = models.ForeignKey('internship.InternshipSpeciality', on_delete=models.CASCADE)
     period = models.ForeignKey('internship.Period', on_delete=models.CASCADE)
     internship = models.ForeignKey('internship.Internship', blank=True, null=True, on_delete=models.CASCADE)
