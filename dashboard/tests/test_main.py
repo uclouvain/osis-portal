@@ -27,10 +27,8 @@ import datetime
 
 from django.conf import settings
 from django.test import TestCase
-from django.contrib.auth.models import Group
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
-from attribution.tests.factories.attribution import AttributionFactory
 from base.models.enums import academic_calendar_type
 from base.tests.factories.academic_calendar import AcademicCalendarFactory
 from base.tests.factories.academic_year import AcademicYearFactory

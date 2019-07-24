@@ -37,7 +37,7 @@ class EntityAdmin(SerializableModelAdmin):
 
 
 class Entity(SerializableModel):
-    organization = models.ForeignKey('Organization', blank=True, null=True)
+    organization = models.ForeignKey('Organization', blank=True, null=True, on_delete=models.PROTECT)
     changed = models.DateTimeField(null=True, auto_now=True)
 
     @cached_property
