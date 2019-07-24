@@ -36,11 +36,11 @@ class InternshipChoiceAdmin(SerializableModelAdmin):
 
 
 class InternshipChoice(SerializableModel):
-    student = models.ForeignKey('base.Student')
-    organization = models.ForeignKey('internship.Organization')
-    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True)
+    student = models.ForeignKey('base.Student', on_delete=models.PROTECT)
+    organization = models.ForeignKey('internship.Organization', on_delete=models.CASCADE)
+    speciality = models.ForeignKey('internship.InternshipSpeciality', null=True, on_delete=models.CASCADE)
     choice = models.IntegerField()
-    internship = models.ForeignKey('internship.Internship')
+    internship = models.ForeignKey('internship.Internship', on_delete=models.CASCADE)
     priority = models.BooleanField()
     registered = models.DateTimeField(null=True, auto_now=True)
 

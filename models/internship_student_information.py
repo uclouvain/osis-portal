@@ -41,7 +41,7 @@ class InternshipStudentInformationAdmin(SerializableModelAdmin):
 class InternshipStudentInformation(SerializableModel):
     TYPE_CHOICE = (('SPECIALIST', _('Specialist')),
                    ('GENERALIST', _('Generalist')))
-    person = models.ForeignKey('base.Person')
+    person = models.ForeignKey('base.Person', on_delete=models.PROTECT)
     location = models.CharField(max_length=255)
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=255)
@@ -49,7 +49,7 @@ class InternshipStudentInformation(SerializableModel):
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone_mobile = models.CharField(max_length=100, blank=True, null=True)
     contest = models.CharField(max_length=124, choices=TYPE_CHOICE, null=True, blank=True)
-    cohort = models.ForeignKey('internship.Cohort')
+    cohort = models.ForeignKey('internship.Cohort',on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s" % self.person

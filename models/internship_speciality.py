@@ -36,7 +36,7 @@ class InternshipSpecialityAdmin(SerializableModelAdmin):
 class InternshipSpeciality(SerializableModel):
     name = models.CharField(max_length=125, blank=False, null=False)
     acronym = models.CharField(max_length=125, blank=False, null=False)
-    cohort = models.ForeignKey('internship.Cohort', null=False)
+    cohort = models.ForeignKey('internship.Cohort', null=False,on_delete=models.CASCADE)
     selectable = models.BooleanField(default=True)
 
     def __str__(self):
