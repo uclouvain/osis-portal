@@ -83,7 +83,7 @@ class LogOutTest(TestCase):
 
         response = self.client.get(url)
 
-        self.assertFalse(response.wsgi_request.user.is_authenticated())
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
 
     @override_settings(OVERRIDED_LOGOUT_URL=reverse('login'))
     def test_with_overrided_logout_url(self):

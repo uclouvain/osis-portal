@@ -42,15 +42,15 @@ def return_error_response(request, template, status_code):
     return response
 
 
-def page_not_found(request):
+def page_not_found(request, **kwargs):
     return return_error_response(request, 'page_not_found.html', 404)
 
 
-def access_denied(request):
+def access_denied(request, **kwargs):
     return return_error_response(request, 'access_denied.html', 401)
 
 
-def server_error(request):
+def server_error(request, **kwargs):
     return return_error_response(request, 'server_error.html', 500)
 
 
