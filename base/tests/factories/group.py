@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,18 +24,15 @@
 #
 ##############################################################################
 import factory
-import factory.fuzzy
-
-from base.tests.factories.group import TutorGroupFactory
-from base.tests.factories.person import PersonFactory
 
 
-class TutorFactory(factory.DjangoModelFactory):
+class GroupFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = 'base.Tutor'
-        exclude = ('group',)
+        model = 'auth.Group'
+        django_get_or_create = ('name',)
 
-    group = factory.SubFactory(TutorGroupFactory)
+    name = ""
 
-    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
-    person = factory.SubFactory(PersonFactory)
+
+class TutorGroupFactory(GroupFactory):
+    name = "tutors"

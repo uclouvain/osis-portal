@@ -319,7 +319,6 @@ ACCESS_DENIED = 401
 
 class HomeTest(TestCase):
     def setUp(self):
-        Group.objects.get_or_create(name='tutors')
         self.person = PersonFactory()
         self.tutor = TutorFactory(person=self.person)
 
