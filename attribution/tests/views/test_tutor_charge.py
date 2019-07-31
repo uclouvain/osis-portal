@@ -151,7 +151,6 @@ def mock_request_multiple_attributions_charge_with_missing_values(*args, **kwarg
 class TutorChargeTest(TestCase):
 
     def setUp(self):
-        Group.objects.get_or_create(name='tutors')
         self.a_tutor = TutorFactory()
         self.data = []
         self.data.append(self.create_lu_yr_annual_data(CURRENT_YEAR))
