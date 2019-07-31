@@ -26,7 +26,7 @@
 from compat import DjangoJSONEncoder
 from django.conf import settings
 
-from django.contrib.auth.views import login as django_login
+from django.contrib.auth.views import LoginView
 from django.contrib.auth import authenticate, logout
 import json
 from django.shortcuts import redirect
@@ -142,7 +142,7 @@ def login(request):
                 request.session[translation.LANGUAGE_SESSION_KEY] = user_language
     elif settings.OVERRIDED_LOGIN_URL:
         return redirect(settings.OVERRIDED_LOGIN_URL)
-    return django_login(request)
+    return LoginView.as_view()(request)
 
 
 def log_out(request):

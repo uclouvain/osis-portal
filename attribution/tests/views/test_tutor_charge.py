@@ -151,7 +151,7 @@ def mock_request_multiple_attributions_charge_with_missing_values(*args, **kwarg
 class TutorChargeTest(TestCase):
 
     def setUp(self):
-        self.create_tutor()
+        self.a_tutor = TutorFactory()
         self.data = []
         self.data.append(self.create_lu_yr_annual_data(CURRENT_YEAR))
         self.data.append(self.create_lu_yr_annual_data(NEXT_YEAR))
@@ -179,17 +179,11 @@ class TutorChargeTest(TestCase):
                 'learning_unit_year':               a_learning_unit_year,
                 'attribution':                      an_attribution}
 
-    def create_tutor(self):
-        self.a_user = self.create_user(username='jacob', email='jacob@localhost', password='top_secret')
-        self.a_person = test_person.create_person_with_user(self.a_user)
-        Group.objects.get_or_create(name='tutors')
-        self.a_tutor = test_tutor.create_tutor_with_person(self.a_person)
-
     def create_user(self, username, email, password):
         return User.objects.create_user(username, email, password)
 
     def test_get_person_from_user(self):
-        self.assertEqual(tutor_charge.get_person(self.a_user), self.a_person)
+        self.assertEqual(tutor_charge.get_person(self.a_tutor.person.user), self.a_tutor.person)
 
     def test_get_non_existing_person_from_user(self):
         a_user_not_known = self.create_user('jacobette', 'jacobette@localhost', 'top_secret')
@@ -232,12 +226,12 @@ class TutorChargeTest(TestCase):
 
     def test_list_attributions(self):
         list_attributions = [self.get_data('attribution')]
-        self.assertEqual(list(tutor_charge.list_attributions(self.a_person, self.get_data('academic_year'))),
+        self.assertEqual(list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year'))),
                          list_attributions)
 
     def test_attribution_years(self):
         list_years = [NEXT_YEAR, CURRENT_YEAR]
-        self.assertEqual(tutor_charge.get_attribution_years(self.a_person), list_years)
+        self.assertEqual(tutor_charge.get_attribution_years(self.a_tutor.person), list_years)
 
     def test_get_url_learning_unit_year(self):
         a_learning_unit_yr = self.get_data('learning_unit_year')
@@ -324,7 +318,6 @@ ACCESS_DENIED = 401
 
 class HomeTest(TestCase):
     def setUp(self):
-        Group.objects.get_or_create(name='tutors')
         self.person = PersonFactory()
         self.tutor = TutorFactory(person=self.person)
 
@@ -360,25 +353,6 @@ class HomeTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, "access_denied.html")
 
-    def test_person_without_global_id(self):
-        self.person.global_id = None
-        self.person.save()
-
-        response = self.client.get(self.url)
-
-        self.assertTemplateUsed(response, 'tutor_charge.html')
-
-        self.assertEqual(response.context['user'], self.person.user)
-        self.assertEqual(len(response.context['attributions']), 1)
-        self.assertEqual(response.context['year'], int(self.academic_year.year))
-        self.assertEqual(response.context['tot_lecturing'], 0)
-        self.assertEqual(response.context['tot_practical'], 0)
-        self.assertEqual(response.context['academic_year'], self.academic_year)
-        self.assertEqual(response.context['global_id'], None)
-        self.assertEqual(response.context['error'], True)
-
-        self.assertIsInstance(response.context['formset'], BaseFormSet)
-
     def test_user_without_person(self):
         self.person.delete()
 
@@ -410,7 +384,7 @@ class HomeTest(TestCase):
         self.assertEqual(response.context['tot_lecturing'], None)
         self.assertEqual(response.context['tot_practical'], None)
         self.assertEqual(response.context['academic_year'], self.academic_year)
-        self.assertEqual(response.context['global_id'], None)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
         self.assertEqual(response.context['error'], False)
 
         self.assertIsInstance(response.context['formset'], BaseFormSet)
@@ -430,7 +404,7 @@ class HomeTest(TestCase):
         self.assertEqual(response.context['tot_lecturing'], 0)
         self.assertEqual(response.context['tot_practical'], 0)
         self.assertEqual(response.context['academic_year'], None)
-        self.assertEqual(response.context['global_id'], None)
+        self.assertEqual(response.context['global_id'], self.person.global_id)
         self.assertEqual(response.context['error'], True)
 
         self.assertIsInstance(response.context['formset'], BaseFormSet)

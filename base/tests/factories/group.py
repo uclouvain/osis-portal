@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,31 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import operator
-import string
-
 import factory
-import factory.fuzzy
-from django.conf import settings
-from base import models as mdl
-from base.tests.factories.user import UserFactory
 
 
-def generate_person_email(person, domain=None):
-    if domain is None:
-        domain = factory.Faker('domain_name').generate({})
-    return '{0.first_name}.{0.last_name}@{1}'.format(person, domain).lower()
-
-
-class PersonFactory(factory.DjangoModelFactory):
+class GroupFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = 'base.Person'
+        model = 'auth.Group'
+        django_get_or_create = ('name',)
 
-    first_name = factory.Faker('first_name')
-    last_name = factory.Faker('last_name')
-    email = factory.LazyAttribute(generate_person_email)
-    phone = factory.Faker('phone_number')
-    language = factory.Iterator(settings.LANGUAGES, getter=operator.itemgetter(0))
-    gender = factory.Iterator(mdl.person.Person.GENDER_CHOICES, getter=operator.itemgetter(0))
-    user = factory.SubFactory(UserFactory)
-    global_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
+    name = ""
+
+
+class TutorGroupFactory(GroupFactory):
+    name = "tutors"
