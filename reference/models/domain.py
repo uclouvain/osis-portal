@@ -39,8 +39,8 @@ class Domain(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=50, verbose_name=_('code'))
-    parent = models.ForeignKey('self', null=True, blank=True)
-    decree = models.ForeignKey('Decree', null=True, blank=True)
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.PROTECT)
+    decree = models.ForeignKey('Decree', null=True, blank=True, on_delete=models.PROTECT)
     type = models.CharField(max_length=50, choices=domain_type.TYPES, default=domain_type.UNKNOWN)
     national = models.BooleanField(default=False) # True if is Belgian else False
 

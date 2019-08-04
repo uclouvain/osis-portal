@@ -30,7 +30,7 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.test import TestCase, Client
 from django.utils import timezone
