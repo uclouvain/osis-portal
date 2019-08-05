@@ -68,6 +68,7 @@ class StudentPerformance(models.Model):
     courses_registration_validated = models.NullBooleanField(null=True)
     learning_units_outside_catalog = models.NullBooleanField(null=True)
     fetch_timed_out = False
+    course_registration_message = models.CharField(max_length=255, null=True)
 
     def _get_academic_year_template_formated(self):
         return '{} - {}'.format(self.academic_year, self.academic_year + 1)

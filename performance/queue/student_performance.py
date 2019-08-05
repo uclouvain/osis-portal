@@ -241,6 +241,7 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     creation_date = get_creation_date()
     courses_registration_validated = get_course_registration_validation_status(academic_year, json_data.pop("validationInscrCours", None))
     learning_units_outside_catalog = json_data.pop("coursHorsPgmPrerequis", None)
+    course_registration_message = json_data.pop("messageInscrCours", None)
     fields = {"data": json_data,
               "update_date": update_date,
               "creation_date": creation_date,
@@ -248,7 +249,8 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
               "session_locked": session_locked,
               "offer_registration_state": offer_registration_state,
               "courses_registration_validated": courses_registration_validated,
-              "learning_units_outside_catalog": learning_units_outside_catalog}
+              "learning_units_outside_catalog": learning_units_outside_catalog,
+              "course_registration_message": course_registration_message}
     try:
         obj = update_or_create(registration_id, academic_year, acronym, fields)
     except Exception:

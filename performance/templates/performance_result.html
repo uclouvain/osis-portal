@@ -77,15 +77,11 @@
             <hr>
             <div class="row container-fluid">
                 <div class="col-md-6 pull-left">
-                    {% if courses_registration_validated %}
+                    {% if course_registration_message %}
                         <div class="alert alert-info" role="alert">
-                            {% trans 'Your courses registration has been validated by the jury.' %}
+                            {{ course_registration_message }}
                         </div>
-                    {% elif  courses_registration_validated != None %}
-                        <div class="alert alert-warning" role="alert">
-                            {% trans 'Your courses registration is being processed' %}
-                        </div>
-                    {%  endif %}
+                    {% endif %}
                 </div>
 
                 <!-- Student sessions summary-->
