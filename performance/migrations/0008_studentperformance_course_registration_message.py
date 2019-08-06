@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='studentperformance',
             name='course_registration_message',
-            field=models.CharField(max_length=255, null=True),
+            field=models.CharField(blank=True, default='', max_length=255),
         ),
     ]
