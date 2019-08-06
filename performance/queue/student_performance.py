@@ -23,20 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import json
 import logging
 import traceback
-import datetime
 
 from django.conf import settings
-from django.utils.encoding import uri_to_iri
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.utils.datetime_safe import datetime as safe_datetime
-from django.db import connection
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
 
-from frontoffice.queue.queue_listener import PerformanceClient
 from base.models import academic_year as mdl_academic_year
+from frontoffice.queue.queue_listener import PerformanceClient
 from osis_common.models.queue_exception import QueueException
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)

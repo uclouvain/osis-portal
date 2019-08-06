@@ -87,7 +87,6 @@ class TestQueueStudentPerformance(TestCase):
         queue_stud_perf.callback(self.json_points.encode())
         self.student_performance.refresh_from_db()
         self.assertJSONEqual(json.dumps(self.student_performance.data), self.json_points, "Object should be updated")
-
         queue_stud_perf.callback(self.json_points_2.encode())
 
         try:
