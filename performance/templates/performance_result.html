@@ -79,7 +79,7 @@
                 <div class="col-md-6 pull-left">
                     {% if course_registration_message %}
                         <div class="alert alert-info" role="alert">
-                            {{ course_registration_message }}
+                            {{ course_registration_message |safe}}
                         </div>
                     {% endif %}
                 </div>
