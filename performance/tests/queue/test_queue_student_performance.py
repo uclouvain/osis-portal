@@ -39,6 +39,7 @@ from performance.queue import student_performance as queue_stud_perf
 
 class TestQueueStudentPerformance(TestCase):
     def setUp(self):
+        self.maxDiff = None
         self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
         self.offer_year = base.tests.models.test_offer_year.create_offer_year()
         self.json_points = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points2.json")
@@ -53,9 +54,7 @@ class TestQueueStudentPerformance(TestCase):
                                          default_update_date=default_update_date)
 
         self.student_performance.refresh_from_db()
-
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
-
 
         queue_stud_perf.save("4549841", academic_year, acronym, json.loads(self.json_points), default_update_date)
         try:
