@@ -39,7 +39,6 @@ from performance.queue import student_performance as queue_stud_perf
 
 class TestQueueStudentPerformance(TestCase):
     def setUp(self):
-        self.maxDiff = None
         self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
         self.offer_year = base.tests.models.test_offer_year.create_offer_year()
         self.json_points = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points2.json")
