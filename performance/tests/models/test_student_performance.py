@@ -46,7 +46,8 @@ def create_student_performance(acronym="SINF2MS/G", registration_id="64641200",
                            update_date=update_date,
                            creation_date=datetime.datetime.now(),
                            data=data,
-                           offer_registration_state=offer_registration_state.REGISTERED)
+                           offer_registration_state=offer_registration_state.REGISTERED,
+                           course_registration_message="L'inscription en ligne sera accessible à partir du 17/10/2019")
     a_student_performance.save()
     return a_student_performance
 
