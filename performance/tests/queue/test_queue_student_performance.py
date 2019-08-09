@@ -53,9 +53,7 @@ class TestQueueStudentPerformance(TestCase):
                                          default_update_date=default_update_date)
 
         self.student_performance.refresh_from_db()
-
         self.assertEqual(stud_perf, self.student_performance, "Object should be updated")
-
 
         queue_stud_perf.save("4549841", academic_year, acronym, json.loads(self.json_points), default_update_date)
         try:
@@ -88,7 +86,6 @@ class TestQueueStudentPerformance(TestCase):
         queue_stud_perf.callback(self.json_points.encode())
         self.student_performance.refresh_from_db()
         self.assertJSONEqual(json.dumps(self.student_performance.data), self.json_points, "Object should be updated")
-
         queue_stud_perf.callback(self.json_points_2.encode())
 
         try:
