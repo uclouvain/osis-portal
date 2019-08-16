@@ -26,7 +26,7 @@
 import datetime
 
 from django.contrib.auth.models import Group, Permission
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 

@@ -25,11 +25,17 @@
 ##############################################################################
 import factory
 import factory.fuzzy
+
+from base.tests.factories.group import TutorGroupFactory
 from base.tests.factories.person import PersonFactory
 
 
 class TutorFactory(factory.DjangoModelFactory):
     class Meta:
         model = 'base.Tutor'
+        exclude = ('group',)
+
+    group = factory.SubFactory(TutorGroupFactory)
+
     external_id = factory.Sequence(lambda n: '10000000%02d' % n)
     person = factory.SubFactory(PersonFactory)

@@ -27,7 +27,7 @@ from unittest.mock import patch
 
 from django.test import TestCase, override_settings
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import Permission
 from django.http.response import HttpResponse
 
