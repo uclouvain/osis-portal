@@ -58,6 +58,7 @@ class EducationGroupYear(SerializableModel):
     academic_year = models.ForeignKey(
         'AcademicYear',
         verbose_name=_("Validity"),
+        on_delete=models.PROTECT
     )
 
     education_group = models.ForeignKey(
@@ -67,7 +68,8 @@ class EducationGroupYear(SerializableModel):
 
     education_group_type = models.ForeignKey(
         'EducationGroupType',
-        verbose_name=_("Type of training")
+        verbose_name=_("Type of training"),
+        on_delete=models.PROTECT
     )
 
     dissertation = models.BooleanField(
@@ -79,14 +81,16 @@ class EducationGroupYear(SerializableModel):
         'Entity',
         verbose_name=_("Management entity"),
         null=True,
-        related_name="management_entity"
+        related_name="management_entity",
+        on_delete=models.PROTECT
     )
 
     administration_entity = models.ForeignKey(
         'Entity',
         null=True,
         verbose_name=_("Administration entity"),
-        related_name='administration_entity'
+        related_name='administration_entity',
+        on_delete=models.PROTECT
     )
 
     class Meta:
