@@ -23,12 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.test import TestCase
+from django.urls import reverse
 
 from base.tests.factories.person import PersonFactory
-
 
 FRENCH_LANGUAGE = settings.LANGUAGE_CODE
 ENGLISH_LANGUAGE = 'en'

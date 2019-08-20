@@ -28,7 +28,7 @@ import json
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase, override_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from mock import patch
 
 from base.tests.factories.person import PersonFactory
@@ -83,7 +83,7 @@ class LogOutTest(TestCase):
 
         response = self.client.get(url)
 
-        self.assertFalse(response.wsgi_request.user.is_authenticated())
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
 
     @override_settings(OVERRIDED_LOGOUT_URL=reverse('login'))
     def test_with_overrided_logout_url(self):

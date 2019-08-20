@@ -38,8 +38,8 @@ class OfferYearDomainAdmin(SerializableModelAdmin):
 
 class OfferYearDomain(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    domain = models.ForeignKey('reference.Domain', blank=True, null=True)
-    offer_year = models.ForeignKey('base.OfferYear', blank=True, null=True)
+    domain = models.ForeignKey('reference.Domain', blank=True, null=True, on_delete=models.PROTECT)
+    offer_year = models.ForeignKey('base.OfferYear', blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s - %s" % (self.domain, self.offer_year)

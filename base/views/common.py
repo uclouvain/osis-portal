@@ -26,7 +26,7 @@
 from compat import DjangoJSONEncoder
 from django.conf import settings
 
-from django.contrib.auth.views import login as django_login
+from django.contrib.auth.views import LoginView
 from django.contrib.auth import authenticate, logout
 import json
 from django.shortcuts import redirect
@@ -42,15 +42,15 @@ def return_error_response(request, template, status_code):
     return response
 
 
-def page_not_found(request):
+def page_not_found(request, **kwargs):
     return return_error_response(request, 'page_not_found.html', 404)
 
 
-def access_denied(request):
+def access_denied(request, **kwargs):
     return return_error_response(request, 'access_denied.html', 401)
 
 
-def server_error(request):
+def server_error(request, **kwargs):
     return return_error_response(request, 'server_error.html', 500)
 
 
@@ -142,7 +142,7 @@ def login(request):
                 request.session[translation.LANGUAGE_SESSION_KEY] = user_language
     elif settings.OVERRIDED_LOGIN_URL:
         return redirect(settings.OVERRIDED_LOGIN_URL)
-    return django_login(request)
+    return LoginView.as_view()(request)
 
 
 def log_out(request):

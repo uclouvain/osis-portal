@@ -38,13 +38,14 @@ class OfferYearAdmin(SerializableModelAdmin):
 
 class OfferYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    academic_year = models.ForeignKey('base.AcademicYear')
+    academic_year = models.ForeignKey('base.AcademicYear', on_delete=models.PROTECT)
     acronym = models.CharField(max_length=15)
     title = models.CharField(max_length=255)
     title_international = models.CharField(max_length=255, blank=True, null=True)
-    grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True)
-    offer = models.ForeignKey('base.Offer', blank=True, null=True)
-    campus = models.ForeignKey('base.Campus', blank=True, null=True)
+    grade_type = models.ForeignKey('reference.GradeType', blank=True, null=True, db_index=True,
+                                   on_delete=models.PROTECT)
+    offer = models.ForeignKey('base.Offer', blank=True, null=True, on_delete=models.PROTECT)
+    campus = models.ForeignKey('base.Campus', blank=True, null=True, on_delete=models.PROTECT)
     enrollment_enabled = models.BooleanField(default=False)
 
     def __str__(self):
