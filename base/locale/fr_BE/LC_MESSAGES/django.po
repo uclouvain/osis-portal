@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-19 13:38+0100\n"
+"POT-Creation-Date: 2019-08-21 15:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,205 +17,155 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/access_denied.html:34
 msgid "Access denied"
 msgstr "Accès refusé"
 
-#: models/education_group_year.py:42
 msgid "Acronym"
 msgstr "Sigle"
 
-#: templates/admin/administration_layout.html:7
-#: templates/admin/data_maintenance.html:29 templates/layout.html:83
 msgid "Administration"
 msgstr ""
 
-#: models/education_group_year.py:89
 msgid "Administration entity"
 msgstr "Entité d'administration"
 
-#: templates/admin/data_maintenance.html:69
 msgid "Are you sure ?"
 msgstr "Êtes-vous certain ?"
 
-#: models/education_group_type.py:44
 msgid "Category"
 msgstr "Catégorie"
 
-#: templates/logged_out.html:37
 msgid "Click here to reconnect"
 msgstr "Cliquez pour vous reconnectez"
 
-#: models/education_group_year.py:49
 msgid "Code"
 msgstr "Code"
 
-#: templates/upload_file_form.html:48 templates/upload_file_list.html:49
 msgid "Content type"
 msgstr "Type de contenu"
 
-#: templates/admin/data.html:31 templates/admin/data.html:36
-#: templates/admin/data_maintenance.html:30 templates/layout.html:88
 msgid "Data"
 msgstr "Données"
 
-#: templates/admin/data.html:51 templates/admin/data_maintenance.html:31
-#: templates/admin/data_maintenance.html:35
 msgid "Data maintenance"
 msgstr "Maintenance des données"
 
-#: templates/admin/data.html:52
 msgid "Data maintenance via SQL"
 msgstr "Maintenance des données via SQL"
 
-#: templates/admin/data.html:45
 msgid "Data management"
 msgstr "Gestion des données"
 
-#: templates/admin/data.html:46
 msgid "Data management by entity"
 msgstr "Gestion des données par entité"
 
-#: templates/upload_file_form.html:61 templates/upload_file_list.html:57
 msgid "Description"
 msgstr ""
 
-#: templates/server_error.html:38
 msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr "N'hésitez pas à nous aider en contactant le"
 
-#: models/education_group_year.py:94
 msgid "Education group year"
 msgstr "Organisation de formations annualisée"
 
-#: models/education_group.py:47
 msgid "End"
 msgstr "Fin"
 
-#: templates/upload_file_form.html:30 templates/upload_file_list.html:41
 msgid "File"
 msgstr "Fichier"
 
-#: templates/upload_file_form.html:39 templates/upload_file_list.html:33
 msgid "File name"
 msgstr "Nom de fichier"
 
-#: templates/admin/data_maintenance.html:45
 msgid "Forbidden SQL keywords"
 msgstr "Mots-clés SQL interdits"
 
-#: models/enums/education_group_categories.py:35
 msgid "Group"
 msgstr "Groupe"
 
-#: models/education_group_year.py:81
 msgid "Management entity"
 msgstr "Gestion des données par entité"
 
-#: models/enums/education_group_categories.py:34
 msgid "Mini-Training"
 msgstr "Mini-Formation"
 
-#: templates/page_not_found.html:34
 msgid "Page not found"
 msgstr "Page inexistante"
 
-#: templates/admin/data_maintenance.html:58
 msgid "Result"
 msgstr "Résultat"
 
-#: templates/admin/data_maintenance.html:42
 msgid "SQL command"
 msgstr "Commande SQL"
 
-#: templates/admin/data_maintenance.html:44
 msgid "SQL readonly"
 msgstr "SQL en lecture seule"
 
-#: models/education_group.py:41
 msgid "Start"
 msgstr "Début"
 
-#: models/education_group_year.py:54
 msgid "Title in French"
 msgstr "Intitulé en français"
 
-#: models/enums/education_group_categories.py:33
 msgid "Training"
 msgstr "Formation"
 
-#: models/education_group_type.py:49 models/education_group_year.py:71
+msgid "Type"
+msgstr ""
+
 msgid "Type of training"
 msgstr "Type de formation"
 
-#: templates/server_error.html:34
 msgid "Unexpected error occurred"
 msgstr "Une erreur inattendue s'est produite"
 
-#: templates/registration/login.html:34
 msgid "Username or password not valid"
 msgstr "Utilisateur ou mot de passe non valide"
 
-#: models/education_group_year.py:59
 msgid "Validity"
 msgstr "Validité"
 
-#: templates/server_error.html:37
 msgid "We have been automatically informed about this problem."
 msgstr "Nous avons été automatiquement informés du problème."
 
-#: templates/logged_out.html:36
 msgid "You are now logged out"
 msgstr "Vous êtes à présent déconnecté"
 
-#: models/education_group_year.py:76
 msgid "dissertation"
 msgstr "dissertation"
 
-#: templates/admin/data_maintenance.html:52
 msgid "execute"
 msgstr ""
 
-#: models/person.py:48
 msgid "female"
 msgstr "femme"
 
-#: templates/registration/login.html:31
 msgid "log in"
 msgstr "se connecter"
 
-#: templates/logged_out.html:31
 msgid "logout"
 msgstr "déconnexion"
 
-#: models/person.py:49
 msgid "male"
 msgstr "homme"
 
-#: forms/base_forms.py:41
 msgid "no student with this registration_id"
 msgstr "pas d'étudiant avec ce registration_id"
 
-#: forms/base_forms.py:53
 msgid "no tutor with this global_id"
 msgstr "pas de professeur avec ce global_id"
 
-#: templates/registration/login.html:46
 msgid "password"
 msgstr "mot de passe"
 
-#: templates/admin/data_maintenance.html:53
 msgid "reset"
 msgstr "réinitialiser"
 
-#: templates/server_error.html:40
 msgid "to describe what you intended to do in more details."
 msgstr "et en décrivant l'opération effectuée de manière plus détaillée."
 
-#: models/person.py:50
 msgid "unknown"
 msgstr "inconnu"
 
-#: templates/registration/login.html:42
 msgid "user"
 msgstr "utilisateur"
