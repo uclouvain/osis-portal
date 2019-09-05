@@ -78,3 +78,17 @@ msgstr ""
 #: views/main.py:112
 msgid "Student attestations"
 msgstr ""
+
+
+### Etat des attestations suivant enum provenant de EPC
+msgid "AVIS"
+msgstr "Notice of registration of your registration"
+
+msgid "DE"
+msgstr "Certificate of provisional registration"
+
+msgid "ABC"
+msgstr "Certificate of definitive registration"
+
+msgid "ECHEANCE"
+msgstr "Notice of expiry of your registration fees"

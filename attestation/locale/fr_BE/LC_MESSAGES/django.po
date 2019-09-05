@@ -81,3 +81,16 @@ msgstr "Id d'enregistrement"
 #: views/main.py:112
 msgid "Student attestations"
 msgstr "Attestations de l'étudiant"
+
+### Etat des attestations suivant enum provenant de EPC
+msgid "AVIS"
+msgstr "Avis d'enregistrement de votre inscription accompagné, le cas échéant, de la facture de vos droits d'inscription"
+
+msgid "DE"
+msgstr "Attestation d'inscription provisoire"
+
+msgid "ABC"
+msgstr "Attestation d'inscription définitive"
+
+msgid "ECHEANCE"
+msgstr "Avis d'échéance de vos droits d'inscription"
