@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import mock
+
 from decimal import Decimal
 
 from django.contrib.auth.models import Group
@@ -66,10 +68,6 @@ class AttributionTest(TestCase):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             academic_year_2016)
         self.assertEqual(len(attribution_list), 1)
-
-        attribution_list = attribution.get_attribution_list(self.person.global_id)
-        self.assertEqual(len(attribution_list), 3)
-
 
     def test_get_attribution_list_empty(self):
         academic_year = AcademicYearFactory(year=1990)
@@ -212,7 +210,7 @@ class AttributionTest(TestCase):
             'charge_lecturing_asked': 30,
             'charge_practical_asked': 30,
             'acronym': "LAGRO1530",
-            'year': next_academic_year.year,
+            'year': self.current_academic_year.year,
             'is_substitute': False
         }]
         self.attrib.applications = application

@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import datetime
+import mock
 
 from django.contrib.auth.models import Group, Permission
 from django.urls import reverse
@@ -347,7 +348,7 @@ class TestOnlineApplication(TestCase):
     def _get_default_attribution_list(self):
         return [
             # Attribution in current year
-            _get_attribution_example(self.lbir1200_current, '20.0', '31.5', 2015, 2019),
+            _get_attribution_example(self.lbir1200_current, '20.0', '31.5', 2015, self.current_academic_year.year+1),
             _get_attribution_example(self.lbir1300_current, '21.5', '40', 2015, self.current_academic_year.year),
             # Attribution in next year
             _get_attribution_example(self.lagro2500_next, '29', '10', 2015, 2020)
