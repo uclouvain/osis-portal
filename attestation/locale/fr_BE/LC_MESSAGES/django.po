@@ -29,14 +29,12 @@ msgstr ""
 
 #: models/enums/attestation_type.py:32
 msgid "ABC"
-msgstr "Attestation d'inscription définitive"
+msgstr "Inscription régulière (le cas échéant, allocations familiales, mutuelles, ...)"
 
 # ## Etat des attestations suivant enum provenant de EPC
 #: models/enums/attestation_type.py:30
 msgid "AVIS"
-msgstr ""
-"Avis d'enregistrement de votre inscription accompagné, le cas échéant, de la "
-"facture de vos droits d'inscription"
+msgstr "Avis d'enregistrement et facture"
 
 #: templates/attestation_home.html:34 templates/attestation_home.html:40
 #: templates/attestation_home_admin.html:32
@@ -63,11 +61,11 @@ msgstr "Disponible"
 
 #: models/enums/attestation_type.py:31
 msgid "DE"
-msgstr "Attestation d'inscription provisoire"
+msgstr "Carte étudiant provisoire et transport en commun"
 
 #: models/enums/attestation_type.py:33
 msgid "ECHEANCE"
-msgstr "Avis d'échéance de vos droits d'inscription"
+msgstr "Avis d'échéance"
 
 #: templates/admin/attestation_administration.html:30
 #: templates/attestation_home.html:31 templates/attestation_home_admin.html:30

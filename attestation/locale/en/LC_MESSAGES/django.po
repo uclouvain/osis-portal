@@ -26,11 +26,11 @@ msgstr ""
 
 #: models/enums/attestation_type.py:32
 msgid "ABC"
-msgstr "Certificate of definitive registration"
+msgstr "Regular registration (family allowances, health mutual, ...)"
 
 #: models/enums/attestation_type.py:30
 msgid "AVIS"
-msgstr "Notice of registration of your registration"
+msgstr "Notice of registration and invoice"
 
 #: templates/attestation_home.html:34 templates/attestation_home.html:40
 #: templates/attestation_home_admin.html:32
@@ -61,7 +61,7 @@ msgstr "Certificate of provisional registration"
 
 #: models/enums/attestation_type.py:33
 msgid "ECHEANCE"
-msgstr "Notice of expiry of your registration fees"
+msgstr "Notice of maturity"
 
 #: templates/admin/attestation_administration.html:30
 #: templates/attestation_home.html:31 templates/attestation_home_admin.html:30
