@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import datetime
-import mock
 
 from django.contrib.auth.models import Group, Permission
 from django.urls import reverse
