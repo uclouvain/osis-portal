@@ -24,23 +24,22 @@
 #
 ##############################################################################
 import collections
+from collections import OrderedDict
 from decimal import Decimal
 from itertools import chain
 
+from django.db.models import OuterRef, Subquery
 from django.utils.translation import ugettext_lazy as _
 
 from attribution import models as mdl_attribution
 from attribution.models.enums import function
 from base import models as mdl_base
 from base.business import learning_unit_year_with_context
+from base.business.entity import get_entities_ids
 from base.models.entity_version import EntityVersion
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
-from base.models.enums import entity_container_year_link_type as entity_types
-from django.db.models import OuterRef, Subquery
-from base.business.entity import get_entities_ids
 from base.models.learning_component_year import LearningComponentYear
-from collections import OrderedDict
 
 NO_CHARGE = 0.0
 
@@ -49,8 +48,7 @@ PERSON_KEY = 'person'
 
 def get_attribution_list(global_id, academic_year=None):
     if not academic_year:
-        academic_year = mdl_base.academic_year.current_academic_year()
-
+        academic_year = mdl_base.academic_year.starting_academic_year()
     attribution_new = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attribution_new and attribution_new.attributions:
         attributions = _filter_by_years(attribution_new.attributions, academic_year)
@@ -244,6 +242,8 @@ def _resolve_attribution_vacant_next_year(attribution_list, academic_year):
 def _append_is_renewable(attribution_with_vacant_list, application_list):
     for attribution in attribution_with_vacant_list:
         attribution['not_renewable_reason'] = _check_is_renewable(attribution, application_list)
+        print(attribution['not_renewable_reason'])
+        print(attribution['not_renewable_reason'] is None)
         attribution['is_renewable'] = (attribution['not_renewable_reason'] is None)
     return attribution_with_vacant_list
 
