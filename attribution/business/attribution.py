@@ -242,8 +242,6 @@ def _resolve_attribution_vacant_next_year(attribution_list, academic_year):
 def _append_is_renewable(attribution_with_vacant_list, application_list):
     for attribution in attribution_with_vacant_list:
         attribution['not_renewable_reason'] = _check_is_renewable(attribution, application_list)
-        print(attribution['not_renewable_reason'])
-        print(attribution['not_renewable_reason'] is None)
         attribution['is_renewable'] = (attribution['not_renewable_reason'] is None)
     return attribution_with_vacant_list
 
