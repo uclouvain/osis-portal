@@ -23,19 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import json
 import logging
 import traceback
-import datetime
 
 from django.conf import settings
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.utils.datetime_safe import datetime as safe_datetime
-from django.db import connection
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
 
-from frontoffice.queue.queue_listener import PerformanceClient
 from base.models import academic_year as mdl_academic_year
+from frontoffice.queue.queue_listener import PerformanceClient
 from osis_common.models.queue_exception import QueueException
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -241,6 +241,7 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     creation_date = get_creation_date()
     courses_registration_validated = get_course_registration_validation_status(academic_year, json_data.pop("validationInscrCours", None))
     learning_units_outside_catalog = json_data.pop("coursHorsPgmPrerequis", None)
+    course_registration_message = json_data.get("messageInscrCours", '')
     fields = {"data": json_data,
               "update_date": update_date,
               "creation_date": creation_date,
@@ -248,10 +249,12 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
               "session_locked": session_locked,
               "offer_registration_state": offer_registration_state,
               "courses_registration_validated": courses_registration_validated,
-              "learning_units_outside_catalog": learning_units_outside_catalog}
+              "learning_units_outside_catalog": learning_units_outside_catalog,
+              "course_registration_message": course_registration_message}
     try:
         obj = update_or_create(registration_id, academic_year, acronym, fields)
-    except Exception:
+    except Exception as e:
+        logger.error("Erreur lors de la creation/update de student_perf : {}".format(e))
         obj = None
     return obj
 

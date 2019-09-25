@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 15:09+0100\n"
+"POT-Creation-Date: 2019-07-05 13:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,6 +48,10 @@ msgstr ""
 msgid "Which action do you want to perform ?"
 msgstr ""
 
+#: views/exam_enrollment.py:149
+msgid "You are outside the exams enrollment period"
+msgstr ""
+
 #: templates/offer_choice.html:70
 msgid "acronym"
 msgstr "Acronym"
@@ -68,7 +72,7 @@ msgstr ""
 msgid "exam_enrollment_form_loading"
 msgstr "Exam enrollment form is loading."
 
-#: views/exam_enrollment.py:235
+#: views/exam_enrollment.py:240
 msgid "exam_enrollment_form_submitted"
 msgstr "Exam enrollment form successfully submitted."
 

@@ -59,7 +59,7 @@ class StudentAdmin(SerializableModelAdmin):
 
 class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
-    person = models.ForeignKey('Person')
+    person = models.ForeignKey('Person', on_delete=models.PROTECT)
 
 
     def email(self):

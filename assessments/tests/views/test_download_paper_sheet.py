@@ -23,16 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from unittest import skip
 
 from django.contrib.auth.models import Permission
-from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 from django.test import TestCase, Client
+from django.urls import reverse
 
 from assessments.tests.factories.score_encoding import ScoreEncodingFactory
-from assessments.views import score_encoding
 from base.tests.models import test_tutor
-from django.contrib.auth.models import User
 
 
 class DownloadPaperSheetTest(TestCase):

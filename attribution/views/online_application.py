@@ -27,7 +27,7 @@ from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.decorators.http import require_http_methods
 

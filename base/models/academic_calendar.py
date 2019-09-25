@@ -34,7 +34,7 @@ class AcademicCalendarAdmin(SerializableModelAdmin):
 
 
 class AcademicCalendar(SerializableModel):
-    academic_year = models.ForeignKey('AcademicYear')
+    academic_year = models.ForeignKey('AcademicYear', on_delete=models.PROTECT)
     title = models.CharField(max_length=50, blank=True, null=True)
     start_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)
     end_date = models.DateField(auto_now=False, blank=True, null=True, auto_now_add=False)

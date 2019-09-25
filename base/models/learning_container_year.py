@@ -43,8 +43,8 @@ class LearningContainerYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
     acronym = models.CharField(max_length=10)
-    academic_year = models.ForeignKey('AcademicYear')
-    learning_container = models.ForeignKey('LearningContainer', null=True)
+    academic_year = models.ForeignKey('AcademicYear', on_delete=models.PROTECT)
+    learning_container = models.ForeignKey('LearningContainer', null=True, on_delete=models.PROTECT)
     common_title = models.CharField(max_length=255, blank=True, null=True)
     common_title_english = models.CharField(max_length=250, blank=True, null=True)
     team = models.BooleanField(default=False)
@@ -52,6 +52,31 @@ class LearningContainerYear(SerializableModel):
     type_declaration_vacant = models.CharField(max_length=100, blank=True, null=True,
                                                choices=vacant_declaration_type.DECLARATION_TYPE)
     in_charge = models.BooleanField(default=False)
+
+    requirement_entity = models.ForeignKey(
+        to="base.Entity",
+        null=True, blank=False,
+        related_name='requirement_entities',
+        on_delete=models.PROTECT,
+    )
+    allocation_entity = models.ForeignKey(
+        to="base.Entity",
+        null=True, blank=True,
+        related_name='allocation_entities',
+        on_delete=models.PROTECT,
+    )
+    additional_entity_1 = models.ForeignKey(
+        to="base.Entity",
+        null=True, blank=True,
+        related_name='additional_entities_1',
+        on_delete=models.PROTECT,
+    )
+    additional_entity_2 = models.ForeignKey(
+        to="base.Entity",
+        null=True, blank=True,
+        related_name='additional_entities_2',
+        on_delete=models.PROTECT,
+    )
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.common_title)

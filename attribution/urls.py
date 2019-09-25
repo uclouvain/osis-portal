@@ -27,7 +27,6 @@ from django.conf.urls import url, include
 
 from attribution.views import online_application
 from attribution.views import tutor_charge, list
-from django.views.i18n import javascript_catalog
 
 
 js_info_dict = {

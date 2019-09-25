@@ -1,8 +1,8 @@
 Django==1.11.2
-django-bootstrap3==10.0.1
+django-bootstrap3==11.1.0
 django-localflavor==1.6
 django-statici18n==1.8.3
-djangorestframework==3.8.2
+djangorestframework==3.9.4
 jdcal==1.4
 mock==2.0.0
 pika==0.12.0
@@ -22,7 +22,7 @@ coverage==4.5.1
 pytz==2018.5
 pyvirtualdisplay==0.2.1
 django-registration==3.0
-django-autocomplete-light==3.2.10
+django-autocomplete-light==3.4.1
 django-hijack==2.1.10
 django-hijack-admin==2.1.10
 

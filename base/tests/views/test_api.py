@@ -1,12 +1,12 @@
 ##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,23 +23,28 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
 
-import factory
-import factory.fuzzy
+import json
+from django.test import TestCase
 
-from base.tests.factories.entity_container_year import EntityContainerYearFactory
-from base.tests.factories.learning_component_year import LearningComponentYearFactory
-from osis_common.utils.datetime import get_tzinfo
+from base.views import api
 
 
-class EntityComponentYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.EntityComponentYear"
+class TestApiTestCase(TestCase):
 
-    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
-                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
+    def setUp(self):
+        self.global_id = 12345678
 
-    entity_container_year = factory.SubFactory(EntityContainerYearFactory)
-    learning_component_year = factory.SubFactory(LearningComponentYearFactory)
-    repartition_volume = factory.fuzzy.FuzzyDecimal(9)
+    def test_get_user_roles(self):
+        with open('osis_common/tests/ressources/person_roles_from_api.json') as json_file:
+            expected_data = json.load(json_file)
+            data = api.get_user_roles(self.global_id)
+            self.assertDictEqual(expected_data, data)
+
+    def test_get_managed_programs_as_dict(self):
+        expected_results = {
+            '2017': ['PHYS1BA', 'BIOL1BA'],
+            '2018': ['PHYS1BA', 'BIOL1BA']
+        }
+        results = api.get_managed_programs_as_dict(self.global_id)
+        self.assertDictEqual(expected_results, results)

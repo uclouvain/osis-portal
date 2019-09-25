@@ -38,21 +38,21 @@ def _is_message_type(context, msg_type):
     return False
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def as_messages_info(context):
     return _is_message_type(context, 'info')
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def as_messages_warning(context):
     return _is_message_type(context, 'warning')
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def as_messages_error(context):
     return _is_message_type(context, 'error')
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def as_messages_success(context):
     return _is_message_type(context, 'success')

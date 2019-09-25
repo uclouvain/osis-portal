@@ -25,7 +25,7 @@
 ##############################################################################
 import os
 
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -100,7 +100,6 @@ MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -400,9 +399,16 @@ URL_TRAINING_API = os.environ.get(
     ""
 )
 
+# BASE_API
+URL_API_BASE_PERSON_ROLES = os.environ.get("URL_API_BASE_PERSON_ROLES", "")
+
 OSIS_PORTAL_TOKEN = os.environ.get("OSIS_PORTAL_TOKEN", "")
 
 URL_AUTH_API = os.environ.get(
     "URL_AUTH_API",
     ""
 )
+
+# BASE_API_TESTING
+MOCK_USER_ROLES_API_CALL = os.environ.get('MOCK_USER_ROLES_API_CALL', 'True').lower() == 'true'
+USER_ROLES_API_MOCKED_FUNCT = os.environ.get('USER_ROLES_API_MOCKED_FUNCT', 'base.views.api.get_user_roles')

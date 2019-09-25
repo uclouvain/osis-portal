@@ -24,7 +24,8 @@
 #
 ##############################################################################
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
@@ -42,8 +43,9 @@ def home(request):
 
 
 @login_required
-@permission_required('base.is_faculty_administrator', raise_exception=True)
 def faculty_administration(request):
+    if not _can_access_administration(request):
+        raise PermissionDenied
     return layout.render(request, "faculty_administrator_dashboard.html",
                          {'online_application_opened': permission.is_online_application_opened(request.user)})
 
@@ -53,3 +55,13 @@ def show_multiple_registration_id_error(request):
             "contact the registration departement (SIC). Thank you.")
     messages.add_message(request, messages.ERROR, msg)
     return home(request)
+
+
+def _can_access_administration(request):
+    if request.user.has_perm('base.is_faculty_administrator'):
+        return True
+    can_access = False
+    if 'performance' in settings.INSTALLED_APPS:
+        from performance.views import main as perf_main_view
+        can_access = perf_main_view.can_access_performance_administration(request)
+    return can_access

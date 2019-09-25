@@ -32,7 +32,7 @@ from django.utils.translation import ugettext_lazy as _
 from attribution.business import attribution
 from attribution.tests.factories.attribution import AttributionNewFactory
 from base.models.academic_year import AcademicYear
-from base.models.enums import learning_component_year_type, component_type
+from base.models.enums import learning_component_year_type
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
@@ -66,10 +66,6 @@ class AttributionTest(TestCase):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             academic_year_2016)
         self.assertEqual(len(attribution_list), 1)
-
-        attribution_list = attribution.get_attribution_list(self.person.global_id)
-        self.assertEqual(len(attribution_list), 3)
-
 
     def test_get_attribution_list_empty(self):
         academic_year = AcademicYearFactory(year=1990)
@@ -212,7 +208,7 @@ class AttributionTest(TestCase):
             'charge_lecturing_asked': 30,
             'charge_practical_asked': 30,
             'acronym': "LAGRO1530",
-            'year': next_academic_year.year,
+            'year': self.current_academic_year.year,
             'is_substitute': False
         }]
         self.attrib.applications = application
@@ -281,8 +277,8 @@ class AttributionTest(TestCase):
                               attributions=attributions_teacher2)
         #
         attributions_result = attribution.get_teachers(acronym_LCHM1111, 2017)
-        self.assertEquals(len(attributions_result), 2)
-        self.assertEquals(attributions_result[0][attribution.PERSON_KEY],
+        self.assertEqual(len(attributions_result), 2)
+        self.assertEqual(attributions_result[0][attribution.PERSON_KEY],
                           person_first_alphabetical_order)
 
     def test_update_learning_unit_volume_no_components(self):

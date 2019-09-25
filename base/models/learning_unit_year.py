@@ -44,9 +44,10 @@ class LearningUnitYear(SerializableModel):
     specific_title = models.CharField(max_length=255, blank=True, null=True)
     credits = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     weight = models.IntegerField(blank=True, null=True)
-    academic_year = models.ForeignKey('AcademicYear')
-    learning_container_year = models.ForeignKey('LearningContainerYear', blank=True, null=True)
-    learning_unit = models.ForeignKey('LearningUnit', blank=True, null=True)
+    academic_year = models.ForeignKey('AcademicYear', on_delete=models.PROTECT)
+    learning_container_year = models.ForeignKey('LearningContainerYear', blank=True, null=True,
+                                                on_delete=models.PROTECT)
+    learning_unit = models.ForeignKey('LearningUnit', blank=True, null=True, on_delete=models.PROTECT)
     subtype = models.CharField(max_length=50, blank=True, null=True,
                                choices=learning_unit_year_subtypes.LEARNING_UNIT_YEAR_SUBTYPES)
 
