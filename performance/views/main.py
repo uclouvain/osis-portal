@@ -203,9 +203,9 @@ def __can_visualize_student_programs(request, registration_id):
     return False
 
 
-def __can_visualize_student_program(request, performance_result_pk):
+def __can_visualize_student_result(request, performance_result_pk):
     """
-    User can visualize the student program if :
+    User can visualize the student result if :
         - The user is faculty_administrator
         - The user is program manager of the requested program
     """
@@ -218,6 +218,16 @@ def __can_visualize_student_program(request, performance_result_pk):
             return student_performance.acronym in managed_programs_as_dict.get(str(student_performance.academic_year),
                                                                                [])
     return False
+
+
+def __can_access_performance_administration(request):
+    """
+    User can access performance results administration if :
+        - The user is faculty_administrator
+        - The user is program manager of at least one program
+    """
+    return request.user.has_perm('base.is_faculty_administrator') or \
+        bool(common.get_managed_program_as_dict(request.user))
 
 
 @login_required
