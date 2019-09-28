@@ -63,5 +63,5 @@ def _can_access_administration(request):
     can_access = False
     if 'performance' in settings.INSTALLED_APPS:
         from performance.views import main as perf_main_view
-        can_access = perf_main_view.can_access_performance_administration(request)
+        can_access = perf_main_view.__can_access_performance_administration(request)
     return can_access
