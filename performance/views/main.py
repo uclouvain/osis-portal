@@ -32,7 +32,6 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
 from base.forms.base_forms import RegistrationIdForm
-from base.models import offer_enrollment
 from base.models import student as mdl_student
 from base.views import layout, common
 from dashboard.views import main as dash_main_view
@@ -246,10 +245,9 @@ def __can_visualize_student_programs(request, registration_id):
         return True
     else:
         managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
-        student = mdl_student.find_by_registration_id(registration_id)
-        for stud_offer_enrollment in offer_enrollment.find_by_student(student):
-            if stud_offer_enrollment.offer_year.acronym in managed_programs_as_dict.get(
-                    str(stud_offer_enrollment.offer_year.academic_year.year), []):
+        for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id):
+            if stud_perfs.acronym in managed_programs_as_dict.get(
+                    str(stud_perfs.academic_year), []):
                 return True
     return False
 

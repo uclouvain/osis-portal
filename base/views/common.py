@@ -23,16 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from compat import DjangoJSONEncoder
 from django.conf import settings
-
-from django.contrib.auth.views import LoginView
 from django.contrib.auth import authenticate, logout
-import json
+from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.utils import translation
-from base.views import layout, api
+
 from base.models import person as person_mdl
+from base.views import layout, api
 from osis_common.models import application_notice
 
 

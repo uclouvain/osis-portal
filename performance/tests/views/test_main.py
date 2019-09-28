@@ -25,11 +25,9 @@
 ##############################################################################
 import json
 
-from compat import DjangoJSONEncoder
-
 from django.contrib.auth.models import Group, Permission
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from mock import patch
 
@@ -249,7 +247,9 @@ class SelectStudentTest(TestCase):
     def setUp(self):
         self.person = PersonFactory()
         self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
-        Group.objects.create(name="students")
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
         self.student = StudentFactory()
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
         self.url = reverse('performance_administration')
@@ -272,6 +272,7 @@ class SelectStudentTest(TestCase):
 
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
+        patcher.stop()
 
     def test_get_request(self):
         response = self.client.get(self.url)
@@ -319,7 +320,9 @@ class VisualizeStudentPrograms(TestCase):
     def setUp(self):
         self.person = PersonFactory()
         self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
-        Group.objects.create(name="students")
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
         self.student = StudentFactory()
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
                                                              academic_year=2017)
@@ -344,6 +347,7 @@ class VisualizeStudentPrograms(TestCase):
 
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
+        patcher.stop()
 
     def test_with_no_corresponding_student(self):
         self.student.delete()
@@ -427,6 +431,9 @@ class VisualizeStudentResult(TestCase):
     def setUp(self):
         self.person = PersonFactory()
         self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
         self.student_performance = StudentPerformanceFactory(acronym='CHIM1BA')
         self.url = reverse('performance_student_result_admin', args=[self.student_performance.pk])
 
