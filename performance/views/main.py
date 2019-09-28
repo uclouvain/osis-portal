@@ -32,8 +32,9 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext as _
 
-from base.models import student, offer_enrollment
+from base.models import offer_enrollment
 from performance import models as mdl_performance
+from base.models import person as mdl_person, student as mdl_student
 from base.forms.base_forms import RegistrationIdForm
 from base.views import layout, common
 from performance.models.enums import offer_registration_state
@@ -49,12 +50,12 @@ def view_performance_home(request):
     Display the academic programs of the student.
     """
     try:
-        stud = student.find_by_user(request.user)
+        stud = mdl_student.find_by_user(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     list_student_programs = None
     if stud:
-        list_student_programs = get_student_programs_list(stud)
+        list_student_programs = __get_student_programs(stud)
     data = {"student": stud,
             "programs": list_student_programs,
             "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
@@ -99,7 +100,7 @@ def display_result_for_specific_student_performance(request, pk):
     Display the student result for a particular year and program.
     """
     try:
-        stud = student.find_by_user(request.user)
+        stud = mdl_student.find_by_user(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
@@ -126,7 +127,7 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
     Display the result for a students , filter by acronym
     """
     try:
-        stud = student.find_by_user(request.user)
+        stud = mdl_student.find_by_user(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     cleaned_acronym = _clean_acronym(acronym)
@@ -173,15 +174,50 @@ def visualize_student_programs(request, registration_id):
     if not can_access_performance_administration(request) or \
             not can_access_student_performance(request, registration_id):
         raise PermissionDenied
-    stud = student.find_by_registration_id(registration_id)
+    stud = mdl_student.find_by_registration_id(registration_id)
     list_student_programs = None
     if stud:
-        list_student_programs = get_student_programs_list(stud)
+        list_student_programs = __get_student_programs(stud)
 
     data = {"student": stud,
             "programs": list_student_programs,
             "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
     return layout.render(request, "admin/performance_home_admin.html", data)
+
+
+def __can_visualize_student_programs(request, registration_id):
+    """
+    User can visualize student programs if :
+        - The user is faculty_administrator
+        - The user is program manager of at least one of the program in the list of the student programs
+    """
+    if request.user.has_perm('base.is_faculty_administrator'):
+        return True
+    else:
+        managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
+        student = mdl_student.find_by_registration_id(registration_id)
+        for stud_offer_enrollment in offer_enrollment.find_by_student(student):
+            if stud_offer_enrollment.offer_year.acronym in managed_programs_as_dict.get(
+                    str(stud_offer_enrollment.offer_year.academic_year.year), []):
+                return True
+    return False
+
+
+def __can_visualize_student_program(request, performance_result_pk):
+    """
+    User can visualize the student program if :
+        - The user is faculty_administrator
+        - The user is program manager of the requested program
+    """
+    if request.user.has_perm('base.is_faculty_administrator'):
+        return True
+    else:
+        student_performance = mdl_performance.student_performance.find_actual_by_pk(performance_result_pk)
+        if student_performance:
+            managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
+            return student_performance.acronym in managed_programs_as_dict.get(str(student_performance.academic_year),
+                                                                               [])
+    return False
 
 
 @login_required
@@ -201,7 +237,7 @@ def visualize_student_result(request, pk):
                          perf_data)
 
 
-def get_student_programs_list(stud):
+def __get_student_programs(stud):
     query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
     list_student_programs = query_result_to_list(query_result)
     return list_student_programs
@@ -252,7 +288,7 @@ def can_access_student_performance(request, registration_id=None, stud_perf=None
             if stud_perf:
                 return stud_perf.acronym in user_managed_programs.get(str(stud_perf.academic_year), [])
             else:
-                stud = student.find_by_registration_id(registration_id)
+                stud = mdl_student.find_by_registration_id(registration_id)
                 if stud:
                     for stud_offer_enrollment in offer_enrollment.find_by_student(stud):
                         if stud_offer_enrollment.offer_year.acronym in user_managed_programs.get(
