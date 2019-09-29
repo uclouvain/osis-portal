@@ -262,7 +262,7 @@ class TestOnlineApplication(TestCase):
     def test_post_edit_application_form_with_empty_value(self):
         url = reverse('create_or_update_tutor_application',
                       kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        post_data = _get_application_example(self.lagro1600_next, "", "")
+        post_data = _get_application_example(self.lagro1600_next, "a", "")
         response = self.client.post(url, data=post_data)
         self.assertEqual(response.status_code, 200)
         context = response.context[0]
