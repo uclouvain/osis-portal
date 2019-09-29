@@ -299,7 +299,6 @@ class SelectStudentTest(TestCase):
 
     def test_user_is_a_student(self):
         self.client.logout()
-        self.student.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         self.client.force_login(self.student.person.user)
         response = self.client.get(self.url, follow=True)
 
@@ -418,7 +417,6 @@ class VisualizeStudentPrograms(TestCase):
 
     def test_user_is_a_student(self):
         self.client.logout()
-        self.student.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         self.client.force_login(self.student.person.user)
         response = self.client.get(self.url, follow=True)
 
@@ -488,7 +486,6 @@ class VisualizeStudentResult(TestCase):
     def test_user_is_a_student(self):
         self.client.logout()
         a_student = StudentFactory()
-        a_student.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         self.client.force_login(a_student.person.user)
         response = self.client.get(self.url, follow=True)
 

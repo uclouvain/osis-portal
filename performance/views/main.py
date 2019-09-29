@@ -64,7 +64,7 @@ def __make_not_authorized_message(stud_perf):
     authorized = stud_perf.authorized if stud_perf else None
     session_month = stud_perf.get_session_locked_display() if stud_perf else None
     if not authorized and session_month:
-        return _('The publication of the notes from the %(session_month)s session was not authorized by our faculty.')\
+        return _('The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
                % {"session_month": session_month}
     else:
         return None
@@ -220,7 +220,8 @@ def convert_student_performance_to_dic(student_performance_obj):
     try:
         d["academic_year"] = student_performance_obj.academic_year_template_formated
         d["acronym"] = student_performance_obj.acronym
-        d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"]["intituleComplet"]
+        d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"][
+            "intituleComplet"]
         d["pk"] = student_performance_obj.pk
         d["offer_registration_state"] = student_performance_obj.offer_registration_state
     except Exception:
@@ -239,16 +240,14 @@ def __can_visualize_student_programs(request, registration_id):
         - The user is faculty_administrator
         - The user is program manager of at least one of the program in the list of the student programs
     """
-    if request.user.has_perm('base.is_student'):
-        return False
     if request.user.has_perm('base.is_faculty_administrator'):
         return True
-    else:
-        managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
-        for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id):
-            if stud_perfs.acronym in managed_programs_as_dict.get(
-                    str(stud_perfs.academic_year), []):
-                return True
+    if request.user.has_perm('base.is_student'):
+        return False
+    managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
+    for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id):
+        if stud_perfs.acronym in managed_programs_as_dict.get(stud_perfs.academic_year, []):
+            return True
     return False
 
 
@@ -259,16 +258,14 @@ def __can_visualize_student_result(request, performance_result_pk):
         - The user is faculty_administrator
         - The user is program manager of the requested program
     """
-    if request.user.has_perm('base.is_student'):
-        return False
     if request.user.has_perm('base.is_faculty_administrator'):
         return True
-    else:
-        student_performance = mdl_performance.student_performance.find_actual_by_pk(performance_result_pk)
-        if student_performance:
-            managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
-            return student_performance.acronym in managed_programs_as_dict.get(str(student_performance.academic_year),
-                                                                               [])
+    if request.user.has_perm('base.is_student'):
+        return False
+    student_performance = mdl_performance.student_performance.find_actual_by_pk(performance_result_pk)
+    if student_performance:
+        managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
+        return student_performance.acronym in managed_programs_as_dict.get(student_performance.academic_year, [])
     return False
 
 
@@ -279,5 +276,6 @@ def __can_access_performance_administration(request):
         - The user is faculty_administrator
         - The user is program manager of at least one program
     """
-    return not request.user.has_perm('base.is_student') and (request.user.has_perm('base.is_faculty_administrator') or
-                                                             bool(common.get_managed_program_as_dict(request.user)))
+    return request.user.has_perm('base.is_faculty_administrator') \
+        or (not request.user.has_perm('base.is_student')
+            and bool(common.get_managed_program_as_dict(request.user)))

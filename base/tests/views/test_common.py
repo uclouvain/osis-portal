@@ -23,16 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
 
 from django.conf import settings
-from django.contrib.auth.models import Group, Permission
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from mock import patch
 
 from base.tests.factories.person import PersonFactory
-from base.tests.factories.student import StudentFactory
 from base.tests.factories.user import UserFactory
 from base.views import common
 from base.views.common import common_context_processor
@@ -114,8 +110,8 @@ class TestManagedPrograms(TestCase):
     def test_get_program_managed_as_dict(self):
         managed_programs = common.get_managed_program_as_dict(self.person.user)
         expected_managed_programs = {
-            '2017': ['PHYS1BA', 'BIOL1BA'],
-            '2018': ['PHYS1BA', 'BIOL1BA']
+            2017: ['PHYS1BA', 'BIOL1BA'],
+            2018: ['PHYS1BA', 'BIOL1BA']
         }
         self.assertDictEqual(expected_managed_programs, managed_programs)
 
