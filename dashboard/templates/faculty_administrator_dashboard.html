@@ -36,7 +36,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body dashboard-grid">
-            {% if 'performance'  in installed_apps and is_faculty_manager %}
+            {% if 'performance'  in installed_apps and perms.base.faculty_administrator %}
                 <div class="grid-item">
                     <i class="fa fa-line-chart"></i>
                     <div class="description">

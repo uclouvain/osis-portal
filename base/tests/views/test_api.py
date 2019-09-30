@@ -43,8 +43,8 @@ class TestApiTestCase(TestCase):
 
     def test_get_managed_programs_as_dict(self):
         expected_results = {
-            '2017': ['PHYS1BA', 'BIOL1BA'],
-            '2018': ['PHYS1BA', 'BIOL1BA']
+            2017: ['PHYS1BA', 'BIOL1BA'],
+            2018: ['PHYS1BA', 'BIOL1BA']
         }
         results = api.get_managed_programs_as_dict(self.global_id)
         self.assertDictEqual(expected_results, results)
