@@ -64,7 +64,7 @@ class AcademicYearTest(TestCase):
         self.academic_years = [AcademicYearFactory(year=now.year+x) for x in [1, -1, 0, 2]]
         self.sorted_academic_years = sorted(self.academic_years, key=lambda ay: ay.year)
         self.current_academic_years = [ay for ay in self.sorted_academic_years
-                                       if ay.start_date <= now.date() < ay.end_date]
+                                       if ay.start_date <= now.date() <= ay.end_date]
 
     def test_find_academic_years(self):
         self.assertListEqual(list(mdl_base.academic_year.find_academic_years()), self.sorted_academic_years)
