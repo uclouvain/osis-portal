@@ -262,7 +262,7 @@ class TestOnlineApplication(TestCase):
     def test_post_edit_application_form_with_empty_value(self):
         url = reverse('create_or_update_tutor_application',
                       kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        post_data = _get_application_example(self.lagro1600_next, None, None)
+        post_data = _get_application_example(self.lagro1600_next, "a", "")
         response = self.client.post(url, data=post_data)
         self.assertEqual(response.status_code, 200)
         context = response.context[0]
@@ -347,7 +347,7 @@ class TestOnlineApplication(TestCase):
     def _get_default_attribution_list(self):
         return [
             # Attribution in current year
-            _get_attribution_example(self.lbir1200_current, '20.0', '31.5', 2015, 2019),
+            _get_attribution_example(self.lbir1200_current, '20.0', '31.5', 2015, self.current_academic_year.year+1),
             _get_attribution_example(self.lbir1300_current, '21.5', '40', 2015, self.current_academic_year.year),
             # Attribution in next year
             _get_attribution_example(self.lagro2500_next, '29', '10', 2015, 2020)
@@ -410,7 +410,7 @@ def _get_application_example(learning_container_year, volume_lecturing, volume_p
         'charge_practical_asked': volume_practical_exercice,
         'acronym': learning_container_year.acronym,
         'year': learning_container_year.academic_year.year,
-        'pending': flag
+        'pending': flag or ""
     }
 
 

@@ -47,9 +47,7 @@ NO_CHARGE = 0.0
 PERSON_KEY = 'person'
 
 
-def get_attribution_list(global_id, academic_year=None):
-    if not academic_year:
-        academic_year = mdl_base.academic_year.current_academic_year()
+def get_attribution_list(global_id, academic_year):
 
     attribution_new = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attribution_new and attribution_new.attributions:
