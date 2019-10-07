@@ -210,7 +210,7 @@ class AttributionTest(TestCase):
             'charge_lecturing_asked': 30,
             'charge_practical_asked': 30,
             'acronym': "LAGRO1530",
-            'year': self.current_academic_year.year,
+            'year': next_academic_year.year,
             'is_substitute': False
         }]
         self.attrib.applications = application
