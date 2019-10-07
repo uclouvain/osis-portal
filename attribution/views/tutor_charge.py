@@ -109,9 +109,6 @@ def list_attributions(a_person, an_academic_year):
     results_in_charge = []
     results = mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(
         mdl_base.tutor.find_by_person(a_person), an_academic_year
-    ).select_related(
-        'learning_unit_year__academic_year',
-        'learning_unit_year__learning_container_year'
     )
     for attribution in results:
         if attribution.learning_unit_year.in_charge:
