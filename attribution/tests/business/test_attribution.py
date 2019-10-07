@@ -50,6 +50,7 @@ class AttributionTest(TestCase):
 
         _create_multiple_academic_year()
         self.current_academic_year = create_current_academic_year()
+
         # Creation Json which will be store on attribution
         attributions = _get_attributions_dict(self.current_academic_year.year)
         self.attrib = AttributionNewFactory(global_id=self.person.global_id,
@@ -65,9 +66,6 @@ class AttributionTest(TestCase):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             academic_year_2016)
         self.assertEqual(len(attribution_list), 1)
-
-        attribution_list = attribution.get_attribution_list(self.person.global_id)
-        self.assertEqual(len(attribution_list), 3)
 
     def test_get_attribution_list_empty(self):
         academic_year = AcademicYearFactory(year=1990)
