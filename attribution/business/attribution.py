@@ -191,7 +191,7 @@ def get_attribution_list_about_to_expire(global_id, academic_year=None):
         academic_year = mdl_base.academic_year.current_academic_year()
 
     attribution_list = get_attribution_list(global_id, academic_year)
-    application_list = attribution.business.tutor_application.get_application_list(global_id, academic_year)
+    application_list = attribution.business.tutor_application.get_application_list(global_id)
     if attribution_list:
         # Remove application which are not about to expire
         attribution_list = _filter_attribution_about_to_expire(attribution_list, academic_year)
