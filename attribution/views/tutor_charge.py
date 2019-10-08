@@ -24,30 +24,26 @@
 #
 ##############################################################################
 import datetime
-
 import json
-import requests
 import logging
 import traceback
-import re
 from operator import itemgetter
 
+import requests
 from django.conf import settings
+from django.contrib.auth.decorators import login_required, permission_required
 from django.forms import formset_factory
 from django.shortcuts import render
 
-from performance import models as mdl_performance
-from base import models as mdl_base
 from attribution import models as mdl_attribution
-from base.models.enums import offer_enrollment_state
-from attribution.forms.attribution import AttributionForm
-from base.forms.base_forms import GlobalIdForm
-from base.views import layout
-from django.contrib.auth.decorators import login_required, permission_required
-from base.utils import string_utils
 from attribution.business import xls_students_by_learning_unit
-from django.utils.translation import ugettext_lazy as _
-
+from attribution.forms.attribution import AttributionForm
+from base import models as mdl_base
+from base.forms.base_forms import GlobalIdForm
+from base.models.enums import offer_enrollment_state, learning_unit_year_subtypes
+from base.utils import string_utils
+from base.views import layout
+from performance import models as mdl_performance
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
 
@@ -111,8 +107,8 @@ def get_schedule_url(an_acronym):
 
 def list_attributions(a_person, an_academic_year):
     results_in_charge = []
-    results = mdl_attribution.attribution \
-        .find_by_tutor_year_order_by_acronym_function(mdl_base.tutor.find_by_person(a_person), an_academic_year)
+    tutor = mdl_base.tutor.find_by_person(a_person)
+    results = mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(tutor, an_academic_year)
     for attribution in results:
         if attribution.learning_unit_year.in_charge:
             results_in_charge.append(attribution)
@@ -203,15 +199,17 @@ def get_teaching_charge_data(a_person, year):
     a_user = None
     if a_person:
         a_user = a_person.user
-    data = {'user': a_user,
-            'attributions': attributions,
-            'formset': set_formset_years(a_person),
-            'year': int(year),
-            'tot_lecturing': tot_lecturing,
-            'tot_practical': tot_practical,
-            'academic_year': an_academic_year,
-            'global_id': a_person.global_id if a_person else None,
-            'error': error}
+    data = {
+        'user': a_user,
+        'attributions': attributions,
+        'formset': set_formset_years(a_person),
+        'year': int(year),
+        'tot_lecturing': tot_lecturing,
+        'tot_practical': tot_practical,
+        'academic_year': an_academic_year,
+        'global_id': a_person.global_id if a_person else None,
+        'error': error
+    }
     return data
 
 
@@ -352,13 +350,13 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
 
 def get_learning_unit_enrollments_list(a_learning_unit_year):
     enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
+    learning_unit_years = [a_learning_unit_year]
+    if a_learning_unit_year.subtype == learning_unit_year_subtypes.FULL:
+        learning_unit_years = list(
+            mdl_base.learning_unit_year.find_by_learning_container_year(a_learning_unit_year.learning_container_year)
+        )
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(
-        list(
-            mdl_base.learning_unit_year.find_by_learning_container_yr_and_subtype(
-                a_learning_unit_year.learning_container_year,
-                a_learning_unit_year.subtype,
-            )
-        ),
+        learning_unit_years,
         offer_enrollment_states=enrollment_states,
         only_enrolled=True
     )
