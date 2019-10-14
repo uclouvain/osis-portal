@@ -26,25 +26,25 @@
 import datetime
 from unittest import mock
 
-from requests.exceptions import RequestException
-from django.contrib.auth.models import User, Group, Permission
-from django.test import TestCase, override_settings
 from django.conf import settings
-from django.urls import reverse
+from django.contrib.auth.models import User, Group, Permission
 from django.forms.formsets import BaseFormSet
+from django.test import TestCase, override_settings
+from django.urls import reverse
+from requests.exceptions import RequestException
 
-from attribution.views import tutor_charge
 from attribution.models.enums import function
-from performance.tests.models import test_student_performance
-from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year
+from attribution.tests.factories.attribution import AttributionFactory
+from attribution.views import tutor_charge
+from base.models.enums import learning_unit_year_subtypes
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from attribution.tests.factories.attribution import AttributionFactory
-from base.models.enums import learning_unit_year_subtypes
-from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
+from base.tests.models import test_academic_year, test_learning_unit_year
+from performance.tests.models import test_student_performance
 
 URL_ADE = "url_ade"
 
@@ -273,15 +273,18 @@ class TutorChargeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
-
-        an_other_attribution = AttributionFactory(learning_unit_year=self.get_data('learning_unit_year'),
-                                                  tutor=self.a_tutor,
-                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+        AttributionFactory(
+            learning_unit_year=self.get_data('learning_unit_year'),
+            tutor=self.a_tutor,
+            external_id=OTHER_ATTRIBUTION_EXTERNAL_ID
+        )
         inexisting_external_id = "osis.attribution_8082"
 
-        attribution_not_in_json = AttributionFactory(learning_unit_year=self.get_data('learning_unit_year'),
-                                                     tutor=self.a_tutor,
-                                                     external_id=inexisting_external_id)
+        AttributionFactory(
+            learning_unit_year=self.get_data('learning_unit_year'),
+            tutor=self.a_tutor,
+            external_id=inexisting_external_id
+        )
 
         teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
 
@@ -295,7 +298,6 @@ class TutorChargeTest(TestCase):
         self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
         self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
 
-
     def test_get_learning_unit_enrollments_list(self):
         luy_full = self.data[0]['learning_unit_year']
         luy_partim = test_learning_unit_year.create_learning_unit_year({
@@ -307,11 +309,11 @@ class TutorChargeTest(TestCase):
         })
         luy_partim.learning_container_year = luy_full.learning_container_year
         luy_partim.save()
-        for i in range(5):
+        for _ in range(5):
             LearningUnitEnrollmentFactory(learning_unit_year=luy_full)
             LearningUnitEnrollmentFactory(learning_unit_year=luy_partim)
-        # The students of the partim don't have to be in the result list
-        self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(luy_full)), 5)
+        self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(luy_full)), 10)
+
 
 ACCESS_DENIED = 401
 
