@@ -25,14 +25,15 @@
 #
 ############################################################################
 import datetime
+from functools import wraps
+
+from django.core.exceptions import MultipleObjectsReturned
+from django.shortcuts import redirect
+from django.urls import reverse
 
 import base.models as mdl_base
-from internship.models import internship_student_information
-from functools import wraps
 from dashboard.views import main as dash_main_view
-from django.urls import reverse
-from django.shortcuts import redirect
-from django.core.exceptions import MultipleObjectsReturned
+from internship.models import internship_student_information
 from internship.models.cohort import Cohort
 
 

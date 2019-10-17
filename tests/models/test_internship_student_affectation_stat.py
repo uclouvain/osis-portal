@@ -24,9 +24,10 @@
 #
 ##############################################################################
 from django.test import TestCase
-from internship.tests.models import test_organization, test_internship_speciality, test_period
+
 from base.tests.models import test_student
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
+from internship.tests.models import test_organization, test_internship_speciality, test_period
 
 
 def create_internship_student_affectation_stat(student):

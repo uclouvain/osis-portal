@@ -24,8 +24,8 @@
 #
 ##############################################################################
 from django.contrib.auth.models import User, Permission
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 
 import base.tests.models.test_student
 from internship.models import internship_choice as mdl_internship_choice

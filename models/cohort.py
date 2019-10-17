@@ -24,7 +24,9 @@
 #
 ##############################################################################
 from datetime import date
+
 from django.db import models
+
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 

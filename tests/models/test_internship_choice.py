@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
 from django.db.utils import IntegrityError
-from internship.models import internship_choice as mdl_internship_choice
-from internship.tests.models import test_organization, test_internship_speciality
+from django.test import TestCase
+
 from base.tests.models import test_student
+from internship.models import internship_choice as mdl_internship_choice
 from internship.tests.factories.internship import InternshipFactory
+from internship.tests.models import test_organization, test_internship_speciality
 
 
 def create_internship_choice(organization, student, speciality, internship, choice=1):

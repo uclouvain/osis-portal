@@ -24,7 +24,9 @@
 #
 ##############################################################################
 import datetime
+
 from django.test import TestCase
+
 from internship.tests.factories.cohort import CohortFactory
 
 

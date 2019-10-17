@@ -24,8 +24,9 @@
 #
 ##############################################################################
 
-from internship.models import period as mdl_period
 import datetime
+
+from internship.models import period as mdl_period
 from internship.tests.factories.cohort import CohortFactory
 
 

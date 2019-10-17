@@ -24,9 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+
 from internship.models.enums.affectation_type import AffectationType
 from internship.models.enums.choice_type import ChoiceType
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
 class InternshipStudentAffectationStatAdmin(SerializableModelAdmin):
