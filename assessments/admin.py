@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.contrib import admin
+
 from assessments.models import *
 
 admin.site.register(score_encoding.ScoreEncoding,

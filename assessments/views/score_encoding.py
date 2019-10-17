@@ -26,30 +26,29 @@
 import datetime
 import json
 import logging
+import time
+import traceback
+
 import pika
 import pika.exceptions
-import traceback
-from voluptuous import error as voluptuous_error
-
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import PermissionDenied
+from django.db import connection
+from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.http import HttpResponse, Http404
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_GET
-from django.core.exceptions import PermissionDenied
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from voluptuous import error as voluptuous_error
 
+import assessments.models
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.utils import queue_utils
 from base.views import layout
-from osis_common.document import paper_sheet
 from osis_common.decorators.ajax import ajax_required
-import assessments.models
-
-from django.db import connection
-from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
-import time
+from osis_common.document import paper_sheet
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
