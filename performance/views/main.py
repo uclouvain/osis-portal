@@ -280,5 +280,6 @@ def __can_access_performance_administration(request):
         - The user is faculty_administrator
         - The user is program manager of at least one program
     """
-    return request.user.has_perm('base.is_faculty_administrator') or \
-           (not request.user.has_perm('base.is_student') and bool(common.get_managed_program_as_dict(request.user)))
+    return request.user.has_perm('base.is_faculty_administrator') or (
+            not request.user.has_perm('base.is_student') and bool(common.get_managed_program_as_dict(request.user))
+    )
