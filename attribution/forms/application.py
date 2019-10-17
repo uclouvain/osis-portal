@@ -114,9 +114,11 @@ class VacantAttributionFilterForm(BootstrapForm):
 
     def _has_mininum_criteria(self):
         cleaned_data = super(VacantAttributionFilterForm, self).clean()
-        if cleaned_data['faculty'] is None \
-                and (cleaned_data['learning_container_acronym'] is None or len(
-            cleaned_data['learning_container_acronym']) == 0):
+        if cleaned_data['faculty'] is None and \
+                (
+                        cleaned_data['learning_container_acronym'] is None
+                        or len(cleaned_data['learning_container_acronym']) == 0
+                ):
             self._errors['learning_container_acronym'] = _(
                 'Please precise at least a faculty or a code (or a part of a code)')
             return False

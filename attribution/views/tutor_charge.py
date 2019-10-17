@@ -145,7 +145,7 @@ def list_teaching_charge(a_person, an_academic_year):
                 'percentage_allocation_charge':
                     calculate_attribution_format_percentage_allocation_charge(numeric_lecturing_charge,
                                                                               numeric_practical_charge,
-                                                                              numeric_learning_unit_charge) if 
+                                                                              numeric_learning_unit_charge) if
                     lecturing_charge or practical_charge
                     else None,
                 'weight': a_learning_unit_year.credits,

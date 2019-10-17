@@ -467,8 +467,10 @@ class ExampleConsumer(object):
         :param pika.Spec.BasicProperties: properties
         :param str|unicode body: The message body
         """
-        logger.debug(self._connection_parameters['queue_name'] + ' : Received message # %s from %s' % (
-        basic_deliver.delivery_tag, properties.app_id))
+        logger.debug(
+            self._connection_parameters['queue_name'] + ' : Received message # %s from %s'
+            % (basic_deliver.delivery_tag, properties.app_id)
+        )
         logger.debug('Executing callback function on the received message...')
         self.callback_func(body)
         self.acknowledge_message(basic_deliver.delivery_tag)
