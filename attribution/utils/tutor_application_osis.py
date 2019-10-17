@@ -26,13 +26,13 @@
 import json
 import logging
 import time
-import datetime
 
 from dateutil import parser
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
+from django.conf import settings
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
-from django.conf import settings
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
+
 from attribution.models import attribution_new as mdl_attribution_new
 from attribution.models.attribution_new import AttributionNew
 

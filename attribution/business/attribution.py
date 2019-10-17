@@ -24,23 +24,22 @@
 #
 ##############################################################################
 import collections
+from collections import OrderedDict
 from decimal import Decimal
 from itertools import chain
 
+from django.db.models import OuterRef, Subquery
 from django.utils.translation import ugettext_lazy as _
 
 from attribution import models as mdl_attribution
 from attribution.models.enums import function
 from base import models as mdl_base
 from base.business import learning_unit_year_with_context
+from base.business.entity import get_entities_ids
 from base.models.entity_version import EntityVersion
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
-from base.models.enums import entity_container_year_link_type as entity_types
-from django.db.models import OuterRef, Subquery
-from base.business.entity import get_entities_ids
 from base.models.learning_component_year import LearningComponentYear
-from collections import OrderedDict
 
 NO_CHARGE = 0.0
 

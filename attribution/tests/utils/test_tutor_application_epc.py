@@ -31,7 +31,6 @@ from django.test import TestCase
 from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_epc
 from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory

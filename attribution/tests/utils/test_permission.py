@@ -24,12 +24,13 @@
 #
 ##############################################################################
 import datetime
+
+from django.contrib.auth.models import User
 from django.test import TestCase
+
 from attribution.utils import permission
 from base.models.enums import academic_calendar_type
 from base.tests.models import test_academic_year, test_academic_calendar
-from django.contrib.auth.models import User
-
 
 now = datetime.datetime.now()
 

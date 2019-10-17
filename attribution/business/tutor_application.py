@@ -24,20 +24,16 @@
 #
 ##############################################################################
 import time
-
 from decimal import Decimal
 
-from django.db.models import Prefetch, OuterRef, Subquery
-from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from attribution import models as mdl_attribution
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
-from base.models.learning_component_year import LearningComponentYear
-from base.models.learning_unit_year import LearningUnitYear
-from osis_common.messaging import message_config, send_message as message_service
 from base.models.enums import learning_unit_year_subtypes
+from osis_common.messaging import message_config, send_message as message_service
 
 
 def get_application_list(global_id, academic_year=None):

@@ -24,9 +24,10 @@
 #
 ##############################################################################
 from decimal import Decimal
+
+from django.contrib import admin
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.contrib import admin
 
 
 class AttributionNewAdmin(admin.ModelAdmin):

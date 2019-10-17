@@ -26,19 +26,17 @@
 
 import datetime
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import connection
-from django.test import TestCase
 from django.contrib.auth.models import Group
+from django.test import TestCase
 
 from attribution import models as mdl_attribution
+from attribution.models.enums import function
+from attribution.tests.factories.attribution import AttributionFactory
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.tutor import TutorFactory
-from attribution.tests.factories.attribution import AttributionFactory
-from base.tests.models import test_person
 from base.tests.factories.user import UserFactory
-from attribution.models.enums import function
+from base.tests.models import test_person
 
 
 def create_attribution(data):

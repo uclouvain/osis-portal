@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from decimal import Decimal
 from time import sleep
 
-from decimal import Decimal
 from django.contrib.auth.models import Group
 from django.test import TestCase
 

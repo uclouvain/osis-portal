@@ -28,7 +28,6 @@ from django.conf.urls import url, include
 from attribution.views import online_application
 from attribution.views import tutor_charge, list
 
-
 js_info_dict = {
     'packages': ('attribution', )
 }

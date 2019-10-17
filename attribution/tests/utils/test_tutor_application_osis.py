@@ -24,8 +24,10 @@
 #
 ##############################################################################
 import json
+
 from django.contrib.auth.models import Group
 from django.test import TestCase
+
 from attribution.models.attribution_new import find_by_global_id
 from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_osis

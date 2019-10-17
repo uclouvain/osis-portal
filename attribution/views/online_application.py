@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.http import Http404
-from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from django.urls import reverse_lazy
+from django.http import Http404
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
 from attribution.business import attribution
@@ -39,10 +40,9 @@ from attribution.utils import tutor_application_epc
 from attribution.views.decorators.authorization import user_is_tutor_or_super_user
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
-from base.views import layout
 from base.models.enums import academic_calendar_type
-from django.conf import settings
 from base.models.enums import learning_component_year_type
+from base.views import layout
 
 
 @login_required
