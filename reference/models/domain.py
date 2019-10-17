@@ -24,9 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from reference.enums import domain_type
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.utils.translation import ugettext_lazy as _
+
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from reference.enums import domain_type
 
 
 class DomainAdmin(SerializableModelAdmin):

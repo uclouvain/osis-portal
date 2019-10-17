@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django.db import models
-from reference.enums import grade_type_coverage
+
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from reference.enums import grade_type_coverage
 from reference.enums import institutional_grade_type as enum_institutional_grade_type
 
 
