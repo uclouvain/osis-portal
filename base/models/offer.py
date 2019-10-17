@@ -24,8 +24,9 @@
 #
 ##############################################################################
 from django.db import models
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+
 from base.models import offer_enrollment
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
 class OfferAdmin(SerializableModelAdmin):

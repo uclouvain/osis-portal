@@ -25,9 +25,10 @@
 ##############################################################################
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
+
 from base.models import signals as mdl_signals, person as mdl_person
-from base.models.person import Person
 from base.models import student as mdl_student, tutor as mdl_tutor
+from base.models.person import Person
 
 
 def get_or_create_user(user_infos):

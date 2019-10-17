@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models import *
 from django.contrib import admin
 
+from base.models import *
 from base.models import education_group, education_group_type, education_group_year
 
 admin.site.register(academic_calendar.AcademicCalendar,
