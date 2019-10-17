@@ -32,7 +32,8 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 class InternshipStudentInformationAdmin(SerializableModelAdmin):
     list_display = (
-    'person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile', 'contest', 'cohort')
+        'person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile', 'contest', 'cohort'
+    )
     fieldsets = ((None, {
         'fields': ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile',
                    'contest', 'cohort')
