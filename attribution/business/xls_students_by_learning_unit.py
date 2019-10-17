@@ -26,9 +26,8 @@
 
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
-from openpyxl.writer.excel import save_virtual_workbook
 from openpyxl import Workbook
-
+from openpyxl.writer.excel import save_virtual_workbook
 
 COLUMN_REGISTRATION_ID_NO = 5
 STATUS_COL_WIDTH = 10

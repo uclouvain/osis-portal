@@ -26,13 +26,13 @@
 import json
 import logging
 import time
-import datetime
 
 from dateutil import parser
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
+from django.conf import settings
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
-from django.conf import settings
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
+
 from attribution.models import attribution_new as mdl_attribution_new
 from attribution.models.attribution_new import AttributionNew
 
@@ -70,25 +70,32 @@ def _update_applications_list(new_applications):
         global_id = new_application.get('global_id')
         attribution_new = mdl_attribution_new.find_by_global_id(global_id)
         if attribution_new:
-            applications_list = []
-            if not attribution_new.applications:
-                _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
-            else:
-                for application in new_application['tutor_applications']:
-                    existing_application = next((data for data in attribution_new.applications if data.get("year") == application.get("year") and data.get("acronym") == application.get("acronym")), None)
-                    if existing_application:
-                        if _check_if_update(application, existing_application):
-                            applications_list.append(application)
-                            attribution_new.applications.remove(existing_application)
-                        else:
-                            applications_list.append(existing_application)
-                            attribution_new.applications.remove(existing_application)
-                    else:
-                        applications_list.append(application)
-                _merge_applications_list(applications_list, attribution_new)
+            _manage_exisisting_attribution_new(attribution_new, new_application)
         else:
-            attribution_new = AttributionNew(global_id=global_id, applications=new_application.get('tutor_applications'))
+            attribution_new = AttributionNew(global_id=global_id,
+                                             applications=new_application.get('tutor_applications'))
             attribution_new.save()
+
+
+def _manage_exisisting_attribution_new(attribution_new, new_application):
+    applications_list = []
+    if not attribution_new.applications:
+        _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
+    else:
+        for application in new_application['tutor_applications']:
+            existing_application = next((data for data in attribution_new.applications if
+                                         data.get("year") == application.get("year") and data.get(
+                                             "acronym") == application.get("acronym")), None)
+            if existing_application:
+                if _check_if_update(application, existing_application):
+                    applications_list.append(application)
+                    attribution_new.applications.remove(existing_application)
+                else:
+                    applications_list.append(existing_application)
+                    attribution_new.applications.remove(existing_application)
+            else:
+                applications_list.append(application)
+        _merge_applications_list(applications_list, attribution_new)
 
 
 def _check_if_update(application, existing_application):

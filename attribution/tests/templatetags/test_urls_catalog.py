@@ -23,8 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
 from django.template import Context, Template
+from django.test import TestCase
 from django.test import override_settings
 
 from base.tests.factories.academic_year import AcademicYearFactory

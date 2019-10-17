@@ -165,10 +165,12 @@ class AttributionTest(TestCase):
 
     def test_get_attribution_list_about_to_expire_volume_zero_is_renewable(self):
         self.attrib.attributions = [
-            {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
-             'weight': '5.00',
-             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
-             'end_year': self.current_academic_year.year, 'is_substitute': False}
+            {
+                'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
+                'weight': '5.00',
+                'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
+                'end_year': self.current_academic_year.year, 'is_substitute': False
+            }
         ]
         self.attrib.save()
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
@@ -182,10 +184,12 @@ class AttributionTest(TestCase):
 
     def test_get_attribution_list_with_substitute_is_not_renewable(self):
         self.attrib.attributions = [
-            {'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
-             'weight': '5.00',
-             'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
-             'end_year': self.current_academic_year.year, 'is_substitute': True}
+            {
+                'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
+                'weight': '5.00',
+                'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
+                'end_year': self.current_academic_year.year, 'is_substitute': True
+            }
         ]
         self.attrib.save()
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
@@ -279,7 +283,7 @@ class AttributionTest(TestCase):
         attributions_result = attribution.get_teachers(acronym_LCHM1111, 2017)
         self.assertEqual(len(attributions_result), 2)
         self.assertEqual(attributions_result[0][attribution.PERSON_KEY],
-                          person_first_alphabetical_order)
+                         person_first_alphabetical_order)
 
     def test_update_learning_unit_volume_no_components(self):
         """When no components found on database, the key 'lecturing_vol' / 'practical_exercises_vol' is set to 0.0"""
@@ -287,18 +291,22 @@ class AttributionTest(TestCase):
         LearningUnitYearFactory(acronym='LAGRO1530',
                                 academic_year=self.current_academic_year,
                                 learning_container_year=l_container)
-        an_attribution = {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Chimie complexe', 'weight': '5.00',
-                          'LECTURING': '22.5', 'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER',
-                          'start_year': 2015, 'end_year': 2020}
+        an_attribution = {
+            'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Chimie complexe', 'weight': '5.00',
+            'LECTURING': '22.5', 'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER',
+            'start_year': 2015, 'end_year': 2020
+        }
 
         attribution.update_learning_unit_volume(an_attribution, self.current_academic_year)
         self.assertEqual(an_attribution['lecturing_vol'], Decimal(0.0))
         self.assertEqual(an_attribution['practical_exercises_vol'], Decimal(0.0))
 
     def test_calculate_component_volume(self):
-        an_attribution = {'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Chimie complexe', 'weight': '5.00',
-                          'LECTURING': '22.5', 'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
-                          'end_year': 2020}
+        an_attribution = {
+            'year': 2017, 'acronym': 'LAGRO1530', 'title': 'Chimie complexe', 'weight': '5.00',
+            'LECTURING': '22.5', 'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
+            'end_year': 2020
+        }
         l_component_lecturing = LearningComponentYearFactory(type=learning_component_year_type.LECTURING)
         l_component_other = LearningComponentYearFactory(type=None)
         components_computed = {
@@ -357,17 +365,26 @@ def _get_attributions_dict(current_year):
     previous_year = current_year - 1
     future_year = current_year + 1
     return [
-        {'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00',
-         'LECTURING': '22.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year,
-         'is_substitute': False},
-        {'year': current_year, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
-         'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015,
-         'end_year': future_year, 'is_substitute': False},
-        {'year': current_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013, 'is_substitute': False},
-        {'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
-         'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
-         'end_year': current_year, 'is_substitute': False}
+        {
+            'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00',
+            'LECTURING': '22.5',
+            'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year,
+            'is_substitute': False
+        },
+        {
+            'year': current_year, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
+            'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015,
+            'end_year': future_year, 'is_substitute': False
+        },
+        {
+            'year': current_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00',
+            'LECTURING': '20.5',
+            'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013, 'is_substitute': False
+        },
+        {
+            'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
+            'LECTURING': '20.5',
+            'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
+            'end_year': current_year, 'is_substitute': False
+        }
     ]

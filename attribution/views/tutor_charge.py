@@ -100,7 +100,7 @@ def get_email_students(an_acronym, year):
 
 def get_schedule_url(an_acronym):
     if string_utils.is_string_not_null_empty(an_acronym) and hasattr(settings, 'ATTRIBUTION_CONFIG'):
-        return settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL').\
+        return settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_URL'). \
             format(settings.ATTRIBUTION_CONFIG.get('TIME_TABLE_NUMBER'), an_acronym.lower())
     return None
 
@@ -136,30 +136,36 @@ def list_teaching_charge(a_person, an_academic_year):
         tot_lecturing = tot_lecturing + numeric_lecturing_charge
         tot_practical = tot_practical + numeric_practical_charge
         attribution_list.append(
-            {'acronym': a_learning_unit_year.acronym,
-             'title': a_learning_unit_year.complete_title,
-             'start_year': an_attribution.start_year,
-             'lecturing_allocation_charge': lecturing_charge,
-             'practice_allocation_charge': practical_charge,
-             'percentage_allocation_charge':
-                 calculate_attribution_format_percentage_allocation_charge(numeric_lecturing_charge, numeric_practical_charge,
-                                                                           numeric_learning_unit_charge) if lecturing_charge or practical_charge
-                 else None,
-             'weight': a_learning_unit_year.credits,
-             'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
-             'url_students_list_email': get_email_students(a_learning_unit_year.acronym,
-                                                           a_learning_unit_year.academic_year.year),
-             'function': an_attribution.function,
-             'year': a_learning_unit_year.academic_year.year,
-             'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year),
-             'learning_unit_year': a_learning_unit_year,
-             'tutor_id': an_attribution.tutor.id})
+            {
+                'acronym': a_learning_unit_year.acronym,
+                'title': a_learning_unit_year.complete_title,
+                'start_year': an_attribution.start_year,
+                'lecturing_allocation_charge': lecturing_charge,
+                'practice_allocation_charge': practical_charge,
+                'percentage_allocation_charge':
+                    calculate_attribution_format_percentage_allocation_charge(numeric_lecturing_charge,
+                                                                              numeric_practical_charge,
+                                                                              numeric_learning_unit_charge) if 
+                    lecturing_charge or practical_charge
+                    else None,
+                'weight': a_learning_unit_year.credits,
+                'url_schedule': get_schedule_url(a_learning_unit_year.acronym),
+                'url_students_list_email': get_email_students(a_learning_unit_year.acronym,
+                                                              a_learning_unit_year.academic_year.year),
+                'function': an_attribution.function,
+                'year': a_learning_unit_year.academic_year.year,
+                'learning_unit_year_url': get_url_learning_unit_year(a_learning_unit_year),
+                'learning_unit_year': a_learning_unit_year,
+                'tutor_id': an_attribution.tutor.id
+            })
     if len(attribution_list) == 0:
         attribution_list = None
-    return {'attributions': attribution_list,
-            'tot_lecturing': tot_lecturing,
-            'tot_practical': tot_practical,
-            'error': attributions_charge_duration.get('error', False)}
+    return {
+        'attributions': attribution_list,
+        'tot_lecturing': tot_lecturing,
+        'tot_practical': tot_practical,
+        'error': attributions_charge_duration.get('error', False)
+    }
 
 
 @login_required
@@ -221,8 +227,10 @@ def set_formset_years(a_person):
     AttributionFormSet = formset_factory(AttributionForm, extra=0)
     initial_data = []
     for yr in get_attribution_years(a_person):
-        initial_data.append({'year': yr,
-                             'next_year': str(yr+1)[-2:]})
+        initial_data.append({
+                                'year': yr,
+                                'next_year': str(yr + 1)[-2:]
+                            })
 
     return AttributionFormSet(initial=initial_data)
 
@@ -236,13 +244,14 @@ def get_url_learning_unit_year(a_learning_unit_year):
 
 
 def _load_students(learning_unit_year_id, a_tutor):
-
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(learning_unit_year_id)
-    return {'global_id': request_tutor.person.global_id,
-            'students': _get_learning_unit_yr_enrollments_list(a_learning_unit_year),
-            'learning_unit_year': a_learning_unit_year,
-            'tutor_id': request_tutor.id}
+    return {
+        'global_id': request_tutor.person.global_id,
+        'students': _get_learning_unit_yr_enrollments_list(a_learning_unit_year),
+        'learning_unit_year': a_learning_unit_year,
+        'tutor_id': request_tutor.id
+    }
 
 
 @login_required
@@ -273,23 +282,30 @@ def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym)
             offre = monOffre['offre']
             if offre['sigleComplet'] == offer_acronym:
                 cours_list = monOffre['cours']
-                if cours_list:
-                    nb_cours = 0
-                    while nb_cours < len(cours_list):
-                        cours = cours_list[nb_cours]
-                        if cours['sigleComplet'] == a_learning_unit_year.acronym:
-                            get_student_results(cours, results)
-                        nb_cours = nb_cours + 1
+                _manage_cours_list(a_learning_unit_year, cours_list, results)
     return results
+
+
+def _manage_cours_list(a_learning_unit_year, cours_list, results):
+    if cours_list:
+        nb_cours = 0
+        while nb_cours < len(cours_list):
+            cours = cours_list[nb_cours]
+            if cours['sigleComplet'] == a_learning_unit_year.acronym:
+                get_student_results(cours, results)
+            nb_cours = nb_cours + 1
 
 
 def get_student_results(cours, results):
     sessions = cours['session']
     nb_session = 0
     while nb_session < len(sessions):
-        results.update({sessions[nb_session]['mois']: {
-            JSON_LEARNING_UNIT_NOTE: get_value(sessions[nb_session], JSON_LEARNING_UNIT_NOTE),
-            JSON_LEARNING_UNIT_STATUS: get_value(sessions[nb_session], JSON_LEARNING_UNIT_STATUS)}})
+        results.update({
+            sessions[nb_session]['mois']: {
+                JSON_LEARNING_UNIT_NOTE: get_value(sessions[nb_session], JSON_LEARNING_UNIT_NOTE),
+                JSON_LEARNING_UNIT_STATUS: get_value(sessions[nb_session], JSON_LEARNING_UNIT_STATUS)
+            }
+        })
         nb_session = nb_session + 1
 
 
@@ -316,7 +332,6 @@ def get_session_value(session_results, month_session, variable_to_get):
 
 
 def get_enrollments_dict_for_display(learning_unit_enrollment):
-
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
                                            learning_unit_enrollment.offer_enrollment.offer_year.acronym)
@@ -332,7 +347,8 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
         'september_note': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
-        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS,), }
+        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS, ),
+    }
 
 
 def is_tutor(a_person):
@@ -385,7 +401,7 @@ def select_tutor_attributions(request):
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def visualize_tutor_attributions(request, global_id):
     tutor = mdl_base.tutor.find_by_person_global_id(global_id)
-    data = get_teaching_charge_data(tutor.person,  get_current_academic_year())
+    data = get_teaching_charge_data(tutor.person, get_current_academic_year())
     return render(request, "tutor_charge.html", data)
 
 
