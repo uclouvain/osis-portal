@@ -26,10 +26,10 @@
 import datetime
 import json
 from unittest.mock import patch
-from django.conf import settings
 
-from django.test import TestCase
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import TestCase
 
 import base.tests.models.test_offer_year
 import performance.tests.models.test_student_performance
@@ -41,8 +41,10 @@ class TestQueueStudentPerformance(TestCase):
     def setUp(self):
         self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
         self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points2.json")
-        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file("performance/tests/ressources/points3.json")
+        self.json_points = performance.tests.models.test_student_performance.load_json_file(
+            "performance/tests/ressources/points2.json")
+        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
+            "performance/tests/ressources/points3.json")
 
     def test_save(self):
         registration_id = self.student_performance.registration_id
@@ -135,9 +137,9 @@ class TestUpdateExpDate(TestCase):
         "DROI1BA","expirationDate":1485267376419,"forceUpdate":false}'
 
     def setUp(self):
-        self.student_performance_1 = performance.tests.models.test_student_performance.\
+        self.student_performance_1 = performance.tests.models.test_student_performance. \
             create_student_performance('DROI1BA', '1111111', 2016, datetime.datetime.now())
-        self.student_performance_2 = performance.tests.models.test_student_performance.\
+        self.student_performance_2 = performance.tests.models.test_student_performance. \
             create_student_performance('DROI1BA', '2222222', 2016, datetime.datetime.now())
 
     def test_update_with_registration_id(self):
@@ -153,5 +155,3 @@ class TestUpdateExpDate(TestCase):
         student_perf_2 = mdl_perf.find_by_pk(self.student_performance_2.pk)
         self.assertEqual(student_perf_1.update_date.replace(microsecond=0),
                          student_perf_2.update_date.replace(microsecond=0))
-
-

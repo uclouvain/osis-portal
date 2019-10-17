@@ -54,9 +54,11 @@ def view_performance_home(request):
     list_student_programs = None
     if stud:
         list_student_programs = __get_student_programs(stud)
-    data = {"student": stud,
-            "programs": list_student_programs,
-            "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
+    data = {
+        "student": stud,
+        "programs": list_student_programs,
+        "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
+    }
     return layout.render(request, "performance_home_student.html", data)
 
 
@@ -176,9 +178,11 @@ def visualize_student_programs(request, registration_id):
             raise PermissionDenied
         list_student_programs = __get_student_programs(stud)
 
-    data = {"student": stud,
-            "programs": list_student_programs,
-            "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE}
+    data = {
+        "student": stud,
+        "programs": list_student_programs,
+        "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
+    }
     return layout.render(request, "admin/performance_home_admin.html", data)
 
 
@@ -277,5 +281,5 @@ def __can_access_performance_administration(request):
         - The user is program manager of at least one program
     """
     return request.user.has_perm('base.is_faculty_administrator') \
-        or (not request.user.has_perm('base.is_student')
-            and bool(common.get_managed_program_as_dict(request.user)))
+           or (not request.user.has_perm('base.is_student')
+               and bool(common.get_managed_program_as_dict(request.user)))
