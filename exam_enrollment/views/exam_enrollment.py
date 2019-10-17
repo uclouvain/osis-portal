@@ -35,10 +35,10 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import MultipleObjectsReturned
-from django.urls import reverse
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.http import HttpResponse, response
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError

@@ -30,9 +30,9 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
-from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.test import TestCase, Client
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
