@@ -23,4 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
