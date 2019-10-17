@@ -26,19 +26,18 @@
 import json
 import logging
 
-from django.contrib import messages
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext_lazy as _
 
+from attestation.queues import student_attestation_status, student_attestation
 from base.forms.base_forms import RegistrationIdForm
 from base.models import student as student_mdl, person as person_mdl
-from attestation.queues import student_attestation_status, student_attestation
 from base.views import layout
 from dashboard.views import main as dash_main_view
-
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
