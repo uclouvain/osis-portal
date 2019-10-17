@@ -4,32 +4,32 @@
 {% load i18n %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block style %}
     <style>
-        .alert{
+        .alert {
             display: block !important;
         }
     </style>
@@ -42,124 +42,130 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div class="btn-group pull-right">
-        <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">
-            <span class="glyphicon glyphicon-ok"></span> {% trans 'Submit choices' %}
-        </button>
+    <div class="page-header">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary" onclick="$('#assign_preference').submit();">
+                <span class="glyphicon glyphicon-ok"></span> {% trans 'Submit choices' %}
+            </button>
+        </div>
+        <h2>{% trans 'Internships' %}</h2>
     </div>
-    <h2>{% trans 'Internships' %}</h2>
-</div>
 
-{% include "template_messages.html" %}
+    {% include "template_messages.html" %}
 
-<ul class="nav nav-tabs">
-    {% for internship in internships %}
-        {% if internship.speciality %}
-        <li role="presentation" {% if current_internship == internship %} class="active" {% endif %}>
-            <a data-toggle="tab" data-id="{{ internship.id }}" href="#{{ internship.id }}">
-                {{ internship.name }}
-            </a>
-        </li>
-        {% endif %}
-    {% endfor %}
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans 'Selective internships' %}
-        <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            {% for internship in internships %}
-                {% if not internship.speciality %}
-                        <li role="presentation" class="selective_internship{% if current_internship.id == internship.id %} active {% endif %}">
+    <ul class="nav nav-tabs">
+        {% for internship in internships %}
+            {% if internship.speciality %}
+                <li role="presentation" {% if current_internship == internship %} class="active" {% endif %}>
+                    <a data-toggle="tab" data-id="{{ internship.id }}" href="#{{ internship.id }}">
+                        {{ internship.name }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans 'Selective internships' %}
+                <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                {% for internship in internships %}
+                    {% if not internship.speciality %}
+                        <li role="presentation"
+                            class="selective_internship{% if current_internship.id == internship.id %} active {% endif %}">
                             <a data-toggle="tab" data-id="{{ internship.id }}" href="#{{ internship.id }}">
                                 {{ internship.name }}
                             </a>
                         </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-      </li>
-</ul>
-<br>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+    <br>
 
     <form id="assign_preference" method="post">
-    <input hidden id="current_internship_input" name="current_internship" value="{{ current_internship.id }}"/>
-    <div class="tab-content">
+        <input hidden id="current_internship_input" name="current_internship" value="{{ current_internship.id }}"/>
+        <div class="tab-content">
             {% csrf_token %}
             {% for internship in internships %}
-                    <div id="{{ internship.id }}" class="tab-pane fade
+                <div id="{{ internship.id }}" class="tab-pane fade
                             {% if current_internship == internship %}
                                 in active
                             {% endif %}
                     ">
-                        <div class="panel panel-default">
-                            {% if not internship.speciality %}
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                            <div class="fieldWrapper col-md-6 form-group">
-                                            <h3>{{ internship }}</h3>
-                                                <label for="speciality_selection">{% trans 'Choose a speciality' %}:</label>
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <select id="speciality_selection_{{ internship.id }}" onchange="get_selective_internship_preferences({{ internship.id }}, this.value);"
-                                                                name="{{ internship }}-speciality_id"
-                                                                class="form-control">
-                                                            <option value="">-----</option>
-                                                            {% for speciality in all_specialities %}
-                                                                <option value="{{ speciality.id }}"
-                                                                    {% if internship.chosen_specialty.id == speciality.id %} selected {% endif %}>
-                                                                    {{ speciality.name }}
-                                                                </option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                </div>
+                    <div class="panel panel-default">
+                        {% if not internship.speciality %}
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="fieldWrapper col-md-6 form-group">
+                                        <h3>{{ internship }}</h3>
+                                        <label for="speciality_selection">{% trans 'Choose a speciality' %}:</label>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <select id="speciality_selection_{{ internship.id }}"
+                                                        onchange="get_selective_internship_preferences({{ internship.id }}, this.value);"
+                                                        name="{{ internship }}-speciality_id"
+                                                        class="form-control">
+                                                    <option value="">-----</option>
+                                                    {% for speciality in all_specialities %}
+                                                        <option value="{{ speciality.id }}"
+                                                                {% if internship.chosen_specialty.id == speciality.id %}
+                                                                selected {% endif %}>
+                                                            {{ speciality.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div id="selective_internship_preferences_form_{{ internship.id }}"></div>
-                            {% endif %}
-                            {% if internship.offers_forms and internship.speciality  %}
-                                {{ internship.formset.management_form }}
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>{% trans 'Hospital' %}</th>
-                                            <th>{% trans 'Maximum number of students' %}</th>
-                                            <th>{% trans 'Number of first choice' %}</th>
-                                            <th>{% trans 'Preference' %}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for offer, form, number_first_choices in internship.offers_forms %}
-                                            <tr>
-                                                <td>{{ offer.organization }}</td>
-                                                <td>{{ offer.maximum_enrollments }}</td>
-                                                <td>{{ number_first_choices }}</td>
-                                                <td hidden>
-                                                    <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}"
-                                                           class="form-control" value="{{ offer.pk }}">
-                                                </td>
-                                                <td>
-                                                    <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
-                                                        {% for key, val in form.fields.preference.choices %}
-                                                            {% choice_for_offer internship.internship_choices offer internship as choice %}
-                                                            <option value="{{ key }}" {% if key == choice %} selected {% endif %}>{{ val }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                            </div>
+                            <div id="selective_internship_preferences_form_{{ internship.id }}"></div>
+                        {% endif %}
+                        {% if internship.offers_forms and internship.speciality %}
+                            {{ internship.formset.management_form }}
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>{% trans 'Hospital' %}</th>
+                                    <th>{% trans 'Maximum number of students' %}</th>
+                                    <th>{% trans 'Number of first choice' %}</th>
+                                    <th>{% trans 'Preference' %}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for offer, form, number_first_choices in internship.offers_forms %}
+                                    <tr>
+                                        <td>{{ offer.organization }}</td>
+                                        <td>{{ offer.maximum_enrollments }}</td>
+                                        <td>{{ number_first_choices }}</td>
+                                        <td hidden>
+                                            <input type="number" id="{{ form.offer.id_for_label }}"
+                                                   name="{{ form.offer.html_name }}"
+                                                   class="form-control" value="{{ offer.pk }}">
+                                        </td>
+                                        <td>
+                                            <select id="{{ form.preference.id_for_label }}"
+                                                    name="{{ form.preference.html_name }}" class="form-control">
+                                                {% for key, val in form.fields.preference.choices %}
+                                                    {% choice_for_offer internship.internship_choices offer internship as choice %}
+                                                    <option value="{{ key }}" {% if key == choice %}
+                                                            selected {% endif %}>{{ val }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
 
-                                <div class="panel-footer">
-                                    <button type="submit" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-ok"></span> {% trans 'Submit choices' %}
-                                    </button>
-                                </div>
-                            {% endif %}
-                        </div>
+                            <div class="panel-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-ok"></span> {% trans 'Submit choices' %}
+                                </button>
+                            </div>
+                        {% endif %}
                     </div>
+                </div>
             {% endfor %}
         </div>
     </form>
@@ -172,20 +178,20 @@
         $("li.selective_internship.active").closest("li.dropdown").addClass("active");
 
         //keep current tab opened after submit
-        $(".nav-tabs a").on('click', function(e){
+        $(".nav-tabs a").on('click', function (e) {
             let internship_id = e.target.dataset.id;
             $("#current_internship_input").val(internship_id);
         });
 
-        $('.selective_internship a').each(function(e){
+        $('.selective_internship a').each(function (e) {
             let internship_id = $(this)[0].dataset.id;
-            let specialty_id = $("#speciality_selection_"+internship_id)[0].value;
-            if(internship_id) {
+            let specialty_id = $("#speciality_selection_" + internship_id)[0].value;
+            if (internship_id) {
                 get_selective_internship_preferences(internship_id, specialty_id);
             }
         });
 
-        function get_selective_internship_preferences(internship_id, specialty_id){
+        function get_selective_internship_preferences(internship_id, specialty_id) {
             $.ajax({
                 url: "ajax/selective_internship/",
                 data: {
@@ -193,11 +199,11 @@
                     'internship': internship_id,
                     'specialty': specialty_id
                 },
-                success: function(response){
-                   $("#selective_internship_preferences_form_"+internship_id).html(response);
+                success: function (response) {
+                    $("#selective_internship_preferences_form_" + internship_id).html(response);
                 },
-                error: function(){
-                    $("#selective_internship_preferences_form_"+internship_id).html('');
+                error: function () {
+                    $("#selective_internship_preferences_form_" + internship_id).html('');
                 }
             })
         }

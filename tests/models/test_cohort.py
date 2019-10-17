@@ -24,7 +24,9 @@
 #
 ##############################################################################
 import datetime
+
 from django.test import TestCase
+
 from internship.tests.factories.cohort import CohortFactory
 
 
@@ -34,7 +36,6 @@ class TestCohort(TestCase):
         cls.cohort = CohortFactory(subscription_start_date=datetime.date(2018, 1, 26),
                                    subscription_end_date=datetime.date(2018, 2, 7),
                                    publication_start_date=datetime.date(2018, 4, 7))
-
 
     def test_cohort_enrollments_active(self):
         self.assertTrue(self.cohort.enrollment_active(datetime.date(2018, 1, 26)))

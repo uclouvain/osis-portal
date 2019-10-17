@@ -25,14 +25,15 @@
 #
 ############################################################################
 import datetime
+from functools import wraps
+
+from django.core.exceptions import MultipleObjectsReturned
+from django.shortcuts import redirect
+from django.urls import reverse
 
 import base.models as mdl_base
-from internship.models import internship_student_information
-from functools import wraps
 from dashboard.views import main as dash_main_view
-from django.urls import reverse
-from django.shortcuts import redirect
-from django.core.exceptions import MultipleObjectsReturned
+from internship.models import internship_student_information
 from internship.models.cohort import Cohort
 
 
@@ -44,7 +45,8 @@ def redirect_if_not_in_cohort(function):
         except MultipleObjectsReturned:
             return dash_main_view.show_multiple_registration_id_error(request)
 
-        if student and internship_student_information.find_by_person_in_cohort(cohort_id, student.person_id).count() > 0:
+        if student and internship_student_information.find_by_person_in_cohort(cohort_id,
+                                                                               student.person_id).count() > 0:
             return function(request, cohort_id, *args, **kwargs)
         else:
             return redirect(reverse("internship"))

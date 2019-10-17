@@ -24,16 +24,19 @@
 #
 ##############################################################################
 from django.db import models
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+
 from internship.models.enums.affectation_type import AffectationType
 from internship.models.enums.choice_type import ChoiceType
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
 class InternshipStudentAffectationStatAdmin(SerializableModelAdmin):
     list_display = ('student', 'organization', 'speciality', 'period', 'internship', 'choice', 'cost',
                     'consecutive_month', 'type')
-    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'period', 'internship', 'choice', 'cost',
-                                    'consecutive_month', 'type')}),)
+    fieldsets = ((None, {
+        'fields': ('student', 'organization', 'speciality', 'period', 'internship', 'choice', 'cost',
+                   'consecutive_month', 'type')
+    }),)
     raw_id_fields = ('student', 'organization', 'speciality', 'period', 'internship')
     search_fields = ['student__person__first_name', 'student__person__last_name']
     list_filter = ('period__cohort', 'choice')

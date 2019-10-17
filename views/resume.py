@@ -54,7 +54,9 @@ def view_student_resume(request, cohort_id):
     student_information = mdl_student_information.find_by_user_in_cohort(request.user, cohort=cohort)
     periods = mdl_period.Period.objects.filter(cohort=cohort)
     period_ids = periods.values_list("pk", flat=True)
-    student_affectations = mdl_student_affectation.InternshipStudentAffectationStat.objects.filter(student=student, period_id__in=period_ids).order_by("period__name")
+    student_affectations = mdl_student_affectation.InternshipStudentAffectationStat.objects.filter(student=student,
+                                                                                                   period_id__in=period_ids).order_by(
+        "period__name")
     specialities = mdl_internship_speciality.find_by_cohort(cohort)
     student_choices = mdl_internship_choice.search(student=student, specialities=specialities)
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
@@ -70,15 +72,16 @@ def view_student_resume(request, cohort_id):
             offers[affectation.organization].update({affectation.speciality: offer})
         except KeyError:
             offers.update({affectation.organization: {affectation.speciality: offer}})
-    return layout.render(request, "student_resume.html", {"student": student,
-                                                          "student_information": student_information,
-                                                          "student_affectations": student_affectations,
-                                                          "student_choices": student_choices,
-                                                          "internships": internships,
-                                                          "publication_allowed": publication_allowed,
-                                                          "cohort": cohort,
-                                                          "offers": offers
-                                                          })
+    return layout.render(request, "student_resume.html", {
+        "student": student,
+        "student_information": student_information,
+        "student_affectations": student_affectations,
+        "student_choices": student_choices,
+        "internships": internships,
+        "publication_allowed": publication_allowed,
+        "cohort": cohort,
+        "offers": offers
+    })
 
 
 def save_from_form(form, person, cohort):
