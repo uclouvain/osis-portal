@@ -23,13 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
-from django.contrib.postgres.fields import JSONField
 from django.contrib import admin
+from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
-from performance.queue.student_performance import fetch_and_save
+from django.db import models
 from django.utils import timezone
+
 from performance.models.enums import offer_registration_state, session_month
+from performance.queue.student_performance import fetch_and_save
 
 
 class StudentPerformanceAdmin(admin.ModelAdmin):
