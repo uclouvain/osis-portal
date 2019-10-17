@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import pika
-import uuid
-from pika.exceptions import ConnectionClosed
-from django.conf import settings
-import threading
 import logging
+import threading
+import uuid
+
+import pika
+from django.conf import settings
+from pika.exceptions import ConnectionClosed
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 DEFAULT_TIMEOUT = 30
