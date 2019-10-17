@@ -23,14 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
-from base.views import layout
 from attribution.utils import permission
+from base.views import layout
 
 
 @login_required
