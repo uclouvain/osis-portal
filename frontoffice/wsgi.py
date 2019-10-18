@@ -24,10 +24,10 @@
 #
 ##############################################################################
 
-import sys
 import logging
-
 import os
+import sys
+
 import dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

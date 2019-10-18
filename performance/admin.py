@@ -23,8 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from performance.models import *
 from django.contrib import admin
+
+from performance.models import *
 
 admin.site.register(student_performance.StudentPerformance,
                     student_performance.StudentPerformanceAdmin)

@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models.enums import learning_component_year_type
 from django.db import models
 
+from base.models.enums import learning_component_year_type
 from base.models.enums.entity_container_year_link_type import REQUIREMENT_ENTITY, ADDITIONAL_REQUIREMENT_ENTITY_1, \
     ADDITIONAL_REQUIREMENT_ENTITY_2
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel

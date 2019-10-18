@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
+
 from attestation.views import main as attestation_main
 
 urlpatterns = [

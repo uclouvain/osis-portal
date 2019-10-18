@@ -23,10 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from unittest import skip
 from django.conf import settings
 from django.test import TestCase
 from mock import patch
+
 from attestation.queues import student_attestation_status as std_att_stat
 from attestation.views import main as v_main
 

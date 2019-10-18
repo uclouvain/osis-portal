@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import datetime
-
 from decimal import Decimal
 
 from django import forms
@@ -33,8 +32,8 @@ from django.utils.translation import ugettext_lazy as _, pgettext
 
 from attribution.business import attribution
 from base.forms.base_forms import BootstrapForm
-from base.models.enums import learning_component_year_type
 from base.models.entity_version import search
+from base.models.enums import learning_component_year_type
 
 MAXIMUM_REMARK_LENGTH = 250
 

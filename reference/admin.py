@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from reference.models import *
 from django.contrib import admin
 
+from reference.models import *
 
 admin.site.register(country.Country,
                     country.CountryAdmin)

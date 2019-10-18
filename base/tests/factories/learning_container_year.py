@@ -24,7 +24,7 @@
 #
 ##############################################################################
 import datetime
-import factory
+
 import factory.fuzzy
 
 from base.models.enums import vacant_declaration_type

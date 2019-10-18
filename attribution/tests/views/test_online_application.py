@@ -26,8 +26,8 @@
 import datetime
 
 from django.contrib.auth.models import Group, Permission
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from attribution.models.enums import function
@@ -35,18 +35,18 @@ from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_epc
 from base.models.enums import academic_calendar_type
 from base.models.enums import learning_component_year_type
+from base.models.enums import learning_unit_year_subtypes
 from base.models.enums import vacant_declaration_type
 from base.tests.factories.academic_calendar import AcademicCalendarFactory
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
+from base.tests.factories.entity import EntityFactory
+from base.tests.factories.entity_version import EntityVersionFactory
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.user import UserFactory
-from base.models.enums import learning_unit_year_subtypes
-from base.tests.factories.entity import EntityFactory
-from base.tests.factories.entity_version import EntityVersionFactory
 
 
 class TestOnlineApplication(TestCase):

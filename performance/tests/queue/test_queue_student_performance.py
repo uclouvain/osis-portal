@@ -26,10 +26,10 @@
 import datetime
 import json
 from unittest.mock import patch
-from django.conf import settings
 
-from django.test import TestCase
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import TestCase
 
 import base.tests.models.test_offer_year
 import performance.tests.models.test_student_performance

@@ -23,10 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
 from django.contrib import admin
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.postgres.fields import JSONField
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 
 
 class ScoreEncodingAdmin(admin.ModelAdmin):

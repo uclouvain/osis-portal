@@ -23,11 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
 import datetime
+import json
 
-from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
+from django.test import TestCase
 
 import base.tests.models.test_offer_year
 from performance import models as mdl_performance

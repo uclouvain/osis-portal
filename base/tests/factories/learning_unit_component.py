@@ -23,15 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import string
 import operator
+import string
 
-import factory
 import factory.fuzzy
 
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.learning_component_year import LearningComponentYearFactory
 from base.models.enums import component_type
+from base.tests.factories.learning_component_year import LearningComponentYearFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 
 
 class LearningUnitComponentFactory(factory.django.DjangoModelFactory):
