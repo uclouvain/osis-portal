@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
 from django.contrib import admin
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist

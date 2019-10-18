@@ -110,7 +110,7 @@ class SpecificExamMarksMessagesTestCase(FunctionalTestCase, StudentWithPerforman
         self.login(student.person.user.username)
         self.__go_to_first_exam_marks_page(student)
         student_perf = student_performance.search(registration_id=student.registration_id)[0]
-        message = self.get_localized_message('performance_result_note_not_autorized', student.person.language).\
+        message = self.get_localized_message('performance_result_note_not_autorized', student.person.language). \
             format(self.get_localized_message(student_perf.session_locked, student.person.language))
         self.check_page_contains_string(message)
 
@@ -140,7 +140,7 @@ class SpecificExamMarksMessagesTestCase(FunctionalTestCase, StudentWithPerforman
         self.login(student.person.user.username)
         self.__go_to_first_exam_marks_page(student)
         self.check_page_contains_string(self.get_localized_message('courses_registration_validated',
-                                                                       student.person.language))
+                                                                   student.person.language))
 
     @can_be_reported
     def test_courses_registration_None(self):
@@ -189,4 +189,3 @@ class SpecificExamMarksMessagesTestCase(FunctionalTestCase, StudentWithPerforman
     def __go_to_first_exam_marks_page(self, student):
         perf = student_performance.search(registration_id=student.registration_id)[0]
         self.open_url_by_name('performance_student_result', {'pk': perf.pk})
-

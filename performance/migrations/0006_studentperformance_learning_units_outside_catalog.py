@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('performance', '0005_studentperformance_courses_registration_validated'),
     ]

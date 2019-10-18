@@ -24,9 +24,10 @@
 #
 ##############################################################################
 from django.db import models
-from reference.enums import domain_type
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from django.utils.translation import ugettext_lazy as _
+
+from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from reference.enums import domain_type
 
 
 class DomainAdmin(SerializableModelAdmin):
@@ -42,7 +43,7 @@ class Domain(SerializableModel):
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.PROTECT)
     decree = models.ForeignKey('Decree', null=True, blank=True, on_delete=models.PROTECT)
     type = models.CharField(max_length=50, choices=domain_type.TYPES, default=domain_type.UNKNOWN)
-    national = models.BooleanField(default=False) # True if is Belgian else False
+    national = models.BooleanField(default=False)  # True if is Belgian else False
 
     def __str__(self):
         return self.name

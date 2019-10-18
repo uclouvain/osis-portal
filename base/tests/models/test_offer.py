@@ -24,15 +24,15 @@
 #
 ##############################################################################
 import datetime
-from django.test import TestCase
+
 from django.contrib.auth.models import Group
+from django.test import TestCase
 
 from base.models import offer as mdl_offer
 from base.tests.factories.offer import OfferFactory
-from base.tests.factories.student import StudentFactory
-from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
-
+from base.tests.factories.offer_year import OfferYearFactory
+from base.tests.factories.student import StudentFactory
 
 now = datetime.datetime.now()
 

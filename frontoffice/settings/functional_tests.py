@@ -28,7 +28,7 @@ FUNCT_TESTS_CONFIG = {
         'PAGE_TITLE': 'Dashboard',
         'STUDENT_LINKS': ('lnk_performance', 'lnk_my_attestations', 'lnk_exam_enrollment_offer_choice'),
         'TUTOR_LINKS': ('lnk_score_encoding', 'lnk_my_teaching_charge', 'lnk_my_students_list', 'lnk_manage_courses'),
-        'ADMIN_LINKS': ('bt_administrations', )
+        'ADMIN_LINKS': ('bt_administrations',)
     },
     'PERFORMANCE': {
         'PAGE_TITLE': 'Exam Marks',
@@ -57,7 +57,7 @@ FUNCT_TESTS_CONFIG = {
             'PAGE_TITLE': 'Data Administration',
             'FROM_DASH_LINK_1': 'bt_administrations',
             'FROM_DASH_LINK_2': 'bt_data',
-            'ADMIN_LINKS': ('lnk_data_management', )
+            'ADMIN_LINKS': ('lnk_data_management',)
         },
         'DATA_MANAGEMENT': {
             'PAGE_TITLE': 'Louvain | Osis-studies',

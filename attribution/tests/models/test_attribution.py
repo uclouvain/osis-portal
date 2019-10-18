@@ -26,19 +26,17 @@
 
 import datetime
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import connection
-from django.test import TestCase
 from django.contrib.auth.models import Group
+from django.test import TestCase
 
 from attribution import models as mdl_attribution
+from attribution.models.enums import function
+from attribution.tests.factories.attribution import AttributionFactory
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.tutor import TutorFactory
-from attribution.tests.factories.attribution import AttributionFactory
-from base.tests.models import test_person
 from base.tests.factories.user import UserFactory
-from attribution.models.enums import function
+from base.tests.models import test_person
 
 
 def create_attribution(data):
@@ -57,7 +55,7 @@ def create_attribution(data):
         if start is None:
             attribution.start_year = year_yr
         if end is None:
-            attribution.end_year = year_yr+1
+            attribution.end_year = year_yr + 1
     if start:
         attribution.start_year = start
     if end:
@@ -93,16 +91,16 @@ class AttributionTest(TestCase):
         c_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
                                                               function=function.CO_HOLDER,
                                                               learning_unit_year=b_learning_unit_year)
-        self.assertListEqual(list(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(self.tutor, self.an_academic_year)), [a_attribution, c_attribution, b_attribution])
-
+        self.assertListEqual(list(mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(self.tutor,
+                                                                                                           self.an_academic_year)),
+                             [a_attribution, c_attribution, b_attribution])
 
     def test_is_summary_responsible_tutor(self):
-        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
-                                                              summary_responsible=True)
+        self.attribution = AttributionFactory(tutor=self.tutor,
+                                              summary_responsible=True)
         return self.assertTrue(mdl_attribution.attribution.is_summary_responsible(self.tutor))
 
-
     def test_is_not_summary_responsible_tutor(self):
-        a_attribution = self.attribution = AttributionFactory(tutor=self.tutor,
-                                                              summary_responsible=False)
+        self.attribution = AttributionFactory(tutor=self.tutor,
+                                              summary_responsible=False)
         return self.assertFalse(mdl_attribution.attribution.is_summary_responsible(self.tutor))

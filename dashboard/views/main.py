@@ -23,14 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
-from base.views import layout
 from attribution.utils import permission
+from base.views import layout
 
 
 @login_required
@@ -63,5 +63,5 @@ def _can_access_administration(request):
     can_access = False
     if 'performance' in settings.INSTALLED_APPS:
         from performance.views import main as perf_main_view
-        can_access = perf_main_view.can_access_performance_administration(request)
+        can_access = perf_main_view.__can_access_performance_administration(request)
     return can_access

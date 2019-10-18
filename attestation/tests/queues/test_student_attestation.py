@@ -23,13 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from mock import patch
 
 from django.conf import settings
 from django.test import SimpleTestCase, override_settings
 
-from attestation.queues.student_attestation import fetch_student_attestation
 from attestation.models.enums.attestation_type import REGULAR_REGISTRATION
+from attestation.queues.student_attestation import fetch_student_attestation
 
 GLOBAL_ID = "45451200"
 ACADEMIC_YEAR = 2016
@@ -49,7 +48,3 @@ class FetchStudentAttestationTest(SimpleTestCase):
         response = fetch_student_attestation(GLOBAL_ID, ACADEMIC_YEAR, ATTESTATION_TYPE, 'USER_TEST')
 
         self.assertEqual(response, None)
-
-
-
-

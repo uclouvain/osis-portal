@@ -23,11 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
-import string
-import json
 import datetime
+import json
+import string
+
+import factory.fuzzy
 
 
 def load_score_encoding_sample(sample_path="assessments/tests/resources/score_encoding_sample.json", global_id=""):

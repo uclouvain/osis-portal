@@ -24,14 +24,14 @@
 #
 ##############################################################################
 
-from django.contrib.auth.models import Group, Permission
-from django.urls import reverse
-from django.test import TestCase
 import openpyxl
+from django.contrib.auth.models import Group, Permission
+from django.test import TestCase
+from django.urls import reverse
 
-from base.tests.factories.tutor import TutorFactory
-from base.tests.factories.person import PersonFactory
 from attribution.business import xls_students_by_learning_unit
+from base.tests.factories.person import PersonFactory
+from base.tests.factories.tutor import TutorFactory
 
 ACCESS_DENIED = 401
 
