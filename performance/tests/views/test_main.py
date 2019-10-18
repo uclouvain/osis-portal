@@ -56,11 +56,13 @@ class TestMain(TestCase):
 
     def test_convert_student_performance_to_dic(self):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
-        expected = {"academic_year": '2016 - 2017',
-                    "acronym": "SINF2MS/G",
-                    "title": " Master [120] en sciences informatiques, à finalité spécialisée ",
-                    "pk": self.student_performance.pk,
-                    "offer_registration_state": offer_registration_state.REGISTERED}
+        expected = {
+            "academic_year": '2016 - 2017',
+            "acronym": "SINF2MS/G",
+            "title": " Master [120] en sciences informatiques, à finalité spécialisée ",
+            "pk": self.student_performance.pk,
+            "offer_registration_state": offer_registration_state.REGISTERED
+        }
         self.assertDictEqual(student_performance_dic, expected)
 
     def test_convert_student_performance_misformated_to_dict(self):
@@ -142,11 +144,13 @@ class ViewPerformanceHomeTest(TestCase):
 
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'],
-                         [{'academic_year': '2017 - 2018',
-                           'acronym': a_student_performance.acronym,
-                           'offer_registration_state': 'CESSATION',
-                           'pk': a_student_performance.pk,
-                           'title': ' Master [120] en sciences informatiques, à finalité spécialisée '}]
+                         [{
+                              'academic_year': '2017 - 2018',
+                              'acronym': a_student_performance.acronym,
+                              'offer_registration_state': 'CESSATION',
+                              'pk': a_student_performance.pk,
+                              'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
+                          }]
                          )
         self.assertEqual(response.context['registration_states_to_show'],
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)
@@ -382,11 +386,13 @@ class VisualizeStudentPrograms(TestCase):
 
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'],
-                         [{'academic_year': '2017 - 2018',
-                           'acronym': self.student_performance.acronym,
-                           'offer_registration_state': 'CESSATION',
-                           'pk': self.student_performance.pk,
-                           'title': ' Master [120] en sciences informatiques, à finalité spécialisée '}]
+                         [{
+                              'academic_year': '2017 - 2018',
+                              'acronym': self.student_performance.acronym,
+                              'offer_registration_state': 'CESSATION',
+                              'pk': self.student_performance.pk,
+                              'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
+                          }]
                          )
         self.assertEqual(response.context['registration_states_to_show'],
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)

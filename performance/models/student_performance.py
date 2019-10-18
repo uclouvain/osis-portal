@@ -38,9 +38,11 @@ class StudentPerformanceAdmin(admin.ModelAdmin):
                     'acronym', 'update_date', 'creation_date', 'authorized', 'offer_registration_state',
                     'courses_registration_validated', 'learning_units_outside_catalog')
     list_filter = ('academic_year',)
-    fieldsets = ((None, {'fields': ('registration_id', 'academic_year', 'acronym', 'update_date',
-                                    'creation_date', 'data', 'courses_registration_validated',
-                                    'learning_units_outside_catalog', 'course_registration_message')}),)
+    fieldsets = ((None, {
+        'fields': ('registration_id', 'academic_year', 'acronym', 'update_date',
+                   'creation_date', 'data', 'courses_registration_validated',
+                   'learning_units_outside_catalog', 'course_registration_message')
+    }),)
     readonly_fields = ('creation_date', 'courses_registration_validated', 'learning_units_outside_catalog')
     search_fields = ['registration_id', 'academic_year', 'acronym']
 
@@ -149,11 +151,11 @@ def has_expired(student_performance):
 def find_actual_by_pk(student_performance_pk):
     result = find_by_pk(student_performance_pk)
     if result and has_expired(result):
-            new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
-            if new_result:
-                result = new_result
-            else:
-                result.fetch_timed_out = True
+        new_result = fetch_and_save(result.registration_id, result.academic_year, result.acronym)
+        if new_result:
+            result = new_result
+        else:
+            result.fetch_timed_out = True
     return result
 
 

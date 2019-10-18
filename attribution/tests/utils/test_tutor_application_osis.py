@@ -155,23 +155,27 @@ class TestTutorApplicationEpc(TestCase):
         body = [{
             'global_id': person.global_id,
             'tutor_applications': [
-                {'acronym': 'LAGRO2630',
-                 'year': self.academic_year.year,
-                 'charge_lecturing_asked': '0',
-                 'charge_practical_asked': '0',
-                 'last_changed': "2021-12-08 09:58:57+00:00"
-                 },
-                {'acronym': 'LBIR1200',
-                 'year': self.academic_year.year,
-                 'charge_lecturing_asked': '0',
-                 'charge_practical_asked': '0',
-                 'last_changed': "2013-12-08 09:58:57+00:00"
-                 },
-                {'acronym': 'BIO5213',
-                 'year': self.academic_year.year,
-                 'charge_lecturing_asked': '0',
-                 'charge_practical_asked': '0',
-                 'last_changed': "2013-12-08 09:58:57+00:00"}
+                {
+                    'acronym': 'LAGRO2630',
+                    'year': self.academic_year.year,
+                    'charge_lecturing_asked': '0',
+                    'charge_practical_asked': '0',
+                    'last_changed': "2021-12-08 09:58:57+00:00"
+                },
+                {
+                    'acronym': 'LBIR1200',
+                    'year': self.academic_year.year,
+                    'charge_lecturing_asked': '0',
+                    'charge_practical_asked': '0',
+                    'last_changed': "2013-12-08 09:58:57+00:00"
+                },
+                {
+                    'acronym': 'BIO5213',
+                    'year': self.academic_year.year,
+                    'charge_lecturing_asked': '0',
+                    'charge_practical_asked': '0',
+                    'last_changed': "2013-12-08 09:58:57+00:00"
+                }
             ]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")

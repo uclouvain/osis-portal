@@ -136,7 +136,7 @@ def _make_registration_json_message(registration_id):
 def _make_anac_for_template(year):
     formated_academic_year = None
     if year:
-        formated_academic_year = '{} - {}'.format(year, year+1)
+        formated_academic_year = '{} - {}'.format(year, year + 1)
     return formated_academic_year
 
 
@@ -152,11 +152,13 @@ def _make_attestation_data(attestation_statuses_json_dict, student):
         formated_academic_year = None
         attestation_available = None
 
-    return {'attestation_statuses': attestation_statuses,
-            'academic_year': academic_year,
-            'formated_academic_year': formated_academic_year,
-            'available': attestation_available,
-            'student': student}
+    return {
+        'attestation_statuses': attestation_statuses,
+        'academic_year': academic_year,
+        'formated_academic_year': formated_academic_year,
+        'available': attestation_available,
+        'student': student
+    }
 
 
 def _make_pdf_attestation(attestation_pdf, attestation_type):

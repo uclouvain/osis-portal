@@ -41,4 +41,3 @@ admin.site.register(grade_type.GradeType,
 
 admin.site.register(language.Language,
                     language.LanguageAdmin)
-

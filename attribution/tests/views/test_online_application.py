@@ -183,7 +183,7 @@ class TestOnlineApplication(TestCase):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
         self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
         # Creation learning container for next academic year [==> application academic year]
-        self.lagro1234_next = _create_learning_container_with_components\
+        self.lagro1234_next = _create_learning_container_with_components \
             ("LAGRO1234", self.application_academic_year, 70, 70,
              type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN)
         url = reverse('vacant_attributions_search')
@@ -296,7 +296,7 @@ class TestOnlineApplication(TestCase):
     def test_post_overview_with_lecturing_and_practical_component_partim(self):
         lbira2101a_next = _create_learning_container_with_components("LBIRA2101A", self.application_academic_year,
                                                                      volume_lecturing=20, volume_practical_exercices=20,
-                                                                         subtype=learning_unit_year_subtypes.PARTIM)
+                                                                     subtype=learning_unit_year_subtypes.PARTIM)
         lbira2101a_current = _create_learning_container_with_components(
             "LBIRA2101A", self.current_academic_year,
             volume_lecturing=20, volume_practical_exercices=20,
@@ -347,7 +347,7 @@ class TestOnlineApplication(TestCase):
     def _get_default_attribution_list(self):
         return [
             # Attribution in current year
-            _get_attribution_example(self.lbir1200_current, '20.0', '31.5', 2015, self.current_academic_year.year+1),
+            _get_attribution_example(self.lbir1200_current, '20.0', '31.5', 2015, self.current_academic_year.year + 1),
             _get_attribution_example(self.lbir1300_current, '21.5', '40', 2015, self.current_academic_year.year),
             # Attribution in next year
             _get_attribution_example(self.lagro2500_next, '29', '10', 2015, 2020)

@@ -9,7 +9,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -67,11 +66,15 @@ class Migration(migrations.Migration):
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
                 ('external_id', models.CharField(blank=True, max_length=100, null=True)),
                 ('name', models.CharField(max_length=255)),
-                ('type', models.CharField(choices=[('HIGH_EDUC_NOT_UNIVERSITY', 'HIGH_EDUC_NOT_UNIVERSITY'), ('UNIVERSITY', 'UNIVERSITY'), ('UNKNOWN', 'UNKNOWN')], default='UNKNOWN', max_length=50)),
+                ('type', models.CharField(
+                    choices=[('HIGH_EDUC_NOT_UNIVERSITY', 'HIGH_EDUC_NOT_UNIVERSITY'), ('UNIVERSITY', 'UNIVERSITY'),
+                             ('UNKNOWN', 'UNKNOWN')], default='UNKNOWN', max_length=50)),
                 ('national', models.BooleanField(default=False)),
                 ('reference', models.CharField(blank=True, max_length=10, null=True)),
-                ('decree', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='reference.Decree')),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='reference.Domain')),
+                ('decree', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                             to='reference.Decree')),
+                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                             to='reference.Domain')),
             ],
             options={
                 'abstract': False,
@@ -83,12 +86,17 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
                 ('name', models.CharField(max_length=100)),
-                ('institution_type', models.CharField(choices=[('SECONDARY', 'SECONDARY'), ('UNIVERSITY', 'UNIVERSITY'), ('HIGHER_NON_UNIVERSITY', 'HIGHER_NON_UNIVERSITY')], max_length=25)),
+                ('institution_type', models.CharField(choices=[('SECONDARY', 'SECONDARY'), ('UNIVERSITY', 'UNIVERSITY'),
+                                                               ('HIGHER_NON_UNIVERSITY', 'HIGHER_NON_UNIVERSITY')],
+                                                      max_length=25)),
                 ('postal_code', models.CharField(max_length=20)),
                 ('city', models.CharField(max_length=255)),
-                ('national_community', models.CharField(blank=True, choices=[('FRENCH', 'FRENCH'), ('GERMAN', 'GERMAN'), ('DUTCH', 'DUTCH')], max_length=20, null=True)),
+                ('national_community',
+                 models.CharField(blank=True, choices=[('FRENCH', 'FRENCH'), ('GERMAN', 'GERMAN'), ('DUTCH', 'DUTCH')],
+                                  max_length=20, null=True)),
                 ('adhoc', models.BooleanField(default=False)),
-                ('country', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='reference.Country')),
+                ('country', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                              to='reference.Country')),
             ],
             options={
                 'abstract': False,
@@ -100,7 +108,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
                 ('external_id', models.CharField(blank=True, max_length=100, null=True)),
-                ('type', models.CharField(choices=[('TRANSITION', 'Transition'), ('QUALIFICATION', 'Qualification'), ('ANOTHER', 'Autre')], max_length=20)),
+                ('type', models.CharField(
+                    choices=[('TRANSITION', 'Transition'), ('QUALIFICATION', 'Qualification'), ('ANOTHER', 'Autre')],
+                    max_length=20)),
                 ('name', models.CharField(max_length=100)),
                 ('adhoc', models.BooleanField(default=False)),
             ],
@@ -115,7 +125,9 @@ class Migration(migrations.Migration):
                 ('uuid', models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)),
                 ('external_id', models.CharField(blank=True, max_length=100, null=True)),
                 ('name', models.CharField(max_length=255)),
-                ('coverage', models.CharField(choices=[('HIGH_EDUC_NOT_UNIVERSITY', 'HIGH_EDUC_NOT_UNIVERSITY'), ('UNIVERSITY', 'UNIVERSITY'), ('UNKNOWN', 'UNKNOWN')], default='UNKNOWN', max_length=30)),
+                ('coverage', models.CharField(
+                    choices=[('HIGH_EDUC_NOT_UNIVERSITY', 'HIGH_EDUC_NOT_UNIVERSITY'), ('UNIVERSITY', 'UNIVERSITY'),
+                             ('UNKNOWN', 'UNKNOWN')], default='UNKNOWN', max_length=30)),
                 ('adhoc', models.BooleanField(default=True)),
                 ('institutional', models.BooleanField(default=False)),
             ],
@@ -152,6 +164,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='gradetype',
             name='institutional_grade_type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='reference.InstitutionalGradeType'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to='reference.InstitutionalGradeType'),
         ),
     ]

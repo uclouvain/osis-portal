@@ -77,8 +77,10 @@ def navigation(request, navigate_direct_to_form):
         if navigate_direct_to_form and len(student_programs) == 1:
             return _get_exam_enrollment_form(student_programs[0], request, stud)
         else:
-            return layout.render(request, 'offer_choice.html', {'programs': student_programs,
-                                                                'student': stud})
+            return layout.render(request, 'offer_choice.html', {
+                'programs': student_programs,
+                'student': stud
+            })
     else:
         messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found').format(current_academic_year))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
@@ -116,7 +118,7 @@ def _get_exam_enrollment_form(off_year, request, stud):
     else:
         request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
     fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
-    exam_enroll_request = exam_enrollment_request.\
+    exam_enroll_request = exam_enrollment_request. \
         get_by_student_and_offer_year_acronym_and_fetch_date(stud, off_year.acronym, fetch_date_limit)
     if exam_enroll_request:
         try:
@@ -126,22 +128,26 @@ def _get_exam_enrollment_form(off_year, request, stud):
             data = {}
 
         return layout.render(request, 'exam_enrollment_form.html',
-                             {'error_message': _get_error_message(data, off_year),
-                              'exam_enrollments': data.get('exam_enrollments'),
-                              'student': stud,
-                              'current_number_session': data.get('current_number_session'),
-                              'academic_year': mdl_base.academic_year.current_academic_year(),
-                              'program': mdl_base.offer_year.find_by_id(off_year.id),
-                              'request_timeout': request_timeout})
+                             {
+                                 'error_message': _get_error_message(data, off_year),
+                                 'exam_enrollments': data.get('exam_enrollments'),
+                                 'student': stud,
+                                 'current_number_session': data.get('current_number_session'),
+                                 'academic_year': mdl_base.academic_year.current_academic_year(),
+                                 'program': mdl_base.offer_year.find_by_id(off_year.id),
+                                 'request_timeout': request_timeout
+                             })
     else:
         ask_exam_enrollment_form(stud, off_year)
         return layout.render(request, 'exam_enrollment_form.html',
-                             {'exam_enrollments': "",
-                              'student': stud,
-                              'current_number_session': "",
-                              'academic_year': mdl_base.academic_year.current_academic_year(),
-                              'program': mdl_base.offer_year.find_by_id(off_year.id),
-                              'request_timeout': request_timeout})
+                             {
+                                 'exam_enrollments': "",
+                                 'student': stud,
+                                 'current_number_session': "",
+                                 'academic_year': mdl_base.academic_year.current_academic_year(),
+                                 'program': mdl_base.offer_year.find_by_id(off_year.id),
+                                 'request_timeout': request_timeout
+                             })
 
 
 def _get_error_message(data, off_year):
@@ -155,15 +161,14 @@ def _get_error_message(data, off_year):
 
 
 def ask_exam_enrollment_form(stud, off_year):
-    if 'exam_enrollment' in settings.INSTALLED_APPS:
-        if hasattr(settings, 'QUEUES') and settings.QUEUES:
-            try:
-                message_published = ask_queue_for_exam_enrollment_form(stud, off_year)
-            except (RuntimeError, pika.exceptions.ConnectionClosed, pika.exceptions.ChannelClosed,
-                    pika.exceptions.AMQPError):
-                return HttpResponse(status=400)
-            if message_published:
-                return HttpResponse(status=200)
+    if 'exam_enrollment' in settings.INSTALLED_APPS and hasattr(settings, 'QUEUES') and settings.QUEUES:
+        try:
+            message_published = ask_queue_for_exam_enrollment_form(stud, off_year)
+        except (RuntimeError, pika.exceptions.ConnectionClosed, pika.exceptions.ChannelClosed,
+                pika.exceptions.AMQPError):
+            return HttpResponse(status=400)
+        if message_published:
+            return HttpResponse(status=200)
     return HttpResponse(status=405)
 
 
@@ -222,7 +227,7 @@ def _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
         else:
             request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
         fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
-        exam_enroll_request = exam_enrollment_request.\
+        exam_enroll_request = exam_enrollment_request. \
             get_by_student_and_offer_year_acronym_and_fetch_date(a_student, off_year.acronym, fetch_date_limit)
         return exam_enroll_request and exam_enroll_request.document
     else:

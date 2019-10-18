@@ -34,4 +34,3 @@ class DomainFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Domain - %d' % n)
     code = factory.Faker('text', max_nb_chars=10)
     parent = None
-

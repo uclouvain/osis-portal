@@ -48,7 +48,3 @@ class FetchStudentAttestationTest(SimpleTestCase):
         response = fetch_student_attestation(GLOBAL_ID, ACADEMIC_YEAR, ATTESTATION_TYPE, 'USER_TEST')
 
         self.assertEqual(response, None)
-
-
-
-

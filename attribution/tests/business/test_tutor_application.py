@@ -67,7 +67,7 @@ class TutorApplicationTest(TestCase):
 
         applications = [
             _get_application_example(self.lbir1200_2017, '3.5', '35.6'),  # Application 2017
-            _get_application_example(self.lbir1300_2017, '7.5', '25'),   # Application 2017
+            _get_application_example(self.lbir1300_2017, '7.5', '25'),  # Application 2017
             _get_application_example(self.lbir1200_2016, '2', '30'),  # Application 2016
         ]
         self.attribution = AttributionNewFactory(global_id=person.global_id,
@@ -117,7 +117,7 @@ class TutorApplicationTest(TestCase):
         global_id = self.tutor.person.global_id
         tutor_application.create_or_update_application(global_id, application_to_create)
         application_list = tutor_application.get_application_list(global_id, self.academic_year)
-        self.assertEqual(len(application_list), 3) # We should have 3 applications now
+        self.assertEqual(len(application_list), 3)  # We should have 3 applications now
         # We should found the newest created
         self.assertTrue(next(app for app in application_list if
                              app.get('acronym') == self.lbir1250_2017.acronym))
@@ -139,7 +139,7 @@ class TutorApplicationTest(TestCase):
         application_list = tutor_application.get_application_list(global_id, self.academic_year)
         self.assertEqual(len(application_list), 2)  # We should have 2 applications
         application_updated = next(app for app in application_list if
-                             app.get('acronym') == self.lbir1200_2017.acronym)
+                                   app.get('acronym') == self.lbir1200_2017.acronym)
         self.assertTrue(application_updated)
         self.assertEqual(application_updated.get('acronym'), self.lbir1200_2017.acronym)
         self.assertEqual(application_updated.get('charge_lecturing_asked'), Decimal(0))
@@ -190,7 +190,7 @@ class TutorApplicationTest(TestCase):
         application_searched_not_validated = tutor_application.get_application(global_id, self.lbir1250_2017)
         self.assertEqual(application_searched_not_validated['pending'], tutor_application_epc.UPDATE_OPERATION)
         self.assertTrue(application_searched_not_validated['updated_at'])
-        sleep(1) # Wait 1 sec for testing updated_at field
+        sleep(1)  # Wait 1 sec for testing updated_at field
         # Validate
         tutor_application.validate_application(global_id, self.lbir1250_2017.acronym,
                                                self.lbir1250_2017.academic_year.year)
@@ -216,12 +216,18 @@ class TutorApplicationTest(TestCase):
 
 def _get_attributions_default():
     return [
-        {'year': 2016, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '22.5',
-         'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER'},
-        {'year': 2017, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
-         'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER'},
-        {'year': 2017, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
-         'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER'},
+        {
+            'year': 2016, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '22.5',
+            'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER'
+        },
+        {
+            'year': 2017, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00', 'LECTURING': '20.5',
+            'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER'
+        },
+        {
+            'year': 2017, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
+            'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER'
+        },
     ]
 
 

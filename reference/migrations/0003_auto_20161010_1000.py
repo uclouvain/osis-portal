@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('reference', '0002_delete_assimilationcriteria'),
     ]
@@ -15,7 +14,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='gradetype',
             name='institutional_grade_type',
-            field=models.CharField(blank=True, choices=[('BACHELOR', 'BACHELOR'), ('MASTER_60', 'MASTER_60'), ('MASTER_120', 'MASTER_120'), ('MASTER_180_OR_240', 'MASTER_180_OR_240'), ('ADVANCED_MASTER', 'ADVANCED_MASTER'), ('TRAINING_CERTIFICATE', 'TRAINING_CERTIFICATE'), ('CERTIFICATE', 'CERTIFICATE'), ('DOCTORATE', 'DOCTORATE'), ('CAPAES', 'CAPAES')], max_length=25, null=True),
+            field=models.CharField(blank=True, choices=[('BACHELOR', 'BACHELOR'), ('MASTER_60', 'MASTER_60'),
+                                                        ('MASTER_120', 'MASTER_120'),
+                                                        ('MASTER_180_OR_240', 'MASTER_180_OR_240'),
+                                                        ('ADVANCED_MASTER', 'ADVANCED_MASTER'),
+                                                        ('TRAINING_CERTIFICATE', 'TRAINING_CERTIFICATE'),
+                                                        ('CERTIFICATE', 'CERTIFICATE'), ('DOCTORATE', 'DOCTORATE'),
+                                                        ('CAPAES', 'CAPAES')], max_length=25, null=True),
         ),
         migrations.DeleteModel(
             name='InstitutionalGradeType',

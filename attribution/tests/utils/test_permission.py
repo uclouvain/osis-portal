@@ -71,4 +71,3 @@ class TestPermission(TestCase):
                                                         two_weeks_ago,
                                                         two_weeks_ago + datetime.timedelta(1))
         self.assertEqual(permission.is_online_application_opened(self.a_user), False)
-

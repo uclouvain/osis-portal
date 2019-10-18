@@ -30,7 +30,6 @@ from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
 # SECURITY Settings
 # Those settings are mandatory and have to be defined in your .env file
 SECRET_KEY = os.environ['SECRET_KEY']
@@ -39,7 +38,6 @@ ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 ADMIN_URL = os.environ['ADMIN_URL']
 ENVIRONMENT = os.environ['ENVIRONMENT']
 CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False').lower() == 'true'
-
 
 # Base configuration
 ROOT_URLCONF = os.environ.get('ROOT_URLCONF', 'frontoffice.urls')
@@ -79,7 +77,7 @@ INTERNAL_IPS = ()
 TESTING = os.environ.get('TESTING', 'False').lower() == 'true'
 if TESTING:
     # add test packages that have specific models for tests
-    INSTALLED_APPS += ('osis_common.tests', )
+    INSTALLED_APPS += ('osis_common.tests',)
 APPS_TO_TEST = (
     'osis_common',
     'reference',
@@ -176,7 +174,6 @@ TEMPLATES = [
     },
 ]
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -185,17 +182,15 @@ DATABASES = {
         'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'osis'),
         'HOST': os.environ.get("POSTGRES_HOST", '127.0.0.1'),
         'PORT': os.environ.get("POSTGRES_PORT", '5432'),
-        'ATOMIC_REQUEST':  os.environ.get('DATABASE_ATOMIC_REQUEST', 'False').lower() == 'true'
+        'ATOMIC_REQUEST': os.environ.get('DATABASE_ATOMIC_REQUEST', 'False').lower() == 'true'
     },
 }
-
 
 # SQL Data Management Settings
 # Enable or disable the admin screen to directly query the database
 ENABLE_SQL_DATA_MANAGEMENT = os.environ.get('ENABLE_SQL_DATA_MANAGEMENT', 'False').lower() == 'true'
 SQL_DATA_MANAGEMENT_READONLY = os.environ.get('SQL_DATA_MANAGEMENT_READONLY', 'False').lower() == 'true'
 FORBIDDEN_SQL_KEYWORDS = os.environ.get('FORBIDDEN_SQL_KEYWORDS', '').split()
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -214,7 +209,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 # If you want to change the default settings,
@@ -230,24 +224,21 @@ USE_I18N = os.environ.get('USE_I18N', 'True').lower() == 'true'
 USE_L10N = os.environ.get('USE_L10N', 'True').lower() == 'true'
 USE_TZ = os.environ.get('USE_TZ', 'True').lower() == 'true'
 
-
 # Static files (CSS, JavaScript, Images) and Media
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'base/static'))
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, "uploads"))
-MEDIA_URL = os.environ.get('MEDIA_URL',  '/media/')
+MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
 CONTENT_TYPES = ['application/csv', 'application/doc', 'application/pdf', 'application/xls', 'application/xml',
                  'application/zip', 'image/jpeg', 'image/gif', 'image/png', 'text/html', 'text/plain']
 MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE', 5242880))
-
 
 # Logging settings
 # Logging framework is defined in env settings (ex: dev.py)
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
 SEND_MAIL_LOGGER = os.environ.get('SEND_MAIL_LOGGER', 'send_mail')
 QUEUE_EXCEPTION_LOGGER = os.environ.get('QUEUE_EXCEPTION_LOGGER', 'queue_exception')
-
 
 # Email Settings
 # By default Email are saved in the folder defined by EMAIL_FILE_PATH
@@ -268,7 +259,6 @@ MAIL_SENDER_CLASSES = os.environ.get(
     'osis_common.messaging.mail_sender_classes.MessageHistorySender'
 ).split()
 
-
 # Authentication settings
 LOGIN_URL = os.environ.get('LOGIN_URL', reverse_lazy('login'))
 LOGIN_REDIRECT_URL = os.environ.get('LOGIN_REDIRECT_URL', reverse_lazy('dashboard_home'))
@@ -277,7 +267,6 @@ OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL', None)
 OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL', None)
 LOGOUT_BUTTON = os.environ.get('LOGOUT_BUTTON', 'True').lower() == 'true'
 PERSON_EXTERNAL_ID_PATTERN = os.environ.get('PERSON_EXTERNAL_ID_PATTERN', 'osis.person_{global_id}')
-
 
 # This has to be set in your .env with the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
@@ -301,11 +290,9 @@ def get_queue_timeout(timeout_name, default_timeout):
 # See in settings.dev.example to configure the queues
 QUEUES = {}
 
-
 # Additionnal Locale Path
 # Add local path in your environment settings (ex: dev.py)
 LOCALE_PATHS = ()
-
 
 # Apps Settings
 
@@ -319,12 +306,16 @@ CKEDITOR_CONFIGS = {
             {'name': 'colors', 'items': ['TextColor', 'BGColor']},
             '/',
             {'name': 'insert', 'items': ['Table']},
-            {'name': 'paragraph',
-             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
-                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-            {'name': 'forms',
-             'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
-                       'HiddenField']},
+            {
+                'name': 'paragraph',
+                'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                          'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+            },
+            {
+                'name': 'forms',
+                'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+                          'HiddenField']
+            },
             {'name': 'about', 'items': ['About']},
         ],
     },
@@ -338,13 +329,11 @@ REST_FRAMEWORK = {
     ]
 }
 
-
 # HIJACK
 HIJACK_LOGIN_REDIRECT_URL = '/'  # Where admins are redirected to after hijacking a user
 HIJACK_LOGOUT_REDIRECT_URL = '/admin/auth/user/'  # Where admins are redirected to after releasing a user
 HIJACK_ALLOW_GET_REQUESTS = True
 HIJACK_USE_BOOTSTRAP = True
-
 
 ATTRIBUTION_CONFIG = {
     'TIME_TABLE_URL': os.environ.get('ATTRIBUTION_TIME_TABLE_URL', ''),
@@ -358,7 +347,8 @@ ATTRIBUTION_CONFIG = {
 
 PERFORMANCE_CONFIG = {
     'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': int(os.environ.get('PERFORMANCE_UPDT_DELTA_CURRENT_ACAD_YR', 12)),
-    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': int(os.environ.get('PERFORMANCE_UPDT_DELTA_NON_CURRENT_ACAD_YR', 720)),
+    'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': int(
+        os.environ.get('PERFORMANCE_UPDT_DELTA_NON_CURRENT_ACAD_YR', 720)),
     'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': int(os.environ.get('PERFORMANCE_UPDT_DELTA_AFTER_CONS', 24)),
 }
 
@@ -369,7 +359,6 @@ ATTESTATION_CONFIG = {
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
-
 
 # Continuing education settings
 ACCOUNT_ACTIVATION_DAYS = int(os.environ.get('IUFC_ACCOUNT_ACTIVATION_DAYS', 7))

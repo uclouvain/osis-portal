@@ -80,7 +80,7 @@ def visualize_tutor_applications(request, global_id):
 @user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
 def overview(request, global_id=None):
     tutor = mdl_base.tutor.find_by_user(request.user) if not global_id else \
-                 mdl_base.tutor.find_by_person_global_id(global_id)
+        mdl_base.tutor.find_by_person_global_id(global_id)
 
     # Applications for next year
     application_year = tutor_application.get_application_year()
@@ -132,7 +132,7 @@ def search_vacant_attribution(request):
     attributions_vacant = None
     form = VacantAttributionFilterForm(data=request.GET)
     if request.GET and form.is_valid():
-            attributions_vacant = _get_attributions_vacant(form, tutor)
+        attributions_vacant = _get_attributions_vacant(form, tutor)
 
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,
@@ -149,12 +149,12 @@ def renew_applications(request):
     tutor = mdl_base.tutor.find_by_user(request.user)
     global_id = tutor.person.global_id
     post_data = dict(request.POST.lists())
-    learning_container_year_acronyms = [param.split("_")[-1] for param, value in post_data.items()\
+    learning_container_year_acronyms = [param.split("_")[-1] for param, value in post_data.items() \
                                         if "learning_container_year_" in param]
     attributions_about_to_expired = attribution.get_attribution_list_about_to_expire(global_id=global_id)
     attribution_to_renew_list = [attrib for attrib in attributions_about_to_expired
                                  if attrib.get('acronym') in learning_container_year_acronyms and \
-                                    attrib.get('is_renewable', False)]
+                                 attrib.get('is_renewable', False)]
     if not attribution_to_renew_list:
         messages.add_message(request, messages.ERROR, _('No attribution renewed'))
         return redirect('applications_overview')
@@ -162,7 +162,7 @@ def renew_applications(request):
     l_containers_years = mdl_base.learning_container_year.search(id=[
         attrib.get('attribution_vacant', {}).get('learning_container_year_id')
         for attrib in attribution_to_renew_list
-        ])
+    ])
 
     for attri_to_renew in attribution_to_renew_list:
         learning_container_year = next((l_containers_year for l_containers_year in l_containers_years if
@@ -187,6 +187,7 @@ def renew_applications(request):
                 error_msg = "{}: {}".format(learning_container_year.acronym, e.args[0])
                 messages.add_message(request, messages.ERROR, error_msg)
     return redirect('applications_overview')
+
 
 @login_required
 @require_http_methods(["GET", "POST"])
@@ -243,7 +244,7 @@ def delete_application(request, learning_container_year_id):
 
     application_to_delete = tutor_application.get_application(global_id, learning_container_year)
     if application_to_delete:
-         try:
+        try:
             # Delete with FLAG Pending
             tutor_application.set_pending_flag(global_id, application_to_delete,
                                                tutor_application_epc.DELETE_OPERATION)
@@ -251,10 +252,10 @@ def delete_application(request, learning_container_year_id):
             tutor_application_epc.send_message(tutor_application_epc.DELETE_OPERATION,
                                                global_id,
                                                application_to_delete)
-         except Exception as e:
+        except Exception as e:
             error_msg = e.args[0]
             messages.add_message(request, messages.ERROR, error_msg)
-         return redirect('applications_overview')
+        return redirect('applications_overview')
     raise Http404
 
 

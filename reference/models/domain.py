@@ -43,7 +43,7 @@ class Domain(SerializableModel):
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.PROTECT)
     decree = models.ForeignKey('Decree', null=True, blank=True, on_delete=models.PROTECT)
     type = models.CharField(max_length=50, choices=domain_type.TYPES, default=domain_type.UNKNOWN)
-    national = models.BooleanField(default=False) # True if is Belgian else False
+    national = models.BooleanField(default=False)  # True if is Belgian else False
 
     def __str__(self):
         return self.name

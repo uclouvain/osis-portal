@@ -82,7 +82,6 @@ class TestTutorApplicationEpc(TestCase):
         self.assertFalse(learning_container_info)
 
     def test_convert_to_epc_application(self):
-        person = self.tutor.person
         application = _get_application_example(self.lbir1200, '30.5', '40.5')
 
         epc_message = tutor_application_epc._convert_to_epc_application(application=application)
@@ -140,7 +139,6 @@ class TestTutorApplicationEpc(TestCase):
                                     not "pending" in application]
         self.assertEqual(len(applications_not_pending), 1)
 
-
     def test_process_message_with_error_operation(self):
         person = self.tutor.person
         _set_all_application_in_pending_state(self.attribution.applications)
@@ -165,7 +163,7 @@ class TestTutorApplicationEpc(TestCase):
         self.attribution.refresh_from_db()
         applications_not_pending = [application for application in self.attribution.applications if
                                     not "pending" in application]
-        self.assertEqual(len(applications_not_pending), 0) # No changed
+        self.assertEqual(len(applications_not_pending), 0)  # No changed
 
 
 def _get_application_example(learning_unit_year, volume_lecturing, volume_practical_exercice, flag=None):

@@ -195,7 +195,8 @@ def print_scores(global_id):
         except (KeyError, voluptuous_error.Invalid):
             trace = traceback.format_exc()
             logger.error(trace)
-            logger.warning("A document could not be produced from the json document of the global id {0}".format(global_id))
+            logger.warning(
+                "A document could not be produced from the json document of the global id {0}".format(global_id))
     else:
         logger.warning("A json document for the global id {0} doesn't exist.".format(global_id))
     return None
@@ -250,7 +251,7 @@ def is_outdated(document):
     now = datetime.datetime.now()
     now_str = '%s/%s/%s' % (now.day, now.month, now.year)
     if json_document.get('publication_date', None) != now_str:
-            return True
+        return True
     return False
 
 

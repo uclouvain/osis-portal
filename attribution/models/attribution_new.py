@@ -34,7 +34,7 @@ class AttributionNewAdmin(admin.ModelAdmin):
     list_display = ('global_id', 'attributions', 'applications')
     fieldsets = ((None, {'fields': ('global_id', 'attributions', 'applications', 'summary_responsible')}),)
     search_fields = ['global_id']
-    list_filter = ('summary_responsible', )
+    list_filter = ('summary_responsible',)
 
 
 class AttributionNew(models.Model):
@@ -81,5 +81,7 @@ def find_by_global_id(global_id):
 
 
 def find_teachers(an_acronym, yr):
-    return AttributionNew.objects.filter(attributions__contains=[{'acronym': an_acronym,
-                                                                  'year': yr}])
+    return AttributionNew.objects.filter(attributions__contains=[{
+                                                                     'acronym': an_acronym,
+                                                                     'year': yr
+                                                                 }])

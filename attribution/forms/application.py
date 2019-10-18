@@ -39,9 +39,11 @@ MAXIMUM_REMARK_LENGTH = 250
 
 
 class ApplicationForm(BootstrapForm):
-    charge_lecturing_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, required=False, localize=True,
+    charge_lecturing_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, required=False,
+                                                localize=True,
                                                 validators=[MinValueValidator(0)])
-    charge_practical_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, required=False, localize=True,
+    charge_practical_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, required=False,
+                                                localize=True,
                                                 validators=[MinValueValidator(0)])
     course_summary = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
     remark = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False, max_length=MAXIMUM_REMARK_LENGTH)
@@ -112,9 +114,11 @@ class VacantAttributionFilterForm(BootstrapForm):
 
     def _has_mininum_criteria(self):
         cleaned_data = super(VacantAttributionFilterForm, self).clean()
-        if cleaned_data['faculty'] is None \
-                and (cleaned_data['learning_container_acronym'] is None or len(
-                    cleaned_data['learning_container_acronym']) == 0):
+        if cleaned_data['faculty'] is None and \
+                (
+                        cleaned_data['learning_container_acronym'] is None
+                        or len(cleaned_data['learning_container_acronym']) == 0
+                ):
             self._errors['learning_container_acronym'] = _(
                 'Please precise at least a faculty or a code (or a part of a code)')
             return False

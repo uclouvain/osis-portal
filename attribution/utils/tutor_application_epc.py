@@ -105,7 +105,8 @@ def process_message(body):
         # Check error in response from epc
         error_epc = application.get(ERROR_EPC_FIELD)
         if error_epc:
-            logger.error('Error during processing tutor application in EPC: {} \n JSON: {}'.format(error_epc, str(json_data)))
+            logger.error(
+                'Error during processing tutor application in EPC: {} \n JSON: {}'.format(error_epc, str(json_data)))
             return False
 
         operation = application.get('operation')

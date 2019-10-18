@@ -33,10 +33,10 @@ from osis_common.queue import queue_sender
 
 
 class ExamEnrollmentSubmittedAdmin(admin.ModelAdmin):
-    list_display = ('offer_enrollment', )
+    list_display = ('offer_enrollment',)
     fieldsets = ((None, {'fields': ('offer_enrollment', 'document')}),)
     search_fields = ['offer_enrollment__student__registration_id', 'offer_enrollment__offer_year__acronym']
-    raw_id_fields = ('offer_enrollment', )
+    raw_id_fields = ('offer_enrollment',)
     actions = ['resend_messages_to_queue']
 
     def resend_messages_to_queue(self, request, queryset):
@@ -66,4 +66,3 @@ def insert_or_update_document(an_offer_enrollment, document):
         offer_enrollment=an_offer_enrollment, defaults={"document": document}
     )
     return exam_enrollment_object
-

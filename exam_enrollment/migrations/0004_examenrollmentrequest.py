@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('base', '0014_remove_person_national_id'),
         ('exam_enrollment', '0003_auto_20170315_1423'),

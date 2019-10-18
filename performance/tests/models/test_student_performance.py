@@ -39,7 +39,7 @@ def create_student_performance(acronym="SINF2MS/G", registration_id="64641200",
                                academic_year=2016, update_date=datetime.datetime.now()):
     with open("performance/tests/ressources/points.json") as f:
         data = json.load(f)
-    a_student_performance = mdl_performance.student_performance.\
+    a_student_performance = mdl_performance.student_performance. \
         StudentPerformance(acronym=acronym,
                            registration_id=registration_id,
                            academic_year=academic_year,
@@ -103,8 +103,10 @@ class TestModelStudentPerformance(TestCase):
         self.assertTrue(self.student_performance, "Should return false as date of update has not been exceeded")
 
     def test_update_or_create(self):
-        fields_value = {"data": self.json_points, "update_date": datetime.date.today(),
-                        "creation_date": datetime.date.today()}
+        fields_value = {
+            "data": self.json_points, "update_date": datetime.date.today(),
+            "creation_date": datetime.date.today()
+        }
         stud_perf = mdl_perf.update_or_create(self.student_performance.registration_id,
                                               self.student_performance.academic_year,
                                               self.student_performance.acronym,
@@ -123,6 +125,3 @@ class TestModelStudentPerformance(TestCase):
                                                     acronym=self.student_performance.acronym)
         except ObjectDoesNotExist:
             self.fail("Object should be created")
-
-
-
