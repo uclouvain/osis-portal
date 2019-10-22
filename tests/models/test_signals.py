@@ -28,6 +28,7 @@ from django.test import TestCase
 from base.models.signals import _add_person_to_group, GROUP_STUDENTS_INTERNSHIP
 from base.tests.factories.person import PersonFactory
 from base.tests.models.test_signals import get_or_create_user
+from internship.tests.factories.internship_student_information import InternshipStudentInformationFactory
 
 
 class UpdatePersonIfNecessary(TestCase):
