@@ -23,15 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
 class InternshipOfferAdmin(SerializableModelAdmin):
     list_display = ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'master', 'selectable')
-    fieldsets = ((None, {'fields': ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'master',
-                                    'selectable')}),)
+    fieldsets = ((None, {
+        'fields': ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'master',
+                   'selectable')
+    }),)
     raw_id_fields = ('organization', 'speciality', 'cohort')
     search_fields = ['organization__name', 'speciality__name']
     list_filter = ['cohort', 'selectable']

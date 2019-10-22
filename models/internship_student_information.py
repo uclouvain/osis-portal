@@ -23,16 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
 class InternshipStudentInformationAdmin(SerializableModelAdmin):
-    list_display = ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile', 'contest', 'cohort')
-    fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile',
-                                    'contest', 'cohort')}),)
+    list_display = (
+        'person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile', 'contest', 'cohort'
+    )
+    fieldsets = ((None, {
+        'fields': ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile',
+                   'contest', 'cohort')
+    }),)
     raw_id_fields = ('person', 'cohort')
     list_filter = ['cohort']
     search_fields = ['person__user__username', 'person__last_name', 'person__first_name']

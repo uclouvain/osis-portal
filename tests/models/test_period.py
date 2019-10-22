@@ -24,8 +24,9 @@
 #
 ##############################################################################
 
-from internship.models import period as mdl_period
 import datetime
+
+from internship.models import period as mdl_period
 from internship.tests.factories.cohort import CohortFactory
 
 
@@ -35,5 +36,3 @@ def create_period(name="P1", start=datetime.date(2010, 1, 1), end=datetime.date(
     period = mdl_period.Period(name=name, date_start=start, date_end=end, cohort=cohort)
     period.save()
     return period
-
-

@@ -3,76 +3,87 @@
 {% load i18n %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
+    <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
     <li class="active">{% trans 'Internships' %}</li>
 {% endblock %}
 
 
 {% block content %}
-<div class="page-header">
-    <h2>{% trans 'Internships' %}</h2>
-</div>
+    <div class="page-header">
+        <h2>{% trans 'Internships' %}</h2>
+    </div>
 
 
-<div class="panel panel-default">
-    <div class="panel panel-body">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                  {% if subscription_allowed %}
-                    <div class="col-md-2 text-center"><i class="fa fa-archive" style="font-size: 400%; color: #6699FF;"></i></div>
-                    <div class="col-md-10">
-                        <h4 class="media-heading"><a href="{% url 'select_internship' cohort_id=cohort.id %}">{% trans 'Submit your internship choices' %}</a></h4>
-                    </div>
-                  {% else %}
-                    <div class="col-md-2 text-center"><i class="fa fa-archive" style="font-size: 400%; color: #CCC;"></i></div>
-                    <div class="col-md-10">
-                        <h4 class="media-heading" style="color: #CCC;">{% trans 'Submit your internship choices' %}</h4>
-                    </div>
-                  {% endif %}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-2 text-center"><i class="fa fa-user" style="font-size: 400%; color: #6699FF;"></i></div>
-                    <div class="col-md-10">
-                        <h4 class="media-heading"><a href="{% url 'student_resume' cohort_id=cohort.id %}">{% trans 'Sump up of your choices and your affectations' %}</a></h4>
+    <div class="panel panel-default">
+        <div class="panel panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        {% if subscription_allowed %}
+                            <div class="col-md-2 text-center"><em class="fa fa-archive"
+                                                                 style="font-size: 400%; color: #6699FF;"></em></div>
+                            <div class="col-md-10">
+                                <h4 class="media-heading"><a
+                                        href="{% url 'select_internship' cohort_id=cohort.id %}">{% trans 'Submit your internship choices' %}</a>
+                                </h4>
+                            </div>
+                        {% else %}
+                            <div class="col-md-2 text-center"><em class="fa fa-archive"
+                                                                 style="font-size: 400%; color: #CCC;"></em></div>
+                            <div class="col-md-10">
+                                <h4 class="media-heading"
+                                    style="color: #CCC;">{% trans 'Submit your internship choices' %}</h4>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-2 text-center"><i class="fa fa-hospital-o" style="font-size: 400%; color: #6699FF;"></i></div>
-                    <div class="col-md-10">
-                        <h4 class="media-heading"><a href="{% url 'hospitals_list' cohort_id=cohort.id %}">{% trans 'Hospital list' %}</a></h4>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-2 text-center"><em class="fa fa-user"
+                                                             style="font-size: 400%; color: #6699FF;"></em></div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading"><a
+                                    href="{% url 'student_resume' cohort_id=cohort.id %}">{% trans 'Sump up of your choices and your affectations' %}</a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-2 text-center"><em class="fa fa-hospital-o"
+                                                             style="font-size: 400%; color: #6699FF;"></em></div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading"><a
+                                    href="{% url 'hospitals_list' cohort_id=cohort.id %}">{% trans 'Hospital list' %}</a>
+                            </h4>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

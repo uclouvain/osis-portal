@@ -25,10 +25,11 @@
 #
 ############################################################################
 from django.contrib.auth.decorators import login_required, permission_required
+
 from base.views import layout
-from internship.forms.form_search_hospital import SearchHospitalForm
 from internship import models as mdl_internship
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
+from internship.forms.form_search_hospital import SearchHospitalForm
 
 
 @login_required
@@ -50,8 +51,10 @@ def view_hospitals_list(request, cohort_id):
 
     hospitals = mdl_internship.organization.search(cohort, name, city)
 
-    return layout.render(request, "hospitals.html", {'search_form': form,
-                                                     'hospitals': hospitals,
-                                                     'cohort': cohort,
-                                                     'name': name,
-                                                     'city': city})
+    return layout.render(request, "hospitals.html", {
+        'search_form': form,
+        'hospitals': hospitals,
+        'cohort': cohort,
+        'name': name,
+        'city': city
+    })

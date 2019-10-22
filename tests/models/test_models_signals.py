@@ -23,12 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
 from django.contrib.auth.models import User, Group
+from django.test import TestCase
+
 from base.models.person import Person
 from base.models.signals import GROUP_STUDENTS_INTERNSHIP
 from internship.models.internship_student_information import InternshipStudentInformation
 from internship.tests.factories.cohort import CohortFactory
+
 
 class AddToGroupsSignalsTest(TestCase):
 

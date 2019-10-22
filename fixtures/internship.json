@@ -100,8 +100,6 @@
       "type": "service partner"
     }
   },
-
-
   {
     "model": "internship.organizationaddress",
     "pk": 1,
@@ -186,8 +184,6 @@
       "country": "France"
     }
   },
-
-
   {
     "model": "internship.internshipspeciality",
     "pk": 1,
@@ -224,7 +220,6 @@
       "acronym": "CH2"
     }
   },
-
   {
     "model": "internship.internshipoffer",
     "pk": 1,

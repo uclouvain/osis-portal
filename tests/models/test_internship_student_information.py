@@ -24,11 +24,12 @@
 #
 ##############################################################################
 from django.contrib.auth.models import User
-from base.tests.factories.user import UserFactory
-from internship.models import internship_student_information as mdl_student_information
-from base.models import person as mdl_person
-from base.tests.models import test_person
 from django.test import TestCase
+
+from base.models import person as mdl_person
+from base.tests.factories.user import UserFactory
+from base.tests.models import test_person
+from internship.models import internship_student_information as mdl_student_information
 from internship.tests.factories.cohort import CohortFactory
 
 
@@ -38,7 +39,8 @@ def create_student_information(user, cohort=None, person=None):
 
     if cohort is None:
         cohort = CohortFactory()
-    student_information = mdl_student_information.InternshipStudentInformation(person=person, location="location", cohort=cohort,
+    student_information = mdl_student_information.InternshipStudentInformation(person=person, location="location",
+                                                                               cohort=cohort,
                                                                                postal_code="00", city="city",
                                                                                country="country")
     student_information.save()

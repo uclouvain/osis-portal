@@ -23,30 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
+import factory.fuzzy
+from django.utils.translation import gettext_lazy as _
 
-from django.test import TestCase
-
+from base.tests.factories.person import PersonFactory
 from internship.tests.factories.cohort import CohortFactory
 
+TYPE_CHOICE = (('SPECIALIST', _('Specialist')),
+               ('GENERALIST', _('Generalist')))
 
-class TestCohort(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.cohort = CohortFactory(subscription_start_date=datetime.date(2018, 1, 26),
-                                   subscription_end_date=datetime.date(2018, 2, 7),
-                                   publication_start_date=datetime.date(2018, 4, 7))
 
-    def test_cohort_enrollments_active(self):
-        self.assertTrue(self.cohort.enrollment_active(datetime.date(2018, 1, 26)))
-        self.assertTrue(self.cohort.enrollment_active(datetime.date(2018, 2, 7)))
+class InternshipStudentInformationFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = 'internship.InternshipStudentInformation'
 
-    def test_cohort_enrollments_inactive(self):
-        self.assertFalse(self.cohort.enrollment_active(datetime.date(2018, 1, 25)))
-        self.assertFalse(self.cohort.enrollment_active(datetime.date(2018, 2, 8)))
+    person = factory.SubFactory(PersonFactory)
+    cohort = factory.SubFactory(CohortFactory)
+    location = factory.Faker('address')
+    postal_code = 1348
+    city = factory.Faker('city')
+    country = factory.Faker('country')
+    email = factory.Faker('email')
+    phone_mobile = factory.Faker('phone_number')
+    contest = factory.fuzzy.FuzzyChoice(TYPE_CHOICE)
 
-    def test_cohort_publication_active(self):
-        self.assertTrue(self.cohort.publication_active(datetime.date(2018, 4, 7)))
-
-    def test_cohort_publication_inactive(self):
-        self.assertFalse(self.cohort.publication_active(datetime.date(2018, 4, 6)))

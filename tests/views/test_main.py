@@ -24,8 +24,8 @@
 #
 ##############################################################################
 from django.contrib.auth.models import User, Permission
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 
 import base.tests.models.test_student
 from internship.models import internship_choice as mdl_internship_choice
@@ -43,7 +43,9 @@ class TestMain(TestCase):
         self.student.person.save()
         self.cohort = CohortFactory()
         self.internship = InternshipFactory(cohort=self.cohort)
-        self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort, self.student.person)
+        self.student_information = test_internship_student_information.create_student_information(self.user,
+                                                                                                  self.cohort,
+                                                                                                  self.student.person)
         add_permission(self.student.person.user, "can_access_internship")
 
     def test_can_access_internship_home(self):
@@ -76,12 +78,15 @@ class TestSelectInternship(TestCase):
         self.client.force_login(user)
 
         self.cohort = CohortFactory()
-        self.student_information = test_internship_student_information.create_student_information(user, self.cohort, self.student.person)
+        self.student_information = test_internship_student_information.create_student_information(user, self.cohort,
+                                                                                                  self.student.person)
 
         self.speciality_1 = test_internship_speciality.create_speciality(name="urgence", cohort=self.cohort)
         self.speciality_2 = test_internship_speciality.create_speciality(name="chirurgie", cohort=self.cohort)
-        self.internship_1 = InternshipFactory(name=self.speciality_1.name, cohort=self.cohort, speciality=self.speciality_1)
-        self.internship_2 = InternshipFactory(name=self.speciality_2.name, cohort=self.cohort, speciality=self.speciality_2)
+        self.internship_1 = InternshipFactory(name=self.speciality_1.name, cohort=self.cohort,
+                                              speciality=self.speciality_1)
+        self.internship_2 = InternshipFactory(name=self.speciality_2.name, cohort=self.cohort,
+                                              speciality=self.speciality_2)
 
         self.organization_1 = test_organization.create_organization(reference="01", cohort=self.cohort)
         self.organization_2 = test_organization.create_organization(reference="02", cohort=self.cohort)
@@ -89,13 +94,19 @@ class TestSelectInternship(TestCase):
         self.organization_4 = test_organization.create_organization(reference="04", cohort=self.cohort)
         self.organization_5 = test_organization.create_organization(reference="05", cohort=self.cohort)
 
-        self.offer_1 = test_internship_offer.create_specific_internship_offer(self.organization_1, self.speciality_1, cohort=self.cohort)
-        self.offer_2 = test_internship_offer.create_specific_internship_offer(self.organization_2, self.speciality_1, cohort=self.cohort)
-        self.offer_3 = test_internship_offer.create_specific_internship_offer(self.organization_3, self.speciality_1, cohort=self.cohort)
-        self.offer_4 = test_internship_offer.create_specific_internship_offer(self.organization_4, self.speciality_1, cohort=self.cohort)
+        self.offer_1 = test_internship_offer.create_specific_internship_offer(self.organization_1, self.speciality_1,
+                                                                              cohort=self.cohort)
+        self.offer_2 = test_internship_offer.create_specific_internship_offer(self.organization_2, self.speciality_1,
+                                                                              cohort=self.cohort)
+        self.offer_3 = test_internship_offer.create_specific_internship_offer(self.organization_3, self.speciality_1,
+                                                                              cohort=self.cohort)
+        self.offer_4 = test_internship_offer.create_specific_internship_offer(self.organization_4, self.speciality_1,
+                                                                              cohort=self.cohort)
 
-        self.offer_5 = test_internship_offer.create_specific_internship_offer(self.organization_1, self.speciality_2, cohort=self.cohort)
-        self.offer_6 = test_internship_offer.create_specific_internship_offer(self.organization_5, self.speciality_2, cohort=self.cohort)
+        self.offer_5 = test_internship_offer.create_specific_internship_offer(self.organization_1, self.speciality_2,
+                                                                              cohort=self.cohort)
+        self.offer_6 = test_internship_offer.create_specific_internship_offer(self.organization_5, self.speciality_2,
+                                                                              cohort=self.cohort)
 
     def test_with_zero_choices(self):
         selection_url = reverse("select_internship", kwargs={'cohort_id': self.cohort.id})
