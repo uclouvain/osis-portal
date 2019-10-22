@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-19 13:38+0100\n"
+"POT-Creation-Date: 2019-10-22 15:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,16 +21,16 @@ msgstr ""
 msgid "Access denied"
 msgstr ""
 
-#: models/education_group_year.py:42
+#: models/education_group_year.py:43
 msgid "Acronym"
 msgstr ""
 
 #: templates/admin/administration_layout.html:7
-#: templates/admin/data_maintenance.html:29 templates/layout.html:83
+#: templates/admin/data_maintenance.html:29
 msgid "Administration"
 msgstr ""
 
-#: models/education_group_year.py:89
+#: models/education_group_year.py:91
 msgid "Administration entity"
 msgstr ""
 
@@ -38,7 +38,7 @@ msgstr ""
 msgid "Are you sure ?"
 msgstr ""
 
-#: models/education_group_type.py:44
+#: models/education_group_type.py:45
 msgid "Category"
 msgstr ""
 
@@ -46,16 +46,16 @@ msgstr ""
 msgid "Click here to reconnect"
 msgstr ""
 
-#: models/education_group_year.py:49
+#: models/education_group_year.py:50
 msgid "Code"
 msgstr ""
 
-#: templates/upload_file_form.html:48 templates/upload_file_list.html:49
+#: templates/upload_file_form.html:48
 msgid "Content type"
 msgstr ""
 
 #: templates/admin/data.html:31 templates/admin/data.html:36
-#: templates/admin/data_maintenance.html:30 templates/layout.html:88
+#: templates/admin/data_maintenance.html:30 templates/layout.html:104
 msgid "Data"
 msgstr ""
 
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Data management by entity"
 msgstr ""
 
-#: templates/upload_file_form.html:61 templates/upload_file_list.html:57
+#: templates/upload_file_form.html:61
 msgid "Description"
 msgstr ""
 
@@ -84,19 +84,19 @@ msgstr ""
 msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr ""
 
-#: models/education_group_year.py:94
+#: models/education_group_year.py:97
 msgid "Education group year"
 msgstr ""
 
-#: models/education_group.py:47
+#: models/education_group.py:49
 msgid "End"
 msgstr ""
 
-#: templates/upload_file_form.html:30 templates/upload_file_list.html:41
+#: templates/upload_file_form.html:30
 msgid "File"
 msgstr ""
 
-#: templates/upload_file_form.html:39 templates/upload_file_list.html:33
+#: templates/upload_file_form.html:39
 msgid "File name"
 msgstr ""
 
@@ -108,7 +108,7 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: models/education_group_year.py:81
+#: models/education_group_year.py:82
 msgid "Management entity"
 msgstr ""
 
@@ -132,11 +132,11 @@ msgstr ""
 msgid "SQL readonly"
 msgstr ""
 
-#: models/education_group.py:41
+#: models/education_group.py:43
 msgid "Start"
 msgstr ""
 
-#: models/education_group_year.py:54
+#: models/education_group_year.py:55
 msgid "Title in French"
 msgstr ""
 
@@ -144,7 +144,11 @@ msgstr ""
 msgid "Training"
 msgstr ""
 
-#: models/education_group_type.py:49 models/education_group_year.py:71
+#: models/entity_version.py:129
+msgid "Type"
+msgstr ""
+
+#: models/education_group_type.py:50 models/education_group_year.py:71
 msgid "Type of training"
 msgstr ""
 
@@ -156,7 +160,7 @@ msgstr ""
 msgid "Username or password not valid"
 msgstr ""
 
-#: models/education_group_year.py:59
+#: models/education_group_year.py:60
 msgid "Validity"
 msgstr ""
 
@@ -168,7 +172,7 @@ msgstr ""
 msgid "You are now logged out"
 msgstr ""
 
-#: models/education_group_year.py:76
+#: models/education_group_year.py:77
 msgid "dissertation"
 msgstr ""
 
