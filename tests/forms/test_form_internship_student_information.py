@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.test import TestCase
+
 from internship.forms import form_internship_student_information
 
 

@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django import forms
+
 from internship.models.internship_speciality import InternshipSpeciality
 
 
