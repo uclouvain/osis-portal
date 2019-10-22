@@ -23,16 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
 
 from base.models import signals as mdl_signals, person as mdl_person
 from base.models import student as mdl_student, tutor as mdl_tutor
 from base.models.person import Person
-from base.models.signals import _add_person_to_group, GROUP_STUDENTS_INTERNSHIP
-from base.tests.factories.person import PersonFactory
-from internship.tests.factories.internship_student_information import InternshipStudentInformationFactory
 
 
 def get_or_create_user(user_infos):
@@ -135,19 +131,13 @@ class UpdatePersonIfNecessary(TestCase):
         assert_person_match_user_infos(self, updated_person, self.user_infos)
 
     def test_when_internship_installed(self):
-        settings.INSTALLED_APPS += ('internship', )
-
         user = get_or_create_user(self.user_infos)
-        person = PersonFactory(
-            user=user,
-            first_name="user3",
-            last_name="user3",
-            email='test3@test.org',
-            global_id="1111111"
-        )
-        InternshipStudentInformationFactory(person=person)
-        _add_person_to_group(person)
-        self.assertTrue(person.user.groups.filter(name=GROUP_STUDENTS_INTERNSHIP).exists())
+        person = Person(user=None, first_name="user3", last_name="user3", email='test3@test.org', global_id="1111111")
+        updated, updated_person = mdl_signals._update_person_if_necessary(user=user,
+                                                                          person=person,
+                                                                          global_id=self.user_infos.get('USER_FGS'))
+        self.assertTrue(updated)
+        assert_person_match_user_infos(self, updated_person, self.user_infos)
 
 
 class AddToGroupsSignalsTest(TestCase):
