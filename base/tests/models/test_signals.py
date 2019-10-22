@@ -130,15 +130,6 @@ class UpdatePersonIfNecessary(TestCase):
         self.assertFalse(updated)
         assert_person_match_user_infos(self, updated_person, self.user_infos)
 
-    def test_when_internship_installed(self):
-        user = get_or_create_user(self.user_infos)
-        person = Person(user=None, first_name="user3", last_name="user3", email='test3@test.org', global_id="1111111")
-        updated, updated_person = mdl_signals._update_person_if_necessary(user=user,
-                                                                          person=person,
-                                                                          global_id=self.user_infos.get('USER_FGS'))
-        self.assertTrue(updated)
-        assert_person_match_user_infos(self, updated_person, self.user_infos)
-
 
 class AddToGroupsSignalsTest(TestCase):
 
