@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import pika
-import uuid
-from pika.exceptions import ConnectionClosed
-from django.conf import settings
-import threading
 import logging
+import threading
+import uuid
+
+import pika
+from django.conf import settings
+from pika.exceptions import ConnectionClosed
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 DEFAULT_TIMEOUT = 30
@@ -110,13 +111,12 @@ class SynchronousConsumerThread(threading.Thread):
 
 
 def listen_queue_synchronously(queue_name, callback, counter=3):
-
     def on_message(channel, method_frame, header_frame, body):
         callback(body)
         channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
     if counter == 0:
-        return # Stop the function
+        return  # Stop the function
     logger.debug("Connecting to {0} (queue name = {1})...".format(settings.QUEUES.get('QUEUE_URL'), queue_name))
     credentials = pika.PlainCredentials(settings.QUEUES.get('QUEUE_USER'), settings.QUEUES.get('QUEUE_PASSWORD'))
     connection = pika.BlockingConnection(pika.ConnectionParameters(settings.QUEUES.get('QUEUE_URL'),
@@ -155,23 +155,23 @@ def listen_queue(queue_name, callback):
     :param queue_name: The name of the queue to create and to listen.
     :param callback: The action to perform when a message is consumed. (It is a function).
     """
-    if not callable(callback) :
+    if not callable(callback):
         raise Exception("Error ! The second parameter of listen_queue MUST BE a function !")
     connection_parameters = {
-        'queue_name' : queue_name,
-        'queue_url' : settings.QUEUES.get('QUEUE_URL'),
-        'queue_user' : settings.QUEUES.get('QUEUE_USER'),
-        'queue_password' : settings.QUEUES.get('QUEUE_PASSWORD'),
-        'queue_port' : settings.QUEUES.get('QUEUE_PORT'),
-        'queue_context_root' : settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
-        'exchange' : queue_name,
-        'routing_key' : '',
+        'queue_name': queue_name,
+        'queue_url': settings.QUEUES.get('QUEUE_URL'),
+        'queue_user': settings.QUEUES.get('QUEUE_USER'),
+        'queue_password': settings.QUEUES.get('QUEUE_PASSWORD'),
+        'queue_port': settings.QUEUES.get('QUEUE_PORT'),
+        'queue_context_root': settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
+        'exchange': queue_name,
+        'routing_key': '',
     }
     consumer_thread = ConsumerThread(connection_parameters, callback)
     try:
         consumer_thread.daemon = True
         consumer_thread.start()
-    except KeyboardInterrupt :
+    except KeyboardInterrupt:
         consumer_thread.stop()
 
 
@@ -195,14 +195,14 @@ class ConsumerThread(threading.Thread):
 
     def run(self):
         connection_parameters = {
-            'queue_name' : self._queue_name,
-            'queue_url' : self._queue_url,
-            'queue_user' : self._queue_user,
-            'queue_password' : self._queue_password,
-            'queue_port' : self._queue_port,
-            'queue_context_root' : self._queue_context_root,
-            'exchange' : self._exchange,
-            'routing_key' : self._routing_key,
+            'queue_name': self._queue_name,
+            'queue_url': self._queue_url,
+            'queue_user': self._queue_user,
+            'queue_password': self._queue_password,
+            'queue_port': self._queue_port,
+            'queue_context_root': self._queue_context_root,
+            'exchange': self._exchange,
+            'routing_key': self._routing_key,
         }
         example = ExampleConsumer(connection_parameters=connection_parameters, callback=self.callback_func)
         example.run()
@@ -225,7 +225,7 @@ class ExampleConsumer(object):
     EXCHANGE_TYPE = 'topic'
     ROUTING_KEY = None
 
-    def __init__(self, connection_parameters=None, callback = None):
+    def __init__(self, connection_parameters=None, callback=None):
         """
         Create a new instance of the consumer class, passing in the AMQP
         URL used to connect to RabbitMQ.
@@ -250,7 +250,8 @@ class ExampleConsumer(object):
         :rtype: pika.SelectConnection
         """
         logger.debug('Connecting to %s' % (self._connection_parameters['queue_url']))
-        credentials = pika.PlainCredentials(self._connection_parameters['queue_user'], self._connection_parameters['queue_password'])
+        credentials = pika.PlainCredentials(self._connection_parameters['queue_user'],
+                                            self._connection_parameters['queue_password'])
         return pika.SelectConnection(pika.ConnectionParameters(self._connection_parameters['queue_url'],
                                                                self._connection_parameters['queue_port'],
                                                                self._connection_parameters['queue_context_root'],
@@ -402,7 +403,8 @@ class ExampleConsumer(object):
 
         :param pika.frame.Method method_frame: The Queue.DeclareOk frame
         """
-        logger.debug('Binding %s to %s with %s' % (self.EXCHANGE, self._connection_parameters['queue_name'], self.ROUTING_KEY))
+        logger.debug(
+            'Binding %s to %s with %s' % (self.EXCHANGE, self._connection_parameters['queue_name'], self.ROUTING_KEY))
         self._channel.queue_bind(self.on_bindok, self._connection_parameters['queue_name'],
                                  self.EXCHANGE, self.ROUTING_KEY)
 
@@ -465,7 +467,10 @@ class ExampleConsumer(object):
         :param pika.Spec.BasicProperties: properties
         :param str|unicode body: The message body
         """
-        logger.debug(self._connection_parameters['queue_name'] + ' : Received message # %s from %s' % (basic_deliver.delivery_tag, properties.app_id))
+        logger.debug(
+            self._connection_parameters['queue_name'] + ' : Received message # %s from %s'
+            % (basic_deliver.delivery_tag, properties.app_id)
+        )
         logger.debug('Executing callback function on the received message...')
         self.callback_func(body)
         self.acknowledge_message(basic_deliver.delivery_tag)

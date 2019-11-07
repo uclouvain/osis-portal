@@ -25,15 +25,15 @@
 ##############################################################################
 import collections
 
-from django.db import models, connection
-from django.db.models import Q
+from django.db import connection
 from django.db import models
+from django.db.models import Q
+from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+
+from base.models.entity import Entity
 from base.models.enums import entity_type
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import now
-from base.models.entity import Entity
-
 
 SQL_RECURSIVE_QUERY = """\
 WITH RECURSIVE under_entity AS (

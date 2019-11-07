@@ -23,12 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
 import urllib
 from urllib.error import URLError
-import logging
 
 from django.conf import settings
-
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 

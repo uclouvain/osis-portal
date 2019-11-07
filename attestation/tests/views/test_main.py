@@ -386,4 +386,3 @@ class TestRegistrationIdMessage(TestCase):
     def test_generate_message_without_registration_id(self):
         given_json_message = v_main._make_registration_json_message(None)
         self.assertIsNone(given_json_message)
-

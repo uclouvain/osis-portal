@@ -28,9 +28,8 @@ from django.conf.urls import url, include
 from attribution.views import online_application
 from attribution.views import tutor_charge, list
 
-
 js_info_dict = {
-    'packages': ('attribution', )
+    'packages': ('attribution',)
 }
 
 urlpatterns = [
@@ -40,7 +39,8 @@ urlpatterns = [
 
     url(r'^students/(?P<learning_unit_year_id>[0-9]+)/(?P<a_tutor>[0-9]+)/$', tutor_charge.show_students,
         name='attribution_students'),
-    url(r'^students/list/xls/(?P<learning_unit_year_id>[0-9]+)', tutor_charge.students_list_build_by_learning_unit, name='produce_xls_students'),
+    url(r'^students/list/xls/(?P<learning_unit_year_id>[0-9]+)', tutor_charge.students_list_build_by_learning_unit,
+        name='produce_xls_students'),
 
     url(r'^applications/', include([
         url(r'^$', online_application.overview, name='applications_overview'),
@@ -67,7 +67,8 @@ urlpatterns = [
         url(r'^visualize_tutor/([0-9a-z-]+)/$', tutor_charge.visualize_tutor_attributions,
             name='attribution_admin_visualize_tutor'),
         url(r'^students_list/$', list.lists_of_students_exams_enrollments, name='lists_of_students_exams_enrollments'),
-        url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person, name='lists_of_students_exams_enrollments_create'),
+        url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person,
+            name='lists_of_students_exams_enrollments_create'),
 
         url(r'^applications/', include([
             url(r'^$', online_application.administration_applications,

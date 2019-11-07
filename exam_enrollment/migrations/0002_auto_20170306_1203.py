@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('exam_enrollment', '0001_initial'),
     ]
@@ -28,18 +27,18 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='examenrollmentsubmitted',
             name='offer_enrollment',
-            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='base.OfferEnrollment'),
+            field=models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE,
+                                    to='base.OfferEnrollment'),
         ),
         migrations.CreateModel(
             name='ExamEnrollmentForm',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('offer_enrollment', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE, to='base.OfferEnrollment')),
+                ('offer_enrollment', models.ForeignKey(default=None, on_delete=django.db.models.deletion.CASCADE,
+                                                       to='base.OfferEnrollment')),
                 ('updated_date', models.DateTimeField(auto_now=True)),
                 ('form', django.contrib.postgres.fields.jsonb.JSONField()),
             ],
         ),
 
     ]
-
-

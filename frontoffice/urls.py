@@ -30,11 +30,10 @@ from django.contrib import admin
 
 from base.views import common
 
-packages = ("attribution", )
-
+packages = ("attribution",)
 
 urlpatterns = (
-    url(r'^'+settings.ADMIN_URL, admin.site.urls),
+    url(r'^' + settings.ADMIN_URL, admin.site.urls),
     url(r'', include('base.urls')),
     url(r'^login/$', common.login, name='login'),
     url(r'^logout/$', common.log_out, name='logout'),
@@ -43,21 +42,20 @@ urlpatterns = (
     url(r'^hijack/', include('hijack.urls', namespace='hijack')),
 )
 
-
 if 'dashboard' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^dashboard/', include('dashboard.urls')), )
+    urlpatterns += (url(r'^dashboard/', include('dashboard.urls')),)
 if 'performance' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^exammarks/', include('performance.urls')), )
+    urlpatterns += (url(r'^exammarks/', include('performance.urls')),)
 if 'dissertation' in settings.INSTALLED_APPS:
     urlpatterns += (url(r'^dissertation/', include('dissertation.urls')),)
 if 'attribution' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^attribution/', include('attribution.urls')), )
+    urlpatterns += (url(r'^attribution/', include('attribution.urls')),)
 if 'internship' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^internship/', include('internship.urls')), )
+    urlpatterns += (url(r'^internship/', include('internship.urls')),)
 if 'exam_enrollment' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^exam_enrollment/', include('exam_enrollment.urls')), )
+    urlpatterns += (url(r'^exam_enrollment/', include('exam_enrollment.urls')),)
 if 'attestation' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')), )
+    urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')),)
 if 'assessments' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^assessments/', include('assessments.urls')),)
 if 'continuing_education' in settings.INSTALLED_APPS:
@@ -73,4 +71,5 @@ admin.site.index_title = 'Louvain'
 
 if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
-    urlpatterns += (url(r'^__debug__/', include(debug_toolbar.urls)), )
+
+    urlpatterns += (url(r'^__debug__/', include(debug_toolbar.urls)),)

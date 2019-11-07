@@ -23,8 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
 import factory.fuzzy
+
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.offer import OfferFactory
 

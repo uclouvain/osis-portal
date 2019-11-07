@@ -28,11 +28,11 @@ import datetime
 from django.test import TestCase
 
 from base.models import entity_version
+from base.models.enums import entity_type
 from base.models.enums import organization_type
 from base.tests.factories.entity import EntityFactory
 from base.tests.factories.entity_version import EntityVersionFactory
 from base.tests.factories.organization import OrganizationFactory
-from base.models.enums import entity_type
 
 now = datetime.datetime.now()
 

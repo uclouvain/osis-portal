@@ -25,7 +25,6 @@
 ##############################################################################
 from base import models as mdl_base
 from base.models.enums import academic_calendar_type
-from attribution import models as mdl_attribution
 
 
 def is_online_application_opened(user):
