@@ -23,8 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
 from django.forms import formset_factory
+from django.test import TestCase
+
 from internship.forms import form_offer_preference
 
 

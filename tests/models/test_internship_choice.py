@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
 from django.db.utils import IntegrityError
-from internship.models import internship_choice as mdl_internship_choice
-from internship.tests.models import test_organization, test_internship_speciality
+from django.test import TestCase
+
 from base.tests.models import test_student
+from internship.models import internship_choice as mdl_internship_choice
 from internship.tests.factories.internship import InternshipFactory
+from internship.tests.models import test_organization, test_internship_speciality
 
 
 def create_internship_choice(organization, student, speciality, internship, choice=1):
@@ -47,9 +48,12 @@ class TestSearch(TestCase):
         self.internship = InternshipFactory(speciality=self.speciality)
         self.other_internship = InternshipFactory(speciality=self.speciality)
 
-        self.choice_1 = create_internship_choice(self.organization, self.student, self.speciality, internship=self.other_internship)
-        self.choice_2 = create_internship_choice(self.organization, self.student, self.speciality, internship=self.internship)
-        self.choice_3 = create_internship_choice(self.organization, self.other_student, self.speciality, internship=self.other_internship)
+        self.choice_1 = create_internship_choice(self.organization, self.student, self.speciality,
+                                                 internship=self.other_internship)
+        self.choice_2 = create_internship_choice(self.organization, self.student, self.speciality,
+                                                 internship=self.internship)
+        self.choice_3 = create_internship_choice(self.organization, self.other_student, self.speciality,
+                                                 internship=self.other_internship)
 
     def test_duplicates_are_forbidden(self):
         with self.assertRaises(IntegrityError):

@@ -1,4 +1,3 @@
-import factory
 import factory.fuzzy
 
 from internship.tests.factories.cohort import CohortFactory

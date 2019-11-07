@@ -24,10 +24,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-import base.models as mdl_base
 from functools import wraps
-from dashboard.views import main as dash_main_view
+
 from django.core.exceptions import MultipleObjectsReturned
+
+import base.models as mdl_base
+from dashboard.views import main as dash_main_view
 
 
 def redirect_if_multiple_registrations(function):
@@ -39,4 +41,5 @@ def redirect_if_multiple_registrations(function):
             return dash_main_view.show_multiple_registration_id_error(request)
         response = function(request, *args, **kwargs)
         return response
+
     return wrapper

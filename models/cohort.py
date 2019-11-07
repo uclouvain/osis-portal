@@ -24,14 +24,18 @@
 #
 ##############################################################################
 from datetime import date
+
 from django.db import models
+
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
 class CohortAdmin(SerializableModelAdmin):
     list_display = ('name', 'description', 'publication_start_date', 'subscription_start_date', 'subscription_end_date')
-    fieldsets = ((None, {'fields': ('name', 'description', 'publication_start_date', 'subscription_start_date',
-                                    'subscription_end_date')}),)
+    fieldsets = ((None, {
+        'fields': ('name', 'description', 'publication_start_date', 'subscription_start_date',
+                   'subscription_end_date')
+    }),)
 
 
 class Cohort(SerializableModel):

@@ -24,8 +24,9 @@
 #
 ##############################################################################
 
-from internship.models import organization as mdl_organization
 from django.test import TestCase
+
+from internship.models import organization as mdl_organization
 from internship.tests.factories.cohort import CohortFactory
 
 

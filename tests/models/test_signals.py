@@ -23,30 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-
 from django.test import TestCase
 
-from internship.tests.factories.cohort import CohortFactory
+from base.models.signals import _add_person_to_group, GROUP_STUDENTS_INTERNSHIP
+from base.tests.factories.person import PersonFactory
+from base.tests.models.test_signals import get_or_create_user
+from internship.tests.factories.internship_student_information import InternshipStudentInformationFactory
 
 
-class TestCohort(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.cohort = CohortFactory(subscription_start_date=datetime.date(2018, 1, 26),
-                                   subscription_end_date=datetime.date(2018, 2, 7),
-                                   publication_start_date=datetime.date(2018, 4, 7))
+class UpdatePersonIfNecessary(TestCase):
 
-    def test_cohort_enrollments_active(self):
-        self.assertTrue(self.cohort.enrollment_active(datetime.date(2018, 1, 26)))
-        self.assertTrue(self.cohort.enrollment_active(datetime.date(2018, 2, 7)))
+    user_infos = {
+        'USERNAME': 'user_test',
+        'PASSWORD': 'pass_test',
+        'USER_FGS': '22222222',
+        'USER_FIRST_NAME': 'user_first',
+        'USER_LAST_NAME': 'user_last',
+        'USER_EMAIL': 'user1@user.org'
+    }
 
-    def test_cohort_enrollments_inactive(self):
-        self.assertFalse(self.cohort.enrollment_active(datetime.date(2018, 1, 25)))
-        self.assertFalse(self.cohort.enrollment_active(datetime.date(2018, 2, 8)))
-
-    def test_cohort_publication_active(self):
-        self.assertTrue(self.cohort.publication_active(datetime.date(2018, 4, 7)))
-
-    def test_cohort_publication_inactive(self):
-        self.assertFalse(self.cohort.publication_active(datetime.date(2018, 4, 6)))
+    def test_when_internship_installed(self):
+        user = get_or_create_user(self.user_infos)
+        person = PersonFactory(
+            user=user,
+            first_name="user3",
+            last_name="user3",
+            email='test3@test.org',
+            global_id="1111111"
+        )
+        InternshipStudentInformationFactory(person=person)
+        _add_person_to_group(person)
+        self.assertTrue(person.user.groups.filter(name=GROUP_STUDENTS_INTERNSHIP).exists())

@@ -31,9 +31,13 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class InternshipStudentInformationAdmin(SerializableModelAdmin):
-    list_display = ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile', 'contest', 'cohort')
-    fieldsets = ((None, {'fields': ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile',
-                                    'contest', 'cohort')}),)
+    list_display = (
+        'person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile', 'contest', 'cohort'
+    )
+    fieldsets = ((None, {
+        'fields': ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile',
+                   'contest', 'cohort')
+    }),)
     raw_id_fields = ('person', 'cohort')
     list_filter = ['cohort']
     search_fields = ['person__user__username', 'person__last_name', 'person__first_name']

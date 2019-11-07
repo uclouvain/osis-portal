@@ -2,60 +2,61 @@
 {% load i18n %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% if offers_forms  %}
+{% if offers_forms %}
     {{ formset.management_form }}
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th>{% trans 'Hospital' %}</th>
-                <th>{% trans 'Maximum number of students' %}</th>
-                <th>{% trans 'Number of first choice' %}</th>
-                <th>{% trans 'Preference' %}</th>
-            </tr>
+        <tr>
+            <th>{% trans 'Hospital' %}</th>
+            <th>{% trans 'Maximum number of students' %}</th>
+            <th>{% trans 'Number of first choice' %}</th>
+            <th>{% trans 'Preference' %}</th>
+        </tr>
         </thead>
         <tbody>
-            {% for offer, form, number_first_choices in offers_forms %}
-                <tr>
-                    <td>{{ offer.organization }}</td>
-                    <td>{{ offer.maximum_enrollments }}</td>
-                    <td>{{ number_first_choices }}</td>
-                    <td hidden>
-                        <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}"
-                               class="form-control" value="{{ offer.pk }}">
-                    </td>
-                    <td>
-                        <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}" class="form-control">
-                            {% for key, val in form.fields.preference.choices %}
-                                {% choice_for_offer internship_choices offer internship as choice %}
-                                <option value="{{ key }}" {% if key == choice %} selected {% endif %}>{{ val }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-            {% endfor %}
+        {% for offer, form, number_first_choices in offers_forms %}
+            <tr>
+                <td>{{ offer.organization }}</td>
+                <td>{{ offer.maximum_enrollments }}</td>
+                <td>{{ number_first_choices }}</td>
+                <td hidden>
+                    <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}"
+                           class="form-control" value="{{ offer.pk }}">
+                </td>
+                <td>
+                    <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}"
+                            class="form-control">
+                        {% for key, val in form.fields.preference.choices %}
+                            {% choice_for_offer internship_choices offer internship as choice %}
+                            <option value="{{ key }}" {% if key == choice %} selected {% endif %}>{{ val }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 

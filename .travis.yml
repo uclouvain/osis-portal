@@ -8,7 +8,7 @@ python: "3.5.5"
 services:
   - postgresql
 addons:
-    postgresql: "9.6"
+  postgresql: "9.6"
 
 install:
   - export PROJECT_DIR=`pwd`

@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url, include
+
 from internship.views import main, hospital, resume, selection
 
 urlpatterns = [

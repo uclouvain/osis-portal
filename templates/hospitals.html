@@ -3,80 +3,80 @@
 {% load i18n %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'internship' %}">{{cohort.name}}</a></li>
-    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a> </li>
+    <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
+    <li><a href="{% url 'internship_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
     <li class="active">{% trans 'Hospitals' %}</li>
 {% endblock %}
 
 
 {% block content %}
-<div class="page-header">
-    <h2>{% trans 'Hospitals' %}</h2>
-</div>
+    <div class="page-header">
+        <h2>{% trans 'Hospitals' %}</h2>
+    </div>
 
 
-<div class="panel panel-default">
-    <div class="panel panel-body">
+    <div class="panel panel-default">
+        <div class="panel panel-body">
 
-        <div class="row">
-            <form method="post">
-                {% csrf_token %}
-                {{ search_form.non_field_errors }}
-                <div class="fieldWrapper col-md-3 form-group">
-                    {{ search_form.name.errors }}
-                    <label for="{{ search_form.name.id_for_label }}">{% trans 'Hospital' %}</label>
-                    <input type="text" class="form-control" id="{{ search_form.name.id_for_label }}"
-                      name="{{ search_form.name.html_name }}" placeholder="Organization" value="{{name}}">
-                </div>
-                <div class="fieldWrapper col-md-3 form-group">
-                    {{ search_form.city.errors }}
-                    <label for="{{ search_form.city.id_for_label }}">{% trans 'City' %}</label>
-                    <select id="{{ search_form.city.id_for_label }}"
-                            name="{{ search_form.city.html_name }}"
-                            class="form-control">
-                        {% for x,y in search_form.fields.city.choices %}
-                        <option value="{{ x }}" {% if city == y %} selected{% endif %}>
-                                {{ y }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <br>
-                    <button type="submit" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                </div>
-            </form>
-        </div>
+            <div class="row">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ search_form.non_field_errors }}
+                    <div class="fieldWrapper col-md-3 form-group">
+                        {{ search_form.name.errors }}
+                        <label for="{{ search_form.name.id_for_label }}">{% trans 'Hospital' %}</label>
+                        <input type="text" class="form-control" id="{{ search_form.name.id_for_label }}"
+                               name="{{ search_form.name.html_name }}" placeholder="Organization" value="{{ name }}">
+                    </div>
+                    <div class="fieldWrapper col-md-3 form-group">
+                        {{ search_form.city.errors }}
+                        <label for="{{ search_form.city.id_for_label }}">{% trans 'City' %}</label>
+                        <select id="{{ search_form.city.id_for_label }}"
+                                name="{{ search_form.city.html_name }}"
+                                class="form-control">
+                            {% for x,y in search_form.fields.city.choices %}
+                                <option value="{{ x }}" {% if city == y %} selected{% endif %}>
+                                    {{ y }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <br>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
 
-        <div class="row">
-            <table class="table table-striped table-hover">
-                <thead>
+            <div class="row">
+                <table class="table table-striped table-hover">
+                    <thead>
                     <tr>
                         <th>{% trans 'Reference' %}</th>
                         <th>{% trans 'name' %}</th>
@@ -86,9 +86,9 @@
                         <th>{% trans 'Country' %}</th>
                         <th>{% trans 'Website' %}</th>
                     </tr>
-                </thead>
-                {% for hospital in hospitals %}
-                    <tbody>
+                    </thead>
+                    {% for hospital in hospitals %}
+                        <tbody>
                         <tr>
                             <td>{{ hospital.reference }}</td>
                             <td>{{ hospital.name }}</td>
@@ -98,13 +98,13 @@
                             <td>{{ hospital.country | default_if_none:'' }}</td>
                             <td>{% if hospital.website %}
                                 <a href="{{ hospital.website }}">{{ hospital.website }}</a>
-                                {% endif %}
+                            {% endif %}
                             </td>
                         </tr>
-                    </tbody>
-                {% endfor %}
-            </table>
+                        </tbody>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

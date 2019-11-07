@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase, Client
-import base.tests.models.test_student
 from django.contrib.auth.models import User, Permission
+from django.test import TestCase, Client
 from django.urls import reverse
-from internship.tests.models import test_internship_student_information
+
+import base.tests.models.test_student
 from internship.tests.factories.cohort import CohortFactory
+from internship.tests.models import test_internship_student_information
 
 
 class TestHospitalUrl(TestCase):
@@ -39,7 +40,9 @@ class TestHospitalUrl(TestCase):
         self.student.person.user = self.user
         self.student.person.save()
         self.cohort = CohortFactory()
-        self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort, self.student.person)
+        self.student_information = test_internship_student_information.create_student_information(self.user,
+                                                                                                  self.cohort,
+                                                                                                  self.student.person)
         add_permission(self.student.person.user, "can_access_internship")
 
     def test_can_access_hospital_list(self):
