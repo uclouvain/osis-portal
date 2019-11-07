@@ -36,9 +36,7 @@ class StudentWithPerformanceMixin(StudentMixin):
             count_perf = random.randint(1, 10)
         for idx in range(count_perf):
             StudentPerformanceFactory(registration_id=student.registration_id,
-                                      academic_year=academic_year-idx,
+                                      academic_year=academic_year - idx,
                                       authorized=authorized_results,
                                       courses_registration_validated=course_registration_validated,
                                       learning_units_outside_catalog=learning_units_outside_catalog)
-
-

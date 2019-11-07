@@ -23,10 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from datetime import datetime
+
 import factory
 
 from osis_common.utils.datetime import get_tzinfo
-from datetime import datetime
 
 
 def generate_email(user, domain=None):

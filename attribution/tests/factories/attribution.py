@@ -23,9 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
 import operator
+
+import factory.fuzzy
+
 from attribution.models.enums import function
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.tutor import TutorFactory

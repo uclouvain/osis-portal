@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('reference', '0007_remove_gradetype_language_exam_required'),
     ]

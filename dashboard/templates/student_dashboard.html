@@ -5,7 +5,8 @@
     <div class="grid-item">
         <i class="fa fa-line-chart"></i>
         <div class="description">
-            <h4 class="media-heading"><a href="{% url 'performance_home'  %}" id="lnk_performance">{% trans 'Performance' %}</a></h4>
+            <h4 class="media-heading"><a href="{% url 'performance_home' %}"
+                                         id="lnk_performance">{% trans 'Performance' %}</a></h4>
             <p>{% trans 'Show the performance module.' %}</p>
         </div>
     </div>
@@ -15,7 +16,8 @@
     <div class="grid-item">
         <i class="fa fa-file-pdf-o"></i>
         <div class="description">
-            <h4 class="media-heading"><a href="{% url 'attestation_home' %}" id="lnk_my_attestations">{% trans 'My attestations' %}</a></h4>
+            <h4 class="media-heading"><a href="{% url 'attestation_home' %}"
+                                         id="lnk_my_attestations">{% trans 'My attestations' %}</a></h4>
             <p>{% trans 'This process controls my attestations.' %}</p>
         </div>
     </div>
@@ -23,26 +25,27 @@
 
 {% if 'exam_enrollment' in installed_apps %}
     <div class="grid-item">
-       <i class="fa fa-book"></i>
-       <div class="description">
-           <h4 class="media-heading">
-               <a href="{% url 'exam_enrollment_form_direct' %}" id="lnk_exam_enrollment_offer_choice">
-                   {% trans 'Exams enrollment' %}
-               </a>
-           </h4>
-           <p>{% trans 'Show the student results and registration state.' %}</p>
-       </div>
+        <i class="fa fa-book"></i>
+        <div class="description">
+            <h4 class="media-heading">
+                <a href="{% url 'exam_enrollment_form_direct' %}" id="lnk_exam_enrollment_offer_choice">
+                    {% trans 'Exams enrollment' %}
+                </a>
+            </h4>
+            <p>{% trans 'Show the student results and registration state.' %}</p>
+        </div>
     </div>
 {% endif %}
 
 {% if 'internship' in installed_apps %}
     {% if perms.internship.can_access_internship %}
-    <div class="grid-item">
-        <i class="fa fa-user-md"></i>
-        <div class="description">
-            <h4 class="media-heading"><a href="{% url 'internship'  %}" id="lnk_internship">{% trans 'Internships' %}</a></h4>
-            <p>{% trans 'This process controls students internships.' %}</p>
+        <div class="grid-item">
+            <i class="fa fa-user-md"></i>
+            <div class="description">
+                <h4 class="media-heading"><a href="{% url 'internship' %}"
+                                             id="lnk_internship">{% trans 'Internships' %}</a></h4>
+                <p>{% trans 'This process controls students internships.' %}</p>
+            </div>
         </div>
-    </div>
     {% endif %}
 {% endif %}

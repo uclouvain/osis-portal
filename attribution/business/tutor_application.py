@@ -24,20 +24,16 @@
 #
 ##############################################################################
 import time
-
 from decimal import Decimal
 
-from django.db.models import Prefetch, OuterRef, Subquery
-from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from attribution import models as mdl_attribution
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
-from base.models.learning_component_year import LearningComponentYear
-from base.models.learning_unit_year import LearningUnitYear
-from osis_common.messaging import message_config, send_message as message_service
 from base.models.enums import learning_unit_year_subtypes
+from osis_common.messaging import message_config, send_message as message_service
 
 
 def get_application_list(global_id, academic_year=None):
@@ -63,14 +59,12 @@ def get_application(global_id, learning_container_year):
 
 
 def mark_attribution_already_applied(attributions_vacant, global_id, application_academic_year):
-    import attribution.business.attribution
     applications = get_application_list(global_id, application_academic_year)
-    attributions = attribution.business.attribution.get_attribution_list(global_id, application_academic_year)
 
     for attribution in attributions_vacant:
         already_applied = next((True for application in applications if
-                                               application.get('acronym') == attribution.get('acronym')), False) \
-                                          if applications else False
+                                application.get('acronym') == attribution.get('acronym')), False) \
+            if applications else False
 
         attribution['already_applied'] = already_applied
     return attributions_vacant
@@ -133,7 +127,7 @@ def send_mail_applications_summary(global_id):
     receivers = [message_config.create_receiver(person.id, person.email, person.language)]
     applications = _get_applications_table(application_list)
     table_applications = message_config.create_table('applications',
-                                                     [_('Acronym'),'Vol. 1','Vol. 2'],
+                                                     [_('Acronym'), 'Vol. 1', 'Vol. 2'],
                                                      applications)
     template_base_data = {
         'first_name': person.first_name,
@@ -246,10 +240,12 @@ def _order_by_pending_and_acronym(application_list):
         :param application_list: List of application to sort
         :return:
     """
+
     def _sort(key):
         pending = key.get('pending', '')
         acronym = key.get('acronym', '')
         return "%s %s" % (pending, acronym)
+
     return sorted(application_list, key=lambda k: _sort(k))
 
 

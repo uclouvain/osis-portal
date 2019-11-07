@@ -23,10 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from unittest import skip
 from django.conf import settings
 from django.test import TestCase
 from mock import patch
+
 from attestation.queues import student_attestation_status as std_att_stat
 from attestation.views import main as v_main
 
@@ -56,7 +56,9 @@ class TestFetchSutentAttestationStatuses(TestCase):
             self.assertDictEqual(attesatation_statuses_expected, attestation_statuses)
 
     def _get_test_attestation_statuses_as_byte(self):
-        return b'{"available": true,"academicYear": 2016,"attestationStatuses": [{"type": "REGISTRATION","printed": true,"available": false},{"type": "STUDENT_CARD","printed": false,"available": false},{"type": "REGULAR_REGISTRATION","printed": true,"available": true}]}'
+        return b'{"available": true,"academicYear": 2016,"attestationStatuses": [{"type": "REGISTRATION","printed": ' \
+               b'true,"available": false},{"type": "STUDENT_CARD","printed": false,"available": false},' \
+               b'{"type": "REGULAR_REGISTRATION","printed": true,"available": true}]}'
 
     def _get_test_attestation_statuses_as_dict(self):
         return {

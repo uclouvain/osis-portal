@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('performance', '0006_studentperformance_learning_units_outside_catalog'),
     ]
@@ -15,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='studentperformance',
             name='session_locked',
-            field=models.CharField(choices=[('JANUARY', 'January'), ('JUNE', 'June'), ('SEPTEMBER', 'September')], max_length=50, null=True),
+            field=models.CharField(choices=[('JANUARY', 'January'), ('JUNE', 'June'), ('SEPTEMBER', 'September')],
+                                   max_length=50, null=True),
         ),
     ]

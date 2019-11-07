@@ -183,7 +183,7 @@ class TestOnlineApplication(TestCase):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
         self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
         # Creation learning container for next academic year [==> application academic year]
-        self.lagro1234_next = _create_learning_container_with_components\
+        self.lagro1234_next = _create_learning_container_with_components \
             ("LAGRO1234", self.application_academic_year, 70, 70,
              type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN)
         url = reverse('vacant_attributions_search')
@@ -262,7 +262,7 @@ class TestOnlineApplication(TestCase):
     def test_post_edit_application_form_with_empty_value(self):
         url = reverse('create_or_update_tutor_application',
                       kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        post_data = _get_application_example(self.lagro1600_next, None, None)
+        post_data = _get_application_example(self.lagro1600_next, "a", "")
         response = self.client.post(url, data=post_data)
         self.assertEqual(response.status_code, 200)
         context = response.context[0]
@@ -296,7 +296,7 @@ class TestOnlineApplication(TestCase):
     def test_post_overview_with_lecturing_and_practical_component_partim(self):
         lbira2101a_next = _create_learning_container_with_components("LBIRA2101A", self.application_academic_year,
                                                                      volume_lecturing=20, volume_practical_exercices=20,
-                                                                         subtype=learning_unit_year_subtypes.PARTIM)
+                                                                     subtype=learning_unit_year_subtypes.PARTIM)
         lbira2101a_current = _create_learning_container_with_components(
             "LBIRA2101A", self.current_academic_year,
             volume_lecturing=20, volume_practical_exercices=20,
@@ -410,7 +410,7 @@ def _get_application_example(learning_container_year, volume_lecturing, volume_p
         'charge_practical_asked': volume_practical_exercice,
         'acronym': learning_container_year.acronym,
         'year': learning_container_year.academic_year.year,
-        'pending': flag
+        'pending': flag or ""
     }
 
 

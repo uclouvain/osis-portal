@@ -29,4 +29,3 @@ from django import forms
 class AttributionForm(forms.Form):
     year = forms.IntegerField()
     next_year = forms.IntegerField()
-
