@@ -6,7 +6,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('exam_enrollment', '0005_examenrollmentrequest_offer_year_acronym'),
     ]

@@ -24,12 +24,11 @@
 #
 ##############################################################################
 import datetime
-import factory
+
 import factory.fuzzy
-import string
 from django.utils import timezone
+
 from base.tests.factories.academic_year import AcademicYearFactory
-from osis_common.utils.datetime import get_tzinfo
 
 
 def generate_start_date(academic_calendar):

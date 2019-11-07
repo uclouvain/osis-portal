@@ -25,6 +25,7 @@
 ##############################################################################
 
 from django import template
+
 from attribution.models.enums.function import FUNCTIONS
 
 register = template.Library()

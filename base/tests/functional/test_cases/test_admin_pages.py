@@ -1,6 +1,6 @@
+from base.tests.functional.models.user_type import FacAdministratorMixin, AdministratorMixin
 from osis_common.tests.functional.models.model import FunctionalTestCase
 from osis_common.tests.functional.models.report import can_be_reported
-from base.tests.functional.models.user_type import FacAdministratorMixin, AdministratorMixin
 
 
 class FacAdminPageTestCase(FunctionalTestCase, FacAdministratorMixin):

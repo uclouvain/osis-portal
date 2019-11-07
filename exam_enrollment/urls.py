@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.conf.urls import url
+
 from exam_enrollment.views import exam_enrollment
 
 urlpatterns = [

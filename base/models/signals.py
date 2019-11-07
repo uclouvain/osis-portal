@@ -25,9 +25,10 @@
 ##############################################################################
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
-from django.core.exceptions import ObjectDoesNotExist
+
 from base import models as mdl
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal

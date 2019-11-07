@@ -30,9 +30,9 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
-from django.urls import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.test import TestCase, Client
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -78,18 +78,23 @@ class ExamEnrollmentFormTest(TestCase):
         self.student = test_student.create_student_with_registration_person("12345678", self.person)
         self.student2 = test_student.create_student_with_registration_person("12457896", self.person2)
         offer_year_id = 1234
-        self.off_year = test_offer_year.create_offer_year_from_kwargs(**{'id': offer_year_id,
-                                                                         'acronym': 'SINF1BA',
-                                                                         'title': 'Bechelor in informatica',
-                                                                         'academic_year': self.academic_year})
+        self.off_year = test_offer_year.create_offer_year_from_kwargs(**{
+            'id': offer_year_id,
+            'acronym': 'SINF1BA',
+            'title': 'Bechelor in informatica',
+            'academic_year': self.academic_year
+        })
         self.url = "/exam_enrollment/{}/form/".format(offer_year_id)
-        self.correct_exam_enrol_form = load_json_file("exam_enrollment/tests/resources/exam_enrollment_form_example.json")
+        self.correct_exam_enrol_form = load_json_file(
+            "exam_enrollment/tests/resources/exam_enrollment_form_example.json")
         self.current_academic_year = test_academic_year.create_academic_year_current()
         self.off_enrol = OfferEnrollmentFactory(student=self.student,
                                                 offer_year=OfferYearFactory(academic_year=self.current_academic_year))
-        learn_unit_year = test_learning_unit_year.create_learning_unit_year({'acronym': 'LDROI1234',
-                                                                             'specific_title': 'Bachelor in law',
-                                                                             'academic_year': self.academic_year})
+        learn_unit_year = test_learning_unit_year.create_learning_unit_year({
+                                                                                'acronym': 'LDROI1234',
+                                                                                'specific_title': 'Bachelor in law',
+                                                                                'academic_year': self.academic_year
+                                                                            })
         self.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(self.off_enrol,
                                                                                               learn_unit_year)
 
@@ -309,9 +314,11 @@ class ExamEnrollmentFormTest(TestCase):
             self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
 
     def assert_correct_data_structure(self, result):
-        exam_enrollment_expected = {"acronym": "LPHYS1234",
-                                    "is_enrolled": True,
-                                    "etat_to_inscr": "I"}
+        exam_enrollment_expected = {
+            "acronym": "LPHYS1234",
+            "is_enrolled": True,
+            "etat_to_inscr": "I"
+        }
         expected_result = {
             "registration_id": self.student.registration_id,
             "offer_year_acronym": self.off_year.acronym,
@@ -328,12 +335,16 @@ class ExamEnrollmentFormTest(TestCase):
             self.assertIn(exam_enrol, exam_enrollments)
 
     def assert_none_etat_to_inscr_not_in_submitted_form(self, exam_enrollments):
-        exam_enrollments_unexpected = [{"acronym": "LBIO4567",
-                                        "is_enrolled": False,
-                                        "etat_to_inscr": None},
-                                       {"acronym": "LDROI1111",
-                                        "is_enrolled": False,
-                                        "etat_to_inscr": None}]
+        exam_enrollments_unexpected = [{
+                                           "acronym": "LBIO4567",
+                                           "is_enrolled": False,
+                                           "etat_to_inscr": None
+                                       },
+                                       {
+                                           "acronym": "LDROI1111",
+                                           "is_enrolled": False,
+                                           "etat_to_inscr": None
+                                       }]
         for index in range(0, len(exam_enrollments_unexpected)):
             self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
 

@@ -24,17 +24,17 @@
 #
 ##############################################################################
 from django.core.exceptions import PermissionDenied
+
 from base import models as mdl_base
 
 
 def user_is_tutor_or_super_user(function):
-
     def wrap(request, *args, **kwargs):
         a_user = request.user
 
-        if not a_user.is_staff and not a_user.has_perm('base.is_administrator'):
-            if kwargs.get('global_id') != mdl_base.person.find_by_user(a_user).global_id:
-                raise PermissionDenied
+        if not a_user.is_staff and not a_user.has_perm('base.is_administrator') and kwargs.get(
+                'global_id') != mdl_base.person.find_by_user(a_user).global_id:
+            raise PermissionDenied
 
         return function(request, *args, **kwargs)
 

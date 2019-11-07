@@ -32,8 +32,10 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 class AttributionAdmin(SerializableModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function', 'summary_responsible',)
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_year', 'end_year',
-                                    'summary_responsible')}),)
+    fieldsets = ((None, {
+        'fields': ('learning_unit_year', 'tutor', 'function', 'start_year', 'end_year',
+                   'summary_responsible')
+    }),)
     raw_id_fields = ('learning_unit_year', 'tutor')
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
@@ -100,8 +102,8 @@ def find_by_tutor_year_order_by_acronym_function(tutor=None, an_academic_year=No
 
 
 def find_distinct_years(a_tutor):
-    return Attribution.objects.filter(tutor=a_tutor, learning_unit_year__learning_container_year__in_charge=True)\
-        .order_by('-learning_unit_year__academic_year__year')\
+    return Attribution.objects.filter(tutor=a_tutor, learning_unit_year__learning_container_year__in_charge=True) \
+        .order_by('-learning_unit_year__academic_year__year') \
         .values_list('learning_unit_year__academic_year__year', flat=True).distinct()
 
 

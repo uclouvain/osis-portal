@@ -24,8 +24,8 @@
 #
 ##############################################################################
 
-from django.conf import settings
 from django import template
+from django.conf import settings
 
 from base import models as mdl_base
 from base.utils import string_utils

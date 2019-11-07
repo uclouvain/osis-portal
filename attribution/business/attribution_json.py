@@ -34,7 +34,6 @@ from psycopg2._psycopg import OperationalError as PsycopOperationalError, Interf
 
 from attribution.models import attribution_new
 
-
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 

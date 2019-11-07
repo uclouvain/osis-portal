@@ -2,50 +2,50 @@
 {% load i18n function %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 <table class="table table-striped">
     <thead>
-        <tr>
-            <th colspan="2"></th>
-            <th colspan="2">{% trans 'Learning unit volumes' %}</th>
-            <th colspan="2" style="border-left: 1px solid;">{% trans 'Vacant' %} </th>
-            <th colspan="6" style="border-left: 1px solid;">{% trans 'Charge' %} </th>
-        </tr>
-        <tr>
-            <th>{% trans 'Code'%}</th>
-            <th>{% trans 'Title'%}</th>
-            <th>{% trans 'Vol.1'%}</th>
-            <th>{% trans 'Vol.2'%}</th>
-            <th style="border-left: 1px solid;">{% trans 'Vol.1'%}</th>
-            <th>{% trans 'Vol.2'%}</th>
-            <th style="border-left: 1px solid;">{% trans 'Vol.1'%}</th>
-            <th>{% trans 'Vol.2'%}</th>
-            <th>{% trans 'Function'%}</th>
-            <th>{% trans 'Start' %}</th>
-            <th>{% trans 'End' %}</th>
-            <th>{% trans 'Teachers' %}</th>
-        </tr>
+    <tr>
+        <th colspan="2"></th>
+        <th colspan="2">{% trans 'Learning unit volumes' %}</th>
+        <th colspan="2" style="border-left: 1px solid;">{% trans 'Vacant' %} </th>
+        <th colspan="6" style="border-left: 1px solid;">{% trans 'Charge' %} </th>
+    </tr>
+    <tr>
+        <th>{% trans 'Code' %}</th>
+        <th>{% trans 'Title' %}</th>
+        <th>{% trans 'Vol.1' %}</th>
+        <th>{% trans 'Vol.2' %}</th>
+        <th style="border-left: 1px solid;">{% trans 'Vol.1' %}</th>
+        <th>{% trans 'Vol.2' %}</th>
+        <th style="border-left: 1px solid;">{% trans 'Vol.1' %}</th>
+        <th>{% trans 'Vol.2' %}</th>
+        <th>{% trans 'Function' %}</th>
+        <th>{% trans 'Start' %}</th>
+        <th>{% trans 'End' %}</th>
+        <th>{% trans 'Teachers' %}</th>
+    </tr>
     </thead>
     {% for attribution in attributions %}
         <tr>
@@ -62,18 +62,21 @@
             <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
             <td>
 
-            {% if attribution.teachers %}
-                {% with teacher_number=forloop.counter0 %}
-                    <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
-                       aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}" style="border:0;padding:0;"
-                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'Display teachers' %}">
-                        <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
-                    </a>
-                {% endwith %}
-            {% endif %}
+                {% if attribution.teachers %}
+                    {% with teacher_number=forloop.counter0 %}
+                        <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
+                           aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}"
+                           style="border:0;padding:0;"
+                           onclick="changeOrientation(expandButton{{ teacher_number }})"
+                           title="{% trans 'Display teachers' %}">
+                            <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand"
+                                  aria-hidden="true"></span>
+                        </a>
+                    {% endwith %}
+                {% endif %}
             </td>
         </tr>
-        {% if attribution.teachers  %}
+        {% if attribution.teachers %}
             {% with teacher_number=forloop.counter0 %}
                 <tr class="collapse collapse_teachers{{ teacher_number }}">
                     <td colspan="11">
@@ -84,11 +87,11 @@
         {% endif %}
     {% endfor %}
     <tfoot>
-        <tr>
-            <td colspan="6" ><label class="pull-right">{% trans 'Total' %}</label></td>
-            <td>{{ tot_lecturing|default_if_none:'0,0' }}</td>
-            <td>{{ tot_practical|default_if_none:'0,0' }}</td>
-            <td colspan="4"></td>
-        </tr>
+    <tr>
+        <td colspan="6"><label class="pull-right">{% trans 'Total' %}</label></td>
+        <td>{{ tot_lecturing|default_if_none:'0,0' }}</td>
+        <td>{{ tot_practical|default_if_none:'0,0' }}</td>
+        <td colspan="4"></td>
+    </tr>
     </tfoot>
 </table>

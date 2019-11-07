@@ -108,7 +108,3 @@ def update_publication_date(sample):
 def get_today_date():
     now = datetime.datetime.now()
     return '%s/%s/%s' % (now.day, now.month, now.year)
-
-
-
-

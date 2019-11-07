@@ -27,14 +27,13 @@ import json
 import logging
 import time
 
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
+from django.conf import settings
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
-from django.conf import settings
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 
-from osis_common.queue import queue_sender
 from base import models as mdl_base
-
+from osis_common.queue import queue_sender
 
 DELETE_OPERATION = "delete"
 UPDATE_OPERATION = "update"
@@ -106,7 +105,8 @@ def process_message(body):
         # Check error in response from epc
         error_epc = application.get(ERROR_EPC_FIELD)
         if error_epc:
-            logger.error('Error during processing tutor application in EPC: {} \n JSON: {}'.format(error_epc, str(json_data)))
+            logger.error(
+                'Error during processing tutor application in EPC: {} \n JSON: {}'.format(error_epc, str(json_data)))
             return False
 
         operation = application.get('operation')
