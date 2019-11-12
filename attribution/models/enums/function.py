@@ -25,7 +25,6 @@
 ##############################################################################
 from django.utils.translation import ugettext_lazy as _
 
-
 COORDINATOR = "COORDINATOR"
 HOLDER = "HOLDER"
 CO_HOLDER = "CO_HOLDER"

@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from reference.models import *
 from django.contrib import admin
 
+from reference.models import *
 
 admin.site.register(country.Country,
                     country.CountryAdmin)
@@ -41,4 +41,3 @@ admin.site.register(grade_type.GradeType,
 
 admin.site.register(language.Language,
                     language.LanguageAdmin)
-

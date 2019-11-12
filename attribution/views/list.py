@@ -25,6 +25,7 @@
 ##############################################################################
 import logging
 import urllib
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
@@ -61,8 +62,10 @@ def get_learning_units(a_user):
             for attribution in attributions:
                 if attribution.learning_unit_year not in learning_units:
                     learning_units.append(attribution.learning_unit_year)
-    data = {'person': a_person,
-            'my_learning_units': learning_units}
+    data = {
+        'person': a_person,
+        'my_learning_units': learning_units
+    }
     return data
 
 
@@ -125,7 +128,8 @@ def fetch_student_exam_enrollment(academic_year, codes):
                                                      codes=codes)
             return _fetch_with_basic_auth(server_top_url, document_url)
         except Exception:
-            logger.exception("Error when fetching document (anac:{}, codes{}, url{})".format(academic_year, codes, document_url))
+            logger.exception(
+                "Error when fetching document (anac:{}, codes{}, url{})".format(academic_year, codes, document_url))
     return None
 
 

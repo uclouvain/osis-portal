@@ -24,9 +24,10 @@
 #
 ##############################################################################
 from django.contrib.auth.decorators import login_required
-from django.utils import translation
-from base import models as mdl
 from django.shortcuts import redirect
+from django.utils import translation
+
+from base import models as mdl
 
 
 @login_required

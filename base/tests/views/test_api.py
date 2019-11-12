@@ -25,6 +25,7 @@
 ##############################################################################
 
 import json
+
 from django.test import TestCase
 
 from base.views import api

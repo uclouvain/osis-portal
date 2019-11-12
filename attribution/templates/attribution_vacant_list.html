@@ -4,56 +4,58 @@
 {% load l10n %}
 {% load urls_catalog %}
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block breadcrumb_area %}
 
-<ol class="breadcrumb">
-    <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
-                                                                      aria-hidden="true"></span></a></li>
-    {% block breadcrumb %}
-        {% if perms.base.is_faculty_administrator %}
-            <li><a href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}" id="lnk_applications">
-                {% trans 'Applications of ' %} {{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                          aria-hidden="true"></span></a></li>
+        {% block breadcrumb %}
+            {% if perms.base.is_faculty_administrator %}
+                <li><a href="{% url 'visualize_tutor_applications' global_id=a_tutor.person.global_id %}"
+                       id="lnk_applications">
+                    {% trans 'Applications of ' %} {{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }}
                 </a>
-            </li>
-        {% else %}
-            <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'My applications' %}</a></li>
-        {% endif %}
-        <li>{% trans 'Vacant course search' %}</li>
-    {% endblock %}
-    <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
-       target="help" id="lnk_user_manual_section"><span
-            class="glyphicon glyphicon-question-sign pull-right"
-            style="font-size: 14pt; color: green"
-            aria-hidden="true"></span></a>
-</ol>
+                </li>
+            {% else %}
+                <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'My applications' %}</a>
+                </li>
+            {% endif %}
+            <li>{% trans 'Vacant course search' %}</li>
+        {% endblock %}
+        <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
+           target="help" id="lnk_user_manual_section"><span
+                class="glyphicon glyphicon-question-sign pull-right"
+                style="font-size: 14pt; color: green"
+                aria-hidden="true"></span></a>
+    </ol>
 {% endblock %}
 
 {% block content %}
 
     <div class="panel panel-default" id="pnl_charges">
-        <div class="panel-heading">{% trans 'Vacant learning unit'%}</div>
+        <div class="panel-heading">{% trans 'Vacant learning unit' %}</div>
 
         <div class="panel-body">
             <div class="row">
@@ -64,81 +66,86 @@
                     </div>
                     <div class="col-md-2">
                         <label for="learning_container_acronym_id">{% trans 'Faculty' %}</label>
-                        {{ search_form.faculty}}
+                        {{ search_form.faculty }}
                     </div>
                     <div class="col-md-2">
                         <label for="learning_container_acronym_id">{% trans 'Code' %}</label>
                         <div class="input-group">
-                            {{ search_form.learning_container_acronym}}
-                             <div class="input-group-btn">
-                                  <button type="submit" id="bt_submit_vacant_attributions_search" class="btn btn-primary" role="button"
-                                    title="{% trans 'Please enter the code of the course to which you would like to apply' %}">
+                            {{ search_form.learning_container_acronym }}
+                            <div class="input-group-btn">
+                                <button type="submit" id="bt_submit_vacant_attributions_search" class="btn btn-primary"
+                                        role="button"
+                                        title="{% trans 'Please enter the code of the course to which you would like to apply' %}">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                 </button>
 
-                             </div>
-                         </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
-        <div class="row">
-            <div class="col-md-12">
-                <span class="error">{{ search_form.errors.learning_container_acronym }}</span>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="error">{{ search_form.errors.learning_container_acronym }}</span>
+                </div>
             </div>
-        </div>
             <br>
             {% if attributions_vacant %}
                 <table class="table table-striped table-hover">
                     <thead>
-                        <tr>
-                            <th colspan="2"></th>
-                            <th colspan="2">{% trans 'Learning unit volumes' %}</th>
-                            <th colspan="2" style="border-left: 1px solid;">{% trans 'Vacant' %}</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                        <tr>
-                            <th>{% trans 'Code'%}</th>
-                            <th>{% trans 'Title'%}</th>
-                            <th>{% trans 'Vol.1'%}</th>
-                            <th>{% trans 'Vol.2'%}</th>
-                            <th style="border-left: 1px solid;">{% trans 'Vol.1'%}</th>
-                            <th>{% trans 'Vol.2'%}</th>
-                            <th>{% trans 'Teachers'%}</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th colspan="2">{% trans 'Learning unit volumes' %}</th>
+                        <th colspan="2" style="border-left: 1px solid;">{% trans 'Vacant' %}</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    <tr>
+                        <th>{% trans 'Code' %}</th>
+                        <th>{% trans 'Title' %}</th>
+                        <th>{% trans 'Vol.1' %}</th>
+                        <th>{% trans 'Vol.2' %}</th>
+                        <th style="border-left: 1px solid;">{% trans 'Vol.1' %}</th>
+                        <th>{% trans 'Vol.2' %}</th>
+                        <th>{% trans 'Teachers' %}</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {% for attribution in attributions_vacant %}
+                    {% for attribution in attributions_vacant %}
                         <tr>
                             <td>
-                                 <a title="{% trans 'Specifications' %}"
-                                    href="{{attribution.learning_container_year_id | get_url_learning_unit_year }}"
-                                    target="_blank">
-                                        {{ attribution.acronym }}
-                                 </a>
+                                <a title="{% trans 'Specifications' %}"
+                                   href="{{ attribution.learning_container_year_id | get_url_learning_unit_year }}"
+                                   target="_blank">
+                                    {{ attribution.acronym }}
+                                </a>
                             </td>
                             <td>
                                 <a title="{% trans 'Specifications' %}"
-                                    href="{{attribution.learning_container_year_id | get_url_learning_unit_year }}"
-                                    target="_blank">
+                                   href="{{ attribution.learning_container_year_id | get_url_learning_unit_year }}"
+                                   target="_blank">
                                     {{ attribution.title }}
                                 </a>
                             </td>
-                            <td >{{ attribution.lecturing_vol }}</td>
-                            <td >{{ attribution.practical_exercises_vol }}</td>
+                            <td>{{ attribution.lecturing_vol }}</td>
+                            <td>{{ attribution.practical_exercises_vol }}</td>
                             <td style="border-left: 1px solid;">{{ attribution.LECTURING }}</td>
                             <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
                             <td>
-                            {% if attribution.teachers %}
-                                {% with teacher_number=forloop.counter0 %}
-                                    <a role="button" data-toggle="collapse" href=".collapse_teachers{{ teacher_number }}"
-                                       aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}" style="border:0;padding:0;"
-                                       onclick="changeOrientation(expandButton{{ teacher_number }})" title="{% trans 'Display teachers' %}">
-                                        <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand" aria-hidden="true"></span>
-                                    </a>
-                                {% endwith %}
-                            {% endif %}
+                                {% if attribution.teachers %}
+                                    {% with teacher_number=forloop.counter0 %}
+                                        <a role="button" data-toggle="collapse"
+                                           href=".collapse_teachers{{ teacher_number }}"
+                                           aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}"
+                                           style="border:0;padding:0;"
+                                           onclick="changeOrientation(expandButton{{ teacher_number }})"
+                                           title="{% trans 'Display teachers' %}">
+                                            <span id="expandButton{{ teacher_number }}"
+                                                  class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                                        </a>
+                                    {% endwith %}
+                                {% endif %}
                             </td>
                             <td>
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
@@ -149,7 +156,8 @@
                                             {% endif %}">
                                     <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
                                        href="{% url 'create_or_update_tutor_application' learning_container_year_id=attribution.learning_container_year_id %}"
-                                       {% if attribution.already_applied or attribution.team %} disabled {% endif %}>
+                                            {% if attribution.already_applied or attribution.team %}
+                                       disabled {% endif %}>
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                         {% trans 'New application' %}
                                     </a>
@@ -158,18 +166,19 @@
                         </tr>
 
                         {% with teacher_number=forloop.counter0 %}
-                            {% if attribution.teachers  %}
-                                <tr class="collapse collapse_teachers{{ teacher_number }}" style="background-color: white;">
-                                    <td colspan="11" >
+                            {% if attribution.teachers %}
+                                <tr class="collapse collapse_teachers{{ teacher_number }}"
+                                    style="background-color: white;">
+                                    <td colspan="11">
                                         {% include "teachers.html" %}
                                     </td>
                                 </tr>
                             {% endif %}
                         {% endwith %}
-                        {% endfor %}
+                    {% endfor %}
                     </tbody>
                 </table>
-            {% elif request.GET.learning_container_acronym and not attributions_vacant %}
+                {% elif request.GET.learning_container_acronym and not attributions_vacant %}
                 <div class="alert alert-info" role="alert">{% trans 'No vacant corresponding course' %}</div>
             {% endif %}
         </div>
