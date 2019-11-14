@@ -239,11 +239,11 @@ class ListBuildTest(TestCase):
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
-        filename = "Liste_Insc_Exam.xls"
+        filename = "Liste_Insc_Exam.xlsx"
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
-                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary')
         self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
         self.assertEqual(response.content.decode(), str(return_sample_xls()))
 
@@ -371,10 +371,10 @@ class AdminListBuildTest(TestCase):
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
-        filename = "Liste_Insc_Exam.xls"
+        filename = "Liste_Insc_Exam.xlsx"
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
-                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary')
         self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
         self.assertEqual(response.content.decode(), str(return_sample_xls()))
