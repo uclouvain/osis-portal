@@ -37,7 +37,7 @@ from attribution import models as mdl_attribution
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.views import layout
-from osis_common.document.xls_build import CONTENT_TYPE_XLS, XLS_EXTENSION
+from osis_common.document.xls_build import XLS_EXTENSION
 
 NO_DATA_VALUE = "-"
 LEARNING_UNIT_ACRONYM_ID = "learning_unit_acronym_"
@@ -148,7 +148,7 @@ def _fetch_with_basic_auth(server_top_url, document_url):
 
 def _make_xls_list(attestation_pdf):
     filename = "Liste_Insc_Exam.{}".format(XLS_EXTENSION)
-    response = HttpResponse(content_type=CONTENT_TYPE_XLS)
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     response.write(attestation_pdf)
     return response
