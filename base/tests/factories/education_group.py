@@ -36,6 +36,3 @@ class EducationGroupFactory(DjangoModelFactory):
         model = "base.EducationGroup"
 
     external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    start_year = factory.fuzzy.FuzzyInteger(2000, timezone.now().year)
-    end_year = factory.LazyAttribute(lambda obj: factory.fuzzy.FuzzyInteger(obj.start_year + 1,
-                                                                            obj.start_year + 9).fuzz())

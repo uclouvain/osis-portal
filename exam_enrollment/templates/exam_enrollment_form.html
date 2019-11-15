@@ -124,11 +124,20 @@
                                                    type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.score | default_if_none
-                                            :"-" }}{% else %}-{% endif %}</td>
-                                        <td>{% if exam_enrol.session_1 %}
-                                            {{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}
-                                            -{% endif %}</td>
+                                        <td>
+                                            {% if exam_enrol.session_1 %}
+                                                {{ exam_enrol.session_1.score | default_if_none:"-" }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if exam_enrol.session_1 %}
+                                                {{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}
+                                            {% else %}
+                                            -
+                                            {% endif %}
+                                        </td>
                                     {% endif %}
 
                                 {% else %}
