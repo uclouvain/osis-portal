@@ -23,16 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from compat import DjangoJSONEncoder
 from django.conf import settings
-
-from django.contrib.auth.views import login as django_login
 from django.contrib.auth import authenticate, logout
-import json
+from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.utils import translation
-from base.views import layout, api
+
 from base.models import person as person_mdl
+from base.views import layout, api
 from osis_common.models import application_notice
 
 
@@ -42,15 +40,15 @@ def return_error_response(request, template, status_code):
     return response
 
 
-def page_not_found(request):
+def page_not_found(request, *args, **kwargs):
     return return_error_response(request, 'page_not_found.html', 404)
 
 
-def access_denied(request):
+def access_denied(request, *args, **kwargs):
     return return_error_response(request, 'access_denied.html', 401)
 
 
-def server_error(request):
+def server_error(request, *args, **kwargs):
     return return_error_response(request, 'server_error.html', 500)
 
 
@@ -64,7 +62,6 @@ def common_context_processor(request):
                'debug': settings.DEBUG,
                'logout_button': settings.LOGOUT_BUTTON}
     _check_notice(request, context)
-    _set_managed_programs(request, context)
     return context
 
 
@@ -80,45 +77,12 @@ def _check_notice(request, context):
         context['notice'] = request.session['notice']
 
 
-def _set_managed_programs(request, context):
-    """
-    1. Preconditions : user is authenticated and user is not a student.
-    2. Check if the session key 'is_faculty_manager' is defined
-        2.1. If yes, Context 'is_faculty_manager' is updated with value of Session 'is_faculty_manager'
-        2.2. If not :
-            2.2.1: The managed programs are retrieved from osis with call to the api
-            2.2.2: If the managed programs exists :
-                2.2.2.1: Context 'is_faculty_manager' value is set to True
-                2.2.2.2: Session 'is_faculty_manager'  value is set to True
-                2.2.2.3: Session 'managed_programs' value is set with the results of the api call
-            2.2.3: If not:
-                2.2.3.1: Context 'is_faculty_manager' value is set to False
-                2.2.3.2: Session 'is_faculty_manager'  value is set to False
-                2.2.3.3: Session 'managed_programs' value is set to None
-    """
-    if request.user.is_authenticated and \
-            (request.user.is_superuser or not request.user.has_perm('base.is_student')):
-        if request.session.get('is_faculty_manager') is None:
-            if request.user.has_perm('base.is_faculty_administrator'):
-                context['is_faculty_manager'] = True
-                request.session['is_faculty_manager'] = True
-            else:
-                person = person_mdl.find_by_user(request.user)
-                if person:
-                    managed_programs_as_dict = api.get_managed_programs_as_dict(person.global_id)
-                    is_faculty_manager = False
-                    managed_programs = None
-                    if managed_programs_as_dict:
-                        is_faculty_manager = True
-                        managed_programs = json.dumps(managed_programs_as_dict, cls=DjangoJSONEncoder)
-                    context['is_faculty_manager'] = is_faculty_manager
-                else:
-                    is_faculty_manager = False
-                    managed_programs = None
-                request.session['is_faculty_manager'] = is_faculty_manager
-                request.session['managed_programs'] = managed_programs
-        else:
-            context['is_faculty_manager'] = request.session.get('is_faculty_manager')
+def get_managed_program_as_dict(user):
+    managed_programs_as_dict = None
+    person = person_mdl.find_by_user(user)
+    if person:
+        managed_programs_as_dict = api.get_managed_programs_as_dict(person.global_id)
+    return managed_programs_as_dict
 
 
 def login(request):
@@ -135,7 +99,7 @@ def login(request):
                 request.session[translation.LANGUAGE_SESSION_KEY] = user_language
     elif settings.OVERRIDED_LOGIN_URL:
         return redirect(settings.OVERRIDED_LOGIN_URL)
-    return django_login(request)
+    return LoginView.as_view()(request)
 
 
 def log_out(request):

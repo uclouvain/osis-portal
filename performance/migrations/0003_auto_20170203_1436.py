@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('performance', '0002_add_index_to_student_performence'),
     ]
@@ -20,7 +19,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='studentperformance',
             name='offer_registration_state',
-            field=models.CharField(choices=[('INSCRIT', 'INSCRIT'), ('CYCLE', 'CYCLE'), ('CONDITION', 'CONDITION'), ('CESSATION', 'CESSATION')], max_length=50, null=True),
+            field=models.CharField(choices=[('INSCRIT', 'INSCRIT'), ('CYCLE', 'CYCLE'), ('CONDITION', 'CONDITION'),
+                                            ('CESSATION', 'CESSATION')], max_length=50, null=True),
         ),
         migrations.AlterField(
             model_name='studentperformance',

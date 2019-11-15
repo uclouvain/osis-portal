@@ -4,27 +4,27 @@
 {% load slash_to__ %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block breadcrumb %}
@@ -44,7 +44,8 @@
                     {% if error_message %}
                         <span id="status_message">{% trans error_message %}</span>
                     {% else %}
-                        <span id="status_message"><i class="fa fa-spinner fa-spin fa-fw"></i>{% trans 'exam_enrollment_form_loading' %}</span>
+                        <span id="status_message"><em
+                                class="fa fa-spinner fa-spin fa-fw"></em>{% trans 'exam_enrollment_form_loading' %}</span>
                     {% endif %}
                 </div>
             {% else %}
@@ -53,7 +54,7 @@
                     <div class="col-md-3">
                         <label>{% trans 'Last name' %}, {% trans 'First name' %}</label>
                         <br>
-                        {{ student.person.last_name}}, {{ student.person.first_name }}
+                        {{ student.person.last_name }}, {{ student.person.first_name }}
                     </div>
                     <div class="col-md-3">
                         <label>{% trans 'Academic year' %}</label>
@@ -72,7 +73,8 @@
                 <div class="alert alert-info" style="display:inline-block;">
                     <table>
                         <tr>
-                            <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%" aria-hidden="true"></i></td>
+                            <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%"
+                                                               aria-hidden="true"></i></td>
                             <td>{% trans 'info_exam_enrollment_by_default' as info_exam_enrollment_by_default %}
                                 {{ info_exam_enrollment_by_default | safe }}
                             </td>
@@ -90,9 +92,15 @@
                             <th>{% trans 'title' %}</th>
                             <th>{% trans 'ects' %}</th>
                             <th>{% trans 'inscr' %}</th>
-                            <th {% if current_number_session >= 1 %} colspan="2" {% endif %}  class="text-nowrap">{% trans 'jan' %} *</th>
-                            <th {% if current_number_session >= 2 %} colspan="2" {% endif %}  class="text-nowrap">{% trans 'june' %} *</th>
-                            <th {% if current_number_session >= 3 %} colspan="2" {% endif %} class="text-nowrap">{% trans 'sept' %} *</th>
+                            <th {% if current_number_session >= 1 %} colspan="2" {% endif %}
+                                                                     class="text-nowrap">{% trans 'jan' %} *
+                            </th>
+                            <th {% if current_number_session >= 2 %} colspan="2" {% endif %}
+                                                                     class="text-nowrap">{% trans 'june' %} *
+                            </th>
+                            <th {% if current_number_session >= 3 %} colspan="2" {% endif %}
+                                                                     class="text-nowrap">{% trans 'sept' %} *
+                            </th>
                             <th>{% trans 'Credited' %}</th>
                         </tr>
                         {% for exam_enrol in exam_enrollments %}
@@ -105,23 +113,39 @@
                                 </td>
                                 <td>{{ exam_enrol.learning_unit_year.title | default_if_none:"" }}</td>
                                 <td class="text-center">{{ exam_enrol.credits | default_if_none:"-" }}</td>
-                                <td class="text-center">{{ exam_enrol.learning_unit_year.enrollment_state | default_if_none:"-" }}</td>
+                                <td class="text-center">
+                                    {{ exam_enrol.learning_unit_year.enrollment_state | default_if_none:"-" }}</td>
                                 {% if current_number_session == 1 %}
                                     {% if exam_enrol.can_enrol_to_exam %}
                                         <td class="text-center" colspan="2">
-                                                <input id="chckbox_exam_enrol_sess1_{{ exam_enrol.learning_unit_year.acronym }}"
-                                                        {% if exam_enrol.enrolled_by_default %} checked {% endif %}
-                                                       name="chckbox_exam_enrol_sess1_{{ exam_enrol.learning_unit_year.acronym }}"
-                                                       type="checkbox">
+                                            <input id="chckbox_exam_enrol_sess1_{{ exam_enrol.learning_unit_year.acronym }}"
+                                                    {% if exam_enrol.enrolled_by_default %} checked {% endif %}
+                                                   name="chckbox_exam_enrol_sess1_{{ exam_enrol.learning_unit_year.acronym }}"
+                                                   type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
-                                        <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                        <td>
+                                            {% if exam_enrol.session_1 %}
+                                                {{ exam_enrol.session_1.score | default_if_none:"-" }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if exam_enrol.session_1 %}
+                                                {{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}
+                                            {% else %}
+                                            -
+                                            {% endif %}
+                                        </td>
                                     {% endif %}
 
                                 {% else %}
-                                    <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
-                                    <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                    <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.score | default_if_none:"-"
+                                        }}{% else %}-{% endif %}</td>
+                                    <td>{% if exam_enrol.session_1 %}
+                                        {{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}
+                                        -{% endif %}</td>
                                 {% endif %}
                                 {% if current_number_session == 2 %}
                                     {% if exam_enrol.can_enrol_to_exam %}
@@ -132,12 +156,18 @@
                                                    type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
-                                        <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.score | default_if_none
+                                            :"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_2 %}
+                                            {{ exam_enrol.session_2.enrollment_state | default_if_none:"-" }}{% else %}
+                                            -{% endif %}</td>
                                     {% endif %}
                                 {% elif current_number_session > 2 %}
-                                    <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
-                                    <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}{% else %}-{% endif %}</td>
+                                    <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.score | default_if_none:"-"
+                                        }}{% else %}-{% endif %}</td>
+                                    <td>{% if exam_enrol.session_2 %}
+                                        {{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}{% else %}
+                                        -{% endif %}</td>
                                 {% else %}
                                     <td>&nbsp;</td>
                                 {% endif %}
@@ -150,8 +180,11 @@
                                                    type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{% if exam_enrol.session_3 %}{{ exam_enrol.session_3.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
-                                        <td>{% if exam_enrol.session_3 %}{{ exam_enrol.session_3.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_3 %}{{ exam_enrol.session_3.score | default_if_none
+                                            :"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_3 %}
+                                            {{ exam_enrol.session_3.enrollment_state | default_if_none:"-" }}{% else %}
+                                            -{% endif %}</td>
                                     {% endif %}
 
                                 {% else %}
@@ -165,15 +198,19 @@
                     <div class="alert alert-info" style="display:inline-block;">
                         <table>
                             <tr>
-                                <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%" aria-hidden="true"></i></td>
-                                <td>{% trans 'message_exam_enrolment_state' %} <a href="{% url 'performance_student_by_acronym_and_year' program.acronym|replace_slash_to__ academic_year.year%}"><i>{% trans 'message_exam_enrolment_state_link_label' %}</i></a>.</td>
+                                <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%"
+                                                                   aria-hidden="true"></i></td>
+                                <td>{% trans 'message_exam_enrolment_state' %} <a
+                                        href="{% url 'performance_student_by_acronym_and_year' program.acronym|replace_slash_to__ academic_year.year %}"><em>{% trans 'message_exam_enrolment_state_link_label' %}</em></a>.
+                                </td>
                             </tr>
                         </table>
                     </div>
 
                     <div class="text-center">
                         <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit">
-                            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
+                            <span class="glyphicon glyphicon-floppy-save"
+                                  aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
                     </div>
                 </form>
 
@@ -181,9 +218,9 @@
 
                 <!-- Legend explaining letters signification -->
 
-                <div class="panel panel-default" >
+                <div class="panel panel-default">
                     <div class="panel-body" id="body_legend_explanation">
-                        <b>{% trans 'legend'%}</b>
+                        <strong>{% trans 'legend' %}</strong>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-6">{% trans 'legend_exam_enrol_p' %}</div>
@@ -236,34 +273,34 @@
         function set_class(element, class_attributes) {
             element.className = class_attributes;
         }
+
         function show_message_in_container(container, message) {
             container.innerHTML = message;
         }
 
-        window.onload = function() {
+        window.onload = function () {
             check_result();
         };
 
-        function check_result(){
+        function check_result() {
             $.ajax({
                 method: 'GET',
                 url: "{% url 'check_exam_enrollment_form' program.id %}",
                 success: function () {
                     var check_data = '{{exam_enrollments}}';
-                    if(!check_data){
+                    if (!check_data) {
                         location.reload();
                     }
                 },
                 error: function () {
                     counter++;
                     if (counter < max_loops) {
-                        setTimeout(function() {
+                        setTimeout(function () {
                             set_class(message_box, "alert alert-info");
                             show(message_box, 'block');
                             check_result();
                         }, delay);
-                    }
-                    else {
+                    } else {
                         show_message_in_container(status_message, "{% trans 'form_unavailable' %}");
                         set_class(message_box, "alert alert-warning");
                         show(message_box, 'block');

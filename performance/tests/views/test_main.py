@@ -25,12 +25,11 @@
 ##############################################################################
 import json
 
-from compat import DjangoJSONEncoder
-
 from django.contrib.auth.models import Group, Permission
-from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from mock import patch
 
 import base.tests.models.test_offer_year
 import base.tests.models.test_student
@@ -57,11 +56,13 @@ class TestMain(TestCase):
 
     def test_convert_student_performance_to_dic(self):
         student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
-        expected = {"academic_year": '2016 - 2017',
-                    "acronym": "SINF2MS/G",
-                    "title": " Master [120] en sciences informatiques, à finalité spécialisée ",
-                    "pk": self.student_performance.pk,
-                    "offer_registration_state": offer_registration_state.REGISTERED}
+        expected = {
+            "academic_year": '2016 - 2017',
+            "acronym": "SINF2MS/G",
+            "title": " Master [120] en sciences informatiques, à finalité spécialisée ",
+            "pk": self.student_performance.pk,
+            "offer_registration_state": offer_registration_state.REGISTERED
+        }
         self.assertDictEqual(student_performance_dic, expected)
 
     def test_convert_student_performance_misformated_to_dict(self):
@@ -143,11 +144,13 @@ class ViewPerformanceHomeTest(TestCase):
 
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'],
-                         [{'academic_year': '2017 - 2018',
-                           'acronym': a_student_performance.acronym,
-                           'offer_registration_state': 'CESSATION',
-                           'pk': a_student_performance.pk,
-                           'title': ' Master [120] en sciences informatiques, à finalité spécialisée '}]
+                         [{
+                              'academic_year': '2017 - 2018',
+                              'acronym': a_student_performance.acronym,
+                              'offer_registration_state': 'CESSATION',
+                              'pk': a_student_performance.pk,
+                              'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
+                          }]
                          )
         self.assertEqual(response.context['registration_states_to_show'],
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)
@@ -248,7 +251,9 @@ class SelectStudentTest(TestCase):
     def setUp(self):
         self.person = PersonFactory()
         self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
-        Group.objects.create(name="students")
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
         self.student = StudentFactory()
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
         self.url = reverse('performance_administration')
@@ -260,6 +265,10 @@ class SelectStudentTest(TestCase):
         self.assertRedirects(response, "/login/?next={}".format(self.url))
 
     def test_user_has_not_permission(self):
+        patcher = patch('base.views.api.get_managed_programs_as_dict')
+        mock_api_call = patcher.start()
+        mock_api_call.return_value = {}
+        self.client.logout()
         a_person = PersonFactory()
         self.client.force_login(a_person.user)
 
@@ -267,6 +276,7 @@ class SelectStudentTest(TestCase):
 
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
+        patcher.stop()
 
     def test_get_request(self):
         response = self.client.get(self.url)
@@ -291,12 +301,31 @@ class SelectStudentTest(TestCase):
         expected_url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
         self.assertRedirects(response, expected_url)
 
+    def test_user_is_a_student(self):
+        self.client.logout()
+        self.client.force_login(self.student.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_user_is_pgm_manager(self):
+        self.client.logout()
+        a_person = PersonFactory()
+        self.client.force_login(a_person.user)
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_administration.html')
+
 
 class VisualizeStudentPrograms(TestCase):
     def setUp(self):
         self.person = PersonFactory()
         self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
-        Group.objects.create(name="students")
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
         self.student = StudentFactory()
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
                                                              academic_year=2017)
@@ -310,6 +339,10 @@ class VisualizeStudentPrograms(TestCase):
         self.assertRedirects(response, "/login/?next={}".format(self.url))
 
     def test_user_has_not_permission(self):
+        self.client.logout()
+        patcher = patch('base.views.api.get_managed_programs_as_dict')
+        mock_api_call = patcher.start()
+        mock_api_call.return_value = {}
         a_person = PersonFactory()
         self.client.force_login(a_person.user)
 
@@ -317,6 +350,7 @@ class VisualizeStudentPrograms(TestCase):
 
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
+        patcher.stop()
 
     def test_with_no_corresponding_student(self):
         self.student.delete()
@@ -352,14 +386,48 @@ class VisualizeStudentPrograms(TestCase):
 
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'],
-                         [{'academic_year': '2017 - 2018',
-                           'acronym': self.student_performance.acronym,
-                           'offer_registration_state': 'CESSATION',
-                           'pk': self.student_performance.pk,
-                           'title': ' Master [120] en sciences informatiques, à finalité spécialisée '}]
+                         [{
+                              'academic_year': '2017 - 2018',
+                              'acronym': self.student_performance.acronym,
+                              'offer_registration_state': 'CESSATION',
+                              'pk': self.student_performance.pk,
+                              'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
+                          }]
                          )
         self.assertEqual(response.context['registration_states_to_show'],
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)
+
+    def test_pgm_manager_ok(self):
+        self.client.logout()
+        pgm_manager = PersonFactory()
+        StudentPerformanceFactory(acronym='PHYS1BA',
+                                  registration_id=self.student.registration_id,
+                                  academic_year=2017)
+        self.client.force_login(pgm_manager.user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, OK)
+        self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
+
+    def test_pgm_manager_wrong_program(self):
+        self.client.logout()
+        pgm_manager = PersonFactory()
+        new_student = StudentFactory()
+        StudentPerformanceFactory(acronym='DROI1BA',
+                                  registration_id=new_student.registration_id,
+                                  academic_year=2017)
+        self.url = reverse('performance_student_programs_admin', args=[new_student.registration_id])
+        self.client.force_login(pgm_manager.user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
+
+    def test_user_is_a_student(self):
+        self.client.logout()
+        self.client.force_login(self.student.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
 
 
 class VisualizeStudentResult(TestCase):
@@ -367,6 +435,9 @@ class VisualizeStudentResult(TestCase):
     def setUp(self):
         self.person = PersonFactory()
         self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+        students_group = Group.objects.create(name="students")
+        permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(permission)
         self.student_performance = StudentPerformanceFactory(acronym='CHIM1BA')
         self.url = reverse('performance_student_result_admin', args=[self.student_performance.pk])
 
@@ -388,13 +459,10 @@ class VisualizeStudentResult(TestCase):
 
     def test_user_is_manager_wrong_program(self):
         a_person = PersonFactory()
+        a_student_performance = StudentPerformanceFactory(academic_year=2017, acronym='DROI1BA')
+        url = reverse('performance_student_result_admin', args=[a_student_performance.pk])
         self.client.force_login(a_person.user)
-        session = self.client.session
-        session['is_faculty_manager'] = True
-        session['managed_programs'] = json.dumps({'2017': ['PHYS1BA', 'BIOL1BA'], '2018': ['PHYS1BA', 'BIOL1BA']},
-                                                 cls=DjangoJSONEncoder)
-        session.save()
-        response = self.client.get(self.url)
+        response = self.client.get(url)
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
 
@@ -403,11 +471,6 @@ class VisualizeStudentResult(TestCase):
         a_student_performance = StudentPerformanceFactory(academic_year=2017, acronym='PHYS1BA')
         url = reverse('performance_student_result_admin', args=[a_student_performance.pk])
         self.client.force_login(a_person.user)
-        session = self.client.session
-        session['is_faculty_manager'] = True
-        session['managed_programs'] = json.dumps({'2017': ['PHYS1BA', 'BIOL1BA'], '2018': ['PHYS1BA', 'BIOL1BA']},
-                                                 cls=DjangoJSONEncoder)
-        session.save()
         response = self.client.get(url)
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'admin/performance_result_admin.html')
@@ -425,6 +488,15 @@ class VisualizeStudentResult(TestCase):
         self.assertEqual(response.context['update_date'], None)
         self.assertEqual(response.context['fetch_timed_out'], None)
         self.assertEqual(response.context['not_authorized_message'], None)
+
+    def test_user_is_a_student(self):
+        self.client.logout()
+        a_student = StudentFactory()
+        self.client.force_login(a_student.person.user)
+        response = self.client.get(self.url, follow=True)
+
+        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_when_found_student_performance(self):
         self.client.force_login(self.person.user)

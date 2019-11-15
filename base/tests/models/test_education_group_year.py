@@ -33,7 +33,6 @@ from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 
 
-
 class TestEducationGroupYear(TestCase):
     def setUp(self):
         self.education_group = EducationGroupFactory()

@@ -27,8 +27,8 @@ import datetime
 
 import mock
 from django.contrib.auth.models import Group, Permission
-from django.core.urlresolvers import reverse
 from django.test import TestCase, override_settings
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from attribution.tests.factories.attribution import AttributionFactory
@@ -41,10 +41,6 @@ from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
-from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from attribution.tests.factories.attribution import AttributionFactory
-
 
 ACCESS_DENIED = 401
 METHOD_NOT_ALLOWED = 405
@@ -94,8 +90,6 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [])
 
     def test_with_attributions(self):
-        today = datetime.datetime.today()
-
         an_academic_year = create_current_academic_year()
 
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
@@ -178,8 +172,10 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [])
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
-    @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
-                                           'ATTRIBUTION_PATH': '/path'})
+    @override_settings(ATTRIBUTION_CONFIG={
+        'SERVER_TO_FETCH_URL': '/server',
+        'ATTRIBUTION_PATH': '/path'
+    })
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self, mock_fetch):
         today = datetime.datetime.today()
@@ -224,8 +220,10 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [])
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
-    @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
-                                           'ATTRIBUTION_PATH': '/path'})
+    @override_settings(ATTRIBUTION_CONFIG={
+        'SERVER_TO_FETCH_URL': '/server',
+        'ATTRIBUTION_PATH': '/path'
+    })
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self, mock_fetch):
         today = datetime.datetime.today()
@@ -241,7 +239,7 @@ class ListBuildTest(TestCase):
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
-        filename = "Liste_Insc_Exam.xls"
+        filename = "Liste_Insc_Exam.xlsx"
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
@@ -282,8 +280,8 @@ class AdminStudentsListTest(TestCase):
 
     def test_with_attributions(self):
         today = datetime.datetime.today()
-        an_academic_year = AcademicYearFactory(year=today.year, start_date=today-datetime.timedelta(days=5),
-                                               end_date=today+datetime.timedelta(days=5))
+        an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
+                                               end_date=today + datetime.timedelta(days=5))
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
         AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
 
@@ -323,7 +321,7 @@ class AdminListBuildTest(TestCase):
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
     def test_with_empty_post(self):
-        response = self.client.post(self.url,)
+        response = self.client.post(self.url, )
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'admin/students_exam_list.html')
@@ -332,8 +330,10 @@ class AdminListBuildTest(TestCase):
         self.assertEqual(response.context['learning_units'], [])
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
-    @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
-                                           'ATTRIBUTION_PATH': '/path'})
+    @override_settings(ATTRIBUTION_CONFIG={
+        'SERVER_TO_FETCH_URL': '/server',
+        'ATTRIBUTION_PATH': '/path'
+    })
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self, mock_fetch):
         today = datetime.datetime.today()
@@ -355,8 +355,10 @@ class AdminListBuildTest(TestCase):
         self.assertEqual(response.context['learning_units'], [a_learning_unit_year])
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
-    @override_settings(ATTRIBUTION_CONFIG={'SERVER_TO_FETCH_URL': '/server',
-                                           'ATTRIBUTION_PATH': '/path'})
+    @override_settings(ATTRIBUTION_CONFIG={
+        'SERVER_TO_FETCH_URL': '/server',
+        'ATTRIBUTION_PATH': '/path'
+    })
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self, mock_fetch):
         today = datetime.datetime.today()
@@ -369,7 +371,7 @@ class AdminListBuildTest(TestCase):
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
-        filename = "Liste_Insc_Exam.xls"
+        filename = "Liste_Insc_Exam.xlsx"
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],

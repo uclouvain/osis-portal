@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.db import models
+
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
@@ -37,7 +38,7 @@ class CampusAdmin(SerializableModelAdmin):
 class Campus(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
-    organization = models.ForeignKey('Organization')
+    organization = models.ForeignKey('Organization', on_delete=models.PROTECT)
     code = models.CharField(max_length=1, blank=True, null=True)
     is_administration = models.BooleanField(default=False)
 

@@ -3,46 +3,49 @@
 {% load i18n %}
 
 {% comment "License" %}
-* OSIS stands for Open Student Information System. It's an application
-* designed to manage the core business of higher education institutions,
-* such as universities, faculties, institutes and professional schools.
-* The core business involves the administration of students, teachers,
-* courses, programs and so on.
-*
-* Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
-*
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* A copy of this license - GNU General Public License - is available
-* at the root of the source code of this program.  If not,
-* see http://www.gnu.org/licenses/.
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
 {% block breadcrumb_area %}
-<ol class="breadcrumb">
-    <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
-                                                                      aria-hidden="true"></span></a></li>
-    {% block breadcrumb %}
-        <li>{% trans 'My applications' %}</li>
-    {% endblock %}
-    <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
-       target="help" id="lnk_user_manual_section"><span
-            class="glyphicon glyphicon-question-sign pull-right"
-            style="font-size: 14pt; color: green"
-            aria-hidden="true"></span></a>
-</ol>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
+                                                                          aria-hidden="true"></span></a></li>
+        {% block breadcrumb %}
+            <li>{% trans 'My applications' %}</li>
+        {% endblock %}
+        <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
+           target="help" id="lnk_user_manual_section"><span
+                class="glyphicon glyphicon-question-sign pull-right"
+                style="font-size: 14pt; color: green"
+                aria-hidden="true"></span></a>
+    </ol>
 {% endblock %}
 
 {% block content %}
-    <small style="color:black;font-family:Verdana;" class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans 'Application period from'%} {{ application_academic_calendar.start_date | default_if_none:''|date:"d/m/Y"}} {% trans 'to' %} {{ application_academic_calendar.end_date | default_if_none:''|date:"d/m/Y" }}</small>
+    <small style="color:black;font-family:Verdana;"
+           class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans 'Application period from' %}
+        {{ application_academic_calendar.start_date | default_if_none:''|date:"d/m/Y"}} {% trans 'to' %}
+        {{ application_academic_calendar.end_date | default_if_none:''|date:"d/m/Y" }}</small>
     <h1>{% trans 'My applications' %}</h1>
     <h2>{{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }} - {{ a_tutor.person.global_id }}</h2>
 
@@ -52,7 +55,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-11">
-                    {% trans 'My applications'%} {{ application_year }}
+                    {% trans 'My applications' %} {{ application_year }}
                 </div>
                 <div class="col-md-1">
                     {% if applications %}
@@ -62,8 +65,9 @@
                             {% csrf_token %}
                             <button class="btn btn-primary pull-right"
                                     id="btn_applications_email_confirmation"
-                                    type="submit" title="{%trans 'To receive a confirmation email with the applications'%}">
-                                <span class="glyphicon glyphicon-envelope" ></span>
+                                    type="submit"
+                                    title="{% trans 'To receive a confirmation email with the applications' %}">
+                                <span class="glyphicon glyphicon-envelope"></span>
                             </button>
                         </form>
                     {% endif %}
@@ -73,31 +77,32 @@
         <div class="panel-body">
             <div class="clearfix">
                 <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
-                   href="{% url 'vacant_attributions_search'%}">
+                   href="{% url 'vacant_attributions_search' %}">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     {% trans 'New application' %}
                 </a>
             </div>
             <br>
-        {% if applications %}
-            {% include "applications_list.html" with applications=applications %}
-        {% else %}
-            <div class="alert alert-info" style="margin-top:10px;">{%  trans 'No application' %}</div>
-        {% endif %}
+            {% if applications %}
+                {% include "applications_list.html" with applications=applications %}
+            {% else %}
+                <div class="alert alert-info" style="margin-top:10px;">{% trans 'No application' %}</div>
+            {% endif %}
         </div>
     </div>
     {% if attributions_about_to_expire %}
-    <div class="panel panel-default" id="pnl_charges_about_to_expire">
-        <div class="panel-heading">{% trans 'My charges now vacant'%} ({% trans 'without application' %}) {{ current_academic_year }}</div>
-        <div class="panel-body">
-            {% include "attribution_renewal_list.html" with attributions=attributions_about_to_expire %}
-            <br>
+        <div class="panel panel-default" id="pnl_charges_about_to_expire">
+            <div class="panel-heading">{% trans 'My charges now vacant' %}
+                ({% trans 'without application' %}) {{ current_academic_year }}</div>
+            <div class="panel-body">
+                {% include "attribution_renewal_list.html" with attributions=attributions_about_to_expire %}
+                <br>
+            </div>
         </div>
-    </div>
     {% endif %}
 
     <div class="panel panel-default" id="pnl_charges">
-        <div class="panel-heading">{% trans 'My charges'%} {{ application_year }}</div>
+        <div class="panel-heading">{% trans 'My charges' %} {{ application_year }}</div>
         <div class="panel-body">
             {% if attributions %}
                 {% include "attribution_list.html" with attributions=attributions %}

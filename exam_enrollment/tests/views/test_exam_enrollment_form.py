@@ -26,14 +26,15 @@
 import json
 import random
 import warnings
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.test import TestCase, Client, override_settings
+from django.test import TestCase, Client
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
@@ -77,18 +78,23 @@ class ExamEnrollmentFormTest(TestCase):
         self.student = test_student.create_student_with_registration_person("12345678", self.person)
         self.student2 = test_student.create_student_with_registration_person("12457896", self.person2)
         offer_year_id = 1234
-        self.off_year = test_offer_year.create_offer_year_from_kwargs(**{'id': offer_year_id,
-                                                                         'acronym': 'SINF1BA',
-                                                                         'title': 'Bechelor in informatica',
-                                                                         'academic_year': self.academic_year})
+        self.off_year = test_offer_year.create_offer_year_from_kwargs(**{
+            'id': offer_year_id,
+            'acronym': 'SINF1BA',
+            'title': 'Bechelor in informatica',
+            'academic_year': self.academic_year
+        })
         self.url = "/exam_enrollment/{}/form/".format(offer_year_id)
-        self.correct_exam_enrol_form = load_json_file("exam_enrollment/tests/resources/exam_enrollment_form_example.json")
+        self.correct_exam_enrol_form = load_json_file(
+            "exam_enrollment/tests/resources/exam_enrollment_form_example.json")
         self.current_academic_year = test_academic_year.create_academic_year_current()
         self.off_enrol = OfferEnrollmentFactory(student=self.student,
                                                 offer_year=OfferYearFactory(academic_year=self.current_academic_year))
-        learn_unit_year = test_learning_unit_year.create_learning_unit_year({'acronym': 'LDROI1234',
-                                                                             'specific_title': 'Bachelor in law',
-                                                                             'academic_year': self.academic_year})
+        learn_unit_year = test_learning_unit_year.create_learning_unit_year({
+                                                                                'acronym': 'LDROI1234',
+                                                                                'specific_title': 'Bachelor in law',
+                                                                                'academic_year': self.academic_year
+                                                                            })
         self.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(self.off_enrol,
                                                                                               learn_unit_year)
 
@@ -198,6 +204,67 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertRedirects(response, reverse('dashboard_home'))
 
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_outside_period(self,
+                                                      mock_get_exam_enrollment_request,
+                                                      mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": "outside_exam_enrollment_period",'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertEqual(
+            error_message,
+            _("You are outside the exams enrollment period")
+        )
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_no_learning_unit_enrollment_found(
+            self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": "no_learning_unit_enrollment_found",'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertEqual(
+            error_message,
+            _("no_learning_unit_enrollment_found").format(self.off_year.acronym)
+        )
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_no_error(
+            self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": null,'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertIsNone(error_message)
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     @patch('exam_enrollment.views.exam_enrollment._get_student_programs')
     @patch('exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form')
     @patch('base.models.academic_year.current_academic_year')
@@ -247,9 +314,11 @@ class ExamEnrollmentFormTest(TestCase):
             self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
 
     def assert_correct_data_structure(self, result):
-        exam_enrollment_expected = {"acronym": "LPHYS1234",
-                                    "is_enrolled": True,
-                                    "etat_to_inscr": "I"}
+        exam_enrollment_expected = {
+            "acronym": "LPHYS1234",
+            "is_enrolled": True,
+            "etat_to_inscr": "I"
+        }
         expected_result = {
             "registration_id": self.student.registration_id,
             "offer_year_acronym": self.off_year.acronym,
@@ -266,12 +335,16 @@ class ExamEnrollmentFormTest(TestCase):
             self.assertIn(exam_enrol, exam_enrollments)
 
     def assert_none_etat_to_inscr_not_in_submitted_form(self, exam_enrollments):
-        exam_enrollments_unexpected = [{"acronym": "LBIO4567",
-                                        "is_enrolled": False,
-                                        "etat_to_inscr": None},
-                                       {"acronym": "LDROI1111",
-                                        "is_enrolled": False,
-                                        "etat_to_inscr": None}]
+        exam_enrollments_unexpected = [{
+                                           "acronym": "LBIO4567",
+                                           "is_enrolled": False,
+                                           "etat_to_inscr": None
+                                       },
+                                       {
+                                           "acronym": "LDROI1111",
+                                           "is_enrolled": False,
+                                           "etat_to_inscr": None
+                                       }]
         for index in range(0, len(exam_enrollments_unexpected)):
             self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
 

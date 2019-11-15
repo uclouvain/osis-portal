@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
 from django.contrib import admin
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
@@ -39,7 +38,7 @@ class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
 
 
 class ExamEnrollmentRequest(models.Model):
-    student = models.ForeignKey('base.Student')
+    student = models.ForeignKey('base.Student', on_delete=models.CASCADE)
     offer_year_acronym = models.CharField(max_length=15)
     document = JSONField()
     fetch_date = models.DateTimeField(auto_now=True)

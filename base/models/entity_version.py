@@ -25,15 +25,15 @@
 ##############################################################################
 import collections
 
-from django.db import models, connection
-from django.db.models import Q
+from django.db import connection
 from django.db import models
+from django.db.models import Q
+from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
+
+from base.models.entity import Entity
 from base.models.enums import entity_type
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
-from django.utils.translation import ugettext_lazy as _
-from django.utils.timezone import now
-from base.models.entity import Entity
-
 
 SQL_RECURSIVE_QUERY = """\
 WITH RECURSIVE under_entity AS (
@@ -119,7 +119,7 @@ class EntityVersionQuerySet(models.QuerySet):
 
 class EntityVersion(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
-    entity = models.ForeignKey('Entity')
+    entity = models.ForeignKey('Entity', on_delete=models.PROTECT)
     acronym = models.CharField(db_index=True, max_length=20, null=True, blank=True)
     entity_type = models.CharField(
         choices=entity_type.ENTITY_TYPES,
@@ -128,7 +128,7 @@ class EntityVersion(SerializableModel):
         blank=True,
         verbose_name=_("Type")
     )
-    parent = models.ForeignKey('Entity', related_name='parent_of', blank=True, null=True)
+    parent = models.ForeignKey('Entity', related_name='parent_of', blank=True, null=True, on_delete=models.PROTECT)
     start_date = models.DateField(db_index=True)
     end_date = models.DateField(db_index=True, blank=True, null=True)
 

@@ -23,20 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
 import datetime
+import json
+
+from django.contrib.auth.models import Group, Permission
+from django.test import TestCase
+from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from mock import patch
 
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import Group, Permission
-from django.core.urlresolvers import reverse
-from django.test import TestCase, Client
-
+from attestation.views import main as v_main
+from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
-from base.forms.base_forms import RegistrationIdForm
-from attestation.views import main as v_main
-
 
 OK = 200
 BAD_REQUEST = 400
@@ -387,4 +386,3 @@ class TestRegistrationIdMessage(TestCase):
     def test_generate_message_without_registration_id(self):
         given_json_message = v_main._make_registration_json_message(None)
         self.assertIsNone(given_json_message)
-

@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.db import models
+
 from attribution.models.enums import function
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
@@ -31,8 +32,10 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 class AttributionAdmin(SerializableModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
     list_filter = ('function', 'summary_responsible',)
-    fieldsets = ((None, {'fields': ('learning_unit_year', 'tutor', 'function', 'start_year', 'end_year',
-                                    'summary_responsible')}),)
+    fieldsets = ((None, {
+        'fields': ('learning_unit_year', 'tutor', 'function', 'start_year', 'end_year',
+                   'summary_responsible')
+    }),)
     raw_id_fields = ('learning_unit_year', 'tutor')
     search_fields = ['tutor__person__first_name', 'tutor__person__last_name', 'learning_unit_year__acronym']
 
@@ -40,8 +43,9 @@ class AttributionAdmin(SerializableModelAdmin):
 class Attribution(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     function = models.CharField(max_length=35, blank=True, null=True, choices=function.FUNCTIONS, db_index=True)
-    learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None)
-    tutor = models.ForeignKey('base.Tutor')
+    learning_unit_year = models.ForeignKey('base.LearningUnitYear', blank=True, null=True, default=None,
+                                           on_delete=models.PROTECT)
+    tutor = models.ForeignKey('base.Tutor', on_delete=models.CASCADE)
     start_year = models.IntegerField(blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)
     summary_responsible = models.BooleanField(default=False)
@@ -91,12 +95,15 @@ def find_by_tutor_year(tutor=None, an_academic_year=None):
 
 def find_by_tutor_year_order_by_acronym_function(tutor=None, an_academic_year=None):
     results = find_by_tutor_year(tutor, an_academic_year)
-    return results.order_by('learning_unit_year__acronym', 'function')
+    return results.order_by('learning_unit_year__acronym', 'function').select_related(
+        'learning_unit_year__academic_year',
+        'learning_unit_year__learning_container_year'
+    )
 
 
 def find_distinct_years(a_tutor):
-    return Attribution.objects.filter(tutor=a_tutor, learning_unit_year__learning_container_year__in_charge=True)\
-        .order_by('-learning_unit_year__academic_year__year')\
+    return Attribution.objects.filter(tutor=a_tutor, learning_unit_year__learning_container_year__in_charge=True) \
+        .order_by('-learning_unit_year__academic_year__year') \
         .values_list('learning_unit_year__academic_year__year', flat=True).distinct()
 
 

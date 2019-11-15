@@ -24,11 +24,13 @@
 #
 ##############################################################################
 import logging
+
 from django.conf import settings
-from django.db import models
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+
 from base.models import person as model_person
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
@@ -59,7 +61,7 @@ class StudentAdmin(SerializableModelAdmin):
 
 class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
-    person = models.ForeignKey('Person')
+    person = models.ForeignKey('Person', on_delete=models.PROTECT)
 
 
     def email(self):

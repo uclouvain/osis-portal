@@ -23,9 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
 import string
+
+import factory.fuzzy
+
 from base.tests.factories.person import PersonFactory
 
 

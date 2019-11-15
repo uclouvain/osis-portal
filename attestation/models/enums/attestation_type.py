@@ -23,13 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.utils.translation import ugettext_lazy as _
 
-REGISTRATION_AND_BILL = 'AVIS'
-STUDENT_AND_TRANSPORT_CARD = 'DE'
-REGULAR_REGISTRATION = 'ABC'
-ECHEANCE = 'ECHEANCE'
+# Enum bidon qui sert à générer les traductions des types d'attestations envoyés par EPC
 
-ATTESTATION_TYPES = ((REGISTRATION_AND_BILL, REGISTRATION_AND_BILL),
-                     (STUDENT_AND_TRANSPORT_CARD, STUDENT_AND_TRANSPORT_CARD),
-                     (REGULAR_REGISTRATION, REGULAR_REGISTRATION),
-                     (ECHEANCE, ECHEANCE))
+REGISTRATION_AND_BILL = _('AVIS')
+STUDENT_AND_TRANSPORT_CARD = _('DE')
+REGULAR_REGISTRATION = _('ABC')
+ECHEANCE = _('ECHEANCE')

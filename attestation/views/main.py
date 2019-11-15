@@ -26,19 +26,18 @@
 import json
 import logging
 
-from django.contrib import messages
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.translation import ugettext_lazy as _
 
+from attestation.queues import student_attestation_status, student_attestation
 from base.forms.base_forms import RegistrationIdForm
 from base.models import student as student_mdl, person as person_mdl
-from attestation.queues import student_attestation_status, student_attestation
 from base.views import layout
 from dashboard.views import main as dash_main_view
-
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -137,7 +136,7 @@ def _make_registration_json_message(registration_id):
 def _make_anac_for_template(year):
     formated_academic_year = None
     if year:
-        formated_academic_year = '{} - {}'.format(year, year+1)
+        formated_academic_year = '{} - {}'.format(year, year + 1)
     return formated_academic_year
 
 
@@ -153,11 +152,13 @@ def _make_attestation_data(attestation_statuses_json_dict, student):
         formated_academic_year = None
         attestation_available = None
 
-    return {'attestation_statuses': attestation_statuses,
-            'academic_year': academic_year,
-            'formated_academic_year': formated_academic_year,
-            'available': attestation_available,
-            'student': student}
+    return {
+        'attestation_statuses': attestation_statuses,
+        'academic_year': academic_year,
+        'formated_academic_year': formated_academic_year,
+        'available': attestation_available,
+        'student': student
+    }
 
 
 def _make_pdf_attestation(attestation_pdf, attestation_type):

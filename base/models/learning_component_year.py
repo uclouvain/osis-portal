@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models.enums import learning_component_year_type
 from django.db import models
 
+from base.models.enums import learning_component_year_type
 from base.models.enums.entity_container_year_link_type import REQUIREMENT_ENTITY, ADDITIONAL_REQUIREMENT_ENTITY_1, \
     ADDITIONAL_REQUIREMENT_ENTITY_2
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
@@ -52,7 +52,7 @@ class RepartitionVolumeField(models.DecimalField):
 class LearningComponentYear(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True, auto_now=True)
-    learning_unit_year = models.ForeignKey('LearningUnitYear')
+    learning_unit_year = models.ForeignKey('LearningUnitYear', on_delete=models.CASCADE)
     acronym = models.CharField(max_length=4, blank=True, null=True)
     type = models.CharField(max_length=30, choices=learning_component_year_type.LEARNING_COMPONENT_YEAR_TYPES,
                             blank=True, null=True, db_index=True)
