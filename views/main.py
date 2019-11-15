@@ -28,7 +28,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 import base.models as mdl_base
 import internship.models as mdl_internship

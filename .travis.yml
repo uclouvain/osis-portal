@@ -35,7 +35,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - python3 manage.py compilemessages && coverage run --source=internship manage.py test internship --exclude-tag=selenium
+  - python3 manage.py compilemessages && coverage run --source=internship manage.py test internship --exclude-tag=selenium --no-logs
 
 after_script:
   - coverage xml

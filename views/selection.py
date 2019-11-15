@@ -29,7 +29,7 @@ from django.forms import formset_factory
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 import base.models as mdl
 import internship.models as mdl_int
