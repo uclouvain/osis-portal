@@ -40,8 +40,9 @@ from attribution.utils import tutor_application_epc
 from attribution.views.decorators.authorization import user_is_tutor_or_super_user
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
-from base.models.enums import academic_calendar_type
+from base.models.enums import academic_calendar_type, learning_unit_year_subtypes
 from base.models.enums import learning_component_year_type
+from base.models.learning_unit_year import LearningUnitYear
 from base.views import layout
 
 
@@ -196,7 +197,10 @@ def renew_applications(request):
 def create_or_update_application(request, learning_container_year_id):
     tutor = mdl_base.tutor.find_by_user(request.user)
     global_id = tutor.person.global_id
-    learning_unit_year = mdl_base.learning_unit_year.get_full_by_learning_container_year_id(learning_container_year_id)
+    learning_unit_year = LearningUnitYear.objects.get(
+        learning_container_year__id=learning_container_year_id,
+        subtype=learning_unit_year_subtypes.FULL
+    )
     learning_container_year = learning_unit_year.learning_container_year
     can_be_saved = True
 
