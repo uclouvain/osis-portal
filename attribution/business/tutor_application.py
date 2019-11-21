@@ -221,12 +221,6 @@ def _filter_by_years(attribution_list, year):
             yield attribution
 
 
-def _filter_pending_delete(attribution_list):
-    for attribution in attribution_list:
-        if attribution.get('pending') != tutor_application_epc.DELETE_OPERATION:
-            yield attribution
-
-
 def _get_unix_time():
     now = timezone.now()
     return time.mktime(now.timetuple())
