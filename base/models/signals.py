@@ -102,8 +102,10 @@ def _add_person_to_group(person):
         _assign_group(person, GROUP_TUTORS)
     # Check if student is internship student
     # Only if internship app is installed
-    if 'internship' in settings.INSTALLED_APPS and mdl_internship.exists_by_person(person):
-        _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
+    if 'internship' in settings.INSTALLED_APPS:
+        from internship.models.internship_student_information import InternshipStudentInformation
+        if InternshipStudentInformation.objects.filter(person=person).exists():
+            _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
 
 
 def _assign_group(person, group_name):
