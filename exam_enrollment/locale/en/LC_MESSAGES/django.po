@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-05 13:41+0200\n"
+"POT-Creation-Date: 2019-08-21 15:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,186 +16,140 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/exam_enrollment_form.html:59
 msgid "Academic year"
 msgstr ""
 
-#: templates/blocks/modal/exam_enrollment_confirm.html:50
 msgid "Cancel"
 msgstr ""
 
-#: templates/blocks/modal/exam_enrollment_confirm.html:35
 msgid "Consult all the status of my exam enrollments"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:96
 msgid "Credited"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:54 templates/offer_choice.html:44
 msgid "First name"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:54 templates/offer_choice.html:44
 msgid "Last name"
 msgstr ""
 
-#: templates/blocks/modal/exam_enrollment_confirm.html:43
 msgid "Register to exams or update my exam enrollments"
 msgstr ""
 
-#: templates/blocks/modal/exam_enrollment_confirm.html:29
 msgid "Which action do you want to perform ?"
 msgstr ""
 
-#: views/exam_enrollment.py:149
 msgid "You are outside the exams enrollment period"
 msgstr ""
 
-#: templates/offer_choice.html:70
 msgid "acronym"
 msgstr "Acronym"
 
-#: templates/offer_choice.html:56
 msgid "choose_offer_for_exams_enrollment"
 msgstr "Please select the program in which you want to enrol to exams"
 
-#: templates/exam_enrollment_form.html:89
 msgid "course"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:91
 msgid "ects"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:47
 msgid "exam_enrollment_form_loading"
 msgstr "Exam enrollment form is loading."
 
-#: views/exam_enrollment.py:240
 msgid "exam_enrollment_form_submitted"
 msgstr "Exam enrollment form successfully submitted."
 
-#: templates/exam_enrollment_form.html:32
-#: templates/exam_enrollment_form.html:37 templates/offer_choice.html:36
 msgid "exams_enrollment"
 msgstr "Exams enrollment"
 
-#: templates/exam_enrollment_form.html:267
 msgid "form_unavailable"
 msgstr "Form unavailable"
 
-#: templates/exam_enrollment_form.html:76
 msgid "info_exam_enrollment_by_default"
 msgstr ""
 "<b>You are enrolled to all checked exams below. <br>If it fits your needs, "
 "then you don't have to do anything. </b><br>To modify your exam enrollments, "
 "please check/uncheck boxes below and then click on 'Validate changes'."
 
-#: templates/exam_enrollment_form.html:92
 msgid "inscr"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:93
 msgid "jan"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:94
 msgid "june"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:186
 msgid "legend"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:198
 msgid "legend_exam_enrol_b"
 msgstr "B - Credit"
 
-#: templates/exam_enrollment_form.html:206
 msgid "legend_exam_enrol_d"
 msgstr "D - Dispensation"
 
-#: templates/exam_enrollment_form.html:190
 msgid "legend_exam_enrol_i"
 msgstr "I - First enrollment"
 
-#: templates/exam_enrollment_form.html:194
 msgid "legend_exam_enrol_j"
 msgstr "J - Score's adjournment from January to September"
 
-#: templates/exam_enrollment_form.html:189
 msgid "legend_exam_enrol_p"
 msgstr "P - Partial exam"
 
-#: templates/exam_enrollment_form.html:197
 msgid "legend_exam_enrol_r"
 msgstr "R - Score's adjournment from last session exam"
 
-#: templates/exam_enrollment_form.html:201
 msgid "legend_exam_enrol_t"
 msgstr "T - Score result from a test"
 
-#: templates/exam_enrollment_form.html:202
 msgid "legend_exam_enrol_v"
 msgstr "V - Satifactory evaluation (score doesn't matter)"
 
-#: templates/exam_enrollment_form.html:205
 msgid "legend_exam_enrol_w"
 msgstr "W - Unsatisfactory evaluation (score doesn't matter)"
 
-#: templates/exam_enrollment_form.html:209
 msgid "legend_exam_enrol_x"
 msgstr "X - Law and administrative penalty"
 
-#: templates/exam_enrollment_form.html:193
 msgid "legend_exam_enrol_y"
 msgstr "Y - Second enrollment"
 
-#: templates/exam_enrollment_form.html:169
 msgid "message_exam_enrolment_state"
 msgstr "You can see the state of all your exam enrollments in your "
 
-#: templates/exam_enrollment_form.html:169
 msgid "message_exam_enrolment_state_link_label"
 msgstr "scoresheet"
 
-#: views/exam_enrollment.py:112
 msgid "no_learning_unit_enrollment_found"
 msgstr "You're not enrolled in the learning units of this program : {}."
 
-#: templates/offer_choice.html:61 views/exam_enrollment.py:83
 msgid "no_offer_enrollment_found"
 msgstr "You're not enrolled to any program for the current academic year ({})."
 
-#: templates/exam_enrollment_form.html:31
 msgid "offer_choice"
 msgstr "Offer choice"
 
-#: templates/exam_enrollment_form.html:64 templates/offer_choice.html:71
 msgid "program"
 msgstr "Program"
 
-#: templates/offer_choice.html:30
 msgid "program_choice"
 msgstr "Program choice"
 
-#: templates/offer_choice.html:49
 msgid "registration_id"
 msgstr "Registration id"
 
-#: templates/exam_enrollment_form.html:95
 msgid "sept"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:90
 msgid "title"
 msgstr ""
 
-#: templates/exam_enrollment_form.html:176
 msgid "validate_changes"
 msgstr "Validate changes"
 
-#: templates/offer_choice.html:69
 msgid "year"
 msgstr "Year"
