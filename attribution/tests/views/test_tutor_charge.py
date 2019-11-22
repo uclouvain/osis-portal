@@ -46,16 +46,10 @@ from base.tests.factories.tutor import TutorFactory
 from base.tests.models import test_academic_year, test_learning_unit_year
 from performance.tests.models import test_student_performance
 
-URL_ADE = "url_ade"
-
-REGISTRATION_ID = '64641200'
-
 LEARNING_UNIT_LECTURING_DURATION = 15.0
 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION = 30.0
 LEARNING_UNIT_CHARGE = 60.0
 
-ATTRIBUTION_CHARGE_LECTURING_DURATION = 15.0
-ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION = 15.0
 ATTRIBUTION_ID = "8080"
 ATTRIBUTION_EXTERNAL_ID = "osis.attribution_{attribution_id}".format(attribution_id=ATTRIBUTION_ID)
 OTHER_ATTRIBUTION_ID = "8081"

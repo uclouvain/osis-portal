@@ -40,6 +40,7 @@ from base.models.entity_version import EntityVersion
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
 from base.models.learning_component_year import LearningComponentYear
+from base.models.person import Person
 
 NO_CHARGE = 0.0
 
@@ -319,7 +320,7 @@ def get_teachers(learning_unit_acronym, application_yr):
 def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
     teachers_data = []
     global_ids = [teacher.global_id for teacher in teachers]
-    person_list = mdl_base.person.find_by_global_ids(global_ids)
+    person_list = Person.objects.filter(global_id__in=global_ids) if global_ids else None
     for teacher in teachers:
         for an_attribution in teacher.attributions:
             if an_attribution['acronym'] == learning_unit_acronym and an_attribution['year'] == application_yr:

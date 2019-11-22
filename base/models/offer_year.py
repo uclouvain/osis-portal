@@ -57,21 +57,5 @@ def find_by_id(offer_year_id):
     return OfferYear.objects.get(pk=offer_year_id)
 
 
-def find_by_domain_grade(domain, grade):
-    return OfferYear.objects.filter(domain=domain, grade_type=grade).order_by("acronym")
-
-
-def find_by_offer(offers):
-    return OfferYear.objects.filter(offer__in=offers)
-
-
 def find_by_student(student):
     return OfferYear.objects.filter(offerenrollment__student=student).order_by("academic_year__year", "acronym")
-
-
-def find_by_student_and_offers(student, offers):
-    return find_by_student(student).filter(offer__in=offers)
-
-
-def find_by_acronym_and_year(acronym, year):
-    return OfferYear.objects.filter(acronym=acronym, academic_year__year=year).order_by('acronym').first()

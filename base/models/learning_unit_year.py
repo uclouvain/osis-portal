@@ -62,10 +62,6 @@ class LearningUnitYear(SerializableModel):
         return self.learning_container_year and self.learning_container_year.in_charge
 
     @property
-    def vacant(self):
-        return self.learning_container_year and self.learning_container_year.is_vacant
-
-    @property
     def team(self):
         return self.learning_container_year and self.learning_container_year.team
 
@@ -99,38 +95,11 @@ def search_order_by_acronym(academic_year_id=None):
     return search(academic_year_id).order_by('acronym')
 
 
-def find_by_id(learning_unit_year_id):
-    return LearningUnitYear.objects.select_related("academic_year",
-                                                   "learning_unit")\
-        .get(pk=learning_unit_year_id)
-
-
-def find_first(an_academic_year=None, a_learning_unit=None):
-    return LearningUnitYear.objects.filter(academic_year=an_academic_year, learning_unit=a_learning_unit).first()
-
-
 def find_by_acronym(acronym, academic_year):
     return LearningUnitYear.objects.select_related("academic_year",
                                                    "learning_unit").\
         filter(acronym__startswith=acronym, academic_year=academic_year)
 
 
-def find_by_learning_container_year(learning_container_yr_id):
-    return LearningUnitYear.objects.filter(learning_container_year=learning_container_yr_id)
-
-
-def find_first_by_learning_container_year(learning_container_yr_id):
-    return find_by_learning_container_year(learning_container_yr_id).first()
-
-
 def find_first_by_exact_acronym(academic_year_id, acronym):
     return search(academic_year_id, acronym, None, None).first()
-
-
-def get_full_by_learning_container_year_id(learning_container_year_id):
-    return LearningUnitYear.objects.get(learning_container_year__id=learning_container_year_id,
-                                        subtype=learning_unit_year_subtypes.FULL)
-
-
-def find_by_learning_container_yr_and_subtype(learning_container_yr_id, a_subtype):
-    return LearningUnitYear.objects.filter(learning_container_year=learning_container_yr_id, subtype=a_subtype)
