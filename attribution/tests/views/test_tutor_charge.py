@@ -26,36 +26,30 @@
 import datetime
 from unittest import mock
 
-from requests.exceptions import RequestException
-from django.contrib.auth.models import User, Group, Permission
-from django.test import TestCase, override_settings
 from django.conf import settings
-from django.urls import reverse
+from django.contrib.auth.models import User, Group, Permission
 from django.forms.formsets import BaseFormSet
+from django.test import TestCase, override_settings
+from django.urls import reverse
+from requests.exceptions import RequestException
 
-from attribution.views import tutor_charge
 from attribution.models.enums import function
-from performance.tests.models import test_student_performance
-from base.tests.models import test_person, test_tutor, test_academic_year, test_learning_unit_year
+from attribution.tests.factories.attribution import AttributionFactory
+from attribution.views import tutor_charge
+from base.models.enums import learning_unit_year_subtypes
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
+from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from attribution.tests.factories.attribution import AttributionFactory
-from base.models.enums import learning_unit_year_subtypes
-from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
-
-URL_ADE = "url_ade"
-
-REGISTRATION_ID = '64641200'
+from base.tests.models import test_academic_year, test_learning_unit_year
+from performance.tests.models import test_student_performance
 
 LEARNING_UNIT_LECTURING_DURATION = 15.0
 LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION = 30.0
 LEARNING_UNIT_CHARGE = 60.0
 
-ATTRIBUTION_CHARGE_LECTURING_DURATION = 15.0
-ATTRIBUTION_CHARGE_PRACTICAL_EXERCISES_DURATION = 15.0
 ATTRIBUTION_ID = "8080"
 ATTRIBUTION_EXTERNAL_ID = "osis.attribution_{attribution_id}".format(attribution_id=ATTRIBUTION_ID)
 OTHER_ATTRIBUTION_ID = "8081"
@@ -70,13 +64,15 @@ NEXT_YEAR = now.year + 1
 
 
 def get_attribution_config_settings():
-    return {'TIME_TABLE_URL': '',
-            'TIME_TABLE_NUMBER': '',
-            'CATALOG_URL': '',
-            'SERVER_TO_FETCH_URL': 'test',
-            'ATTRIBUTION_PATH': 'test',
-            'SERVER_TO_FETCH_USER': 'test',
-            'SERVER_TO_FETCH_PASSWORD': 'test'}
+    return {
+        'TIME_TABLE_URL': '',
+        'TIME_TABLE_NUMBER': '',
+        'CATALOG_URL': '',
+        'SERVER_TO_FETCH_URL': 'test',
+        'ATTRIBUTION_PATH': 'test',
+        'SERVER_TO_FETCH_USER': 'test',
+        'SERVER_TO_FETCH_PASSWORD': 'test'
+    }
 
 
 class MockRequest:
@@ -93,58 +89,64 @@ def mock_request_none_attribution_charge(*args, **kwargs):
 
 
 def mock_request_single_attribution_charge(*args, **kwargs):
-    json_response = {"tutorAllocations": {
-        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
-        "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
-        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
-        "function": "COORDINATOR",
-        "globalId": "00233751",
-        "allocationId": ATTRIBUTION_ID,
-        "year": "2017"
-    }}
+    json_response = {
+        "tutorAllocations": {
+            "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
+            "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
+            "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+            "function": "COORDINATOR",
+            "globalId": "00233751",
+            "allocationId": ATTRIBUTION_ID,
+            "year": "2017"
+        }
+    }
     return MockRequest(json_response)
 
 
 def mock_request_multiple_attributions_charge(*args, **kwargs):
-    json_response = {"tutorAllocations": [{
-        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
-        "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
-        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
-        "function": "COORDINATOR",
-        "globalId": "00233751",
-        "allocationId": ATTRIBUTION_ID,
-        "year": "2017"
-    },
-        {
-            "allocationChargeLecturing": str(0),
-            "allocationChargePractical": str(0),
+    json_response = {
+        "tutorAllocations": [{
+            "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
+            "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
             "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
-            "function": "CO_HOLDER",
+            "function": "COORDINATOR",
             "globalId": "00233751",
-            "allocationId": OTHER_ATTRIBUTION_ID,
+            "allocationId": ATTRIBUTION_ID,
             "year": "2017"
         },
-    ]}
+            {
+                "allocationChargeLecturing": str(0),
+                "allocationChargePractical": str(0),
+                "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+                "function": "CO_HOLDER",
+                "globalId": "00233751",
+                "allocationId": OTHER_ATTRIBUTION_ID,
+                "year": "2017"
+            },
+        ]
+    }
     return MockRequest(json_response)
 
 
 def mock_request_multiple_attributions_charge_with_missing_values(*args, **kwargs):
-    json_response = {"tutorAllocations": [{
-        "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
-        "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
-        "function": "COORDINATOR",
-        "globalId": "00233751",
-        "allocationId": ATTRIBUTION_ID,
-        "year": "2017"
-    },
-        {
-            "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
-            "function": "CO_HOLDER",
+    json_response = {
+        "tutorAllocations": [{
+            "allocationChargeLecturing": str(LEARNING_UNIT_LECTURING_DURATION),
+            "learningUnitCharge": str(LEARNING_UNIT_CHARGE),
+            "function": "COORDINATOR",
             "globalId": "00233751",
-            "allocationId": OTHER_ATTRIBUTION_ID,
+            "allocationId": ATTRIBUTION_ID,
             "year": "2017"
         },
-    ]}
+            {
+                "allocationChargePractical": str(LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION),
+                "function": "CO_HOLDER",
+                "globalId": "00233751",
+                "allocationId": OTHER_ATTRIBUTION_ID,
+                "year": "2017"
+            },
+        ]
+    }
     return MockRequest(json_response)
 
 
@@ -175,9 +177,11 @@ class TutorChargeTest(TestCase):
                                             tutor=self.a_tutor,
                                             external_id=ATTRIBUTION_EXTERNAL_ID)
 
-        return {'academic_year':                   an_academic_yr,
-                'learning_unit_year':               a_learning_unit_year,
-                'attribution':                      an_attribution}
+        return {
+            'academic_year': an_academic_yr,
+            'learning_unit_year': a_learning_unit_year,
+            'attribution': an_attribution
+        }
 
     def create_user(self, username, email, password):
         return User.objects.create_user(username, email, password)
@@ -246,19 +250,28 @@ class TutorChargeTest(TestCase):
             'acronym': 'LINGI2145',
             'specific_title': TITLE,
             'academic_year': an_academic_yr,
-            'weight': WEIGHT})
+            'weight': WEIGHT
+        })
         self.assertEqual(tutor_charge.get_sessions_results(student_performance.registration_id,
                                                            a_learning_unit_year,
                                                            student_performance.acronym)
-                         , {tutor_charge.JANUARY:
-                                {tutor_charge.JSON_LEARNING_UNIT_NOTE: '13.0',
-                                 tutor_charge.JSON_LEARNING_UNIT_STATUS: 'I'},
-                            tutor_charge.JUNE:
-                                {tutor_charge.JSON_LEARNING_UNIT_NOTE: '13.0',
-                                 tutor_charge.JSON_LEARNING_UNIT_STATUS: 'R'},
-                            tutor_charge.SEPTEMBER:
-                                {tutor_charge.JSON_LEARNING_UNIT_NOTE: '-',
-                                 tutor_charge.JSON_LEARNING_UNIT_STATUS: '-'}})
+                         , {
+                             tutor_charge.JANUARY:
+                                 {
+                                     tutor_charge.JSON_LEARNING_UNIT_NOTE: '13.0',
+                                     tutor_charge.JSON_LEARNING_UNIT_STATUS: 'I'
+                                 },
+                             tutor_charge.JUNE:
+                                 {
+                                     tutor_charge.JSON_LEARNING_UNIT_NOTE: '13.0',
+                                     tutor_charge.JSON_LEARNING_UNIT_STATUS: 'R'
+                                 },
+                             tutor_charge.SEPTEMBER:
+                                 {
+                                     tutor_charge.JSON_LEARNING_UNIT_NOTE: '-',
+                                     tutor_charge.JSON_LEARNING_UNIT_STATUS: '-'
+                                 }
+                         })
 
     def test_get_student_performance_data_dict(self):
         student_performance = test_student_performance.create_student_performance()
@@ -273,15 +286,18 @@ class TutorChargeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_list_teaching_charge_for_multiple_attributions_less_in_json(self, mock_requests_get):
-
-        an_other_attribution = AttributionFactory(learning_unit_year=self.get_data('learning_unit_year'),
-                                                  tutor=self.a_tutor,
-                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+        AttributionFactory(
+            learning_unit_year=self.get_data('learning_unit_year'),
+            tutor=self.a_tutor,
+            external_id=OTHER_ATTRIBUTION_EXTERNAL_ID
+        )
         inexisting_external_id = "osis.attribution_8082"
 
-        attribution_not_in_json = AttributionFactory(learning_unit_year=self.get_data('learning_unit_year'),
-                                                     tutor=self.a_tutor,
-                                                     external_id=inexisting_external_id)
+        AttributionFactory(
+            learning_unit_year=self.get_data('learning_unit_year'),
+            tutor=self.a_tutor,
+            external_id=inexisting_external_id
+        )
 
         teaching_charge = tutor_charge.list_teaching_charge(self.a_tutor.person, self.get_data('academic_year'))
 
@@ -295,7 +311,6 @@ class TutorChargeTest(TestCase):
         self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
         self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
 
-
     def test_get_learning_unit_enrollments_list(self):
         luy_full = self.data[0]['learning_unit_year']
         luy_partim = test_learning_unit_year.create_learning_unit_year({
@@ -307,11 +322,11 @@ class TutorChargeTest(TestCase):
         })
         luy_partim.learning_container_year = luy_full.learning_container_year
         luy_partim.save()
-        for i in range(5):
+        for _ in range(5):
             LearningUnitEnrollmentFactory(learning_unit_year=luy_full)
             LearningUnitEnrollmentFactory(learning_unit_year=luy_partim)
-        # The students of the partim don't have to be in the result list
-        self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(luy_full)), 5)
+        self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(luy_full)), 10)
+
 
 ACCESS_DENIED = 401
 
@@ -325,8 +340,8 @@ class HomeTest(TestCase):
         self.person.user.user_permissions.add(attribution_permission)
 
         today = datetime.datetime.today()
-        self.academic_year = AcademicYearFactory(year=today.year, start_date=today-datetime.timedelta(days=5),
-                                                 end_date=today+datetime.timedelta(days=5))
+        self.academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
+                                                 end_date=today + datetime.timedelta(days=5))
         self.learning_unit_year = LearningUnitYearFactory(academic_year=self.academic_year,
                                                           learning_container_year__academic_year=self.academic_year,
                                                           learning_container_year__in_charge=True)
@@ -470,7 +485,6 @@ class HomeTest(TestCase):
     @override_settings(ATTRIBUTION_CONFIG=get_attribution_config_settings())
     @mock.patch('requests.get', side_effect=mock_request_single_attribution_charge)
     def test_for_one_attribution(self, mock_requests_get):
-
         response = self.client.get(self.url)
 
         self.assertTrue(mock_requests_get.called)
@@ -508,7 +522,7 @@ class HomeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_for_multiple_attributions(self, mock_requests_get):
-        an_other_attribution = AttributionFactory(function=function.CO_HOLDER,
+        AttributionFactory(function=function.CO_HOLDER,
                                                   learning_unit_year=self.learning_unit_year,
                                                   tutor=self.tutor,
                                                   external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
@@ -533,12 +547,12 @@ class HomeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_with_attribution_not_recognized(self, mock_requests_get):
-        an_other_attribution = AttributionFactory(learning_unit_year=self.learning_unit_year,
+        AttributionFactory(learning_unit_year=self.learning_unit_year,
                                                   tutor=self.tutor,
                                                   external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
 
         inexisting_external_id = "osis.attribution_8082"
-        attribution_not_in_json = AttributionFactory(learning_unit_year=self.learning_unit_year,
+        AttributionFactory(learning_unit_year=self.learning_unit_year,
                                                      tutor=self.tutor,
                                                      external_id=inexisting_external_id)
 
@@ -562,7 +576,7 @@ class HomeTest(TestCase):
 
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge_with_missing_values)
     def test_with_missing_values(self, mock_requests_get):
-        an_other_attribution = AttributionFactory(learning_unit_year=self.learning_unit_year,
+        AttributionFactory(learning_unit_year=self.learning_unit_year,
                                                   tutor=self.tutor,
                                                   external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
 
@@ -584,7 +598,6 @@ class HomeTest(TestCase):
 
         attributions = response.context['attributions']
         reduced_list_attributions = map(lambda attribution: [attribution["lecturing_allocation_charge"],
-                                        attribution['practice_allocation_charge'],
-                                        attribution['percentage_allocation_charge']], attributions)
+                                                             attribution['practice_allocation_charge'],
+                                                             attribution['percentage_allocation_charge']], attributions)
         self.assertIn([str(LEARNING_UNIT_LECTURING_DURATION), None, "25.0"], reduced_list_attributions)
-

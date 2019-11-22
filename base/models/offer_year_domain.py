@@ -25,6 +25,7 @@
 #
 ##############################################################################
 from django.db import models
+
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 from reference import models as mdl_reference
 
@@ -54,7 +55,3 @@ def search(grade_type=None, domain=None):
                                               domain__in=sub_domains, offer_year__enrollment_enabled=True)
     else:
         return []
-
-
-def find_by_offer_year(offer_yr):
-    return OfferYearDomain.objects.get(offer_year=offer_yr)

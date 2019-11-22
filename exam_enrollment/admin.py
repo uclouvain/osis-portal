@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.contrib import admin
+
 from exam_enrollment.models import exam_enrollment_submitted, exam_enrollment_request
 
 admin.site.register(exam_enrollment_submitted.ExamEnrollmentSubmitted,

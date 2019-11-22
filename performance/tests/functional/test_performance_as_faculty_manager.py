@@ -5,7 +5,8 @@ from performance.models import student_performance
 from performance.tests.functional.models.model import StudentWithPerformanceMixin
 
 
-class FacultyAdministratorsPerformanceTestCase(FunctionalTestCase, FacAdministratorMixin, StudentWithPerformanceMixin, StudentMixin):
+class FacultyAdministratorsPerformanceTestCase(FunctionalTestCase, FacAdministratorMixin, StudentWithPerformanceMixin,
+                                               StudentMixin):
     """
     Performance application testing as a Faculty Administrator
     """

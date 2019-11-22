@@ -23,16 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib.admin.sites import site as admin_site
 from django.contrib.auth.models import Group
 from django.test import TestCase, Client
-from django.http.request import HttpRequest
-from django.contrib.admin.sites import site as admin_site
 
-from base.tests.models.test_person import create_person
-from base.tests.factories.student import StudentFactory
-from base.tests.factories.person import PersonFactory
 from base import models as mdl_base
 from base.models import student as mdl_student
+from base.tests.factories.person import PersonFactory
+from base.tests.factories.student import StudentFactory
+from base.tests.models.test_person import create_person
 
 
 class TestModelStudent(TestCase):
@@ -111,12 +110,6 @@ class StudentAdminTest(TestCase):
 
 
 def create_student(registration_id="64641200"):
-    a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
-    a_student.save()
-    return a_student
-
-
-def create_student_with_specific_registration_id(registration_id):
     a_student = mdl_base.student.Student(registration_id=registration_id, person=create_person())
     a_student.save()
     return a_student

@@ -57,8 +57,8 @@ class TestHome(TestCase):
 
     def test_with_online_application_opened(self):
         today = datetime.date.today()
-        current_academic_year = AcademicYearFactory(year=today.year, start_date=today-datetime.timedelta(days=5),
-                                                    end_date=today+datetime.timedelta(days=5))
+        current_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
+                                                    end_date=today + datetime.timedelta(days=5))
         AcademicCalendarFactory(academic_year=current_academic_year,
                                 reference=academic_calendar_type.TEACHING_CHARGE_APPLICATION)
         response = self.client.get(self.url)

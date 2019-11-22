@@ -23,8 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
 from django.db import IntegrityError
+from django.test import TestCase
 
 from base.tests.factories.student import StudentFactory
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory

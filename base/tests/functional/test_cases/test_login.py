@@ -1,7 +1,6 @@
 from base.tests.factories.user import UserFactory
-from osis_common.tests.functional.models.model import FunctionalTestCase
-
 from base.tests.functional.models.user_type import StudentMixin, TutorMixin, PhdMixin, AdministratorMixin
+from osis_common.tests.functional.models.model import FunctionalTestCase
 from osis_common.tests.functional.models.report import can_be_reported
 
 

@@ -28,20 +28,18 @@ from unittest.mock import patch
 
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
-from django.db.utils import OperationalError
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse
+from django.db.utils import OperationalError
 from django.test import TestCase, Client, modify_settings, override_settings
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from assessments.models.score_encoding import ScoreEncoding
-
 from assessments.tests.factories.score_encoding import ScoreEncodingFactory, load_score_encoding_sample
 from assessments.tests.models import test_score_encoding
 from assessments.views import score_encoding
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
-
 
 GLOBAL_ID = "45451200"
 OTHER_GLOBAL_ID = "92921100"

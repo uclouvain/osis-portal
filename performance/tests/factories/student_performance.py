@@ -23,12 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
-import string
-import operator
-import json
 import datetime
+import json
+import operator
+import string
+
+import factory.fuzzy
 import pytz
 
 from performance.models.enums import offer_registration_state as registration_state, session_month

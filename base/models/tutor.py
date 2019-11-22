@@ -24,9 +24,11 @@
 #
 ##############################################################################
 import logging
+
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+
 from base.models import person as model_person
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
@@ -64,12 +66,6 @@ def find_by_user(a_user):
         return tutor
     except ObjectDoesNotExist:
         return None
-
-
-def is_tutor(a_user):
-    if find_by_user(a_user):
-        return True
-    return False
 
 
 def find_by_person_global_id(global_id):

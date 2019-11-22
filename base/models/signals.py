@@ -25,9 +25,10 @@
 ##############################################################################
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
-from django.core.exceptions import ObjectDoesNotExist
+
 from base import models as mdl
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
@@ -37,6 +38,7 @@ person_created = Signal(providing_args=['person'])
 GROUP_STUDENTS = "students"
 GROUP_STUDENTS_INTERNSHIP = "internship_students"
 GROUP_TUTORS = "tutors"
+
 
 @receiver(user_created_signal)
 @receiver(user_updated_signal)
@@ -101,8 +103,10 @@ def _add_person_to_group(person):
         _assign_group(person, GROUP_TUTORS)
     # Check if student is internship student
     # Only if internship app is installed
-    if 'internship' in settings.INSTALLED_APPS and mdl_internship.exists_by_person(person):
-        _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
+    if 'internship' in settings.INSTALLED_APPS:
+        from internship.models.internship_student_information import InternshipStudentInformation
+        if InternshipStudentInformation.objects.filter(person=person).exists():
+            _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
 
 
 def _assign_group(person, group_name):

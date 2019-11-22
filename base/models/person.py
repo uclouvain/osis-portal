@@ -25,10 +25,11 @@
 ##############################################################################
 import logging
 
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -95,8 +96,7 @@ def find_by_id(person_id):
 
 
 def find_by_user(user):
-    person = Person.objects.filter(user=user).first()
-    return person
+    return Person.objects.filter(user=user).first()
 
 
 def change_language(user, new_language):
@@ -109,7 +109,3 @@ def change_language(user, new_language):
 
 def find_by_global_id(global_id):
     return Person.objects.filter(global_id=global_id).first() if global_id else None
-
-
-def find_by_global_ids(global_ids):
-    return Person.objects.filter(global_id__in=global_ids) if global_ids else None

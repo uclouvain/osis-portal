@@ -24,23 +24,23 @@
 #
 ##############################################################################
 import collections
+from collections import OrderedDict
 from decimal import Decimal
 from itertools import chain
 
+from django.db.models import OuterRef, Subquery
 from django.utils.translation import ugettext_lazy as _
 
 from attribution import models as mdl_attribution
 from attribution.models.enums import function
 from base import models as mdl_base
 from base.business import learning_unit_year_with_context
+from base.business.entity import get_entities_ids
 from base.models.entity_version import EntityVersion
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
-from base.models.enums import entity_container_year_link_type as entity_types
-from django.db.models import OuterRef, Subquery
-from base.business.entity import get_entities_ids
 from base.models.learning_component_year import LearningComponentYear
-from collections import OrderedDict
+from base.models.person import Person
 
 NO_CHARGE = 0.0
 
@@ -48,7 +48,6 @@ PERSON_KEY = 'person'
 
 
 def get_attribution_list(global_id, academic_year):
-
     attribution_new = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attribution_new and attribution_new.attributions:
         attributions = _filter_by_years(attribution_new.attributions, academic_year)
@@ -321,7 +320,7 @@ def get_teachers(learning_unit_acronym, application_yr):
 def _find_teachers_with_person(application_yr, learning_unit_acronym, teachers):
     teachers_data = []
     global_ids = [teacher.global_id for teacher in teachers]
-    person_list = mdl_base.person.find_by_global_ids(global_ids)
+    person_list = Person.objects.filter(global_id__in=global_ids) if global_ids else None
     for teacher in teachers:
         for an_attribution in teacher.attributions:
             if an_attribution['acronym'] == learning_unit_acronym and an_attribution['year'] == application_yr:
@@ -365,8 +364,8 @@ def _get_learning_components(academic_year, acronym_filter, faculty):
 
         learning_components = LearningComponentYear.objects \
             .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs) \
-            .order_by('learning_unit_year__acronym')\
-            .select_related('learning_unit_year__learning_container_year')\
+            .order_by('learning_unit_year__acronym') \
+            .select_related('learning_unit_year__learning_container_year') \
             .exclude(volume_declared_vacant__isnull=True)
     return learning_components
 
@@ -386,7 +385,7 @@ def _get_learning_components_by_faculty(academic_year, acronym_filter, faculty):
     learning_unit_years = get_filter_learning_container_ids(faculty, learning_unit_years)
     learning_unit_years_ids = learning_unit_years.values_list('id', flat=True)
     return LearningComponentYear.objects \
-        .filter(learning_unit_year_id__in=learning_unit_years_ids)\
-        .select_related('learning_unit_year__learning_container_year')\
-        .exclude(volume_declared_vacant__isnull=True)\
+        .filter(learning_unit_year_id__in=learning_unit_years_ids) \
+        .select_related('learning_unit_year__learning_container_year') \
+        .exclude(volume_declared_vacant__isnull=True) \
         .order_by('learning_unit_year__acronym')

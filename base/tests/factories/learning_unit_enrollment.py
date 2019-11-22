@@ -23,10 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-import factory.fuzzy
-import string
 import datetime
+import string
+
+import factory.fuzzy
 
 from base.models.enums import learning_unit_enrollment_state
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory

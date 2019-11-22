@@ -63,13 +63,6 @@ invalid_sample = "assessments/tests/resources/invalid_sample.json"
 undated_sample = "assessments/tests/resources/undated_sample.json"
 
 
-def create_score_encoding(global_id="001254"):
-    document = get_sample()
-    score_encoding = mdl_score_encoding.ScoreEncoding(global_id=global_id, document=document)
-    score_encoding.save()
-    return score_encoding
-
-
 def create_invalid_score_encoding(global_id):
     invalid_document = get_invalid_sample()
     score_encoding = mdl_score_encoding.ScoreEncoding(global_id=global_id, document=invalid_document)
@@ -95,10 +88,6 @@ def get_invalid_sample():
     return load_sample(invalid_sample)
 
 
-def get_undated_sample():
-    return load_sample(undated_sample)
-
-
 def update_publication_date(sample):
     json_sample = json.loads(sample)
     json_sample['publication_date'] = get_today_date()
@@ -108,7 +97,3 @@ def update_publication_date(sample):
 def get_today_date():
     now = datetime.datetime.now()
     return '%s/%s/%s' % (now.day, now.month, now.year)
-
-
-
-

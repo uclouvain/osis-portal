@@ -29,6 +29,7 @@ import string
 import factory
 import factory.fuzzy
 from django.conf import settings
+
 from base import models as mdl
 from base.tests.factories.user import UserFactory
 

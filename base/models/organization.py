@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.db import models
+
 from base.enums.organization_type import TYPES as ORGANIZATION_TYPES
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 

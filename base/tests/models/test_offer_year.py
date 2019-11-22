@@ -40,21 +40,3 @@ def create_offer_year():
     an_offer_year.title = "Première année de bachelier en médecine vétérinaire"
     an_offer_year.save()
     return an_offer_year
-
-
-def create_offer_year_with_acronym(acronym):
-    an_offer_year = mdl_base.offer_year.OfferYear()
-    an_offer_year.academic_year = create_academic_year()
-    an_offer_year.acronym = acronym
-    an_offer_year.title = "Première année de bachelier en médecine vétérinaire"
-    an_offer_year.save()
-    return an_offer_year
-
-
-def create_offer_year_with_academic_year(academic_year):
-    an_offer_year = mdl_base.offer_year.OfferYear()
-    an_offer_year.academic_year = academic_year
-    an_offer_year.acronym = "VETE11BA"
-    an_offer_year.title = "Première année de bachelier en médecine vétérinaire"
-    an_offer_year.save()
-    return an_offer_year

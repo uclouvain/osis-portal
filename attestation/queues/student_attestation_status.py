@@ -25,7 +25,9 @@
 ##############################################################################
 import json
 import logging
+
 from django.conf import settings
+
 from frontoffice.queue.queue_listener import AttestationStatusClient
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)

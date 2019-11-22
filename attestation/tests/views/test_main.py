@@ -38,10 +38,7 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 
 OK = 200
-BAD_REQUEST = 400
 ACCESS_DENIED = 401
-FILE_NOT_FOUND = 404
-METHOD_NOT_ALLOWED = 405
 
 STUDENT_REGISTRATION_ID = "45451000"
 STUDENT_GLOBAL_ID = "78961314"
@@ -386,4 +383,3 @@ class TestRegistrationIdMessage(TestCase):
     def test_generate_message_without_registration_id(self):
         given_json_message = v_main._make_registration_json_message(None)
         self.assertIsNone(given_json_message)
-
