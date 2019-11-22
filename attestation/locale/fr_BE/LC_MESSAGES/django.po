@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-05 14:20+0200\n"
+"POT-Creation-Date: 2019-10-22 15:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,33 +29,34 @@ msgstr ""
 
 #: models/enums/attestation_type.py:32
 msgid "ABC"
-msgstr "Inscription régulière (le cas échéant, allocations familiales, mutuelles, ...)"
+msgstr ""
+"Inscription régulière (le cas échéant, allocations familiales, "
+"mutuelles, ...)"
 
 # ## Etat des attestations suivant enum provenant de EPC
 #: models/enums/attestation_type.py:30
 msgid "AVIS"
 msgstr "Avis d'enregistrement et facture"
 
-#: templates/attestation_home.html:34 templates/attestation_home.html:40
 #: templates/attestation_home_admin.html:32
 #: templates/attestation_home_student.html:30
 msgid "Attestation"
 msgstr "Attestation"
 
 #: templates/admin/attestation_administration.html:31
-#: templates/attestation_home.html:32 templates/attestation_home_admin.html:31
+#: templates/attestation_home_admin.html:31
 msgid "Attestation administration"
 msgstr "Administration des attestations"
 
-#: templates/attestation_content.html:52 templates/attestation_home.html:74
+#: templates/attestation_content.html:52
 msgid "Attestation type"
 msgstr "Type d'attestation"
 
-#: templates/attestation_content.html:31 templates/attestation_home.html:50
+#: templates/attestation_content.html:31
 msgid "Attestations for academic year"
 msgstr "Attestations pour l'année académique"
 
-#: templates/attestation_content.html:54 templates/attestation_home.html:76
+#: templates/attestation_content.html:54
 msgid "Available"
 msgstr "Disponible"
 
@@ -68,28 +69,20 @@ msgid "ECHEANCE"
 msgstr "Avis d'échéance"
 
 #: templates/admin/attestation_administration.html:30
-#: templates/attestation_home.html:31 templates/attestation_home_admin.html:30
+#: templates/attestation_home_admin.html:30
 msgid "Faculty administration"
 msgstr "Administration des facultés"
 
-#: templates/attestation_home.html:57
-msgid "First name"
-msgstr "Prénom"
-
-#: templates/attestation_home.html:57
-msgid "Last name"
-msgstr "Nom"
-
-#: templates/attestation_content.html:46 templates/attestation_home.html:68
+#: templates/attestation_content.html:46
 msgid "No attestation available"
 msgstr "Aucune attestation disponible"
 
-#: templates/attestation_content.html:53 templates/attestation_home.html:75
+#: templates/attestation_content.html:53
 msgid "Printed"
 msgstr "Imprimée"
 
 #: templates/admin/attestation_administration.html:58
-#: templates/attestation_content.html:41 templates/attestation_home.html:61
+#: templates/attestation_content.html:41
 msgid "Registration id"
 msgstr "Id d'enregistrement"
 
