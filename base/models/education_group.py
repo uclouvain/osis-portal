@@ -31,23 +31,12 @@ from osis_common.models.serializable_model import SerializableModelAdmin, Serial
 
 
 class EducationGroupAdmin(SerializableModelAdmin):
-    list_display = ('most_recent_acronym', 'start_year', 'end_year',)
+    list_display = ('most_recent_acronym',)
     search_fields = ('educationgroupyear__acronym',)
 
 
 class EducationGroup(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
-    start_year = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        verbose_name=_('Start')
-    )
-
-    end_year = models.PositiveIntegerField(
-        blank=True,
-        null=True,
-        verbose_name=_('End')
-    )
 
     def __str__(self):
         return "{}".format(self.uuid)
