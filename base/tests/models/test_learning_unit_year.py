@@ -58,8 +58,13 @@ class LearningUnitYearTest(TestCase):
         a_learning_unit_year_1 = LearningUnitYearFactory(academic_year=self.an_academic_year,
                                                          learning_unit=a_learning_unit,
                                                          acronym=LDROI1000)
-        self.assertEqual(mdl_base.learning_unit_year.find_first(self.an_academic_year, a_learning_unit),
-                         a_learning_unit_year_1)
+        self.assertEqual(
+            LearningUnitYear.objects.filter(
+                academic_year=self.an_academic_year,
+                learning_unit=a_learning_unit
+            ).first(),
+            a_learning_unit_year_1
+        )
 
     def test_search_order_by_acronym_check_alphabetical_order(self):
         ldroi1000_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year,
@@ -132,9 +137,16 @@ class TestGetFullByLearningContainerYearId(TestCase):
 
     def test_when_no_full_course_attached(self):
         with self.assertRaises(ObjectDoesNotExist):
-            mdl_base.learning_unit_year.get_full_by_learning_container_year_id(self.learning_container_year.id)
+            LearningUnitYear.objects.get(
+                learning_container_year__id=self.learning_container_year.id,
+                subtype=learning_unit_year_subtypes.FULL
+            )
 
     def test_when_full_course_attached(self):
-        self.assertEqual(self.full_learning_unit_year,
-                         mdl_base.learning_unit_year.get_full_by_learning_container_year_id(
-                             self.partim_learning_unit_year.learning_container_year.id))
+        self.assertEqual(
+            self.full_learning_unit_year,
+            LearningUnitYear.objects.get(
+                learning_container_year__id=self.partim_learning_unit_year.learning_container_year.id,
+                subtype=learning_unit_year_subtypes.FULL
+            )
+        )

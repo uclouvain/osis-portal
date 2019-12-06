@@ -41,6 +41,7 @@ from attribution.forms.attribution import AttributionForm
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.enums import offer_enrollment_state, learning_unit_year_subtypes
+from base.models.learning_unit_year import LearningUnitYear
 from base.utils import string_utils
 from base.views import layout
 from performance import models as mdl_performance
@@ -245,7 +246,10 @@ def get_url_learning_unit_year(a_learning_unit_year):
 
 def _load_students(learning_unit_year_id, a_tutor):
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
-    a_learning_unit_year = mdl_base.learning_unit_year.find_by_id(learning_unit_year_id)
+    a_learning_unit_year = LearningUnitYear.objects.select_related(
+        "academic_year",
+        "learning_unit"
+    ).get(pk=learning_unit_year_id)
     return {
         'global_id': request_tutor.person.global_id,
         'students': _get_learning_unit_yr_enrollments_list(a_learning_unit_year),
@@ -369,7 +373,7 @@ def get_learning_unit_enrollments_list(a_learning_unit_year):
     learning_unit_years = [a_learning_unit_year]
     if a_learning_unit_year.subtype == learning_unit_year_subtypes.FULL:
         learning_unit_years = list(
-            mdl_base.learning_unit_year.find_by_learning_container_year(a_learning_unit_year.learning_container_year)
+            LearningUnitYear.objects.filter(learning_container_year=a_learning_unit_year.learning_container_year)
         )
     return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(
         learning_unit_years,
@@ -463,6 +467,9 @@ def _get_learning_unit_yr_enrollments_list(a_learning_unit_year):
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def students_list_build_by_learning_unit(request, learning_unit_year_id):
-    a_learning_unit_yr = mdl_base.learning_unit_year.find_by_id(learning_unit_year_id)
+    a_learning_unit_yr = LearningUnitYear.objects.select_related(
+        "academic_year",
+        "learning_unit"
+    ).get(pk=learning_unit_year_id)
     student_list = _get_learning_unit_yr_enrollments_list(a_learning_unit_yr)
     return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
