@@ -39,35 +39,6 @@ from base.tests.factories.user import UserFactory
 from base.tests.models import test_person
 
 
-def create_attribution(data):
-    attribution = mdl_attribution.attribution.Attribution()
-    start = None
-    if 'start_year' in data:
-        start = data['start_year']
-    end = None
-    if 'end_year' in data:
-        end = data['end_year']
-    if 'function' in data:
-        attribution.function = data['function']
-    if 'learning_unit_year' in data:
-        attribution.learning_unit_year = data['learning_unit_year']
-        year_yr = attribution.learning_unit_year.academic_year.year
-        if start is None:
-            attribution.start_year = year_yr
-        if end is None:
-            attribution.end_year = year_yr + 1
-    if start:
-        attribution.start_year = start
-    if end:
-        attribution.end_year = end
-    if 'tutor' in data:
-        attribution.tutor = data['tutor']
-    if 'external_id' in data:
-        attribution.external_id = data['external_id']
-    attribution.save()
-    return attribution
-
-
 class AttributionTest(TestCase):
     def setUp(self):
         group = Group(name="tutors")

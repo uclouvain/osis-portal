@@ -68,12 +68,6 @@ def find_by_user(a_user):
         return None
 
 
-def is_tutor(a_user):
-    if find_by_user(a_user):
-        return True
-    return False
-
-
 def find_by_person_global_id(global_id):
     try:
         return Tutor.objects.get(person__global_id=global_id) if global_id is not None else None
