@@ -239,7 +239,7 @@ class ListBuildTest(TestCase):
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
-        filename = "Liste_Insc_Exam.xlsx"
+        filename = "Liste_Insc_Exam.xls"
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
@@ -371,7 +371,7 @@ class AdminListBuildTest(TestCase):
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
-        filename = "Liste_Insc_Exam.xlsx"
+        filename = "Liste_Insc_Exam.xls"
         self.assertEqual(response.status_code, OK)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
