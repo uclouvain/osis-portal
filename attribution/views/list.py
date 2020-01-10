@@ -148,7 +148,7 @@ def _fetch_with_basic_auth(server_top_url, document_url):
 def _make_xls_list(excel_list_student_enrolled):
     # xls extension because file received is xls
     filename = "Liste_Insc_Exam.xls"
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     response.write(excel_list_student_enrolled)
     return response
