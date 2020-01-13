@@ -41,11 +41,11 @@ from django.http import HttpResponse, response
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 
 from base import models as mdl_base
 from base.models import student, offer_enrollment, offer_year
-from base.views import layout
+from base.views import layout, learning_unit_enrollment_api
 from dashboard.views import main as dash_main_view
 from exam_enrollment.models import exam_enrollment_request, exam_enrollment_submitted
 from osis_common.queue import queue_sender
@@ -109,8 +109,8 @@ def _get_student_programs(stud, acad_year):
 
 
 def _get_exam_enrollment_form(off_year, request, stud):
-    learn_unit_enrols = mdl_base.learning_unit_enrollment.find_by_student_and_offer_year(stud, off_year)
-    if not learn_unit_enrols:
+    learn_unit_enrols = learning_unit_enrollment_api.enrollments_list_by_student(request, stud.registration_id)
+    if not learn_unit_enrols['count']:
         messages.add_message(request, messages.WARNING, _('no_learning_unit_enrollment_found').format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
     if hasattr(settings, 'QUEUES') and settings.QUEUES:

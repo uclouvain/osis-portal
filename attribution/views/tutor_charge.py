@@ -43,7 +43,7 @@ from base.forms.base_forms import GlobalIdForm
 from base.models.enums import offer_enrollment_state, learning_unit_year_subtypes
 from base.models.learning_unit_year import LearningUnitYear
 from base.utils import string_utils
-from base.views import layout
+from base.views import layout, learning_unit_enrollment_api
 from performance import models as mdl_performance
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
@@ -244,15 +244,23 @@ def get_url_learning_unit_year(a_learning_unit_year):
     return None
 
 
-def _load_students(learning_unit_year_id, a_tutor):
+def _load_students(request, learning_unit_year_id, a_tutor):
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     a_learning_unit_year = LearningUnitYear.objects.select_related(
         "academic_year",
         "learning_unit"
     ).get(pk=learning_unit_year_id)
+    # .annotate(
+    #     partims=Subquery(
+    #         LearningUnitYear.objects.filter(
+    #             learning_container_year=OuterRef('learning_container_year_id'),
+    #             subtype=learning_unit_year_subtypes.FULL,
+    #         )
+    #     )
+    # )
     return {
         'global_id': request_tutor.person.global_id,
-        'students': _get_learning_unit_yr_enrollments_list(a_learning_unit_year),
+        'students': _get_learning_unit_yr_enrollments_list(request, a_learning_unit_year),
         'learning_unit_year': a_learning_unit_year,
         'tutor_id': request_tutor.id
     }
@@ -262,40 +270,39 @@ def _load_students(learning_unit_year_id, a_tutor):
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def show_students_admin(request, learning_unit_year_id, a_tutor):
     return render(request, "students_list_admin.html",
-                  _load_students(learning_unit_year_id, a_tutor))
+                  _load_students(request, learning_unit_year_id, a_tutor))
 
 
 @login_required
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 def show_students(request, learning_unit_year_id, a_tutor):
     return render(request, "students_list.html",
-                  _load_students(learning_unit_year_id, a_tutor))
+                  _load_students(request, learning_unit_year_id, a_tutor))
 
 
-def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym):
+def get_sessions_results(a_registration_id, year, learning_unit_acronym, offer_acronym):
     results = {}
-    academic_year = a_learning_unit_year.academic_year.year
     a_student_performance = mdl_performance.student_performance \
-        .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
+        .find_by_student_and_offer_year(a_registration_id, year, offer_acronym)
 
     if a_student_performance:
         student_data = get_student_data_dict(a_student_performance)
         monAnnee = student_data['monAnnee']
-        if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(academic_year):
+        if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == year:
             monOffre = monAnnee['monOffre']
             offre = monOffre['offre']
             if offre['sigleComplet'] == offer_acronym:
                 cours_list = monOffre['cours']
-                _manage_cours_list(a_learning_unit_year, cours_list, results)
+                _manage_cours_list(learning_unit_acronym, cours_list, results)
     return results
 
 
-def _manage_cours_list(a_learning_unit_year, cours_list, results):
+def _manage_cours_list(learning_unit_acronym, cours_list, results):
     if cours_list:
         nb_cours = 0
         while nb_cours < len(cours_list):
             cours = cours_list[nb_cours]
-            if cours['sigleComplet'] == a_learning_unit_year.acronym:
+            if cours['sigleComplet'] == learning_unit_acronym:
                 get_student_results(cours, results)
             nb_cours = nb_cours + 1
 
@@ -336,16 +343,17 @@ def get_session_value(session_results, month_session, variable_to_get):
 
 
 def get_enrollments_dict_for_display(learning_unit_enrollment):
-    session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
-                                           learning_unit_enrollment.learning_unit_year,
-                                           learning_unit_enrollment.offer_enrollment.offer_year.acronym)
+    session_results = get_sessions_results(learning_unit_enrollment['registration_id'],
+                                           learning_unit_enrollment['academic_year'],
+                                           learning_unit_enrollment['learning_unit_acronym'],
+                                           learning_unit_enrollment['education_group_acronym'])
     return {
-        'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
-                                  learning_unit_enrollment.offer_enrollment.student.person.first_name),
-        'email': learning_unit_enrollment.offer_enrollment.student.person.email,
-        'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
-        'acronym': learning_unit_enrollment.learning_unit_year.acronym,
-        'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
+        'name': "{0}, {1}".format(learning_unit_enrollment['student_last_name'],
+                                  learning_unit_enrollment['student_first_name']),
+        'email': learning_unit_enrollment['student_email'],
+        'program': learning_unit_enrollment['education_group_acronym'],
+        'acronym': learning_unit_enrollment['learning_unit_acronym'],
+        'registration_id': learning_unit_enrollment['registration_id'],
         'january_note': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE),
         'january_status': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_STATUS),
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
@@ -368,18 +376,15 @@ def calculate_attribution_format_percentage_allocation_charge(lecturing_charge, 
     return None
 
 
-def get_learning_unit_enrollments_list(a_learning_unit_year):
-    enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
-    learning_unit_years = [a_learning_unit_year]
-    if a_learning_unit_year.subtype == learning_unit_year_subtypes.FULL:
-        learning_unit_years = list(
-            LearningUnitYear.objects.filter(learning_container_year=a_learning_unit_year.learning_container_year)
-        )
-    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(
-        learning_unit_years,
-        offer_enrollment_states=enrollment_states,
-        only_enrolled=True
+def _fetch_enrollments_from_api(request, learning_unit_year):
+    offer_enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
+    test = learning_unit_enrollment_api.enrollments_list_by_learning_unit(
+        request,
+        learning_unit_year.academic_year.year,
+        learning_unit_year.acronym,
+        offer_enrollment_states
     )
+    return test['results']
 
 
 @login_required
@@ -456,12 +461,12 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     return tutor_attributions
 
 
-def _get_learning_unit_yr_enrollments_list(a_learning_unit_year):
+def _get_learning_unit_yr_enrollments_list(request, a_learning_unit_year):
     enrollments = [
         get_enrollments_dict_for_display(lue)
-        for lue in get_learning_unit_enrollments_list(a_learning_unit_year)
+        for lue in _fetch_enrollments_from_api(request, a_learning_unit_year)
     ]
-    return sorted(enrollments, key=itemgetter('program'))
+    return sorted(enrollments, key=itemgetter('program', 'acronym', 'name'))
 
 
 @login_required
@@ -471,5 +476,5 @@ def students_list_build_by_learning_unit(request, learning_unit_year_id):
         "academic_year",
         "learning_unit"
     ).get(pk=learning_unit_year_id)
-    student_list = _get_learning_unit_yr_enrollments_list(a_learning_unit_yr)
+    student_list = _get_learning_unit_yr_enrollments_list(request, a_learning_unit_yr)
     return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)

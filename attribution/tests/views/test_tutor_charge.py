@@ -29,7 +29,7 @@ from unittest import mock
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
 from django.forms.formsets import BaseFormSet
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, RequestFactory
 from django.urls import reverse
 from requests.exceptions import RequestException
 
@@ -253,7 +253,8 @@ class TutorChargeTest(TestCase):
             'weight': WEIGHT
         })
         self.assertEqual(tutor_charge.get_sessions_results(student_performance.registration_id,
-                                                           a_learning_unit_year,
+                                                           a_learning_unit_year.academic_year.year,
+                                                           a_learning_unit_year.academic_year.acronym,
                                                            student_performance.acronym)
                          , {
                              tutor_charge.JANUARY:
@@ -325,7 +326,7 @@ class TutorChargeTest(TestCase):
         for _ in range(5):
             LearningUnitEnrollmentFactory(learning_unit_year=luy_full)
             LearningUnitEnrollmentFactory(learning_unit_year=luy_partim)
-        self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(luy_full)), 10)
+        self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(RequestFactory(), luy_full)), 10)
 
 
 ACCESS_DENIED = 401
