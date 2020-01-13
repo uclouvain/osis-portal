@@ -33,9 +33,12 @@ from django.utils.translation import ugettext_lazy as _
 
 from attribution.tests.factories.attribution import AttributionFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
+from base.models.enums import learning_unit_enrollment_state, offer_enrollment_state
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
+from base.tests.factories.learning_unit_enrollment_serialized import LearningUnitEnrollmentAPIResponse, \
+    LearningUnitEnrollmentSerialized
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
@@ -102,7 +105,9 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
 
-    def test_with_attribution_students(self):
+    @mock.patch("base.views.learning_unit_enrollment_api.enrollments_list_by_learning_unit")
+    def test_with_attribution_students(self, mock_api_call):
+
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
@@ -110,15 +115,10 @@ class StudentsListTest(TestCase):
         AttributionFactory(learning_unit_year=a_learning_unit_year, tutor=self.tutor)
         offer_year = OfferYearFactory(academic_year=an_academic_year)
 
-        # Create two enrollment to exam [Enrolled]
-        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
-        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment)
-        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
-        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment)
-        # Create an enrollment to exam [NOT enrolled]
-        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
-        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment,
-                                      enrollment_state="")
+        api_results = [
+            LearningUnitEnrollmentSerialized(a_learning_unit_year, OfferEnrollmentFactory(offer_year=offer_year))
+        ]
+        mock_api_call.return_value = LearningUnitEnrollmentAPIResponse(results=api_results)
 
         url = reverse('attribution_students', kwargs={
             'learning_unit_year_id': a_learning_unit_year.id,
@@ -131,7 +131,7 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['global_id'], self.tutor.person.global_id)
         self.assertEqual(response.context['learning_unit_year'], a_learning_unit_year)
         self.assertTrue(response.context['students'])
-        self.assertEqual(len(response.context['students']), 2)
+        self.assertEqual(len(response.context['students']), len(api_results))
 
 
 class ListBuildTest(TestCase):
