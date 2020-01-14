@@ -360,9 +360,7 @@ class ExamEnrollmentFormTest(TestCase):
             self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
 
     @patch("base.views.learning_unit_enrollment_api.enrollments_list_by_student")
-    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
-    def test_case_student_has_no_learning_unit_enrollment(self, mock_find, mock_api_lunit_enrollment):
-        mock_find.return_value = None
+    def test_case_student_has_no_learning_unit_enrollment(self, mock_api_lunit_enrollment):
         mock_api_lunit_enrollment.return_value = LearningUnitEnrollmentAPIResponse(results=[])
         off_year_enrol = OfferEnrollmentFactory(student=self.student,
                                                 offer_year=OfferYearFactory(academic_year=self.current_academic_year))
