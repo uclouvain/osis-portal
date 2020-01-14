@@ -33,10 +33,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from attribution.tests.factories.attribution import AttributionFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
-from base.models.enums import learning_unit_enrollment_state, offer_enrollment_state
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
 from base.tests.factories.learning_unit_enrollment_serialized import LearningUnitEnrollmentAPIResponse, \
     LearningUnitEnrollmentSerialized
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
