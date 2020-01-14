@@ -98,20 +98,3 @@ def enrollments_list_by_learning_unit(request, year, acronym, offer_enrollment_s
         headers={'Authorization': 'Token ' + token}
     )
     return _transform_response_to_data(response)
-
-
-# def _fetch_enrollments():
-#     # import openapi_client
-#     # from openapi_client import Enrollment
-#     from openapi_client import LearningUnitEnrollmentsApi
-#     # configuration.host = "http://petstore.swagger.io:80/v2"
-#     # Create an instance of the API class
-#     api_instance = LearningUnitEnrollmentsApi()
-#     # body = Enrollment('')  # Enrollment | enrollment model
-#     try:
-#         # To test special tags
-#         global_id = '12911101'
-#         api_response = api_instance.learning_unit_enrollments_list_by_student(global_id)
-#         print(api_response)
-#     except Exception as e:
-#         print("Exception when calling AnotherFakeApi->call_123_test_special_tags: %s\n" % e)
