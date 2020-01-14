@@ -53,16 +53,16 @@ class LearningUnitEnrollmentSerialized(dict):
 
 class APIResponseFactory(dict):
 
-    serializer_klass = None
+    serializer_class = None
 
     def __init__(self, results_to_produce=1, results: List[dict] = None):
-        assert self.serializer_klass is not None
+        assert self.serializer_class is not None
         super(APIResponseFactory, self).__init__()
         self.update({
             'count': len(results) if results is not None else results_to_produce,
-            'results': results or [self.serializer_klass() for _ in range(results_to_produce)]
+            'results': results or [self.serializer_class() for _ in range(results_to_produce)]
         })
 
 
 class LearningUnitEnrollmentAPIResponse(APIResponseFactory):
-    serializer_klass = LearningUnitEnrollmentSerialized
+    serializer_class = LearningUnitEnrollmentSerialized
