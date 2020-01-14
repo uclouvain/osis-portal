@@ -62,24 +62,3 @@ class LearningUnitEnrollment(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.learning_unit_year, self.offer_enrollment.student)
-
-
-def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=None, only_enrolled=False):
-    qs = LearningUnitEnrollment.objects.select_related("learning_unit_year__academic_year",
-                                                         "learning_unit_year__learning_unit",
-                                                         "offer_enrollment__student__person",
-                                                         "offer_enrollment__offer_year",)\
-        .filter(learning_unit_year__in=learning_unit_years)\
-        .order_by('offer_enrollment__student__person__last_name', 'offer_enrollment__student__person__first_name')
-
-    if offer_enrollment_states and isinstance(offer_enrollment_states, list):
-        qs = qs.filter(offer_enrollment__enrollment_state__in=offer_enrollment_states)
-    if only_enrolled:
-        qs = qs.filter(enrollment_state=learning_unit_enrollment_state.ENROLLED)
-
-    return qs
-
-
-def find_by_student_and_offer_year(student, off_year):
-    return LearningUnitEnrollment.objects.filter(offer_enrollment__student=student)\
-                                         .filter(offer_enrollment__offer_year=off_year)
