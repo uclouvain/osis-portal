@@ -40,8 +40,7 @@ from base.tests.factories.learning_unit_enrollment_serialized import LearningUni
     LearningUnitEnrollmentAPIResponse
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.offer_year import OfferYearFactory
-from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, \
-    test_learning_unit_enrollment, test_learning_unit_year
+from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, test_learning_unit_year
 from base.utils import queue_utils
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
