@@ -40,7 +40,10 @@ from base.models.enums import learning_unit_year_subtypes
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
+from base.tests.factories.learning_unit_enrollment_serialized import LearningUnitEnrollmentAPIResponse, \
+    LearningUnitEnrollmentSerialized
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.models import test_academic_year, test_learning_unit_year
@@ -254,7 +257,7 @@ class TutorChargeTest(TestCase):
         })
         self.assertEqual(tutor_charge.get_sessions_results(student_performance.registration_id,
                                                            a_learning_unit_year.academic_year.year,
-                                                           a_learning_unit_year.academic_year.acronym,
+                                                           a_learning_unit_year.acronym,
                                                            student_performance.acronym)
                          , {
                              tutor_charge.JANUARY:
@@ -312,7 +315,8 @@ class TutorChargeTest(TestCase):
         self.assertEqual(tot_lecturing, LEARNING_UNIT_LECTURING_DURATION)
         self.assertEqual(tot_practical, LEARNING_UNIT_PRACTICAL_EXERCISES_DURATION)
 
-    def test_get_learning_unit_enrollments_list(self):
+    @mock.patch("base.views.learning_unit_enrollment_api.enrollments_list_by_learning_unit")
+    def test_get_learning_unit_enrollments_list(self, mock_api_lunit_enrol):
         luy_full = self.data[0]['learning_unit_year']
         luy_partim = test_learning_unit_year.create_learning_unit_year({
             'acronym': "{}A".format(ACRONYM),
@@ -323,9 +327,11 @@ class TutorChargeTest(TestCase):
         })
         luy_partim.learning_container_year = luy_full.learning_container_year
         luy_partim.save()
+        api_results = []
         for _ in range(5):
-            LearningUnitEnrollmentFactory(learning_unit_year=luy_full)
-            LearningUnitEnrollmentFactory(learning_unit_year=luy_partim)
+            api_results.append(LearningUnitEnrollmentSerialized(luy_full))
+            api_results.append(LearningUnitEnrollmentSerialized(luy_partim))
+        mock_api_lunit_enrol.return_value = LearningUnitEnrollmentAPIResponse(results=api_results)
         self.assertEqual(len(tutor_charge._get_learning_unit_yr_enrollments_list(RequestFactory(), luy_full)), 10)
 
 

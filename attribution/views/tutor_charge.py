@@ -250,14 +250,6 @@ def _load_students(request, learning_unit_year_id, a_tutor):
         "academic_year",
         "learning_unit"
     ).get(pk=learning_unit_year_id)
-    # .annotate(
-    #     partims=Subquery(
-    #         LearningUnitYear.objects.filter(
-    #             learning_container_year=OuterRef('learning_container_year_id'),
-    #             subtype=learning_unit_year_subtypes.FULL,
-    #         )
-    #     )
-    # )
     return {
         'global_id': request_tutor.person.global_id,
         'students': _get_learning_unit_yr_enrollments_list(request, a_learning_unit_year),
@@ -288,7 +280,7 @@ def get_sessions_results(a_registration_id, year, learning_unit_acronym, offer_a
     if a_student_performance:
         student_data = get_student_data_dict(a_student_performance)
         monAnnee = student_data['monAnnee']
-        if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == year:
+        if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(year):
             monOffre = monAnnee['monOffre']
             offre = monOffre['offre']
             if offre['sigleComplet'] == offer_acronym:
