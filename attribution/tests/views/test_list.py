@@ -54,16 +54,19 @@ def return_sample_xls(*args):
 
 
 class StudentsListTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         Group.objects.create(name="tutors")
         Group.objects.get_or_create(name='students')
-        self.tutor = TutorFactory()
-        person = self.tutor.person
+        cls.tutor = TutorFactory()
+        person = cls.tutor.person
         person.global_id = "001923265"
         person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         person.save()
 
-        self.url = reverse('students_list')
+        cls.url = reverse('students_list')
+
+    def setUp(self):
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -135,12 +138,15 @@ class StudentsListTest(TestCase):
 
 
 class ListBuildTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         Group.objects.create(name="tutors")
-        self.tutor = TutorFactory()
-        self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
+        cls.tutor = TutorFactory()
+        cls.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('students_list_create')
+        cls.url = reverse('students_list_create')
+
+    def setUp(self):
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -249,13 +255,16 @@ class ListBuildTest(TestCase):
 
 
 class AdminStudentsListTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         Group.objects.create(name="tutors")
-        self.person = PersonFactory(global_id="76543210")
-        self.tutor = TutorFactory(person=self.person)
-        self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
+        cls.person = PersonFactory(global_id="76543210")
+        cls.tutor = TutorFactory(person=cls.person)
+        cls.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('lists_of_students_exams_enrollments')
+        cls.url = reverse('lists_of_students_exams_enrollments')
+
+    def setUp(self):
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
@@ -292,13 +301,16 @@ class AdminStudentsListTest(TestCase):
 
 
 class AdminListBuildTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         Group.objects.create(name="tutors")
-        self.person = PersonFactory(global_id="01234567")
-        self.tutor = TutorFactory(person=self.person)
-        self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
+        cls.person = PersonFactory(global_id="01234567")
+        cls.tutor = TutorFactory(person=cls.person)
+        cls.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('lists_of_students_exams_enrollments_create', args=['01234567'])
+        cls.url = reverse('lists_of_students_exams_enrollments_create', args=['01234567'])
+
+    def setUp(self):
         self.client.force_login(self.tutor.person.user)
 
     def test_without_being_logged(self):
