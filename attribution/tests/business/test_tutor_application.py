@@ -40,39 +40,40 @@ from base.tests.factories.tutor import TutorFactory
 
 
 class TutorApplicationTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         # Create academic year
-        self.academic_year = AcademicYearFactory(year=2017)
+        cls.academic_year = AcademicYearFactory(year=2017)
         # Create several learning container year - 2017
-        self.lbir1200_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1200")
-        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1200_2017)
-        self.lbir1250_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1250")
-        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1250_2017)
-        self.lbir1300_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1300")
-        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lbir1300_2017)
-        self.lagro1200_2017 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LAGRO1200")
-        LearningUnitYearFactory(academic_year=self.academic_year, learning_container_year=self.lagro1200_2017)
+        cls.lbir1200_2017 = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="LBIR1200")
+        LearningUnitYearFactory(academic_year=cls.academic_year, learning_container_year=cls.lbir1200_2017)
+        cls.lbir1250_2017 = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="LBIR1250")
+        LearningUnitYearFactory(academic_year=cls.academic_year, learning_container_year=cls.lbir1250_2017)
+        cls.lbir1300_2017 = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="LBIR1300")
+        LearningUnitYearFactory(academic_year=cls.academic_year, learning_container_year=cls.lbir1300_2017)
+        cls.lagro1200_2017 = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="LAGRO1200")
+        LearningUnitYearFactory(academic_year=cls.academic_year, learning_container_year=cls.lagro1200_2017)
 
         # Create several learning container year - 2016
-        self.academic_year_2016 = AcademicYearFactory(year=2016)
-        self.lbir1200_2016 = LearningContainerYearFactory(academic_year=self.academic_year_2016, acronym="LBIR1200")
-        LearningUnitYearFactory(academic_year=self.academic_year_2016, learning_container_year=self.lbir1200_2016)
-        self.lbir1250_2016 = LearningContainerYearFactory(academic_year=self.academic_year_2016, acronym="LBIR1250")
-        LearningUnitYearFactory(academic_year=self.academic_year_2016, learning_container_year=self.lbir1250_2016)
+        cls.academic_year_2016 = AcademicYearFactory(year=2016)
+        cls.lbir1200_2016 = LearningContainerYearFactory(academic_year=cls.academic_year_2016, acronym="LBIR1200")
+        LearningUnitYearFactory(academic_year=cls.academic_year_2016, learning_container_year=cls.lbir1200_2016)
+        cls.lbir1250_2016 = LearningContainerYearFactory(academic_year=cls.academic_year_2016, acronym="LBIR1250")
+        LearningUnitYearFactory(academic_year=cls.academic_year_2016, learning_container_year=cls.lbir1250_2016)
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
         person = PersonFactory(global_id="98363454")
-        self.tutor = TutorFactory(person=person)
+        cls.tutor = TutorFactory(person=person)
 
         applications = [
-            _get_application_example(self.lbir1200_2017, '3.5', '35.6'),  # Application 2017
-            _get_application_example(self.lbir1300_2017, '7.5', '25'),  # Application 2017
-            _get_application_example(self.lbir1200_2016, '2', '30'),  # Application 2016
+            _get_application_example(cls.lbir1200_2017, '3.5', '35.6'),  # Application 2017
+            _get_application_example(cls.lbir1300_2017, '7.5', '25'),  # Application 2017
+            _get_application_example(cls.lbir1200_2016, '2', '30'),  # Application 2016
         ]
-        self.attribution = AttributionNewFactory(global_id=person.global_id,
-                                                 attributions=_get_attributions_default(),
-                                                 applications=applications)
+        cls.attribution = AttributionNewFactory(global_id=person.global_id,
+                                                attributions=_get_attributions_default(),
+                                                applications=applications)
 
     def test_get_application_list(self):
         global_id = self.tutor.person.global_id
