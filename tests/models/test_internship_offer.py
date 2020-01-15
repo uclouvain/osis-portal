@@ -53,8 +53,9 @@ def create_specific_internship_offer(organization, speciality, title="offer_test
 
 
 class TestInternshipOffer(TestCase):
-    def setUp(self):
-        self.offer = create_internship_offer()
+    @classmethod
+    def setUpTestData(cls):
+        cls.offer = create_internship_offer()
 
     def test_find_by_speciality(self):
         speciality = self.offer.speciality
