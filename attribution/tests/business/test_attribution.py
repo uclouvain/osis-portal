@@ -53,9 +53,11 @@ class AttributionTest(TestCase):
         cls.current_academic_year = create_current_academic_year()
 
         # Creation Json which will be store on attribution
-        attributions = _get_attributions_dict(cls.current_academic_year.year)
-        cls.attrib = AttributionNewFactory(global_id=cls.person.global_id,
-                                           attributions=attributions)
+        cls.attributions = _get_attributions_dict(cls.current_academic_year.year)
+
+    def setUp(self):
+        self.attrib = AttributionNewFactory(global_id=self.person.global_id,
+                                            attributions=self.attributions)
 
     def test_get_attribution_list(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
