@@ -30,8 +30,9 @@ from reference.tests.factories.domain import DomainFactory
 
 
 class TestFindSubdomains(TestCase):
-    def setUp(self):
-        self.parent_domain = DomainFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.parent_domain = DomainFactory()
 
     def test_with_no_subdomdains(self):
         subdomains = list(domain.find_subdomains(self.parent_domain))
