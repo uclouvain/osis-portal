@@ -30,9 +30,12 @@ from internship.forms import form_offer_preference
 
 
 class TestOfferPreferenceFormset(TestCase):
-    def setUp(self):
-        self.FormsetOfferPreference = formset_factory(form_offer_preference.OfferPreferenceForm,
-                                                      formset=form_offer_preference.OfferPreferenceFormSet)
+    @classmethod
+    def setUpTestData(cls):
+        cls.FormsetOfferPreference = formset_factory(
+            form_offer_preference.OfferPreferenceForm,
+            formset=form_offer_preference.OfferPreferenceFormSet
+        )
 
     def test_invalid_same_preference(self):
         data = {
