@@ -37,30 +37,33 @@ from base.tests.factories.tutor import TutorFactory
 
 
 class TestTutorApplicationEpc(TestCase):
-    def setUp(self):
-        self.academic_year = AcademicYearFactory(year=2017)
+    @classmethod
+    def setUpTestData(cls):
+        cls.academic_year = AcademicYearFactory(year=2017)
         external_id = tutor_application_epc.LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID + '35654987_2017'
-        self.lbir1200 = LearningUnitYearFactory(academic_year=self.academic_year, acronym="LBIR1200",
-                                                learning_container_year__academic_year=self.academic_year,
-                                                learning_container_year__acronym="LBIR1200",
-                                                learning_container_year__external_id=external_id)
-        self.lagro2630 = LearningUnitYearFactory(academic_year=self.academic_year, acronym="LAGRO2630",
-                                                 learning_container_year__academic_year=self.academic_year,
-                                                 learning_container_year__acronym="LAGRO2630",
-                                                 )
+        cls.lbir1200 = LearningUnitYearFactory(academic_year=cls.academic_year, acronym="LBIR1200",
+                                               learning_container_year__academic_year=cls.academic_year,
+                                               learning_container_year__acronym="LBIR1200",
+                                               learning_container_year__external_id=external_id)
+        cls.lagro2630 = LearningUnitYearFactory(academic_year=cls.academic_year, acronym="LAGRO2630",
+                                                learning_container_year__academic_year=cls.academic_year,
+                                                learning_container_year__acronym="LAGRO2630",
+                                                )
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
-        person = PersonFactory(global_id="98363454")
+        cls.person = PersonFactory(global_id="98363454")
         external_id = tutor_application_epc.TUTOR_PREFIX_EXTERNAL_ID + '2089590559'
-        self.tutor = TutorFactory(external_id=external_id, person=person)
+        cls.tutor = TutorFactory(external_id=external_id, person=cls.person)
 
         # Create two tutor applications
-        applications = [_get_application_example(self.lbir1200, '30.5', '40.5'),
-                        _get_application_example(self.lagro2630, '12.5', '0')]
+        cls.applications = [_get_application_example(cls.lbir1200, '30.5', '40.5'),
+                            _get_application_example(cls.lagro2630, '12.5', '0')]
+
+    def setUp(self):
         self.attribution = AttributionNewFactory(
-            global_id=person.global_id,
-            applications=applications
+            global_id=self.person.global_id,
+            applications=self.applications
         )
 
     def test_extract_learning_container_year_epc_info(self):
