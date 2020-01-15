@@ -30,7 +30,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import OperationalError
-from django.test import TestCase, Client, modify_settings, override_settings
+from django.test import TestCase, modify_settings, override_settings
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
@@ -51,18 +51,21 @@ METHOD_NOT_ALLOWED = 405
 
 
 class CheckPaperSheetTest(TestCase):
-    def setUp(self):
-        a_person = PersonFactory(global_id=GLOBAL_ID)
+    @classmethod
+    def setUpTestData(cls):
+        cls.a_person = PersonFactory(global_id=GLOBAL_ID)
 
         tutors_group = Group.objects.create(name='tutors')
         permission = Permission.objects.get(codename="is_tutor")
         tutors_group.permissions.add(permission)
-        a_person.user.groups.add(tutors_group)
+        cls.a_person.user.groups.add(tutors_group)
 
-        self.tutor = TutorFactory(person=a_person)
+        cls.tutor = TutorFactory(person=cls.a_person)
 
-        self.url = reverse('check_papersheet', args=[GLOBAL_ID])
-        self.client.force_login(a_person.user)
+        cls.url = reverse('check_papersheet', args=[GLOBAL_ID])
+
+    def setUp(self):
+        self.client.force_login(self.a_person.user)
 
     def test_when_no_tutor(self):
         self.tutor.delete()
@@ -101,18 +104,21 @@ class CheckPaperSheetTest(TestCase):
 
 
 class AskPaperSheetTest(TestCase):
-    def setUp(self):
-        a_person = PersonFactory(global_id=GLOBAL_ID)
+    @classmethod
+    def setUpTestData(cls):
+        cls.a_person = PersonFactory(global_id=GLOBAL_ID)
 
         tutors_group = Group.objects.create(name='tutors')
         permission = Permission.objects.get(codename="is_tutor")
         tutors_group.permissions.add(permission)
-        a_person.user.groups.add(tutors_group)
+        cls.a_person.user.groups.add(tutors_group)
 
-        self.tutor = TutorFactory(person=a_person)
+        cls.tutor = TutorFactory(person=cls.a_person)
 
-        self.url = reverse('ask_papersheet', args=[GLOBAL_ID])
-        self.client.force_login(a_person.user)
+        cls.url = reverse('ask_papersheet', args=[GLOBAL_ID])
+
+    def setUp(self):
+        self.client.force_login(self.a_person.user)
 
     def test_when_no_tutor(self):
         self.tutor.delete()
@@ -174,18 +180,21 @@ class AskPaperSheetTest(TestCase):
 
 
 class DownloadPaperSheetTest(TestCase):
-    def setUp(self):
-        a_person = PersonFactory(global_id=GLOBAL_ID)
+    @classmethod
+    def setUpTestData(cls):
+        cls.a_person = PersonFactory(global_id=GLOBAL_ID)
 
         tutors_group = Group.objects.create(name='tutors')
         permission = Permission.objects.get(codename="is_tutor")
         tutors_group.permissions.add(permission)
-        a_person.user.groups.add(tutors_group)
+        cls.a_person.user.groups.add(tutors_group)
 
-        self.tutor = TutorFactory(person=a_person)
+        cls.tutor = TutorFactory(person=cls.a_person)
 
-        self.url = reverse('scores_download', args=[GLOBAL_ID])
-        self.client.force_login(a_person.user)
+        cls.url = reverse('scores_download', args=[GLOBAL_ID])
+
+    def setUp(self):
+        self.client.force_login(self.a_person.user)
 
     def test_when_user_not_tutor(self):
         self.tutor.delete()
@@ -289,8 +298,9 @@ class ScoreSheetTest(TestCase):
 
 
 class PrintScoreSheetTest(TestCase):
-    def setUp(self):
-        self.score_encoding = ScoreEncodingFactory(global_id=GLOBAL_ID)
+    @classmethod
+    def setUpTestData(cls):
+        cls.score_encoding = ScoreEncodingFactory(global_id=GLOBAL_ID)
 
     def test_when_no_scores_sheet(self):
         pdf = score_encoding.print_scores("014")
@@ -309,9 +319,10 @@ class PrintScoreSheetTest(TestCase):
 
 
 class InsertOrUpdateDocumentFromQueueTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         json_sample = load_score_encoding_sample(global_id=GLOBAL_ID)
-        self.message_body = bytes(json_sample, 'utf-8')
+        cls.message_body = bytes(json_sample, 'utf-8')
 
     @patch("assessments.models.score_encoding.insert_or_update_document", side_effect=Exception)
     def test_when_Exception(self, mock_insert_or_update_document):
@@ -330,14 +341,17 @@ class InsertOrUpdateDocumentFromQueueTest(TestCase):
 
 
 class ScoresSheetAdminTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('scores_sheets_admin')
+        cls.a_person = PersonFactory(global_id=GLOBAL_ID)
+
     def setUp(self):
-        self.url = reverse('scores_sheets_admin')
-        self.a_person = PersonFactory(global_id=GLOBAL_ID)
         self.client.force_login(self.a_person.user)
 
     def test_when_not_logged(self):
-        client = Client()
-        response = client.get(self.url)
+        self.client.logout()
+        response = self.client.get(self.url)
         self.assertRedirects(response, '/login/?next=/assessments/administration/scores_sheets/')
 
     def test_when_not_faculty_administrator(self):
@@ -369,15 +383,17 @@ class ScoresSheetAdminTest(TestCase):
 
 
 class ScoresSheetTest(TestCase):
-    def setUp(self):
-        self.url = reverse('my_scores_sheets')
-        self.a_person = PersonFactory(global_id=GLOBAL_ID)
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('my_scores_sheets')
+        cls.a_person = PersonFactory(global_id=GLOBAL_ID)
 
+    def setUp(self):
         self.client.force_login(self.a_person.user)
 
     def test_when_not_logged(self):
-        client = Client()
-        response = client.get(self.url)
+        self.client.logout()
+        response = self.client.get(self.url)
         self.assertRedirects(response, '/login/?next=/assessments/scores_encoding/my_scores_sheets/')
 
     def test_when_not_a_tutor(self):
