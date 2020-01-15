@@ -40,15 +40,16 @@ from base.tests.models import test_person
 
 
 class AttributionTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         group = Group(name="tutors")
         group.save()
-        self.attribution = AttributionFactory()
+        cls.attribution = AttributionFactory()
         today = datetime.datetime.today()
-        self.an_academic_year = AcademicYearFactory(year=today.year)
-        self.user = UserFactory()
-        self.person = test_person.create_person_with_user(self.user)
-        self.tutor = TutorFactory(person=self.person)
+        cls.an_academic_year = AcademicYearFactory(year=today.year)
+        cls.user = UserFactory()
+        cls.person = test_person.create_person_with_user(cls.user)
+        cls.tutor = TutorFactory(person=cls.person)
 
     def test_find_by_tutor_year_order_by_acronym_function_check_alphabetical_order(self):
         a_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year, acronym='LAUT')
