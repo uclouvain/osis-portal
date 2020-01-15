@@ -29,12 +29,12 @@ from django.test import TestCase
 
 from base.tests.models import test_student
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
+from internship.models import period as mdl_period
 from internship.tests.factories.cohort import CohortFactory
 from internship.tests.models import test_organization, test_internship_speciality
 
 
-def create_period(name="P1", start=datetime.date(2010, 1, 1), end=datetime.date(2010, 1, 20), cohort=None,
-                  mdl_period=None):
+def create_period(name="P1", start=datetime.date(2010, 1, 1), end=datetime.date(2010, 1, 20), cohort=None):
     if cohort is None:
         cohort = CohortFactory()
     period = mdl_period.Period(name=name, date_start=start, date_end=end, cohort=cohort)
