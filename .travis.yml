@@ -17,8 +17,8 @@ install:
   - cd osis-portal
   - git checkout qa
   - git pull origin qa
-  - git submodule init internship osis_common
-  - git submodule update internship osis_common
+  - git submodule init internship osis_common dissertation
+  - git submodule update internship osis_common dissertation
   - pip install -r requirements.txt
   - rm -Rf internship
   - cp -avr $PROJECT_DIR internship
