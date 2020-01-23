@@ -51,20 +51,24 @@ def open_sample_pdf():
 
 
 class HomeTest(TestCase):
-    def setUp(self):
-        self.url = reverse('attestation_home')
-        self.person = PersonFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('attestation_home')
+        cls.person = PersonFactory()
 
         students_group = Group.objects.create(name='students')
-        self.permission = Permission.objects.get(codename="is_student")
-        students_group.permissions.add(self.permission)
+        cls.permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(cls.permission)
+
+    def setUp(self):
+        self.client.force_login(self.person.user)
 
     def test_without_being_logged(self):
+        self.client.logout()
         response = self.client.get(self.url)
         self.assertRedirects(response, '/login/?next={}'.format(self.url))
 
     def test_with_user_not_a_student(self):
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "access_denied.html")
@@ -75,8 +79,6 @@ class HomeTest(TestCase):
         StudentFactory(person=self.person)
         msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
                 "contact the registration departement (SIC). Thank you.")
-
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "dashboard.html")
@@ -90,8 +92,6 @@ class HomeTest(TestCase):
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses', side_effect=lambda x: None)
     def test_when_not_receive_attestation_statuses(self, mock_fetch_json_attestation_statuses):
         a_student = StudentFactory(person=self.person)
-
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
@@ -109,8 +109,6 @@ class HomeTest(TestCase):
            side_effect=lambda x: {'academicYear': 2015, 'available': False, 'attestationStatuses': []})
     def test_when_receive_attestation_statuses(self, mock_fetch_json_attestation_statuses):
         a_student = StudentFactory(person=self.person)
-
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
@@ -126,8 +124,6 @@ class HomeTest(TestCase):
 
     def test_when_no_student_find_by_user(self):
         self.person.user.user_permissions.add(self.permission)
-
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertEqual(response.status_code, OK)
@@ -141,22 +137,26 @@ class HomeTest(TestCase):
 
 
 class DownloadAttestationTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         year = datetime.date.today().year
-        self.attestation_type = "test"
-        self.url = reverse('download_attestation', args=[str(year), self.attestation_type])
-        self.person = PersonFactory()
+        cls.attestation_type = "test"
+        cls.url = reverse('download_attestation', args=[str(year), cls.attestation_type])
+        cls.person = PersonFactory()
 
         students_group = Group.objects.create(name='students')
-        self.permission = Permission.objects.get(codename="is_student")
-        students_group.permissions.add(self.permission)
+        cls.permission = Permission.objects.get(codename="is_student")
+        students_group.permissions.add(cls.permission)
+
+    def setUp(self):
+        self.client.force_login(self.person.user)
 
     def test_without_being_logged(self):
+        self.client.logout()
         response = self.client.get(self.url)
         self.assertRedirects(response, '/login/?next={}'.format(self.url))
 
     def test_with_user_not_a_student(self):
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "access_denied.html")
@@ -167,8 +167,6 @@ class DownloadAttestationTest(TestCase):
         StudentFactory(person=self.person)
         msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
                 "contact the registration departement (SIC). Thank you.")
-
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "dashboard.html")
@@ -183,8 +181,6 @@ class DownloadAttestationTest(TestCase):
            side_effect=lambda global_id, year, attestation_type, username: None)
     def test_when_no_attestation_pdf(self, mock_fetch_student_attestation):
         StudentFactory(person=self.person)
-
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_student_attestation.called)
@@ -200,8 +196,6 @@ class DownloadAttestationTest(TestCase):
            side_effect=lambda global_id, year, attestation_type, username: open_sample_pdf())
     def test_when_attestation_pdf_fetched(self, mock_fetch_student_attestation):
         StudentFactory(person=self.person)
-
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_student_attestation.called)
@@ -211,14 +205,19 @@ class DownloadAttestationTest(TestCase):
 
 
 class AttestationAdministrationTest(TestCase):
-    def setUp(self):
-        self.url = reverse('attestation_administration')
-        self.person = PersonFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('attestation_administration')
+        cls.person = PersonFactory()
 
-        self.permission = Permission.objects.get(codename="is_faculty_administrator")
-        self.person.user.user_permissions.add(self.permission)
+        cls.permission = Permission.objects.get(codename="is_faculty_administrator")
+        cls.person.user.user_permissions.add(cls.permission)
+
+    def setUp(self):
+        self.client.force_login(self.person.user)
 
     def test_without_being_logged(self):
+        self.client.logout()
         response = self.client.get(self.url)
         self.assertRedirects(response, '/login/?next={}'.format(self.url))
 
@@ -231,7 +230,6 @@ class AttestationAdministrationTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     def test_when_faculty_administrator(self):
-        self.client.force_login(self.person.user)
 
         response = self.client.get(self.url, follow=True)
 
@@ -240,16 +238,21 @@ class AttestationAdministrationTest(TestCase):
 
 
 class SelectStudentAttestationTest(TestCase):
-    def setUp(self):
-        self.url = reverse('attestation_admin_select_student')
-        self.person = PersonFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('attestation_admin_select_student')
+        cls.person = PersonFactory()
 
-        self.permission = Permission.objects.get(codename="is_faculty_administrator")
-        self.person.user.user_permissions.add(self.permission)
+        cls.permission = Permission.objects.get(codename="is_faculty_administrator")
+        cls.person.user.user_permissions.add(cls.permission)
 
         Group.objects.create(name='students')
 
+    def setUp(self):
+        self.client.force_login(self.person.user)
+
     def test_without_being_logged(self):
+        self.client.logout()
         response = self.client.get(self.url)
         self.assertRedirects(response, '/login/?next={}'.format(self.url))
 
@@ -262,8 +265,6 @@ class SelectStudentAttestationTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     def test_get_request(self):
-        self.client.force_login(self.person.user)
-
         response = self.client.get(self.url, follow=True)
 
         self.assertEqual(response.status_code, OK)
@@ -272,8 +273,6 @@ class SelectStudentAttestationTest(TestCase):
         self.assertIsInstance(response.context['form'], RegistrationIdForm)
 
     def test_invalid_post_request(self):
-        self.client.force_login(self.person.user)
-
         response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
 
         self.assertEqual(response.status_code, OK)
@@ -284,8 +283,6 @@ class SelectStudentAttestationTest(TestCase):
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses', side_effect=lambda x: None)
     def test_valid_post_request_but_no_attestation(self, mock_fetch_json_attestation_statuses):
         a_student = StudentFactory(registration_id=STUDENT_REGISTRATION_ID)
-        self.client.force_login(self.person.user)
-
         response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
@@ -304,8 +301,6 @@ class SelectStudentAttestationTest(TestCase):
            side_effect=lambda x: {'academicYear': 2015, 'available': False, 'attestationStatuses': []})
     def test_valid_post_request(self, mock_fetch_json_attestation_statuses):
         a_student = StudentFactory(registration_id=STUDENT_REGISTRATION_ID)
-        self.client.force_login(self.person.user)
-
         response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
@@ -322,18 +317,23 @@ class SelectStudentAttestationTest(TestCase):
 
 
 class DownloadStudentAttestation(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         year = datetime.date.today().year
-        self.attestation_type = "test"
-        self.url = reverse('attestation_admin_download', args=[STUDENT_GLOBAL_ID, year, self.attestation_type])
-        self.person = PersonFactory()
+        cls.attestation_type = "test"
+        cls.url = reverse('attestation_admin_download', args=[STUDENT_GLOBAL_ID, year, cls.attestation_type])
+        cls.person = PersonFactory()
 
-        self.permission = Permission.objects.get(codename="is_faculty_administrator")
-        self.person.user.user_permissions.add(self.permission)
+        cls.permission = Permission.objects.get(codename="is_faculty_administrator")
+        cls.person.user.user_permissions.add(cls.permission)
 
         Group.objects.create(name='students')
 
+    def setUp(self):
+        self.client.force_login(self.person.user)
+
     def test_without_being_logged(self):
+        self.client.logout()
         response = self.client.get(self.url)
         self.assertRedirects(response, '/login/?next={}'.format(self.url))
 
@@ -349,7 +349,6 @@ class DownloadStudentAttestation(TestCase):
            side_effect=lambda global_id, year, attestation_type, username: None)
     def test_when_no_attestation_pdf(self, mock_fetch_student_attestation):
         StudentFactory(person=PersonFactory(global_id=STUDENT_GLOBAL_ID))
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_student_attestation.called)
@@ -364,7 +363,6 @@ class DownloadStudentAttestation(TestCase):
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
            side_effect=lambda global_id, year, attestation_type, username: open_sample_pdf())
     def test_when_attestation_pdf_fetched(self, mock_fetch_student_attestation):
-        self.client.force_login(self.person.user)
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_student_attestation.called)
@@ -374,7 +372,6 @@ class DownloadStudentAttestation(TestCase):
 
 
 class TestRegistrationIdMessage(TestCase):
-
     def test_generate_message_with_registration_id(self):
         given_json_message = v_main._make_registration_json_message('1111111')
         expected_json_message = json.loads('{"registration_id" : "1111111"}')
