@@ -365,6 +365,3 @@ msgstr "au"
 
 msgid "without application"
 msgstr "sans candidature"
-
-#~ msgid "Wait validation"
-#~ msgstr "En attente de validation"
