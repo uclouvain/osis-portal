@@ -246,12 +246,6 @@ def _append_is_renewable(attribution_with_vacant_list, application_list):
 
 
 def _check_is_renewable(attribution_with_vacant_next_year, application_list):
-    """
-    This function check if the volume of attribution [current year] is lower or equals to attribution vacant next year
-    :param attribution_with_vacant_next_year:
-    :param application_list:
-    :return: error code if not valid, None if no error
-    """
     next_year_attribution_vacant = attribution_with_vacant_next_year['attribution_vacant']
 
     current_volume_lecturing = attribution_with_vacant_next_year.get(learning_component_year_type.LECTURING, NO_CHARGE)
@@ -273,7 +267,17 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
     if attribution_with_vacant_next_year['is_substitute']:
         return _('A substitute can not renew his function of substitute')
 
+    if _is_managed_in_team(next_year_attribution_vacant["learning_container_year_id"]):
+        return _('This course is team-managed. The application to this activity is based on a paper transmission.')
+
     return None
+
+
+def _is_managed_in_team(learning_container_year_id):
+    l_container_year = mdl_base.learning_container_year.LearningContainerYear.objects.get(
+        id=learning_container_year_id
+    )
+    return l_container_year.team
 
 
 def _has_already_applied(attribution_with_vacant_next_year, application_list):
@@ -357,8 +361,8 @@ def _get_learning_components(academic_year, acronym_filter, faculty):
     else:
         learning_container_yrs = mdl_base.learning_container_year.search(
             acronym=acronym_filter,
-            academic_year=academic_year).filter(
-            team=False,
+            academic_year=academic_year
+        ).filter(
             type_declaration_vacant__in=type_declaration_vacant_allowed
         )
 

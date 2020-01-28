@@ -58,7 +58,7 @@
                              {{ application.acronym }}
                          </span>
                     <br>
-                    <span class="small font-italic">({% trans 'Wait validation' %})</span>
+                    <span class="small font-italic">({% trans 'Please refresh the page' %})</span>
                 {% endif %}
             </td>
             <td>
@@ -83,7 +83,7 @@
             <td colspan="2" style="width:130px;">
                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                      title="{% if application.pending %}
-                                    {% trans 'Wait validation' %}
+                                    {% trans 'Please refresh the page' %}
                                 {% endif %}">
                     <a class="btn btn-primary {% if application.pending %} disabled {% endif %}"
                        id="lnk_application_edit_{{ application.learning_container_year_id }}"
@@ -95,7 +95,7 @@
                 </div>
                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                      title="{% if application.pending %}
-                                                {% trans 'Wait validation' %}
+                                                {% trans 'Please refresh the page' %}
                                             {% endif %}">
                     <form action="{% url 'delete_tutor_application' application.learning_container_year_id %}"
                           id="form_delete_{{ application.learning_container_year_id }}"
