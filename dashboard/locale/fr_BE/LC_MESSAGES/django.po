@@ -74,7 +74,7 @@ msgstr "Gérer les fiches descriptives"
 
 #: templates/tutor_dashboard.html:18
 msgid "My applications"
-msgstr "Mes applications"
+msgstr "Mes candidatures"
 
 #: templates/student_dashboard.html:18
 msgid "My attestations"
@@ -106,7 +106,7 @@ msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
 #: templates/tutor_dashboard.html:19
 msgid "This process controls my applications"
-msgstr "Gestion de mes applications"
+msgstr "Gestion de mes candidatures aux cours vacants"
 
 #: templates/student_dashboard.html:19
 msgid "This process controls my attestations."
