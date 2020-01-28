@@ -194,6 +194,19 @@ class TestOnlineApplication(TestCase):
         self.assertTrue(context['search_form'])
         self.assertFalse(context['attributions_vacant'])
 
+    def test_search_vacant_attribution_with_team_set_to_true(self):
+        self.lagro1600_next.team = True
+        self.lagro1600_next.save()
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(
+            url, data={
+                'learning_container_acronym': 'LAGRO'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['attributions_vacant']), 2)
+
     def test_renew_applications(self):
         url = reverse('renew_applications')
         post_data = {'learning_container_year_' + self.lbir1300_next.acronym: 'on'}
