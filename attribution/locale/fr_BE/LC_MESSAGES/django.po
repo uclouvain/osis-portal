@@ -25,7 +25,7 @@ msgstr "Sigle"
 
 msgctxt "plural"
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 msgid "An application has already been submitted"
 msgstr "Une candidature a déjà été soumise"
