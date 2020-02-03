@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:52+0200\n"
+"POT-Creation-Date: 2020-01-27 19:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -210,6 +210,9 @@ msgstr ""
 msgid "Please precise at least a faculty or a code (or a part of a code)"
 msgstr ""
 
+msgid "Please refresh the page"
+msgstr ""
+
 msgid "Produce xls"
 msgstr ""
 
@@ -328,9 +331,6 @@ msgid "Vol.2 applied"
 msgstr ""
 
 msgid "Vol.2 vacant"
-msgstr ""
-
-msgid "Wait validation"
 msgstr ""
 
 msgid "You already apply to this course."
