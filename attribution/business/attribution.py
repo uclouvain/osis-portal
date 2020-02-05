@@ -365,13 +365,14 @@ def _get_learning_components(academic_year, acronym_filter, faculty):
         ).filter(
             type_declaration_vacant__in=type_declaration_vacant_allowed
         )
-
         learning_components = LearningComponentYear.objects \
             .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs) \
             .order_by('learning_unit_year__acronym') \
             .select_related('learning_unit_year__learning_container_year') \
             .exclude(volume_declared_vacant__isnull=True)
-    return learning_components
+    return learning_components.filter(
+        learning_unit_year__learning_container_year__type_declaration_vacant__in=type_declaration_vacant_allowed
+    )
 
 
 def _get_learning_components_by_faculty(academic_year, acronym_filter, faculty):
