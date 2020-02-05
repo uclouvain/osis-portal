@@ -45,15 +45,18 @@ class TestSearch(TestCase):
         self.student = test_student.create_student("64641200")
         self.other_student = test_student.create_student("60601200")
         self.speciality = test_internship_speciality.create_speciality()
+        self.other_speciality = test_internship_speciality.create_speciality()
         self.internship = InternshipFactory(speciality=self.speciality)
         self.other_internship = InternshipFactory(speciality=self.speciality)
 
-        self.choice_1 = create_internship_choice(self.organization, self.student, self.speciality,
+        self.choice_1 = create_internship_choice(self.organization, self.student, self.other_speciality,
                                                  internship=self.other_internship)
         self.choice_2 = create_internship_choice(self.organization, self.student, self.speciality,
                                                  internship=self.internship)
-        self.choice_3 = create_internship_choice(self.organization, self.other_student, self.speciality,
+        self.choice_3 = create_internship_choice(self.organization, self.other_student, self.other_speciality,
                                                  internship=self.other_internship)
+        self.choice_4 = create_internship_choice(self.organization, self.other_student, self.speciality,
+                                                 internship=self.internship)
 
     def test_duplicates_are_forbidden(self):
         with self.assertRaises(IntegrityError):
@@ -73,10 +76,9 @@ class TestSearch(TestCase):
 
     def test_with_only_speciality(self):
         choices = list(mdl_internship_choice.search(speciality=self.speciality))
-        self.assertEqual(len(choices), 3)
-        self.assertIn(self.choice_1, choices)
+        self.assertEqual(len(choices), 2)
         self.assertIn(self.choice_2, choices)
-        self.assertIn(self.choice_3, choices)
+        self.assertIn(self.choice_4, choices)
 
     def test_with_student_and_internship_choice(self):
         choices = list(mdl_internship_choice.search(student=self.student, internship=self.internship))
@@ -86,16 +88,16 @@ class TestSearch(TestCase):
         number_first_choice = list(mdl_internship_choice.get_number_first_choice_by_organization(
             self.speciality, self.internship
         ))
-        expected = [{"organization": self.organization.id, "organization__count": 3}]
+        expected = [{"organization": self.organization.id, "organization__count": 2}]
         self.assertEqual(expected, number_first_choice)
 
         other_organization = test_organization.create_organization(reference="10")
-        yet_another_internship = InternshipFactory(speciality=self.speciality)
-        create_internship_choice(other_organization, self.student, self.speciality, yet_another_internship)
+        yet_another_student = test_student.create_student("64641201")
+        create_internship_choice(other_organization, yet_another_student, self.speciality, self.internship)
         number_first_choice = list(mdl_internship_choice.get_number_first_choice_by_organization(
             self.speciality, self.internship
         ))
-        expected = [{"organization": self.organization.id, "organization__count": 3},
+        expected = [{"organization": self.organization.id, "organization__count": 2},
                     {"organization": other_organization.id, "organization__count": 1}]
         self.assertCountEqual(number_first_choice, expected)
         self.assertIn(expected[0], number_first_choice)
