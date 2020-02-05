@@ -362,8 +362,6 @@ def _get_learning_components(academic_year, acronym_filter, faculty):
         learning_container_yrs = mdl_base.learning_container_year.search(
             acronym=acronym_filter,
             academic_year=academic_year
-        ).filter(
-            type_declaration_vacant__in=type_declaration_vacant_allowed
         )
         learning_components = LearningComponentYear.objects \
             .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs) \
