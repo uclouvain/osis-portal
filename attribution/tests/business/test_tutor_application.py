@@ -27,7 +27,7 @@ from decimal import Decimal
 from time import sleep
 
 from django.contrib.auth.models import Group
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
 
 from attribution.business import tutor_application
 from attribution.tests.factories.attribution import AttributionNewFactory
@@ -217,6 +217,37 @@ class TutorApplicationTest(TestCase):
         # After delete
         application_searched = tutor_application.get_application(global_id, self.lbir1200_2017)
         self.assertFalse(application_searched)
+
+
+class TestGetApplicationTable(SimpleTestCase):
+    def test_when_no_applications(self):
+        result = tutor_application._get_applications_table([])
+        self.assertEqual(result, [])
+
+    def test_when_one_application(self):
+        applications = [
+            {"acronym": "LORDE4523"}
+        ]
+        result = tutor_application._get_applications_table(applications)
+
+        self.assertEqual(result, [("LORDE4523", "", "")])
+
+    def test_when_multiple_applications(self):
+        applications = [
+            {"acronym": "LORDE4523"},
+            {"acronym": "NORDE4589", "charge_lecturing_asked": "25.3"},
+            {"acronym": "ROGE4589", "charge_lecturing_asked": "25.3", "charge_practical_asked": "18.0"}
+        ]
+        result = tutor_application._get_applications_table(applications)
+
+        self.assertEqual(
+            result,
+            [
+                ("LORDE4523", "", ""),
+                ("NORDE4589", "25.3", ""),
+                ("ROGE4589", "25.3", "18.0")
+            ]
+        )
 
 
 def _get_attributions_default():
