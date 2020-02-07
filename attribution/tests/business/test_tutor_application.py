@@ -63,17 +63,21 @@ class TutorApplicationTest(TestCase):
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
-        person = PersonFactory(global_id="98363454")
-        cls.tutor = TutorFactory(person=person)
+        cls.person = PersonFactory(global_id="98363454")
+        cls.tutor = TutorFactory(person=cls.person)
 
-        applications = [
+        cls.applications = [
             _get_application_example(cls.lbir1200_2017, '3.5', '35.6'),  # Application 2017
             _get_application_example(cls.lbir1300_2017, '7.5', '25'),  # Application 2017
             _get_application_example(cls.lbir1200_2016, '2', '30'),  # Application 2016
         ]
-        cls.attribution = AttributionNewFactory(global_id=person.global_id,
-                                                attributions=_get_attributions_default(),
-                                                applications=applications)
+
+    def setUp(self):
+        self.attribution = AttributionNewFactory(
+            global_id=self.person.global_id,
+            attributions=_get_attributions_default(),
+            applications=self.applications
+        )
 
     def test_get_application_list(self):
         global_id = self.tutor.person.global_id
