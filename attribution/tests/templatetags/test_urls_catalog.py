@@ -27,6 +27,7 @@ from django.template import Context, Template
 from django.test import TestCase
 from django.test import override_settings
 
+from base.models.enums import learning_unit_year_subtypes
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
@@ -39,8 +40,17 @@ class UrlCatalogTagTests(TestCase):
         cls.learning_container_year = LearningContainerYearFactory(acronym='LBIR1200',
                                                                    academic_year=cls.academic_year)
         cls.learning_unit_year = LearningUnitYearFactory(acronym='LBIR1200',
-                                                         academic_year=cls.academic_year,
-                                                         learning_container_year=cls.learning_container_year)
+                                                 academic_year=cls.academic_year,
+                                                 learning_container_year=cls.learning_container_year,
+                                                 subtype=learning_unit_year_subtypes.FULL)
+
+        cls.partims = LearningUnitYearFactory.create_batch(
+            2,
+            academic_year=cls.academic_year,
+            learning_container_year=cls.learning_container_year,
+            subtype=learning_unit_year_subtypes.PARTIM
+        )
+
 
     @override_settings(ATTRIBUTION_CONFIG={'CATALOG_URL': 'http://www.uclouvain.be/cours-{0}-{1}.html'})
     def test_url_catalogs(self):

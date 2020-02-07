@@ -206,12 +206,12 @@ def _find_application(acronym, year, applications_list):
 
 def _get_applications_table(application_list):
     applications = []
-    validation_str = "({})".format(_('Wait validation'))
     for application in application_list:
-        applications.append(("{} {}".format(validation_str if application.get('pending') else '',
-                                            application.get('acronym', '')),
-                             application.get('charge_lecturing_asked', ''),
-                             application.get('charge_practical_asked', '')))
+        applications.append(
+            (application.get('acronym', ''),
+             application.get('charge_lecturing_asked', ''),
+             application.get('charge_practical_asked', ''))
+        )
     return applications
 
 

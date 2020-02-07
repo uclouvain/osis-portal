@@ -180,6 +180,24 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 200)
         context = response.context[-1]
         self.assertEqual(len(context['attributions_vacant']), 2)
+        self.assertEqual(context['attributions_vacant'][0]['acronym'], self.lagro1600_next.acronym)
+        self.assertEqual(context['attributions_vacant'][1]['acronym'], self.lagro2500_next.acronym)
+
+    def test_search_vacant_attribution_search_list_by_faculty_take_account_of_declaration_vacant_type(self):
+        self.lagro1600_next.type_declaration_vacant = vacant_declaration_type.EXCEPTIONAL_PROCEDURE
+        self.lagro1600_next.save()
+
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(
+            url, data={
+                'learning_container_acronym': 'LAGRO',
+                'faculty': self.agro_entity_version.id
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['attributions_vacant']), 1)
+        self.assertEqual(context['attributions_vacant'][0]['acronym'], self.lagro2500_next.acronym)
 
     def test_search_vacant_attribution_with_declaration_vac_not_allowed(self):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
@@ -195,6 +213,19 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(context['a_tutor'], self.tutor)
         self.assertTrue(context['search_form'])
         self.assertFalse(context['attributions_vacant'])
+
+    def test_search_vacant_attribution_with_team_set_to_true(self):
+        self.lagro1600_next.team = True
+        self.lagro1600_next.save()
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(
+            url, data={
+                'learning_container_acronym': 'LAGRO'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['attributions_vacant']), 2)
 
     def test_renew_applications(self):
         lbir1300_next = _create_learning_container_with_components("LBIR1300", self.application_academic_year,
