@@ -60,9 +60,11 @@ def load_json_file(json_path):
 class TestModelStudentPerformance(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.student_performance = create_student_performance()
         cls.offer_year = base.tests.models.test_offer_year.create_offer_year()
         cls.json_points = load_json_file("performance/tests/ressources/points2.json")
+
+    def setUp(self):
+        self.student_performance = create_student_performance()
 
     def test_search(self):
         student_performances = mdl_perf.search(registration_id=self.student_performance.registration_id)
