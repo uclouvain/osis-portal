@@ -60,12 +60,11 @@ class CheckPaperSheetTest(TestCase):
         tutors_group.permissions.add(permission)
         cls.a_person.user.groups.add(tutors_group)
 
-        cls.tutor = TutorFactory(person=cls.a_person)
-
         cls.url = reverse('check_papersheet', args=[GLOBAL_ID])
 
     def setUp(self):
         self.client.force_login(self.a_person.user)
+        self.tutor = TutorFactory(person=self.a_person)
 
     def test_when_no_tutor(self):
         self.tutor.delete()
@@ -113,12 +112,11 @@ class AskPaperSheetTest(TestCase):
         tutors_group.permissions.add(permission)
         cls.a_person.user.groups.add(tutors_group)
 
-        cls.tutor = TutorFactory(person=cls.a_person)
-
         cls.url = reverse('ask_papersheet', args=[GLOBAL_ID])
 
     def setUp(self):
         self.client.force_login(self.a_person.user)
+        self.tutor = TutorFactory(person=self.a_person)
 
     def test_when_no_tutor(self):
         self.tutor.delete()
@@ -189,12 +187,11 @@ class DownloadPaperSheetTest(TestCase):
         tutors_group.permissions.add(permission)
         cls.a_person.user.groups.add(tutors_group)
 
-        cls.tutor = TutorFactory(person=cls.a_person)
-
         cls.url = reverse('scores_download', args=[GLOBAL_ID])
 
     def setUp(self):
         self.client.force_login(self.a_person.user)
+        self.tutor = TutorFactory(person=self.a_person)
 
     def test_when_user_not_tutor(self):
         self.tutor.delete()
@@ -344,9 +341,9 @@ class ScoresSheetAdminTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.url = reverse('scores_sheets_admin')
-        cls.a_person = PersonFactory(global_id=GLOBAL_ID)
 
     def setUp(self):
+        self.a_person = PersonFactory(global_id=GLOBAL_ID)
         self.client.force_login(self.a_person.user)
 
     def test_when_not_logged(self):
@@ -386,9 +383,9 @@ class ScoresSheetTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.url = reverse('my_scores_sheets')
-        cls.a_person = PersonFactory(global_id=GLOBAL_ID)
 
     def setUp(self):
+        self.a_person = PersonFactory(global_id=GLOBAL_ID)
         self.client.force_login(self.a_person.user)
 
     def test_when_not_logged(self):
