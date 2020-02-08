@@ -55,8 +55,8 @@ class TestSearch(TestCase):
                                                 internship=cls.internship)
         cls.choice_3 = create_internship_choice(cls.organization, cls.other_student, cls.speciality,
                                                 internship=cls.other_internship)
-        self.choice_4 = create_internship_choice(self.organization, self.other_student, self.speciality,
-                                                 internship=self.internship)
+        cls.choice_4 = create_internship_choice(cls.organization, cls.other_student, cls.speciality,
+                                                internship=cls.internship)
 
     def test_duplicates_are_forbidden(self):
         with self.assertRaises(IntegrityError):
