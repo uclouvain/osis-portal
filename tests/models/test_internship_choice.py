@@ -46,19 +46,18 @@ class TestSearch(TestCase):
         cls.student = test_student.create_student("64641200")
         cls.other_student = test_student.create_student("60601200")
         cls.speciality = test_internship_speciality.create_speciality()
+        cls.other_speciality = test_internship_speciality.create_speciality()
         cls.internship = InternshipFactory(speciality=cls.speciality)
         cls.other_internship = InternshipFactory(speciality=cls.speciality)
 
-        cls.choice_1 = create_internship_choice(cls.organization, cls.student, cls.speciality,
+        cls.choice_1 = create_internship_choice(cls.organization, cls.student, cls.other_speciality,
                                                 internship=cls.other_internship)
         cls.choice_2 = create_internship_choice(cls.organization, cls.student, cls.speciality,
                                                 internship=cls.internship)
-        cls.choice_3 = create_internship_choice(cls.organization, cls.other_student, cls.speciality,
+        cls.choice_3 = create_internship_choice(cls.organization, cls.other_student, cls.other_speciality,
                                                 internship=cls.other_internship)
-        
-    def setUp(self):
-        self.choice_4 = create_internship_choice(self.organization, self.other_student, self.speciality,
-                                                 internship=self.internship)
+        cls.choice_4 = create_internship_choice(cls.organization, cls.other_student, cls.speciality,
+                                                internship=cls.internship)
 
     def test_duplicates_are_forbidden(self):
         with self.assertRaises(IntegrityError):
