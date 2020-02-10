@@ -57,8 +57,8 @@ class TestOnlineApplication(TestCase):
 
         # Create user
         cls.user = UserFactory(username="tutor_application")
-        person = PersonFactory(global_id="578945612", user=cls.user)
-        cls.tutor = TutorFactory(person=person)
+        cls.person = PersonFactory(global_id="578945612", user=cls.user)
+        cls.tutor = TutorFactory(person=cls.person)
 
         # Add permission and log into app
         add_permission(cls.user, "can_access_attribution_application")
@@ -73,14 +73,6 @@ class TestOnlineApplication(TestCase):
         cls.application_academic_year = AcademicYearFactory(
 
             year=cls.current_academic_year.year + 1
-        )
-
-        # Creation context with multiple learning container year
-        _create_multiple_learning_container_year(cls)
-        cls.attribution = AttributionNewFactory(
-            global_id=person.global_id,
-            applications=_get_default_application_list(cls),
-            attributions=_get_default_attribution_list(cls)
         )
 
     def setUp(self):
@@ -103,6 +95,13 @@ class TestOnlineApplication(TestCase):
                                                        start_date=self.academic_calendar.start_date,
                                                        end_date=self.academic_calendar.end_date)
         self.client.force_login(self.user)
+        # Creation context with multiple learning container year
+        _create_multiple_learning_container_year(self)
+        self.attribution = AttributionNewFactory(
+            global_id=self.person.global_id,
+            applications=_get_default_application_list(self),
+            attributions=_get_default_attribution_list(self)
+        )
 
     def test_redirection_to_outside_encoding_period(self):
         # Remove teaching charge application event
@@ -203,9 +202,10 @@ class TestOnlineApplication(TestCase):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
         self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
         # Creation learning container for next academic year [==> application academic year]
-        self.lagro1234_next = _create_learning_container_with_components \
-            ("LAGRO1234", self.application_academic_year, 70, 70,
-             type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN)
+        self.lagro1234_next = _create_learning_container_with_components(
+            "LAGRO1234", self.application_academic_year, 70, 70,
+            type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN
+        )
         url = reverse('vacant_attributions_search')
         response = self.client.get(url, data={'learning_container_acronym': 'LAGRO1234'})
         self.assertEqual(response.status_code, 200)
@@ -237,136 +237,125 @@ class TestOnlineApplication(TestCase):
         self.attribution.refresh_from_db()
         self.assertEqual(len(self.attribution.applications), 2)  # Now we have two applications
 
+    def test_renew_applications_with_bad_learning_container(self):
+        url = reverse('renew_applications')
+        post_data = {'learning_container_year_' + self.lagro2500_next.acronym: 'on'}
+        response = self.client.post(url, data=post_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].tags, 'error')
+        self.assertEqual(messages[0].message, _('No attribution renewed'))
 
-def test_renew_applications_with_bad_learning_container(self):
-    url = reverse('renew_applications')
-    post_data = {'learning_container_year_' + self.lagro2500_next.acronym: 'on'}
-    response = self.client.post(url, data=post_data, follow=True)
-    self.assertEqual(response.status_code, 200)
-    messages = list(response.context['messages'])
-    self.assertEqual(len(messages), 1)
-    self.assertEqual(messages[0].tags, 'error')
-    self.assertEqual(messages[0].message, _('No attribution renewed'))
+    def test_renew_applications_method_not_allowed(self):
+        url = reverse('renew_applications')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
 
+    def test_delete_application(self):
+        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)  # redirection
+        self.attribution.refresh_from_db()
+        # pending flag must be set to 'deleted'
+        self.assertTrue((next(attrib for attrib in self.attribution.applications
+                              if attrib.get('acronym') == self.lagro1600_next.acronym and
+                              attrib.get('pending') == tutor_application_epc.DELETE_OPERATION), False))
 
-def test_renew_applications_method_not_allowed(self):
-    url = reverse('renew_applications')
-    response = self.client.get(url)
-    self.assertEqual(response.status_code, 405)
+    def test_delete_application_with_wrong_container(self):
+        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lbir1300_next.id})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 404)  # Not found
 
+    def test_delete_application_method_not_allowed(self):
+        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 405)
 
-def test_delete_application(self):
-    url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
-    response = self.client.post(url)
-    self.assertEqual(response.status_code, 302)  # redirection
-    self.attribution.refresh_from_db()
-    # pending flag must be set to 'deleted'
-    self.assertTrue((next(attrib for attrib in self.attribution.applications
-                          if attrib.get('acronym') == self.lagro1600_next.acronym and
-                          attrib.get('pending') == tutor_application_epc.DELETE_OPERATION), False))
+    def test_get_edit_application_form(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[0]
+        self.assertEqual(context['a_tutor'], self.tutor)
+        self.assertEqual(context['learning_container_year'], self.lagro1600_next)
+        self.assertTrue(context['form'])
 
+    def test_post_edit_application_form(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, '54', '7')
+        response = self.client.post(url, data=post_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.attribution.refresh_from_db()
+        self.assertEqual(len(self.attribution.applications), 1)
+        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '54.0')
+        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '7.0')
+        self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
 
-def test_delete_application_with_wrong_container(self):
-    url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lbir1300_next.id})
-    response = self.client.post(url)
-    self.assertEqual(response.status_code, 404)  # Not found
+    def test_post_edit_application_form_with_empty_value(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, "a", "")
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[0]
+        self.assertTrue(context.get('form'))
+        form = context['form']
+        self.assertTrue(form.errors)  # Not valid because not number entered
 
+    def test_post_edit_application_form_with_empty_lecturing_value(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, "15", "")
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 302)
+        self.attribution.refresh_from_db()
+        self.assertEqual(len(self.attribution.applications), 1)
+        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '15.0')
+        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '0.0')
+        self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
 
-def test_delete_application_method_not_allowed(self):
-    url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
-    response = self.client.get(url)
-    self.assertEqual(response.status_code, 405)
+    def test_post_edit_application_form_with_value_under_zero(self):
+        url = reverse('create_or_update_tutor_application',
+                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
+        post_data = _get_application_example(self.lagro1600_next, '-1', '5')
+        response = self.client.post(url, data=post_data)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[0]
+        self.assertTrue(context.get('form'))
+        form = context['form']
+        self.assertTrue(form.errors)  # Not valid because -1 entered
 
+    def test_post_overview_with_lecturing_and_practical_component_partim(self):
+        lbira2101a_next = _create_learning_container_with_components("LBIRA2101A", self.application_academic_year,
+                                                                     volume_lecturing=20, volume_practical_exercices=20,
+                                                                     subtype=learning_unit_year_subtypes.PARTIM)
+        lbira2101a_current = _create_learning_container_with_components(
+            "LBIRA2101A", self.current_academic_year,
+            volume_lecturing=20, volume_practical_exercices=20,
+            subtype=learning_unit_year_subtypes.PARTIM)
+        _link_components_and_learning_unit_year_to_container(lbira2101a_current, "LBIRA2101",
+                                                             subtype=learning_unit_year_subtypes.FULL)
+        _link_components_and_learning_unit_year_to_container(lbira2101a_next, "LBIRA2101",
+                                                             subtype=learning_unit_year_subtypes.FULL)
+        self.attribution.delete()
+        self.attribution = AttributionNewFactory(
+            global_id=self.tutor.person.global_id,
+            applications=[_get_application_example(lbira2101a_next, "10", "10")]
+        )
 
-def test_get_edit_application_form(self):
-    url = reverse('create_or_update_tutor_application',
-                  kwargs={'learning_container_year_id': self.lagro1600_next.id})
-    response = self.client.get(url)
-    self.assertEqual(response.status_code, 200)
-    context = response.context[0]
-    self.assertEqual(context['a_tutor'], self.tutor)
-    self.assertEqual(context['learning_container_year'], self.lagro1600_next)
-    self.assertTrue(context['form'])
-
-
-def test_post_edit_application_form(self):
-    url = reverse('create_or_update_tutor_application',
-                  kwargs={'learning_container_year_id': self.lagro1600_next.id})
-    post_data = _get_application_example(self.lagro1600_next, '54', '7')
-    response = self.client.post(url, data=post_data, follow=True)
-    self.assertEqual(response.status_code, 200)
-    self.attribution.refresh_from_db()
-    self.assertEqual(len(self.attribution.applications), 1)
-    self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '54.0')
-    self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '7.0')
-    self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
-
-
-def test_post_edit_application_form_with_empty_value(self):
-    url = reverse('create_or_update_tutor_application',
-                  kwargs={'learning_container_year_id': self.lagro1600_next.id})
-    post_data = _get_application_example(self.lagro1600_next, "a", "")
-    response = self.client.post(url, data=post_data)
-    self.assertEqual(response.status_code, 200)
-    context = response.context[0]
-    self.assertTrue(context.get('form'))
-    form = context['form']
-    self.assertTrue(form.errors)  # Not valid because not number entered
-
-
-def test_post_edit_application_form_with_empty_lecturing_value(self):
-    url = reverse('create_or_update_tutor_application',
-                  kwargs={'learning_container_year_id': self.lagro1600_next.id})
-    post_data = _get_application_example(self.lagro1600_next, "15", "")
-    response = self.client.post(url, data=post_data)
-    self.assertEqual(response.status_code, 302)
-    self.attribution.refresh_from_db()
-    self.assertEqual(len(self.attribution.applications), 1)
-    self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '15.0')
-    self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '0.0')
-    self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
-
-
-def test_post_edit_application_form_with_value_under_zero(self):
-    url = reverse('create_or_update_tutor_application',
-                  kwargs={'learning_container_year_id': self.lagro1600_next.id})
-    post_data = _get_application_example(self.lagro1600_next, '-1', '5')
-    response = self.client.post(url, data=post_data)
-    self.assertEqual(response.status_code, 200)
-    context = response.context[0]
-    self.assertTrue(context.get('form'))
-    form = context['form']
-    self.assertTrue(form.errors)  # Not valid because -1 entered
-
-
-def test_post_overview_with_lecturing_and_practical_component_partim(self):
-    lbira2101a_next = _create_learning_container_with_components("LBIRA2101A", self.application_academic_year,
-                                                                 volume_lecturing=20, volume_practical_exercices=20,
-                                                                 subtype=learning_unit_year_subtypes.PARTIM)
-    lbira2101a_current = _create_learning_container_with_components(
-        "LBIRA2101A", self.current_academic_year,
-        volume_lecturing=20, volume_practical_exercices=20,
-        subtype=learning_unit_year_subtypes.PARTIM)
-    _link_components_and_learning_unit_year_to_container(lbira2101a_current, "LBIRA2101",
-                                                         subtype=learning_unit_year_subtypes.FULL)
-    _link_components_and_learning_unit_year_to_container(lbira2101a_next, "LBIRA2101",
-                                                         subtype=learning_unit_year_subtypes.FULL)
-    self.attribution.delete()
-    self.attribution = AttributionNewFactory(
-        global_id=self.tutor.person.global_id,
-        applications=[_get_application_example(lbira2101a_next, "10", "10")]
-    )
-
-    url = reverse('applications_overview')
-    response = self.client.get(url)
-    self.assertEqual(response.status_code, 200)
-    context = response.context[0]
-    self.assertEqual(len(context['applications']), 1)
-    self.assertEqual(context['applications'][0]['acronym'], lbira2101a_next.acronym)
-    with self.assertRaises(KeyError):
-        context['applications'][0]['PRACTICAL_EXERCISES']
-    with self.assertRaises(KeyError):
-        context['applications'][0]['LECTURING']
+        url = reverse('applications_overview')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        context = response.context[0]
+        self.assertEqual(len(context['applications']), 1)
+        self.assertEqual(context['applications'][0]['acronym'], lbira2101a_next.acronym)
+        with self.assertRaises(KeyError):
+            context['applications'][0]['PRACTICAL_EXERCISES']
+        with self.assertRaises(KeyError):
+            context['applications'][0]['LECTURING']
 
 
 def _create_multiple_learning_container_year(cls):
