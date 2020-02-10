@@ -53,14 +53,14 @@ class TestTutorApplicationEpc(TestCase):
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
         cls.person = PersonFactory(global_id="98363454")
-        external_id = tutor_application_epc.TUTOR_PREFIX_EXTERNAL_ID + '2089590559'
-        cls.tutor = TutorFactory(external_id=external_id, person=cls.person)
 
         # Create two tutor applications
         cls.applications = [_get_application_example(cls.lbir1200, '30.5', '40.5'),
                             _get_application_example(cls.lagro2630, '12.5', '0')]
 
     def setUp(self):
+        external_id = tutor_application_epc.TUTOR_PREFIX_EXTERNAL_ID + '2089590559'
+        self.tutor = TutorFactory(external_id=external_id, person=self.person)
         self.attribution = AttributionNewFactory(
             global_id=self.person.global_id,
             applications=self.applications
