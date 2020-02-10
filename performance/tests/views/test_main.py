@@ -46,12 +46,13 @@ ACCESS_DENIED = 401
 
 
 class TestMain(TestCase):
-    def setUp(self):
-        self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
-        self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = performance.tests.models.test_student_performance.load_json_file(
+    @classmethod
+    def setUpTestData(cls):
+        cls.student_performance = performance.tests.models.test_student_performance.create_student_performance()
+        cls.offer_year = base.tests.models.test_offer_year.create_offer_year()
+        cls.json_points = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points2.json")
-        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
+        cls.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points3.json")
 
     def test_convert_student_performance_to_dic(self):
@@ -82,14 +83,17 @@ class TestMain(TestCase):
 
 
 class ViewPerformanceHomeTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
 
-        self.student = StudentFactory()
+        cls.student = StudentFactory()
 
-        self.url = reverse('performance_home')
+        cls.url = reverse('performance_home')
+
+    def setUp(self):
         self.client.force_login(self.student.person.user)
 
     def test_user_not_logged(self):
@@ -145,24 +149,27 @@ class ViewPerformanceHomeTest(TestCase):
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'],
                          [{
-                              'academic_year': '2017 - 2018',
-                              'acronym': a_student_performance.acronym,
-                              'offer_registration_state': 'CESSATION',
-                              'pk': a_student_performance.pk,
-                              'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
-                          }]
+                             'academic_year': '2017 - 2018',
+                             'acronym': a_student_performance.acronym,
+                             'offer_registration_state': 'CESSATION',
+                             'pk': a_student_performance.pk,
+                             'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
+                         }]
                          )
         self.assertEqual(response.context['registration_states_to_show'],
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)
 
 
 class DisplayResultForSpecificStudentPerformanceTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
 
-        self.student = StudentFactory()
+        cls.student = StudentFactory()
+
+    def setUp(self):
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
 
         self.url = reverse('performance_student_result', args=[self.student_performance.pk])
@@ -248,15 +255,18 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
 
 class SelectStudentTest(TestCase):
-    def setUp(self):
-        self.person = PersonFactory()
-        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+        cls.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
-        self.student = StudentFactory()
-        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
-        self.url = reverse('performance_administration')
+        cls.student = StudentFactory()
+        cls.student_performance = StudentPerformanceFactory(registration_id=cls.student.registration_id)
+        cls.url = reverse('performance_administration')
+
+    def setUp(self):
         self.client.force_login(self.person.user)
 
     def test_user_not_logged(self):
@@ -320,17 +330,20 @@ class SelectStudentTest(TestCase):
 
 
 class VisualizeStudentPrograms(TestCase):
-    def setUp(self):
-        self.person = PersonFactory()
-        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+        cls.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
-        self.student = StudentFactory()
+        cls.student = StudentFactory()
+
+        cls.url = reverse('performance_student_programs_admin', args=[cls.student.registration_id])
+
+    def setUp(self):
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
                                                              academic_year=2017)
-
-        self.url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
         self.client.force_login(self.person.user)
 
     def test_user_not_logged(self):
@@ -387,12 +400,12 @@ class VisualizeStudentPrograms(TestCase):
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'],
                          [{
-                              'academic_year': '2017 - 2018',
-                              'acronym': self.student_performance.acronym,
-                              'offer_registration_state': 'CESSATION',
-                              'pk': self.student_performance.pk,
-                              'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
-                          }]
+                             'academic_year': '2017 - 2018',
+                             'acronym': self.student_performance.acronym,
+                             'offer_registration_state': 'CESSATION',
+                             'pk': self.student_performance.pk,
+                             'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
+                         }]
                          )
         self.assertEqual(response.context['registration_states_to_show'],
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)
@@ -431,27 +444,26 @@ class VisualizeStudentPrograms(TestCase):
 
 
 class VisualizeStudentResult(TestCase):
-
-    def setUp(self):
-        self.person = PersonFactory()
-        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+        cls.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
+        cls.a_person = PersonFactory()
+
+    def setUp(self):
         self.student_performance = StudentPerformanceFactory(acronym='CHIM1BA')
         self.url = reverse('performance_student_result_admin', args=[self.student_performance.pk])
-
-    def tearDown(self):
-        self.client.logout()
+        self.client.force_login(self.a_person.user)
 
     def test_user_not_logged(self):
+        self.client.logout()
         response = self.client.get(self.url)
         self.assertRedirects(response, "/login/?next={}".format(self.url))
 
     def test_user_has_not_permission(self):
-        a_person = PersonFactory()
-        self.client.force_login(a_person.user)
-
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, ACCESS_DENIED)
@@ -532,7 +544,6 @@ class VisualizeStudentResult(TestCase):
 
 
 class ViewPerformanceByAcronymAndYear(TestCase):
-
     def __test_access_denied(self, url):
         response = self.client.get(url)
         self.assertEqual(response.status_code, ACCESS_DENIED)
@@ -543,30 +554,33 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'performance_result_student.html')
 
-    def setUp(self):
-        self.simple_acronym_input = 'DROI1BA'
-        self.simple_acronym = "DROI1BA"
-        self.complex_acronym_input = 'DROI2MS_G'
-        self.complex_acronym = "DROI2MS/G"
-        self.invalid_acronym_input = "BIR1BA"
-        self.acronym_with_space_input = "IAG IS"
-        self.acronym_with_space = "IAG IS"
-        self.valid_year = 2017
-        self.invalid_year = 2020
-        self.person = PersonFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.simple_acronym_input = 'DROI1BA'
+        cls.simple_acronym = "DROI1BA"
+        cls.complex_acronym_input = 'DROI2MS_G'
+        cls.complex_acronym = "DROI2MS/G"
+        cls.invalid_acronym_input = "BIR1BA"
+        cls.acronym_with_space_input = "IAG IS"
+        cls.acronym_with_space = "IAG IS"
+        cls.valid_year = 2017
+        cls.invalid_year = 2020
+        cls.person = PersonFactory()
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
-        self.student = StudentFactory()
-        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
-                                                             academic_year=self.valid_year,
-                                                             acronym=self.simple_acronym)
-        self.student_performance_complex = StudentPerformanceFactory(registration_id=self.student.registration_id,
-                                                                     academic_year=self.valid_year,
-                                                                     acronym=self.complex_acronym)
-        self.student_performance_with_space = StudentPerformanceFactory(registration_id=self.student.registration_id,
-                                                                        academic_year=self.valid_year,
-                                                                        acronym=self.acronym_with_space)
+        cls.student = StudentFactory()
+        cls.student_performance = StudentPerformanceFactory(registration_id=cls.student.registration_id,
+                                                             academic_year=cls.valid_year,
+                                                             acronym=cls.simple_acronym)
+        cls.student_performance_complex = StudentPerformanceFactory(registration_id=cls.student.registration_id,
+                                                                     academic_year=cls.valid_year,
+                                                                     acronym=cls.complex_acronym)
+        cls.student_performance_with_space = StudentPerformanceFactory(registration_id=cls.student.registration_id,
+                                                                        academic_year=cls.valid_year,
+                                                                        acronym=cls.acronym_with_space)
+
+    def setUp(self):
         self.client.force_login(self.student.person.user)
 
     def test_clean_acronym(self):
