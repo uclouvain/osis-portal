@@ -40,11 +40,7 @@ class TestTutorApplicationEpc(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.academic_year = AcademicYearFactory(year=2017)
-        external_id = tutor_application_epc.LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID + '35654987_2017'
-        cls.lbir1200 = LearningUnitYearFactory(academic_year=cls.academic_year, acronym="LBIR1200",
-                                               learning_container_year__academic_year=cls.academic_year,
-                                               learning_container_year__acronym="LBIR1200",
-                                               learning_container_year__external_id=external_id)
+
         cls.lagro2630 = LearningUnitYearFactory(academic_year=cls.academic_year, acronym="LAGRO2630",
                                                 learning_container_year__academic_year=cls.academic_year,
                                                 learning_container_year__acronym="LAGRO2630",
@@ -53,14 +49,19 @@ class TestTutorApplicationEpc(TestCase):
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
         cls.person = PersonFactory(global_id="98363454")
-
-        # Create two tutor applications
-        cls.applications = [_get_application_example(cls.lbir1200, '30.5', '40.5'),
-                            _get_application_example(cls.lagro2630, '12.5', '0')]
+        external_id = tutor_application_epc.TUTOR_PREFIX_EXTERNAL_ID + '2089590559'
+        cls.tutor = TutorFactory(external_id=external_id, person=cls.person)
 
     def setUp(self):
-        external_id = tutor_application_epc.TUTOR_PREFIX_EXTERNAL_ID + '2089590559'
-        self.tutor = TutorFactory(external_id=external_id, person=self.person)
+        external_id = tutor_application_epc.LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID + '35654987_2017'
+        self.lbir1200 = LearningUnitYearFactory(academic_year=self.academic_year, acronym="LBIR1200",
+                                                learning_container_year__academic_year=self.academic_year,
+                                                learning_container_year__acronym="LBIR1200",
+                                                learning_container_year__external_id=external_id)
+
+        # Create two tutor applications
+        self.applications = [_get_application_example(self.lbir1200, '30.5', '40.5'),
+                             _get_application_example(self.lagro2630, '12.5', '0')]
         self.attribution = AttributionNewFactory(
             global_id=self.person.global_id,
             applications=self.applications
