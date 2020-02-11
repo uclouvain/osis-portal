@@ -48,9 +48,10 @@ def create_student_information(user, cohort=None, person=None):
 
 
 class TestFindByUser(TestCase):
-    def setUp(self):
-        self.cohort = CohortFactory()
-        self.user = User.objects.create_user('user', 'user@test.com', 'userpass')
+    @classmethod
+    def setUpTestData(cls):
+        cls.cohort = CohortFactory()
+        cls.user = User.objects.create_user('user', 'user@test.com', 'userpass')
 
     def test_with_no_data(self):
         student_information = mdl_student_information.find_by_user_in_cohort(self.user, self.cohort)
@@ -71,9 +72,10 @@ class TestFindByUser(TestCase):
 
 
 class TestFindByPerson(TestCase):
-    def setUp(self):
-        self.user = UserFactory()
-        self.student_information = create_student_information(self.user)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = UserFactory()
+        cls.student_information = create_student_information(cls.user)
 
     def test_with_no_information_for_user(self):
         other_person = test_person.create_person("other", "another")
@@ -87,11 +89,12 @@ class TestFindByPerson(TestCase):
 
 
 class TestExistsByPerson(TestCase):
-    def setUp(self):
-        self.user = UserFactory()
-        self.student_information = create_student_information(self.user)
-        person = mdl_person.find_by_user(self.user)
-        self.student_information2 = create_student_information(self.user, person=person)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = UserFactory()
+        cls.student_information = create_student_information(cls.user)
+        person = mdl_person.find_by_user(cls.user)
+        cls.student_information2 = create_student_information(cls.user, person=person)
 
     def test_with_no_information_for_user(self):
         other_person = test_person.create_person("other", "another")

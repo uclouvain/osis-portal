@@ -33,10 +33,10 @@ from internship.tests.factories.cohort import CohortFactory
 
 
 class AddToGroupsSignalsTest(TestCase):
-
-    def setUp(self):
-        self.user_foo = User.objects.create_user('user_foo')
-        self.person_foo = Person.objects.create(user=self.user_foo)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user_foo = User.objects.create_user('user_foo')
+        cls.person_foo = Person.objects.create(user=cls.user_foo)
         Group.objects.get_or_create(name=GROUP_STUDENTS_INTERNSHIP)
 
     def create_internships_student_foo(self):
