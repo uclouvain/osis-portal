@@ -40,11 +40,12 @@ YEAR_2017 = 2017
 
 
 class AttributionNewTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         today = datetime.datetime.today()
-        self.an_academic_year = AcademicYearFactory(year=today.year)
-        self.user = UserFactory()
-        self.person = test_person.create_person_with_user(self.user)
+        cls.an_academic_year = AcademicYearFactory(year=today.year)
+        cls.user = UserFactory()
+        cls.person = test_person.create_person_with_user(cls.user)
 
     def test_find_no_attribution(self):
         AttributionNewFactory(global_id="123456789",
