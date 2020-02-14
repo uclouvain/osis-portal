@@ -168,7 +168,7 @@ def _create_application(global_id, application_to_create):
         attrib = mdl_attribution.attribution_new.AttributionNew(global_id=global_id)
     if not attrib.applications:
         attrib.applications = []
-    application_to_create['updated_at'] = _get_unix_time()
+    application_to_create['last_changed'] = _get_unix_time()
     attrib.applications.append(application_to_create)
     return attrib.save()
 
@@ -185,7 +185,7 @@ def _update_application(global_id, application_to_update):
         year = application_to_update.get('year')
         # Remove and append new records to json array
         attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
-        application_to_update['updated_at'] = _get_unix_time()
+        application_to_update['last_changed'] = _get_unix_time()
         attrib.applications.append(application_to_update)
         return attrib.save()
     return None
