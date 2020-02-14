@@ -42,19 +42,22 @@ from base.tests.factories.tutor import TutorFactory
 
 
 class AttributionTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
-        self.person = PersonFactory(global_id="98363454")
-        TutorFactory(person=self.person)
+        cls.person = PersonFactory(global_id="98363454")
+        TutorFactory(person=cls.person)
 
         _create_multiple_academic_year()
-        self.current_academic_year = create_current_academic_year()
+        cls.current_academic_year = create_current_academic_year()
 
         # Creation Json which will be store on attribution
-        attributions = _get_attributions_dict(self.current_academic_year.year)
+        cls.attributions = _get_attributions_dict(cls.current_academic_year.year)
+
+    def setUp(self):
         self.attrib = AttributionNewFactory(global_id=self.person.global_id,
-                                            attributions=attributions)
+                                            attributions=self.attributions)
 
     def test_get_attribution_list(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,

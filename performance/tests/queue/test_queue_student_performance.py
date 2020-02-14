@@ -38,12 +38,13 @@ from performance.queue import student_performance as queue_stud_perf
 
 
 class TestQueueStudentPerformance(TestCase):
-    def setUp(self):
-        self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
-        self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = performance.tests.models.test_student_performance.load_json_file(
+    @classmethod
+    def setUpTestData(cls):
+        cls.student_performance = performance.tests.models.test_student_performance.create_student_performance()
+        cls.offer_year = base.tests.models.test_offer_year.create_offer_year()
+        cls.json_points = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points2.json")
-        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
+        cls.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points3.json")
 
     def test_save(self):
@@ -136,10 +137,11 @@ class TestUpdateExpDate(TestCase):
         return b'{"academicYear":2016,"acronym":\
         "DROI1BA","expirationDate":1485267376419,"forceUpdate":false}'
 
-    def setUp(self):
-        self.student_performance_1 = performance.tests.models.test_student_performance. \
+    @classmethod
+    def setUpTestData(cls):
+        cls.student_performance_1 = performance.tests.models.test_student_performance. \
             create_student_performance('DROI1BA', '1111111', 2016, datetime.datetime.now())
-        self.student_performance_2 = performance.tests.models.test_student_performance. \
+        cls.student_performance_2 = performance.tests.models.test_student_performance. \
             create_student_performance('DROI1BA', '2222222', 2016, datetime.datetime.now())
 
     def test_update_with_registration_id(self):

@@ -33,9 +33,10 @@ from assessments.tests.factories.score_encoding import ScoreEncodingFactory, loa
 
 
 class ScoreEncodingTest(TestCase):
-    def setUp(self):
-        self.score_encoding = ScoreEncodingFactory()
-        self.global_id = self.score_encoding.global_id
+    @classmethod
+    def setUpTestData(cls):
+        cls.score_encoding = ScoreEncodingFactory()
+        cls.global_id = cls.score_encoding.global_id
 
     def test_find_by_global_id(self):
         score_encoding = mdl_score_encoding.find_by_global_id(global_id=self.global_id)
@@ -64,7 +65,7 @@ undated_sample = "assessments/tests/resources/undated_sample.json"
 
 
 def create_invalid_score_encoding(global_id):
-    invalid_document = get_invalid_sample()
+    invalid_document = load_sample(invalid_sample)
     score_encoding = mdl_score_encoding.ScoreEncoding(global_id=global_id, document=invalid_document)
     score_encoding.save()
     return score_encoding
@@ -76,16 +77,8 @@ def load_sample(sample_path):
 
 
 def get_sample():
-    sample = get_old_sample()
+    sample = load_sample(sample_1)
     return update_publication_date(sample)
-
-
-def get_old_sample():
-    return load_sample(sample_1)
-
-
-def get_invalid_sample():
-    return load_sample(invalid_sample)
 
 
 def update_publication_date(sample):

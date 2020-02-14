@@ -25,11 +25,11 @@
 ##############################################################################
 import datetime
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from attribution.utils import permission
 from base.models.enums import academic_calendar_type
+from base.tests.factories.user import UserFactory
 from base.tests.models import test_academic_year, test_academic_calendar
 
 now = datetime.datetime.now()
@@ -39,9 +39,9 @@ NEXT_YEAR = now.year + 1
 
 
 class TestPermission(TestCase):
-
-    def setUp(self):
-        self.a_user = User.objects.create_user(username='legat', email='legat@localhost', password='top_secret')
+    @classmethod
+    def setUpTestData(cls):
+        cls.a_user = UserFactory()
 
     def test_permission_is_undefined_no_academic_year(self):
         self.assertEqual(permission.is_online_application_opened(self.a_user), False)

@@ -151,15 +151,16 @@ def mock_request_multiple_attributions_charge_with_missing_values(*args, **kwarg
 
 
 class TutorChargeTest(TestCase):
-
-    def setUp(self):
-        self.a_tutor = TutorFactory()
-        self.data = []
-        self.data.append(self.create_lu_yr_annual_data(CURRENT_YEAR))
-        self.data.append(self.create_lu_yr_annual_data(NEXT_YEAR))
+    @classmethod
+    def setUpTestData(cls):
+        cls.a_tutor = TutorFactory()
+        cls.data = []
+        cls.data.append(cls.create_lu_yr_annual_data(CURRENT_YEAR))
+        cls.data.append(cls.create_lu_yr_annual_data(NEXT_YEAR))
         Group.objects.get_or_create(name='students')
 
-    def create_lu_yr_annual_data(self, a_year):
+    @classmethod
+    def create_lu_yr_annual_data(cls, a_year):
         an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
         an_academic_yr.year = a_year
         a_container_year = LearningContainerYearFactory(in_charge=True)
@@ -174,7 +175,7 @@ class TutorChargeTest(TestCase):
         a_learning_unit_year.save()
         an_attribution = AttributionFactory(function=function.CO_HOLDER,
                                             learning_unit_year=a_learning_unit_year,
-                                            tutor=self.a_tutor,
+                                            tutor=cls.a_tutor,
                                             external_id=ATTRIBUTION_EXTERNAL_ID)
 
         return {
@@ -332,25 +333,27 @@ ACCESS_DENIED = 401
 
 
 class HomeTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        today = datetime.datetime.today()
+        cls.academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
+                                                end_date=today + datetime.timedelta(days=5))
+        cls.learning_unit_year = LearningUnitYearFactory(academic_year=cls.academic_year,
+                                                         learning_container_year__academic_year=cls.academic_year,
+                                                         learning_container_year__in_charge=True)
+        cls.url = reverse('attribution_home')
+
     def setUp(self):
         self.person = PersonFactory()
-        self.tutor = TutorFactory(person=self.person)
-
         attribution_permission = Permission.objects.get(codename='can_access_attribution')
         self.person.user.user_permissions.add(attribution_permission)
-
-        today = datetime.datetime.today()
-        self.academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
-                                                 end_date=today + datetime.timedelta(days=5))
-        self.learning_unit_year = LearningUnitYearFactory(academic_year=self.academic_year,
-                                                          learning_container_year__academic_year=self.academic_year,
-                                                          learning_container_year__in_charge=True)
+        self.person.save()
+        self.tutor = TutorFactory(person=self.person)
         self.attribution = AttributionFactory(function=function.CO_HOLDER,
                                               learning_unit_year=self.learning_unit_year,
                                               tutor=self.tutor,
                                               external_id=ATTRIBUTION_EXTERNAL_ID)
 
-        self.url = reverse('attribution_home')
         self.client.force_login(self.person.user)
 
     def test_user_not_logged(self):
@@ -523,9 +526,9 @@ class HomeTest(TestCase):
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_for_multiple_attributions(self, mock_requests_get):
         AttributionFactory(function=function.CO_HOLDER,
-                                                  learning_unit_year=self.learning_unit_year,
-                                                  tutor=self.tutor,
-                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+                           learning_unit_year=self.learning_unit_year,
+                           tutor=self.tutor,
+                           external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
 
         response = self.client.get(self.url)
 
@@ -548,13 +551,13 @@ class HomeTest(TestCase):
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge)
     def test_with_attribution_not_recognized(self, mock_requests_get):
         AttributionFactory(learning_unit_year=self.learning_unit_year,
-                                                  tutor=self.tutor,
-                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+                           tutor=self.tutor,
+                           external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
 
         inexisting_external_id = "osis.attribution_8082"
         AttributionFactory(learning_unit_year=self.learning_unit_year,
-                                                     tutor=self.tutor,
-                                                     external_id=inexisting_external_id)
+                           tutor=self.tutor,
+                           external_id=inexisting_external_id)
 
         response = self.client.get(self.url)
 
@@ -577,8 +580,8 @@ class HomeTest(TestCase):
     @mock.patch('requests.get', side_effect=mock_request_multiple_attributions_charge_with_missing_values)
     def test_with_missing_values(self, mock_requests_get):
         AttributionFactory(learning_unit_year=self.learning_unit_year,
-                                                  tutor=self.tutor,
-                                                  external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
+                           tutor=self.tutor,
+                           external_id=OTHER_ATTRIBUTION_EXTERNAL_ID)
 
         response = self.client.get(self.url)
 

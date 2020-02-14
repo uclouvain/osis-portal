@@ -34,22 +34,23 @@ from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 
 
 class UrlCatalogTagTests(TestCase):
-    def setUp(self):
-        self.academic_year = AcademicYearFactory(year=2015)
-        self.learning_container_year = LearningContainerYearFactory(acronym='LBIR1200',
-                                                                    academic_year=self.academic_year)
-        self.partims = LearningUnitYearFactory.create_batch(
+    @classmethod
+    def setUpTestData(cls):
+        cls.academic_year = AcademicYearFactory(year=2015)
+        cls.learning_container_year = LearningContainerYearFactory(acronym='LBIR1200',
+                                                                   academic_year=cls.academic_year)
+        cls.learning_unit_year = LearningUnitYearFactory(acronym='LBIR1200',
+                                                 academic_year=cls.academic_year,
+                                                 learning_container_year=cls.learning_container_year,
+                                                 subtype=learning_unit_year_subtypes.FULL)
+
+        cls.partims = LearningUnitYearFactory.create_batch(
             2,
-            academic_year=self.academic_year,
-            learning_container_year=self.learning_container_year,
+            academic_year=cls.academic_year,
+            learning_container_year=cls.learning_container_year,
             subtype=learning_unit_year_subtypes.PARTIM
         )
-        self.learning_unit_year = LearningUnitYearFactory(
-            acronym='LBIR1200',
-            academic_year=self.academic_year,
-            learning_container_year=self.learning_container_year,
-            subtype=learning_unit_year_subtypes.FULL
-        )
+
 
     @override_settings(ATTRIBUTION_CONFIG={'CATALOG_URL': 'http://www.uclouvain.be/cours-{0}-{1}.html'})
     def test_url_catalogs(self):
