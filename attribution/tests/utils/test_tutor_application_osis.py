@@ -38,27 +38,29 @@ from base.tests.factories.tutor import TutorFactory
 
 
 class TestTutorApplicationEpc(TestCase):
-    def setUp(self):
-        self.academic_year = AcademicYearFactory(year=2017)
+    @classmethod
+    def setUpTestData(cls):
+        cls.academic_year = AcademicYearFactory(year=2017)
         external_id = tutor_application_osis.LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID + '35654987_2017'
-        self.lbir1200 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1200",
-                                                     external_id=external_id)
-        self.lagro2630 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LAGRO2630")
-        self.bio = LearningContainerYearFactory(academic_year=self.academic_year, acronym="BIO5213")
+        cls.lbir1200 = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="LBIR1200",
+                                                    external_id=external_id)
+        cls.lagro2630 = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="LAGRO2630")
+        cls.bio = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="BIO5213")
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
-        person = PersonFactory(global_id="98363454")
+        cls.person = PersonFactory(global_id="98363454")
         external_id = tutor_application_osis.TUTOR_PREFIX_EXTERNAL_ID + '2089590559'
-        self.tutor = TutorFactory(external_id=external_id, person=person)
+        cls.tutor = TutorFactory(external_id=external_id, person=cls.person)
 
+    def setUp(self):
         # Create two tutor applications
-        applications = [_get_application_example(self.lbir1200, '30.5', '40.5'),
-                        _get_application_example(self.lagro2630, '12.5', '10.5'),
-                        _get_application_example(self.bio, '10.5', '9.5')]
+        self.applications = [_get_application_example(self.lbir1200, '30.5', '40.5'),
+                             _get_application_example(self.lagro2630, '12.5', '10.5'),
+                             _get_application_example(self.bio, '10.5', '9.5')]
         self.attribution_new = AttributionNewFactory(
-            global_id=person.global_id,
-            applications=applications
+            global_id=self.person.global_id,
+            applications=self.applications
         )
 
     def test_process_message_update_operation(self):
