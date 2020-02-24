@@ -36,10 +36,13 @@ from base.tests.factories.user import UserFactory
 
 
 class TestHome(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = UserFactory()
+        cls.url = reverse("home")
+
     def setUp(self):
-        self.user = UserFactory()
         self.client.force_login(self.user)
-        self.url = reverse("home")
 
     def test_user_is_not_logged(self):
         self.client.logout()

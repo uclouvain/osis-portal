@@ -31,7 +31,6 @@ from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollme
 
 
 class TestExamEnrollmentRequest(TestCase):
-
     def test_must_be_unique(self):
         the_student = StudentFactory()
         acronym = 'ACRO0001'
