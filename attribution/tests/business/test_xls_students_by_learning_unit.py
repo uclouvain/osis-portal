@@ -37,12 +37,15 @@ ACCESS_DENIED = 401
 
 
 class XlsStudentsByLearningUnitTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         Group.objects.create(name="tutors")
-        self.tutor = TutorFactory()
-        self.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
+        cls.tutor = TutorFactory()
+        cls.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        self.url = reverse('produce_xls_students', args=['01234567'])
+        cls.url = reverse('produce_xls_students', args=['01234567'])
+
+    def setUp(self):
         self.client.force_login(self.tutor.person.user)
 
     def create_worksheet(self):

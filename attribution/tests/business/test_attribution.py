@@ -42,19 +42,22 @@ from base.tests.factories.tutor import TutorFactory
 
 
 class AttributionTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
-        self.person = PersonFactory(global_id="98363454")
-        TutorFactory(person=self.person)
+        cls.person = PersonFactory(global_id="98363454")
+        TutorFactory(person=cls.person)
 
         _create_multiple_academic_year()
-        self.current_academic_year = create_current_academic_year()
+        cls.current_academic_year = create_current_academic_year()
 
         # Creation Json which will be store on attribution
-        attributions = _get_attributions_dict(self.current_academic_year.year)
+        cls.attributions = _get_attributions_dict(cls.current_academic_year.year)
+
+    def setUp(self):
         self.attrib = AttributionNewFactory(global_id=self.person.global_id,
-                                            attributions=attributions)
+                                            attributions=self.attributions)
 
     def test_get_attribution_list(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
@@ -201,6 +204,36 @@ class AttributionTest(TestCase):
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
         self.assertEqual(attribution_list_about_to_expired[0]['not_renewable_reason'],
                          _('A substitute can not renew his function of substitute'))
+
+    def test_get_attribution_list_when_attribute_not_renewable_because_team(self):
+        self.attrib.attributions = [
+            {
+                'year': self.current_academic_year.year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire',
+                'weight': '5.00',
+                'LECTURING': '0', 'PRACTICAL_EXERCISES': '0', 'function': 'HOLDER', 'start_year': 2015,
+                'end_year': self.current_academic_year.year, 'is_substitute': False
+            }
+        ]
+        self.attrib.save()
+        _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
+        next_academic_year = AcademicYear.objects.get(year=self.current_academic_year.year + 1)
+        container_year = _create_learning_container_with_components(
+            "LAGRO1530",
+            next_academic_year,
+            Decimal(30),
+            Decimal(30)
+        )
+        container_year.team = True
+        container_year.save()
+
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
+                                                                                             self.current_academic_year)
+        self.assertEqual(len(attribution_list_about_to_expired), 1)
+        self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
+        self.assertEqual(
+            attribution_list_about_to_expired[0]['not_renewable_reason'],
+            _('This course is team-managed. The application to this activity is based on a paper transmission.')
+        )
 
     def test_get_attribution_list_about_to_expire_already_applied(self):
         _create_learning_container_with_components("LAGRO1530", self.current_academic_year, Decimal(30), Decimal(30))
@@ -359,6 +392,8 @@ def _create_learning_container_with_components(acronym, academic_year, volume_le
             type=learning_component_year_type.PRACTICAL_EXERCISES,
             volume_declared_vacant=volume_practical_exercices
         )
+
+    return l_container
 
 
 def _get_attributions_dict(current_year):
