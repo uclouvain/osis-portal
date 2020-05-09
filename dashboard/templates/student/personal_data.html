@@ -3,19 +3,19 @@
 {% load i18n %}
 
 {% block breadcrumb %}
-    <li class="active">{% trans 'Personal data' %}</li>
+    <li class="active">{% trans 'My personal data' %}</li>
 {% endblock %}
 
 {% include "template_messages.html" %}
 
 {% block content %}
     <div class="alert alert-warning">{% trans 'If those data are not correct, please contact ' %}<a
-            href="{{ registration_service_url }}">{% trans 'your registration manager' %}</a></div>
+            href="{{ registration_service_url }}" target="_blank">{% trans 'your registration manager' %}</a></div>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    {% trans 'Administrative data' %}
+                    {% trans 'ID data' %}
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -38,11 +38,19 @@
                         <div class="col-md-6">
                             <p><strong>{% trans 'Birth date' %}</strong> : {{ main_data.dateNaissance }}</p>
                         </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Birth location' %}</strong> : {{ main_data.lieuNaissance }}</p>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Email' %}</strong> : {{ email }}</p>
+                            <p><strong>{% trans 'Private email' %}</strong> : {{ email }}</p>
                         </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Email' %}</strong> : {{ gsm }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <p><strong>{% trans 'Mobile number' %}</strong> : {{ gsm }}</p>
                         </div>

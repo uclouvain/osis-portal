@@ -34,7 +34,9 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def __fetch_student_personal_data(person):
-    data = {}
+    data = {
+        'registration_service_url': settings.REGISTRATION_ADMINISTRATION_URL
+    }
     try:
         server_top_url = settings.ESB_URL
         personal_data_path = settings.STUDENT_PERSONAL_DATA_PATH
@@ -43,7 +45,6 @@ def __fetch_student_personal_data(person):
         main_data_url = server_top_url + main_data_path.format(person.global_id)
         personal_data = get_data_from_esb(personal_data_url)
         main_data = get_data_from_esb(main_data_url)
-        data['registration_service_url'] = settings.REGISTRATION_ADMINISTRATION_URL
         data.update(personal_data.get('return'))
         data['main_data'] = main_data.get('lireDossierEtudiantResponse').get('return')
     except error.HTTPError:
