@@ -43,9 +43,9 @@ def __fetch_student_personal_data(person):
         main_data_url = server_top_url + main_data_path.format(person.global_id)
         personal_data = get_data_from_esb(personal_data_url)
         main_data = get_data_from_esb(main_data_url)
-        data = personal_data.get('return')
-        data['main_data'] = main_data.get('lireDossierEtudiantResponse').get('return')
         data['registration_service_url'] = settings.REGISTRATION_ADMINISTRATION_URL
+        data.update(personal_data.get('return'))
+        data['main_data'] = main_data.get('lireDossierEtudiantResponse').get('return')
     except error.HTTPError:
         log_trace = traceback.format_exc()
         logger.warning('Error when querying WebService: \n {}'.format(log_trace))
