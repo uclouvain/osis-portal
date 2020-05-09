@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-09 16:13+0200\n"
+"POT-Creation-Date: 2020-05-09 16:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgstr ""
 msgid "ID data"
 msgstr ""
 
-msgid "If those data are not correct, please contact "
+msgid "If those data are not correct, please contact the "
 msgstr ""
 
 msgid "Internships"
@@ -110,6 +110,9 @@ msgid "Postal code"
 msgstr ""
 
 msgid "Private email"
+msgstr ""
+
+msgid "Registration department"
 msgstr ""
 
 msgid "Registration id"
@@ -161,7 +164,4 @@ msgid "VPN access"
 msgstr ""
 
 msgid "outside UCL."
-msgstr ""
-
-msgid "your registration manager"
 msgstr ""
