@@ -74,7 +74,7 @@ msgid "ID data"
 msgstr "Identification"
 
 msgid "If those data are not correct, please contact the "
-msgstr "Si ces données ne sont pas exactes, veuillez prendre contact avec le"
+msgstr "Si ces données ne sont pas exactes, veuillez prendre contact avec le "
 
 msgid "Internships"
 msgstr "Stages"
