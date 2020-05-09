@@ -360,6 +360,15 @@ ATTESTATION_CONFIG = {
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
 
+ESB_AUTHORIZATION = os.environ.get('ESB_AUTHORIZATION', '')
+ESB_URL = os.environ.get('ESB_URL', '')
+ESB_CONTENT_TYPE = os.environ.get('ESB_CONTENT_TYPE', 'application/json; charset=utf-8')
+ESB_ENCODING = os.environ.get('ESB_ENCODING', 'UTF-8')
+ESB_TIMEOUT = os.environ.get('ESB_TIMEOUT', 10)
+STUDENT_PERSONAL_DATA_PATH = os.environ.get('STUDENT_PERSONAL_DATA_API_PATH', '')
+STUDENT_MAIN_DATA_PATH = os.environ.get('STUDENT_MAIN_DATA_API_PATH', '')
+REGISTRATION_ADMINISTRATION_URL = os.environ.get('REGISTRATION_SERVICE_URL', '')
+
 # Continuing education settings
 ACCOUNT_ACTIVATION_DAYS = int(os.environ.get('IUFC_ACCOUNT_ACTIVATION_DAYS', 7))
 IUFC_CONFIG = {

@@ -1,0 +1,88 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block breadcrumb %}
+    <li class="active">{% trans 'Personal data' %}</li>
+{% endblock %}
+
+{% include "template_messages.html" %}
+
+{% block content %}
+    <div class="alert alert-warning">{% trans 'If those data are not correct, please contact ' %}<a
+            href="{{ registration_service_url }}">{% trans 'your registration manager' %}</a></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans 'Administrative data' %}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Global id' %}</strong> : {{ matric_fgs }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Registration id' %}</strong> : {{ main_data.noma }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'First name' %}</strong> : {{ main_data.nom }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Last name' %}</strong> : {{ main_data.prenom }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Birth date' %}</strong> : {{ main_data.dateNaissance }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Email' %}</strong> : {{ email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Mobile number' %}</strong> : {{ gsm }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if domicile %}
+        <div class="grid-item">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans 'Personal address' %}
+                </div>
+                <div class="panel-body">
+                    <p><strong>{% trans 'Street' %}</strong> : {{ domicile.street }}</p>
+                    {% if domicile.street2 %}<p>{{ domicile.street2 }}</p>{% endif %}
+                    {% if domicile.street3 %}<p>{{ domicile.street3 }}</p>{% endif %}
+                    <p><strong>{% trans 'Postal code' %}</strong> : {{ domicile.postCode }}</p>
+                    <p><strong>{% trans 'City' %}</strong> : {{ domicile.town }}</p>
+                    <p><strong>{% trans 'Country' %}</strong> : {{ domicile.country }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if residence %}
+        <div class="grid-item">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans 'Staying address' %}
+                </div>
+                <div class="panel-body">
+                    <p><strong>{% trans 'Street' %}</strong> : {{ residence.street }}</p>
+                    {% if residence.street2 %}<p>{{ residence.street2 }}</p>{% endif %}
+                    {% if residence.street3 %}<p>{{ residence.street3 }}</p>{% endif %}
+                    <p><strong>{% trans 'Postal code' %}</strong> : {{ residence.postCode }}</p>
+                    <p><strong>{% trans 'City' %}</strong> : {{ residence.town }}</p>
+                    <p><strong>{% trans 'Country' %}</strong> : {{ residence.country }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

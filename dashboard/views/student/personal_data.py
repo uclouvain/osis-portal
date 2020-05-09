@@ -23,13 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+import logging
 
-from dashboard.views import main
-from dashboard.views.student import personal_data as std_personal_data
+from django.conf import settings
+from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import MultipleObjectsReturned
 
-urlpatterns = [
-    url(r'^$', main.home, name='dashboard_home'),
-    url('^faculty_administration/$', main.faculty_administration, name='faculty_administration'),
-    url('^student/personal/data/$', std_personal_data.home, name='student_personal_data_home'),
-]
+from base.views import layout
+from dashboard.business import personal_data as pers_data_bus
+from dashboard.views import main as dash_main_view
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+@login_required
+@permission_required('base.is_student', raise_exception=True)
+def home(request):
+    try:
+        data = pers_data_bus.get_student_personal_data(request.user)
+    except MultipleObjectsReturned:
+        logger.exception('User {} returned multiple students.'.format(request.user.username))
+        return dash_main_view.show_multiple_registration_id_error(request)
+    return layout.render(request, "student/personal_data.html", data)
+
