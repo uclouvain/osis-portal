@@ -26,10 +26,10 @@
 from django.conf.urls import url
 
 from dashboard.views import main
-from dashboard.views.student import personal_data as std_personal_data
+from dashboard.views.student import id_data as std_id_data
 
 urlpatterns = [
     url(r'^$', main.home, name='dashboard_home'),
     url('^faculty_administration/$', main.faculty_administration, name='faculty_administration'),
-    url('^student/data/$', std_personal_data.home, name='student_personal_data_home'),
+    url('^student/data/$', std_id_data.home, name='student_personal_data_home'),
 ]
