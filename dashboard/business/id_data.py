@@ -39,9 +39,9 @@ def __fetch_student_id_data(student):
     }
     try:
         server_top_url = settings.ESB_URL
-        personal_data_path = settings.STUDENT_PERSONAL_DATA_PATH
-        main_data_path = settings.STUDENT_MAIN_DATA_PATH
-        birth_data_path = settings.STUDENT_BIRTH_DATA_PATH
+        personal_data_path = settings.STUDENT_ID_DATA.get('PERSONAL_DATA_PATH')
+        main_data_path = settings.STUDENT_ID_DATA.get('MAIN_DATA_PATH')
+        birth_data_path = settings.STUDENT_ID_DATA.get('BIRTH_DATA_PATH')
         personal_data_url = server_top_url + personal_data_path.format(student.person.global_id)
         main_data_url = server_top_url + main_data_path.format(student.person.global_id)
         birth_data_url = server_top_url + birth_data_path.format(student.person.global_id)
