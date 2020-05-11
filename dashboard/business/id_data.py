@@ -45,13 +45,13 @@ def __fetch_student_id_data(person):
         personal_data_url = server_top_url + personal_data_path.format(person.global_id)
         main_data_url = server_top_url + main_data_path.format(person.global_id)
         birth_data_url = server_top_url + birth_data_path.format(person.global_id)
-        personal_data = get_data_from_esb(personal_data_url)
-        main_data = get_data_from_esb(main_data_url)
+        personal_data = get_data_from_esb(personal_data_url).get('return')
+        main_data = get_data_from_esb(main_data_url).get('lireDossierEtudiantResponse').get('return')
         main_data['email'] = person.email if not None else ''
-        birth_data = get_data_from_esb(birth_data_url)
-        data['personal_data'] = personal_data.get('return')
-        data['main_data'] = main_data.get('lireDossierEtudiantResponse').get('return')
-        data['birth_data'] = birth_data.get('return')
+        birth_data = get_data_from_esb(birth_data_url).get('return')
+        data['personal_data'] = personal_data
+        data['main_data'] = main_data
+        data['birth_data'] = birth_data
     except error.HTTPError:
         log_trace = traceback.format_exc()
         logger.warning('Error when querying WebService: \n {}'.format(log_trace))
