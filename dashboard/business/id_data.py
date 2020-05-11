@@ -33,7 +33,7 @@ from django.conf import settings
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def __fetch_student_id_data(person):
+def __fetch_student_id_data(student):
     data = {
         'registration_service_url': settings.REGISTRATION_ADMINISTRATION_URL
     }
@@ -42,12 +42,12 @@ def __fetch_student_id_data(person):
         personal_data_path = settings.STUDENT_PERSONAL_DATA_PATH
         main_data_path = settings.STUDENT_MAIN_DATA_PATH
         birth_data_path = settings.STUDENT_BIRTH_DATA_PATH
-        personal_data_url = server_top_url + personal_data_path.format(person.global_id)
-        main_data_url = server_top_url + main_data_path.format(person.global_id)
-        birth_data_url = server_top_url + birth_data_path.format(person.global_id)
+        personal_data_url = server_top_url + personal_data_path.format(student.person.global_id)
+        main_data_url = server_top_url + main_data_path.format(student.person.global_id)
+        birth_data_url = server_top_url + birth_data_path.format(student.person.global_id)
         personal_data = __get_data_from_esb(personal_data_url).get('return')
         main_data = __get_data_from_esb(main_data_url).get('lireDossierEtudiantResponse').get('return')
-        main_data['email'] = person.email if not None else ''
+        main_data['email'] = student.email if not None else ''
         birth_data = __get_data_from_esb(birth_data_url).get('return')
         data['personal_data'] = personal_data
         data['main_data'] = main_data
@@ -70,8 +70,7 @@ def get_student_id_data(user=None, registration_id=None):
     else:
         student = None
     if student:
-        person = person_mdl.find_by_user(user)
-        data = __fetch_student_id_data(person)
+        data = __fetch_student_id_data(student)
     return data
 
 
