@@ -33,7 +33,7 @@ from django.conf import settings
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def __fetch_student_personal_data(person):
+def __fetch_student_id_data(person):
     data = {
         'registration_service_url': settings.REGISTRATION_ADMINISTRATION_URL
     }
@@ -58,16 +58,15 @@ def __fetch_student_personal_data(person):
     except Exception:
         log_trace = traceback.format_exc()
         logger.warning('Error when returning student personal data: \n {}'.format(log_trace))
-    finally:
-        return data
+    return data
 
 
-def get_student_personal_data(user):
+def get_student_id_data(user):
     student = student_mdl.find_by_user(user)
     data = None
     if student:
         person = person_mdl.find_by_user(user)
-        data = __fetch_student_personal_data(person)
+        data = __fetch_student_id_data(person)
     return data
 
 

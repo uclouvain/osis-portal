@@ -30,7 +30,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import MultipleObjectsReturned
 
 from base.views import layout
-from dashboard.business import personal_data as pers_data_bus
+from dashboard.business import id_data as id_data_bus
 from dashboard.views import main as dash_main_view
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -40,7 +40,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @permission_required('base.is_student', raise_exception=True)
 def home(request):
     try:
-        data = pers_data_bus.get_student_personal_data(request.user)
+        data = id_data_bus.get_student_id_data(request.user)
     except MultipleObjectsReturned:
         logger.exception('User {} returned multiple students.'.format(request.user.username))
         return dash_main_view.show_multiple_registration_id_error(request)
