@@ -65,9 +65,3 @@ def faculty_administration(request):
     else:
         form = RegistrationIdForm()
     return layout.render(request, "admin/student_id_data_administration.html", {"form": form})
-
-
-
-
-
-
