@@ -29,6 +29,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import MultipleObjectsReturned
 
+from base.forms.base_forms import RegistrationIdForm
 from base.views import layout
 from dashboard.business import id_data as id_data_bus
 from dashboard.views import main as dash_main_view
@@ -40,9 +41,33 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @permission_required('base.is_student', raise_exception=True)
 def home(request):
     try:
-        data = id_data_bus.get_student_id_data(request.user)
+        data = id_data_bus.get_student_id_data(user=request.user)
     except MultipleObjectsReturned:
         logger.exception('User {} returned multiple students.'.format(request.user.username))
         return dash_main_view.show_multiple_registration_id_error(request)
-    return layout.render(request, "student/personal_data.html", data)
+    return layout.render(request, "student/id_data_home.html", data)
+
+
+# Admin views
+@login_required
+@permission_required('base.is_faculty_administrator', raise_exception=True)
+def faculty_administration(request):
+    """
+    View to select a student to visualize his/her ID data.
+    !!! Should only be accessible for staff having the rights.
+    """
+    if request.method == "POST":
+        form = RegistrationIdForm(request.POST)
+        if form.is_valid():
+            registration_id = form.cleaned_data['registration_id']
+            data = id_data_bus.get_student_id_data(registration_id=registration_id)
+            return layout.render(request, "admin/student_id_data.html", data)
+    else:
+        form = RegistrationIdForm()
+    return layout.render(request, "admin/student_id_data_administration.html", {"form": form})
+
+
+
+
+
 

@@ -31,5 +31,7 @@ from dashboard.views.student import id_data as std_id_data
 urlpatterns = [
     url(r'^$', main.home, name='dashboard_home'),
     url('^faculty_administration/$', main.faculty_administration, name='faculty_administration'),
-    url('^student/data/$', std_id_data.home, name='student_personal_data_home'),
+    url('^faculty_administration/student/data/select_student/$', std_id_data.faculty_administration,
+        name='student_id_data_administration'),
+    url('^student/data/$', std_id_data.home, name='student_id_data_home'),
 ]

@@ -45,10 +45,10 @@ def __fetch_student_id_data(person):
         personal_data_url = server_top_url + personal_data_path.format(person.global_id)
         main_data_url = server_top_url + main_data_path.format(person.global_id)
         birth_data_url = server_top_url + birth_data_path.format(person.global_id)
-        personal_data = get_data_from_esb(personal_data_url).get('return')
-        main_data = get_data_from_esb(main_data_url).get('lireDossierEtudiantResponse').get('return')
+        personal_data = __get_data_from_esb(personal_data_url).get('return')
+        main_data = __get_data_from_esb(main_data_url).get('lireDossierEtudiantResponse').get('return')
         main_data['email'] = person.email if not None else ''
-        birth_data = get_data_from_esb(birth_data_url).get('return')
+        birth_data = __get_data_from_esb(birth_data_url).get('return')
         data['personal_data'] = personal_data
         data['main_data'] = main_data
         data['birth_data'] = birth_data
@@ -61,16 +61,21 @@ def __fetch_student_id_data(person):
     return data
 
 
-def get_student_id_data(user):
-    student = student_mdl.find_by_user(user)
+def get_student_id_data(user=None, registration_id=None):
     data = None
+    if registration_id:
+        student = student_mdl.find_by_registration_id(registration_id)
+    elif user:
+        student = student_mdl.find_by_user(user)
+    else:
+        student = None
     if student:
         person = person_mdl.find_by_user(user)
         data = __fetch_student_id_data(person)
     return data
 
 
-def get_data_from_esb(url):
+def __get_data_from_esb(url):
     logger.info('URL ESB : '+url)
     esb_headers = {"Authorization": settings.ESB_AUTHORIZATION, "Content-Type": settings.ESB_CONTENT_TYPE}
     esb_request = request.Request(url, headers=esb_headers)

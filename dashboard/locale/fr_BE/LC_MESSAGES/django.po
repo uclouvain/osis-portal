@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-09 16:52+0200\n"
+"POT-Creation-Date: 2020-05-12 00:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,6 +138,12 @@ msgstr "Adresse de résidence"
 
 msgid "Street"
 msgstr "Rue"
+
+msgid "Student ID data"
+msgstr "Données personnelles de l'étudiant"
+
+msgid "Student ID data administration"
+msgstr "Administration des données personnelles de l'étudiant"
 
 msgid "This process controls my applications"
 msgstr "Gestion de mes candidatures aux cours vacants"
