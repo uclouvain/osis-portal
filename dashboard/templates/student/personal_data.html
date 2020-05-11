@@ -20,7 +20,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Global id' %}</strong> : {{ matric_fgs }}</p>
+                            <p><strong>{% trans 'Global id' %}</strong> : {{ main_data.matricFGS }}</p>
                         </div>
                         <div class="col-md-6">
                             <p><strong>{% trans 'Registration id' %}</strong> : {{ main_data.noma }}</p>
@@ -36,15 +36,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Birth date' %}</strong> : {{ main_data.dateNaissance }}</p>
+                            <p><strong>{% trans 'Birth date' %}</strong> : {{ birth_data.birthdate }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Birth location' %}</strong> : {{ main_data.lieuNaissance }}</p>
+                            <p><strong>{% trans 'Birth location' %}</strong> : {{ birth_data.birthcity }} / {{ birth_data.birthcountry }}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Private email' %}</strong> : {{ email }}</p>
+                            <p><strong>{% trans 'Private email' %}</strong> : {{ personal_data.email }}</p>
                         </div>
                         <div class="col-md-6">
                             <p><strong>{% trans 'Email' %}</strong> : {{ main_data.email }}</p>
@@ -52,43 +52,43 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Mobile number' %}</strong> : {{ gsm }}</p>
+                            <p><strong>{% trans 'Mobile number' %}</strong> : {{ personal_data.gsm }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {% if domicile %}
+    {% if personal_data.domicile %}
         <div class="grid-item">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'Personal address' %}
                 </div>
                 <div class="panel-body">
-                    <p><strong>{% trans 'Street' %}</strong> : {{ domicile.street }}</p>
-                    {% if domicile.street2 %}<p>{{ domicile.street2 }}</p>{% endif %}
-                    {% if domicile.street3 %}<p>{{ domicile.street3 }}</p>{% endif %}
-                    <p><strong>{% trans 'Postal code' %}</strong> : {{ domicile.postCode }}</p>
-                    <p><strong>{% trans 'City' %}</strong> : {{ domicile.town }}</p>
-                    <p><strong>{% trans 'Country' %}</strong> : {{ domicile.country }}</p>
+                    <p><strong>{% trans 'Street' %}</strong> : {{ personal_data.domicile.street }}</p>
+                    {% if personal_data.domicile.street2 %}<p>{{ personal_data.domicile.street2 }}</p>{% endif %}
+                    {% if personal_data.domicile.street3 %}<p>{{ personal_data.domicile.street3 }}</p>{% endif %}
+                    <p><strong>{% trans 'Postal code' %}</strong> : {{ personal_data.domicile.postCode }}</p>
+                    <p><strong>{% trans 'City' %}</strong> : {{ personal_data.domicile.town }}</p>
+                    <p><strong>{% trans 'Country' %}</strong> : {{ personal_data.domicile.country }}</p>
                 </div>
             </div>
         </div>
     {% endif %}
-    {% if residence %}
+    {% if personal_data.residence %}
         <div class="grid-item">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'Staying address' %}
                 </div>
                 <div class="panel-body">
-                    <p><strong>{% trans 'Street' %}</strong> : {{ residence.street }}</p>
-                    {% if residence.street2 %}<p>{{ residence.street2 }}</p>{% endif %}
-                    {% if residence.street3 %}<p>{{ residence.street3 }}</p>{% endif %}
-                    <p><strong>{% trans 'Postal code' %}</strong> : {{ residence.postCode }}</p>
-                    <p><strong>{% trans 'City' %}</strong> : {{ residence.town }}</p>
-                    <p><strong>{% trans 'Country' %}</strong> : {{ residence.country }}</p>
+                    <p><strong>{% trans 'Street' %}</strong> : {{ personal_data.residence.street }}</p>
+                    {% if personal_data.residence.street2 %}<p>{{ personal_data.residence.street2 }}</p>{% endif %}
+                    {% if personal_data.residence.street3 %}<p>{{ personal_data.residence.street3 }}</p>{% endif %}
+                    <p><strong>{% trans 'Postal code' %}</strong> : {{ personal_data.residence.postCode }}</p>
+                    <p><strong>{% trans 'City' %}</strong> : {{ personal_data.residence.town }}</p>
+                    <p><strong>{% trans 'Country' %}</strong> : {{ personal_data.residence.country }}</p>
                 </div>
             </div>
         </div>
