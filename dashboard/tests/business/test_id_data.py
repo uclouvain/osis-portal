@@ -26,11 +26,18 @@
 import json
 from unittest.mock import patch
 
+from django.conf import settings
 from django.test import TestCase
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
-from dashboard.business.id_data import get_student_id_data
+from dashboard.business import id_data as bsn_id_data
+
+
+def get_json_as_dict(json_path):
+    with open(json_path) as json_file:
+        data_as_json = json_file.read()
+    return json.loads(data_as_json)
 
 
 class TestStudentData(TestCase):
@@ -38,11 +45,9 @@ class TestStudentData(TestCase):
     def setUp(self):
         self.person = PersonFactory()
 
-    @patch('dashboard.business.id_data.__fetch_student_id_data')
+    @patch('dashboard.business.id_data._fetch_student_id_data')
     def test_get_student_data(self, mock_client_call):
-        with open("dashboard/tests/resources/student_id_data.json") as json_file:
-            data_as_json = json_file.read()
-        mock_client_call.return_value = json.loads(data_as_json)
+        mock_client_call.return_value = get_json_as_dict("dashboard/tests/resources/student_id_data.json")
         student = StudentFactory()
         expected_data = {
             'main_data': {
@@ -86,7 +91,132 @@ class TestStudentData(TestCase):
                 'birthcountry': 'France'
             }
         }
-        given_data = get_student_id_data(user=student.person.user)
+        given_data = bsn_id_data.get_student_id_data(user=student.person.user)
         self.assertDictEqual(given_data, expected_data)
-        given_data = get_student_id_data(registration_id=student.registration_id)
+        given_data = bsn_id_data.get_student_id_data(registration_id=student.registration_id)
+        self.assertDictEqual(given_data, expected_data)
+
+    @patch('dashboard.business.id_data._get_birth_data')
+    @patch('dashboard.business.id_data._get_personal_data')
+    @patch('dashboard.business.id_data._get_main_data')
+    def test_fetch_student_data(self, main_data_mock, private_data_mock, birth_data_mock):
+        main_data_mock.return_value = get_json_as_dict("dashboard/tests/resources/student_main_data.json")
+        private_data_mock.return_value = get_json_as_dict("dashboard/tests/resources/student_private_data.json")
+        birth_data_mock.return_value = get_json_as_dict("dashboard/tests/resources/student_birth_data.json")
+        student = StudentFactory()
+        given_data = bsn_id_data._fetch_student_id_data(student)
+        expected_data = {
+            'registration_service_url': settings.REGISTRATION_ADMINISTRATION_URL,
+            'personal_data': {
+                'matric_fgs': '0202020',
+                'email': 'monemail@osis.be',
+                'gsm': '+32466202020',
+                'domicile': {
+                    'street': 'Rue Machin, 42',
+                    'street2': None,
+                    'street3': None,
+                    'postCode': 7965,
+                    'town': 'Outsy',
+                    'country': 'Belgique'
+                },
+                'residence': {
+                    'street': 'Rue du Kot, 42',
+                    'street2': 'A côté du Nignt-Shop',
+                    'street3': None,
+                    'postCode': 1236,
+                    'town': 'Las-Bas',
+                    'country': 'Belgique'
+                }
+            },
+            'main_data': {
+                'anneeAcademique': 2020,
+                'bourseAutre': 'CIUF',
+                'codeEtatInscription': 1,
+                'codeStatut': 60,
+                'dateNaissance': '08/08/1912',
+                'etatInscription': 'Inscrit au rôle',
+                'matricFGS': '0202020',
+                'nom': 'Monsiuer M',
+                'noma': 16542394,
+                'prenom': 'Rudolphe',
+                'statut': 'Formation continue'
+            },
+            'birth_data': {
+                'matric_fgs': '0202020',
+                'birthdate': '08/08/1912',
+                'birthcity': 'GRENOBLE',
+                'birthcountry': 'France'
+            }
+        }
+        self.assertDictEqual(given_data, expected_data)
+
+    @patch('dashboard.business.id_data._get_data_from_esb')
+    def test_get_main_data(self, mock_esb):
+        mock_esb.return_value = get_json_as_dict("dashboard/tests/resources/esb_student_main_data.json")
+        student = StudentFactory()
+        given_data = bsn_id_data._get_main_data(student)
+        expected_data = {
+            'anneeAcademique': 2020,
+            'bourseAutre': 'CIUF',
+            'codeEtatInscription': 1,
+            'codeStatut': 60,
+            'dateNaissance': '08/08/1912',
+            'etatInscription': 'Inscrit au rôle',
+            'matricFGS': '0202020',
+            'nom': 'Monsiuer M',
+            'noma': 16542394,
+            'prenom': 'Rudolphe',
+            'statut': 'Formation continue',
+            'email': student.email
+        }
+        self.assertDictEqual(given_data, expected_data)
+
+    @patch('dashboard.business.id_data._get_data_from_esb')
+    def test_get_personal_data(self, mock_esb):
+        mock_esb.return_value = get_json_as_dict("dashboard/tests/resources/esb_student_private_data.json")
+        student = StudentFactory()
+        given_data = bsn_id_data._get_personal_data(student)
+        expected_data = {
+            'matric_fgs': '0202020',
+            'email': 'monemail@osis.be',
+            'gsm': '+32466202020',
+            'domicile': {
+                'street': 'Rue Machin, 42',
+                'street2': None,
+                'street3': None,
+                'postCode': 7965,
+                'town': 'Outsy',
+                'country': 'Belgique'
+            },
+            'residence': {
+                'street': 'Rue du Kot, 42',
+                'street2': 'A côté du Nignt-Shop',
+                'street3': None,
+                'postCode': 1236,
+                'town': 'Las-Bas',
+                'country': 'Belgique'
+            }
+        }
+        self.assertDictEqual(given_data, expected_data)
+
+    @patch('dashboard.business.id_data._get_data_from_esb')
+    def test_get_birth_data(self, mock_esb):
+        mock_esb.return_value = get_json_as_dict("dashboard/tests/resources/esb_student_birth_data.json")
+        student = StudentFactory()
+        given_data = bsn_id_data._get_birth_data(student)
+        expected_data = {
+            'matric_fgs': '0202020',
+            'birthdate': '08/08/1912',
+            'birthcity': 'GRENOBLE',
+            'birthcountry': 'France'
+        }
+        self.assertDictEqual(given_data, expected_data)
+
+    @patch('dashboard.business.id_data._get_data_from_esb')
+    def test_get_data_from_esb(self, mock_esb):
+        mock_esb.return_value = get_json_as_dict("dashboard/tests/resources/esb_test.json")
+        given_data = bsn_id_data._get_data_from_esb("test")
+        expected_data = {
+            'return': 'TEST'
+        }
         self.assertDictEqual(given_data, expected_data)

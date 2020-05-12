@@ -33,25 +33,14 @@ from django.conf import settings
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def __fetch_student_id_data(student):
+def _fetch_student_id_data(student):
     data = {
         'registration_service_url': settings.REGISTRATION_ADMINISTRATION_URL
     }
     try:
-        server_top_url = settings.ESB_URL
-        personal_data_path = settings.STUDENT_ID_DATA.get('PERSONAL_DATA_PATH')
-        main_data_path = settings.STUDENT_ID_DATA.get('MAIN_DATA_PATH')
-        birth_data_path = settings.STUDENT_ID_DATA.get('BIRTH_DATA_PATH')
-        personal_data_url = server_top_url + personal_data_path.format(student.person.global_id)
-        main_data_url = server_top_url + main_data_path.format(student.person.global_id)
-        birth_data_url = server_top_url + birth_data_path.format(student.person.global_id)
-        personal_data = __get_data_from_esb(personal_data_url).get('return')
-        main_data = __get_data_from_esb(main_data_url).get('lireDossierEtudiantResponse').get('return')
-        main_data['email'] = student.email if not None else ''
-        birth_data = __get_data_from_esb(birth_data_url).get('return')
-        data['personal_data'] = personal_data
-        data['main_data'] = main_data
-        data['birth_data'] = birth_data
+        data['personal_data'] = _get_personal_data(student)
+        data['main_data'] = _get_main_data(student)
+        data['birth_data'] = _get_birth_data(student)
     except error.HTTPError:
         log_trace = traceback.format_exc()
         logger.warning('Error when querying WebService: \n {}'.format(log_trace))
@@ -59,6 +48,31 @@ def __fetch_student_id_data(student):
         log_trace = traceback.format_exc()
         logger.warning('Error when returning student personal data: \n {}'.format(log_trace))
     return data
+
+
+def _get_main_data(student):
+    server_top_url = settings.ESB_URL
+    main_data_path = settings.STUDENT_ID_DATA.get('MAIN_DATA_PATH')
+    main_data_url = server_top_url + main_data_path.format(student.person.global_id)
+    main_data = _get_data_from_esb(main_data_url).get('lireDossierEtudiantResponse').get('return')
+    main_data['email'] = student.email if not None else ''
+    return main_data
+
+
+def _get_personal_data(student):
+    server_top_url = settings.ESB_URL
+    personal_data_path = settings.STUDENT_ID_DATA.get('PERSONAL_DATA_PATH')
+    personal_data_url = server_top_url + personal_data_path.format(student.person.global_id)
+    personal_data = _get_data_from_esb(personal_data_url).get('return')
+    return personal_data
+
+
+def _get_birth_data(student):
+    server_top_url = settings.ESB_URL
+    birth_data_path = settings.STUDENT_ID_DATA.get('BIRTH_DATA_PATH')
+    birth_data_url = server_top_url + birth_data_path.format(student.person.global_id)
+    birth_data = _get_data_from_esb(birth_data_url).get('return')
+    return birth_data
 
 
 def get_student_id_data(user=None, registration_id=None):
@@ -70,11 +84,11 @@ def get_student_id_data(user=None, registration_id=None):
     else:
         student = None
     if student:
-        data = __fetch_student_id_data(student)
+        data = _fetch_student_id_data(student)
     return data
 
 
-def __get_data_from_esb(url):
+def _get_data_from_esb(url):
     logger.info('URL ESB : '+url)
     esb_headers = {"Authorization": settings.ESB_AUTHORIZATION, "Content-Type": settings.ESB_CONTENT_TYPE}
     esb_request = request.Request(url, headers=esb_headers)
