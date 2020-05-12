@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-20 15:27+0200\n"
+"POT-Creation-Date: 2020-05-12 11:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views/main.py:54
 msgid ""
 "A problem was detected with your registration : 2 registration id's are "
 "linked to your user. Please contact the registration departement (SIC). "
@@ -26,116 +25,95 @@ msgstr ""
 "affectés à votre utilisateur. Veuillez prendre contact avec le service des "
 "inscriptions (SIC) afin de résoudre le problème. Merci."
 
-#: templates/faculty_administrator_dashboard.html:68
+msgid "Annual program"
+msgstr "Programme annuel"
+
 msgid "Applications administration"
 msgstr "Administration des candidatures en ligne"
 
-#: templates/faculty_administrator_dashboard.html:57
 msgid "Attestations administration"
 msgstr "Administration des attestations"
 
-#: templates/dashboard.html:31
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: templates/faculty_administrator_dashboard.html:45
 msgid "Exam marks and registration state administration"
 msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
-#: templates/tutor_dashboard.html:33
 msgid "Exam student list"
-msgstr "Liste des examens d'étudiant"
+msgstr "Liste des examens d'étudiants"
 
-#: templates/student_dashboard.html:30
-msgid "Exams enrollment"
-msgstr "Inscriptions aux examens"
-
-#: templates/dashboard_admin_menu.html:31
-#: templates/faculty_administrator_dashboard.html:34
-#: templates/faculty_administrator_dashboard.html:77
 msgid "Faculty administration"
 msgstr "Administration facultaire"
 
-#: templates/tutor_dashboard.html:9
 msgid "Get scores encoding papersheet and encode scores of your students."
 msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
 
-#: templates/student_dashboard.html:43
 msgid "Internships"
 msgstr "Stages"
 
-#: templates/faculty_administrator_dashboard.html:101
+msgid "List of students enrolled to my exams"
+msgstr "Liste des étudiants inscrits à mes examens"
+
 msgid "Lists of students exams enrollments"
 msgstr "Liste des étudiants inscrits aux examens"
 
-#: templates/tutor_dashboard.html:43
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
 
-#: templates/tutor_dashboard.html:18
+msgid "Manage my exam registration"
+msgstr "Gérer mon inscription aux examens"
+
 msgid "My applications"
 msgstr "Mes candidatures"
 
-#: templates/student_dashboard.html:18
 msgid "My attestations"
 msgstr "Mes attestations"
 
-#: templates/tutor_dashboard.html:26
 msgid "My teaching charge"
 msgstr "Ma charge d'enseignement"
 
-#: templates/student_dashboard.html:8
-msgid "Performance"
-msgstr ""
-
-#: templates/tutor_dashboard.html:8
 msgid "Scores encoding"
 msgstr "Encodage de notes"
 
-#: templates/faculty_administrator_dashboard.html:89
 msgid "Scores sheets administration"
 msgstr "Administration des feuilles de notes"
 
-#: templates/student_dashboard.html:9
-msgid "Show the performance module."
-msgstr "Voir le module performance"
-
-#: templates/student_dashboard.html:33
 msgid "Show the student results and registration state."
 msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
 
-#: templates/tutor_dashboard.html:19
 msgid "This process controls my applications"
 msgstr "Gestion de mes candidatures aux cours vacants"
 
-#: templates/student_dashboard.html:19
 msgid "This process controls my attestations."
 msgstr "Gestion de mes attestations."
 
-#: templates/student_dashboard.html:44
 msgid "This process controls students internships."
 msgstr "Gestion des stages des étudiants."
 
-#: templates/tutor_dashboard.html:34
-msgid "This process controls the students internship."
-msgstr "Gestion des stages des étudiants."
-
-#: templates/tutor_dashboard.html:27
-msgid "This process controls the teaching charge."
+msgid "This process controls the teaching charge"
 msgstr "Gestion de ma charge d'enseignement"
 
-#: templates/tutor_dashboard.html:50
 msgid "This requires a"
 msgstr "Ceci nécessite un"
 
-#: templates/tutor_dashboard.html:54
 msgid "This requires a VPN access outside UCL."
 msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
 
-#: templates/tutor_dashboard.html:50
 msgid "VPN access"
 msgstr "accès VPN"
 
-#: templates/tutor_dashboard.html:50
+msgid "View my annual program and exam marks"
+msgstr "Voir mon programme annuel et mes notes d'examen"
+
 msgid "outside UCL."
 msgstr "en dehors du réseau de l'UCL."
+
+#~ msgid "Exams enrollment"
+#~ msgstr "Inscriptions aux examens"
+
+#~ msgid "Show the performance module."
+#~ msgstr "Voir le module performance"
+
+#~ msgid "This process controls the students internship."
+#~ msgstr "Gestion des stages des étudiants."
