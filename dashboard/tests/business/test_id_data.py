@@ -28,11 +28,15 @@ from unittest.mock import patch
 
 from django.test import TestCase
 
+from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from dashboard.business.id_data import get_student_id_data
 
 
 class TestStudentData(TestCase):
+
+    def setUp(self):
+        self.person = PersonFactory()
 
     @patch('dashboard.business.id_data.__fetch_student_id_data')
     def test_get_student_data(self, mock_client_call):

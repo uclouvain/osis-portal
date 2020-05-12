@@ -27,7 +27,7 @@ import json
 import logging
 import traceback
 from urllib import error, request
-from base.models import student as student_mdl, person as person_mdl
+from base.models import student as student_mdl
 from django.conf import settings
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
