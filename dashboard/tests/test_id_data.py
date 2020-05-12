@@ -108,6 +108,53 @@ class TestAdmin(TestCase):
         self.assertTemplateUsed(response, 'admin/student_id_data.html')
 
 
+class TestStudentData(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.expected_data = {
+            'main_data': {
+                'anneeAcademique': 2020,
+                'bourseAutre': 'CIUF',
+                'codeEtatInscription': 1,
+                'codeStatut': 60,
+                'dateNaissance': '08/08/1912',
+                'etatInscription': 'Inscrit au rôle',
+                'matricFGS': '0202020',
+                'nom': 'Monsiuer M',
+                'noma': 16542394,
+                'prenom': 'Rudolphe',
+                'statut': 'Formation continue'
+            },
+            'private_data': {
+                'matric_fgs': '0202020',
+                'email': 'monemail@osis.be',
+                'gsm': '+32466202020',
+                'domicile': {
+                    'street': 'Rue Machin, 42',
+                    'street2': None,
+                    'street3': None,
+                    'postCode': 7965,
+                    'town': 'Outsy',
+                    'country': 'Belgique'
+                },
+                'residence': {
+                    'street': 'Rue du Kot, 42',
+                    'street2': 'A côté du Nignt-Shop',
+                    'street3': None,
+                    'postCode': 1236,
+                    'town': 'Las-Bas',
+                    'country': 'Belgique'
+                }
+            },
+            'birth_data': {
+                'matric_fgs': '0202020',
+                'birthdate': '08/08/1912',
+                'birthcity': 'GRENOBLE',
+                'birthcountry': 'France'
+            }
+        }
+
+
 def load_json_file(json_path):
     with open(json_path) as json_file:
         return json_file.read()
