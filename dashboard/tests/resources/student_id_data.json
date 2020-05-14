@@ -10,7 +10,8 @@
     "nom": "Monsiuer M",
     "noma": 16542394,
     "prenom": "Rudolphe",
-    "statut": "Formation continue"
+    "statut": "Formation continue",
+    "gender": "M"
   },
   "private_data": {
     "matric_fgs": "0202020",
@@ -37,7 +38,6 @@
     "matric_fgs": "0202020",
     "birthdate": "08/08/1912",
     "birthcity": "GRENOBLE",
-    "birthcountry": "France",
-    "sex": "M"
+    "birthcountry": "France"
   }
 }

@@ -61,7 +61,8 @@ class TestStudentData(TestCase):
                 'nom': 'Monsiuer M',
                 'noma': 16542394,
                 'prenom': 'Rudolphe',
-                'statut': 'Formation continue'
+                'statut': 'Formation continue',
+                'gender': 'M'
             },
             'private_data': {
                 'matric_fgs': '0202020',
@@ -88,8 +89,7 @@ class TestStudentData(TestCase):
                 'matric_fgs': '0202020',
                 'birthdate': '08/08/1912',
                 'birthcity': 'GRENOBLE',
-                'birthcountry': 'France',
-                'sex': 'M'
+                'birthcountry': 'France'
             }
         }
         given_data = bsn_id_data.get_student_id_data(user=student.person.user)
@@ -140,14 +140,14 @@ class TestStudentData(TestCase):
                 'nom': 'Monsiuer M',
                 'noma': 16542394,
                 'prenom': 'Rudolphe',
-                'statut': 'Formation continue'
+                'statut': 'Formation continue',
+                'gender': 'M'
             },
             'birth_data': {
                 'matric_fgs': '0202020',
                 'birthdate': '08/08/1912',
                 'birthcity': 'GRENOBLE',
                 'birthcountry': 'France',
-                "sex": 'M'
             }
         }
         self.assertDictEqual(given_data, expected_data)
@@ -169,7 +169,8 @@ class TestStudentData(TestCase):
             'noma': 16542394,
             'prenom': 'Rudolphe',
             'statut': 'Formation continue',
-            'email': student.email
+            'email': student.email,
+            'gender': 'M'
         }
         self.assertDictEqual(given_data, expected_data)
 
@@ -210,8 +211,7 @@ class TestStudentData(TestCase):
             'matric_fgs': '0202020',
             'birthdate': '08/08/1912',
             'birthcity': 'GRENOBLE',
-            'birthcountry': 'France',
-            'sex': 'M'
+            'birthcountry': 'France'
         }
         self.assertDictEqual(given_data, expected_data)
 
