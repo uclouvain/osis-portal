@@ -88,7 +88,8 @@ class TestStudentData(TestCase):
                 'matric_fgs': '0202020',
                 'birthdate': '08/08/1912',
                 'birthcity': 'GRENOBLE',
-                'birthcountry': 'France'
+                'birthcountry': 'France',
+                'sex': 'M'
             }
         }
         given_data = bsn_id_data.get_student_id_data(user=student.person.user)
@@ -145,7 +146,8 @@ class TestStudentData(TestCase):
                 'matric_fgs': '0202020',
                 'birthdate': '08/08/1912',
                 'birthcity': 'GRENOBLE',
-                'birthcountry': 'France'
+                'birthcountry': 'France',
+                "sex": 'M'
             }
         }
         self.assertDictEqual(given_data, expected_data)
@@ -208,7 +210,8 @@ class TestStudentData(TestCase):
             'matric_fgs': '0202020',
             'birthdate': '08/08/1912',
             'birthcity': 'GRENOBLE',
-            'birthcountry': 'France'
+            'birthcountry': 'France',
+            'sex': 'M'
         }
         self.assertDictEqual(given_data, expected_data)
 
