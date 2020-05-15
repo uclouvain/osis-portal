@@ -90,7 +90,7 @@ def get_student_id_data(user=None, registration_id=None):
 
 def _get_data_from_esb(url):
     logger.info('URL ESB : '+url)
-    esb_headers = {"Authorization": settings.ESB_AUTHORIZATION, "Content-Type": settings.ESB_CONTENT_TYPE}
+    esb_headers = {"Authorization": settings.ESB_AUTHORIZATION, "Accept": settings.ESB_CONTENT_TYPE}
     esb_request = request.Request(url, headers=esb_headers)
     esb_connection = request.urlopen(esb_request, timeout=settings.ESB_TIMEOUT)
     esb_response = esb_connection.read().decode(settings.ESB_ENCODING)

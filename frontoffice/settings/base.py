@@ -407,7 +407,7 @@ ESB_URL = os.environ.get('ESB_URL', '')
 ESB_AUTHORIZATION = os.environ.get('ESB_AUTHORIZATION', '')
 ESB_TIMEOUT = int(os.environ.get('ESB_TIMEOUT', '10'))
 ESB_ENCODING = os.environ.get('ESB_ENCODING', 'UTF-8')
-ESB_CONTENT_TYPE = os.environ.get('ESB_CONTENT_TYPE', 'application/json; charset=utf-8')
+ESB_CONTENT_TYPE = os.environ.get('ESB_CONTENT_TYPE', 'application/json')
 
 STUDENT_ID_DATA = {
     'PERSONAL_DATA_PATH': os.environ.get('STUDENT_PERSONAL_DATA_API_PATH', ''),
