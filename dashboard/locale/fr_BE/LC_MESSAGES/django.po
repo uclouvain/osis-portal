@@ -56,7 +56,7 @@ msgid "Exam marks and registration state administration"
 msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
 msgid "Exam student list"
-msgstr "Liste des examens d'étudiant"
+msgstr "Liste des examens d'étudiants"
 
 msgid "Exams enrollment"
 msgstr "Inscriptions aux examens"
