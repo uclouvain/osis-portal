@@ -22,6 +22,10 @@ msgid ""
 "Thank you."
 msgstr ""
 
+
+msgid "Annual program"
+msgstr ""
+
 msgid "Applications administration"
 msgstr ""
 
@@ -79,13 +83,20 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
+msgid "List of students exams enrollments"
+msgstr ""
+
 msgid "Lists of students exams enrollments"
 msgstr ""
 
 msgid "Manage description fiche"
 msgstr ""
 
+msgid "Manage my exam registration"
+msgstr ""
+
 msgid "Mobile number"
+
 msgstr ""
 
 msgid "My applications"
@@ -170,6 +181,9 @@ msgid "This requires a VPN access outside UCL."
 msgstr ""
 
 msgid "VPN access"
+msgstr ""
+
+msgid "View my annual program and exam marks"
 msgstr ""
 
 msgid "outside UCL."

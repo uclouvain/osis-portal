@@ -25,6 +25,9 @@ msgstr ""
 "affectés à votre utilisateur. Veuillez prendre contact avec le service des "
 "inscriptions (SIC) afin de résoudre le problème. Merci."
 
+msgid "Annual program"
+msgstr "Programme annuel"
+
 msgid "Applications administration"
 msgstr "Administration des candidatures en ligne"
 
@@ -82,11 +85,17 @@ msgstr "Stages"
 msgid "Last name"
 msgstr ""
 
+msgid "List of students enrolled to my exams"
+msgstr "Liste des étudiants inscrits à mes examens"
+
 msgid "Lists of students exams enrollments"
 msgstr "Liste des étudiants inscrits aux examens"
 
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
+
+msgid "Manage my exam registration"
+msgstr "Gérer mon inscription aux examens"
 
 msgid "Mobile number"
 msgstr "Numéro de GSM"
@@ -175,5 +184,9 @@ msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
 msgid "VPN access"
 msgstr "accès VPN"
 
+msgid "View my annual program and exam marks"
+msgstr "Voir mon programme annuel et mes notes d'examen"
+
 msgid "outside UCL."
 msgstr "en dehors du réseau de l'UCL."
+
