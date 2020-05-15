@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-14 11:52+0200\n"
+"POT-Creation-Date: 2020-05-15 10:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,7 +169,7 @@ msgstr "Gestion des stages des étudiants."
 msgid "This process controls the students internship."
 msgstr "Gestion des stages des étudiants."
 
-msgid "This process controls the teaching charge."
+msgid "This process controls the teaching charge"
 msgstr "Gestion de ma charge d'enseignement"
 
 msgid "This process shows personal data."
@@ -189,4 +189,3 @@ msgstr "Voir mon programme annuel et mes notes d'examen"
 
 msgid "outside UCL."
 msgstr "en dehors du réseau de l'UCL."
-
