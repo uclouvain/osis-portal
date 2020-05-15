@@ -22,6 +22,7 @@ msgid ""
 "Thank you."
 msgstr ""
 
+
 msgid "Annual program"
 msgstr ""
 
@@ -31,7 +32,22 @@ msgstr ""
 msgid "Attestations administration"
 msgstr ""
 
+msgid "Birth date"
+msgstr ""
+
+msgid "Birth location"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
 msgid "Dashboard"
+msgstr ""
+
+msgid "Email"
 msgstr ""
 
 msgid "Exam marks and registration state administration"
@@ -43,16 +59,34 @@ msgstr ""
 msgid "Exams enrollment"
 msgstr ""
 
+msgid "Exams enrollment"
+msgstr ""
+
 msgid "Faculty administration"
+msgstr ""
+
+msgid "First name"
 msgstr ""
 
 msgid "Get scores encoding papersheet and encode scores of your students."
 msgstr ""
 
+msgid "Global id"
+msgstr ""
+
+msgid "ID data"
+msgstr ""
+
+msgid "If those data are not correct, please contact the "
+msgstr ""
+
 msgid "Internships"
 msgstr ""
 
-msgid "List of students enrolled to my exams"
+msgid "Last name"
+msgstr ""
+
+msgid "List of students exams enrollments"
 msgstr ""
 
 msgid "Lists of students exams enrollments"
@@ -64,19 +98,65 @@ msgstr ""
 msgid "Manage my exam registration"
 msgstr ""
 
+msgid "Mobile number"
+
+msgstr ""
+
 msgid "My applications"
 msgstr ""
 
 msgid "My attestations"
 msgstr ""
 
+msgid "My personal data"
+msgstr ""
+
 msgid "My teaching charge"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+msgid "Personal address"
+msgstr ""
+
+msgid "Postal code"
+msgstr ""
+
+msgid "Private email"
+msgstr ""
+
+msgid "Registration department"
+msgstr ""
+
+msgid "Registration id"
 msgstr ""
 
 msgid "Scores encoding"
 msgstr ""
 
 msgid "Scores sheets administration"
+msgstr ""
+
+msgid "Sex"
+msgstr ""
+
+msgid "Show the performance module."
+msgstr ""
+
+msgid "Show the student results and registration state."
+msgstr ""
+
+msgid "Staying address"
+msgstr ""
+
+msgid "Street"
+msgstr ""
+
+msgid "Student ID data"
+msgstr ""
+
+msgid "Student ID data administration"
 msgstr ""
 
 msgid "This process controls my applications"
@@ -88,7 +168,13 @@ msgstr ""
 msgid "This process controls students internships."
 msgstr ""
 
-msgid "This process controls the teaching charge"
+msgid "This process controls the students internship."
+msgstr ""
+
+msgid "This process controls the teaching charge."
+msgstr ""
+
+msgid "This process shows personal data."
 msgstr ""
 
 msgid "This requires a"

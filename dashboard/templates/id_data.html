@@ -1,0 +1,121 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% include "template_messages.html" %}
+
+{% block content %}
+    <div class="alert alert-warning">{% trans 'If those data are not correct, please contact the ' %}<a
+            href="{{ registration_service_url }}" target="_blank">{% trans 'Registration department' %}</a></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans 'ID data' %}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Global id' %}</strong> : {{ main_data.matricFGS }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Registration id' %}</strong> : {{ main_data.noma }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'First name' %}</strong> : {{ main_data.prenom }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Last name' %}</strong> : {{ main_data.nom }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Birth date' %}</strong> : {{ birth_data.birthdate }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Birth location' %}</strong> : {{ birth_data.birthcity }} / {{ birth_data.birthcountry }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Sex' %}</strong> : {{ main_data.gender }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Private email' %}</strong> : {{ personal_data.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Email' %}</strong> : {{ main_data.email }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Mobile number' %}</strong> : {{ personal_data.gsm }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if personal_data.domicile %}
+        <div class="grid-item">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans 'Personal address' %}
+                </div>
+                <div class="panel-body">
+                    <p><strong>{% trans 'Street' %}</strong> : {{ personal_data.domicile.street }}</p>
+                    {% if personal_data.domicile.street2 %}<p>{{ personal_data.domicile.street2 }}</p>{% endif %}
+                    {% if personal_data.domicile.street3 %}<p>{{ personal_data.domicile.street3 }}</p>{% endif %}
+                    <p><strong>{% trans 'Postal code' %}</strong> : {{ personal_data.domicile.postCode }}</p>
+                    <p><strong>{% trans 'City' %}</strong> : {{ personal_data.domicile.town }}</p>
+                    <p><strong>{% trans 'Country' %}</strong> : {{ personal_data.domicile.country }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if personal_data.residence %}
+        <div class="grid-item">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans 'Staying address' %}
+                </div>
+                <div class="panel-body">
+                    <p><strong>{% trans 'Street' %}</strong> : {{ personal_data.residence.street }}</p>
+                    {% if personal_data.residence.street2 %}<p>{{ personal_data.residence.street2 }}</p>{% endif %}
+                    {% if personal_data.residence.street3 %}<p>{{ personal_data.residence.street3 }}</p>{% endif %}
+                    <p><strong>{% trans 'Postal code' %}</strong> : {{ personal_data.residence.postCode }}</p>
+                    <p><strong>{% trans 'City' %}</strong> : {{ personal_data.residence.town }}</p>
+                    <p><strong>{% trans 'Country' %}</strong> : {{ personal_data.residence.country }}</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
