@@ -189,12 +189,3 @@ msgstr "Voir mon programme annuel et mes notes d'examen"
 
 msgid "outside UCL."
 msgstr "en dehors du réseau de l'UCL."
-
-#~ msgid "Exams enrollment"
-#~ msgstr "Inscriptions aux examens"
-
-#~ msgid "Show the performance module."
-#~ msgstr "Voir le module performance"
-
-#~ msgid "This process controls the students internship."
-#~ msgstr "Gestion des stages des étudiants."

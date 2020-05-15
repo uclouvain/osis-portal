@@ -59,9 +59,6 @@ msgstr ""
 msgid "Exams enrollment"
 msgstr ""
 
-msgid "Exams enrollment"
-msgstr ""
-
 msgid "Faculty administration"
 msgstr ""
 
