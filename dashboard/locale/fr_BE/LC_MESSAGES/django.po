@@ -169,7 +169,7 @@ msgstr "Gestion des stages des étudiants."
 msgid "This process controls the students internship."
 msgstr "Gestion des stages des étudiants."
 
-msgid "This process controls the teaching charge."
+msgid "This process controls the teaching charge"
 msgstr "Gestion de ma charge d'enseignement"
 
 msgid "This process shows personal data."
