@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-12 11:38+0200\n"
+"POT-Creation-Date: 2020-05-15 10:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,9 @@ msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
 msgid "Exam student list"
 msgstr "Liste des examens d'étudiants"
+
+msgid "Exams enrollment"
+msgstr "Inscriptions aux examens"
 
 msgid "Faculty administration"
 msgstr "Administration facultaire"
@@ -79,9 +82,6 @@ msgstr "Encodage de notes"
 msgid "Scores sheets administration"
 msgstr "Administration des feuilles de notes"
 
-msgid "Show the student results and registration state."
-msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
-
 msgid "This process controls my applications"
 msgstr "Gestion de mes candidatures aux cours vacants"
 
@@ -108,12 +108,3 @@ msgstr "Voir mon programme annuel et mes notes d'examen"
 
 msgid "outside UCL."
 msgstr "en dehors du réseau de l'UCL."
-
-#~ msgid "Exams enrollment"
-#~ msgstr "Inscriptions aux examens"
-
-#~ msgid "Show the performance module."
-#~ msgstr "Voir le module performance"
-
-#~ msgid "This process controls the students internship."
-#~ msgstr "Gestion des stages des étudiants."
