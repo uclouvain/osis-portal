@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-12 11:38+0200\n"
+"POT-Creation-Date: 2020-05-14 11:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,26 +34,56 @@ msgstr "Administration des candidatures en ligne"
 msgid "Attestations administration"
 msgstr "Administration des attestations"
 
+msgid "Birth date"
+msgstr ""
+
+msgid "Birth location"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
 msgid "Dashboard"
 msgstr "Tableau de bord"
+
+msgid "Email"
+msgstr ""
 
 msgid "Exam marks and registration state administration"
 msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
 
 msgid "Exam student list"
-msgstr "Liste des examens d'étudiants"
+msgstr "Liste des examens d'étudiant"
+
+msgid "Exams enrollment"
+msgstr "Inscriptions aux examens"
 
 msgid "Faculty administration"
 msgstr "Administration facultaire"
 
+msgid "First name"
+msgstr ""
+
 msgid "Get scores encoding papersheet and encode scores of your students."
 msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
+
+msgid "Global id"
+msgstr ""
+
+msgid "ID data"
+msgstr "Identification"
+
+msgid "If those data are not correct, please contact the "
+msgstr "Si ces données ne sont pas exactes, veuillez prendre contact avec le "
 
 msgid "Internships"
 msgstr "Stages"
 
-msgid "List of students enrolled to my exams"
-msgstr "Liste des étudiants inscrits à mes examens"
+msgid "Last name"
+msgstr ""
 
 msgid "Lists of students exams enrollments"
 msgstr "Liste des étudiants inscrits aux examens"
@@ -64,14 +94,38 @@ msgstr "Gérer les fiches descriptives"
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
 
+msgid "Mobile number"
+msgstr "Numéro de GSM"
+
 msgid "My applications"
 msgstr "Mes candidatures"
 
 msgid "My attestations"
 msgstr "Mes attestations"
 
+msgid "My personal data"
+msgstr "Mes données personnelles"
+
 msgid "My teaching charge"
 msgstr "Ma charge d'enseignement"
+
+msgid "Performance"
+msgstr ""
+
+msgid "Personal address"
+msgstr "Adresse du domicile"
+
+msgid "Postal code"
+msgstr ""
+
+msgid "Private email"
+msgstr "Courriel privé"
+
+msgid "Registration department"
+msgstr "Service des inscriptions"
+
+msgid "Registration id"
+msgstr ""
 
 msgid "Scores encoding"
 msgstr "Encodage de notes"
@@ -79,8 +133,26 @@ msgstr "Encodage de notes"
 msgid "Scores sheets administration"
 msgstr "Administration des feuilles de notes"
 
+msgid "Sex"
+msgstr "Sexe"
+
+msgid "Show the performance module."
+msgstr "Voir le module performance"
+
 msgid "Show the student results and registration state."
 msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
+
+msgid "Staying address"
+msgstr "Adresse de résidence"
+
+msgid "Street"
+msgstr "Rue"
+
+msgid "Student ID data"
+msgstr "Données personnelles de l'étudiant"
+
+msgid "Student ID data administration"
+msgstr "Administration des données personnelles de l'étudiant"
 
 msgid "This process controls my applications"
 msgstr "Gestion de mes candidatures aux cours vacants"
@@ -91,8 +163,14 @@ msgstr "Gestion de mes attestations."
 msgid "This process controls students internships."
 msgstr "Gestion des stages des étudiants."
 
-msgid "This process controls the teaching charge"
+msgid "This process controls the students internship."
+msgstr "Gestion des stages des étudiants."
+
+msgid "This process controls the teaching charge."
 msgstr "Gestion de ma charge d'enseignement"
+
+msgid "This process shows personal data."
+msgstr "Accès à mes données personneles"
 
 msgid "This requires a"
 msgstr "Ceci nécessite un"
@@ -109,11 +187,3 @@ msgstr "Voir mon programme annuel et mes notes d'examen"
 msgid "outside UCL."
 msgstr "en dehors du réseau de l'UCL."
 
-#~ msgid "Exams enrollment"
-#~ msgstr "Inscriptions aux examens"
-
-#~ msgid "Show the performance module."
-#~ msgstr "Voir le module performance"
-
-#~ msgid "This process controls the students internship."
-#~ msgstr "Gestion des stages des étudiants."
