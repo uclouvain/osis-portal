@@ -85,6 +85,9 @@ msgstr "Stages"
 msgid "Last name"
 msgstr ""
 
+msgid "List of students enrolled to my exams"
+msgstr "Liste des étudiants inscrits à mes examens"
+
 msgid "Lists of students exams enrollments"
 msgstr "Liste des étudiants inscrits aux examens"
 

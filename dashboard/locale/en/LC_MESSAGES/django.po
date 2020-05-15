@@ -83,6 +83,9 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
+msgid "List of students exams enrollments"
+msgstr ""
+
 msgid "Lists of students exams enrollments"
 msgstr ""
 
