@@ -36,7 +36,7 @@ msgid "My scores sheets"
 msgstr "Mes feuilles de notes"
 
 msgid "Online Scores Encoding"
-msgstr "Encodage de Note en Ligne"
+msgstr "Encodage de notes en ligne"
 
 msgid "Scores Encoding"
 msgstr "Encodage de Notes"
