@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-27 19:38+0100\n"
+"POT-Creation-Date: 2020-05-12 11:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -237,6 +237,9 @@ msgstr ""
 msgid "Schedule"
 msgstr ""
 
+msgid "Scores encoding"
+msgstr ""
+
 msgid "Search"
 msgstr ""
 
@@ -271,6 +274,9 @@ msgid "Teachers"
 msgstr ""
 
 msgid "Teaching charge"
+msgstr ""
+
+msgid "The Excel lists for encoding scores are available in"
 msgstr ""
 
 msgid "The period of online application is closed"
@@ -331,6 +337,9 @@ msgid "Vol.2 applied"
 msgstr ""
 
 msgid "Vol.2 vacant"
+msgstr ""
+
+msgid "Warning, this is not a list for encoding scores."
 msgstr ""
 
 msgid "You already apply to this course."

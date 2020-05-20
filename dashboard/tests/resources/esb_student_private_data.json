@@ -1,0 +1,23 @@
+{
+  "return": {
+    "matric_fgs": "0202020",
+    "email": "monemail@osis.be",
+    "gsm": "+32466202020",
+    "domicile": {
+      "street": "Rue Machin, 42",
+      "street2": null,
+      "street3": null,
+      "postCode": 7965,
+      "town": "Outsy",
+      "country": "Belgique"
+    },
+    "residence": {
+      "street": "Rue du Kot, 42",
+      "street2": "A côté du Nignt-Shop",
+      "street3": null,
+      "postCode": 1236,
+      "town": "Las-Bas",
+      "country": "Belgique"
+    }
+  }
+}
