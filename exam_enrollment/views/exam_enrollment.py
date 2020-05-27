@@ -135,7 +135,9 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'current_number_session': data.get('current_number_session'),
                                  'academic_year': mdl_base.academic_year.current_academic_year(),
                                  'program': mdl_base.offer_year.find_by_id(off_year.id),
-                                 'request_timeout': request_timeout
+                                 'request_timeout': request_timeout,
+                                 'written_exam_on_site': data.get('written_exam_on_site'),
+                                 'oral_exam_on_site': data.get('oral_exam_on_site')
                              })
     else:
         ask_exam_enrollment_form(stud, off_year)
@@ -251,7 +253,9 @@ def _exam_enrollment_form_submission_message(off_year, request, stud):
         'registration_id': stud.registration_id,
         'offer_year_acronym': off_year.acronym,
         'year': off_year.academic_year.year,
-        'exam_enrollments': _build_enrollments_by_learning_unit(request)
+        'exam_enrollments': _build_enrollments_by_learning_unit(request),
+        'written_exam_on_site': request.POST.get('written_exam_on_site'),
+        'oral_exam_on_site': request.POST.get('oral_exam_on_site')
     }
 
 

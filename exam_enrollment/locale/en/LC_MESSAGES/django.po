@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:57+0200\n"
+"POT-Creation-Date: 2020-05-26 21:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,13 +34,33 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
+msgid "No"
+msgstr ""
+
+msgid "On site Oral Exam"
+msgstr ""
+
+msgid "On site Written Exam"
+msgstr ""
+
+msgid "On site exam informations"
+msgstr ""
+
 msgid "Register to exams or update my exam enrollments"
 msgstr ""
 
 msgid "Which action do you want to perform ?"
 msgstr ""
 
+msgid "Yes"
+msgstr ""
+
 msgid "You are outside the exams enrollment period"
+msgstr ""
+
+msgid ""
+"You have already set your exam site choice. If you want to change it, please "
+"contact you program manager"
 msgstr ""
 
 msgid "acronym"
