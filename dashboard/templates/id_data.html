@@ -40,47 +40,47 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Global id' %}</strong> : {{ main_data.matricFGS }}</p>
+                            <p><strong>{% trans 'Global id' %}</strong> : {{ main_data.matricFGS|default_if_none:"" }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Registration id' %}</strong> : {{ main_data.noma }}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>{% trans 'First name' %}</strong> : {{ main_data.prenom }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>{% trans 'Last name' %}</strong> : {{ main_data.nom }}</p>
+                            <p><strong>{% trans 'Registration id' %}</strong> : {{ main_data.noma|default_if_none:"" }}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Middle name(s)' %}</strong> : {{ main_data.middlenames }}</p>
+                            <p><strong>{% trans 'First name' %}</strong> : {{ main_data.prenom|default_if_none:"" }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Sex' %}</strong> : {{ main_data.gender }}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>{% trans 'Birth date' %}</strong> : {{ birth_data.birthdate }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>{% trans 'Birth location' %}</strong> : {{ birth_data.birthcity }} / {{ birth_data.birthcountry }}</p>
+                            <p><strong>{% trans 'Last name' %}</strong> : {{ main_data.nom|default_if_none:"" }}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Private email' %}</strong> : {{ personal_data.email }}</p>
+                            <p><strong>{% trans 'Middle name(s)' %}</strong> : {{ main_data.middlenames|default_if_none:"" }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Email' %}</strong> : {{ main_data.email }}</p>
+                            <p><strong>{% trans 'Sex' %}</strong> : {{ main_data.gender|default_if_none:"" }}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Mobile number' %}</strong> : {{ personal_data.gsm }}</p>
+                            <p><strong>{% trans 'Birth date' %}</strong> : {{ birth_data.birthdate|default_if_none:"" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Birth location' %}</strong> : {{ birth_data.birthcity|default_if_none:"" }} / {{ birth_data.birthcountry|default_if_none:"" }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Private email' %}</strong> : {{ personal_data.email|default_if_none:"" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Email' %}</strong> : {{ main_data.email|default_if_none:"" }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Mobile number' %}</strong> : {{ personal_data.gsm|default_if_none:"" }}</p>
                         </div>
                     </div>
                 </div>
@@ -94,12 +94,12 @@
                     {% trans 'Personal address' %}
                 </div>
                 <div class="panel-body">
-                    <p><strong>{% trans 'Street' %}</strong> : {{ personal_data.domicile.street }}</p>
+                    <p><strong>{% trans 'Street' %}</strong> : {{ personal_data.domicile.street|default_if_none:"" }}</p>
                     {% if personal_data.domicile.street2 %}<p>{{ personal_data.domicile.street2 }}</p>{% endif %}
                     {% if personal_data.domicile.street3 %}<p>{{ personal_data.domicile.street3 }}</p>{% endif %}
-                    <p><strong>{% trans 'Postal code' %}</strong> : {{ personal_data.domicile.postCode }}</p>
-                    <p><strong>{% trans 'City' %}</strong> : {{ personal_data.domicile.town }}</p>
-                    <p><strong>{% trans 'Country' %}</strong> : {{ personal_data.domicile.country }}</p>
+                    <p><strong>{% trans 'Postal code' %}</strong> : {{ personal_data.domicile.postCode|default_if_none:"" }}</p>
+                    <p><strong>{% trans 'City' %}</strong> : {{ personal_data.domicile.town|default_if_none:"" }}</p>
+                    <p><strong>{% trans 'Country' %}</strong> : {{ personal_data.domicile.country|default_if_none:"" }}</p>
                 </div>
             </div>
         </div>
@@ -111,12 +111,12 @@
                     {% trans 'Staying address' %}
                 </div>
                 <div class="panel-body">
-                    <p><strong>{% trans 'Street' %}</strong> : {{ personal_data.residence.street }}</p>
+                    <p><strong>{% trans 'Street' %}</strong> : {{ personal_data.residence.street|default_if_none:"" }}</p>
                     {% if personal_data.residence.street2 %}<p>{{ personal_data.residence.street2 }}</p>{% endif %}
                     {% if personal_data.residence.street3 %}<p>{{ personal_data.residence.street3 }}</p>{% endif %}
-                    <p><strong>{% trans 'Postal code' %}</strong> : {{ personal_data.residence.postCode }}</p>
-                    <p><strong>{% trans 'City' %}</strong> : {{ personal_data.residence.town }}</p>
-                    <p><strong>{% trans 'Country' %}</strong> : {{ personal_data.residence.country }}</p>
+                    <p><strong>{% trans 'Postal code' %}</strong> : {{ personal_data.residence.postCode|default_if_none:"" }}</p>
+                    <p><strong>{% trans 'City' %}</strong> : {{ personal_data.residence.town|default_if_none:"" }}</p>
+                    <p><strong>{% trans 'Country' %}</strong> : {{ personal_data.residence.country|default_if_none:"" }}</p>
                 </div>
             </div>
         </div>
