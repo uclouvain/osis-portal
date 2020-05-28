@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-15 10:51+0200\n"
+"POT-Creation-Date: 2020-05-28 17:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,6 +97,9 @@ msgstr "Gérer les fiches descriptives"
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
 
+msgid "Middle name(s)"
+msgstr "Prénom(s) suivant(s)"
+
 msgid "Mobile number"
 msgstr "Numéro de GSM"
 
@@ -111,9 +114,6 @@ msgstr "Mes données personnelles"
 
 msgid "My teaching charge"
 msgstr "Ma charge d'enseignement"
-
-msgid "Performance"
-msgstr ""
 
 msgid "Personal address"
 msgstr "Adresse du domicile"
@@ -139,12 +139,6 @@ msgstr "Administration des feuilles de notes"
 msgid "Sex"
 msgstr "Sexe"
 
-msgid "Show the performance module."
-msgstr "Voir le module performance"
-
-msgid "Show the student results and registration state."
-msgstr "Etat d'inscription aux cours et résultats de l'étudiant."
-
 msgid "Staying address"
 msgstr "Adresse de résidence"
 
@@ -164,9 +158,6 @@ msgid "This process controls my attestations."
 msgstr "Gestion de mes attestations."
 
 msgid "This process controls students internships."
-msgstr "Gestion des stages des étudiants."
-
-msgid "This process controls the students internship."
 msgstr "Gestion des stages des étudiants."
 
 msgid "This process controls the teaching charge"

@@ -62,7 +62,8 @@ class TestStudentData(TestCase):
                 'noma': 16542394,
                 'prenom': 'Rudolphe',
                 'statut': 'Formation continue',
-                'gender': 'M'
+                'gender': 'M',
+                'middlenames': 'Isabelle, Serge, Marie'
             },
             'private_data': {
                 'matric_fgs': '0202020',
@@ -141,7 +142,8 @@ class TestStudentData(TestCase):
                 'noma': 16542394,
                 'prenom': 'Rudolphe',
                 'statut': 'Formation continue',
-                'gender': 'M'
+                'gender': 'M',
+                'middlenames': 'Isabelle, Serge, Marie'
             },
             'birth_data': {
                 'matric_fgs': '0202020',
@@ -170,7 +172,8 @@ class TestStudentData(TestCase):
             'prenom': 'Rudolphe',
             'statut': 'Formation continue',
             'email': student.email,
-            'gender': 'M'
+            'gender': 'M',
+            'middlenames': 'Isabelle, Serge, Marie'
         }
         self.assertDictEqual(given_data, expected_data)
 

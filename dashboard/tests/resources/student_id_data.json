@@ -11,7 +11,8 @@
     "noma": 16542394,
     "prenom": "Rudolphe",
     "statut": "Formation continue",
-    "gender": "M"
+    "gender": "M",
+    "middlenames": "Isabelle, Serge, Marie"
   },
   "private_data": {
     "matric_fgs": "0202020",
