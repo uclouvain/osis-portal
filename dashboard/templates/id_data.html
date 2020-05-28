@@ -56,15 +56,18 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Birth date' %}</strong> : {{ birth_data.birthdate }}</p>
+                            <p><strong>{% trans 'Middle name(s)' %}</strong> : {{ main_data.middlenames }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Birth location' %}</strong> : {{ birth_data.birthcity }} / {{ birth_data.birthcountry }}</p>
+                            <p><strong>{% trans 'Sex' %}</strong> : {{ main_data.gender }}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>{% trans 'Sex' %}</strong> : {{ main_data.gender }}</p>
+                            <p><strong>{% trans 'Birth date' %}</strong> : {{ birth_data.birthdate }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>{% trans 'Birth location' %}</strong> : {{ birth_data.birthcity }} / {{ birth_data.birthcountry }}</p>
                         </div>
                     </div>
                     <div class="row">
