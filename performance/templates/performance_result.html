@@ -76,10 +76,23 @@
                 </div>
                 <hr>
                 <div class="row container-fluid">
-                    <div class="col-md-6 pull-left">
+                    <div class="col-md-6 pull-left" id="courseMessagesDivId">
                         {% if course_registration_message %}
-                            <div class="alert alert-info" role="alert">
-                                {{ course_registration_message |safe }}
+                            <div class="row">
+                                <div class="alert alert-info" role="alert">
+                                    {{ course_registration_message |safe }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if on_site_exams_info %}
+                            <div class="row">
+                                <div class="alert alert-warning" role="alert">
+                                    <h4>{% trans 'Session of ' %}{% trans on_site_exams_info.info_site_session %}</h4>
+                                    <p>{% trans 'I will pass my written exams on site' %} : {% trans on_site_exams_info.written_exams_on_site|default_if_none 'not specified'%}</p>
+                                    <p>{% trans 'I will pass my oral exams ons site' %} : {% trans on_site_exams_info.oral_exams_on_site |default_if_none 'not specified'%}</p>
+                                    <br/>
+                                    <p>{% trans 'If the current informations are not correct, please contact your faculty' %}</p>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
