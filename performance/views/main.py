@@ -81,7 +81,7 @@ def __get_performance_data(stud_perf):
     courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
     learning_units_outside_catalog = stud_perf.learning_units_outside_catalog if stud_perf else None
     course_registration_message = stud_perf.course_registration_message if stud_perf else None
-    on_site_exams_info = json.loads(stud_perf.on_site_exams_info) \
+    on_site_exams_info = stud_perf.on_site_exams_info \
         if stud_perf and stud_perf.on_site_exams_info else None
     return {
         "results": document,

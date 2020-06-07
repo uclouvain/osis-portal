@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 16:54+0200\n"
+"POT-Creation-Date: 2020-06-07 21:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,7 +92,9 @@ msgstr "Je présenterai mes examens oraux sur site"
 
 msgid ""
 "If the current informations are not correct, please contact your faculty"
-msgstr "Si ces informations sont inexactes, veuillez prendre contact avec votre faculté"
+msgstr ""
+"Si ces informations sont inexactes, veuillez prendre contact avec votre "
+"faculté"
 
 msgid "Inscr."
 msgstr "Inscr."
@@ -121,8 +123,14 @@ msgstr "Mention"
 msgid "My exam marks and regisration state"
 msgstr "Mon état d'inscription aux cours et mes notes d'examen"
 
+msgid "No"
+msgstr ""
+
 msgid "No results to show."
 msgstr "Vous n'avez aucune note."
+
+msgid "Not defined"
+msgstr "Non défini"
 
 msgid "Program"
 msgstr "Programme"
@@ -202,6 +210,9 @@ msgstr "Total ECTS / Inscription"
 
 msgid "Year"
 msgstr "Année"
+
+msgid "Yes"
+msgstr ""
 
 msgid "performance"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 16:54+0200\n"
+"POT-Creation-Date: 2020-06-07 21:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,7 +113,13 @@ msgstr ""
 msgid "My exam marks and regisration state"
 msgstr ""
 
+msgid "No"
+msgstr ""
+
 msgid "No results to show."
+msgstr ""
+
+msgid "Not defined"
 msgstr ""
 
 msgid "Program"
@@ -178,6 +184,9 @@ msgid "Total ECTS / Enrollment"
 msgstr ""
 
 msgid "Year"
+msgstr ""
+
+msgid "Yes"
 msgstr ""
 
 msgid "performance"
