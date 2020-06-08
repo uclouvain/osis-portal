@@ -76,10 +76,31 @@
                 </div>
                 <hr>
                 <div class="row container-fluid">
-                    <div class="col-md-6 pull-left">
+                    <div class="col-md-6 pull-left" id="courseMessagesDivId">
                         {% if course_registration_message %}
-                            <div class="alert alert-info" role="alert">
-                                {{ course_registration_message |safe }}
+                            <div class="row">
+                                <div class="alert alert-info" role="alert">
+                                    {{ course_registration_message |safe }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if on_site_exams_info %}
+                            <div class="row">
+                                <div class="alert alert-warning" role="alert">
+                                    <h4>{% trans 'Session of ' %}{% trans on_site_exams_info.moisSession %}</h4>
+                                    <p>{% trans 'I will pass my written exams on site' %} :
+                                        {% if  on_site_exams_info.ecritSurSite is None %}{%trans 'Not defined'%}
+                                            {% elif on_site_exams_info.ecritSurSite %}{% trans 'Yes' %}
+                                            {% else %}{% trans 'No' %}
+                                        {% endif %}</p>
+                                    <p>{% trans 'I will pass my oral exams ons site' %} :
+                                        {% if  on_site_exams_info.oralSurSite is None %}{%trans 'Not defined'%}
+                                            {% elif on_site_exams_info.oralSurSite %}{% trans 'Yes' %}
+                                            {% else %}{% trans 'No' %}
+                                        {% endif %}</p>
+                                    <br/>
+                                    <p>{% trans 'If the current informations are not correct, please contact your faculty' %}</p>
+                                </div>
                             </div>
                         {% endif %}
                     </div>

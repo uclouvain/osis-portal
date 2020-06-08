@@ -41,9 +41,11 @@ class StudentPerformanceAdmin(admin.ModelAdmin):
     fieldsets = ((None, {
         'fields': ('registration_id', 'academic_year', 'acronym', 'update_date',
                    'creation_date', 'data', 'courses_registration_validated',
-                   'learning_units_outside_catalog', 'course_registration_message')
+                   'learning_units_outside_catalog', 'course_registration_message', 'on_site_exams_info')
     }),)
-    readonly_fields = ('creation_date', 'courses_registration_validated', 'learning_units_outside_catalog')
+    readonly_fields = ('creation_date', 'courses_registration_validated', 'learning_units_outside_catalog',
+                       'on_site_exams_info')
+
     search_fields = ['registration_id', 'academic_year', 'acronym']
 
 
@@ -72,6 +74,7 @@ class StudentPerformance(models.Model):
     learning_units_outside_catalog = models.NullBooleanField(null=True)
     fetch_timed_out = False
     course_registration_message = models.CharField(max_length=255, blank=True, default='')
+    on_site_exams_info = JSONField(null=True)
 
     def _get_academic_year_template_formated(self):
         return '{} - {}'.format(self.academic_year, self.academic_year + 1)
