@@ -302,9 +302,11 @@ class ExamEnrollmentFormTest(TestCase):
                 "etat_to_inscr_current_session_LPHYS1234": "I",
                 "chckbox_exam_enrol_sess1_LBIO4567": "",
                 "etat_to_inscr_current_session_LBIO4567": "None",
-                "chckbox_exam_enrol_sess1_LDROI1111": None,
-                "etat_to_inscr_current_session_LDROI1111": None,
+                "chckbox_exam_enrol_sess1_LDROI1111": "None",
+                "etat_to_inscr_current_session_LDROI1111": "None",
                 "current_number_session": 1,
+                "written_exam_on_site": False,
+                "oral_exam_on_site": True
             }
             response = self.client.post(self.url, post_data)
             result = exam_enrollment._exam_enrollment_form_submission_message(self.off_year,
@@ -323,7 +325,9 @@ class ExamEnrollmentFormTest(TestCase):
             "registration_id": self.student.registration_id,
             "offer_year_acronym": self.off_year.acronym,
             "year": self.off_year.academic_year.year,
-            "exam_enrollments": [exam_enrollment_expected]
+            "exam_enrollments": [exam_enrollment_expected],
+            "written_exam_on_site": False,
+            "oral_exam_on_site": True
         }
         self.assertEqual(len(result), len(expected_result))
         self.assertEqual(expected_result.get('registration_id'), result.get('registration_id'))
