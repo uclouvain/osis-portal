@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:57+0200\n"
+"POT-Creation-Date: 2020-05-26 21:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,14 +34,36 @@ msgstr "Prénom"
 msgid "Last name"
 msgstr "Nom"
 
+msgid "No"
+msgstr ""
+
+msgid "On site Oral Exam"
+msgstr "Examen oral sur site"
+
+msgid "On site Written Exam"
+msgstr "Examen écrit sur site"
+
+msgid "On site exam informations"
+msgstr "Information concernant la présence sur site lors des examens"
+
 msgid "Register to exams or update my exam enrollments"
 msgstr "M'inscrire aux examens ou modifier mon inscription aux examens"
 
 msgid "Which action do you want to perform ?"
 msgstr "Quelle action souhaitez-vous effectuer ?"
 
+msgid "Yes"
+msgstr ""
+
 msgid "You are outside the exams enrollment period"
 msgstr "Vous êtes en dehors de la période d'inscription aux examens"
+
+msgid ""
+"You have already set your exam site choice. If you want to change it, please "
+"contact you program manager"
+msgstr ""
+"Vous avez déjà valider le choix de l'organisation de vos examens sur site ou en distanciel. Si vous désirez modifier ce choix, "
+"veuillez contacter votre gestionaire de programme"
 
 msgid "acronym"
 msgstr "Sigle"
