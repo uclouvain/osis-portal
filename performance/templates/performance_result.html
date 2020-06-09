@@ -88,18 +88,26 @@
                             <div class="row">
                                 <div class="alert alert-warning" role="alert">
                                     <h4>{% trans 'Session of ' %}{% trans on_site_exams_info.moisSession %}</h4>
-                                    <p>{% trans 'I will pass my written exams on site' %} :
-                                        {% if  on_site_exams_info.ecritSurSite is None %}{%trans 'Not defined'%}
-                                            {% elif on_site_exams_info.ecritSurSite %}{% trans 'Yes' %}
-                                            {% else %}{% trans 'No' %}
-                                        {% endif %}</p>
-                                    <p>{% trans 'I will pass my oral exams ons site' %} :
-                                        {% if  on_site_exams_info.oralSurSite is None %}{%trans 'Not defined'%}
-                                            {% elif on_site_exams_info.oralSurSite %}{% trans 'Yes' %}
-                                            {% else %}{% trans 'No' %}
-                                        {% endif %}</p>
-                                    <br/>
-                                    <p>{% trans 'If the current informations are not correct, please contact your faculty' %}</p>
+                                    <p>{% trans 'For the '%}<strong><u>{% trans 'distance exams'%}</u></strong>{% trans ', I will present one or more' %}</p>
+                                    <ul>
+                                        <li>{% trans 'written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.testweSurSite is None %}{%trans 'Not defined'%}
+                                                {% elif on_site_exams_info.testweSurSite %}{% trans 'Yes' %}
+                                                {% else %}{% trans 'No' %}
+                                            {% endif %}</li>
+                                        <li>{% trans 'written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.moodleSurSite is None %}{%trans 'Not defined'%}
+                                                {% elif on_site_exams_info.moodleSurSite %}{% trans 'Yes' %}
+                                                {% else %}{% trans 'No' %}
+                                            {% endif %}</li>
+                                        <li>{% trans 'oral exams with Teams, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.teamsSurSite is None %}{%trans 'Not defined'%}
+                                                {% elif on_site_exams_info.teamsSurSite %}{% trans 'Yes' %}
+                                                {% else %}{% trans 'No' %}
+                                            {% endif %}</li>
+                                        <br/>
+                                    </ul>
+                                    <p>{% trans 'If this information is not correct, please contact your faculty' %}</p>
                                 </div>
                             </div>
                         {% endif %}

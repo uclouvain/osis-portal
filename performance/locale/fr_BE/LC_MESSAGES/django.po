@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 21:59+0200\n"
+"POT-Creation-Date: 2020-06-09 16:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid ", I will present one or more"
+msgstr ", je présenterai un ou plusieurs"
 
 msgid ""
 "A problem was detected with your registration : 2 registration id's are "
@@ -78,20 +81,16 @@ msgstr "Etat d'inscription aux cours et notes d'examens d'un étudiant"
 msgid "First Name"
 msgstr "Prénom"
 
+msgid "For the "
+msgstr "Pour les "
+
 msgid "General mean"
 msgstr "Moyenne générale"
 
 msgid "Generated on"
 msgstr "Générée le"
 
-msgid "I will pass my oral exams ons site"
-msgstr "Je présenterai mes examens ecrits sur site"
-
-msgid "I will pass my written exams on site"
-msgstr "Je présenterai mes examens oraux sur site"
-
-msgid ""
-"If the current informations are not correct, please contact your faculty"
+msgid "If this information is not correct, please contact your faculty"
 msgstr ""
 "Si ces informations sont inexactes, veuillez prendre contact avec votre "
 "faculté"
@@ -214,11 +213,19 @@ msgstr "Année"
 msgid "Yes"
 msgstr ""
 
+msgid "distance exams"
+msgstr "examens distanciels"
+
+msgid "oral exams with Teams, in a room at UCLouvain"
+msgstr "examens oraux avec Teams dans une salle UCLouvain"
+
 msgid "performance"
 msgstr ""
 
-#~ msgid "Your courses registration has been validated by the jury."
-#~ msgstr "Votre inscription aux cours a été validée par le jury."
+msgid ""
+"written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain"
+msgstr "examens écrits avec Moodle et/ou  Gradescope dans une salle UCLouvain"
 
-#~ msgid "Your courses registration is being processed"
-#~ msgstr "Votre inscription aux cours est en cours de traitement."
+msgid ""
+"written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain"
+msgstr "examens écrits avec TestWe et/ou Wiseflow dans une salle UCLouvain"
