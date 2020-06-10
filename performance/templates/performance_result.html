@@ -61,14 +61,15 @@
                     <div class="col-md-12 alert alert-warning">
                         {% trans 'The server is actually overloaded. Please excuse us and try again later.' %}
                     </div>
-                    {% elif not_authorized_message %}
+                {% elif not_authorized_message %}
                     <div class="col-md-12 alert alert-danger">
                         {{ not_authorized_message }}
                     </div>
                 {% endif %}
                 <div class="row container-fluid">
                     <div class="col-md-6 text-left">
-                        <small><strong>{% trans 'Date of the next document regeneration' %}:</strong> {{ update_date }}</small>
+                        <small><strong>{% trans 'Date of the next document regeneration' %}:</strong> {{ update_date }}
+                        </small>
                     </div>
                     <div class="col-md-6 text-right">
                         <small><strong>{% trans 'Generated on' %}:</strong> {{ creation_date }}</small>
@@ -82,6 +83,17 @@
                                 {{ course_registration_message |safe }}
                             </div>
                         {% endif %}
+                        <div class="alert alert-warning">
+                            <h4>{% trans 'Session of'  %} {{ session_month }}</h4>
+                            {% trans 'For the <u><strong>distance</strong></u> exams, I will present one or more' %}
+                            <ul>
+                                <li>{% trans 'written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain' %} : {{ testwe_exam_on_site }}</li>
+                                <li>{% trans 'written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain' %} : {{ moodle_exam_on_site }}</li>
+                                <li>{% trans 'oral exams in a room at UCLouvain' %} : {{ teams_exam_on_site }}</li>
+                            </ul>
+                            <br>
+                            <strong>{% trans 'If this information is not correct, please contact your faculty' %}</strong>
+                        </div>
                     </div>
 
                     <!-- Student sessions summary-->

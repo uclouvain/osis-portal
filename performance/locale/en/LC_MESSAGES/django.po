@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-13 16:59+0100\n"
+"POT-Creation-Date: 2020-06-10 14:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,191 +17,150 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: tests/views/test_main.py:109 tests/views/test_main.py:183
 msgid ""
 "A problem was detected with your registration : 2 registration id's are "
 "linked to your user. Please contact the registration departement (SIC). "
 "Thank you."
 msgstr ""
 
-#: templates/performance_result.html:53
 msgid "Academic year"
 msgstr ""
 
-#: templates/performance_result.html:167
 msgid "Acquired charge credits"
 msgstr ""
 
-#: templates/performance_result.html:162
 msgid ""
 "Acquired cycle credits are included in the cycle mean. Only acquired "
 "progression credits are accounted for requested credits."
 msgstr ""
 
-#: templates/performance_result.html:168
 msgid "Acquired progression credits"
 msgstr ""
 
-#: templates/performance_home.html:69
 msgid "Acronym"
 msgstr ""
 
-#: templates/performance_result.html:134
 msgid "Attention : From June 2009, the score is expressed to a maximum of 20."
 msgstr ""
 
-#: templates/performance_result.html:122
 msgid "Course"
 msgstr ""
 
-#: templates/performance_result.html:129
 msgid "Credited"
 msgstr ""
 
-#: templates/performance_result.html:171
 msgid "Cycle"
 msgstr ""
 
-#: templates/performance_result.html:159
 msgid "Cycle credits advancement"
 msgstr ""
 
-#: templates/performance_result.html:71
 msgid "Date of the next document regeneration"
 msgstr ""
 
-#: templates/performance_result.html:96 templates/performance_result.html:124
 msgid "ECTS"
 msgstr ""
 
-#: templates/admin/performance_administration.html:32
-#: templates/admin/performance_administration.html:33
-#: templates/admin/performance_home_admin.html:31
-#: templates/admin/performance_home_admin.html:32
-#: templates/admin/performance_result_admin.html:30
-#: templates/admin/performance_result_admin.html:31
 msgid "Exam marks and registration state administration"
 msgstr ""
 
-#: templates/admin/performance_administration.html:41
 msgid "Exam marks and registration state of a student"
 msgstr ""
 
-#: templates/performance_home.html:48 templates/performance_result.html:50
 msgid "First Name"
 msgstr ""
 
-#: templates/performance_result.html:111
+msgid ""
+"For the <u><strong>distance</strong></u> exams, I will present one or more"
+msgstr ""
+
 msgid "General mean"
 msgstr ""
 
-#: templates/performance_result.html:74
 msgid "Generated on"
 msgstr ""
 
-#: templates/performance_result.html:125
+msgid "If this information is not correct, please contact your faculty"
+msgstr ""
+
 msgid "Inscr."
 msgstr ""
 
-#: templates/performance_result.html:97 templates/performance_result.html:126
 msgid "Jan."
 msgstr ""
 
-#: models/enums/session_month.py:32
 msgid "January"
 msgstr ""
 
-#: models/enums/session_month.py:33 templates/performance_result.html:98
-#: templates/performance_result.html:127
 msgid "June"
 msgstr ""
 
-#: templates/performance_home.html:48 templates/performance_result.html:50
 msgid "Last Name"
 msgstr ""
 
-#: templates/performance_result.html:151
 msgid "Legend"
 msgstr ""
 
-#: templates/performance_result.html:105
 msgid "Mean"
 msgstr ""
 
-#: templates/performance_result.html:114
 msgid "Mention"
 msgstr ""
 
-#: templates/performance_home.html:33
-#: templates/performance_home_student.html:30
-#: templates/performance_result.html:33
-#: templates/performance_result_student.html:30
 msgid "My exam marks and regisration state"
 msgstr ""
 
-#: templates/performance_result.html:45
 msgid "No results to show."
 msgstr ""
 
-#: templates/performance_home.html:70 templates/performance_result.html:56
 msgid "Program"
 msgstr ""
 
-#: templates/admin/performance_administration.html:60
 msgid "Registration Id"
 msgstr ""
 
-#: templates/performance_home.html:53
 msgid "Registration Number"
 msgstr ""
 
-#: templates/admin/performance_result_admin.html:32
-#: templates/performance_result_student.html:31
 msgid "Results"
 msgstr ""
 
-#: templates/performance_result.html:99 templates/performance_result.html:128
 msgid "Sept."
 msgstr ""
 
-#: models/enums/session_month.py:34
 msgid "September"
 msgstr ""
 
-#: templates/performance_result.html:108
+msgid "Session of"
+msgstr ""
+
 msgid "Success mean"
 msgstr ""
 
-#: tests/views/test_main.py:239 tests/views/test_main.py:430 views/main.py:67
 #, python-format
 msgid ""
 "The publication of the notes from the %(session_month)s session was not "
 "authorized by our faculty."
 msgstr ""
 
-#: templates/performance_home.html:62
 msgid "The score are yet to be published."
 msgstr ""
 
-#: templates/performance_result.html:62
 msgid ""
 "The server is actually overloaded. Please excuse us and try again later."
 msgstr ""
 
-#: templates/performance_home.html:40
 msgid ""
 "This component reflects the status of the information stored in the official "
 "databases of the university at the time of publication and according to the "
 "rules of publication decided by the secretariat of your faculty."
 msgstr ""
 
-#: templates/performance_result.html:138
 msgid ""
 "This registration is \\\"out of catalog\\\" or \\\"preemptive\\\" and the "
 "associated credits are not accounted in the requested credits."
 msgstr ""
 
-#: templates/performance_result.html:39
 msgid ""
 "This results are intended as communication between faculty and students. "
 "Only the appendix to the diploma, which lists all the courses taken during a "
@@ -209,26 +168,28 @@ msgid ""
 "transcript."
 msgstr ""
 
-#: templates/performance_result.html:123
 msgid "Title"
 msgstr ""
 
-#: templates/performance_result.html:102
 msgid "Total ECTS / Enrollment"
 msgstr ""
 
-#: templates/performance_home.html:68
 msgid "Year"
 msgstr ""
 
-#: templates/performance_result.html:82
-msgid "Your courses registration has been validated by the jury."
+msgid "oral exams in a room at UCLouvain"
 msgstr ""
 
-#: templates/performance_result.html:86
-msgid "Your courses registration is being processed"
-msgstr "Your courses registration is being processed"
-
-#: templates/admin/performance_home_admin.html:33
 msgid "performance"
 msgstr ""
+
+msgid ""
+"written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain"
+msgstr ""
+
+msgid ""
+"written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain"
+msgstr ""
+
+#~ msgid "Your courses registration is being processed"
+#~ msgstr "Your courses registration is being processed"

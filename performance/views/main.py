@@ -25,7 +25,9 @@
 #
 ############################################################################
 import json
+import logging
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
 from django.shortcuts import redirect
@@ -35,8 +37,12 @@ from base.forms.base_forms import RegistrationIdForm
 from base.models import student as mdl_student
 from base.views import layout, common
 from dashboard.views import main as dash_main_view
+from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
+from osis_common.utils.models import get_object_or_none
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 # Students Views
@@ -54,6 +60,7 @@ def view_performance_home(request):
     list_student_programs = None
     if stud:
         list_student_programs = __get_student_programs(stud)
+
     data = {
         "student": stud,
         "programs": list_student_programs,
@@ -72,7 +79,7 @@ def __make_not_authorized_message(stud_perf):
         return None
 
 
-def __get_performance_data(stud_perf):
+def __get_performance_data(stud_perf, stud):
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
@@ -81,6 +88,11 @@ def __get_performance_data(stud_perf):
     courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
     learning_units_outside_catalog = stud_perf.learning_units_outside_catalog if stud_perf else None
     course_registration_message = stud_perf.course_registration_message if stud_perf else None
+    session_month = stud_perf.get_session_locked_display() if stud_perf else None
+    data = {}
+    if stud_perf:
+        data = _get_exam_location_choices(stud, stud_perf)
+
     return {
         "results": document,
         "creation_date": creation_date,
@@ -89,8 +101,28 @@ def __get_performance_data(stud_perf):
         "not_authorized_message": not_authorized_message,
         "courses_registration_validated": courses_registration_validated,
         "learning_units_outside_catalog": learning_units_outside_catalog,
-        "course_registration_message": course_registration_message
+        "course_registration_message": course_registration_message,
+        "session_month": session_month or '',
+        'testwe_exam_on_site': data.get('testwe_exam_on_site') or '-',
+        'teams_exam_on_site': data.get('teams_exam_on_site') or '-',
+        'moodle_exam_on_site': data.get('moodle_exam_on_site') or '-'
     }
+
+
+def _get_exam_location_choices(stud, stud_perf):
+    data = {}
+    exam_enroll_request = get_object_or_none(
+        ExamEnrollmentRequest,
+        student=stud,
+        offer_year_acronym=stud_perf.acronym
+    )
+    if exam_enroll_request:
+        try:
+            data = json.loads(exam_enroll_request.document)
+        except json.JSONDecodeError:
+            logger.exception("Json data is not valid")
+            data = {}
+    return data
 
 
 @login_required
@@ -107,7 +139,7 @@ def display_result_for_specific_student_performance(request, pk):
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
 
-    perf_data = __get_performance_data(stud_perf)
+    perf_data = __get_performance_data(stud_perf, stud)
     return layout.render(request,
                          "performance_result_student.html",
                          perf_data)
@@ -136,7 +168,7 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
                                                                                           cleaned_acronym)
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
-    perf_data = __get_performance_data(stud_perf)
+    perf_data = __get_performance_data(stud_perf, stud)
 
     return layout.render(request,
                          "performance_result_student.html",
@@ -197,7 +229,7 @@ def visualize_student_result(request, pk):
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     if stud_perf and not __can_visualize_student_result(request, pk):
         raise PermissionDenied
-    perf_data = __get_performance_data(stud_perf)
+    perf_data = __get_performance_data(stud_perf, stud)
     return layout.render(request,
                          "admin/performance_result_admin.html",
                          perf_data)
@@ -205,6 +237,7 @@ def visualize_student_result(request, pk):
 
 def __get_student_programs(stud):
     query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
+    print(query_result)
     list_student_programs = query_result_to_list(query_result)
     return list_student_programs
 
