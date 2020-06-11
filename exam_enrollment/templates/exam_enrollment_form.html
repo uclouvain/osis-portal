@@ -39,7 +39,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            {% if not exam_enrollments %}
+            {% if exam_enrollments %}
                 <div id="message_box" class="alert alert-info" style="margin-top: 1em;display: block;">
                     {% if error_message %}
                         <span id="status_message">{% trans error_message %}</span>
@@ -86,76 +86,79 @@
                 <form id="exam_enrollment_form" method="POST" action="{% url 'exam_enrollment_form' program.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
-                    <div class="alert alert-warning">
-                        <h4>{% trans 'For the <u><b>distance</b></u> exams, in view of the difficulties to find myself in good conditions to take my exams from my place of living,' %}</h4>
-                        <div class="checkbox">
-                            {% trans 'I will present one or more written exams with the TestWe and/or Wiseflow tools, in an equipped room at UCLouvain' %}
-                            :
-                            <label class="radio-inline">
-                                <input type="radio" name="testwe_exam_on_site"
-                                       id="testwe_exam_on_site_yes_id" value="true"
-                                        {% if  testwe_exam_on_site %} checked {% endif %}
-                                       required>{% trans 'Yes' %}
-                            </label>
-                            <label class="radio-inline">
-                                <input class="form-check-input" type="radio"
-                                       name="testwe_exam_on_site" id="testwe_exam_on_site_no_id" value="false"
-                                        {% if  testwe_exam_on_site is not None and not testwe_exam_on_site %}
-                                       checked
-                                        {% endif %}>{% trans 'No' %}
-                            </label>
-                            <label class="radio-inline">
-                                <input class="form-check-input" type="radio"
-                                       name="testwe_exam_on_site" id="testwe_exam_on_site_not_concerned_id" value="not_concerned"
-                                        {% if  testwe_exam_on_site is not None and not testwe_exam_on_site %}
-                                       checked
-                                        {% endif %}>{% trans 'Not concerned' %}
-                            </label>
+                    {% if covid_period %}
+                        <div class="alert alert-warning">
+                            <h4>{% trans 'For the <u><b>distance</b></u> exams, in view of the difficulties to find myself in good conditions to take my exams from my place of living,' %}</h4>
+                            <div class="checkbox">
+                                {% trans 'I will present one or more written exams with the TestWe and/or Wiseflow tools, in an equipped room at UCLouvain' %}
+                                :
+                                <label class="radio-inline">
+                                    <input type="radio" name="testwe_exam_on_site"
+                                           id="testwe_exam_on_site_yes_id" value="true"
+                                            {% if  testwe_exam_on_site %} checked {% endif %}
+                                           required>{% trans 'Yes' %}
+                                </label>
+                                <label class="radio-inline">
+                                    <input class="form-check-input" type="radio"
+                                           name="testwe_exam_on_site" id="testwe_exam_on_site_no_id" value="false"
+                                            {% if  testwe_exam_on_site is not None and not testwe_exam_on_site %}
+                                           checked
+                                            {% endif %}>{% trans 'No' %}
+                                </label>
+                                <label class="radio-inline">
+                                    <input class="form-check-input" type="radio"
+                                           name="testwe_exam_on_site" id="testwe_exam_on_site_not_concerned_id"
+                                           value="not_concerned"
+                                            {% if  testwe_exam_on_site is not None and not testwe_exam_on_site %}
+                                           checked
+                                            {% endif %}>{% trans 'Not concerned' %}
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                {% trans 'I will present one or more written exams with the Moodle and/or Gradescope tools, in an equipped room at UCLouvain' %}
+                                :
+                                <label class="radio-inline">
+                                    <input class="form-check-input" type="radio"
+                                           name="moodle_exam_on_site" id="moodle_exam_on_site_yes_id" value="true"
+                                            {% if  moodle_exam_on_site %} checked {% endif %} required>{% trans 'Yes' %}
+                                </label>
+                                <label class="radio-inline">
+                                    <input class="form-check-input" type="radio"
+                                           name="moodle_exam_on_site" id="moodle_exam_on_site_no_id" value="false"
+                                            {% if moodle_exam_on_site is not None and not moodle_exam_on_site %}
+                                           checked {% endif %} >{% trans 'No' %}
+                                </label>
+                                <label class="radio-inline">
+                                    <input class="form-check-input" type="radio"
+                                           name="moodle_exam_on_site" id="moodle_exam_on_site_not_concerned_id"
+                                           value="not_concerned"
+                                            {% if moodle_exam_on_site is not None and not moodle_exam_on_site %}
+                                           checked {% endif %} >{% trans 'Not concerned' %}
+                                </label>
+                            </div>
+                            <div class="checkbox" id="teams_exam_on_site_checkbox">
+                                {% trans 'I will present one or more oral exams in an equipped room at UCLouvain' %} :
+                                <label class="radio-inline">
+                                    <input class="form-check-input" type="radio"
+                                           name="teams_exam_on_site" id="teams_exam_on_site_yes_id" value="true"
+                                            {% if teams_exam_on_site %} checked {% endif %} required>{% trans 'Yes' %}
+                                </label>
+                                <label class="radio-inline">
+                                    <input class="form-check-input" type="radio"
+                                           name="teams_exam_on_site" id="teams_exam_on_site_no_id" value="false"
+                                            {% if teams_exam_on_site is not None and not teams_exam_on_site %}
+                                           checked {% endif %} >{% trans 'No' %}
+                                </label>
+                                <label class="radio-inline">
+                                    <input class="form-check-input" type="radio"
+                                           name="teams_exam_on_site" id="teams_exam_on_site_not_concerned_id"
+                                           value="not_concerned"
+                                            {% if teams_exam_on_site is not None and not teams_exam_on_site %}
+                                           checked {% endif %} >{% trans 'Not concerned' %}
+                                </label>
+                            </div>
                         </div>
-                        <div class="checkbox">
-                            {% trans 'I will present one or more written exams with the Moodle and/or Gradescope tools, in an equipped room at UCLouvain' %}
-                            :
-                            <label class="radio-inline">
-                                <input class="form-check-input" type="radio"
-                                       name="moodle_exam_on_site" id="moodle_exam_on_site_yes_id" value="true"
-                                        {% if  moodle_exam_on_site %} checked {% endif %} required>{% trans 'Yes' %}
-                            </label>
-                            <label class="radio-inline">
-                                <input class="form-check-input" type="radio"
-                                       name="moodle_exam_on_site" id="moodle_exam_on_site_no_id" value="false"
-                                        {% if moodle_exam_on_site is not None and not moodle_exam_on_site %}
-                                       checked {% endif %} >{% trans 'No' %}
-                            </label>
-                            <label class="radio-inline">
-                                <input class="form-check-input" type="radio"
-                                       name="moodle_exam_on_site" id="moodle_exam_on_site_not_concerned_id"
-                                       value="not_concerned"
-                                        {% if moodle_exam_on_site is not None and not moodle_exam_on_site %}
-                                       checked {% endif %} >{% trans 'Not concerned' %}
-                            </label>
-                        </div>
-                        <div class="checkbox" id="teams_exam_on_site_checkbox">
-                            {% trans 'I will present one or more oral exams in an equipped room at UCLouvain' %} :
-                            <label class="radio-inline">
-                                <input class="form-check-input" type="radio"
-                                       name="teams_exam_on_site" id="teams_exam_on_site_yes_id" value="true"
-                                        {% if teams_exam_on_site %} checked {% endif %} required>{% trans 'Yes' %}
-                            </label>
-                            <label class="radio-inline">
-                                <input class="form-check-input" type="radio"
-                                       name="teams_exam_on_site" id="teams_exam_on_site_no_id" value="false"
-                                        {% if teams_exam_on_site is not None and not teams_exam_on_site %}
-                                       checked {% endif %} >{% trans 'No' %}
-                            </label>
-                            <label class="radio-inline">
-                                <input class="form-check-input" type="radio"
-                                       name="teams_exam_on_site" id="teams_exam_on_site_not_concerned_id"
-                                       value="not_concerned"
-                                        {% if teams_exam_on_site is not None and not teams_exam_on_site %}
-                                       checked {% endif %} >{% trans 'Not concerned' %}
-                            </label>
-                        </div>
-                    </div>
+                    {% endif %}
                     <table class="table table-striped table-hover table-bordered" id="table_exam_enrollment_choice">
                         <tr>
                             <th>{% trans 'course' %}</th>

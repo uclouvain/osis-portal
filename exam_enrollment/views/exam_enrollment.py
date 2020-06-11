@@ -139,7 +139,8 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'request_timeout': request_timeout,
                                  'testwe_exam_on_site': data.get('testwe_exam_on_site'),
                                  'teams_exam_on_site': data.get('teams_exam_on_site'),
-                                 'moodle_exam_on_site': data.get('moodle_exam_on_site')
+                                 'moodle_exam_on_site': data.get('moodle_exam_on_site'),
+                                 'covid_period': data.get('covid_period')
                              })
     else:
         ask_exam_enrollment_form(stud, off_year)
@@ -151,9 +152,6 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'academic_year': mdl_base.academic_year.current_academic_year(),
                                  'program': mdl_base.offer_year.find_by_id(off_year.id),
                                  'request_timeout': request_timeout,
-                                 'testwe_exam_on_site': None,
-                                 'teams_exam_on_site': None,
-                                 'moodle_exam_on_site': None
                              })
 
 

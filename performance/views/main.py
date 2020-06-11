@@ -79,7 +79,7 @@ def __make_not_authorized_message(stud_perf):
         return None
 
 
-def __get_performance_data(stud_perf, stud):
+def __get_performance_data(stud_perf, stud=None):
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
@@ -90,7 +90,7 @@ def __get_performance_data(stud_perf, stud):
     course_registration_message = stud_perf.course_registration_message if stud_perf else None
     session_month = stud_perf.get_session_locked_display() if stud_perf else None
     data = {}
-    if stud_perf:
+    if stud_perf and stud:
         data = _get_exam_location_choices(stud, stud_perf)
 
     return {
@@ -105,7 +105,8 @@ def __get_performance_data(stud_perf, stud):
         "session_month": session_month or '',
         'testwe_exam_on_site': data.get('testwe_exam_on_site') or '-',
         'teams_exam_on_site': data.get('teams_exam_on_site') or '-',
-        'moodle_exam_on_site': data.get('moodle_exam_on_site') or '-'
+        'moodle_exam_on_site': data.get('moodle_exam_on_site') or '-',
+        'covid_period': data.get('covid_period')
     }
 
 
@@ -229,7 +230,7 @@ def visualize_student_result(request, pk):
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     if stud_perf and not __can_visualize_student_result(request, pk):
         raise PermissionDenied
-    perf_data = __get_performance_data(stud_perf, stud)
+    perf_data = __get_performance_data(stud_perf)
     return layout.render(request,
                          "admin/performance_result_admin.html",
                          perf_data)

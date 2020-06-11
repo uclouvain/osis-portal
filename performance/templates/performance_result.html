@@ -83,17 +83,21 @@
                                 {{ course_registration_message |safe }}
                             </div>
                         {% endif %}
-                        <div class="alert alert-warning">
-                            <h4>{% trans 'Session of'  %} {{ session_month }}</h4>
-                            {% trans 'For the <u><strong>distance</strong></u> exams, I will present one or more' %}
-                            <ul>
-                                <li>{% trans 'written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain' %} : {{ testwe_exam_on_site }}</li>
-                                <li>{% trans 'written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain' %} : {{ moodle_exam_on_site }}</li>
-                                <li>{% trans 'oral exams in a room at UCLouvain' %} : {{ teams_exam_on_site }}</li>
-                            </ul>
-                            <br>
-                            <strong>{% trans 'If this information is not correct, please contact your faculty' %}</strong>
-                        </div>
+                        {% if covid_period %}
+                            <div class="alert alert-warning">
+                                <h4>{% trans 'Session of' %} {{ session_month }}</h4>
+                                {% trans 'For the <u><strong>distance</strong></u> exams, I will present one or more' %}
+                                <ul>
+                                    <li>{% trans 'written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain' %}
+                                        : {{ testwe_exam_on_site }}</li>
+                                    <li>{% trans 'written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain' %}
+                                        : {{ moodle_exam_on_site }}</li>
+                                    <li>{% trans 'oral exams in a room at UCLouvain' %} : {{ teams_exam_on_site }}</li>
+                                </ul>
+                                <br>
+                                <strong>{% trans 'If this information is not correct, please contact your faculty' %}</strong>
+                            </div>
+                        {% endif %}
                     </div>
 
                     <!-- Student sessions summary-->
