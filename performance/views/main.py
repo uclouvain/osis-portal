@@ -103,9 +103,9 @@ def __get_performance_data(stud_perf, stud=None):
         "learning_units_outside_catalog": learning_units_outside_catalog,
         "course_registration_message": course_registration_message,
         "session_month": session_month or '',
-        'testwe_exam_on_site': data.get('testwe_exam_on_site') or '-',
-        'teams_exam_on_site': data.get('teams_exam_on_site') or '-',
-        'moodle_exam_on_site': data.get('moodle_exam_on_site') or '-',
+        'testwe_exam': data.get('testwe_exam') or '-',
+        'teams_exam': data.get('teams_exam') or '-',
+        'moodle_exam': data.get('moodle_exam') or '-',
         'covid_period': data.get('covid_period')
     }
 

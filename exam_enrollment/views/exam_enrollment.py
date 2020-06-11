@@ -52,6 +52,11 @@ from osis_common.queue import queue_sender
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
+covid_exam_choices = {
+    'SUR_SITE': _('Yes'),
+    'PAS_SUR_SITE': _('No'),
+    'NON_CONCERNE': _('Not concerned')
+}
 
 
 @login_required
@@ -137,9 +142,9 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'academic_year': mdl_base.academic_year.current_academic_year(),
                                  'program': mdl_base.offer_year.find_by_id(off_year.id),
                                  'request_timeout': request_timeout,
-                                 'testwe_exam_on_site': data.get('testwe_exam_on_site'),
-                                 'teams_exam_on_site': data.get('teams_exam_on_site'),
-                                 'moodle_exam_on_site': data.get('moodle_exam_on_site'),
+                                 'testwe_exam': data.get('testwe_exam'),
+                                 'teams_exam': data.get('teams_exam'),
+                                 'moodle_exam': data.get('moodle_exam'),
                                  'covid_period': data.get('covid_period')
                              })
     else:
@@ -263,9 +268,9 @@ def _exam_enrollment_form_submission_message(off_year, request, stud):
         'offer_year_acronym': off_year.acronym,
         'year': off_year.academic_year.year,
         'exam_enrollments': _build_enrollments_by_learning_unit(request),
-        'testwe_exam_on_site': request.POST.get('testwe_exam_on_site'),
-        'teams_exam_on_site': request.POST.get('teams_exam_on_site'),
-        'moodle_exam_on_site': request.POST.get('moodle_exam_on_site')
+        'testwe_exam': request.POST.get('testwe_exam'),
+        'teams_exam': request.POST.get('teams_exam'),
+        'moodle_exam': request.POST.get('moodle_exam')
     }
 
 
