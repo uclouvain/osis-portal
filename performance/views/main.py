@@ -237,7 +237,6 @@ def visualize_student_result(request, pk):
 
 def __get_student_programs(stud):
     query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
-    print(query_result)
     list_student_programs = query_result_to_list(query_result)
     return list_student_programs
 

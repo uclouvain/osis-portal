@@ -204,20 +204,3 @@ msgstr "Valider mes changements"
 
 msgid "year"
 msgstr "Année"
-
-#~ msgid "On site Oral Exam"
-#~ msgstr "Examen oral sur site"
-
-#~ msgid "On site Written Exam"
-#~ msgstr "Examen écrit sur site"
-
-#~ msgid "On site exam informations"
-#~ msgstr "Information concernant la présence sur site lors des examens"
-
-#~ msgid ""
-#~ "You have already set your exam site choice. If you want to change it, "
-#~ "please contact you program manager"
-#~ msgstr ""
-#~ "Vous avez déjà valider le choix de l'organisation de vos examens sur site "
-#~ "ou en distanciel. Si vous désirez modifier ce choix, veuillez contacter "
-#~ "votre gestionaire de programme"

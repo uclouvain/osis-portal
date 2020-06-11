@@ -58,10 +58,8 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#, fuzzy
-#| msgid "exams_enrollment"
 msgid "No exam enrollment found"
-msgstr "Exams enrollment"
+msgstr ""
 
 msgid "Not concerned"
 msgstr ""

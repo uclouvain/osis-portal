@@ -190,6 +190,3 @@ msgstr ""
 msgid ""
 "written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain"
 msgstr ""
-
-#~ msgid "Your courses registration is being processed"
-#~ msgstr "Your courses registration is being processed"

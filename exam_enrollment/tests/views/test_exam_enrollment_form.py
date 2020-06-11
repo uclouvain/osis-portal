@@ -227,6 +227,28 @@ class ExamEnrollmentFormTest(TestCase):
 
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_not_available(self,
+                                                     mock_get_exam_enrollment_request,
+                                                     mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": "no_exam_enrollment_avalaible",'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertEqual(
+            error_message,
+            _("Exam enrollment is not available")
+        )
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
     def test_case_exam_enrollment_form_no_learning_unit_enrollment_found(
             self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
         mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
