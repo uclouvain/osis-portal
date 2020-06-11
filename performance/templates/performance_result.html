@@ -91,19 +91,25 @@
                                     <p>{% trans 'For the '%}<strong><u>{% trans 'distance exams'%}</u></strong>{% trans ', I will present one or more' %}</p>
                                     <ul>
                                         <li>{% trans 'written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.testweSurSite is None %}{%trans 'Not defined'%}
-                                                {% elif on_site_exams_info.testweSurSite %}{% trans 'Yes' %}
-                                                {% else %}{% trans 'No' %}
+                                            {% if  on_site_exams_info.examTestWe is None %}{%trans 'Not defined'%}
+                                                {% elif on_site_exams_info.examTestWe == "SUR_SITE" %}{% trans 'Yes' %}
+                                                {% elif  on_site_exams_info.examTestWe == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif  on_site_exams_info.examTestWe == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <li>{% trans 'written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.moodleSurSite is None %}{%trans 'Not defined'%}
-                                                {% elif on_site_exams_info.moodleSurSite %}{% trans 'Yes' %}
-                                                {% else %}{% trans 'No' %}
+                                            {% if  on_site_exams_info.examMoodle is None %}{%trans 'Not defined'%}
+                                                {% elif on_site_exams_info.examMoodle == "SUR_SITE" %}{% trans 'Yes' %}
+                                                {% elif  on_site_exams_info.examMoodle == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif  on_site_exams_info.examMoodle == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <li>{% trans 'oral exams with Teams, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.teamsSurSite is None %}{%trans 'Not defined'%}
-                                                {% elif on_site_exams_info.teamsSurSite %}{% trans 'Yes' %}
-                                                {% else %}{% trans 'No' %}
+                                            {% if  on_site_exams_info.examMoodle is None %}{%trans 'Not defined'%}
+                                                {% elif on_site_exams_info.examTeams == "SUR_SITE" %}{% trans 'Yes' %}
+                                                {% elif  on_site_exams_info.examTeams == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif  on_site_exams_info.examTeams == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <br/>
                                     </ul>
