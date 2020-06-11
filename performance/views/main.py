@@ -38,6 +38,7 @@ from base.models import student as mdl_student
 from base.views import layout, common
 from dashboard.views import main as dash_main_view
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
+from exam_enrollment.views.exam_enrollment import covid_exam_choices
 from osis_common.utils.models import get_object_or_none
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
@@ -103,9 +104,9 @@ def __get_performance_data(stud_perf, stud=None):
         "learning_units_outside_catalog": learning_units_outside_catalog,
         "course_registration_message": course_registration_message,
         "session_month": session_month or '',
-        'testwe_exam': data.get('testwe_exam') or '-',
-        'teams_exam': data.get('teams_exam') or '-',
-        'moodle_exam': data.get('moodle_exam') or '-',
+        'testwe_exam': covid_exam_choices.get(data.get('testwe_exam')) or '-',
+        'teams_exam': covid_exam_choices.get(data.get('teams_exam')) or '-',
+        'moodle_exam': covid_exam_choices.get(data.get('moodle_exam')) or '-',
         'covid_period': data.get('covid_period')
     }
 
