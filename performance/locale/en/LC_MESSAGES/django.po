@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 14:48+0200\n"
+"POT-Creation-Date: 2020-06-12 15:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,17 +70,10 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
-msgid ""
-"For the <u><strong>distance</strong></u> exams, I will present one or more"
-msgstr ""
-
 msgid "General mean"
 msgstr ""
 
 msgid "Generated on"
-msgstr ""
-
-msgid "If this information is not correct, please contact your faculty"
 msgstr ""
 
 msgid "Inscr."
@@ -131,9 +124,6 @@ msgstr ""
 msgid "September"
 msgstr ""
 
-msgid "Session of"
-msgstr ""
-
 msgid "Success mean"
 msgstr ""
 
@@ -177,16 +167,5 @@ msgstr ""
 msgid "Year"
 msgstr ""
 
-msgid "oral exams in a room at UCLouvain"
-msgstr ""
-
 msgid "performance"
-msgstr ""
-
-msgid ""
-"written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain"
-msgstr ""
-
-msgid ""
-"written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain"
 msgstr ""

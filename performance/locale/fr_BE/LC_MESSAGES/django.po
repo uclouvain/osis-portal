@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 14:48+0200\n"
+"POT-Creation-Date: 2020-06-12 15:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,21 +78,11 @@ msgstr "Etat d'inscription aux cours et notes d'examens d'un étudiant"
 msgid "First Name"
 msgstr "Prénom"
 
-msgid ""
-"For the <u><strong>distance</strong></u> exams, I will present one or more"
-msgstr ""
-"Pour les examens <u><strong>distanciels</strong></u>, je présenterai un ou "
-"plusieurs"
-
 msgid "General mean"
 msgstr "Moyenne générale"
 
 msgid "Generated on"
 msgstr "Générée le"
-
-msgid "If this information is not correct, please contact your faculty"
-msgstr ""
-"Si ces informations ne sont pas correctes, merci de contacter votre faculté"
 
 msgid "Inscr."
 msgstr "Inscr."
@@ -141,9 +131,6 @@ msgstr "Sept."
 
 msgid "September"
 msgstr "Septembre"
-
-msgid "Session of"
-msgstr "Session de"
 
 msgid "Success mean"
 msgstr "Moyenne de réussite"
@@ -203,16 +190,5 @@ msgstr "Total ECTS / Inscription"
 msgid "Year"
 msgstr "Année"
 
-msgid "oral exams in a room at UCLouvain"
-msgstr "examens oraux avec Teams dans une salle UCLouvain"
-
 msgid "performance"
 msgstr ""
-
-msgid ""
-"written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain"
-msgstr "examens écrits avec Moodle et/ou  Gradescope dans une salle UCLouvain"
-
-msgid ""
-"written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain"
-msgstr "examens écrits avec TestWe et/ou Wiseflow dans une salle UCLouvain"
