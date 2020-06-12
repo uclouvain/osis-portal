@@ -252,6 +252,8 @@ function creditToString(creditReport) {
             return "Reporté";
         case "S":
             return "EPM";
+        case "SCOVID":
+            return "Retiré";
         case "P":
             return "Postposé";
         case "r":
