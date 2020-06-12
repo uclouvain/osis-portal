@@ -37,9 +37,6 @@ from base.forms.base_forms import RegistrationIdForm
 from base.models import student as mdl_student
 from base.views import layout, common
 from dashboard.views import main as dash_main_view
-from exam_enrollment.enums.covid_exam_choice import CovidExamChoice
-from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
-from osis_common.utils.models import get_object_or_none
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
 
@@ -80,7 +77,7 @@ def __make_not_authorized_message(stud_perf):
         return None
 
 
-def __get_performance_data(stud_perf, stud=None):
+def __get_performance_data(stud_perf):
     document = json.dumps(stud_perf.data) if stud_perf else None
     creation_date = stud_perf.creation_date if stud_perf else None
     update_date = stud_perf.update_date if stud_perf else None
@@ -89,13 +86,7 @@ def __get_performance_data(stud_perf, stud=None):
     courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
     learning_units_outside_catalog = stud_perf.learning_units_outside_catalog if stud_perf else None
     course_registration_message = stud_perf.course_registration_message if stud_perf else None
-    session_month = stud_perf.get_session_locked_display() if stud_perf else None
-    data = {}
-    if stud_perf and stud:
-        data = _get_exam_location_choices(stud, stud_perf)
-    testwe_exam = data.get('testwe_exam')
-    teams_exam = data.get('teams_exam')
-    moodle_exam = data.get('moodle_exam')
+
     return {
         "results": document,
         "creation_date": creation_date,
@@ -104,29 +95,8 @@ def __get_performance_data(stud_perf, stud=None):
         "not_authorized_message": not_authorized_message,
         "courses_registration_validated": courses_registration_validated,
         "learning_units_outside_catalog": learning_units_outside_catalog,
-        "course_registration_message": course_registration_message,
-        "session_month": session_month or '',
-        'testwe_exam': CovidExamChoice(testwe_exam).name if testwe_exam else '-',
-        'teams_exam': CovidExamChoice(teams_exam).name if teams_exam else '-',
-        'moodle_exam': CovidExamChoice(moodle_exam).name if moodle_exam else '-',
-        'covid_period': data.get('covid_period')
+        "course_registration_message": course_registration_message
     }
-
-
-def _get_exam_location_choices(stud, stud_perf):
-    data = {}
-    exam_enroll_request = get_object_or_none(
-        ExamEnrollmentRequest,
-        student=stud,
-        offer_year_acronym=stud_perf.acronym
-    )
-    if exam_enroll_request:
-        try:
-            data = json.loads(exam_enroll_request.document)
-        except json.JSONDecodeError:
-            logger.exception("Json data is not valid")
-            data = {}
-    return data
 
 
 @login_required
@@ -143,7 +113,7 @@ def display_result_for_specific_student_performance(request, pk):
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
 
-    perf_data = __get_performance_data(stud_perf, stud)
+    perf_data = __get_performance_data(stud_perf)
     return layout.render(request,
                          "performance_result_student.html",
                          perf_data)
@@ -172,7 +142,7 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
                                                                                           cleaned_acronym)
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
-    perf_data = __get_performance_data(stud_perf, stud)
+    perf_data = __get_performance_data(stud_perf)
 
     return layout.render(request,
                          "performance_result_student.html",
