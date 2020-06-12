@@ -64,78 +64,76 @@ from django.conf import settings
 
 LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
 
-if hasattr(settings, 'QUEUES') and settings.QUEUES:
-    from osis_common.queue import queue_listener as common_queue_listener, callbacks as common_callback
 
-    # migration queue used to migrate data between osis ans osis_portal
+def _listen_to_queue_with_callback(callback, queue_name):
+    from osis_common.queue import queue_listener
     try:
-        common_queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('MIGRATIONS_TO_CONSUME'),
-                                                        common_callback.process_message).start()
+        queue_listener.SynchronousConsumerThread(
+            settings.QUEUES.get('QUEUES_NAME').get(queue_name),
+            callback
+        ).start()
     except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
         LOGGER.exception("Couldn't connect to the QueueServer")
+
+
+if hasattr(settings, 'QUEUES') and settings.QUEUES:
+    from osis_common.queue import callbacks as common_callback
+
+    # migration queue used to migrate data between osis ans osis_portal
+    _listen_to_queue_with_callback(
+        callback=common_callback.process_message,
+        queue_name='MIGRATIONS_TO_CONSUME'
+    )
 
     # Queues used by performance app
     if 'performance' in settings.INSTALLED_APPS:
         # Thread in which is running the listening of the queue used to received student points
-        try:
-            common_queue_listener.SynchronousConsumerThread(settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE'),
-                                                            perf_callback).start()
-        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-            LOGGER.exception("Couldn't connect to the QueueServer")
+        _listen_to_queue_with_callback(
+            callback=perf_callback,
+            queue_name='PERFORMANCE'
+        )
 
         # Thread in wich is running the listening of the queue used to update the expiration date of the students points
-        try:
-            common_queue_listener.SynchronousConsumerThread(
-                settings.QUEUES.get('QUEUES_NAME').get('PERFORMANCE_UPDATE_EXP_DATE'),
-                update_exp_date_callback).start()
-        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-            LOGGER.exception("Couldn't connect to the QueueServer")
+        _listen_to_queue_with_callback(
+            callback=update_exp_date_callback,
+            queue_name='PERFORMANCE_UPDATE_EXP_DATE'
+        )
 
     # Thread in wich is running the listening of the queue used to receive the json of scores_sheets from osis
     if 'assessments' in settings.INSTALLED_APPS:
         from assessments.views.score_encoding import insert_or_update_document_from_queue
 
-        try:
-            common_queue_listener.SynchronousConsumerThread(
-                settings.QUEUES.get('QUEUES_NAME').get('SCORE_ENCODING_PDF_RESPONSE'),
-                insert_or_update_document_from_queue).start()
-        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-            LOGGER.exception("Couldn't connect to the QueueServer")
+        _listen_to_queue_with_callback(
+            callback=insert_or_update_document_from_queue,
+            queue_name='SCORE_ENCODING_PDF_RESPONSE'
+        )
 
     if 'exam_enrollment' in settings.INSTALLED_APPS:
         from exam_enrollment.views.exam_enrollment import insert_or_update_document_from_queue
 
-        try:
-            common_queue_listener.SynchronousConsumerThread(
-                settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_RESPONSE'),
-                insert_or_update_document_from_queue).start()
-        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-            LOGGER.exception("Couldn't connect to the QueueServer")
+        _listen_to_queue_with_callback(
+            callback=insert_or_update_document_from_queue,
+            queue_name='EXAM_ENROLLMENT_FORM_RESPONSE'
+        )
 
     if 'attribution' in settings.INSTALLED_APPS:
         from attribution.business.attribution_json import insert_or_update_document_from_queue
 
-        try:
-            common_queue_listener.SynchronousConsumerThread(
-                settings.QUEUES.get('QUEUES_NAME').get('ATTRIBUTION_RESPONSE'),
-                insert_or_update_document_from_queue).start()
-        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-            LOGGER.exception("Couldn't connect to the QueueServer")
+        _listen_to_queue_with_callback(
+            callback=insert_or_update_document_from_queue,
+            queue_name='ATTRIBUTION_RESPONSE'
+        )
 
         from attribution.utils.tutor_application_epc import process_message
 
-        try:
-            common_queue_listener.SynchronousConsumerThread(
-                settings.QUEUES.get('QUEUES_NAME').get('APPLICATION_RESPONSE'),
-                process_message).start()
-        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-            LOGGER.exception("Couldn't connect to the QueueServer")
+        _listen_to_queue_with_callback(
+            callback=process_message,
+            queue_name='APPLICATION_RESPONSE'
+        )
 
         from attribution.utils.tutor_application_osis import process_message
 
-        try:
-            common_queue_listener.SynchronousConsumerThread(
-                settings.QUEUES.get('QUEUES_NAME').get('APPLICATION_OSIS_PORTAL'),
-                process_message).start()
-        except (ConnectionClosed, ChannelClosed, AMQPConnectionError, ConnectionError) as e:
-            LOGGER.exception("Couldn't connect to the QueueServer")
+        _listen_to_queue_with_callback(
+            callback=process_message,
+            queue_name='APPLICATION_OSIS_PORTAL'
+        )
