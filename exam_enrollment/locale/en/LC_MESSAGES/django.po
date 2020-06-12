@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:57+0200\n"
+"POT-Creation-Date: 2020-06-10 15:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,10 +28,40 @@ msgstr ""
 msgid "Credited"
 msgstr ""
 
+msgid "Exam enrollment is not available"
+msgstr ""
+
 msgid "First name"
 msgstr ""
 
+msgid ""
+"For the <u><b>distance</b></u> exams, in view of the difficulties to find "
+"myself in good conditions to take my exams from my place of living,"
+msgstr ""
+
+msgid "I will present one or more oral exams in an equipped room at UCLouvain"
+msgstr ""
+
+msgid ""
+"I will present one or more written exams with the Moodle and/or Gradescope "
+"tools, in an equipped room at UCLouvain"
+msgstr ""
+
+msgid ""
+"I will present one or more written exams with the TestWe and/or Wiseflow "
+"tools, in an equipped room at UCLouvain"
+msgstr ""
+
 msgid "Last name"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "No exam enrollment found"
+msgstr ""
+
+msgid "Not concerned"
 msgstr ""
 
 msgid "Register to exams or update my exam enrollments"
@@ -40,7 +70,13 @@ msgstr ""
 msgid "Which action do you want to perform ?"
 msgstr ""
 
+msgid "Yes"
+msgstr ""
+
 msgid "You are outside the exams enrollment period"
+msgstr ""
+
+msgid "You can not enrol to exam"
 msgstr ""
 
 msgid "acronym"

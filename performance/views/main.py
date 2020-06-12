@@ -25,7 +25,9 @@
 #
 ############################################################################
 import json
+import logging
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
 from django.shortcuts import redirect
@@ -37,6 +39,8 @@ from base.views import layout, common
 from dashboard.views import main as dash_main_view
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 # Students Views
@@ -54,6 +58,7 @@ def view_performance_home(request):
     list_student_programs = None
     if stud:
         list_student_programs = __get_student_programs(stud)
+
     data = {
         "student": stud,
         "programs": list_student_programs,
