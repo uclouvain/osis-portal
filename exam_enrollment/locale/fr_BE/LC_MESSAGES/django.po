@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:57+0200\n"
+"POT-Creation-Date: 2020-06-10 15:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,11 +28,50 @@ msgstr "Consulter l'ensemble de mes états d'inscriptions aux examens"
 msgid "Credited"
 msgstr "Crédité"
 
+msgid "Exam enrollment is not available"
+msgstr "Le formulaire d'inscription aux examens n'est pas disponible"
+
 msgid "First name"
 msgstr "Prénom"
 
+msgid ""
+"For the <u><b>distance</b></u> exams, in view of the difficulties to find "
+"myself in good conditions to take my exams from my place of living,"
+msgstr ""
+"Pour les examens <u><b>distanciels</b></u>, au vu des difficultés "
+"rencontrées pour me trouver dans de bonnes conditions pour présenter mes "
+"examens au départ de mon lieu de vie,"
+
+msgid "I will present one or more oral exams in an equipped room at UCLouvain"
+msgstr ""
+"je présenterai un ou plusieurs examens oraux avec Teams dans une salle "
+"aménagée de l'UCLouvain"
+
+msgid ""
+"I will present one or more written exams with the Moodle and/or Gradescope "
+"tools, in an equipped room at UCLouvain"
+msgstr ""
+"je présenterai un ou plusieurs examens écrits avec Moodle et/ou  Gradescope "
+"dans une salle aménagée de l'UCLouvain"
+
+msgid ""
+"I will present one or more written exams with the TestWe and/or Wiseflow "
+"tools, in an equipped room at UCLouvain"
+msgstr ""
+"je présenterai un ou plusieurs examens écrits avec TestWe et/ou Wiseflow "
+"dans une salle aménagée de l'UCLouvain"
+
 msgid "Last name"
 msgstr "Nom"
+
+msgid "No"
+msgstr ""
+
+msgid "No exam enrollment found"
+msgstr "Formulaire d'inscription aux examens non trouvé"
+
+msgid "Not concerned"
+msgstr "Non concerné"
 
 msgid "Register to exams or update my exam enrollments"
 msgstr "M'inscrire aux examens ou modifier mon inscription aux examens"
@@ -40,8 +79,14 @@ msgstr "M'inscrire aux examens ou modifier mon inscription aux examens"
 msgid "Which action do you want to perform ?"
 msgstr "Quelle action souhaitez-vous effectuer ?"
 
+msgid "Yes"
+msgstr ""
+
 msgid "You are outside the exams enrollment period"
 msgstr "Vous êtes en dehors de la période d'inscription aux examens"
+
+msgid "You can not enrol to exam"
+msgstr "Vous ne pouvez pas vous inscrire aux examens"
 
 msgid "acronym"
 msgstr "Sigle"
