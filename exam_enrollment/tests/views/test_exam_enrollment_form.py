@@ -41,6 +41,7 @@ from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, \
     test_learning_unit_enrollment, test_learning_unit_year
 from base.utils import queue_utils
+from exam_enrollment.enums.covid_exam_choice import CovidExamChoice
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
 from exam_enrollment.views import exam_enrollment
@@ -327,9 +328,9 @@ class ExamEnrollmentFormTest(TestCase):
                 "chckbox_exam_enrol_sess1_LDROI1111": "None",
                 "etat_to_inscr_current_session_LDROI1111": "None",
                 "current_number_session": 1,
-                "testwe_exam": 'PAS_SUR_SITE',
-                "teams_exam": 'SUR_SITE',
-                'moodle_exam': 'NON_CONCERNE'
+                "testwe_exam": CovidExamChoice.PAS_SUR_SITE,
+                "teams_exam": CovidExamChoice.SUR_SITE,
+                'moodle_exam': CovidExamChoice.NON_CONCERNE
             }
             response = self.client.post(self.url, post_data)
             result = exam_enrollment._exam_enrollment_form_submission_message(self.off_year,
@@ -349,9 +350,9 @@ class ExamEnrollmentFormTest(TestCase):
             "offer_year_acronym": self.off_year.acronym,
             "year": self.off_year.academic_year.year,
             "exam_enrollments": [exam_enrollment_expected],
-            "testwe_exam": 'PAS_SUR_SITE',
-            "teams_exam": 'SUR_SITE',
-            'moodle_exam': 'NON_CONCERNE'
+            "testwe_exam": CovidExamChoice.PAS_SUR_SITE,
+            "teams_exam": CovidExamChoice.SUR_SITE,
+            'moodle_exam': CovidExamChoice.NON_CONCERNE
         }
         self.assertEqual(len(result), len(expected_result))
         self.assertEqual(expected_result.get('registration_id'), result.get('registration_id'))

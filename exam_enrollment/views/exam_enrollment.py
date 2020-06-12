@@ -52,11 +52,6 @@ from osis_common.queue import queue_sender
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
-covid_exam_choices = {
-    'SUR_SITE': _('Yes'),
-    'PAS_SUR_SITE': _('No'),
-    'NON_CONCERNE': _('Not concerned')
-}
 
 
 @login_required
@@ -142,9 +137,9 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'academic_year': mdl_base.academic_year.current_academic_year(),
                                  'program': mdl_base.offer_year.find_by_id(off_year.id),
                                  'request_timeout': request_timeout,
-                                 'testwe_exam': covid_exam_choices.get(data.get('testwe_exam')),
-                                 'teams_exam': covid_exam_choices.get(data.get('teams_exam')),
-                                 'moodle_exam': covid_exam_choices.get(data.get('moodle_exam')),
+                                 'testwe_exam': data.get('testwe_exam'),
+                                 'teams_exam': data.get('teams_exam'),
+                                 'moodle_exam': data.get('moodle_exam'),
                                  'covid_period': data.get('covid_period')
                              })
     else:
