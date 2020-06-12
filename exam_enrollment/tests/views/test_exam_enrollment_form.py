@@ -41,6 +41,7 @@ from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.models import test_student, test_person, test_academic_year, test_offer_year, \
     test_learning_unit_enrollment, test_learning_unit_year
 from base.utils import queue_utils
+from exam_enrollment.enums.covid_exam_choice import CovidExamChoice
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
 from exam_enrollment.views import exam_enrollment
@@ -227,6 +228,28 @@ class ExamEnrollmentFormTest(TestCase):
 
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
+    def test_case_exam_enrollment_form_not_available(self,
+                                                     mock_get_exam_enrollment_request,
+                                                     mock_find_learn_unit_enrols):
+        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+        mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
+            document='{"error_message": "no_exam_enrollment_avalaible",'
+                     '"registration_id":" 12345678",'
+                     '"current_number_session": null,'
+                     '"legende": null,'
+                     '"offer_year_acronym": "DROI1BA",'
+                     '"exam_enrollments": null}'
+        )
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        error_message = response.context.get("error_message")
+        self.assertEqual(
+            error_message,
+            _("Exam enrollment is not available")
+        )
+
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
     def test_case_exam_enrollment_form_no_learning_unit_enrollment_found(
             self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
         mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
@@ -305,8 +328,9 @@ class ExamEnrollmentFormTest(TestCase):
                 "chckbox_exam_enrol_sess1_LDROI1111": "None",
                 "etat_to_inscr_current_session_LDROI1111": "None",
                 "current_number_session": 1,
-                "written_exam_on_site": False,
-                "oral_exam_on_site": True
+                "testwe_exam": CovidExamChoice.PAS_SUR_SITE,
+                "teams_exam": CovidExamChoice.SUR_SITE,
+                'moodle_exam': CovidExamChoice.NON_CONCERNE
             }
             response = self.client.post(self.url, post_data)
             result = exam_enrollment._exam_enrollment_form_submission_message(self.off_year,
@@ -326,8 +350,9 @@ class ExamEnrollmentFormTest(TestCase):
             "offer_year_acronym": self.off_year.acronym,
             "year": self.off_year.academic_year.year,
             "exam_enrollments": [exam_enrollment_expected],
-            "written_exam_on_site": False,
-            "oral_exam_on_site": True
+            "testwe_exam": CovidExamChoice.PAS_SUR_SITE,
+            "teams_exam": CovidExamChoice.SUR_SITE,
+            'moodle_exam': CovidExamChoice.NON_CONCERNE
         }
         self.assertEqual(len(result), len(expected_result))
         self.assertEqual(expected_result.get('registration_id'), result.get('registration_id'))

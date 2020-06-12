@@ -120,6 +120,7 @@ def _get_exam_enrollment_form(off_year, request, stud):
     fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
     exam_enroll_request = exam_enrollment_request. \
         get_by_student_and_offer_year_acronym_and_fetch_date(stud, off_year.acronym, fetch_date_limit)
+
     if exam_enroll_request:
         try:
             data = json.loads(exam_enroll_request.document)
@@ -136,8 +137,10 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'academic_year': mdl_base.academic_year.current_academic_year(),
                                  'program': mdl_base.offer_year.find_by_id(off_year.id),
                                  'request_timeout': request_timeout,
-                                 'written_exam_on_site': data.get('written_exam_on_site'),
-                                 'oral_exam_on_site': data.get('oral_exam_on_site')
+                                 'testwe_exam': data.get('testwe_exam'),
+                                 'teams_exam': data.get('teams_exam'),
+                                 'moodle_exam': data.get('moodle_exam'),
+                                 'covid_period': data.get('covid_period')
                              })
     else:
         ask_exam_enrollment_form(stud, off_year)
@@ -148,13 +151,19 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'current_number_session': "",
                                  'academic_year': mdl_base.academic_year.current_academic_year(),
                                  'program': mdl_base.offer_year.find_by_id(off_year.id),
-                                 'request_timeout': request_timeout
+                                 'request_timeout': request_timeout,
                              })
 
 
 def _get_error_message(data, off_year):
     if data.get('error_message') == 'outside_exam_enrollment_period':
         error_message = _("You are outside the exams enrollment period")
+    elif data.get('error_message') == 'student_can_not_enrol_to_exam':
+        error_message = _("You can not enrol to exam")
+    elif data.get('error_message') == 'no_exam_enrollment_found':
+        error_message = _("No exam enrollment found")
+    elif data.get('error_message') == 'no_exam_enrollment_avalaible':
+        error_message = _("Exam enrollment is not available")
     elif data.get('error_message'):
         error_message = _(data.get('error_message')).format(off_year.acronym)
     else:
@@ -254,8 +263,9 @@ def _exam_enrollment_form_submission_message(off_year, request, stud):
         'offer_year_acronym': off_year.acronym,
         'year': off_year.academic_year.year,
         'exam_enrollments': _build_enrollments_by_learning_unit(request),
-        'written_exam_on_site': request.POST.get('written_exam_on_site'),
-        'oral_exam_on_site': request.POST.get('oral_exam_on_site')
+        'testwe_exam': request.POST.get('testwe_exam'),
+        'teams_exam': request.POST.get('teams_exam'),
+        'moodle_exam': request.POST.get('moodle_exam')
     }
 
 
