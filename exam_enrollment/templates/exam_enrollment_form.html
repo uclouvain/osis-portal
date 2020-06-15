@@ -97,6 +97,9 @@
                                         <input type="radio" name="testwe_exam"
                                                id="testwe_exam_yes_id" value="SUR_SITE"
                                                 {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
+                                                {% if  testwe_exam is not None and testwe_exam != '' %}
+                                               disabled
+                                                {% endif %}
                                                required>{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
@@ -104,7 +107,11 @@
                                                name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if  testwe_exam == 'PAS_SUR_SITE' %}
                                                checked
-                                                {% endif %}>{% trans 'No' %}
+                                                {% endif %}
+                                                {% if  testwe_exam is not None and testwe_exam != '' %}
+                                               disabled
+                                                {% endif %}
+                                        >{% trans 'No' %}
                                     </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input" type="radio"
@@ -112,7 +119,11 @@
                                                value="NON_CONCERNE"
                                                 {% if  testwe_exam == 'NON_CONCERNE' %}
                                                checked
-                                                {% endif %}>{% trans 'Not concerned' %}
+                                                {% endif %}
+                                                {% if  testwe_exam is not None and testwe_exam != '' %}
+                                               disabled
+                                                {% endif %}
+                                        >{% trans 'Not concerned' %}
                                     </label>
                                 </p>
                             </div>
@@ -124,20 +135,31 @@
                                         <input class="form-check-input" type="radio"
                                                name="moodle_exam" id="moodle_exam_yes_id" value="SUR_SITE"
                                                 {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
+                                                {% if  moodle_exam is not None and moodle_exam != '' %}
+                                               disabled
+                                                {% endif %}
                                                required>{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input" type="radio"
                                                name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if moodle_exam == 'PAS_SUR_SITE' %}
-                                               checked {% endif %} >{% trans 'No' %}
+                                               checked {% endif %}
+                                                {% if  moodle_exam is not None and moodle_exam != '' %}
+                                               disabled
+                                                {% endif %}
+                                        >{% trans 'No' %}
                                     </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input" type="radio"
                                                name="moodle_exam" id="moodle_exam_not_concerned_id"
                                                value="NON_CONCERNE"
                                                 {% if moodle_exam == 'NON_CONCERNE' %}
-                                               checked {% endif %} >{% trans 'Not concerned' %}
+                                               checked {% endif %}
+                                                {% if  moodle_exam is not None and moodle_exam != '' %}
+                                               disabled
+                                                {% endif %}
+                                        >{% trans 'Not concerned' %}
                                     </label>
                                 </p>
                             </div>
@@ -149,20 +171,31 @@
                                         <input class="form-check-input" type="radio"
                                                name="teams_exam" id="teams_exam_yes_id" value="SUR_SITE"
                                                 {% if teams_exam == 'SUR_SITE' %} checked {% endif %}
+                                                {% if  teams_exam is not None and teams_exam != '' %}
+                                               disabled
+                                                {% endif %}
                                                required>{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input" type="radio"
                                                name="teams_exam" id="teams_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if teams_exam == 'PAS_SUR_SITE' %}
-                                               checked {% endif %} >{% trans 'No' %}
+                                               checked {% endif %}
+                                                {% if  teams_exam is not None and teams_exam != '' %}
+                                               disabled
+                                                {% endif %}
+                                        >{% trans 'No' %}
                                     </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input" type="radio"
                                                name="teams_exam" id="teams_exam_not_concerned_id"
                                                value="NON_CONCERNE"
                                                 {% if teams_exam == 'NON_CONCERNE' %}
-                                               checked {% endif %} >{% trans 'Not concerned' %}
+                                               checked {% endif %}
+                                                {% if  teams_exam is not None and teams_exam != '' %}
+                                               disabled
+                                                {% endif %}
+                                        >{% trans 'Not concerned' %}
                                     </label>
                                 </p>
                             </div>
@@ -387,16 +420,6 @@
                     }
                 }
             });
-        }
-
-        var exam_location_set = '{{moodle_exam}}' !== 'None' & '{{moodle_exam}}' !== '';
-        if (exam_location_set === true) {
-            $('#teams_exam_no_id').prop('disabled', true);
-            $('#teams_exam_yes_id').prop('disabled', true)
-            $('#moodle_exam_no_id').prop('disabled', true)
-            $('#moodle_exam_yes_id').prop('disabled', true)
-            $('#testwe_exam_no_id').prop('disabled', true)
-            $('#testwe_exam_yes_id').prop('disabled', true)
         }
     </script>
 {% endblock %}
