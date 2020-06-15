@@ -87,7 +87,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
                     {% if covid_period %}
-                        <div class="alert alert-warning">
+                        <div id="covid_form_div" class="alert alert-warning">
                             <h4>{% trans 'For the <u><b>distance</b></u> exams, in view of the difficulties to find myself in good conditions to take my exams from my place of living,' %}</h4>
                             <div class="checkbox">
                                 {% trans 'I will present one or more written exams with the TestWe and/or Wiseflow tools, in an equipped room at UCLouvain' %}
@@ -100,7 +100,7 @@
                                                 {% if  testwe_exam is not None and testwe_exam != '' %}
                                                disabled
                                                 {% endif %}
-                                               required>{% trans 'Yes' %}
+                                               >{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input" type="radio"
@@ -138,7 +138,7 @@
                                                 {% if  moodle_exam is not None and moodle_exam != '' %}
                                                disabled
                                                 {% endif %}
-                                               required>{% trans 'Yes' %}
+                                               >{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input" type="radio"
@@ -174,7 +174,7 @@
                                                 {% if  teams_exam is not None and teams_exam != '' %}
                                                disabled
                                                 {% endif %}
-                                               required>{% trans 'Yes' %}
+                                               >{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input" type="radio"
@@ -421,5 +421,26 @@
                 }
             });
         }
+
+        $('#exam_enrollment_form').on('submit', function (e) {
+            let testweChoiceMade = document.getElementById("testwe_exam_yes_id").checked ||
+                document.getElementById("testwe_exam_no_id").checked ||
+                document.getElementById("testwe_exam_not_concerned_id").checked;
+            let moodleChoiceMade = document.getElementById("moodle_exam_yes_id").checked ||
+                document.getElementById("moodle_exam_no_id").checked ||
+                document.getElementById("moodle_exam_not_concerned_id").checked;
+            let teamsChoiceMade = document.getElementById("teams_exam_yes_id").checked ||
+                document.getElementById("teams_exam_no_id").checked ||
+                document.getElementById("teams_exam_not_concerned_id").checked;
+            let allChoicesMade = testweChoiceMade && moodleChoiceMade && teamsChoiceMade;
+            if (allChoicesMade !== true){
+                e.preventDefault();
+                document.getElementById("covid_form_div").classList.remove('alert-warning');
+                document.getElementById("covid_form_div").classList.add('alert-danger');
+                window.scrollTo(0, 0);
+            }
+
+        });
+
     </script>
 {% endblock %}
