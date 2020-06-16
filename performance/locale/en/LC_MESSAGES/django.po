@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-07 21:59+0200\n"
+"POT-Creation-Date: 2020-06-12 16:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid ", I will present one or more"
+msgstr ""
 
 msgid ""
 "A problem was detected with your registration : 2 registration id's are "
@@ -61,6 +64,9 @@ msgstr ""
 msgid "ECTS"
 msgstr ""
 
+msgid "Error"
+msgstr ""
+
 msgid "Exam marks and registration state administration"
 msgstr ""
 
@@ -70,20 +76,16 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
+msgid "For the "
+msgstr ""
+
 msgid "General mean"
 msgstr ""
 
 msgid "Generated on"
 msgstr ""
 
-msgid "I will pass my oral exams ons site"
-msgstr ""
-
-msgid "I will pass my written exams on site"
-msgstr ""
-
-msgid ""
-"If the current informations are not correct, please contact your faculty"
+msgid "If this information is not correct, please contact your faculty"
 msgstr ""
 
 msgid "Inscr."
@@ -117,6 +119,9 @@ msgid "No"
 msgstr ""
 
 msgid "No results to show."
+msgstr ""
+
+msgid "Not concerned"
 msgstr ""
 
 msgid "Not defined"
@@ -189,7 +194,21 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+msgid "distance exams"
+msgstr ""
+
+msgid "oral exams with Teams, in a room at UCLouvain"
+msgstr ""
+
 msgid "performance"
+msgstr ""
+
+msgid ""
+"written exams with the Moodle and/or Gradescope tools, in a room at UCLouvain"
+msgstr ""
+
+msgid ""
+"written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain"
 msgstr ""
 
 #~ msgid "Your courses registration is being processed"
