@@ -67,7 +67,7 @@ msgstr ""
 msgid "Not concerned"
 msgstr ""
 
-msgid "Please complete MANDATORYLY the questionnaire below"
+msgid "Please complete IMPERATIVELY the questionnaire below"
 msgstr ""
 
 msgid "Register to exams or update my exam enrollments"
