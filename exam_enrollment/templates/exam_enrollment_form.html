@@ -88,6 +88,8 @@
                     <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
                     {% if covid_period %}
                         <div id="covid_form_div" class="alert alert-warning">
+                            <h3><b>{% trans 'Please complete MANDATORY the questionnaire below' %}</b></h3>
+                            <br>
                             <h4>{% trans 'For the <u><b>distance</b></u> exams, in view of the difficulties to find myself in good conditions to take my exams from my place of living,' %}</h4>
                             <div class="checkbox">
                                 {% trans 'I will present one or more written exams with the TestWe and/or Wiseflow tools, in an equipped room at UCLouvain' %}
@@ -114,7 +116,7 @@
                                                 {% if  testwe_exam == 'NON_CONCERNE' %}
                                                checked
                                                 {% endif %}
-                                        >{% trans 'Not concerned' %}
+                                        >{% trans 'Not concerned' %} *
                                     </label>
                                 </p>
                             </div>
@@ -141,7 +143,7 @@
                                                value="NON_CONCERNE"
                                                 {% if moodle_exam == 'NON_CONCERNE' %}
                                                checked {% endif %}
-                                        >{% trans 'Not concerned' %}
+                                        >{% trans 'Not concerned' %} *
                                     </label>
                                 </p>
                             </div>
@@ -168,9 +170,12 @@
                                                value="NON_CONCERNE"
                                                 {% if teams_exam == 'NON_CONCERNE' %}
                                                checked {% endif %}
-                                        >{% trans 'Not concerned' %}
+                                        >{% trans 'Not concerned' %} *
                                     </label>
                                 </p>
+                            </div>
+                            <div style="margin-top: 2em;">
+                                * {% trans 'If you have no exam of this type, please tick "Not concerned".' %}
                             </div>
                         </div>
                     {% endif %}
