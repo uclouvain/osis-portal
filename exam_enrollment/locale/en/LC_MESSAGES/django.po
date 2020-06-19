@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 15:23+0200\n"
+"POT-Creation-Date: 2020-06-19 11:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,9 @@ msgid ""
 "tools, in an equipped room at UCLouvain"
 msgstr ""
 
+msgid "If you have no exam of this type, please tick \"Not concerned\"."
+msgstr ""
+
 msgid "Last name"
 msgstr ""
 
@@ -62,6 +65,9 @@ msgid "No exam enrollment found"
 msgstr ""
 
 msgid "Not concerned"
+msgstr ""
+
+msgid "Please complete MANDATORYLY the questionnaire below"
 msgstr ""
 
 msgid "Register to exams or update my exam enrollments"
