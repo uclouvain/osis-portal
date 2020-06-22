@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 11:52+0200\n"
+"POT-Creation-Date: 2020-06-22 14:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,9 @@ msgid ""
 "myself in good conditions to take my exams from my place of living,"
 msgstr ""
 
+msgid "Form not submitted !"
+msgstr ""
+
 msgid "I will present one or more oral exams in an equipped room at UCLouvain"
 msgstr ""
 
@@ -65,6 +68,9 @@ msgid "No exam enrollment found"
 msgstr ""
 
 msgid "Not concerned"
+msgstr ""
+
+msgid "Please complete <b>IMPERATIVELY</b> the questionnaire."
 msgstr ""
 
 msgid "Please complete IMPERATIVELY the questionnaire below"

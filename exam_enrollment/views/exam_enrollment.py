@@ -247,6 +247,14 @@ def _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
 
 
 def _process_exam_enrollment_form_submission(off_year, request, stud):
+    # Lines before data_to_submit = ... are temporary (covid-19)
+    covid_choices = ['testwe_exam', 'moodle_exam', 'teams_exam']
+    all_covid_choices_made = all(request.POST.get(choice, None) for choice in covid_choices)
+    if request.POST.get('covid_period', None) and not all_covid_choices_made:
+        messages.add_message(request, messages.ERROR, _('Form not submitted !'))
+        messages.add_message(request, messages.ERROR, _('Please complete IMPERATIVELY the questionnaire below'))
+        return _get_exam_enrollment_form(off_year, request, stud)
+
     data_to_submit = _exam_enrollment_form_submission_message(off_year, request, stud)
     json_data = json.dumps(data_to_submit)
     offer_enrol = offer_enrollment.get_by_student_offer(stud, off_year)
