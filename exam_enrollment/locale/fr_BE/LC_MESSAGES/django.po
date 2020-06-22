@@ -66,7 +66,7 @@ msgstr ""
 
 msgid "If you have no exam of this type, please tick \"Not concerned\"."
 msgstr ""
-"Si vous n'avez aucun examen de ce type,  merci de cocher \"Pas concerné\"."
+"Si vous n'avez aucun examen de ce type,  merci de cocher \"Non concerné\"."
 
 msgid "Last name"
 msgstr "Nom"
