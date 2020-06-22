@@ -96,13 +96,13 @@
                                 :<br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
-                                        <input type="radio" name="testwe_exam"
+                                        <input class="form-check-input choices" type="radio" name="testwe_exam"
                                                id="testwe_exam_yes_id" value="SUR_SITE"
                                                 {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
                                                >{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="form-check-input" type="radio"
+                                        <input class="form-check-input choices" type="radio"
                                                name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if  testwe_exam == 'PAS_SUR_SITE' %}
                                                checked
@@ -110,7 +110,7 @@
                                         >{% trans 'No' %}
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="form-check-input" type="radio"
+                                        <input class="form-check-input choices" type="radio"
                                                name="testwe_exam" id="testwe_exam_not_concerned_id"
                                                value="NON_CONCERNE"
                                                 {% if  testwe_exam == 'NON_CONCERNE' %}
@@ -125,20 +125,20 @@
                                 :<br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
-                                        <input class="form-check-input" type="radio"
+                                        <input class="form-check-input choices" type="radio"
                                                name="moodle_exam" id="moodle_exam_yes_id" value="SUR_SITE"
                                                 {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
                                                >{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="form-check-input" type="radio"
+                                        <input class="form-check-input choices" type="radio"
                                                name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if moodle_exam == 'PAS_SUR_SITE' %}
                                                checked {% endif %}
                                         >{% trans 'No' %}
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="form-check-input" type="radio"
+                                        <input class="form-check-input choices" type="radio"
                                                name="moodle_exam" id="moodle_exam_not_concerned_id"
                                                value="NON_CONCERNE"
                                                 {% if moodle_exam == 'NON_CONCERNE' %}
@@ -152,20 +152,20 @@
                                 <br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
-                                        <input class="form-check-input" type="radio"
+                                        <input class="form-check-input choices" type="radio"
                                                name="teams_exam" id="teams_exam_yes_id" value="SUR_SITE"
                                                 {% if teams_exam == 'SUR_SITE' %} checked {% endif %}
                                                >{% trans 'Yes' %}
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="form-check-input" type="radio"
+                                        <input class="form-check-input choices" type="radio"
                                                name="teams_exam" id="teams_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if teams_exam == 'PAS_SUR_SITE' %}
                                                checked {% endif %}
                                         >{% trans 'No' %}
                                     </label>
                                     <label class="radio-inline">
-                                        <input class="form-check-input" type="radio"
+                                        <input class="form-check-input choices" type="radio"
                                                name="teams_exam" id="teams_exam_not_concerned_id"
                                                value="NON_CONCERNE"
                                                 {% if teams_exam == 'NON_CONCERNE' %}
@@ -299,7 +299,8 @@
                     </div>
 
                     <div class="text-center">
-                        <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit">
+                        <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit" disabled
+                        data-toggle="tooltip" data-html="true" title="{% trans 'Please complete <b>IMPERATIVELY</b> the questionnaire.' %}">
                             <span class="glyphicon glyphicon-floppy-save"
                                   aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
                     </div>
@@ -399,18 +400,27 @@
                 }
             });
         }
-
-        $('#exam_enrollment_form').on('submit', function (e) {
-            let testweChoiceMade = document.getElementById("testwe_exam_yes_id").checked ||
+        function checkTestweChoiceMade(){
+            return document.getElementById("testwe_exam_yes_id").checked ||
                 document.getElementById("testwe_exam_no_id").checked ||
                 document.getElementById("testwe_exam_not_concerned_id").checked;
-            let moodleChoiceMade = document.getElementById("moodle_exam_yes_id").checked ||
+        }
+
+        function checkMoodleChoiceMade(){
+            return document.getElementById("moodle_exam_yes_id").checked ||
                 document.getElementById("moodle_exam_no_id").checked ||
                 document.getElementById("moodle_exam_not_concerned_id").checked;
-            let teamsChoiceMade = document.getElementById("teams_exam_yes_id").checked ||
+        }
+
+        function checkTeamsChoiceMade(){
+            return document.getElementById("teams_exam_yes_id").checked ||
                 document.getElementById("teams_exam_no_id").checked ||
                 document.getElementById("teams_exam_not_concerned_id").checked;
-            let allChoicesMade = testweChoiceMade && moodleChoiceMade && teamsChoiceMade;
+        }
+
+
+        $('#exam_enrollment_form').on('submit', function (e) {
+            let allChoicesMade = checkTestweChoiceMade() && checkMoodleChoiceMade() && checkTeamsChoiceMade();
             if (allChoicesMade !== true){
                 e.preventDefault();
                 document.getElementById("covid_form_div").classList.remove('alert-warning');
@@ -419,6 +429,25 @@
             }
 
         });
+
+        function enableValidateButtonIfAllChoicesMade(){
+            let allChoicesMade = checkTestweChoiceMade() && checkMoodleChoiceMade() && checkTeamsChoiceMade();
+            let validateButton = $('#bt_validate_exam_enrol_form');
+            if(allChoicesMade){
+                validateButton.attr("data-original-title", "");
+                validateButton.prop('disabled', false);
+            }
+        }
+
+        $( ".choices" ).change(function(e) {
+            enableValidateButtonIfAllChoicesMade();
+        });
+
+        window.onload = function() {
+          enableValidateButtonIfAllChoicesMade();
+        };
+
+
 
     </script>
 {% endblock %}
