@@ -132,7 +132,7 @@ msgid "No results to show."
 msgstr "Vous n'avez aucune note."
 
 msgid "Not concerned"
-msgstr "Pas concerné"
+msgstr "Non concerné"
 
 msgid "Not defined"
 msgstr "Non défini"
