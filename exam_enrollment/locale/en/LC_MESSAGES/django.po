@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-23 14:12+0200\n"
+"POT-Creation-Date: 2020-06-23 14:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,13 +45,13 @@ msgstr ""
 msgid "I have no exam of this type"
 msgstr ""
 
-msgid "I will present my  written exams with the TestWe and/or Wiseflow tools"
-msgstr ""
-
 msgid "I will present my oral exams with Teams"
 msgstr ""
 
 msgid "I will present my written exams with the Moodle and/or Gradescope tools"
+msgstr ""
+
+msgid "I will present my written exams with the TestWe and/or Wiseflow tools"
 msgstr ""
 
 msgid "Last name"
