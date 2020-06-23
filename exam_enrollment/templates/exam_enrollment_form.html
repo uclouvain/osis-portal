@@ -94,25 +94,27 @@
                         <div id="covid_form_div" class="alert alert-warning">
                             <h3><b>{% trans 'Please complete IMPERATIVELY the questionnaire below' %}</b></h3>
                             <br>
-                            <h4>{% trans 'For the <u><b>distance</b></u> exams, in view of the difficulties to find myself in good conditions to take my exams from my place of living,' %}</h4>
+                            <h4>{% trans 'For the <b><u>distance</u></b> exams, in view of the difficulties or not to find myself in good conditions to take my exams from my place of living,' %}</h4>
                             <div class="checkbox">
-                                {% trans 'I will present one or more written exams with the TestWe and/or Wiseflow tools, in an equipped room at UCLouvain' %}
+                                {% trans 'I will present my  written exams with the TestWe and/or Wiseflow tools' %}
                                 :<br>
                                 <p style="margin-left:30px;">
-                                    <label class="radio-inline">
-                                        <input class="form-check-input choices" type="radio" name="testwe_exam"
-                                               id="testwe_exam_yes_id" value="SUR_SITE"
-                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
-                                               >{% trans 'Yes' %}
-                                    </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
                                                name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if  testwe_exam == 'PAS_SUR_SITE' %}
                                                checked
                                                 {% endif %}
-                                        >{% trans 'No' %}
+                                        >{% trans 'from my place of living' %}
                                     </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio" name="testwe_exam"
+                                               id="testwe_exam_yes_id" value="SUR_SITE"
+                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
                                                name="testwe_exam" id="testwe_exam_not_concerned_id"
@@ -120,66 +122,67 @@
                                                 {% if  testwe_exam == 'NON_CONCERNE' %}
                                                checked
                                                 {% endif %}
-                                        >{% trans 'Not concerned' %} *
+                                        >{% trans 'I have no exam of this type' %}
                                     </label>
                                 </p>
                             </div>
                             <div class="checkbox">
-                                {% trans 'I will present one or more written exams with the Moodle and/or Gradescope tools, in an equipped room at UCLouvain' %}
+                                {% trans 'I will present my written exams with the Moodle and/or Gradescope tools' %}
                                 :<br>
                                 <p style="margin-left:30px;">
-                                    <label class="radio-inline">
-                                        <input class="form-check-input choices" type="radio"
-                                               name="moodle_exam" id="moodle_exam_yes_id" value="SUR_SITE"
-                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
-                                               >{% trans 'Yes' %}
-                                    </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
                                                name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if moodle_exam == 'PAS_SUR_SITE' %}
                                                checked {% endif %}
-                                        >{% trans 'No' %}
+                                        >{% trans 'from my place of living' %}
                                     </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="moodle_exam" id="moodle_exam_yes_id" value="SUR_SITE"
+                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
                                                name="moodle_exam" id="moodle_exam_not_concerned_id"
                                                value="NON_CONCERNE"
                                                 {% if moodle_exam == 'NON_CONCERNE' %}
                                                checked {% endif %}
-                                        >{% trans 'Not concerned' %} *
+                                        >{% trans 'I have no exam of this type' %}
                                     </label>
                                 </p>
                             </div>
                             <div class="checkbox" id="teams_exam_checkbox">
-                                {% trans 'I will present one or more oral exams in an equipped room at UCLouvain' %} :
+                                {% trans 'I will present my oral exams with Teams' %} :
                                 <br>
                                 <p style="margin-left:30px;">
-                                    <label class="radio-inline">
-                                        <input class="form-check-input choices" type="radio"
-                                               name="teams_exam" id="teams_exam_yes_id" value="SUR_SITE"
-                                                {% if teams_exam == 'SUR_SITE' %} checked {% endif %}
-                                               >{% trans 'Yes' %}
-                                    </label>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
                                                name="teams_exam" id="teams_exam_no_id" value="PAS_SUR_SITE"
                                                 {% if teams_exam == 'PAS_SUR_SITE' %}
                                                checked {% endif %}
-                                        >{% trans 'No' %}
+                                        >{% trans 'from my place of living' %}
                                     </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="teams_exam" id="teams_exam_yes_id" value="SUR_SITE"
+                                                {% if teams_exam == 'SUR_SITE' %} checked {% endif %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
                                                name="teams_exam" id="teams_exam_not_concerned_id"
                                                value="NON_CONCERNE"
                                                 {% if teams_exam == 'NON_CONCERNE' %}
                                                checked {% endif %}
-                                        >{% trans 'Not concerned' %} *
+                                        >{% trans 'I have no exam of this type' %}
                                     </label>
                                 </p>
-                            </div>
-                            <div style="margin-top: 2em;">
-                                * {% trans 'If you have no exam of this type, please tick "Not concerned".' %}
                             </div>
                         </div>
                     {% endif %}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-22 14:36+0200\n"
+"POT-Creation-Date: 2020-06-23 14:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,27 +35,23 @@ msgid "First name"
 msgstr ""
 
 msgid ""
-"For the <u><b>distance</b></u> exams, in view of the difficulties to find "
-"myself in good conditions to take my exams from my place of living,"
+"For the <b><u>distance</u></b> exams, in view of the difficulties or not to "
+"find myself in good conditions to take my exams from my place of living,"
 msgstr ""
 
 msgid "Form not submitted !"
 msgstr ""
 
-msgid "I will present one or more oral exams in an equipped room at UCLouvain"
+msgid "I have no exam of this type"
 msgstr ""
 
-msgid ""
-"I will present one or more written exams with the Moodle and/or Gradescope "
-"tools, in an equipped room at UCLouvain"
+msgid "I will present my  written exams with the TestWe and/or Wiseflow tools"
 msgstr ""
 
-msgid ""
-"I will present one or more written exams with the TestWe and/or Wiseflow "
-"tools, in an equipped room at UCLouvain"
+msgid "I will present my oral exams with Teams"
 msgstr ""
 
-msgid "If you have no exam of this type, please tick \"Not concerned\"."
+msgid "I will present my written exams with the Moodle and/or Gradescope tools"
 msgstr ""
 
 msgid "Last name"
@@ -114,6 +110,12 @@ msgstr "Exams enrollment"
 
 msgid "form_unavailable"
 msgstr "Form unavailable"
+
+msgid "from my place of living"
+msgstr ""
+
+msgid "in an equipped room at UCLouvain"
+msgstr ""
 
 msgid "info_exam_enrollment_by_default"
 msgstr ""
