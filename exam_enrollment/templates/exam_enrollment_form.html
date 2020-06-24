@@ -32,8 +32,11 @@
     <li class="active">{% trans 'exams_enrollment' %}</li>
 {% endblock %}
 
+
+
 {% block content %}
     <div class="page-header hidden-print">
+        {% include "template_messages.html" %}
         <h2>{% trans 'exams_enrollment' %}</h2>
     </div>
 
@@ -86,6 +89,103 @@
                 <form id="exam_enrollment_form" method="POST" action="{% url 'exam_enrollment_form' program.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
+                    {% if covid_period %}
+                        <input type="hidden" name="covid_period" value="True" />
+                        <div id="covid_form_div" class="alert alert-warning">
+                            <h3><b>{% trans 'Please complete IMPERATIVELY the questionnaire below' %}</b></h3>
+                            <br>
+                            <h4>{% trans 'For the <strong><u>distance</u></strong> exams, in view of the difficulties or not to find myself in good conditions to take my exams from my place of living,' %}</h4>
+                            <div class="checkbox">
+                                {% trans 'I will present my written exams with the TestWe and/or Wiseflow tools' %}
+                                :<br>
+                                <p style="margin-left:30px;">
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if  testwe_exam == 'PAS_SUR_SITE' %}
+                                               checked
+                                                {% endif %}
+                                        >{% trans 'from my place of living' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio" name="testwe_exam"
+                                               id="testwe_exam_yes_id" value="SUR_SITE"
+                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="testwe_exam" id="testwe_exam_not_concerned_id"
+                                               value="NON_CONCERNE"
+                                                {% if  testwe_exam == 'NON_CONCERNE' %}
+                                               checked
+                                                {% endif %}
+                                        >{% trans 'I have no exam of this type' %}
+                                    </label>
+                                </p>
+                            </div>
+                            <div class="checkbox">
+                                {% trans 'I will present my written exams with the Moodle and/or Gradescope tools' %}
+                                :<br>
+                                <p style="margin-left:30px;">
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if moodle_exam == 'PAS_SUR_SITE' %}
+                                               checked {% endif %}
+                                        >{% trans 'from my place of living' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="moodle_exam" id="moodle_exam_yes_id" value="SUR_SITE"
+                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="moodle_exam" id="moodle_exam_not_concerned_id"
+                                               value="NON_CONCERNE"
+                                                {% if moodle_exam == 'NON_CONCERNE' %}
+                                               checked {% endif %}
+                                        >{% trans 'I have no exam of this type' %}
+                                    </label>
+                                </p>
+                            </div>
+                            <div class="checkbox" id="teams_exam_checkbox">
+                                {% trans 'I will present my oral exams with Teams' %} :
+                                <br>
+                                <p style="margin-left:30px;">
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="teams_exam" id="teams_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if teams_exam == 'PAS_SUR_SITE' %}
+                                               checked {% endif %}
+                                        >{% trans 'from my place of living' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="teams_exam" id="teams_exam_yes_id" value="SUR_SITE"
+                                                {% if teams_exam == 'SUR_SITE' %} checked {% endif %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="teams_exam" id="teams_exam_not_concerned_id"
+                                               value="NON_CONCERNE"
+                                                {% if teams_exam == 'NON_CONCERNE' %}
+                                               checked {% endif %}
+                                        >{% trans 'I have no exam of this type' %}
+                                    </label>
+                                </p>
+                            </div>
+                        </div>
+                    {% endif %}
                     <table class="table table-striped table-hover table-bordered" id="table_exam_enrollment_choice">
                         <tr>
                             <th>{% trans 'course' %}</th>
@@ -125,15 +225,22 @@
                                                    type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.score | default_if_none:"-" }}{% else %}-{% endif %}
+                                        <td>{% if exam_enrol.session_1 %}
+                                            {{ exam_enrol.session_1.score | default_if_none:"-" }}{% else %}-{% endif %}
                                         </td>
-                                        <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}
+                                        <td>{% if exam_enrol.session_1 %}
+                                            {{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}
+                                            -{% endif %}
                                         </td>
                                     {% endif %}
 
                                 {% else %}
-                                    <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.score | default_if_none:"-"}}{% else %}-{% endif %}</td>
-                                    <td>{% if exam_enrol.session_1 %}{{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                    <td>{% if exam_enrol.session_1 %}
+                                        {{ exam_enrol.session_1.score | default_if_none:"-" }}{% else %}
+                                        -{% endif %}</td>
+                                    <td>{% if exam_enrol.session_1 %}
+                                        {{ exam_enrol.session_1.enrollment_state | default_if_none:"-" }}{% else %}
+                                        -{% endif %}</td>
                                 {% endif %}
                                 {% if current_number_session == 2 %}
                                     {% if exam_enrol.can_enrol_to_exam %}
@@ -144,12 +251,20 @@
                                                    type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
-                                        <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_2 %}
+                                            {{ exam_enrol.session_2.score | default_if_none:"-" }}{% else %}
+                                            -{% endif %}</td>
+                                        <td>{% if exam_enrol.session_2 %}
+                                            {{ exam_enrol.session_2.enrollment_state | default_if_none:"-" }}{% else %}
+                                            -{% endif %}</td>
                                     {% endif %}
                                 {% elif current_number_session > 2 %}
-                                    <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.score | default_if_none:"-"}}{% else %}-{% endif %}</td>
-                                    <td>{% if exam_enrol.session_2 %}{{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}{% else %}-{% endif %}</td>
+                                    <td>{% if exam_enrol.session_2 %}
+                                        {{ exam_enrol.session_2.score | default_if_none:"-" }}{% else %}
+                                        -{% endif %}</td>
+                                    <td>{% if exam_enrol.session_2 %}
+                                        {{ exam_enrol.session_2.enrollment_state | default_if_none:" " }}{% else %}
+                                        -{% endif %}</td>
                                 {% else %}
                                     <td>&nbsp;</td>
                                 {% endif %}
@@ -162,8 +277,12 @@
                                                    type="checkbox">
                                         </td>
                                     {% else %}
-                                        <td>{% if exam_enrol.session_3 %}{{ exam_enrol.session_3.score | default_if_none:"-" }}{% else %}-{% endif %}</td>
-                                        <td>{% if exam_enrol.session_3 %}{{ exam_enrol.session_3.enrollment_state | default_if_none:"-" }}{% else %}-{% endif %}</td>
+                                        <td>{% if exam_enrol.session_3 %}
+                                            {{ exam_enrol.session_3.score | default_if_none:"-" }}{% else %}
+                                            -{% endif %}</td>
+                                        <td>{% if exam_enrol.session_3 %}
+                                            {{ exam_enrol.session_3.enrollment_state | default_if_none:"-" }}{% else %}
+                                            -{% endif %}</td>
                                     {% endif %}
 
                                 {% else %}
@@ -187,9 +306,16 @@
                     </div>
 
                     <div class="text-center">
-                        <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit">
+                        {% if covid_period %}
+                            <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit" disabled
+                            data-toggle="tooltip" data-html="true" title="{% trans 'Please complete <b>IMPERATIVELY</b> the questionnaire.' %}">
                             <span class="glyphicon glyphicon-floppy-save"
                                   aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
+                        {% else %}
+                            <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit">
+                            <span class="glyphicon glyphicon-floppy-save"
+                                  aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
+                        {% endif %}
                     </div>
                 </form>
 
@@ -287,5 +413,57 @@
                 }
             });
         }
+
+        {% if covid_period %}
+            function checkTestweChoiceMade(){
+                return document.getElementById("testwe_exam_yes_id").checked ||
+                    document.getElementById("testwe_exam_no_id").checked ||
+                    document.getElementById("testwe_exam_not_concerned_id").checked;
+            }
+
+            function checkMoodleChoiceMade(){
+                return document.getElementById("moodle_exam_yes_id").checked ||
+                    document.getElementById("moodle_exam_no_id").checked ||
+                    document.getElementById("moodle_exam_not_concerned_id").checked;
+            }
+
+            function checkTeamsChoiceMade(){
+                return document.getElementById("teams_exam_yes_id").checked ||
+                    document.getElementById("teams_exam_no_id").checked ||
+                    document.getElementById("teams_exam_not_concerned_id").checked;
+            }
+
+
+            $('#exam_enrollment_form').on('submit', function (e) {
+                let allChoicesMade = checkTestweChoiceMade() && checkMoodleChoiceMade() && checkTeamsChoiceMade();
+                if (allChoicesMade !== true){
+                    e.preventDefault();
+                    document.getElementById("covid_form_div").classList.remove('alert-warning');
+                    document.getElementById("covid_form_div").classList.add('alert-danger');
+                    window.scrollTo(0, 0);
+                }
+
+            });
+
+            function enableValidateButtonIfAllChoicesMade(){
+                let allChoicesMade = checkTestweChoiceMade() && checkMoodleChoiceMade() && checkTeamsChoiceMade();
+                let validateButton = $('#bt_validate_exam_enrol_form');
+                if(allChoicesMade){
+                    validateButton.attr("data-original-title", "");
+                    validateButton.attr("title", "");
+                    validateButton.prop('disabled', false);
+                }
+            }
+
+                $( ".choices" ).change(function(e) {
+                    enableValidateButtonIfAllChoicesMade();
+                });
+
+                window.onload = function() {
+                  enableValidateButtonIfAllChoicesMade();
+                };
+        {% endif %}
+
+
     </script>
 {% endblock %}
