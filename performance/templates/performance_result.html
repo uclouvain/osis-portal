@@ -98,7 +98,7 @@
                                                 {% elif  on_site_exams_info.examTestWe == "NON_CONCERNE" %}{% trans 'Not concerned' %}
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
-                                        <li>{% trans 'written exams with the Moodle and/or Gradescope and/or another, in a room at UCLouvain' %} :
+                                        <li>{% trans 'written exams with Moodle and/or Gradescope and/or another, in a room at UCLouvain' %} :
                                             {% if  on_site_exams_info.examMoodle is None %}{%trans 'Not defined'%}
                                                 {% elif on_site_exams_info.examMoodle == "SUR_SITE" %}{% trans 'Yes' %}
                                                 {% elif  on_site_exams_info.examMoodle == "PAS_SUR_SITE" %}{% trans 'No' %}
