@@ -9,6 +9,7 @@ pika==0.12.0
 Pillow==6.2.0
 psycopg2-binary==2.7.5
 PyPDF2==1.26.0
+pypdftk==0.4
 reportlab==3.5.34
 selenium==3.14.0
 django-analytical==2.4.0
