@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-15 10:51+0200\n"
+"POT-Creation-Date: 2020-05-28 18:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,6 @@ msgid ""
 "linked to your user. Please contact the registration departement (SIC). "
 "Thank you."
 msgstr ""
-
 
 msgid "Annual program"
 msgstr ""
@@ -83,7 +82,7 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-msgid "List of students exams enrollments"
+msgid "List of students enrolled to my exams"
 msgstr ""
 
 msgid "Lists of students exams enrollments"
@@ -95,8 +94,10 @@ msgstr ""
 msgid "Manage my exam registration"
 msgstr ""
 
-msgid "Mobile number"
+msgid "Middle name(s)"
+msgstr ""
 
+msgid "Mobile number"
 msgstr ""
 
 msgid "My applications"
@@ -109,9 +110,6 @@ msgid "My personal data"
 msgstr ""
 
 msgid "My teaching charge"
-msgstr ""
-
-msgid "Performance"
 msgstr ""
 
 msgid "Personal address"
@@ -138,12 +136,6 @@ msgstr ""
 msgid "Sex"
 msgstr ""
 
-msgid "Show the performance module."
-msgstr ""
-
-msgid "Show the student results and registration state."
-msgstr ""
-
 msgid "Staying address"
 msgstr ""
 
@@ -165,10 +157,7 @@ msgstr ""
 msgid "This process controls students internships."
 msgstr ""
 
-msgid "This process controls the students internship."
-msgstr ""
-
-msgid "This process controls the teaching charge."
+msgid "This process controls the teaching charge"
 msgstr ""
 
 msgid "This process shows personal data."

@@ -25,7 +25,9 @@
 #
 ############################################################################
 import json
+import logging
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
 from django.shortcuts import redirect
@@ -37,6 +39,8 @@ from base.views import layout, common
 from dashboard.views import main as dash_main_view
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 # Students Views
@@ -54,6 +58,7 @@ def view_performance_home(request):
     list_student_programs = None
     if stud:
         list_student_programs = __get_student_programs(stud)
+
     data = {
         "student": stud,
         "programs": list_student_programs,
@@ -81,6 +86,8 @@ def __get_performance_data(stud_perf):
     courses_registration_validated = stud_perf.courses_registration_validated if stud_perf else None
     learning_units_outside_catalog = stud_perf.learning_units_outside_catalog if stud_perf else None
     course_registration_message = stud_perf.course_registration_message if stud_perf else None
+    on_site_exams_info = stud_perf.on_site_exams_info \
+        if stud_perf and stud_perf.on_site_exams_info else None
     return {
         "results": document,
         "creation_date": creation_date,
@@ -89,7 +96,8 @@ def __get_performance_data(stud_perf):
         "not_authorized_message": not_authorized_message,
         "courses_registration_validated": courses_registration_validated,
         "learning_units_outside_catalog": learning_units_outside_catalog,
-        "course_registration_message": course_registration_message
+        "course_registration_message": course_registration_message,
+        "on_site_exams_info": on_site_exams_info
     }
 
 
