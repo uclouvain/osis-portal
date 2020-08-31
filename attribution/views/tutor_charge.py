@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import datetime
 import json
 import logging
 import traceback
+from typing import List, Dict
 from operator import itemgetter
 
 import requests
@@ -339,6 +340,11 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
                                            learning_unit_enrollment.offer_enrollment.offer_year.acronym)
+
+    student_specific_profile = None
+    if hasattr(learning_unit_enrollment.offer_enrollment.student, 'studentspecificprofile'):
+        student_specific_profile = learning_unit_enrollment.offer_enrollment.student.studentspecificprofile
+
     return {
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
@@ -351,7 +357,8 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
         'september_note': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
-        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS, ),
+        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS),
+        'student_specific_profile': student_specific_profile
     }
 
 
@@ -456,7 +463,7 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     return tutor_attributions
 
 
-def _get_learning_unit_yr_enrollments_list(a_learning_unit_year):
+def _get_learning_unit_yr_enrollments_list(a_learning_unit_year) -> List [Dict]:
     enrollments = [
         get_enrollments_dict_for_display(lue)
         for lue in get_learning_unit_enrollments_list(a_learning_unit_year)

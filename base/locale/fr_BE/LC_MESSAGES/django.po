@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 15:04+0100\n"
+"POT-Creation-Date: 2020-08-31 15:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,21 @@ msgstr "Entité d'administration"
 msgid "Are you sure ?"
 msgstr "Êtes-vous certain ?"
 
+msgid "Arrangement additional time"
+msgstr "Aménagement Tiers-Temps"
+
+msgid "Arrangement appropriate copy"
+msgstr "Aménagement Copie adaptée"
+
+msgid "Arrangement other"
+msgstr "Autre"
+
+msgid "Arrangement specific locale"
+msgstr "Aménagement Local spécifique"
+
+msgid "Artist"
+msgstr "Artiste"
+
 msgid "Category"
 msgstr "Catégorie"
 
@@ -43,6 +58,9 @@ msgstr "Code"
 
 msgid "Content type"
 msgstr "Type de contenu"
+
+msgid "DDI"
+msgstr "HTM"
 
 msgid "Data"
 msgstr "Données"
@@ -68,6 +86,12 @@ msgstr "N'hésitez pas à nous aider en contactant le"
 msgid "Education group year"
 msgstr "Organisation de formations annualisée"
 
+msgid "Educational facilities accepted by Jury"
+msgstr "Aménagement Jury"
+
+msgid "Entrepreneur"
+msgstr "Entreprenariat"
+
 msgid "File"
 msgstr "Fichier"
 
@@ -80,14 +104,32 @@ msgstr "Mots-clés SQL interdits"
 msgid "Group"
 msgstr "Groupe"
 
+msgid "Guide"
+msgstr ""
+
+msgid "High Level Promising athlete"
+msgstr "ESHN"
+
 msgid "Management entity"
 msgstr "Gestion des données par entité"
 
 msgid "Mini-Training"
 msgstr "Mini-Formation"
 
+msgid "Not defined"
+msgstr "Non défini"
+
+msgid "Other special needs"
+msgstr "Autre HTM"
+
 msgid "Page not found"
 msgstr "Page inexistante"
+
+msgid "Person with reduced mobility"
+msgstr "PMR"
+
+msgid "Promising athlete"
+msgstr "ES"
 
 msgid "Result"
 msgstr "Résultat"
@@ -97,6 +139,15 @@ msgstr "Commande SQL"
 
 msgid "SQL readonly"
 msgstr "SQL en lecture seule"
+
+msgid "Sport"
+msgstr ""
+
+msgid "Sub type Disability"
+msgstr "Sous-type HTM"
+
+msgid "Sub type Sport"
+msgstr "Sous-type Sport"
 
 msgid "Title in French"
 msgstr "Intitulé en français"
