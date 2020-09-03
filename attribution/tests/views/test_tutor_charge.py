@@ -229,13 +229,33 @@ class TutorChargeTest(TestCase):
         self.assertIsNone(tutor_charge.get_schedule_url(None))
 
     def test_list_attributions(self):
+        types_to_display_in_list = [
+            learning_container_type.COURSE,
+            learning_container_type.INTERNSHIP,
+            learning_container_type.DISSERTATION,
+        ]
         list_attributions = [self.get_data('attribution')]
-        self.assertEqual(list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year'))),
-                         list_attributions)
+        for type_to_display in types_to_display_in_list:
+            with self.subTest(type_to_display=type_to_display):
+                LearningContainerYear.objects.all().update(container_type=type_to_display)
+            self.assertEqual(
+                list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year'))),
+                list_attributions
+            )
 
     def test_list_attributions_with_luy_not_displayed(self):
-        LearningContainerYear.objects.all().update(container_type=learning_container_type.OTHER_COLLECTIVE)
-        self.assertFalse(list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year'))))
+        types_not_to_display_in_list = [
+            learning_container_type.OTHER_COLLECTIVE,
+            learning_container_type.OTHER_INDIVIDUAL,
+            learning_container_type.MASTER_THESIS,
+            learning_container_type.EXTERNAL,
+        ]
+        for type_not_to_display in types_not_to_display_in_list:
+            with self.subTest(type_not_to_display=type_not_to_display):
+                LearningContainerYear.objects.all().update(container_type=type_not_to_display)
+                self.assertFalse(
+                    list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year')))
+                )
 
     def test_attribution_years(self):
         list_years = [NEXT_YEAR, CURRENT_YEAR]
