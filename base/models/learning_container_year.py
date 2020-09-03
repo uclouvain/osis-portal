@@ -25,13 +25,13 @@
 ##############################################################################
 from django.db import models
 
-from base.models.enums import vacant_declaration_type
+from base.models.enums import vacant_declaration_type, learning_container_type
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
 class LearningContainerYearAdmin(SerializableModelAdmin):
-    list_display = ('learning_container', 'academic_year', 'acronym', 'common_title')
-    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'common_title',
+    list_display = ('learning_container', 'academic_year', 'acronym', 'container_type', 'common_title')
+    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'container_type', 'common_title',
                                     'team', 'is_vacant', 'type_declaration_vacant', 'in_charge',
                                     'common_title_english')}),)
     search_fields = ['acronym']
@@ -45,6 +45,7 @@ class LearningContainerYear(SerializableModel):
     acronym = models.CharField(max_length=10)
     academic_year = models.ForeignKey('AcademicYear', on_delete=models.PROTECT)
     learning_container = models.ForeignKey('LearningContainer', null=True, on_delete=models.PROTECT)
+    container_type = models.CharField(max_length=20, choices=learning_container_type.CONTAINER_TYPE, null=True)
     common_title = models.CharField(max_length=255, blank=True, null=True)
     common_title_english = models.CharField(max_length=250, blank=True, null=True)
     team = models.BooleanField(default=False)
