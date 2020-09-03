@@ -25,20 +25,20 @@
 ##############################################################################
 from django.utils.translation import ugettext_lazy as _
 
-COURSE = "Course"
-INTERNSHIP = "Internship"
-DISSERTATION = "Dissertation"
-OTHER_COLLECTIVE = "Other collective"
-OTHER_INDIVIDUAL = "Other individual"
-MASTER_THESIS = "Thesis"
-EXTERNAL = "External"
+COURSE = "COURSE"
+INTERNSHIP = "INTERNSHIP"
+DISSERTATION = "DISSERTATION"
+OTHER_COLLECTIVE = "OTHER_COLLECTIVE"
+OTHER_INDIVIDUAL = "OTHER_INDIVIDUAL"
+MASTER_THESIS = "MASTER_THESIS"
+EXTERNAL = "EXTERNAL"
 
 CONTAINER_TYPE = (
-    (COURSE, _(COURSE)),
-    (INTERNSHIP, _(INTERNSHIP)),
-    (DISSERTATION, _(DISSERTATION)),
-    (OTHER_COLLECTIVE, _(OTHER_COLLECTIVE)),
-    (OTHER_INDIVIDUAL, _(OTHER_INDIVIDUAL)),
-    (MASTER_THESIS, _(MASTER_THESIS)),
-    (EXTERNAL, _(EXTERNAL)),
+    (COURSE, _("Course")),
+    (INTERNSHIP, _("Internship")),
+    (DISSERTATION, _("Dissertation")),
+    (OTHER_COLLECTIVE, _("Other collective")),
+    (OTHER_INDIVIDUAL, _("Other individual")),
+    (MASTER_THESIS, _("Thesis")),
+    (EXTERNAL, _("External")),
 )
