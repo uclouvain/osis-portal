@@ -141,7 +141,7 @@ msgid "SQL readonly"
 msgstr "SQL en lecture seule"
 
 msgid "Sport"
-msgstr ""
+msgstr "Sport"
 
 msgid "Sub type Disability"
 msgstr "Sous-type HTM"
