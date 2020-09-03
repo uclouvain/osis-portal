@@ -28,11 +28,10 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
-from base.models.enums import peps_type
-from base.models.student_specific_profile import StudentSpecificProfile
 from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.styles import Color
 from openpyxl.styles import Style
+from attribution.business.student_specific_profile import get_type_peps
 
 COLUMN_REGISTRATION_ID_NO = 5
 STATUS_COL_WIDTH = 10
@@ -97,7 +96,7 @@ def _make_xls_list(student_list):
 
         if student_specific_profile:
             line_content.extend([
-                _get_type_peps(student_specific_profile),
+                get_type_peps(student_specific_profile),
                 str(_('Yes')) if student_specific_profile.arrangement_additional_time else '-',
                 str(_('Yes')) if student_specific_profile.arrangement_appropriate_copy else '-',
                 str(_('Yes')) if student_specific_profile.arrangement_specific_locale else '-',
@@ -164,20 +163,6 @@ def _columns_registration_id_to_text(ws):
         for cell in row:
             if cell.col_idx == COLUMN_REGISTRATION_ID_NO:
                 cell.number_format = OPENPYXL_STRING_FORMAT
-
-def _get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
-    if student_specific_profile.type == peps_type.PepsTypes.SPORT.name:
-        return "{} - {}".format(
-            str(_(student_specific_profile.get_type_display())) or "-",
-            str(_(student_specific_profile.get_subtype_sport_display())) or "-",
-        )
-    if student_specific_profile.type == peps_type.PepsTypes.DISABILITY.name:
-        return "{} - {}".format(
-            str(_(student_specific_profile.get_type_display())) or "-",
-            str(_(student_specific_profile.get_subtype_disability_display())) or "-",
-        )
-
-    return str(_(student_specific_profile.get_type_display())) or "-"
 
 def _set_peps_border(ws, last_row_number):
     """
