@@ -105,7 +105,7 @@ msgid "Group"
 msgstr "Groupe"
 
 msgid "Guide"
-msgstr ""
+msgstr "Guide"
 
 msgid "High Level Promising athlete"
 msgstr "ESHN"

@@ -71,8 +71,12 @@ def _make_xls_list(student_list):
                _('June'),
                _('State'),
                _('September'),
-               _('Type of specific profile'), _('Extra time (33% generally)'), _('Large print'),
-               _('Specific room of examination'), _('Other educational facilities'), _('Educational tutor')
+               _('Type of specific profile'),
+               _('Extra time (33% generally)'),
+               _('Large print'),
+               _('Specific room of examination'),
+               _('Other educational facilities'),
+               _('Educational tutor'),
                ]
     worksheet1.append(col for col in COLUMNS)
     for student in student_list:
@@ -179,18 +183,12 @@ def _set_peps_border(ws, last_row_number):
     """
     Set border at the left of the first peps column
     """
-    cpt = 1
-    while cpt <= last_row_number:
+    for cpt in range(1, last_row_number + 1):
         cell = ws["{}{}".format(FIRST_COL_PEPS, cpt)]
         _update_border_for_first_peps_column(cell)
-        cpt += 1
 
 def _update_border_for_first_peps_column(cell):
-    if cell.has_style:
-        c = cell.has_style
-    else:
-        c = Style
+    c = cell.style if cell.has_style else Style()
 
-    c = cell.style
     c.border = BORDER_LEFT
     cell.style = c
