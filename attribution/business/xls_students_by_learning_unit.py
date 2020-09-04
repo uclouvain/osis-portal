@@ -28,8 +28,6 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
-from base.models.enums import peps_type
-from base.models.student_specific_profile import StudentSpecificProfile
 from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.styles import Color
 from openpyxl.styles import Style
@@ -61,38 +59,39 @@ def _make_xls_list(student_list):
     workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = _("Students")
-    COLUMNS = [_('Program'),
-               _('Learning unit'),
-               _('Email'),
-               _('Student'),
-               _('Registration id'),
-               _('State'),
-               _('January'),
-               _('State'),
-               _('June'),
-               _('State'),
-               _('September'),
-               _('Type of specific profile'),
-               _('Extra time (33% generally)'),
-               _('Large print'),
-               _('Specific room of examination'),
-               _('Other educational facilities'),
-               _('Educational tutor'),
-               ]
-    worksheet1.append(col for col in COLUMNS)
+    columns_header = [
+        _('Program'),
+        _('Learning unit'),
+        _('Email'),
+        _('Student'),
+        _('Registration id'),
+        _('State'),
+        _('January'),
+        _('State'),
+        _('June'),
+        _('State'),
+        _('September'),
+        _('Type of specific profile'),
+        _('Extra time (33% generally)'),
+        _('Large print'),
+        _('Specific room of examination'),
+        _('Other educational facilities'),
+        _('Educational tutor'),
+    ]
+    worksheet1.append(col for col in columns_header)
     for student in student_list:
-        line_content = [student.get('program'),
-                           student.get('acronym'),
-                           student.get('email'),
-                           student.get('name'),
-                           student.get('registration_id'),
-                           student.get('january_status'),
-                           student.get('january_note'),
-                           student.get('june_status'),
-                           student.get('june_note'),
-                           student.get('september_status'),
-                           student.get('september_note'),
-                           ]
+        line_content = [
+            student.get('program'),
+            student.get('acronym'), student.get('email'),
+            student.get('name'),
+            student.get('registration_id'),
+            student.get('january_status'),
+            student.get('january_note'),
+            student.get('june_status'),
+            student.get('june_note'),
+            student.get('september_status'),
+            student.get('september_note'),
+        ]
 
         student_specific_profile = student.get('student_specific_profile')
 
@@ -108,7 +107,6 @@ def _make_xls_list(student_list):
         else:
             line_content.extend(["-", "-", "-", "-", "-", "-"])
         worksheet1.append(line_content)
-
 
     _columns_resizing(worksheet1)
     _columns_registration_id_to_text(worksheet1)
@@ -166,6 +164,7 @@ def _columns_registration_id_to_text(ws):
             if cell.col_idx == COLUMN_REGISTRATION_ID_NO:
                 cell.number_format = OPENPYXL_STRING_FORMAT
 
+
 def _set_peps_border(ws, last_row_number):
     """
     Set border at the left of the first peps column
@@ -173,6 +172,7 @@ def _set_peps_border(ws, last_row_number):
     for cpt in range(1, last_row_number + 1):
         cell = ws["{}{}".format(FIRST_COL_PEPS, cpt)]
         _update_border_for_first_peps_column(cell)
+
 
 def _update_border_for_first_peps_column(cell):
     c = cell.style if cell.has_style else Style()

@@ -24,8 +24,10 @@
 #
 ##############################################################################
 from base.models.enums import peps_type
+from base.models.person import Person
 from base.models.student_specific_profile import StudentSpecificProfile
 from django.utils.translation import ugettext as _
+from typing import List
 
 
 def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
@@ -41,3 +43,20 @@ def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
         )
 
     return str(_(student_specific_profile.get_type_display())) or "-"
+
+
+def get_arrangements(student_specific_profile: StudentSpecificProfile) -> List [str]:
+    arrangements = []
+    if student_specific_profile.arrangement_additional_time:
+        arrangements.append(_('Extra time (33% generally)'))
+    if student_specific_profile.arrangement_appropriate_copy:
+        arrangements.append(_('Large print'))
+    if student_specific_profile.arrangement_specific_locale:
+        arrangements.append(_('Specific room of examination'))
+    if student_specific_profile.arrangement_other:
+        arrangements.append(_('Other educational facilities'))
+    return arrangements
+
+
+def get_guide(student_specific_profile) -> Person:
+    return str(student_specific_profile.guide) if student_specific_profile.guide else None
