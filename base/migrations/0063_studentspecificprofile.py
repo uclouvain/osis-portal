@@ -10,7 +10,7 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('base', '0061_auto_20200123_1002'),
+        ('base', '0062_learningcontaineryear_container_type'),
     ]
 
     operations = [
