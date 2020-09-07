@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-12 11:56+0200\n"
+"POT-Creation-Date: 2020-08-31 15:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,6 +93,9 @@ msgstr ""
 msgid "ECT"
 msgstr ""
 
+msgid "Educational tutor"
+msgstr ""
+
 msgid "Email"
 msgstr ""
 
@@ -103,6 +106,10 @@ msgid "Export list (Excel)"
 msgstr ""
 
 msgid "Export the students list in Excel format"
+msgstr ""
+
+#, python-format
+msgid "Extra time (33% generally)"
 msgstr ""
 
 msgid "Faculties administration"
@@ -133,6 +140,9 @@ msgid "January"
 msgstr ""
 
 msgid "June"
+msgstr ""
+
+msgid "Large print"
 msgstr ""
 
 msgid "Last name"
@@ -198,6 +208,9 @@ msgstr ""
 msgid "Non-renewable"
 msgstr ""
 
+msgid "Other educational facilities"
+msgstr ""
+
 msgid "Pedagogy proposal"
 msgstr ""
 
@@ -250,6 +263,9 @@ msgid "Sept."
 msgstr ""
 
 msgid "September"
+msgstr ""
+
+msgid "Specific room of examination"
 msgstr ""
 
 msgid "Specifications"
@@ -312,6 +328,9 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
+msgid "Type of specific profile"
+msgstr ""
+
 msgid "Vacant"
 msgstr ""
 
@@ -340,6 +359,9 @@ msgid "Vol.2 vacant"
 msgstr ""
 
 msgid "Warning, this is not a list for encoding scores."
+msgstr ""
+
+msgid "Yes"
 msgstr ""
 
 msgid "You already apply to this course."
