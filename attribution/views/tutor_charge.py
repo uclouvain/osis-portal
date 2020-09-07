@@ -40,6 +40,7 @@ from attribution.business import xls_students_by_learning_unit
 from attribution.forms.attribution import AttributionForm
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
+from base.models.enums import learning_container_type
 from base.models.enums import offer_enrollment_state, learning_unit_year_subtypes
 from base.models.learning_unit_year import LearningUnitYear
 from base.utils import string_utils
@@ -111,9 +112,18 @@ def list_attributions(a_person, an_academic_year):
     tutor = mdl_base.tutor.find_by_person(a_person)
     results = mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(tutor, an_academic_year)
     for attribution in results:
-        if attribution.learning_unit_year.in_charge:
+        if _display_in_list(attribution.learning_unit_year):
             results_in_charge.append(attribution)
     return results_in_charge
+
+
+def _display_in_list(luy: LearningUnitYear) -> bool:
+    list_of_types_to_display = [
+        learning_container_type.COURSE,
+        learning_container_type.INTERNSHIP,
+        learning_container_type.DISSERTATION,
+    ]
+    return luy.learning_container_year.container_type in list_of_types_to_display
 
 
 def list_teaching_charge(a_person, an_academic_year):
