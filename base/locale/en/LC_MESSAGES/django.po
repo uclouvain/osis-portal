@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-22 15:04+0100\n"
+"POT-Creation-Date: 2020-08-31 15:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,21 @@ msgstr ""
 msgid "Are you sure ?"
 msgstr ""
 
+msgid "Arrangement additional time"
+msgstr ""
+
+msgid "Arrangement appropriate copy"
+msgstr ""
+
+msgid "Arrangement other"
+msgstr ""
+
+msgid "Arrangement specific locale"
+msgstr ""
+
+msgid "Artist"
+msgstr ""
+
 msgid "Category"
 msgstr ""
 
@@ -42,6 +57,9 @@ msgid "Code"
 msgstr ""
 
 msgid "Content type"
+msgstr ""
+
+msgid "DDI"
 msgstr ""
 
 msgid "Data"
@@ -68,6 +86,12 @@ msgstr ""
 msgid "Education group year"
 msgstr ""
 
+msgid "Educational facilities accepted by Jury"
+msgstr ""
+
+msgid "Entrepreneur"
+msgstr ""
+
 msgid "File"
 msgstr ""
 
@@ -80,13 +104,31 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
+msgid "Guide"
+msgstr ""
+
+msgid "High Level Promising athlete"
+msgstr ""
+
 msgid "Management entity"
 msgstr ""
 
 msgid "Mini-Training"
 msgstr ""
 
+msgid "Not defined"
+msgstr ""
+
+msgid "Other special needs"
+msgstr ""
+
 msgid "Page not found"
+msgstr ""
+
+msgid "Person with reduced mobility"
+msgstr ""
+
+msgid "Promising athlete"
 msgstr ""
 
 msgid "Result"
@@ -96,6 +138,15 @@ msgid "SQL command"
 msgstr ""
 
 msgid "SQL readonly"
+msgstr ""
+
+msgid "Sport"
+msgstr ""
+
+msgid "Sub type Disability"
+msgstr ""
+
+msgid "Sub type Sport"
 msgstr ""
 
 msgid "Title in French"
