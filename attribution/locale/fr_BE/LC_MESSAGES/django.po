@@ -48,6 +48,9 @@ msgstr "Administration des candidatures"
 msgid "Applications of "
 msgstr "Candidatures de "
 
+msgid "Arrangements"
+msgstr "Aménagements"
+
 msgid "Attribution administration"
 msgstr "Administration des attributions"
 
