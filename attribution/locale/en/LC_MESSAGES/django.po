@@ -48,6 +48,9 @@ msgstr ""
 msgid "Applications of "
 msgstr ""
 
+msgid "Arrangements"
+msgstr ""
+
 msgid "Attribution administration"
 msgstr ""
 
