@@ -91,8 +91,8 @@ def attestation_administration(request):
 def visualize_student_attestations(request, registration_id):
     student = student_mdl.find_by_registration_id(registration_id)
     json_message = _make_registration_json_message(student.registration_id)
-    attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
-    data = _make_attestation_data(attestation_statuses_json_dict, student)
+    attestation_statuses_all_years_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
+    data = _make_attestation_data(attestation_statuses_all_years_json_dict, student)
     return layout.render(request, "attestation_home_admin.html", data)
 
 
@@ -140,23 +140,19 @@ def _make_anac_for_template(year):
     return formated_academic_year
 
 
-def _make_attestation_data(attestation_statuses_json_dict, student):
-    if attestation_statuses_json_dict:
-        attestation_statuses = attestation_statuses_json_dict.get('attestationStatuses')
-        academic_year = attestation_statuses_json_dict.get('academicYear')
-        formated_academic_year = _make_anac_for_template(academic_year)
-        attestation_available = attestation_statuses_json_dict.get('available')
+def _make_attestation_data(attestation_statuses_all_years_json_dict, student):
+    if attestation_statuses_all_years_json_dict:
+        attestations = attestation_statuses_all_years_json_dict.get('attestationStatusesAllYears')
+        if len(attestations) > 1:
+            current_year = 2020
+        else:
+            current_year = attestations[0].get('academicYear')
     else:
-        attestation_statuses = None
-        academic_year = None
-        formated_academic_year = None
-        attestation_available = None
-
+        attestations = None
+        current_year = None
     return {
-        'attestation_statuses': attestation_statuses,
-        'academic_year': academic_year,
-        'formated_academic_year': formated_academic_year,
-        'available': attestation_available,
+        'attestations': attestations,
+        'current_year': current_year,
         'student': student
     }
 
