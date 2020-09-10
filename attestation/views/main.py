@@ -35,7 +35,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from attestation.queues import student_attestation_status, student_attestation
 from base.forms.base_forms import RegistrationIdForm
-from base.models import student as student_mdl, person as person_mdl
+from base.models import student as student_mdl, person as person_mdl, academic_year as academic_year_mdl
 from base.views import layout
 from dashboard.views import main as dash_main_view
 
@@ -133,18 +133,11 @@ def _make_registration_json_message(registration_id):
     return json_message
 
 
-def _make_anac_for_template(year):
-    formated_academic_year = None
-    if year:
-        formated_academic_year = '{} - {}'.format(year, year + 1)
-    return formated_academic_year
-
-
 def _make_attestation_data(attestation_statuses_all_years_json_dict, student):
     if attestation_statuses_all_years_json_dict:
         attestations = attestation_statuses_all_years_json_dict.get('attestationStatusesAllYears')
         if len(attestations) > 1:
-            current_year = 2020
+            current_year = academic_year_mdl.current_academic_year()
         else:
             current_year = attestations[0].get('academicYear')
     else:
