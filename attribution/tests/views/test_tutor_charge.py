@@ -38,6 +38,7 @@ from attribution.tests.factories.attribution import AttributionFactory
 from attribution.views import tutor_charge
 from base.models.enums import learning_unit_year_subtypes, learning_container_type
 from base.models.learning_container_year import LearningContainerYear
+from base.models.learning_unit_year import LearningUnitYear
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
@@ -256,6 +257,12 @@ class TutorChargeTest(TestCase):
                 self.assertFalse(
                     list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year')))
                 )
+
+    def test_list_attributions_with_classes(self):
+        LearningUnitYear.objects.all().update(learning_container_year=None)
+        self.assertFalse(
+            list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year')))
+        )
 
     def test_attribution_years(self):
         list_years = [NEXT_YEAR, CURRENT_YEAR]

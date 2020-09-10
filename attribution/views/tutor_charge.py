@@ -123,6 +123,9 @@ def _display_in_list(luy: LearningUnitYear) -> bool:
         learning_container_type.INTERNSHIP,
         learning_container_type.DISSERTATION,
     ]
+    luy_is_a_class = not luy.learning_container_year
+    if luy_is_a_class:
+        return False
     return luy.learning_container_year.container_type in list_of_types_to_display
 
 
