@@ -260,10 +260,8 @@ class TutorChargeTest(TestCase):
 
     def test_list_attributions_with_classes(self):
         LearningUnitYear.objects.all().update(learning_container_year=None)
-        list_attributions = [self.get_data('attribution')]
-        self.assertEqual(
-            list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year'))),
-            list_attributions
+        self.assertFalse(
+            list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year')))
         )
 
     def test_attribution_years(self):
