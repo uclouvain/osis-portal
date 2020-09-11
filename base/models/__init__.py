@@ -17,4 +17,5 @@ from base.models import offer_year_domain
 from base.models import organization
 from base.models import person
 from base.models import student
+from base.models import student_specific_profile
 from base.models import tutor

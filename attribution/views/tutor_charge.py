@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ import datetime
 import json
 import logging
 import traceback
+from typing import List, Dict
 from operator import itemgetter
 
 import requests
@@ -40,6 +41,7 @@ from attribution.business import xls_students_by_learning_unit
 from attribution.forms.attribution import AttributionForm
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
+from base.models.enums import learning_container_type
 from base.models.enums import offer_enrollment_state, learning_unit_year_subtypes
 from base.models.learning_unit_year import LearningUnitYear
 from base.utils import string_utils
@@ -111,9 +113,21 @@ def list_attributions(a_person, an_academic_year):
     tutor = mdl_base.tutor.find_by_person(a_person)
     results = mdl_attribution.attribution.find_by_tutor_year_order_by_acronym_function(tutor, an_academic_year)
     for attribution in results:
-        if attribution.learning_unit_year.in_charge:
+        if _display_in_list(attribution.learning_unit_year):
             results_in_charge.append(attribution)
     return results_in_charge
+
+
+def _display_in_list(luy: LearningUnitYear) -> bool:
+    list_of_types_to_display = [
+        learning_container_type.COURSE,
+        learning_container_type.INTERNSHIP,
+        learning_container_type.DISSERTATION,
+    ]
+    luy_is_a_class = not luy.learning_container_year
+    if luy_is_a_class:
+        return False
+    return luy.learning_container_year.container_type in list_of_types_to_display
 
 
 def list_teaching_charge(a_person, an_academic_year):
@@ -339,6 +353,11 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
                                            learning_unit_enrollment.offer_enrollment.offer_year.acronym)
+
+    student_specific_profile = None
+    if hasattr(learning_unit_enrollment.offer_enrollment.student, 'studentspecificprofile'):
+        student_specific_profile = learning_unit_enrollment.offer_enrollment.student.studentspecificprofile
+
     return {
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
@@ -351,7 +370,8 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
         'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
         'september_note': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
-        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS, ),
+        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS),
+        'student_specific_profile': student_specific_profile
     }
 
 
@@ -456,7 +476,7 @@ def _tutor_attributions_by_learning_unit(tutor_allocations_json):
     return tutor_attributions
 
 
-def _get_learning_unit_yr_enrollments_list(a_learning_unit_year):
+def _get_learning_unit_yr_enrollments_list(a_learning_unit_year) -> List [Dict]:
     enrollments = [
         get_enrollments_dict_for_display(lue)
         for lue in get_learning_unit_enrollments_list(a_learning_unit_year)

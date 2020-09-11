@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,25 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
+from django.utils.translation import ugettext_lazy as _
 
-import factory.fuzzy
+COURSE = "COURSE"
+INTERNSHIP = "INTERNSHIP"
+DISSERTATION = "DISSERTATION"
+OTHER_COLLECTIVE = "OTHER_COLLECTIVE"
+OTHER_INDIVIDUAL = "OTHER_INDIVIDUAL"
+MASTER_THESIS = "MASTER_THESIS"
+EXTERNAL = "EXTERNAL"
 
-from base.models.enums import vacant_declaration_type, learning_container_type
-from base.tests.factories.academic_year import AcademicYearFactory
-from osis_common.utils.datetime import get_tzinfo
-
-
-class LearningContainerYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.LearningContainerYear"
-
-    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
-    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
-                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
-    acronym = factory.Sequence(lambda n: 'LCY-%d' % n)
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    container_type = learning_container_type.COURSE
-    common_title = factory.Sequence(lambda n: 'Learning container year - %d' % n)
-    common_title_english = factory.Sequence(lambda n: 'Learning container year - %d' % n)
-    type_declaration_vacant = vacant_declaration_type.RESERVED_FOR_INTERNS
+CONTAINER_TYPE = (
+    (COURSE, _("Course")),
+    (INTERNSHIP, _("Internship")),
+    (DISSERTATION, _("Dissertation")),
+    (OTHER_COLLECTIVE, _("Other collective")),
+    (OTHER_INDIVIDUAL, _("Other individual")),
+    (MASTER_THESIS, _("Thesis")),
+    (EXTERNAL, _("External")),
+)

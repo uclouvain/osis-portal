@@ -36,7 +36,9 @@ from requests.exceptions import RequestException
 from attribution.models.enums import function
 from attribution.tests.factories.attribution import AttributionFactory
 from attribution.views import tutor_charge
-from base.models.enums import learning_unit_year_subtypes
+from base.models.enums import learning_unit_year_subtypes, learning_container_type
+from base.models.learning_container_year import LearningContainerYear
+from base.models.learning_unit_year import LearningUnitYear
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
@@ -151,16 +153,14 @@ def mock_request_multiple_attributions_charge_with_missing_values(*args, **kwarg
 
 
 class TutorChargeTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.a_tutor = TutorFactory()
-        cls.data = []
-        cls.data.append(cls.create_lu_yr_annual_data(CURRENT_YEAR))
-        cls.data.append(cls.create_lu_yr_annual_data(NEXT_YEAR))
+    def setUp(self):
+        self.a_tutor = TutorFactory()
+        self.data = []
+        self.data.append(self.create_lu_yr_annual_data(CURRENT_YEAR))
+        self.data.append(self.create_lu_yr_annual_data(NEXT_YEAR))
         Group.objects.get_or_create(name='students')
 
-    @classmethod
-    def create_lu_yr_annual_data(cls, a_year):
+    def create_lu_yr_annual_data(self, a_year):
         an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
         an_academic_yr.year = a_year
         a_container_year = LearningContainerYearFactory(in_charge=True)
@@ -175,7 +175,7 @@ class TutorChargeTest(TestCase):
         a_learning_unit_year.save()
         an_attribution = AttributionFactory(function=function.CO_HOLDER,
                                             learning_unit_year=a_learning_unit_year,
-                                            tutor=cls.a_tutor,
+                                            tutor=self.a_tutor,
                                             external_id=ATTRIBUTION_EXTERNAL_ID)
 
         return {
@@ -230,9 +230,39 @@ class TutorChargeTest(TestCase):
         self.assertIsNone(tutor_charge.get_schedule_url(None))
 
     def test_list_attributions(self):
+        types_to_display_in_list = [
+            learning_container_type.COURSE,
+            learning_container_type.INTERNSHIP,
+            learning_container_type.DISSERTATION,
+        ]
         list_attributions = [self.get_data('attribution')]
-        self.assertEqual(list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year'))),
-                         list_attributions)
+        for type_to_display in types_to_display_in_list:
+            with self.subTest(type_to_display=type_to_display):
+                LearningContainerYear.objects.all().update(container_type=type_to_display)
+            self.assertEqual(
+                list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year'))),
+                list_attributions
+            )
+
+    def test_list_attributions_with_luy_not_displayed(self):
+        types_not_to_display_in_list = [
+            learning_container_type.OTHER_COLLECTIVE,
+            learning_container_type.OTHER_INDIVIDUAL,
+            learning_container_type.MASTER_THESIS,
+            learning_container_type.EXTERNAL,
+        ]
+        for type_not_to_display in types_not_to_display_in_list:
+            with self.subTest(type_not_to_display=type_not_to_display):
+                LearningContainerYear.objects.all().update(container_type=type_not_to_display)
+                self.assertFalse(
+                    list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year')))
+                )
+
+    def test_list_attributions_with_classes(self):
+        LearningUnitYear.objects.all().update(learning_container_year=None)
+        self.assertFalse(
+            list(tutor_charge.list_attributions(self.a_tutor.person, self.get_data('academic_year')))
+        )
 
     def test_attribution_years(self):
         list_years = [NEXT_YEAR, CURRENT_YEAR]
