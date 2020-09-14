@@ -136,10 +136,10 @@ def _make_registration_json_message(registration_id):
 def _make_attestation_data(attestation_statuses_all_years_json_dict, student):
     if attestation_statuses_all_years_json_dict:
         attestations = attestation_statuses_all_years_json_dict.get('attestationStatusesAllYears')
-        if len(attestations) > 1:
-            current_year = academic_year_mdl.current_academic_year()
-        else:
-            current_year = attestations[0].get('academicYear')
+        current_year = attestation_statuses_all_years_json_dict.get('current_year')
+        returned_registration_id = attestation_statuses_all_years_json_dict.get('registration_id')
+        if returned_registration_id != student.registration_id:
+            raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
     else:
         attestations = None
         current_year = None
