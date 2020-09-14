@@ -119,6 +119,17 @@ class HomeTest(TestCase):
 
         self.assertFalse(response.context['attestations'])
 
+    @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses',
+           side_effect=lambda x: {'current_year': 2015, 'attestations': [], 'registration_id': STUDENT_REGISTRATION_ID})
+    def test_when_registration_id_doesnt_match(self, mock_fetch_json_attestation_statuses):
+        a_student = StudentFactory(person=self.person)
+
+        with self.assertRaises(Exception) as e:
+            self.client.get(self.url, follow=True)
+
+        self.assertTrue(mock_fetch_json_attestation_statuses.called)
+        self.assertEqual(str(e.exception), _('Registration fetched doesn\'t match with student registration_id'))
+
     def test_when_no_student_find_by_user(self):
         self.person.user.user_permissions.add(self.permission)
         response = self.client.get(self.url, follow=True)
