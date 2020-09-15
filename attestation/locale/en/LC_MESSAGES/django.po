@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 15:28+0200\n"
+"POT-Creation-Date: 2020-09-15 19:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,71 +17,56 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: tests/views/test_main.py:79 tests/views/test_main.py:171
 msgid ""
 "A problem was detected with your registration : 2 registration id's are "
 "linked to your user. Please contact the registration departement (SIC). "
 "Thank you."
 msgstr ""
 
-#: models/enums/attestation_type.py:32
 msgid "ABC"
 msgstr "Regular registration (family allowances, health mutual, ...)"
 
-#: models/enums/attestation_type.py:30
+msgid "ABC_PROLONGE"
+msgstr "Regular registration extended (family allowances, health mutual, public transport, ...)"
+
 msgid "AVIS"
 msgstr "Notice of registration and invoice"
 
-#: templates/attestation_home_admin.html:32
-#: templates/attestation_home_student.html:30
 msgid "Attestation"
 msgstr ""
 
-#: templates/admin/attestation_administration.html:31
-#: templates/attestation_home_admin.html:31
 msgid "Attestation administration"
 msgstr ""
 
-#: templates/attestation_content.html:52
 msgid "Attestation type"
 msgstr ""
 
-#: templates/attestation_content.html:31
-msgid "Attestations for academic year"
+msgid "Attestations"
 msgstr ""
 
-#: templates/attestation_content.html:54
 msgid "Available"
 msgstr ""
 
-#: models/enums/attestation_type.py:31
 msgid "DE"
 msgstr "Certificate of provisional registration"
 
-#: models/enums/attestation_type.py:33
 msgid "ECHEANCE"
 msgstr "Notice of maturity"
 
-#: templates/admin/attestation_administration.html:30
-#: templates/attestation_home_admin.html:30
 msgid "Faculty administration"
 msgstr ""
 
-#: templates/attestation_content.html:46
 msgid "No attestation available"
 msgstr ""
 
-#: templates/attestation_content.html:53
 msgid "Printed"
 msgstr ""
 
-#: templates/admin/attestation_administration.html:58
-#: templates/attestation_content.html:41
+msgid "Registration fetched doesn't match with student registration_id"
+msgstr ""
+
 msgid "Registration id"
 msgstr ""
 
-#: templates/admin/attestation_administration.html:39
-#: tests/views/test_main.py:200 tests/views/test_main.py:365 views/main.py:80
-#: views/main.py:112
 msgid "Student attestations"
 msgstr ""
