@@ -23,7 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 from decimal import Decimal
+from pprint import pprint
 
 from django.contrib.auth.models import Group
 from django.test import TestCase
@@ -31,7 +33,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from attribution.business import attribution
 from attribution.tests.factories.attribution import AttributionNewFactory
-from base.models.academic_year import AcademicYear
+from base.models.academic_year import AcademicYear, current_academic_year
 from base.models.enums import learning_component_year_type
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.learning_component_year import LearningComponentYearFactory
@@ -50,7 +52,7 @@ class AttributionTest(TestCase):
         TutorFactory(person=cls.person)
 
         _create_multiple_academic_year()
-        cls.current_academic_year = create_current_academic_year()
+        cls.current_academic_year = current_academic_year()
 
         # Creation Json which will be store on attribution
         cls.attributions = _get_attributions_dict(cls.current_academic_year.year)
@@ -119,19 +121,17 @@ class AttributionTest(TestCase):
     def test_append_start_end_academic_year(self):
         attribution_list = attribution.get_attribution_list(self.person.global_id,
                                                             self.current_academic_year)
+
         self.assertEqual(attribution_list[0]['acronym'], "LAGRO1530")
-        self.assertTrue(attribution_list[0]['start_academic_year'])
-        self.assertEqual(attribution_list[0]['start_academic_year'].year, 2015)
+        self.assertEqual(attribution_list[0]['start_academic_year'].year, self.current_academic_year.year-2)
         self.assertEqual(attribution_list[0]['end_academic_year'].year, self.current_academic_year.year)
 
         self.assertEqual(attribution_list[1]['acronym'], "LBIR1200")
-        self.assertTrue(attribution_list[1]['start_academic_year'])
-        self.assertEqual(attribution_list[1]['start_academic_year'].year, 2013)
+        self.assertEqual(attribution_list[1]['start_academic_year'].year, self.current_academic_year.year-1)
         self.assertRaises(KeyError, lambda: attribution_list[1]['end_academic_year'])  # No end year
 
         self.assertEqual(attribution_list[2]['acronym'], "LBIR1300")
-        self.assertTrue(attribution_list[2]['start_academic_year'])
-        self.assertEqual(attribution_list[2]['start_academic_year'].year, 2015)
+        self.assertEqual(attribution_list[2]['start_academic_year'].year, self.current_academic_year.year-2)
         self.assertEqual(attribution_list[2]['end_academic_year'].year, self.current_academic_year.year + 1)
 
     def test_get_attribution_list_about_to_expire(self):
@@ -369,7 +369,8 @@ class AttributionTest(TestCase):
 
 
 def _create_multiple_academic_year():
-    for year in range(2000, 2025):
+    current_year = datetime.date.today().year
+    for year in range(current_year-3, current_year+2):
         AcademicYearFactory(year=year)
 
 
@@ -403,23 +404,23 @@ def _get_attributions_dict(current_year):
         {
             'year': previous_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00',
             'LECTURING': '22.5',
-            'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015, 'end_year': previous_year,
+            'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': previous_year, 'end_year': previous_year,
             'is_substitute': False
         },
         {
             'year': current_year, 'acronym': 'LBIR1300', 'title': 'Chimie complexe volume 2', 'weight': '7.50',
-            'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': 2015,
+            'LECTURING': '12.5', 'PRACTICAL_EXERCISES': '9.5', 'function': 'HOLDER', 'start_year': previous_year-1,
             'end_year': future_year, 'is_substitute': False
         },
         {
             'year': current_year, 'acronym': 'LBIR1200', 'title': 'Chimie complexe', 'weight': '5.00',
             'LECTURING': '20.5',
-            'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': 2013, 'is_substitute': False
+            'PRACTICAL_EXERCISES': '7.0', 'function': 'CO-HOLDER', 'start_year': previous_year, 'is_substitute': False
         },
         {
             'year': current_year, 'acronym': 'LAGRO1530', 'title': 'Agrochimie élémentaire', 'weight': '5.00',
             'LECTURING': '20.5',
-            'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': 2015,
+            'PRACTICAL_EXERCISES': '5.0', 'function': 'HOLDER', 'start_year': previous_year-1,
             'end_year': current_year, 'is_substitute': False
         }
     ]
