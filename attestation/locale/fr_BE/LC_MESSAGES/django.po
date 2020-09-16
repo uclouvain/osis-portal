@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 19:59+0200\n"
+"POT-Creation-Date: 2020-09-16 11:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,7 +36,6 @@ msgstr ""
 "Inscription régulière prolongée (le cas échéant, allocations familiales, "
 "mutuelles, transport en commun, ...)"
 
-# ## Etat des attestations suivant enum provenant de EPC
 msgid "AVIS"
 msgstr "Avis d'enregistrement et facture"
 
@@ -49,10 +48,8 @@ msgstr "Administration des attestations"
 msgid "Attestation type"
 msgstr "Type d'attestation"
 
-#, fuzzy
-#| msgid "Attestation"
 msgid "Attestations"
-msgstr "Attestation"
+msgstr "Attestations"
 
 msgid "Available"
 msgstr "Disponible"
@@ -73,13 +70,10 @@ msgid "Printed"
 msgstr "Imprimée"
 
 msgid "Registration fetched doesn't match with student registration_id"
-msgstr ""
+msgstr "Le noma des attestations ne correspond pas au noma de l'étudiant"
 
 msgid "Registration id"
 msgstr "Id d'enregistrement"
 
 msgid "Student attestations"
 msgstr "Attestations de l'étudiant"
-
-#~ msgid "Attestations for academic year"
-#~ msgstr "Attestations pour l'année académique"
