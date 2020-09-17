@@ -33,6 +33,7 @@ from django.utils.translation import ugettext_lazy as _
 from mock import patch
 
 from attestation.views import main as v_main
+from attribution.business.xls_students_by_learning_unit import _columns_registration_id_to_text
 from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
@@ -40,7 +41,7 @@ from base.tests.factories.student import StudentFactory
 OK = 200
 ACCESS_DENIED = 401
 
-STUDENT_REGISTRATION_ID = "45451000"
+STUDENT_REGISTRATION_ID = "70531800"
 STUDENT_GLOBAL_ID = "78961314"
 
 
@@ -100,15 +101,13 @@ class HomeTest(TestCase):
 
         self.assertEqual(response.context['student'], a_student)
 
-        self.assertFalse(response.context['attestation_statuses'])
-        self.assertFalse(response.context['academic_year'])
-        self.assertFalse(response.context['formated_academic_year'])
-        self.assertFalse(response.context['available'])
+        self.assertFalse(response.context['attestations'])
+        self.assertFalse(response.context['current_year'])
 
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses',
-           side_effect=lambda x: {'academicYear': 2015, 'available': False, 'attestationStatuses': []})
+           side_effect=lambda x: {'current_year': 2015, 'attestations': [], 'registration_id': STUDENT_REGISTRATION_ID})
     def test_when_receive_attestation_statuses(self, mock_fetch_json_attestation_statuses):
-        a_student = StudentFactory(person=self.person)
+        a_student = StudentFactory(person=self.person, registration_id=STUDENT_REGISTRATION_ID)
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
@@ -116,11 +115,20 @@ class HomeTest(TestCase):
         self.assertTemplateUsed(response, 'attestation_home_student.html')
 
         self.assertEqual(response.context['student'], a_student)
-        self.assertEqual(response.context['academic_year'], 2015)
-        self.assertEqual(response.context['formated_academic_year'], "2015 - 2016")
+        self.assertEqual(response.context['current_year'], 2015)
 
-        self.assertFalse(response.context['attestation_statuses'])
-        self.assertFalse(response.context['available'])
+        self.assertFalse(response.context['attestations'])
+
+    @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses',
+           side_effect=lambda x: {'current_year': 2015, 'attestations': [], 'registration_id': STUDENT_REGISTRATION_ID})
+    def test_when_registration_id_doesnt_match(self, mock_fetch_json_attestation_statuses):
+        a_student = StudentFactory(person=self.person)
+
+        with self.assertRaises(Exception) as e:
+            self.client.get(self.url, follow=True)
+
+        self.assertTrue(mock_fetch_json_attestation_statuses.called)
+        self.assertEqual(str(e.exception), _('Registration fetched doesn\'t match with student registration_id'))
 
     def test_when_no_student_find_by_user(self):
         self.person.user.user_permissions.add(self.permission)
@@ -129,11 +137,9 @@ class HomeTest(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'attestation_home_student.html')
 
-        self.assertFalse(response.context['attestation_statuses'])
+        self.assertFalse(response.context['attestations'])
         self.assertFalse(response.context['student'])
-        self.assertFalse(response.context['academic_year'])
-        self.assertFalse(response.context['formated_academic_year'])
-        self.assertFalse(response.context['available'])
+        self.assertFalse(response.context['current_year'])
 
 
 class DownloadAttestationTest(TestCase):
@@ -292,13 +298,11 @@ class SelectStudentAttestationTest(TestCase):
 
         self.assertEqual(response.context['student'], a_student)
 
-        self.assertFalse(response.context['attestation_statuses'])
-        self.assertFalse(response.context['academic_year'])
-        self.assertFalse(response.context['formated_academic_year'])
-        self.assertFalse(response.context['available'])
+        self.assertFalse(response.context['attestations'])
+        self.assertFalse(response.context['current_year'])
 
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses',
-           side_effect=lambda x: {'academicYear': 2015, 'available': False, 'attestationStatuses': []})
+           side_effect=lambda x: {'current_year': 2015, 'attestations': [], 'registration_id' : STUDENT_REGISTRATION_ID})
     def test_valid_post_request(self, mock_fetch_json_attestation_statuses):
         a_student = StudentFactory(registration_id=STUDENT_REGISTRATION_ID)
         response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
@@ -309,11 +313,9 @@ class SelectStudentAttestationTest(TestCase):
         self.assertTemplateUsed(response, "attestation_home_admin.html")
 
         self.assertEqual(response.context['student'], a_student)
-        self.assertEqual(response.context['academic_year'], 2015)
-        self.assertEqual(response.context['formated_academic_year'], "2015 - 2016")
+        self.assertEqual(response.context['current_year'], 2015)
 
-        self.assertFalse(response.context['attestation_statuses'])
-        self.assertFalse(response.context['available'])
+        self.assertFalse(response.context['attestations'])
 
 
 class DownloadStudentAttestation(TestCase):
