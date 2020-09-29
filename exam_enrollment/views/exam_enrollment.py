@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -134,7 +134,7 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'exam_enrollments': data.get('exam_enrollments'),
                                  'student': stud,
                                  'current_number_session': data.get('current_number_session'),
-                                 'academic_year': mdl_base.academic_year.current_academic_year(),
+                                 'academic_year': off_year.academic_year,
                                  'program': mdl_base.offer_year.find_by_id(off_year.id),
                                  'request_timeout': request_timeout,
                                  'testwe_exam': data.get('testwe_exam'),
@@ -149,7 +149,7 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'exam_enrollments': "",
                                  'student': stud,
                                  'current_number_session': "",
-                                 'academic_year': mdl_base.academic_year.current_academic_year(),
+                                 'academic_year': off_year.academic_year,
                                  'program': mdl_base.offer_year.find_by_id(off_year.id),
                                  'request_timeout': request_timeout,
                              })
