@@ -24,12 +24,19 @@
 #
 ##############################################################################
 from django.contrib.auth.models import Group
+from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
 
+from base.models.academic_year import AcademicYearAdmin
+from base.models.enums import offer_enrollment_state
 from base.models.student import Student
+from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from base.business import student as student_bsn
+from base.tests.factories.user import UserFactory
 
 
 class TestPersonIsStudent(TestCase):
@@ -52,3 +59,65 @@ class TestPersonIsStudent(TestCase):
     def test_check_is_not_student(self):
         person_not_student = PersonFactory()
         self.assertFalse(student_bsn.check_if_person_is_student(person_not_student))
+
+
+class TestFindAndDiscriminate(TestCase):
+    def setUp(self):
+        Group.objects.create(name='students')
+        self.user = UserFactory()
+        self.person = PersonFactory(user=self.user)
+        self.student = StudentFactory(person=self.person)
+
+    def test_one_student(self):
+        self.assertEqual(self.student, student_bsn.find_by_user_and_discriminate(self.user))
+
+    def test_no_student(self):
+        another_user = UserFactory()
+        another_person = PersonFactory(user=another_user)
+        self.assertIsNone(student_bsn.find_by_user_and_discriminate(another_user))
+
+    def test_one_offer_enrollment_valid(self):
+        valid_student = StudentFactory(person=self.person)
+        current_academic_year = AcademicYearFactory(year=2020)
+        current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
+        valid_offer_enrollment = OfferEnrollmentFactory(student=valid_student,
+                                                        enrollment_state=offer_enrollment_state.PROVISORY,
+                                                        education_group_year=current_education_group_year)
+        invalid_offer_enrollment = OfferEnrollmentFactory(student=self.student,
+                                                          enrollment_state=None,
+                                                          education_group_year=current_education_group_year)
+        self.assertEqual(student_bsn.find_by_user_and_discriminate(self.user), valid_student)
+
+    def test_last_offer_enrollment_valid(self):
+        current_student = StudentFactory(person=self.person)
+        current_academic_year = AcademicYearFactory(year=2020)
+        previous_academic_year = AcademicYearFactory(year=2019)
+        current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
+        previous_education_group_year = EducationGroupYearFactory(academic_year=previous_academic_year)
+        current_offer_enrollmment = OfferEnrollmentFactory(student=current_student,
+                                                           enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                                                           education_group_year=current_education_group_year)
+        previous_offer_enrollment = OfferEnrollmentFactory(student=self.student,
+                                                           enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                                                           education_group_year=previous_education_group_year)
+        self.assertTrue(len(Student.objects.filter(person=self.person)) > 1)
+        self.assertEqual(current_student, student_bsn.find_by_user_and_discriminate(self.user))
+
+    def test_no_offer_enrollment_valid(self):
+        current_student = StudentFactory(person=self.person)
+        invalid_enrollment = OfferEnrollmentFactory(student=current_student,
+                                                    enrollment_state=offer_enrollment_state.PENDING)
+        another_invalid_enrollment = OfferEnrollmentFactory(student=current_student, enrollment_state=None)
+        self.assertIsNone(student_bsn.find_by_user_and_discriminate(self.user))
+
+    def test_cannot_discriminate(self):
+        current_student = StudentFactory(person=self.person)
+        current_academic_year = AcademicYearFactory(year=2020)
+        current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
+        offer_enrollmment = OfferEnrollmentFactory(student=current_student,
+                                                   enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                                                   education_group_year=current_education_group_year)
+        another_offer_enrollment = OfferEnrollmentFactory(student=self.student,
+                                                          enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                                                          education_group_year=current_education_group_year)
+        self.assertRaises(MultipleObjectsReturned, student_bsn.find_by_user_and_discriminate, self.user)
