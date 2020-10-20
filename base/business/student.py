@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.core.exceptions import MultipleObjectsReturned
 
 from base.models.enums import offer_enrollment_state
@@ -20,26 +22,21 @@ def _discriminate_student(students):
     If the most recent enrollment year has only one student, this student is returned.
     If there are more than one student for the most recent offer enrollment year, an exception is raised.
     """
-    student_offer_enrollments = {}
+    student_offer_enrollments = defaultdict(set)
+    offers_enrollments = list(OfferEnrollment.objects.filter(
+        student__in=students,
+        enrollment_state__in=offer_enrollment_state.VALID_ENROLLMENT_STATES))
 
-    for student in students:
-        offers_enrollments = list(OfferEnrollment.objects.filter(
-            student=student,
-            enrollment_state__in=offer_enrollment_state.VALID_ENROLLMENT_STATES))
-        for offer_enrollment in offers_enrollments:
-            offer_year = offer_enrollment.education_group_year.academic_year.year
-            if student_offer_enrollments.get(offer_year) and \
-                    offer_enrollment.student not in student_offer_enrollments.get(offer_year):
-                student_offer_enrollments.get(offer_year).append(offer_enrollment.student)
-            elif not student_offer_enrollments.get(offer_year):
-                student_offer_enrollments[offer_year] = [offer_enrollment.student]
+    for offer_enrollment in offers_enrollments:
+        offer_year = offer_enrollment.education_group_year.academic_year.year
+        student_offer_enrollments[offer_year].add(offer_enrollment.student)
 
     if student_offer_enrollments:
         max_year = max(student_offer_enrollments.keys())
         if len(student_offer_enrollments.get(max_year)) > 1:
             raise MultipleObjectsReturned
         else:
-            return student_offer_enrollments.get(max_year)[0]
+            return student_offer_enrollments.get(max_year).pop()
     else:
         return None
 

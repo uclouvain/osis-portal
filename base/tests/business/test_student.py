@@ -52,8 +52,7 @@ class TestPersonIsStudent(TestCase):
         StudentFactory(person=self.person)
         StudentFactory(person=self.person)
 
-        students_for_person = Student.objects.filter(person=self.person)
-        self.assertTrue(len(students_for_person) > 1)
+        self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
         self.assertTrue(student_bsn.check_if_person_is_student(self.person))
 
     def test_check_is_not_student(self):
@@ -80,12 +79,10 @@ class TestFindAndDiscriminate(TestCase):
         valid_student = StudentFactory(person=self.person)
         current_academic_year = AcademicYearFactory(year=2020)
         current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
-        OfferEnrollmentFactory(student=valid_student,
-                                                        enrollment_state=offer_enrollment_state.PROVISORY,
-                                                        education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=self.student,
-                                                          enrollment_state=None,
-                                                          education_group_year=current_education_group_year)
+        OfferEnrollmentFactory(student=valid_student, enrollment_state=offer_enrollment_state.PROVISORY,
+                               education_group_year=current_education_group_year)
+        OfferEnrollmentFactory(student=self.student, enrollment_state=None,
+                               education_group_year=current_education_group_year)
         self.assertEqual(student_bsn.find_by_user_and_discriminate(self.user), valid_student)
 
     def test_last_offer_enrollment_valid(self):
@@ -94,34 +91,30 @@ class TestFindAndDiscriminate(TestCase):
         previous_academic_year = AcademicYearFactory(year=2019)
         current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
         previous_education_group_year = EducationGroupYearFactory(academic_year=previous_academic_year)
-        OfferEnrollmentFactory(student=current_student,
-                                                           enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                                                           education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=self.student,
-                                                           enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                                                           education_group_year=previous_education_group_year)
-        self.assertTrue(len(Student.objects.filter(person=self.person)) > 1)
+        OfferEnrollmentFactory(student=current_student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                               education_group_year=current_education_group_year)
+        OfferEnrollmentFactory(student=self.student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                               education_group_year=previous_education_group_year)
+        self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
         self.assertEqual(current_student, student_bsn.find_by_user_and_discriminate(self.user))
 
     def test_no_offer_enrollment_valid(self):
         current_student = StudentFactory(person=self.person)
         OfferEnrollmentFactory(student=current_student,
-                                                    enrollment_state=offer_enrollment_state.PENDING)
+                               enrollment_state=offer_enrollment_state.PENDING)
         OfferEnrollmentFactory(student=current_student, enrollment_state=None)
-        self.assertTrue(len(Student.objects.filter(person=self.person)) > 1)
+        self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
         self.assertIsNone(student_bsn.find_by_user_and_discriminate(self.user))
 
     def test_cannot_discriminate(self):
         current_student = StudentFactory(person=self.person)
         current_academic_year = AcademicYearFactory(year=2020)
         current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
-        OfferEnrollmentFactory(student=current_student,
-                                                   enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                                                   education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=self.student,
-                                                          enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                                                          education_group_year=current_education_group_year)
-        self.assertTrue(len(Student.objects.filter(person=self.person)) > 1)
+        OfferEnrollmentFactory(student=current_student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                               education_group_year=current_education_group_year)
+        OfferEnrollmentFactory(student=self.student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                               education_group_year=current_education_group_year)
+        self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
         self.assertRaises(MultipleObjectsReturned, student_bsn.find_by_user_and_discriminate, self.user)
 
     def test_several_valid_enrollment_same_student(self):
@@ -130,17 +123,14 @@ class TestFindAndDiscriminate(TestCase):
         previous_education_group = EducationGroupYearFactory(academic_year=previous_academic_year)
         current_academic_year = AcademicYearFactory(year=2020)
         current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
-        OfferEnrollmentFactory(student=self.student,
-                                                   enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                                                   education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=self.student,
-                                                          enrollment_state=offer_enrollment_state.PROVISORY,
-                                                          education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=previous_student,
-                                                           enrollment_state=offer_enrollment_state.PROVISORY,
-                                                           education_group_year=previous_education_group)
-        self.assertTrue(len(Student.objects.filter(person=self.person)) > 1)
-        self.assertTrue(len(OfferEnrollment.objects
-                            .filter(student=self.student,
-                                    education_group_year__academic_year=current_academic_year)) > 1)
+        OfferEnrollmentFactory(student=self.student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
+                               education_group_year=current_education_group_year)
+        OfferEnrollmentFactory(student=self.student, enrollment_state=offer_enrollment_state.PROVISORY,
+                               education_group_year=current_education_group_year)
+        OfferEnrollmentFactory(student=previous_student, enrollment_state=offer_enrollment_state.PROVISORY,
+                               education_group_year=previous_education_group)
+        self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
+        self.assertTrue(OfferEnrollment.objects
+                        .filter(student=self.student,
+                                education_group_year__academic_year=current_academic_year).count() > 1)
         self.assertEqual(self.student, student_bsn.find_by_user_and_discriminate(self.user))
