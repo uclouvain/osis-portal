@@ -35,6 +35,8 @@ from mock import patch
 from attestation.views import main as v_main
 from attribution.business.xls_students_by_learning_unit import _columns_registration_id_to_text
 from base.forms.base_forms import RegistrationIdForm
+from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 
@@ -76,8 +78,11 @@ class HomeTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     def test_with_multiple_students_assigned_same_person(self):
-        StudentFactory(person=self.person)
-        StudentFactory(person=self.person)
+        student1 = StudentFactory(person=self.person)
+        student2 = StudentFactory(person=self.person)
+        education_group_year = EducationGroupYearFactory()
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student1)
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
         msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
                 "contact the registration departement (SIC). Thank you.")
         response = self.client.get(self.url, follow=True)
@@ -169,8 +174,11 @@ class DownloadAttestationTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
 
     def test_with_multiple_students_assigned_same_person(self):
-        StudentFactory(person=self.person)
-        StudentFactory(person=self.person)
+        student1 = StudentFactory(person=self.person)
+        student2 = StudentFactory(person=self.person)
+        education_group_year = EducationGroupYearFactory()
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student1)
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
         msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
                 "contact the registration departement (SIC). Thank you.")
         response = self.client.get(self.url, follow=True)
