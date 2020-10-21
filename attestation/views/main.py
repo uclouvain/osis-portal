@@ -35,7 +35,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from attestation.queues import student_attestation_status, student_attestation
 from base.forms.base_forms import RegistrationIdForm
-from base.models import student as student_mdl, person as person_mdl, academic_year as academic_year_mdl
+from base.models import student as student_mdl, person as person_mdl
+from base.business import student as student_bsn
 from base.views import layout
 from dashboard.views import main as dash_main_view
 
@@ -46,7 +47,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @permission_required('base.is_student', raise_exception=True)
 def home(request):
     try:
-        student = student_mdl.find_by_user(request.user)
+        student = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         logger.exception('User {} returned multiple students.'.format(request.user.username))
         return dash_main_view.show_multiple_registration_id_error(request)
@@ -63,7 +64,7 @@ def home(request):
 @permission_required('base.is_student', raise_exception=True)
 def download_attestation(request, academic_year, attestation_type):
     try:
-        student = student_mdl.find_by_user(request.user)
+        student = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         logger.exception('User {} returned multiple students.'.format(request.user.username))
         return dash_main_view.show_multiple_registration_id_error(request)
