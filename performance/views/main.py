@@ -40,6 +40,8 @@ from dashboard.views import main as dash_main_view
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
 
+from base.business import student as student_bsn
+
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
@@ -52,7 +54,7 @@ def view_performance_home(request):
     Display the academic programs of the student.
     """
     try:
-        stud = mdl_student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     list_student_programs = None
@@ -108,7 +110,7 @@ def display_result_for_specific_student_performance(request, pk):
     Display the student result for a particular year and program.
     """
     try:
-        stud = mdl_student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
@@ -135,7 +137,7 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
     Display the result for a students , filter by acronym
     """
     try:
-        stud = mdl_student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     cleaned_acronym = _clean_acronym(acronym)

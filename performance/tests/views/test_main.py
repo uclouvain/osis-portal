@@ -35,6 +35,8 @@ import base.tests.models.test_offer_year
 import base.tests.models.test_student
 import performance.tests.models.test_student_performance
 from base.forms.base_forms import RegistrationIdForm
+from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from performance.models.enums import offer_registration_state
@@ -112,7 +114,10 @@ class ViewPerformanceHomeTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
-        StudentFactory(person=self.student.person)
+        student2 = StudentFactory(person=self.student.person)
+        education_group_year = EducationGroupYearFactory()
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
         msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
                 "contact the registration departement (SIC). Thank you.")
 
@@ -191,7 +196,10 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
-        StudentFactory(person=self.student.person)
+        student2 = StudentFactory(person=self.student.person)
+        education_group_year = EducationGroupYearFactory()
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
         msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
                 "contact the registration departement (SIC). Thank you.")
 

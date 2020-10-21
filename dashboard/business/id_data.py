@@ -28,6 +28,7 @@ import logging
 import traceback
 from urllib import error, request
 from base.models import student as student_mdl
+from base.business import student as student_bsn
 from django.conf import settings
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -80,7 +81,7 @@ def get_student_id_data(user=None, registration_id=None):
     if registration_id:
         student = student_mdl.find_by_registration_id(registration_id)
     elif user:
-        student = student_mdl.find_by_user(user)
+        student = student_bsn.find_by_user_and_discriminate(user)
     else:
         student = None
     if student:
