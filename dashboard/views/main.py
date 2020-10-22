@@ -51,8 +51,10 @@ def faculty_administration(request):
 
 
 def show_multiple_registration_id_error(request):
-    msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-            "contact the registration departement (SIC). Thank you.")
+    msg = _("A problem was detected with your registration : 2 registration id's are linked to your user.</br> Please "
+            "contact <a href=\"{registration_departement_url}\" "
+            "target=\"_blank\">the Registration departement</a>. Thank you.")\
+        .format(registration_departement_url=settings.REGISTRATION_ADMINISTRATION_URL)
     messages.add_message(request, messages.ERROR, msg)
     return home(request)
 
