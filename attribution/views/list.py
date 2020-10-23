@@ -54,7 +54,7 @@ def get_learning_units(a_user):
     a_person = mdl_base.person.find_by_user(a_user)
     learning_units = []
     if a_person:
-        current_academic_year = mdl_base.academic_year.starting_academic_year()
+        current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
             attributions = mdl_attribution.attribution.find_by_tutor_year(tutor, current_academic_year)
@@ -105,7 +105,7 @@ def get_anac_parameter(current_academic_year):
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 @require_POST
 def list_build(request):
-    current_academic_year = mdl_base.academic_year.starting_academic_year()
+    current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
     codes = get_codes_parameter(request, current_academic_year)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
