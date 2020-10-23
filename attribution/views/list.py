@@ -105,7 +105,7 @@ def get_anac_parameter(current_academic_year):
 @permission_required('attribution.can_access_attribution', raise_exception=True)
 @require_POST
 def list_build(request):
-    current_academic_year = mdl_base.academic_year.current_academic_year()
+    current_academic_year = mdl_base.academic_year.starting_academic_year()
     anac = get_anac_parameter(current_academic_year)
     codes = get_codes_parameter(request, current_academic_year)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
