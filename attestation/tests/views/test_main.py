@@ -26,14 +26,15 @@
 import datetime
 import json
 
+from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from mock import patch
 
+
 from attestation.views import main as v_main
-from attribution.business.xls_students_by_learning_unit import _columns_registration_id_to_text
 from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
@@ -45,6 +46,12 @@ ACCESS_DENIED = 401
 
 STUDENT_REGISTRATION_ID = "70531800"
 STUDENT_GLOBAL_ID = "78961314"
+
+MULTIPLE_STUDENT_ERROR = _("A problem was detected with your registration : 2 registration id's are "
+                           "linked to your user.</br> Please contact <a href="
+                           "\"{registration_department_url}\" target=\"_blank\">the Registration "
+                           "department</a>. Thank you.")\
+                        .format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
 
 
 def open_sample_pdf():
@@ -83,8 +90,7 @@ class HomeTest(TestCase):
         education_group_year = EducationGroupYearFactory()
         OfferEnrollmentFactory(education_group_year=education_group_year, student=student1)
         OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
-        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-                "contact the registration departement (SIC). Thank you.")
+
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "dashboard.html")
@@ -93,7 +99,7 @@ class HomeTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, msg)
+        self.assertEqual(messages[0].message, MULTIPLE_STUDENT_ERROR)
 
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses', side_effect=lambda x: None)
     def test_when_not_receive_attestation_statuses(self, mock_fetch_json_attestation_statuses):
@@ -179,8 +185,6 @@ class DownloadAttestationTest(TestCase):
         education_group_year = EducationGroupYearFactory()
         OfferEnrollmentFactory(education_group_year=education_group_year, student=student1)
         OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
-        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-                "contact the registration departement (SIC). Thank you.")
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "dashboard.html")
@@ -189,7 +193,7 @@ class DownloadAttestationTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, msg)
+        self.assertEqual(messages[0].message, MULTIPLE_STUDENT_ERROR)
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
            side_effect=lambda global_id, year, attestation_type, username: None)
@@ -310,7 +314,8 @@ class SelectStudentAttestationTest(TestCase):
         self.assertFalse(response.context['current_year'])
 
     @patch('attestation.queues.student_attestation_status.fetch_json_attestation_statuses',
-           side_effect=lambda x: {'current_year': 2015, 'attestations': [], 'registration_id' : STUDENT_REGISTRATION_ID})
+           side_effect=lambda x: {'current_year': 2015, 'attestations': [],
+                                  'registration_id': STUDENT_REGISTRATION_ID})
     def test_valid_post_request(self, mock_fetch_json_attestation_statuses):
         a_student = StudentFactory(registration_id=STUDENT_REGISTRATION_ID)
         response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
