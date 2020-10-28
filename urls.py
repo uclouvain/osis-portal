@@ -39,5 +39,7 @@ urlpatterns = [
         ])),
         url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
         url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-    ]))
+    ])),
+
+    url(r'^score_encoding/$', main.view_score_encoding, name="internship_score_encoding"),
 ]
