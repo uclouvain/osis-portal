@@ -42,7 +42,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            {% if exam_enrollments %}
+            {% if not exam_enrollments %}
                 <div id="message_box" class="alert alert-info" style="margin-top: 1em;display: block;">
                     {% if error_message %}
                         <span id="status_message">{% trans error_message %}</span>
@@ -74,7 +74,7 @@
                 <form id="exam_enrollment_form" method="POST" action="{% url 'exam_enrollment_form' program.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
-                    {% if not covid_period %}
+                    {% if covid_period %}
                         <input type="hidden" name="covid_period" value="True"/>
                         <div id="covid_form_div" class="alert alert-warning">
                             <h3><b>{% trans 'Please complete IMPERATIVELY the questionnaire below' %}</b></h3>
