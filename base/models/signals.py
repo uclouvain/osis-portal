@@ -32,6 +32,7 @@ from django.dispatch.dispatcher import receiver, Signal
 from base import models as mdl
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
+from base.business import student as student_bsn
 
 person_created = Signal(providing_args=['person'])
 
@@ -96,7 +97,7 @@ if 'internship' in settings.INSTALLED_APPS:
 
 def _add_person_to_group(person):
     # Check Student
-    if mdl.student.find_by_person(person):
+    if student_bsn.check_if_person_is_student(person):
         _assign_group(person, GROUP_STUDENTS)
     # Check tutor
     if mdl.tutor.find_by_person(person):
