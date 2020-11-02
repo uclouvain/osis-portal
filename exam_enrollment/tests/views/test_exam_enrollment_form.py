@@ -159,7 +159,7 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertRedirects(response, reverse('dashboard_home'))
         self.assertEqual('dashboard.html', response.templates[0].name)
 
-    @patch('base.models.student.find_by_user')
+    @patch('base.business.student.find_by_user_and_discriminate')
     def test_choose_offer_no_student_for_current_user(self, mock_find_by_user):
         mock_find_by_user.return_value = None
         self.client.force_login(self.user)

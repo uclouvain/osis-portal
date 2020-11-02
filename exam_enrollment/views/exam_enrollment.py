@@ -41,10 +41,11 @@ from django.http import HttpResponse, response
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 
 from base import models as mdl_base
-from base.models import student, offer_enrollment, offer_year
+from base.models import offer_enrollment, offer_year
+from base.business import student as student_bsn
 from base.views import layout
 from dashboard.views import main as dash_main_view
 from exam_enrollment.models import exam_enrollment_request, exam_enrollment_submitted
@@ -68,7 +69,7 @@ def choose_offer_direct(request):
 
 def navigation(request, navigate_direct_to_form):
     try:
-        stud = mdl_base.student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     current_academic_year = mdl_base.academic_year.starting_academic_year()
@@ -90,7 +91,7 @@ def navigation(request, navigate_direct_to_form):
 @permission_required('base.is_student', raise_exception=True)
 def exam_enrollment_form(request, offer_year_id):
     try:
-        stud = student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     off_year = offer_year.find_by_id(offer_year_id)
@@ -220,7 +221,7 @@ def _exam_enrollment_form_message(registration_id, offer_year_acronym, year):
 
 
 def check_exam_enrollment_form(request, offer_year_id):
-    a_student = mdl_base.student.find_by_user(request.user)
+    a_student = student_bsn.find_by_user_and_discriminate(request.user)
     off_year = offer_year.find_by_id(offer_year_id)
     if 'exam_enrollment' in settings.INSTALLED_APPS:
         if _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):

@@ -25,6 +25,7 @@
 ##############################################################################
 import json
 
+from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -35,6 +36,8 @@ import base.tests.models.test_offer_year
 import base.tests.models.test_student
 import performance.tests.models.test_student_performance
 from base.forms.base_forms import RegistrationIdForm
+from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from performance.models.enums import offer_registration_state
@@ -43,6 +46,12 @@ from performance.views import main
 
 OK = 200
 ACCESS_DENIED = 401
+
+MULTIPLE_STUDENT_ERROR = _("A problem was detected with your registration : 2 registration id's are "
+                           "linked to your user.</br> Please contact <a href="
+                           "\"{registration_department_url}\" target=\"_blank\">the Registration "
+                           "department</a>. Thank you.") \
+    .format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
 
 
 class TestMain(TestCase):
@@ -112,9 +121,10 @@ class ViewPerformanceHomeTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
-        StudentFactory(person=self.student.person)
-        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-                "contact the registration departement (SIC). Thank you.")
+        student2 = StudentFactory(person=self.student.person)
+        education_group_year = EducationGroupYearFactory()
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
 
         response = self.client.get(self.url)
 
@@ -124,7 +134,7 @@ class ViewPerformanceHomeTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, msg)
+        self.assertEqual(messages[0].message, MULTIPLE_STUDENT_ERROR)
 
     def test_with_empty_programs_list(self):
         response = self.client.get(self.url)
@@ -191,9 +201,10 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
-        StudentFactory(person=self.student.person)
-        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-                "contact the registration departement (SIC). Thank you.")
+        student2 = StudentFactory(person=self.student.person)
+        education_group_year = EducationGroupYearFactory()
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
 
         response = self.client.get(self.url)
 
@@ -203,7 +214,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, msg)
+        self.assertEqual(messages[0].message, MULTIPLE_STUDENT_ERROR)
 
     def test_when_none_student_performance(self):
         self.student_performance.delete()
@@ -249,7 +260,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
             'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-                           % {"session_month": self.student_performance.get_session_locked_display()}
+            % {"session_month": self.student_performance.get_session_locked_display()}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 
@@ -538,7 +549,7 @@ class VisualizeStudentResult(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
             'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-                           % {"session_month": self.student_performance.get_session_locked_display()}
+            % {"session_month": self.student_performance.get_session_locked_display()}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 
@@ -571,14 +582,14 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         students_group.permissions.add(permission)
         cls.student = StudentFactory()
         cls.student_performance = StudentPerformanceFactory(registration_id=cls.student.registration_id,
-                                                             academic_year=cls.valid_year,
-                                                             acronym=cls.simple_acronym)
+                                                            academic_year=cls.valid_year,
+                                                            acronym=cls.simple_acronym)
         cls.student_performance_complex = StudentPerformanceFactory(registration_id=cls.student.registration_id,
-                                                                     academic_year=cls.valid_year,
-                                                                     acronym=cls.complex_acronym)
+                                                                    academic_year=cls.valid_year,
+                                                                    acronym=cls.complex_acronym)
         cls.student_performance_with_space = StudentPerformanceFactory(registration_id=cls.student.registration_id,
-                                                                        academic_year=cls.valid_year,
-                                                                        acronym=cls.acronym_with_space)
+                                                                       academic_year=cls.valid_year,
+                                                                       acronym=cls.acronym_with_space)
 
     def setUp(self):
         self.client.force_login(self.student.person.user)
