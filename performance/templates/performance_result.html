@@ -89,32 +89,32 @@
                             <div class="row">
                                 <div class="alert alert-warning" role="alert">
                                     <h4>{% trans 'Session of ' %}{% trans on_site_exams_info.moisSession %}</h4>
-                                    <p>{% trans 'For the '%}<strong><u>{% trans 'distance exams'%}</u></strong>{% trans ', I will present one or more' %}</p>
+                                    <p>{% trans 'For the ' %}<strong><u>{% trans 'distance exams' %}</u></strong>{% trans ', if applicable, I will present one or more' %}
+                                    </p>
                                     <ul>
-                                        <li>{% trans 'written exams with the TestWe and/or Wiseflow tools, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.examTestWe is None %}{%trans 'Not defined'%}
+                                        <li>{% trans 'written exams with Gradescope, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.examTestWe is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examTestWe == "SUR_SITE" %}{% trans 'Yes' %}
-                                                {% elif  on_site_exams_info.examTestWe == "PAS_SUR_SITE" %}{% trans 'No' %}
-                                                {% elif  on_site_exams_info.examTestWe == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% elif on_site_exams_info.examTestWe == "PAS_SUR_SITE" %}{% trans 'No' %}
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
-                                        <li>{% trans 'written exams with Moodle and/or Gradescope and/or another, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.examMoodle is None %}{%trans 'Not defined'%}
+                                        <li>{% trans 'written exams with Moodle, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.examMoodle is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examMoodle == "SUR_SITE" %}{% trans 'Yes' %}
-                                                {% elif  on_site_exams_info.examMoodle == "PAS_SUR_SITE" %}{% trans 'No' %}
-                                                {% elif  on_site_exams_info.examMoodle == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% elif on_site_exams_info.examMoodle == "PAS_SUR_SITE" %}{% trans 'No' %}
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <li>{% trans 'oral exams with Teams, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.examMoodle is None %}{%trans 'Not defined'%}
+                                            {% if  on_site_exams_info.examMoodle is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examTeams == "SUR_SITE" %}{% trans 'Yes' %}
-                                                {% elif  on_site_exams_info.examTeams == "PAS_SUR_SITE" %}{% trans 'No' %}
-                                                {% elif  on_site_exams_info.examTeams == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% elif on_site_exams_info.examTeams == "PAS_SUR_SITE" %}{% trans 'No' %}
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <br/>
                                     </ul>
-                                    <p><strong>{% trans 'If this information is not correct, please contact your faculty' %}</strong></p>
+                                    <p>
+                                        <strong>{% trans 'If this information is not correct, please contact your faculty' %}</strong>
+                                    </p>
                                 </div>
                             </div>
                         {% endif %}
