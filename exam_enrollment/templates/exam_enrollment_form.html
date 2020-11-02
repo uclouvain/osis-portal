@@ -86,17 +86,17 @@
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
-                                                {% if  testwe_exam == 'PAS_SUR_SITE' %}
+                                               name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if  moodle_exam == 'PAS_SUR_SITE' %}
                                                checked
                                                 {% endif %}
                                         >{% trans 'from my place of living' %}
                                     </label>
                                     <br>
                                     <label class="radio-inline">
-                                        <input class="form-check-input choices" type="radio" name="testwe_exam"
-                                               id="testwe_exam_yes_id" value="SUR_SITE"
-                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
+                                        <input class="form-check-input choices" type="radio" name="moodle_exam"
+                                               id="moodle_exam_yes_id" value="SUR_SITE"
+                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
                                         >{% trans 'in an equipped room at UCLouvain (because it is impossible for me to present it from my place of living)' %}
                                     </label>
                                 </p>
@@ -107,16 +107,16 @@
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
-                                                {% if moodle_exam == 'PAS_SUR_SITE' %}
+                                               name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if testwe_exam == 'PAS_SUR_SITE' %}
                                                checked {% endif %}
                                         >{% trans 'from my place of living' %}
                                     </label>
                                     <br>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="moodle_exam" id="moodle_exam_yes_id" value="SUR_SITE"
-                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
+                                               name="testwe_exam" id="testwe_exam_yes_id" value="SUR_SITE"
+                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
                                         >{% trans 'in an equipped room at UCLouvain (because it is impossible for me to present it from my place of living)' %}
                                     </label>
                                 </p>

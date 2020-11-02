@@ -105,7 +105,7 @@
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <li>{% trans 'oral exams with Teams, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.examMoodle is None %}{% trans 'Not defined' %}
+                                            {% if  on_site_exams_info.examTeams is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examTeams == "SUR_SITE" %}{% trans 'Yes' %}
                                                 {% elif on_site_exams_info.examTeams == "PAS_SUR_SITE" %}{% trans 'No' %}
                                                 {% else %}{% trans 'Error' %}
