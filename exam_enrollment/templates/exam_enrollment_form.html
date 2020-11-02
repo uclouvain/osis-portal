@@ -70,25 +70,6 @@
                         {{ program.acronym }} - {{ program.title }}
                     </div>
                 </div>
-
-                <br>
-
-                <div class="alert alert-info" style="display:inline-block;">
-                    <table>
-                        <tr>
-                            <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%"
-                                                               aria-hidden="true"></i></td>
-                            <td>{% trans 'info_exam_enrollment_by_default' as info_exam_enrollment_by_default %}
-                                {{ info_exam_enrollment_by_default | safe }}
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                {% if is_11ba %}
-                    <div class="alert alert-danger" style="display:inline-block;">
-                        {% trans 'The first-year bachelor student must register for the January exam session all the learning units given in the first quadrimester (block 1 courses), including those which only give rise to a partial test (according to Art. 83 of the RGEE)' %}
-                    </div>
-                {% endif %}
                 <br>
                 <form id="exam_enrollment_form" method="POST" action="{% url 'exam_enrollment_form' program.id %}">
                     {% csrf_token %}
@@ -101,48 +82,47 @@
                             <h4>{% trans 'For the <strong><u>distance</u></strong> exams, in view of the difficulties to find yourself in good conditions to take your exams from your place of living, it is possible to come in a equipped room at UCLouvain.' %}</h4>
                             <div class="checkbox">
                                 {% trans 'In case one of my written exams is or will be held in distance with Moodle, I would present it :' %}
-                                :<br>
+                                <br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
-                                                {% if  testwe_exam == 'PAS_SUR_SITE' %}
+                                               name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if  moodle_exam == 'PAS_SUR_SITE' %}
                                                checked
                                                 {% endif %}
                                         >{% trans 'from my place of living' %}
                                     </label>
                                     <br>
                                     <label class="radio-inline">
-                                        <input class="form-check-input choices" type="radio" name="testwe_exam"
-                                               id="testwe_exam_yes_id" value="SUR_SITE"
-                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
+                                        <input class="form-check-input choices" type="radio" name="moodle_exam"
+                                               id="moodle_exam_yes_id" value="SUR_SITE"
+                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
                                         >{% trans 'in an equipped room at UCLouvain (because it is impossible for me to present it from my place of living)' %}
                                     </label>
                                 </p>
                             </div>
                             <div class="checkbox">
                                 {% trans 'In case one of my written exams is or will be held in distance with Gradescope, I would present it :' %}
-                                :<br>
+                                <br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
-                                                {% if moodle_exam == 'PAS_SUR_SITE' %}
+                                               name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if testwe_exam == 'PAS_SUR_SITE' %}
                                                checked {% endif %}
                                         >{% trans 'from my place of living' %}
                                     </label>
                                     <br>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="moodle_exam" id="moodle_exam_yes_id" value="SUR_SITE"
-                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
+                                               name="testwe_exam" id="testwe_exam_yes_id" value="SUR_SITE"
+                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
                                         >{% trans 'in an equipped room at UCLouvain (because it is impossible for me to present it from my place of living)' %}
                                     </label>
                                 </p>
                             </div>
                             <div class="checkbox" id="teams_exam_checkbox">
                                 {% trans 'In case one of my oral exams is or will be held in distance with Teams, I would present it :' %}
-                                :
                                 <br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
@@ -166,6 +146,23 @@
                                     {% trans 'In case of force majeure, it is always possible to modify the choices made via this questionnaire, by contacting your faculty.' %}
                                 </strong>
                             </div>
+                        </div>
+                    {% endif %}
+                    <div class="alert alert-info" style="display:inline-block;">
+                        <table>
+                            <tr>
+                                <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%"
+                                                                   aria-hidden="true"></i></td>
+                                <td>{% trans 'info_exam_enrollment_by_default' as info_exam_enrollment_by_default %}
+                                    {{ info_exam_enrollment_by_default | safe }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                    {% if is_11ba %}
+                        <div class="alert alert-danger" style="display:inline-block;">
+                            {% trans 'The first-year bachelor student must register for the January exam session all the learning units given in the first quadrimester (block 1 courses), including those which only give rise to a partial test (according to Art. 83 of the RGEE)' %}
                         </div>
                     {% endif %}
                     <table class="table table-striped table-hover table-bordered" id="table_exam_enrollment_choice">

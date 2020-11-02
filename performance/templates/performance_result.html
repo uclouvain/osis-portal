@@ -61,7 +61,7 @@
                     <div class="col-md-12 alert alert-warning">
                         {% trans 'The server is actually overloaded. Please excuse us and try again later.' %}
                     </div>
-                {% elif not_authorized_message %}
+                    {% elif not_authorized_message %}
                     <div class="col-md-12 alert alert-danger">
                         {{ not_authorized_message }}
                     </div>
@@ -92,20 +92,20 @@
                                     <p>{% trans 'For the ' %}<strong><u>{% trans 'distance exams' %}</u></strong>{% trans ', if applicable, I will present one or more' %}
                                     </p>
                                     <ul>
-                                        <li>{% trans 'written exams with Gradescope, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.examTestWe is None %}{% trans 'Not defined' %}
-                                                {% elif on_site_exams_info.examTestWe == "SUR_SITE" %}{% trans 'Yes' %}
-                                                {% elif on_site_exams_info.examTestWe == "PAS_SUR_SITE" %}{% trans 'No' %}
-                                                {% else %}{% trans 'Error' %}
-                                            {% endif %}</li>
                                         <li>{% trans 'written exams with Moodle, in a room at UCLouvain' %} :
                                             {% if  on_site_exams_info.examMoodle is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examMoodle == "SUR_SITE" %}{% trans 'Yes' %}
                                                 {% elif on_site_exams_info.examMoodle == "PAS_SUR_SITE" %}{% trans 'No' %}
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
+                                        <li>{% trans 'written exams with Gradescope, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.examTestWe is None %}{% trans 'Not defined' %}
+                                                {% elif on_site_exams_info.examTestWe == "SUR_SITE" %}{% trans 'Yes' %}
+                                                {% elif on_site_exams_info.examTestWe == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% else %}{% trans 'Error' %}
+                                            {% endif %}</li>
                                         <li>{% trans 'oral exams with Teams, in a room at UCLouvain' %} :
-                                            {% if  on_site_exams_info.examMoodle is None %}{% trans 'Not defined' %}
+                                            {% if  on_site_exams_info.examTeams is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examTeams == "SUR_SITE" %}{% trans 'Yes' %}
                                                 {% elif on_site_exams_info.examTeams == "PAS_SUR_SITE" %}{% trans 'No' %}
                                                 {% else %}{% trans 'Error' %}
