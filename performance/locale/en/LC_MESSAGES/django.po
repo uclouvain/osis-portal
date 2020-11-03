@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-02 13:10+0100\n"
+"POT-Creation-Date: 2020-11-03 13:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,6 +121,9 @@ msgid "No"
 msgstr ""
 
 msgid "No results to show."
+msgstr ""
+
+msgid "Not concerned"
 msgstr ""
 
 msgid "Not defined"
