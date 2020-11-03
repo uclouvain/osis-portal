@@ -96,18 +96,21 @@
                                             {% if  on_site_exams_info.examMoodle is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examMoodle == "SUR_SITE" %}{% trans 'Yes' %}
                                                 {% elif on_site_exams_info.examMoodle == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif on_site_exams_info.examMoodle == "NON_CONCERNE" %}{% trans 'Not concerned' %}
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <li>{% trans 'written exams with Gradescope, in a room at UCLouvain' %} :
                                             {% if  on_site_exams_info.examTestWe is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examTestWe == "SUR_SITE" %}{% trans 'Yes' %}
                                                 {% elif on_site_exams_info.examTestWe == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif on_site_exams_info.examTestWe == "NON_CONCERNE" %}{% trans 'Not concerned' %}
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <li>{% trans 'oral exams with Teams, in a room at UCLouvain' %} :
                                             {% if  on_site_exams_info.examTeams is None %}{% trans 'Not defined' %}
                                                 {% elif on_site_exams_info.examTeams == "SUR_SITE" %}{% trans 'Yes' %}
                                                 {% elif on_site_exams_info.examTeams == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif on_site_exams_info.examTeams == "NON_CONCERNE" %}{% trans 'Not concerned' %}
                                                 {% else %}{% trans 'Error' %}
                                             {% endif %}</li>
                                         <br/>
