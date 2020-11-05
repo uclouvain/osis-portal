@@ -70,59 +70,93 @@
                         {{ program.acronym }} - {{ program.title }}
                     </div>
                 </div>
+
+                <br>
+
+                <div class="alert alert-info" style="display:inline-block;">
+                    <table>
+                        <tr>
+                            <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%"
+                                                               aria-hidden="true"></i></td>
+                            <td>{% trans 'info_exam_enrollment_by_default' as info_exam_enrollment_by_default %}
+                                {{ info_exam_enrollment_by_default | safe }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
                 <br>
                 <form id="exam_enrollment_form" method="POST" action="{% url 'exam_enrollment_form' program.id %}">
                     {% csrf_token %}
                     <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
                     {% if covid_period %}
-                        <input type="hidden" name="covid_period" value="True"/>
+                        <input type="hidden" name="covid_period" value="True" />
                         <div id="covid_form_div" class="alert alert-warning">
                             <h3><b>{% trans 'Please complete IMPERATIVELY the questionnaire below' %}</b></h3>
                             <br>
-                            <h4>{% trans 'For the <strong><u>distance</u></strong> exams, in view of the difficulties to find yourself in good conditions to take your exams from your place of living, it is possible to come in a equipped room at UCLouvain.' %}</h4>
+                            <h4>{% trans 'For the <strong><u>distance</u></strong> exams, in view of the difficulties or not to find myself in good conditions to take my exams from my place of living,' %}</h4>
                             <div class="checkbox">
-                                {% trans 'In case one of my written exams is or will be held in distance with Moodle, I would present it :' %}
-                                <br>
+                                {% trans 'I will present my written exams with the TestWe and/or Wiseflow tools' %}
+                                :<br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
-                                                {% if  moodle_exam == 'PAS_SUR_SITE' %}
+                                               name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if  testwe_exam == 'PAS_SUR_SITE' %}
                                                checked
                                                 {% endif %}
                                         >{% trans 'from my place of living' %}
                                     </label>
                                     <br>
                                     <label class="radio-inline">
-                                        <input class="form-check-input choices" type="radio" name="moodle_exam"
-                                               id="moodle_exam_yes_id" value="SUR_SITE"
-                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
-                                        >{% trans 'in an equipped room at UCLouvain (because it is impossible for me to present it from my place of living)' %}
+                                        <input class="form-check-input choices" type="radio" name="testwe_exam"
+                                               id="testwe_exam_yes_id" value="SUR_SITE"
+                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="testwe_exam" id="testwe_exam_not_concerned_id"
+                                               value="NON_CONCERNE"
+                                                {% if  testwe_exam == 'NON_CONCERNE' %}
+                                               checked
+                                                {% endif %}
+                                        >{% trans 'I have no exam of this type' %}
                                     </label>
                                 </p>
                             </div>
                             <div class="checkbox">
-                                {% trans 'In case one of my written exams is or will be held in distance with Gradescope, I would present it :' %}
-                                <br>
+                                {% trans 'I will present my written exams with the Moodle and/or Gradescope and/or another tool' %}
+                                :<br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="testwe_exam" id="testwe_exam_no_id" value="PAS_SUR_SITE"
-                                                {% if testwe_exam == 'PAS_SUR_SITE' %}
+                                               name="moodle_exam" id="moodle_exam_no_id" value="PAS_SUR_SITE"
+                                                {% if moodle_exam == 'PAS_SUR_SITE' %}
                                                checked {% endif %}
                                         >{% trans 'from my place of living' %}
                                     </label>
                                     <br>
                                     <label class="radio-inline">
                                         <input class="form-check-input choices" type="radio"
-                                               name="testwe_exam" id="testwe_exam_yes_id" value="SUR_SITE"
-                                                {% if  testwe_exam == 'SUR_SITE' %} checked {% endif %}
-                                        >{% trans 'in an equipped room at UCLouvain (because it is impossible for me to present it from my place of living)' %}
+                                               name="moodle_exam" id="moodle_exam_yes_id" value="SUR_SITE"
+                                                {% if  moodle_exam == 'SUR_SITE' %} checked {% endif %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="moodle_exam" id="moodle_exam_not_concerned_id"
+                                               value="NON_CONCERNE"
+                                                {% if moodle_exam == 'NON_CONCERNE' %}
+                                               checked {% endif %}
+                                        >{% trans 'I have no exam of this type' %}
                                     </label>
                                 </p>
                             </div>
                             <div class="checkbox" id="teams_exam_checkbox">
-                                {% trans 'In case one of my oral exams is or will be held in distance with Teams, I would present it :' %}
+                                {% trans 'I will present my oral exams with Teams' %} :
                                 <br>
                                 <p style="margin-left:30px;">
                                     <label class="radio-inline">
@@ -137,32 +171,19 @@
                                         <input class="form-check-input choices" type="radio"
                                                name="teams_exam" id="teams_exam_yes_id" value="SUR_SITE"
                                                 {% if teams_exam == 'SUR_SITE' %} checked {% endif %}
-                                        >{% trans 'in an equipped room at UCLouvain (because it is impossible for me to present it from my place of living)' %}
+                                               >{% trans 'in an equipped room at UCLouvain' %}
+                                    </label>
+                                    <br>
+                                    <label class="radio-inline">
+                                        <input class="form-check-input choices" type="radio"
+                                               name="teams_exam" id="teams_exam_not_concerned_id"
+                                               value="NON_CONCERNE"
+                                                {% if teams_exam == 'NON_CONCERNE' %}
+                                               checked {% endif %}
+                                        >{% trans 'I have no exam of this type' %}
                                     </label>
                                 </p>
                             </div>
-                            <div>
-                                <strong>
-                                    {% trans 'In case of force majeure, it is always possible to modify the choices made via this questionnaire, by contacting your faculty.' %}
-                                </strong>
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="alert alert-info" style="display:inline-block;">
-                        <table>
-                            <tr>
-                                <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%"
-                                                                   aria-hidden="true"></i></td>
-                                <td>{% trans 'info_exam_enrollment_by_default' as info_exam_enrollment_by_default %}
-                                    {{ info_exam_enrollment_by_default | safe }}
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <br>
-                    {% if is_11ba %}
-                        <div class="alert alert-danger" style="display:inline-block;">
-                            {% trans 'The first-year bachelor student must obligatorily register for the January exam session all the learning units of the first annual block taught in the first quadrimester, including those giving rise to a partial test (Art. 83 of the RGEE).' %}
                         </div>
                     {% endif %}
                     <table class="table table-striped table-hover table-bordered" id="table_exam_enrollment_choice">
@@ -287,8 +308,7 @@
                     <div class="text-center">
                         {% if covid_period %}
                             <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit" disabled
-                                    data-toggle="tooltip" data-html="true"
-                                    title="{% trans 'Please complete <b>IMPERATIVELY</b> the questionnaire.' %}">
+                            data-toggle="tooltip" data-html="true" title="{% trans 'Please complete <b>IMPERATIVELY</b> the questionnaire.' %}">
                             <span class="glyphicon glyphicon-floppy-save"
                                   aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
                         {% else %}
@@ -395,19 +415,19 @@
         }
 
         {% if covid_period %}
-            function checkTestweChoiceMade() {
+            function checkTestweChoiceMade(){
                 return document.getElementById("testwe_exam_yes_id").checked ||
                     document.getElementById("testwe_exam_no_id").checked ||
                     document.getElementById("testwe_exam_not_concerned_id").checked;
             }
 
-            function checkMoodleChoiceMade() {
+            function checkMoodleChoiceMade(){
                 return document.getElementById("moodle_exam_yes_id").checked ||
                     document.getElementById("moodle_exam_no_id").checked ||
                     document.getElementById("moodle_exam_not_concerned_id").checked;
             }
 
-            function checkTeamsChoiceMade() {
+            function checkTeamsChoiceMade(){
                 return document.getElementById("teams_exam_yes_id").checked ||
                     document.getElementById("teams_exam_no_id").checked ||
                     document.getElementById("teams_exam_not_concerned_id").checked;
@@ -416,7 +436,7 @@
 
             $('#exam_enrollment_form').on('submit', function (e) {
                 let allChoicesMade = checkTestweChoiceMade() && checkMoodleChoiceMade() && checkTeamsChoiceMade();
-                if (allChoicesMade !== true) {
+                if (allChoicesMade !== true){
                     e.preventDefault();
                     document.getElementById("covid_form_div").classList.remove('alert-warning');
                     document.getElementById("covid_form_div").classList.add('alert-danger');
@@ -425,23 +445,23 @@
 
             });
 
-            function enableValidateButtonIfAllChoicesMade() {
+            function enableValidateButtonIfAllChoicesMade(){
                 let allChoicesMade = checkTestweChoiceMade() && checkMoodleChoiceMade() && checkTeamsChoiceMade();
                 let validateButton = $('#bt_validate_exam_enrol_form');
-                if (allChoicesMade) {
+                if(allChoicesMade){
                     validateButton.attr("data-original-title", "");
                     validateButton.attr("title", "");
                     validateButton.prop('disabled', false);
                 }
             }
 
-            $(".choices").change(function (e) {
-                enableValidateButtonIfAllChoicesMade();
-            });
+                $( ".choices" ).change(function(e) {
+                    enableValidateButtonIfAllChoicesMade();
+                });
 
-            window.onload = function () {
-                enableValidateButtonIfAllChoicesMade();
-            };
+                window.onload = function() {
+                  enableValidateButtonIfAllChoicesMade();
+                };
         {% endif %}
 
 
