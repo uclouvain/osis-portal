@@ -44,8 +44,8 @@ from django.utils.translation import gettext_lazy as _
 from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 
 from base import models as mdl_base
-from base.business import student as student_bsn
 from base.models import offer_enrollment, offer_year
+from base.business import student as student_bsn
 from base.views import layout
 from dashboard.views import main as dash_main_view
 from exam_enrollment.models import exam_enrollment_request, exam_enrollment_submitted
@@ -122,14 +122,13 @@ def _get_exam_enrollment_form(off_year, request, stud):
     exam_enroll_request = exam_enrollment_request. \
         get_by_student_and_offer_year_acronym_and_fetch_date(stud, off_year.acronym, fetch_date_limit)
 
-    program = mdl_base.offer_year.find_by_id(off_year.id)
-
     if exam_enroll_request:
         try:
             data = json.loads(exam_enroll_request.document)
         except json.JSONDecodeError:
             logger.exception("Json data is not valid")
             data = {}
+
         return layout.render(request, 'exam_enrollment_form.html',
                              {
                                  'error_message': _get_error_message(data, off_year),
@@ -137,13 +136,12 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'student': stud,
                                  'current_number_session': data.get('current_number_session'),
                                  'academic_year': mdl_base.academic_year.current_academic_year(),
-                                 'program': program,
+                                 'program': mdl_base.offer_year.find_by_id(off_year.id),
                                  'request_timeout': request_timeout,
                                  'testwe_exam': data.get('testwe_exam'),
                                  'teams_exam': data.get('teams_exam'),
                                  'moodle_exam': data.get('moodle_exam'),
-                                 'covid_period': data.get('covid_period'),
-                                 'is_11ba': program.acronym.endswith('11BA'),
+                                 'covid_period': data.get('covid_period')
                              })
     else:
         ask_exam_enrollment_form(stud, off_year)
@@ -153,9 +151,8 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'student': stud,
                                  'current_number_session': "",
                                  'academic_year': mdl_base.academic_year.current_academic_year(),
-                                 'program': program,
+                                 'program': mdl_base.offer_year.find_by_id(off_year.id),
                                  'request_timeout': request_timeout,
-                                 'is_11ba': program.acronym.endswith('11BA'),
                              })
 
 
