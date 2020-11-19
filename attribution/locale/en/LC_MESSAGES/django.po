@@ -75,6 +75,10 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
+msgctxt "applications"
+msgid "Code"
+msgstr ""
+
 msgid "Coordinator"
 msgstr ""
 

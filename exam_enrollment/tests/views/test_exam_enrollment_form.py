@@ -290,13 +290,10 @@ class ExamEnrollmentFormTest(TestCase):
     @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
     @patch('exam_enrollment.views.exam_enrollment._get_student_programs')
     @patch('exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form')
-    @patch('base.models.academic_year.current_academic_year')
     def test_navigation_student_has_programs_with_data(self,
-                                                       mock_current_academic_year,
                                                        mock_fetch_exam_form,
                                                        mock_get_student_programs,
                                                        mock_find_learn_unit_enrols):
-        mock_current_academic_year.return_value = None
         mock_get_student_programs.return_value = [self.off_year]
         mock_fetch_exam_form.return_value = {
             'exam_enrollments': [],
@@ -306,7 +303,6 @@ class ExamEnrollmentFormTest(TestCase):
         self.client.force_login(self.user)
         an_url = reverse('exam_enrollment_form', args=[self.off_year.id])
         response = self.client.get(an_url, follow=True)
-        self.assertTrue(mock_current_academic_year.called)
         self.assertEqual('exam_enrollment_form.html', response.templates[0].name)
 
     if hasattr(settings, 'QUEUES') and settings.QUEUES:

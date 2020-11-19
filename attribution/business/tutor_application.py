@@ -27,8 +27,7 @@ import time
 from decimal import Decimal
 
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from attribution import models as mdl_attribution
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
@@ -127,7 +126,7 @@ def send_mail_applications_summary(global_id):
     receivers = [message_config.create_receiver(person.id, person.email, person.language)]
     applications = _get_applications_table(application_list)
     table_applications = message_config.create_table('applications',
-                                                     [_('Acronym'), 'Vol. 1', 'Vol. 2'],
+                                                     [pgettext_lazy("applications", "Code"), 'Vol. 1', 'Vol. 2'],
                                                      applications)
     template_base_data = {
         'first_name': person.first_name,
