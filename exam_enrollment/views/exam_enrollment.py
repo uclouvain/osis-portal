@@ -41,10 +41,11 @@ from django.http import HttpResponse, response
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 
 from base import models as mdl_base
-from base.models import student, offer_enrollment, offer_year
+from base.business import student as student_bsn
+from base.models import offer_enrollment, offer_year
 from base.views import layout
 from dashboard.views import main as dash_main_view
 from exam_enrollment.models import exam_enrollment_request, exam_enrollment_submitted
@@ -68,7 +69,7 @@ def choose_offer_direct(request):
 
 def navigation(request, navigate_direct_to_form):
     try:
-        stud = mdl_base.student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     current_academic_year = mdl_base.academic_year.starting_academic_year()
@@ -90,7 +91,7 @@ def navigation(request, navigate_direct_to_form):
 @permission_required('base.is_student', raise_exception=True)
 def exam_enrollment_form(request, offer_year_id):
     try:
-        stud = student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     off_year = offer_year.find_by_id(offer_year_id)
@@ -121,26 +122,28 @@ def _get_exam_enrollment_form(off_year, request, stud):
     exam_enroll_request = exam_enrollment_request. \
         get_by_student_and_offer_year_acronym_and_fetch_date(stud, off_year.acronym, fetch_date_limit)
 
+    program = mdl_base.offer_year.find_by_id(off_year.id)
+
     if exam_enroll_request:
         try:
             data = json.loads(exam_enroll_request.document)
         except json.JSONDecodeError:
             logger.exception("Json data is not valid")
             data = {}
-
         return layout.render(request, 'exam_enrollment_form.html',
                              {
                                  'error_message': _get_error_message(data, off_year),
                                  'exam_enrollments': data.get('exam_enrollments'),
                                  'student': stud,
                                  'current_number_session': data.get('current_number_session'),
-                                 'academic_year': off_year.academic_year,
-                                 'program': mdl_base.offer_year.find_by_id(off_year.id),
+                                 'academic_year': mdl_base.academic_year.current_academic_year(),
+                                 'program': program,
                                  'request_timeout': request_timeout,
                                  'testwe_exam': data.get('testwe_exam'),
                                  'teams_exam': data.get('teams_exam'),
                                  'moodle_exam': data.get('moodle_exam'),
-                                 'covid_period': data.get('covid_period')
+                                 'covid_period': data.get('covid_period'),
+                                 'is_11ba': program.acronym.endswith('11BA'),
                              })
     else:
         ask_exam_enrollment_form(stud, off_year)
@@ -149,9 +152,10 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'exam_enrollments': "",
                                  'student': stud,
                                  'current_number_session': "",
-                                 'academic_year': off_year.academic_year,
-                                 'program': mdl_base.offer_year.find_by_id(off_year.id),
+                                 'academic_year': mdl_base.academic_year.current_academic_year(),
+                                 'program': program,
                                  'request_timeout': request_timeout,
+                                 'is_11ba': program.acronym.endswith('11BA'),
                              })
 
 
@@ -220,7 +224,7 @@ def _exam_enrollment_form_message(registration_id, offer_year_acronym, year):
 
 
 def check_exam_enrollment_form(request, offer_year_id):
-    a_student = mdl_base.student.find_by_user(request.user)
+    a_student = student_bsn.find_by_user_and_discriminate(request.user)
     off_year = offer_year.find_by_id(offer_year_id)
     if 'exam_enrollment' in settings.INSTALLED_APPS:
         if _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):

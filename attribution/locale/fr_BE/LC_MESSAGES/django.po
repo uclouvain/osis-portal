@@ -77,6 +77,10 @@ msgstr "Co-titulaire"
 msgid "Code"
 msgstr "Sigle"
 
+msgctxt "applications"
+msgid "Code"
+msgstr "Code"
+
 msgid "Coordinator"
 msgstr "Coordinateur(trice)"
 
