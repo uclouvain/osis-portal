@@ -170,7 +170,7 @@ msgid "This process controls the teaching charge"
 msgstr "Gestion de ma charge d'enseignement"
 
 msgid "This process shows personal data."
-msgstr "Accès à mes données personneles"
+msgstr "Accès à mes données personnelles."
 
 msgid "This requires a"
 msgstr "Ceci nécessite un"
