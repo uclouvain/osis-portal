@@ -40,7 +40,7 @@ from base.models.enums import learning_unit_year_subtypes, learning_container_ty
 from base.models.learning_container_year import LearningContainerYear
 from base.models.learning_unit_year import LearningUnitYear
 from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory, LearningContainerYearInChargeFactory
+from base.tests.factories.learning_container_year import LearningContainerYearInChargeFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
@@ -368,9 +368,9 @@ class HomeTest(TestCase):
         today = datetime.datetime.today()
         cls.academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                 end_date=today + datetime.timedelta(days=5))
+        learning_container_yr = LearningContainerYearInChargeFactory(academic_year=cls.academic_year)
         cls.learning_unit_year = LearningUnitYearFactory(academic_year=cls.academic_year,
-                                                         learning_container_year__academic_year=cls.academic_year,
-                                                         learning_container_year__in_charge=True)
+                                                         learning_container_year=learning_container_yr)
         cls.url = reverse('attribution_home')
 
     def setUp(self):

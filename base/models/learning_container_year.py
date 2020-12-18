@@ -24,7 +24,6 @@
 #
 ##############################################################################
 from django.db import models
-from django.db.models import Q, When, Case, BooleanField
 
 from base.models.enums import vacant_declaration_type, learning_container_type
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
@@ -37,29 +36,6 @@ class LearningContainerYearAdmin(SerializableModelAdmin):
     search_fields = ['acronym']
     raw_id_fields = ('learning_container', )
     list_filter = ('academic_year', 'is_vacant',)
-
-
-class LearningContainerYearQuerySet(models.QuerySet):
-
-    def annotate_in_charge(self):
-        return self.annotate(
-            in_charge=Case(
-                When(
-                    Q(container_type=learning_container_type.COURSE) |
-                    Q(container_type=learning_container_type.INTERNSHIP) |
-                    Q(container_type=learning_container_type.DISSERTATION),
-                    then=True
-                ),
-                default=False,
-                output_field=BooleanField(),
-            ),
-        )
-
-
-class LearningContainerYearManager(models.manager.BaseManager.from_queryset(LearningContainerYearQuerySet)):
-
-    def get_queryset(self):
-        return super().get_queryset().annotate_in_charge()
 
 
 class LearningContainerYear(SerializableModel):
@@ -101,11 +77,9 @@ class LearningContainerYear(SerializableModel):
         on_delete=models.PROTECT,
     )
 
-    objects = LearningContainerYearManager()
-
     @property
     def in_charge(self):
-        if self.container_type in (learning_container_type.COURSE, learning_container_type.DISSERTATION, learning_container_type.INTERNSHIP):
+        if self.container_type and self.container_type in learning_container_type.IN_CHARGE_TYPES:
             return True
         return False
 
