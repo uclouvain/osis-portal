@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -32,11 +32,10 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 class LearningContainerYearAdmin(SerializableModelAdmin):
     list_display = ('learning_container', 'academic_year', 'acronym', 'container_type', 'common_title')
     fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'container_type', 'common_title',
-                                    'team', 'is_vacant', 'type_declaration_vacant', 'in_charge',
-                                    'common_title_english')}),)
+                                    'team', 'is_vacant', 'type_declaration_vacant', 'common_title_english')}),)
     search_fields = ['acronym']
     raw_id_fields = ('learning_container', )
-    list_filter = ('academic_year', 'in_charge', 'is_vacant',)
+    list_filter = ('academic_year', 'is_vacant',)
 
 
 class LearningContainerYear(SerializableModel):
@@ -52,7 +51,6 @@ class LearningContainerYear(SerializableModel):
     is_vacant = models.BooleanField(default=False)
     type_declaration_vacant = models.CharField(max_length=100, blank=True, null=True,
                                                choices=vacant_declaration_type.DECLARATION_TYPE)
-    in_charge = models.BooleanField(default=False)
 
     requirement_entity = models.ForeignKey(
         to="base.Entity",
@@ -78,6 +76,12 @@ class LearningContainerYear(SerializableModel):
         related_name='additional_entities_2',
         on_delete=models.PROTECT,
     )
+
+    @property
+    def in_charge(self):
+        if self.container_type in (learning_container_type.COURSE, learning_container_type.DISSERTATION, learning_container_type.INTERNSHIP):
+            return True
+        return False
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.common_title)
