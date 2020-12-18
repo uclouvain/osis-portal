@@ -28,7 +28,6 @@ from typing import List
 from django.utils.translation import ugettext as _
 
 from base.models.enums import peps_type
-from base.models.person import Person
 from base.models.student_specific_profile import StudentSpecificProfile
 
 
@@ -43,7 +42,8 @@ def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
             str(_(student_specific_profile.get_type_display())) or "-",
             str(_(student_specific_profile.get_subtype_disability_display())) or "-",
         )
-
+    if student_specific_profile.type == peps_type.PepsTypes.NOT_DEFINED.name:
+        return"-"
     return str(_(student_specific_profile.get_type_display())) or "-"
 
 
