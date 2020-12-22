@@ -253,12 +253,13 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
         learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
 
     next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, NO_CHARGE)
-    if current_volume_lecturing > next_volume_lecturing:
-        return _('The vacant volume of the next academic year is lower than the current one')
-
     next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES,
                                                                        NO_CHARGE)
-    if current_volume_practical_exercices > next_volume_practical_exercices:
+    if next_volume_lecturing == 0 and next_volume_practical_exercices == 0:
+        return _('No vacant corresponding activity')
+
+    if current_volume_lecturing > next_volume_lecturing or \
+            current_volume_practical_exercices > next_volume_practical_exercices:
         return _('The vacant volume of the next academic year is lower than the current one')
 
     if _has_already_applied(attribution_with_vacant_next_year, application_list):
