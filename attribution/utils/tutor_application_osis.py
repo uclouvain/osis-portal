@@ -104,7 +104,7 @@ def _manage_new_applications(application, applications_list, attribution_new):
 
 def _check_if_update(application, existing_application):
     if "pending" not in existing_application or (existing_application["pending"] == UPDATE_OPERATION and parser.parse(
-            existing_application.get("last_changed")) < parser.parse(application.get("last_changed"))):
+            existing_application.get("updated_at")) < parser.parse(application.get("updated_at"))):
         return True
 
 
