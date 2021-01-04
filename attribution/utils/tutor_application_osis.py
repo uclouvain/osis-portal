@@ -26,6 +26,7 @@
 import json
 import logging
 import time
+from datetime import datetime
 
 from dateutil import parser
 from django.conf import settings
@@ -61,8 +62,9 @@ def process_message(body):
         connection.close()
         time.sleep(1)
         process_message(body)
-    except Exception:
+    except Exception as e:
         logger.exception('(Not PostgresError) during process tutor application message. Cannot update ')
+        logger.exception(str(e))
 
 
 def _update_applications_list(new_applications):
@@ -103,9 +105,18 @@ def _manage_new_applications(application, applications_list, attribution_new):
 
 
 def _check_if_update(application, existing_application):
-    if "pending" not in existing_application or (existing_application["pending"] == UPDATE_OPERATION and parser.parse(
-            existing_application.get("updated_at")) < parser.parse(application.get("updated_at"))):
+    if "pending" not in existing_application:
         return True
+    elif existing_application["pending"] == UPDATE_OPERATION and \
+            _get_updated_at_time(existing_application) < _get_updated_at_time(application):
+        return True
+
+
+def _get_updated_at_time(application):
+    updated_at_value = application.get("updated_at")
+    if isinstance(updated_at_value, float):
+        return datetime.fromtimestamp(updated_at_value)
+    return parser.parse(updated_at_value)
 
 
 def _merge_applications_list(applications_list, attribution_new):
