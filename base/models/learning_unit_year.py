@@ -104,7 +104,7 @@ def find_by_acronym(acronym, academic_year):
 def find_first_by_exact_acronym(academic_year_obj, acronym: 'str') -> 'LearningUnitYear':
     return LearningUnitYear.objects.filter(
         academic_year=academic_year_obj,
-        learning_container_year__learning_container__learningcontaineryear__learningunityear__acronym=acronym
+        learning_container_year__learning_container__learningcontaineryear__learningunityear__acronym__iexact=acronym
     ).select_related(
         "learning_container_year",
     ).first()

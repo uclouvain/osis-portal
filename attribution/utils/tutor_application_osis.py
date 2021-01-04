@@ -108,7 +108,7 @@ def _check_if_update(application, existing_application):
     if "pending" not in existing_application:
         return True
     elif existing_application["pending"] == UPDATE_OPERATION and \
-            _get_updated_at_time(existing_application) > _get_updated_at_time(application):
+            _get_updated_at_time(existing_application) < _get_updated_at_time(application):
         return True
 
 
