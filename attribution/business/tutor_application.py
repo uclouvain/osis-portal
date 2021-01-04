@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import time
 from decimal import Decimal
 
@@ -167,7 +168,7 @@ def _create_application(global_id, application_to_create):
         attrib = mdl_attribution.attribution_new.AttributionNew(global_id=global_id)
     if not attrib.applications:
         attrib.applications = []
-    application_to_create['last_changed'] = _get_unix_time()
+    application_to_create['updated_at'] = _get_serialized_time()
     attrib.applications.append(application_to_create)
     return attrib.save()
 
@@ -184,7 +185,7 @@ def _update_application(global_id, application_to_update):
         year = application_to_update.get('year')
         # Remove and append new records to json array
         attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
-        application_to_update['last_changed'] = _get_unix_time()
+        application_to_update['updated_at'] = _get_serialized_time()
         attrib.applications.append(application_to_update)
         return attrib.save()
     return None
@@ -220,9 +221,8 @@ def _filter_by_years(attribution_list, year):
             yield attribution
 
 
-def _get_unix_time():
-    now = timezone.now()
-    return time.mktime(now.timetuple())
+def _get_serialized_time() -> str:
+    return str(datetime.datetime.now())
 
 
 def _order_by_pending_and_acronym(application_list):

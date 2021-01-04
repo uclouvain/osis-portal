@@ -78,7 +78,7 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2020-12-08 09:58:57+00:00"
+                'updated_at': "2020-12-08 09:58:57+00:00"
             }]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")
@@ -101,7 +101,7 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2013-12-08 09:58:57+00:00"
+                'updated_at': "2013-12-08 09:58:57+00:00"
             }]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")
@@ -122,7 +122,7 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2016-12-08 09:58:57+00:00"
+                'updated_at': "2016-12-08 09:58:57+00:00"
             }]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")
@@ -139,7 +139,7 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2016-12-08 09:58:57+00:00"
+                'updated_at': "2016-12-08 09:58:57+00:00"
             }]
         }]
         self.assertEqual(find_by_global_id("321654"), None)
@@ -162,21 +162,21 @@ class TestTutorApplicationEpc(TestCase):
                     'year': self.academic_year.year,
                     'charge_lecturing_asked': '0',
                     'charge_practical_asked': '0',
-                    'last_changed': "2021-12-08 09:58:57+00:00"
+                    'updated_at': "2021-12-08 09:58:57+00:00"
                 },
                 {
                     'acronym': 'LBIR1200',
                     'year': self.academic_year.year,
                     'charge_lecturing_asked': '0',
                     'charge_practical_asked': '0',
-                    'last_changed': "2013-12-08 09:58:57+00:00"
+                    'updated_at': "2013-12-08 09:58:57+00:00"
                 },
                 {
                     'acronym': 'BIO5213',
                     'year': self.academic_year.year,
                     'charge_lecturing_asked': '0',
                     'charge_practical_asked': '0',
-                    'last_changed': "2013-12-08 09:58:57+00:00"
+                    'updated_at': "2013-12-08 09:58:57+00:00"
                 }
             ]
         }]
@@ -197,7 +197,7 @@ def _get_application_example(learning_container_year, volume_lecturing, volume_p
         'charge_practical_asked': volume_practical_exercice,
         'acronym': learning_container_year.acronym,
         'year': learning_container_year.academic_year.year,
-        'last_changed': "2018-12-08 09:58:57+00:00"
+        'updated_at': "2018-12-08 09:58:57+00:00"
     }
 
 
