@@ -67,9 +67,6 @@ class TestTutorApplicationEpc(TestCase):
         person = self.tutor.person
         _set_all_application_in_pending_state(self.attribution_new.applications)
         self.attribution_new.save()
-        self.assertEqual(len(self.attribution_new.applications), 3)
-        self.assertEqual(self.attribution_new.applications[0]['pending'], tutor_application_osis.UPDATE_OPERATION)
-        self.assertEqual(self.attribution_new.applications[1]['pending'], tutor_application_osis.UPDATE_OPERATION)
 
         body = [{
             'global_id': person.global_id,
@@ -84,15 +81,13 @@ class TestTutorApplicationEpc(TestCase):
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_osis.process_message(body_encoded)
         self.attribution_new.refresh_from_db()
-        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '0')
+        self.assertEqual(self.attribution_new.applications[2]['acronym'], 'LBIR1200')
+        self.assertEqual(self.attribution_new.applications[2]['charge_lecturing_asked'], '0')
 
     def test_process_message_no_update_operation(self):
         person = self.tutor.person
         _set_all_application_in_pending_state(self.attribution_new.applications)
         self.attribution_new.save()
-        self.assertEqual(len(self.attribution_new.applications), 3)
-        self.assertEqual(self.attribution_new.applications[0]['pending'], tutor_application_osis.UPDATE_OPERATION)
-        self.assertEqual(self.attribution_new.applications[1]['pending'], tutor_application_osis.UPDATE_OPERATION)
 
         body = [{
             'global_id': person.global_id,
@@ -107,7 +102,7 @@ class TestTutorApplicationEpc(TestCase):
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_osis.process_message(body_encoded)
         self.attribution_new.refresh_from_db()
-        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '12.5')
+        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '30.5')
 
     def test_process_message_with_delete_pending(self):
         person = self.tutor.person
@@ -122,14 +117,14 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'updated_at': "2016-12-08 09:58:57+00:00"
+                'updated_at': "2019-12-08 09:58:57+00:00"
             }]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_osis.process_message(body_encoded)
         self.attribution_new.refresh_from_db()
-        self.assertEqual(len(self.attribution_new.applications), 1)
-        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '12.5')
+        self.assertEqual(len(self.attribution_new.applications), 3)
+        self.assertEqual(self.attribution_new.applications[1]['charge_lecturing_asked'], '10.5')
 
     def test_process_when_attribution_new_not_exist(self):
         body = [{

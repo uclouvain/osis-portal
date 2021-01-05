@@ -80,26 +80,26 @@ def _update_applications_list(new_applications):
 
 
 def _manage_exisisting_attribution_new(attribution_new, new_application):
-    applications_list = []
-    if not attribution_new.applications:
-        _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
+    applications_list = list(attribution_new.applications) if attribution_new.applications else []
+    if not applications_list:
+        applications_list = new_application.get('tutor_applications', [])
     else:
         for application in new_application['tutor_applications']:
-            _manage_new_applications(application, applications_list, attribution_new)
-        _merge_applications_list(applications_list, attribution_new)
+            _manage_new_applications(application, applications_list)
+    _merge_applications_list(applications_list, attribution_new)
 
 
-def _manage_new_applications(application, applications_list, attribution_new):
-    existing_application = next((data for data in attribution_new.applications if
+def _manage_new_applications(application, applications_list):
+    existing_application = next((data for data in applications_list if
                                  data.get("year") == application.get("year") and data.get(
                                      "acronym") == application.get("acronym")), None)
     if existing_application:
         if _check_if_update(application, existing_application):
             applications_list.append(application)
-            attribution_new.applications.remove(existing_application)
+            applications_list.remove(existing_application)
         else:
             applications_list.append(existing_application)
-            attribution_new.applications.remove(existing_application)
+            applications_list.remove(existing_application)
     else:
         applications_list.append(application)
 
