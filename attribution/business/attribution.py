@@ -42,6 +42,7 @@ from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
 from base.models.learning_component_year import LearningComponentYear
 from base.models.person import Person
+from base.models.enums.learning_component_year_type import LECTURING, PRACTICAL_EXERCISES
 
 NO_CHARGE = 0.0
 
@@ -107,7 +108,8 @@ def _append_team_and_volume_declared_vacant(attribution_list, academic_year):
     l_container_ids = list(mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year)
                            .values_list('id', flat=True))
     l_components = LearningComponentYear.objects.filter(
-        learning_unit_year__learning_container_year__in=l_container_ids
+        learning_unit_year__learning_container_year__in=l_container_ids,
+        type__in=[LECTURING, PRACTICAL_EXERCISES]
     ).select_related('learning_unit_year__learning_container_year')
 
     for attribution in attribution_list:
