@@ -132,7 +132,6 @@ def _get_volume_declared_vacant(attribution, l_component_year_list):
     for l_component_year in l_component_year_list:
         if l_component_year.learning_unit_year.learning_container_year.acronym == attribution.get('acronym') and \
                 l_component_year.volume_declared_vacant is not None:
-            print(l_component_year.type)
             volumes_declared_vacant[l_component_year.type] += l_component_year.volume_declared_vacant
     return volumes_declared_vacant
 
