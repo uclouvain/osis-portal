@@ -182,7 +182,7 @@ def can_be_updated(application):
 def _update_application(global_id, application_to_update):
     attrib_qs = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(global_id=global_id)
     with transaction.atomic():
-        attrib = attrib_qs.get()
+        attrib = attrib_qs.first()
         if attrib and attrib.applications:
             acronym = application_to_update.get('acronym')
             year = application_to_update.get('year')
