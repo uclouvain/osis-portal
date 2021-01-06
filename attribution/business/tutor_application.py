@@ -180,18 +180,25 @@ def can_be_updated(application):
 
 
 def _update_application(global_id, application_to_update):
-    attrib_qs = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(global_id=global_id)
+    attrib_qs = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(
+        global_id=global_id,
+    ).exclude(
+        applications=[]
+    )
     with transaction.atomic():
         attrib = attrib_qs.first()
-        if attrib and attrib.applications:
-            acronym = application_to_update.get('acronym')
-            year = application_to_update.get('year')
-            # Remove and append new records to json array
-            attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
-            application_to_update['updated_at'] = _get_serialized_time()
-            attrib.applications.append(application_to_update)
-            return attrib.save()
-        return None
+        if not attrib:
+            return None
+
+        acronym = application_to_update.get('acronym')
+        year = application_to_update.get('year')
+
+        # Remove and append new records to json array
+        attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
+        application_to_update['updated_at'] = _get_serialized_time()
+        attrib.applications.append(application_to_update)
+
+        return attrib.save()
 
 
 def _delete_application_in_list(acronym, year, application_list):
