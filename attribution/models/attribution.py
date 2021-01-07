@@ -28,6 +28,8 @@ from django.db import models
 from attribution.models.enums import function
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
+from base.models.enums.learning_container_type import IN_CHARGE_TYPES
+
 
 class AttributionAdmin(SerializableModelAdmin):
     list_display = ('tutor', 'function', 'learning_unit_year')
@@ -102,7 +104,8 @@ def find_by_tutor_year_order_by_acronym_function(tutor=None, an_academic_year=No
 
 
 def find_distinct_years(a_tutor):
-    return Attribution.objects.filter(tutor=a_tutor, learning_unit_year__learning_container_year__in_charge=True) \
+    return Attribution.objects.filter(tutor=a_tutor,
+                                      learning_unit_year__learning_container_year__container_type__in=IN_CHARGE_TYPES) \
         .order_by('-learning_unit_year__academic_year__year') \
         .values_list('learning_unit_year__academic_year__year', flat=True).distinct()
 

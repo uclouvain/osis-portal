@@ -26,6 +26,7 @@
 from decimal import Decimal
 from time import sleep
 
+from dateutil import parser
 from django.contrib.auth.models import Group
 from django.test import TestCase, SimpleTestCase
 
@@ -204,6 +205,14 @@ class TutorApplicationTest(TestCase):
         self.assertTrue(application_searched_validated['updated_at'])
         self.assertTrue(application_searched_validated['updated_at'] >
                         application_searched_not_validated['updated_at'])
+
+    def test_ensure_updated_at_field_is_parsable(self):
+        global_id = self.tutor.person.global_id
+        application_to_create = _get_application_example(self.lbir1250_2017, '30', '20')
+        tutor_application.create_or_update_application(global_id, application_to_create)
+        application_searched_not_validated = tutor_application.get_application(global_id, self.lbir1250_2017)
+
+        parser.parse(application_searched_not_validated['updated_at'])
 
     def test_delete_application(self):
         global_id = self.tutor.person.global_id
