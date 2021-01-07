@@ -23,31 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
+from django.test import TestCase
 
-import factory.fuzzy
+from base.models.enums import learning_container_type
+from base.tests.factories.learning_container_year import LearningContainerYearFactory
 
-from base.models.enums import vacant_declaration_type, learning_container_type
-from base.tests.factories.academic_year import AcademicYearFactory
-from osis_common.utils.datetime import get_tzinfo
-
-
-class LearningContainerYearFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.LearningContainerYear"
-
-    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
-    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
-                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
-    acronym = factory.Sequence(lambda n: 'LCY-%d' % n)
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    container_type = learning_container_type.COURSE
-    common_title = factory.Sequence(lambda n: 'Learning container year - %d' % n)
-    common_title_english = factory.Sequence(lambda n: 'Learning container year - %d' % n)
-    type_declaration_vacant = vacant_declaration_type.RESERVED_FOR_INTERNS
+IN_CHARGE_TYPES = [learning_container_type.COURSE, learning_container_type.DISSERTATION,
+                   learning_container_type.INTERNSHIP]
+NOT_IN_CHARGE_TYPES = [learning_container_type.OTHER_COLLECTIVE, learning_container_type.OTHER_INDIVIDUAL,
+                       learning_container_type.MASTER_THESIS, learning_container_type.EXTERNAL]
 
 
-class LearningContainerYearInChargeFactory(LearningContainerYearFactory):
-    container_type = factory.Iterator(
-        [learning_container_type.COURSE, learning_container_type.DISSERTATION, learning_container_type.INTERNSHIP]
-    )
+class LearningContainerYearTestCase(TestCase):
+
+    def test_in_charge(self):
+        for type in IN_CHARGE_TYPES:
+            l_c_yr = LearningContainerYearFactory(container_type=type)
+            self.assertTrue(l_c_yr.in_charge)
+
+    def test_not_in_charge(self):
+        for type in NOT_IN_CHARGE_TYPES:
+            l_c_yr = LearningContainerYearFactory(container_type=type)
+            self.assertFalse(l_c_yr.in_charge)
