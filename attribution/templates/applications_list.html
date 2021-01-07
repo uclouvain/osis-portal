@@ -97,19 +97,21 @@
                      title="{% if application.pending %}
                                                 {% trans 'Please refresh the page' %}
                                             {% endif %}">
-                    <form action="{% url 'delete_tutor_application' application.learning_container_year_id %}"
-                          id="form_delete_{{ application.learning_container_year_id }}"
-                          method="POST">
-                        {% csrf_token %}
-                        <button class="btn btn-warning"
-                                id="lnk_application_delete_{{ application.learning_container_year_id }}"
-                                type="submit" title="{% trans 'Cancel the application' %}"
-                                {% if application.pending %} disabled {% endif %}>
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-                    </form>
+
+                        <a class="btn btn-warning"
+                           id="lnk_application_delete_{{ application.learning_container_year_id }}"
+                           href="#"
+                           title="{% trans 'Cancel the application' %}"
+                           data-toggle="modal" data-target="#modalConfirmApplicationDelete{{application.learning_container_year_id}}"
+                           {% if application.pending %} disabled {% endif %}>
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </a>
+                        {% include 'blocks/modal/application_delete_confirm.html' %}
+
                 </div>
             </td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+
