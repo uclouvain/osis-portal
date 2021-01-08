@@ -37,10 +37,12 @@ from base import models as mdl_base
 from base.business import learning_unit_year_with_context
 from base.business.entity import get_entities_ids
 from base.models.entity_version import EntityVersion
+from base.models.enums.learning_container_type import IN_CHARGE_TYPES
 from base.models.enums import learning_component_year_type
 from base.models.enums import vacant_declaration_type
 from base.models.learning_component_year import LearningComponentYear
 from base.models.person import Person
+from base.models.enums.learning_component_year_type import LECTURING, PRACTICAL_EXERCISES
 
 NO_CHARGE = 0.0
 
@@ -106,7 +108,8 @@ def _append_team_and_volume_declared_vacant(attribution_list, academic_year):
     l_container_ids = list(mdl_base.learning_container_year.search(acronym=acronym_list, academic_year=academic_year)
                            .values_list('id', flat=True))
     l_components = LearningComponentYear.objects.filter(
-        learning_unit_year__learning_container_year__in=l_container_ids
+        learning_unit_year__learning_container_year__in=l_container_ids,
+        type__in=[LECTURING, PRACTICAL_EXERCISES]
     ).select_related('learning_unit_year__learning_container_year')
 
     for attribution in attribution_list:
@@ -253,12 +256,13 @@ def _check_is_renewable(attribution_with_vacant_next_year, application_list):
         learning_component_year_type.PRACTICAL_EXERCISES, NO_CHARGE)
 
     next_volume_lecturing = next_year_attribution_vacant.get(learning_component_year_type.LECTURING, NO_CHARGE)
-    if current_volume_lecturing > next_volume_lecturing:
-        return _('The vacant volume of the next academic year is lower than the current one')
-
     next_volume_practical_exercices = next_year_attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES,
                                                                        NO_CHARGE)
-    if current_volume_practical_exercices > next_volume_practical_exercices:
+    if next_volume_lecturing == 0 and next_volume_practical_exercices == 0:
+        return _('No vacant corresponding activity')
+
+    if current_volume_lecturing > next_volume_lecturing or \
+            current_volume_practical_exercices > next_volume_practical_exercices:
         return _('The vacant volume of the next academic year is lower than the current one')
 
     if _has_already_applied(attribution_with_vacant_next_year, application_list):
@@ -365,6 +369,7 @@ def _get_learning_components(academic_year, acronym_filter, faculty):
         )
         learning_components = LearningComponentYear.objects \
             .filter(learning_unit_year__learning_container_year_id__in=learning_container_yrs) \
+            .filter(learning_unit_year__learning_container_year__container_type__in=IN_CHARGE_TYPES) \
             .order_by('learning_unit_year__acronym') \
             .select_related('learning_unit_year__learning_container_year') \
             .exclude(volume_declared_vacant__isnull=True)
