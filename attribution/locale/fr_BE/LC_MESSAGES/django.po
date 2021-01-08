@@ -120,6 +120,8 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+#, fuzzy, python-format
+#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -134,6 +136,9 @@ msgstr "Fonction"
 
 msgid "Global id"
 msgstr "Matricule fgs"
+
+msgid "Guide"
+msgstr ""
 
 msgid "Holder"
 msgstr "Titulaire"
@@ -212,6 +217,9 @@ msgstr "Aucun étudiant inscrit au cours"
 
 msgid "No teaching charge in "
 msgstr "Pas de charge d'enseignement en "
+
+msgid "No vacant corresponding activity"
+msgstr "Pas d'activité vacante correspondante"
 
 msgid "No vacant corresponding course"
 msgstr "Pas d'activité vacante correspondante"

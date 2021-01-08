@@ -215,6 +215,9 @@ msgstr "No students enrolled"
 msgid "No teaching charge in "
 msgstr ""
 
+msgid "No vacant corresponding activity"
+msgstr ""
+
 msgid "No vacant corresponding course"
 msgstr ""
 
