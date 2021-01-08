@@ -33,10 +33,10 @@
         {% csrf_token %}
         <div class="modal-body">
             {% block modal_header %}
-                <h3>{% blocktrans %}Delete the application?{% endblocktrans %}</h3>
+                <h3>{% blocktrans %}Delete the application{% endblocktrans %}?</h3>
             {% endblock %}
             <br>
-            {% trans "Are you sure you want to delete the application?" %}
+            {% trans "This action will delete the application" %}
         </div>
 
         <div class="modal-footer">

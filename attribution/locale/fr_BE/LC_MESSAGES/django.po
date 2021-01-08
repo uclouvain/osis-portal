@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-18 14:35+0100\n"
+"POT-Creation-Date: 2021-01-08 06:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,9 +60,6 @@ msgstr "Attributions"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgid "Cancel the application"
-msgstr "Annuler la candidature"
-
 msgid "Charge"
 msgstr "Charge"
 
@@ -83,6 +80,12 @@ msgstr "Code"
 
 msgid "Coordinator"
 msgstr "Coordinateur(trice)"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Delete the application"
+msgstr "Supprimer la candidature"
 
 msgid "Deputy"
 msgstr "Suppléant"
@@ -330,6 +333,9 @@ msgstr ""
 "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez "
 "réessayer plus tard."
 
+msgid "This action will delete the application"
+msgstr "Cette action supprimera la candidature"
+
 msgid ""
 "This course is team-managed. The application to this activity is based on a "
 "paper transmission."
@@ -411,3 +417,6 @@ msgstr "au"
 
 msgid "without application"
 msgstr "sans candidature"
+
+#~ msgid "Cancel the application"
+#~ msgstr "Annuler la candidature"
