@@ -264,6 +264,57 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 
+    def test_not_authorized_verrour_solde(self):
+        self.student_performance.authorized = False
+        with open("performance/tests/ressources/points_verrou_solde.json") as f:
+            self.student_performance.data = json.load(f)
+        self.student_performance.save()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'performance_result_student.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
+        self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
+        self.assertEqual(response.context['update_date'], self.student_performance.update_date)
+        self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = \
+            _('The publication of the notes from the %(session_month)s session is not authorized '
+              'because, unless there is an error, there is still a balance of '
+              'your registration fees to be paid.<br/><br/>If you have paid very recently, '
+              'given the technical and banking delays, your situation may not yet have been updated. '
+              'In this case, your notes will be available the day after the regularization of your file. '
+              'If you have any questions about your debt to the university, please contact '
+              'the <a href=\"%(accounting_enrollment_service_url)s\" target=\"_blank\">Accounting Department '
+              'of the Enrollment Service</a>') % {
+               "session_month": self.student_performance.get_session_locked_display(),
+               "accounting_enrollment_service_url": settings.REGISTRATION_ACCOUNT_SERVICE_URL
+                }
+        self.assertEqual(response.context['not_authorized_message'],
+                         response_message)
+
+    def test_not_authorized_verrou_faculte(self):
+        self.student_performance.authorized = False
+        with open("performance/tests/ressources/points_verrou_faculte.json") as f:
+            self.student_performance.data = json.load(f)
+        self.student_performance.save()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'performance_result_student.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
+        self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
+        self.assertEqual(response.context['update_date'], self.student_performance.update_date)
+        self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = _(
+            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
+            % {"session_month": self.student_performance.get_session_locked_display()}
+        self.assertEqual(response.context['not_authorized_message'],
+                         response_message)
+
 
 class SelectStudentTest(TestCase):
     @classmethod
