@@ -61,9 +61,9 @@
                     <div class="col-md-12 alert alert-warning">
                         {% trans 'The server is actually overloaded. Please excuse us and try again later.' %}
                     </div>
-                    {% elif not_authorized_message %}
+                {% elif not_authorized_message %}
                     <div class="col-md-12 alert alert-danger">
-                        {{ not_authorized_message }}
+                        {{ not_authorized_message | safe }}
                     </div>
                 {% endif %}
                 <div class="row container-fluid">
