@@ -25,7 +25,10 @@
 ##############################################################################
 from django.conf.urls import url, include
 
-from internship.views import main, hospital, resume, selection
+from internship.views import main, hospital, resume, selection, score_encoding
+from internship.views.internship_authentication.account_activation import InternshipMasterRegistrationView, \
+    InternshipMasterRegistrationSuccessView, InternshipMasterActivationView
+from internship.views.internship_authentication.login import InternshipLoginView
 
 urlpatterns = [
     url(r'^$', main.view_cohort_selection, name="internship"),
@@ -41,5 +44,14 @@ urlpatterns = [
         url(r'^resume/$', resume.view_student_resume, name='student_resume'),
     ])),
 
-    url(r'^score_encoding/$', main.view_score_encoding, name="internship_score_encoding"),
+    url(r'login/$', InternshipLoginView.as_view(), name="internship_score_encoding_login"),
+
+    url(r'^score_encoding/', include([
+        url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
+        url(r'^create_account/$', InternshipMasterRegistrationView.as_view(), name="internship_create_account"),
+        url(r'^activate/(?P<activation_key>[-:\w]+)/$', InternshipMasterActivationView.as_view(),
+            name='internship_master_account_activate'),
+        url(r'^create_account/success', InternshipMasterRegistrationSuccessView.as_view(),
+            name='internship_master_registration_complete'),
+    ])),
 ]

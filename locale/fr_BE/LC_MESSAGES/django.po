@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:57+0200\n"
+"POT-Creation-Date: 2021-01-12 13:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Activation failed"
+msgstr "Activation échouée"
+
 msgid "Address"
 msgstr "Adresse"
 
 msgid "Affectations are available from"
 msgstr "Les affections sont disponibles depuis"
+
+msgid "Cancel"
+msgstr "Annuler"
 
 msgid "Cannot apply same preference on distinct offers"
 msgstr ""
@@ -53,6 +59,9 @@ msgstr "Concours"
 msgid "Country"
 msgstr "Pays"
 
+msgid "Creating an internship master user account"
+msgstr "Creation d'un compte utilisateur pour maître de stage"
+
 msgid "Enrollments from"
 msgstr "Inscriptions du"
 
@@ -77,11 +86,17 @@ msgstr "Liste des hôpitaux"
 msgid "Hospitals"
 msgstr "Hôpitaux"
 
+msgid "Internship"
+msgstr "Stage"
+
 msgid "Internship affectation"
 msgstr "Affectation de stages"
 
 msgid "Internship master"
 msgstr "Maître de stage"
+
+msgid "Internship master with email {} does not exist"
+msgstr "Le maître de stage ayant pour email {} n'existe pas"
 
 msgid "Internships"
 msgstr "Stages"
@@ -92,6 +107,9 @@ msgid ""
 msgstr ""
 "Il semblerait que vous ne soyez pas inscrit aux stages, nous vous "
 "recommandons de contacter votre secrétariat."
+
+msgid "Login"
+msgstr "Se connecter"
 
 msgid "Maximum number of students"
 msgstr "Nombre maximum d'étudiants"
@@ -108,8 +126,14 @@ msgstr "Préférence"
 msgid "Reference"
 msgstr "Référence"
 
+msgid "Registration completed"
+msgstr "Inscription complétée"
+
 msgid "Registration id"
 msgstr "Id d'enregistrement"
+
+msgid "Score encoding"
+msgstr "Encodage des cotes"
 
 msgid "Second choice"
 msgstr "Second choix"
@@ -126,6 +150,9 @@ msgstr "Spécialiste"
 msgid "Student information"
 msgstr "Information de l'étudiant"
 
+msgid "Submit"
+msgstr "Soumettre"
+
 msgid "Submit choices"
 msgstr "Soumettre vos choix"
 
@@ -135,14 +162,41 @@ msgstr "Encodez vos choix de stages"
 msgid "Sump up of your choices and your affectations"
 msgstr "Résumé de vos choix et affectations"
 
+msgid "The account you attempted to activate is invalid."
+msgstr "Le compte que vous essayez d'activer n'est pas valide"
+
+msgid "The account you tried to activate has already been activated."
+msgstr "Le compte que vous essayez d'activer est déjà actif"
+
+msgid "The activation failed"
+msgstr "L'activation a échoué"
+
+msgid "The activation key you provided is invalid."
+msgstr "La clé d'activation fourniée n'est pas valide."
+
 msgid "Third choice"
 msgstr "Troisième choix"
+
+msgid "This account has expired."
+msgstr "Ce compte utilisateur est expiré."
+
+msgid "User account activated"
+msgstr "Compte utilisateur activé"
 
 msgid "Website"
 msgstr "Site web"
 
 msgid "You can no longer submit your choices."
 msgstr "Vous ne pouvez plus soumettre vos choix."
+
+msgid ""
+"Your registration to the platform has been successfully completed. Please "
+"check your emails to activate your user account."
+msgstr "Votre inscription à la plateforme a été complétée avec succès. Veuillez vérifier vos emails pour activer votre compte utilisateur."
+
+msgid ""
+"Your user account is now active. You can now log in to access the platform."
+msgstr "Votre compte utilisateur est maintenant actif. Vous pouvez vous connceter pour accéder à la plateforme."
 
 msgid "email"
 msgstr ""

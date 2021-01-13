@@ -1,0 +1,90 @@
+{% extends "dashboard_layout.html" %}
+{% load i18n %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block title %}{% trans "Internship score encoding" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "Internship score encoding" %}</h1>
+    <br>
+    {% include 'template_messages.html' %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>{% trans "You already have an active account" %}</h4>
+                </div>
+                <div class="panel-body">
+                    {% if form.errors %}
+                        <p class="text-danger">
+                            {% trans 'Username and password not matching' %}
+                        </p>
+                    {% endif %}
+                    <form action="{% url 'internship_score_encoding_login' %}" method="post" class="form" role="form">
+                        {% csrf_token %}
+                        <div style="width: 300px;">
+                            <div class="form-group">
+                                <label class="control-label" for="username">{% trans 'Email' %}</label>
+                                <input id="id_username" maxlength="254" name="username" type="text" class="form-control"
+                                       placeholder="{% trans 'Email' %}" value="{{ username }}"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="password">{% trans 'Password' %}</label>
+                                <input id="id_password" name="password" type="password" class="form-control"
+                                       placeholder="{{ password | capfirst }}">
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="next" value="{{ next }}"/>
+                                <div class="row">
+                                    <div class="col-md-6 align-content-center">
+                                        <input type="submit" value="{% trans 'Login' %}" class="btn btn-primary"
+                                               id="post_login_btn"/>
+                                    </div>
+                                    <!-- <div class="col-md-6 align-content-center">
+                                        <a href="{% url 'password_reset' %}">{% trans 'Forgot your password ?' %}</a>
+                                    </div>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>{% trans "You don't have an account" %}</h4>
+                </div>
+                <div class="panel-body">
+                    <p>{% trans "Please contact internship administration (STAC) to obtain a user account access" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
