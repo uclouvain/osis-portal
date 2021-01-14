@@ -30,18 +30,20 @@ from django.urls import reverse
 from mock import patch
 
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.user import UserFactory
 
 
 class TestInternshipMasterRegistrationView(TestCase):
-    def setUp(self):
-        self.person = PersonFactory(user=None)
-        self.url = reverse('internship_create_account')
-        password = 'fake-password'
-        self.account_data = {
-            'username': self.person.email,
-            'email': self.person.email,
-            'password1': password,
-            'password2': password
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory(user=None)
+        cls.url = reverse('internship_create_account')
+        cls.password = 'fake-password'
+        cls.account_data = {
+            'username': cls.person.email,
+            'email': cls.person.email,
+            'password1': cls.password,
+            'password2': cls.password
         }
 
     def test_access_registration_page(self):
@@ -92,3 +94,29 @@ class TestInternshipMasterRegistrationView(TestCase):
         send_mail_args = mock_send_mail.call_args[0][0]
         self.assertEqual(send_mail_args['receivers'][0]['receiver_email'], self.person.email)
         self.assertIn(activation_url, send_mail_args['template_base_data']['link'])
+
+
+class TestInternshipMasterRegistrationSuccessView(TestCase):
+    def test_access_registration_success_page(self):
+        response = self.client.get(reverse('internship_master_registration_complete'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'internship_django_registration/registration_complete.html')
+
+
+class TestInternshipMasterActivationView(TestCase):
+    def setUp(self):
+        self.user = UserFactory(is_active=False)
+        self.key = 'ABCD'
+        self.url = reverse('internship_master_account_activate', kwargs={'activation_key': self.key})
+
+    @patch(
+        'internship.views.internship_authentication.account_activation.'
+        'InternshipMasterActivationView.trigger_master_activation'
+    )
+    @patch('internship.views.internship_authentication.account_activation.InternshipMasterActivationView.validate_key')
+    def test_activate_user_with_link_trigger_api(self, mock_validate_key, mock_trigger_api_activation):
+        mock_validate_key.return_value = self.user.username
+        self.client.get(self.url)
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.is_active)
+        self.assertTrue(mock_trigger_api_activation.called)
