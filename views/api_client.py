@@ -1,8 +1,7 @@
 from django.conf import settings
-
-from internship.openapi_client.api.default_api import DefaultApi
-from internship.openapi_client.api_client import ApiClient
-from internship.openapi_client.configuration import Configuration
+from osis_internship_sdk.api.default_api import DefaultApi
+from osis_internship_sdk.api_client import ApiClient
+from osis_internship_sdk.configuration import Configuration
 
 
 class InternshipAPIClient:
