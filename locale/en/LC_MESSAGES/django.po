@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:57+0200\n"
+"POT-Creation-Date: 2021-01-12 13:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Activation failed"
+msgstr ""
+
 msgid "Address"
 msgstr ""
 
 msgid "Affectations are available from"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Cannot apply same preference on distinct offers"
@@ -51,6 +57,9 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
+msgid "Creating an internship master user account"
+msgstr ""
+
 msgid "Enrollments from"
 msgstr ""
 
@@ -75,10 +84,16 @@ msgstr ""
 msgid "Hospitals"
 msgstr ""
 
+msgid "Internship"
+msgstr ""
+
 msgid "Internship affectation"
 msgstr ""
 
 msgid "Internship master"
+msgstr ""
+
+msgid "Internship master with email {} does not exist"
 msgstr ""
 
 msgid "Internships"
@@ -87,6 +102,9 @@ msgstr ""
 msgid ""
 "It seems you are not subscribed to internships, you may want to check with "
 "your administration."
+msgstr ""
+
+msgid "Login"
 msgstr ""
 
 msgid "Maximum number of students"
@@ -104,7 +122,13 @@ msgstr ""
 msgid "Reference"
 msgstr ""
 
+msgid "Registration completed"
+msgstr ""
+
 msgid "Registration id"
+msgstr ""
+
+msgid "Score encoding"
 msgstr ""
 
 msgid "Second choice"
@@ -122,6 +146,9 @@ msgstr ""
 msgid "Student information"
 msgstr ""
 
+msgid "Submit"
+msgstr ""
+
 msgid "Submit choices"
 msgstr ""
 
@@ -131,13 +158,40 @@ msgstr ""
 msgid "Sump up of your choices and your affectations"
 msgstr ""
 
+msgid "The account you attempted to activate is invalid."
+msgstr ""
+
+msgid "The account you tried to activate has already been activated."
+msgstr ""
+
+msgid "The activation failed"
+msgstr ""
+
+msgid "The activation key you provided is invalid."
+msgstr ""
+
 msgid "Third choice"
+msgstr ""
+
+msgid "This account has expired."
+msgstr ""
+
+msgid "User account activated"
 msgstr ""
 
 msgid "Website"
 msgstr ""
 
 msgid "You can no longer submit your choices."
+msgstr ""
+
+msgid ""
+"Your registration to the platform has been successfully completed. Please "
+"check your emails to activate your user account."
+msgstr ""
+
+msgid ""
+"Your user account is now active. You can now log in to access the platform."
 msgstr ""
 
 msgid "email"

@@ -84,8 +84,3 @@ def view_internship_home(request, cohort_id):
     today = datetime.date.today()
     subscription_allowed = cohort.subscription_start_date <= today <= cohort.subscription_end_date
     return layout.render(request, "internship_home.html", locals())
-
-
-@login_required
-def view_score_encoding(request):
-    return layout.render(request, "internship_score_encoding.html")

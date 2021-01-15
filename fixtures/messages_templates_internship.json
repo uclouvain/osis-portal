@@ -1,0 +1,22 @@
+[
+{
+  "model": "osis_common.messagetemplate",
+  "fields": {
+    "reference": "internship_master_account_activation_html",
+    "subject": "STAC - Activation compte",
+    "template": "<p>Activation du compte via ce lien: <a href='{{link}}'>{{link}}</a></p>",
+    "format": "HTML",
+    "language": "fr-be"
+  }
+},
+{
+  "model": "osis_common.messagetemplate",
+  "fields": {
+    "reference": "internship_master_account_activation_txt",
+    "subject": "STAC - Activation compte",
+    "template": "Activation du compte via ce lien: {{link}}",
+    "format": "PLAIN",
+    "language": "fr-be"
+  }
+}
+]
