@@ -37,7 +37,7 @@
                             {% for message in messages %}
                                 <tr>
                                     {% if 'error' in message.tags %}
-                                        <td {% if message.tags %}{% endif %}>{{ message }}</td>
+                                        <td {% if message.tags %}{% endif %}>{{ message | safe}}</td>
                                     {%endif%}
                                 </tr>
                             {% endfor %}

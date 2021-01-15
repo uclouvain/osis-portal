@@ -40,6 +40,8 @@ from dashboard.views import main as dash_main_view
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
 
+from base.business import student as student_bsn
+
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
@@ -52,7 +54,7 @@ def view_performance_home(request):
     Display the academic programs of the student.
     """
     try:
-        stud = mdl_student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     list_student_programs = None
@@ -71,8 +73,23 @@ def __make_not_authorized_message(stud_perf):
     authorized = stud_perf.authorized if stud_perf else None
     session_month = stud_perf.get_session_locked_display() if stud_perf else None
     if not authorized and session_month:
-        return _('The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-               % {"session_month": session_month}
+        not_autorized_status = json.loads(json.dumps(stud_perf.data)).get('blockingType')
+        if not_autorized_status and 'VERROU_SOLDE' == not_autorized_status:
+            return _('The publication of the notes from the %(session_month)s session is not authorized '
+                     'because, unless there is an error, there is still a balance of '
+                     'your registration fees to be paid.<br/><br/>If you have paid very recently, '
+                     'given the technical and banking delays, your situation may not yet have been updated. '
+                     'In this case, your notes will be available the day after the regularization of your file. '
+                     'If you have any questions about your debt to the university, please contact '
+                     'the <a href=\"%(accounting_enrollment_service_url)s\" target=\"_blank\">Accounting Department '
+                     'of the Enrollment Service</a>') % {
+                "session_month": session_month,
+                "accounting_enrollment_service_url": settings.REGISTRATION_ACCOUNT_SERVICE_URL
+            }
+        else:
+            return _('The publication of the notes from the %(session_month)s '
+                     'session was not authorized by our faculty.') \
+                   % {"session_month": session_month}
     else:
         return None
 
@@ -108,7 +125,7 @@ def display_result_for_specific_student_performance(request, pk):
     Display the student result for a particular year and program.
     """
     try:
-        stud = mdl_student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
@@ -135,7 +152,7 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
     Display the result for a students , filter by acronym
     """
     try:
-        stud = mdl_student.find_by_user(request.user)
+        stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
     cleaned_acronym = _clean_acronym(acronym)

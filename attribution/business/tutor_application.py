@@ -23,12 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import time
 from decimal import Decimal
 
+from django.db import transaction
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from attribution import models as mdl_attribution
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
@@ -127,7 +128,7 @@ def send_mail_applications_summary(global_id):
     receivers = [message_config.create_receiver(person.id, person.email, person.language)]
     applications = _get_applications_table(application_list)
     table_applications = message_config.create_table('applications',
-                                                     [_('Acronym'), 'Vol. 1', 'Vol. 2'],
+                                                     [pgettext_lazy("applications", "Code"), 'Vol. 1', 'Vol. 2'],
                                                      applications)
     template_base_data = {
         'first_name': person.first_name,
@@ -168,7 +169,7 @@ def _create_application(global_id, application_to_create):
         attrib = mdl_attribution.attribution_new.AttributionNew(global_id=global_id)
     if not attrib.applications:
         attrib.applications = []
-    application_to_create['updated_at'] = _get_unix_time()
+    application_to_create['updated_at'] = _get_serialized_time()
     attrib.applications.append(application_to_create)
     return attrib.save()
 
@@ -179,16 +180,25 @@ def can_be_updated(application):
 
 
 def _update_application(global_id, application_to_update):
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if attrib and attrib.applications:
+    attrib_qs = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(
+        global_id=global_id,
+    ).exclude(
+        applications=[]
+    )
+    with transaction.atomic():
+        attrib = attrib_qs.first()
+        if not attrib:
+            return None
+
         acronym = application_to_update.get('acronym')
         year = application_to_update.get('year')
+
         # Remove and append new records to json array
         attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
-        application_to_update['updated_at'] = _get_unix_time()
+        application_to_update['updated_at'] = _get_serialized_time()
         attrib.applications.append(application_to_update)
+
         return attrib.save()
-    return None
 
 
 def _delete_application_in_list(acronym, year, application_list):
@@ -221,9 +231,8 @@ def _filter_by_years(attribution_list, year):
             yield attribution
 
 
-def _get_unix_time():
-    now = timezone.now()
-    return time.mktime(now.timetuple())
+def _get_serialized_time() -> str:
+    return str(datetime.datetime.now())
 
 
 def _order_by_pending_and_acronym(application_list):

@@ -26,6 +26,7 @@
 import json
 import logging
 import time
+from datetime import datetime
 
 from dateutil import parser
 from django.conf import settings
@@ -61,8 +62,9 @@ def process_message(body):
         connection.close()
         time.sleep(1)
         process_message(body)
-    except Exception:
+    except Exception as e:
         logger.exception('(Not PostgresError) during process tutor application message. Cannot update ')
+        logger.exception(str(e))
 
 
 def _update_applications_list(new_applications):
@@ -78,34 +80,43 @@ def _update_applications_list(new_applications):
 
 
 def _manage_exisisting_attribution_new(attribution_new, new_application):
-    applications_list = []
-    if not attribution_new.applications:
-        _merge_applications_list(new_application.get('tutor_applications'), attribution_new)
+    applications_list = list(attribution_new.applications) if attribution_new.applications else []
+    if not applications_list:
+        applications_list = new_application.get('tutor_applications', [])
     else:
         for application in new_application['tutor_applications']:
-            _manage_new_applications(application, applications_list, attribution_new)
-        _merge_applications_list(applications_list, attribution_new)
+            _manage_new_applications(application, applications_list)
+    _merge_applications_list(applications_list, attribution_new)
 
 
-def _manage_new_applications(application, applications_list, attribution_new):
-    existing_application = next((data for data in attribution_new.applications if
+def _manage_new_applications(application, applications_list):
+    existing_application = next((data for data in applications_list if
                                  data.get("year") == application.get("year") and data.get(
                                      "acronym") == application.get("acronym")), None)
     if existing_application:
         if _check_if_update(application, existing_application):
             applications_list.append(application)
-            attribution_new.applications.remove(existing_application)
+            applications_list.remove(existing_application)
         else:
             applications_list.append(existing_application)
-            attribution_new.applications.remove(existing_application)
+            applications_list.remove(existing_application)
     else:
         applications_list.append(application)
 
 
 def _check_if_update(application, existing_application):
-    if "pending" not in existing_application or (existing_application["pending"] == UPDATE_OPERATION and parser.parse(
-            existing_application.get("last_changed")) < parser.parse(application.get("last_changed"))):
+    if "pending" not in existing_application:
         return True
+    elif existing_application["pending"] == UPDATE_OPERATION and \
+            _get_updated_at_time(existing_application) < _get_updated_at_time(application):
+        return True
+
+
+def _get_updated_at_time(application):
+    updated_at_value = application.get("updated_at")
+    if isinstance(updated_at_value, float):
+        return datetime.fromtimestamp(updated_at_value)
+    return parser.parse(updated_at_value)
 
 
 def _merge_applications_list(applications_list, attribution_new):

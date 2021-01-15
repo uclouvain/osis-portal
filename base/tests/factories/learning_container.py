@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,17 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-SUBSCRIBED = 'SUBSCRIBED'
-PROVISORY = 'PROVISORY'
-PENDING = 'PENDING'
-TERMINATION = 'TERMINATION'
-END_OF_CYCLE = 'END_OF_CYCLE'
+import datetime
 
-STATES = (
-    (SUBSCRIBED, SUBSCRIBED),
-    (PROVISORY, PROVISORY),
-    (PENDING, PENDING),
-    (TERMINATION, TERMINATION),
-    (END_OF_CYCLE, END_OF_CYCLE))
+import factory.fuzzy
 
-VALID_ENROLLMENT_STATES = (SUBSCRIBED, PROVISORY, TERMINATION, END_OF_CYCLE)
+from base.models.enums import vacant_declaration_type, learning_container_type
+from base.tests.factories.academic_year import AcademicYearFactory
+from osis_common.utils.datetime import get_tzinfo
+
+
+class LearningContainerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.LearningContainer"
+
+    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
+    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
+                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
