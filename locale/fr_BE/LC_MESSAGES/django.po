@@ -60,7 +60,7 @@ msgid "Country"
 msgstr "Pays"
 
 msgid "Creating an internship master user account"
-msgstr "Creation d'un compte utilisateur pour maître de stage"
+msgstr "Création d'un compte utilisateur pour maître de stage"
 
 msgid "Enrollments from"
 msgstr "Inscriptions du"
