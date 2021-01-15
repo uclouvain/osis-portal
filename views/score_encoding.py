@@ -36,6 +36,14 @@ def view_score_encoding(request):
     return layout.render(request, "internship_score_encoding.html", locals())
 
 
+@login_required(login_url="/internship/auth/login/")
+def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
+    specialty = _get_specialty(specialty_uuid)
+    organization = _get_organization(organization_uuid)
+    students_affectations = _get_students_affectations(specialty_uuid, organization_uuid)
+    return layout.render(request, "internship_score_encoding_sheet.html", locals())
+
+
 def _get_master_by_email(email):
     return get_first_paginated_result(
         InternshipAPIClient().masters_get(search=email)
@@ -45,4 +53,18 @@ def _get_master_by_email(email):
 def _get_master_allocations(master_uuid=None):
     return get_paginated_results(
         InternshipAPIClient().masters_uuid_allocations_get(uuid=master_uuid, current=True)
+    )
+
+
+def _get_specialty(specialty_uuid):
+    return InternshipAPIClient().specialties_uuid_get(uuid=specialty_uuid)
+
+
+def _get_organization(organization_uuid):
+    return InternshipAPIClient().organizations_uuid_get(uuid=organization_uuid)
+
+
+def _get_students_affectations(specialty_uuid, organization_uuid):
+    return get_paginated_results(
+        InternshipAPIClient().students_affectations_get(specialty=specialty_uuid, organization=organization_uuid)
     )
