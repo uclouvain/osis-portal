@@ -26,8 +26,23 @@
 from django.contrib.auth.decorators import login_required
 
 from base.views import layout
+from internship.views.api_client import InternshipAPIClient, get_paginated_results, get_first_paginated_result
 
 
-@login_required(login_url="/internship/login/")
+@login_required(login_url="/internship/auth/login/")
 def view_score_encoding(request):
-    return layout.render(request, "internship_score_encoding.html")
+    master = _get_master_by_email(request.user.username)
+    allocations = _get_master_allocations(master['uuid'])
+    return layout.render(request, "internship_score_encoding.html", locals())
+
+
+def _get_master_by_email(email):
+    return get_first_paginated_result(
+        InternshipAPIClient().masters_get(search=email)
+    )
+
+
+def _get_master_allocations(master_uuid=None):
+    return get_paginated_results(
+        InternshipAPIClient().masters_uuid_allocations_get(uuid=master_uuid, current=True)
+    )

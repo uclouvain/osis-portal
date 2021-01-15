@@ -36,14 +36,31 @@
         <h2>{% trans 'Score encoding' %}</h2>
     </div>
 
+    <div class="alert alert-info">
+        <span class="glyphicon glyphicon-info-sign" style="margin-right: 5px;"></span>
+        {% trans 'You will find hereunder internships that have been assigned to you and for which score encoding is open ' %}
+    </div>
 
-    <div class="panel panel-default">
-        <div class="panel panel-body">
-            <div class="row">
-                <div class="col-md-4">
-                    Score Encoding
+
+    <div class="row">
+        {% for allocation in allocations %}
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">{{ allocation.organization.cohort.name }}</h3>
+                  </div>
+                  <div class="panel-body">
+                      <h3>{{ allocation.specialty.name }}</h3>
+                      <p>2/12 {% trans 'encoded grade(s)' %}</p>
+                      <hr/>
+                      <button class="btn btn-primary">{% trans 'Encoding' %}</button>
+                  </div>
+                    <div class="panel-footer">
+                        <h5>{{ allocation.organization.name }}</h5>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endfor %}
     </div>
+
 {% endblock %}

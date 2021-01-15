@@ -44,10 +44,13 @@ urlpatterns = [
         url(r'^resume/$', resume.view_student_resume, name='student_resume'),
     ])),
 
-    url(r'login/$', InternshipLoginView.as_view(), name="internship_score_encoding_login"),
-
     url(r'^score_encoding/', include([
         url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
+    ])),
+
+    url(r'^auth/', include([
+        url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
+        url(r'login/$', InternshipLoginView.as_view(), name="internship_score_encoding_login"),
         url(r'^create_account/$', InternshipMasterRegistrationView.as_view(), name="internship_create_account"),
         url(r'^activate/(?P<activation_key>[-:\w]+)/$', InternshipMasterActivationView.as_view(),
             name='internship_master_account_activate'),
