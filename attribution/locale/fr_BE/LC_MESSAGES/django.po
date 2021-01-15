@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:13+0200\n"
+"POT-Creation-Date: 2021-01-08 06:47+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,9 +60,6 @@ msgstr "Attributions"
 msgid "Cancel"
 msgstr "Annuler"
 
-msgid "Cancel the application"
-msgstr "Annuler la candidature"
-
 msgid "Charge"
 msgstr "Charge"
 
@@ -83,6 +80,12 @@ msgstr "Code"
 
 msgid "Coordinator"
 msgstr "Coordinateur(trice)"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Delete the application"
+msgstr "Supprimer la candidature"
 
 msgid "Deputy"
 msgstr "Suppléant"
@@ -117,6 +120,8 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+#, fuzzy, python-format
+#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -131,6 +136,9 @@ msgstr "Fonction"
 
 msgid "Global id"
 msgstr "Matricule fgs"
+
+msgid "Guide"
+msgstr ""
 
 msgid "Holder"
 msgstr "Titulaire"
@@ -209,6 +217,9 @@ msgstr "Aucun étudiant inscrit au cours"
 
 msgid "No teaching charge in "
 msgstr "Pas de charge d'enseignement en "
+
+msgid "No vacant corresponding activity"
+msgstr "Pas d'activité vacante correspondante"
 
 msgid "No vacant corresponding course"
 msgstr "Pas d'activité vacante correspondante"
@@ -322,6 +333,9 @@ msgstr ""
 "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez "
 "réessayer plus tard."
 
+msgid "This action will delete the application"
+msgstr "Cette action supprimera la candidature"
+
 msgid ""
 "This course is team-managed. The application to this activity is based on a "
 "paper transmission."
@@ -403,3 +417,6 @@ msgstr "au"
 
 msgid "without application"
 msgstr "sans candidature"
+
+#~ msgid "Cancel the application"
+#~ msgstr "Annuler la candidature"

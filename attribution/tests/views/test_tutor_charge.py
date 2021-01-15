@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ from base.models.enums import learning_unit_year_subtypes, learning_container_ty
 from base.models.learning_container_year import LearningContainerYear
 from base.models.learning_unit_year import LearningUnitYear
 from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
+from base.tests.factories.learning_container_year import LearningContainerYearInChargeFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.person import PersonFactory
@@ -163,7 +163,7 @@ class TutorChargeTest(TestCase):
     def create_lu_yr_annual_data(self, a_year):
         an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
         an_academic_yr.year = a_year
-        a_container_year = LearningContainerYearFactory(in_charge=True)
+        a_container_year = LearningContainerYearInChargeFactory()
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
             'acronym': ACRONYM,
             'specific_title': TITLE,
@@ -368,9 +368,9 @@ class HomeTest(TestCase):
         today = datetime.datetime.today()
         cls.academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                 end_date=today + datetime.timedelta(days=5))
+        learning_container_yr = LearningContainerYearInChargeFactory(academic_year=cls.academic_year)
         cls.learning_unit_year = LearningUnitYearFactory(academic_year=cls.academic_year,
-                                                         learning_container_year__academic_year=cls.academic_year,
-                                                         learning_container_year__in_charge=True)
+                                                         learning_container_year=learning_container_yr)
         cls.url = reverse('attribution_home')
 
     def setUp(self):
