@@ -237,7 +237,7 @@ msgid "Pgrm"
 msgstr "Pgrm"
 
 msgid "Please enter the code of the course to which you would like to apply"
-msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
+msgstr "Veuillez introduire le code du cours pour lequel vous voulez postuler"
 
 msgid "Please precise at least a faculty or a code (or a part of a code)"
 msgstr ""
@@ -351,7 +351,7 @@ msgid ""
 "on the button"
 msgstr ""
 "Pour poser une candidature à un cours vacant dont vous n'assuriez pas la "
-"charge, veuillez introduire ci-après le sigle du cours et cliquer sur le "
+"charge, veuillez introduire ci-après le code du cours et cliquer sur le "
 "bouton 'loupe'"
 
 msgid "To receive a confirmation email with the applications"
