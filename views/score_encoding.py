@@ -24,9 +24,12 @@
 #
 ############################################################################
 from django.contrib.auth.decorators import login_required
+from osis_internship_sdk.rest import ApiException
 
 from base.views import layout
 from internship.views.api_client import InternshipAPIClient, get_paginated_results, get_first_paginated_result
+
+APD_NUMBER = 15
 
 
 @login_required(login_url="/internship/auth/login/")
@@ -38,9 +41,13 @@ def view_score_encoding(request):
 
 @login_required(login_url="/internship/auth/login/")
 def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
+    apds = ['apd_{}'.format(index) for index in range(1, APD_NUMBER + 1)]
+
     specialty = _get_specialty(specialty_uuid)
     organization = _get_organization(organization_uuid)
     students_affectations = _get_students_affectations(specialty_uuid, organization_uuid)
+    for affectation in students_affectations:
+        affectation['score'] = _get_score(affectation['student']['uuid'], affectation['period']['uuid'])
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 
 
@@ -68,3 +75,12 @@ def _get_students_affectations(specialty_uuid, organization_uuid):
     return get_paginated_results(
         InternshipAPIClient().students_affectations_get(specialty=specialty_uuid, organization=organization_uuid)
     )
+
+
+def _get_score(student_uuid, period_uuid):
+    try:
+        return InternshipAPIClient().scores_student_uuid_period_uuid_get(
+            student_uuid=student_uuid, period_uuid=period_uuid
+        )
+    except ApiException:
+        return None

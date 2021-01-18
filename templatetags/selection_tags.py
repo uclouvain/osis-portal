@@ -24,6 +24,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+import re
+
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaulttags import register as reg
@@ -48,3 +50,13 @@ def choice_for_offer(internship_choices, offer, internship):
 def get_item(dictionary, key):
     val = dictionary.get(key)
     return val if val else ""
+
+
+@reg.filter
+def get_attr(object, name):
+    return getattr(object, name) if hasattr(object, name) else None
+
+
+@reg.filter
+def only_number(text):
+    return re.findall(r'\d+', text)[0]

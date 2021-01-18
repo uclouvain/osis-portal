@@ -1,4 +1,5 @@
 {% extends "dashboard_layout.html" %}
+{% load selection_tags %}
 
 {% load i18n %}
 {% comment "License" %}
@@ -45,9 +46,13 @@
         <div class="table-responsive">
           <table class="table">
                 <thead>
+                <tr><th colspan="2"></th><th colspan="15" style="text-align:center;">APD</th></tr>
                     <tr>
                         <th>{% trans 'Student' %}</th>
                         <th>{% trans 'Period' %}</th>
+                        {% for apd in apds %}
+                            <th style="text-align:center;">{{ apd | only_number }}</th>
+                        {% endfor %}
                     </tr>
                 </thead>
               <tbody>
@@ -59,6 +64,13 @@
                         <td>
                             {{ affectation.period.name }}
                         </td>
+                        {% for apd in apds %}
+                            {% if affectation.score %}
+                                <td style="text-align:center;">{{ affectation.score|get_attr:apd|default_if_none:'-'}}</td>
+                            {% else %}
+                                <td style="text-align:center;">-</td>
+                            {% endif %}
+                        {% endfor %}
 
                     </tr>
                 {% endfor %}
