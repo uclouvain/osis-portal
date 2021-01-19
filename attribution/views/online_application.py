@@ -120,7 +120,8 @@ def overview(request, global_id=None):
         'application_academic_calendar': mdl_base.academic_calendar.get_by_reference_and_academic_year(
             academic_calendar_type.TEACHING_CHARGE_APPLICATION,
             current_academic_year),
-        'catalog_url': settings.ATTRIBUTION_CONFIG.get('CATALOG_URL')
+        'catalog_url': settings.ATTRIBUTION_CONFIG.get('CATALOG_URL'),
+        'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
     })
 
 
@@ -138,7 +139,8 @@ def search_vacant_attribution(request):
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,
         'attributions_vacant': attributions_vacant,
-        'search_form': form
+        'search_form': form,
+        'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
     })
 
 
@@ -233,7 +235,8 @@ def create_or_update_application(request, learning_container_year_id):
         'form': form,
         'learning_container_year': learning_container_year,
         'learning_unit_year': learning_unit_year,
-        'can_be_saved': can_be_saved
+        'can_be_saved': can_be_saved,
+        'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
     })
 
 
