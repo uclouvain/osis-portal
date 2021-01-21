@@ -398,6 +398,8 @@ URL_AUTH_API = os.environ.get(
     "URL_AUTH_API",
     ""
 )
+# ATTRIBUTION-SDK-CONFIGURATION
+OSIS_ATTRIBUTION_SDK_HOST = os.environ.get("OSIS_ATTRIBUTION_SDK_HOST", "")
 
 # BASE_API_TESTING
 MOCK_USER_ROLES_API_CALL = os.environ.get('MOCK_USER_ROLES_API_CALL', 'True').lower() == 'true'

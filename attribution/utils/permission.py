@@ -23,16 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base import models as mdl_base
-from base.models.enums import academic_calendar_type
+from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 
 
-def is_online_application_opened(user):
-    return _is_academic_calendar_event_opened(academic_calendar_type.TEACHING_CHARGE_APPLICATION)
-
-
-def _is_academic_calendar_event_opened(calendar_type):
-    current_academic_year = mdl_base.academic_year.current_academic_year()
-    if not current_academic_year:
-        return False
-    return mdl_base.academic_calendar.is_academic_calendar_opened(current_academic_year, calendar_type)
+def is_online_application_opened(user) -> bool:
+    calendar = ApplicationCoursesRemoteCalendar()
+    return bool(calendar.get_target_years_opened())
