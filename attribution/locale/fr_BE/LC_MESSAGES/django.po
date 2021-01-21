@@ -333,8 +333,8 @@ msgstr ""
 "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez "
 "réessayer plus tard."
 
-msgid "This action will delete the application"
-msgstr "Cette action supprimera la candidature"
+msgid "This action will delete the application."
+msgstr "Cette action supprimera la candidature."
 
 msgid ""
 "This course is team-managed. The application to this activity is based on a "
