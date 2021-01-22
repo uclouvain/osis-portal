@@ -29,17 +29,17 @@ from typing import List
 import urllib3
 from django.conf import settings
 
-from attribution import attribution_sdk_configuration
+from frontoffice.settings.osis_sdk import attribution as attribution_sdk
 import osis_attribution_sdk
 
 LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class ApplicationCoursesRemoteCalendar(object):
-    _calendars: List[osis_attribution_sdk.models.ApplicationCourseCalendar] = None
+    _calendars = []  # type: List[osis_attribution_sdk.models.ApplicationCourseCalendar]
 
     def __init__(self):
-        configuration = attribution_sdk_configuration.build_configuration()
+        configuration = attribution_sdk.build_configuration()
 
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = osis_attribution_sdk.ApplicationApi(api_client)
