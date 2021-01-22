@@ -40,6 +40,7 @@ from attribution.utils import tutor_application_epc
 from attribution.views.decorators.authorization import user_is_tutor_or_super_user
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
+from base.models import academic_year
 from base.models.enums import academic_calendar_type, learning_unit_year_subtypes
 from base.models.enums import learning_component_year_type
 from base.models.learning_unit_year import LearningUnitYear
@@ -102,6 +103,7 @@ def overview(request, global_id=None):
 
     for attrib in attributions:
         attrib['teachers'] = attribution.get_teachers(attrib['acronym'], application_year.year)
+        attrib['academic_year'] = str(academic_year.find_by_year(attrib['year']))
 
     for an_attribution in attributions:
         attribution.update_learning_unit_volume(an_attribution, application_year)
