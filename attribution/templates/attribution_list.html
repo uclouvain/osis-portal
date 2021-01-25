@@ -48,8 +48,20 @@
     </tr>
     </thead>
     {% for attribution in attributions %}
-        <tr>
-            <td>{{ attribution.acronym }}</td>
+        <tr
+            {% if attribution.is_in_suppression_proposal %}
+                data-toggle="tooltip" data-placement="left"
+                title="{% blocktrans with attribution.academic_year as academic_year %}This course will be discontinued in {{ academic_year }} following a program reform.{% endblocktrans %}"
+                style="text-decoration: line-through"
+                class="warning"
+            {% endif %}
+        >
+            <td>
+                {{ attribution.acronym }}
+                {% if attribution.is_in_suppression_proposal %}
+                    <span class="fa fa-warning" aria-hidden="true"></span>
+                {% endif %}
+            </td>
             <td>{{ attribution.title }}</td>
             <td>{{ attribution.lecturing_vol }}</td>
             <td>{{ attribution.practical_exercises_vol }}</td>

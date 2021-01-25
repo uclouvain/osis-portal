@@ -40,6 +40,7 @@ from attribution.utils import tutor_application_epc
 from attribution.views.decorators.authorization import user_is_tutor_or_super_user
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
+from base.models import academic_year
 from base.models.enums import academic_calendar_type, learning_unit_year_subtypes
 from base.models.enums import learning_component_year_type
 from base.models.learning_unit_year import LearningUnitYear
@@ -102,6 +103,7 @@ def overview(request, global_id=None):
 
     for attrib in attributions:
         attrib['teachers'] = attribution.get_teachers(attrib['acronym'], application_year.year)
+        attrib['academic_year'] = str(academic_year.find_by_year(attrib['year']))
 
     for an_attribution in attributions:
         attribution.update_learning_unit_volume(an_attribution, application_year)
@@ -120,7 +122,8 @@ def overview(request, global_id=None):
         'application_academic_calendar': mdl_base.academic_calendar.get_by_reference_and_academic_year(
             academic_calendar_type.TEACHING_CHARGE_APPLICATION,
             current_academic_year),
-        'catalog_url': settings.ATTRIBUTION_CONFIG.get('CATALOG_URL')
+        'catalog_url': settings.ATTRIBUTION_CONFIG.get('CATALOG_URL'),
+        'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
     })
 
 
@@ -138,7 +141,8 @@ def search_vacant_attribution(request):
     return layout.render(request, "attribution_vacant_list.html", {
         'a_tutor': tutor,
         'attributions_vacant': attributions_vacant,
-        'search_form': form
+        'search_form': form,
+        'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
     })
 
 
@@ -233,7 +237,8 @@ def create_or_update_application(request, learning_container_year_id):
         'form': form,
         'learning_container_year': learning_container_year,
         'learning_unit_year': learning_unit_year,
-        'can_be_saved': can_be_saved
+        'can_be_saved': can_be_saved,
+        'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
     })
 
 

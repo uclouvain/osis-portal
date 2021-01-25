@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,24 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.utils.translation import ugettext_lazy as _
+import datetime
 
-COURSE = "COURSE"
-INTERNSHIP = "INTERNSHIP"
-DISSERTATION = "DISSERTATION"
-OTHER_COLLECTIVE = "OTHER_COLLECTIVE"
-OTHER_INDIVIDUAL = "OTHER_INDIVIDUAL"
-MASTER_THESIS = "MASTER_THESIS"
-EXTERNAL = "EXTERNAL"
+import factory.fuzzy
 
-CONTAINER_TYPE = (
-    (COURSE, _("Course")),
-    (INTERNSHIP, _("Internship")),
-    (DISSERTATION, _("Dissertation")),
-    (OTHER_COLLECTIVE, _("Other collective")),
-    (OTHER_INDIVIDUAL, _("Other individual")),
-    (MASTER_THESIS, _("Thesis")),
-    (EXTERNAL, _("External")),
-)
+from base.models.enums import vacant_declaration_type, learning_container_type
+from base.tests.factories.academic_year import AcademicYearFactory
+from osis_common.utils.datetime import get_tzinfo
 
-IN_CHARGE_TYPES = [COURSE, INTERNSHIP, DISSERTATION]
+
+class LearningContainerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "base.LearningContainer"
+
+    external_id = factory.Sequence(lambda n: '10000000%02d' % n)
+    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
+                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))

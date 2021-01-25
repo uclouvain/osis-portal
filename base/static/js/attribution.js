@@ -29,11 +29,6 @@ $('document').ready(function(){
         });
     }
     recompute_submit_renew_btn_and_select_all_state();
-
-    //Show confirm popup before delete application
-    $("button[id^='lnk_application_delete_']").click(function() {
-        return confirm(gettext('Are you sure you want to delete the application?'));
-    });
 });
 
 function changeOrientation(button) {
