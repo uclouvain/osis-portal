@@ -40,19 +40,36 @@
     <h3>{{ specialty.cohort.name }} - {{ specialty.name }}</h3>
     <h4>{{ organization.name }}</h4>
     <hr/>
-
     <div class="panel panel-default">
-      <div class="panel-body">
+      <div class="panel-heading">
+          <form action="{% url 'internship_score_encoding_sheet' specialty_uuid=specialty_uuid organization_uuid=organization_uuid %}" method="get" id="filter-form">
+            <div class="form-group">
+                <label for="period">
+                {% trans 'Period' %}
+                </label>
+                <div>
+                <select class="form-control" name="period" id="period-select">
+                    <option value="all">{% trans "All periods" %}</option>
+                    {% for period in periods %}
+                        <option value="{{ period.name }}" {% if selected_period == period.name %} selected {% endif %}>{{ period.name }}</option>
+                    {% endfor %}
+                </select>
+                </div>
+            </div>
+          </form>
+      </div>
+        <div class="panel-body">
         <div class="table-responsive">
           <table class="table">
                 <thead>
-                <tr><th colspan="2"></th><th colspan="15" style="text-align:center;">APD</th></tr>
+                <tr><th colspan="2"></th><th colspan="15" style="text-align:center;">APD</th><th colspan="1"></th></tr>
                     <tr>
                         <th>{% trans 'Student' %}</th>
                         <th>{% trans 'Period' %}</th>
                         {% for apd in apds %}
                             <th style="text-align:center;">{{ apd | only_number }}</th>
                         {% endfor %}
+                        <th style="text-align:center;">{% trans 'Encoding' %}</th>
                     </tr>
                 </thead>
               <tbody>
@@ -71,7 +88,11 @@
                                 <td style="text-align:center;">-</td>
                             {% endif %}
                         {% endfor %}
-
+                        <td style="text-align:center;">
+                            <a class="btn btn-primary btn-xs" href="{% url 'internship_score_encoding_form' specialty_uuid=specialty_uuid organization_uuid=organization_uuid affectation_uuid=affectation.uuid %}">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
               </tbody>
@@ -80,4 +101,14 @@
       </div>
     </div>
 
+{% endblock %}
+
+{% block script %}
+    <script>
+    console.log( document.querySelector('#period-select'));
+        document.querySelector('#period-select').addEventListener("change", function(){
+            console.log('select');
+           document.querySelector('#filter-form').submit();
+        });
+    </script>
 {% endblock %}

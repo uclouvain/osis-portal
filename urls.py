@@ -46,9 +46,12 @@ urlpatterns = [
 
     url(r'^score_encoding/', include([
         url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
-        url(r'(?P<specialty_uuid>[0-9a-f-]+)/(?P<organization_uuid>[0-9a-f-]+)$',
-            score_encoding.view_score_encoding_sheet,
-            name="internship_score_encoding_sheet"),
+        url(r'(?P<specialty_uuid>[0-9a-f-]+)/(?P<organization_uuid>[0-9a-f-]+)/', include([
+            url(r'^$', score_encoding.view_score_encoding_sheet, name='internship_score_encoding_sheet'),
+            url(r'^(?P<affectation_uuid>[0-9a-f-]+)/$',
+                score_encoding.view_score_encoding_form,
+                name="internship_score_encoding_form"),
+        ]))
     ])),
 
     url(r'^auth/', include([

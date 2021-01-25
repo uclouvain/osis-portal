@@ -41,7 +41,7 @@ class InternshipAPIClient:
 
 
 def get_first_paginated_result(response):
-    return response['results'][0]
+    return response['results'][0] if response['count'] else None
 
 
 def get_paginated_results(response):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-12 13:30+0100\n"
+"POT-Creation-Date: 2021-01-21 14:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "APDs"
+msgstr ""
+
+msgid ""
+"Access to internship is only authorized to students and internship masters"
+msgstr ""
+
 msgid "Activation failed"
 msgstr ""
 
@@ -24,6 +31,9 @@ msgid "Address"
 msgstr ""
 
 msgid "Affectations are available from"
+msgstr ""
+
+msgid "All periods"
 msgstr ""
 
 msgid "Cancel"
@@ -51,6 +61,9 @@ msgstr ""
 msgid "City"
 msgstr ""
 
+msgid "Comments"
+msgstr ""
+
 msgid "Contest"
 msgstr ""
 
@@ -60,7 +73,22 @@ msgstr ""
 msgid "Creating an internship master user account"
 msgstr ""
 
+msgid "Email"
+msgstr ""
+
+msgid "Encoding"
+msgstr ""
+
+msgid "Encoding form"
+msgstr ""
+
 msgid "Enrollments from"
+msgstr ""
+
+msgid "Example of areas for improvement"
+msgstr ""
+
+msgid "Example of good performance"
 msgstr ""
 
 msgid "First choice"
@@ -84,6 +112,9 @@ msgstr ""
 msgid "Hospitals"
 msgstr ""
 
+msgid "Intermediary evaluation (optional)"
+msgstr ""
+
 msgid "Internship"
 msgstr ""
 
@@ -94,6 +125,9 @@ msgid "Internship master"
 msgstr ""
 
 msgid "Internship master with email {} does not exist"
+msgstr ""
+
+msgid "Internship score encoding"
 msgstr ""
 
 msgid "Internships"
@@ -107,6 +141,9 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+msgid "Logout"
+msgstr ""
+
 msgid "Maximum number of students"
 msgstr ""
 
@@ -114,6 +151,17 @@ msgid "Mobile phone"
 msgstr ""
 
 msgid "Number of first choice"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid ""
+"Please contact internship administration (STAC) to obtain a user account "
+"access"
 msgstr ""
 
 msgid "Preference"
@@ -131,6 +179,9 @@ msgstr ""
 msgid "Score encoding"
 msgstr ""
 
+msgid "Score encoding sheet"
+msgstr ""
+
 msgid "Second choice"
 msgstr ""
 
@@ -141,6 +192,9 @@ msgid "Selective internships"
 msgstr ""
 
 msgid "Specialist"
+msgstr ""
+
+msgid "Student"
 msgstr ""
 
 msgid "Student information"
@@ -155,7 +209,13 @@ msgstr ""
 msgid "Submit your internship choices"
 msgstr ""
 
+msgid "Succesfull logout"
+msgstr ""
+
 msgid "Sump up of your choices and your affectations"
+msgstr ""
+
+msgid "Targeted APDs before internship"
 msgstr ""
 
 msgid "The account you attempted to activate is invalid."
@@ -170,6 +230,9 @@ msgstr ""
 msgid "The activation key you provided is invalid."
 msgstr ""
 
+msgid "The two password fields didn't match."
+msgstr ""
+
 msgid "Third choice"
 msgstr ""
 
@@ -179,10 +242,27 @@ msgstr ""
 msgid "User account activated"
 msgstr ""
 
+msgid "Username and password not matching"
+msgstr ""
+
 msgid "Website"
 msgstr ""
 
+msgid "Which learning methods do you suggest to improve ?"
+msgstr ""
+
+msgid "You already have an active account"
+msgstr ""
+
 msgid "You can no longer submit your choices."
+msgstr ""
+
+msgid "You don't have an account"
+msgstr ""
+
+msgid ""
+"You will find hereunder internships that have been assigned to you and for "
+"which score encoding is open "
 msgstr ""
 
 msgid ""
@@ -195,6 +275,9 @@ msgid ""
 msgstr ""
 
 msgid "email"
+msgstr ""
+
+msgid "encoded grade(s)"
 msgstr ""
 
 msgid "gender"

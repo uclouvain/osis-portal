@@ -23,8 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase, override_settings
+import uuid
 
+from django.test import TestCase, override_settings
+from osis_internship_sdk import DefaultApi, MasterGet, AllocationGet, PeriodGet, SpecialtyGet, OrganizationGet, \
+    StudentAffectationGet, CohortGet, StudentGet, ScoreGet
+
+from base.tests.factories.person import PersonFactory
 from internship.views.api_client import InternshipAPIClient
 
 
@@ -35,3 +40,48 @@ class TestAPIClient(TestCase):
         default_api = InternshipAPIClient()
         self.assertEqual(default_api.api_client.configuration.host, 'test_url')
         self.assertEqual(default_api.api_client.configuration.api_key['Authorization'], 'Token {}'.format('token'))
+
+
+class MockAPI(DefaultApi):
+    @classmethod
+    def masters_get(*args, **kwargs):
+        return {'count': 1, 'results': [MasterGet().to_dict()]}
+
+    @classmethod
+    def masters_uuid_allocations_get(*args, **kwargs):
+        return {'count': 1, 'results': [AllocationGet(
+            organization={'uuid': uuid.uuid4()},
+            specialty={'uuid': uuid.uuid4()}
+        ).to_dict()]}
+
+    @classmethod
+    def periods_active_get(*args, **kwargs):
+        return {'count': 1, 'results': [PeriodGet().to_dict()]}
+
+    @classmethod
+    def specialties_uuid_get(*args, **kwargs):
+        return SpecialtyGet(uuid=uuid.uuid4(), cohort=CohortGet())
+
+    @classmethod
+    def organizations_uuid_get(*args, **kwargs):
+        return OrganizationGet(uuid=uuid.uuid4()).to_dict()
+
+    @classmethod
+    def students_affectations_get(*args, **kwargs):
+        affectation = StudentAffectationGet(student={'uuid': uuid.uuid4()}, period={'uuid': uuid.uuid4()}).to_dict()
+        affectation['uuid'] = uuid.uuid4()
+        return {'count': 1, 'results': [affectation]}
+
+    @classmethod
+    def students_affectations_uuid_get(*args, **kwargs):
+        student = StudentGet(person=PersonFactory())
+        student.__setattr__('uuid', uuid.uuid4())
+        return StudentAffectationGet(student=student, period=PeriodGet())
+
+    @classmethod
+    def scores_student_uuid_period_uuid_get(*args, **kwargs):
+        return ScoreGet(objectives={}, comments={})
+
+    @classmethod
+    def scores_student_uuid_period_uuid_put(*args, **kwargs):
+        return kwargs.get('score_get')
