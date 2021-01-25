@@ -68,11 +68,6 @@ def mark_attribution_already_applied(attributions_vacant, global_id, application
     return attributions_vacant
 
 
-def get_application_year():
-    # Application year is always for next year
-    return mdl_base.academic_year.find_next_academic_year()
-
-
 def create_or_update_application(global_id, application):
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib:
