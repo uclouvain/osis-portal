@@ -305,7 +305,8 @@ def send_mail_applications_summary(request):
 
 
 def _get_attributions_vacant(form, tutor):
-    application_academic_year = tutor_application.get_application_year()
+    application_courses_years_opened = ApplicationCoursesRemoteCalendar().get_target_years_opened()
+    application_academic_year = AcademicYear.objects.get(year=application_courses_years_opened[0])
     attributions_vacant = attribution.get_attribution_vacant_list(
         acronym_filter=form.cleaned_data['learning_container_acronym'],
         academic_year=application_academic_year,
