@@ -25,19 +25,19 @@
 ##############################################################################
 import datetime
 
+import mock
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from osis_attribution_sdk import ApplicationCourseCalendar
 
 from attribution.models.enums import function
 from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_epc
-from base.models.enums import academic_calendar_type
 from base.models.enums import learning_component_year_type
 from base.models.enums import learning_unit_year_subtypes
 from base.models.enums import vacant_declaration_type
-from base.tests.factories.academic_calendar import AcademicCalendarFactory
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.entity import EntityFactory
 from base.tests.factories.entity_version import EntityVersionFactory
@@ -62,39 +62,49 @@ class TestOnlineApplication(TestCase):
 
         # Add permission and log into app
         add_permission(cls.user, "can_access_attribution_application")
-        # Create current academic year
-        cls.current_academic_year = create_current_academic_year()
 
         cls.agro_entity = EntityFactory()
         cls.drt_entity = EntityFactory()
 
+        # Create current academic year
+        cls.current_academic_year = create_current_academic_year()
         # Create application year
-        # Application is always next year
-        cls.application_academic_year = AcademicYearFactory(
-
-            year=cls.current_academic_year.year + 1
-        )
+        cls.application_academic_year = AcademicYearFactory(year=cls.current_academic_year.year + 1)
 
     def setUp(self):
-        # Create Event to allow teacher to register
-        start_date = datetime.datetime.today() - datetime.timedelta(days=10)
-        end_date = datetime.datetime.today() + datetime.timedelta(days=15)
-        self.academic_calendar = AcademicCalendarFactory(
-            academic_year=self.current_academic_year,
-            reference=academic_calendar_type.TEACHING_CHARGE_APPLICATION,
-            start_date=start_date,
-            end_date=end_date
+        # Create event to open calendar + Mock Remove API Call for calendar
+        self.calendar = ApplicationCourseCalendar(
+            title="Candidature aux cours vacants",
+            start_date=datetime.datetime.today() - datetime.timedelta(days=10),
+            end_date=datetime.datetime.today() + datetime.timedelta(days=15),
+            authorized_target_year=self.application_academic_year.year,
+            is_open=True
         )
-        self.agro_entity_version = EntityVersionFactory(entity=self.agro_entity, acronym="AGRO",
-                                                        entity_type='FACULTY',
-                                                        start_date=self.academic_calendar.start_date,
-                                                        end_date=self.academic_calendar.end_date)
+        self.application_remote_calendar_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationCoursesRemoteCalendar',
+            __init__=mock.Mock(return_value=None),
+            _calendars=mock.PropertyMock(return_value=[self.calendar])
+        )
+        self.application_remote_calendar_patcher.start()
+        self.addCleanup(self.application_remote_calendar_patcher.stop)
 
-        self.drt_entity_version = EntityVersionFactory(entity=self.drt_entity, acronym="DRT",
-                                                       entity_type='FACULTY',
-                                                       start_date=self.academic_calendar.start_date,
-                                                       end_date=self.academic_calendar.end_date)
+        self.agro_entity_version = EntityVersionFactory(
+            entity=self.agro_entity,
+            acronym="AGRO",
+            entity_type='FACULTY',
+            start_date=self.calendar.start_date,
+            end_date=self.calendar.end_date
+        )
+
+        self.drt_entity_version = EntityVersionFactory(
+            entity=self.drt_entity,
+            acronym="DRT",
+            entity_type='FACULTY',
+            start_date=self.calendar.start_date,
+            end_date=self.calendar.end_date
+        )
         self.client.force_login(self.user)
+
         # Creation context with multiple learning container year
         _create_multiple_learning_container_year(self)
         self.attribution = AttributionNewFactory(
@@ -104,16 +114,20 @@ class TestOnlineApplication(TestCase):
         )
 
     def test_redirection_to_outside_encoding_period(self):
-        # Remove teaching charge application event
-        self.academic_calendar.delete()
+        # Change calendar start date + set property is_open to False
+        self.calendar.start_date = datetime.datetime.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
         url = reverse('applications_overview')
         url_outside = reverse('outside_applications_period')
         response = self.client.get(url)
         self.assertRedirects(response, "%s?next=%s" % (url_outside, url))  # Redirection
 
     def test_message_outside_encoding_period(self):
-        # Remove teaching charge application event
-        self.academic_calendar.delete()
+        # Change calendar start date + set property is_open to False
+        self.calendar.start_date = datetime.datetime.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
         url = reverse('outside_applications_period')
         response = self.client.get(url)
         messages = list(response.context['messages'])
@@ -127,8 +141,10 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 200)
         context = response.context[-1]
         self.assertEqual(context['a_tutor'], self.tutor)
-        self.assertEqual(context['current_academic_year'], self.current_academic_year)
-        self.assertEqual(context['application_year'], self.application_academic_year)
+        self.assertEqual(context['previous_academic_year'], self.current_academic_year)
+        self.assertEqual(context['application_academic_year'], self.application_academic_year)
+        self.assertEqual(context['application_course_calendar'], self.calendar)
+
         self.assertEqual(len(context['attributions']), 1)
         self.assertEqual(context['attributions'][0]['acronym'], self.lagro2500_next.acronym)
         self.assertEqual(len(context['applications']), 1)
