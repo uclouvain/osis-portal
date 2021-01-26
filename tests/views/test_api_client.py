@@ -55,7 +55,7 @@ class MockAPI(DefaultApi):
         ).to_dict()]}
 
     @classmethod
-    def periods_active_get(*args, **kwargs):
+    def periods_get(*args, **kwargs):
         return {'count': 1, 'results': [PeriodGet().to_dict()]}
 
     @classmethod

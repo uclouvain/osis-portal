@@ -45,6 +45,18 @@ def view_score_encoding(request):
     master = _get_master_by_email(request.user.username)
     if master:
         allocations = _get_master_allocations(master['uuid'])
+        for allocation in allocations:
+            students_affectations = _get_students_affectations(
+                specialty_uuid=allocation['specialty']['uuid'],
+                organization_uuid=allocation['organization']['uuid'],
+            )
+            encoded_affectations = _get_students_affectations(
+                specialty_uuid=allocation['specialty']['uuid'],
+                organization_uuid=allocation['organization']['uuid'],
+                with_score=True
+            )
+            amount_encoded = len(encoded_affectations)
+            total_amount = len(students_affectations)
     else:
         messages.error(request, _('Access to internship is only authorized to students and internship masters'))
         return redirect(reverse('internship'))
@@ -151,12 +163,13 @@ def _get_organization(organization_uuid):
     return InternshipAPIClient().organizations_uuid_get(uuid=organization_uuid)
 
 
-def _get_students_affectations(specialty_uuid, organization_uuid, period=""):
+def _get_students_affectations(specialty_uuid, organization_uuid, period="", with_score=False):
     return get_paginated_results(
-        InternshipAPIClient().students_affectations_get(
+        InternshipAPIClient().students_affectations_specialty_organization_get(
             specialty=specialty_uuid,
             organization=organization_uuid,
-            period=period
+            period=period,
+            with_score=with_score
         )
     )
 
@@ -171,7 +184,7 @@ def _get_period(period_uuid):
 
 def _get_active_period():
     return get_first_paginated_result(
-        InternshipAPIClient().periods_active_get()
+        InternshipAPIClient().periods_get(active=True)
     )
 
 

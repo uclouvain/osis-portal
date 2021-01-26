@@ -51,7 +51,7 @@
                   </div>
                   <div class="panel-body">
                       <h3>{{ allocation.specialty.name }}</h3>
-                      <p>2/12 {% trans 'encoded grade(s)' %}</p>
+                      <p>{{ amount_encoded }}/{{ total_amount }} {% trans 'encoded grade(s)' %}</p>
                       <hr/>
                       <a href="{% url 'internship_score_encoding_sheet' specialty_uuid=allocation.specialty.uuid organization_uuid=allocation.organization.uuid %}" class="btn btn-primary">
                         {% trans 'Encoding' %}
