@@ -105,9 +105,7 @@
 
 {% block script %}
     <script>
-    console.log( document.querySelector('#period-select'));
         document.querySelector('#period-select').addEventListener("change", function(){
-            console.log('select');
            document.querySelector('#filter-form').submit();
         });
     </script>
