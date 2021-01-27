@@ -52,6 +52,9 @@
     <div class="page-header">
         <h2>{% trans 'Encoding form' %}</h2>
     </div>
+
+    {% include "template_messages.html" %}
+
     <div class="panel panel-default">
     <div class="panel-heading">
             <h3 class="pull-right">{{ student.person.last_name | upper }}, {{ student.person.first_name }}</h3>

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
@@ -23,11 +24,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-from django.contrib.auth.views import LoginView
+from functools import wraps
 
-from internship.forms.form_login import InternshipAuthenticationForm
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.translation import gettext as _
+
+from internship.views.api_client import get_first_paginated_result, InternshipAPIClient
 
 
-class InternshipLoginView(LoginView):
-    form_class = InternshipAuthenticationForm
-    template_name = "internship_authentication/login.html"
+def redirect_if_not_master(function):
+    @wraps(function)
+    def wrapper(request, *args, **kwargs):
+        if not _get_master_by_email(email=request.user.email):
+            messages.add_message(
+                request, messages.ERROR, _("Score encoding is only accessible to internship's masters")
+            )
+            return redirect(reverse('home'))
+        response = function(request, *args, **kwargs)
+        return response
+    return wrapper
+
+
+def _get_master_by_email(email):
+    return get_first_paginated_result(
+        InternshipAPIClient().masters_get(search=email)
+    )

@@ -38,7 +38,7 @@
 
     <div class="list-group">
         {% for cohort in cohorts|dictsortreversed:"subscription_start_date" %}
-            <a href="{% url 'internship_home' cohort_id=cohort.id %}" class="list-group-item">
+            <a href="{% url 'internship_student_home' cohort_id=cohort.id %}" class="list-group-item">
                 <h4 class="list-group-item-heading">{{ cohort }}</h4>
                 {% if cohort.enrollment_active %}
                     <p class="list-group-item-text">{% trans 'Enrollments from' %} {{ cohort.subscription_start_date }} {% trans 'to' %} {{ cohort.subscription_end_date }}.</p>

@@ -29,74 +29,74 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from osis_internship_sdk import ScoreGet
-from osis_internship_sdk.rest import ApiException
 
 from base.views import layout
+from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
 from internship.models.period import Period
 from internship.templatetags.selection_tags import only_number
-from internship.views.api_client import InternshipAPIClient, get_paginated_results, get_first_paginated_result
+from internship.views.api_client import get_master_by_email, get_master_allocations, get_students_affectations, \
+    get_active_period, get_specialty, get_organization, get_score, get_affectation, update_score
 
 APD_NUMBER = 15
 COMMENTS_FIELDS = ['intermediary_evaluation', 'good_perf_ex', 'impr_areas', 'suggestions']
 
 
-@login_required(login_url="/internship/auth/login/")
+@login_required
+@redirect_if_not_master
 def view_score_encoding(request):
-    master = _get_master_by_email(request.user.username)
-    if master:
-        allocations = _get_master_allocations(master['uuid'])
-        for allocation in allocations:
-            students_affectations = _get_students_affectations(
-                specialty_uuid=allocation['specialty']['uuid'],
-                organization_uuid=allocation['organization']['uuid'],
-            )
-            encoded_affectations = _get_students_affectations(
-                specialty_uuid=allocation['specialty']['uuid'],
-                organization_uuid=allocation['organization']['uuid'],
-                with_score=True
-            )
-            amount_encoded = len(encoded_affectations)
-            total_amount = len(students_affectations)
-    else:
-        messages.error(request, _('Access to internship is only authorized to students and internship masters'))
-        return redirect(reverse('internship'))
+    master = get_master_by_email(request.user.email)
+    allocations = get_master_allocations(master['uuid'])
+    for allocation in allocations:
+        students_affectations = get_students_affectations(
+            specialty_uuid=allocation['specialty']['uuid'],
+            organization_uuid=allocation['organization']['uuid'],
+        )
+        encoded_affectations = get_students_affectations(
+            specialty_uuid=allocation['specialty']['uuid'],
+            organization_uuid=allocation['organization']['uuid'],
+            with_score=True
+        )
+        amount_encoded = len(encoded_affectations)
+        total_amount = len(students_affectations)
     return layout.render(request, "internship_score_encoding.html", locals())
 
 
-@login_required(login_url="/internship/auth/login/")
+@login_required
+@redirect_if_not_master
 def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
     if request.GET.get('period'):
         selected_period = request.GET.get('period', "")
     else:
-        active_period = _get_active_period()
+        active_period = get_active_period()
         selected_period = active_period['name'] if active_period else ""
 
     apds = ['apd_{}'.format(index) for index in range(1, APD_NUMBER + 1)]
 
-    specialty = _get_specialty(specialty_uuid)
-    organization = _get_organization(organization_uuid)
+    specialty = get_specialty(specialty_uuid)
+    organization = get_organization(organization_uuid)
 
     selected_period = selected_period if selected_period != "all" else ""
-    students_affectations = _get_students_affectations(specialty_uuid, organization_uuid, selected_period)
+    students_affectations = get_students_affectations(specialty_uuid, organization_uuid, selected_period)
 
     periods = Period.objects.filter(cohort__name=specialty.cohort.name).order_by('date_start')
 
     for affectation in students_affectations:
-        affectation['score'] = _get_score(affectation['student']['uuid'], affectation['period']['uuid'])
+        affectation['score'] = get_score(affectation['student']['uuid'], affectation['period']['uuid'])
 
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 
 
-@login_required(login_url="/internship/auth/login/")
+@login_required
+@redirect_if_not_master
 def view_score_encoding_form(request, specialty_uuid, organization_uuid, affectation_uuid):
 
-    affectation = _get_affectation(affectation_uuid)
+    affectation = get_affectation(affectation_uuid)
     period = affectation.period
     student = affectation.student
 
-    score = _get_score(student.uuid, period.uuid)
-    specialty = _get_specialty(specialty_uuid)
-    organization = _get_organization(organization_uuid)
+    score = get_score(student.uuid, period.uuid)
+    specialty = get_specialty(specialty_uuid)
+    organization = get_organization(organization_uuid)
 
     apds = ['apd_{}'.format(index) for index in range(1, APD_NUMBER + 1)]
 
@@ -111,7 +111,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
             objectives=objectives,
             **{key: request.POST.get(key) for key in ScoreGet.attribute_map.keys() if key in request.POST.keys()}
         )
-        update = _update_score(student.uuid, period.uuid, score)
+        update = update_score(student.uuid, period.uuid, score)
         if update:
             messages.add_message(
                 request,
@@ -120,13 +120,12 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
                     student.person.last_name, period.name
                 ))
             )
+            return redirect(reverse('internship_score_encoding_sheet', kwargs={
+                'specialty_uuid': specialty_uuid,
+                'organization_uuid': organization_uuid,
+            }))
         else:
             messages.add_message(request, messages.ERROR, _('An error occurred during score update'))
-        return redirect(reverse('internship_score_encoding_form', kwargs={
-            'specialty_uuid': specialty_uuid,
-            'organization_uuid': organization_uuid,
-            'affectation_uuid': affectation_uuid,
-        }))
 
     available_grades = ['A', 'B', 'C', 'D', 'E']
     comments_fields = COMMENTS_FIELDS
@@ -141,61 +140,3 @@ def _build_comments(post_data):
 def _build_objectives(post_data, apds):
     apds_objectives = [post_data.get('obj-{}'.format(apd)) for apd in apds]
     return {'apds': [only_number(apd) for apd in apds_objectives if apd]}
-
-
-def _get_master_by_email(email):
-    return get_first_paginated_result(
-        InternshipAPIClient().masters_get(search=email)
-    )
-
-
-def _get_master_allocations(master_uuid=None):
-    return get_paginated_results(
-        InternshipAPIClient().masters_uuid_allocations_get(uuid=master_uuid, current=True)
-    )
-
-
-def _get_specialty(specialty_uuid):
-    return InternshipAPIClient().specialties_uuid_get(uuid=specialty_uuid)
-
-
-def _get_organization(organization_uuid):
-    return InternshipAPIClient().organizations_uuid_get(uuid=organization_uuid)
-
-
-def _get_students_affectations(specialty_uuid, organization_uuid, period="", with_score=False):
-    return get_paginated_results(
-        InternshipAPIClient().students_affectations_specialty_organization_get(
-            specialty=specialty_uuid,
-            organization=organization_uuid,
-            period=period,
-            with_score=with_score
-        )
-    )
-
-
-def _get_affectation(affectation_uuid):
-    return InternshipAPIClient().students_affectations_uuid_get(uuid=affectation_uuid)
-
-
-def _get_period(period_uuid):
-    return InternshipAPIClient().periods_uuid_get(uuid=period_uuid)
-
-
-def _get_active_period():
-    return get_first_paginated_result(
-        InternshipAPIClient().periods_get(active=True)
-    )
-
-
-def _get_score(student_uuid, period_uuid):
-    try:
-        return InternshipAPIClient().scores_student_uuid_period_uuid_get(
-            student_uuid=student_uuid, period_uuid=period_uuid
-        )
-    except ApiException:
-        return None
-
-
-def _update_score(student_uuid, period_uuid, score):
-    return InternshipAPIClient().scores_student_uuid_period_uuid_put(student_uuid, period_uuid, score_get=score)

@@ -26,41 +26,34 @@
 from django.conf.urls import url, include
 
 from internship.views import main, hospital, resume, selection, score_encoding
-from internship.views.internship_authentication.account_activation import InternshipMasterRegistrationView, \
-    InternshipMasterRegistrationSuccessView, InternshipMasterActivationView
-from internship.views.internship_authentication.login import InternshipLoginView
 
 urlpatterns = [
-    url(r'^$', main.view_cohort_selection, name="internship"),
+    url(r'^$', main.view_internship_role_selection, name="internship"),
 
-    url(r'^cohort/(?P<cohort_id>[0-9]+)/', include([
-        url(r'^$', main.view_internship_home, name='internship_home'),
-        url(r'^selection/', include([
-            url(r'^$', selection.view_internship_selection, name='select_internship'),
-            url(r'^ajax/selective_internship/$', selection.get_selective_internship_preferences,
-                name='selective_internship_preferences'),
+    url(r'^student/', include([
+        url(r'^$', main.view_cohort_selection, name="internship_cohort_selection"),
+        url(r'^cohort/(?P<cohort_id>[0-9]+)/', include([
+            url(r'^$', main.view_internship_student_home, name='internship_student_home'),
+            url(r'^selection/', include([
+                url(r'^$', selection.view_internship_selection, name='select_internship'),
+                url(r'^ajax/selective_internship/$', selection.get_selective_internship_preferences,
+                    name='selective_internship_preferences'),
+            ])),
+            url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
+            url(r'^resume/$', resume.view_student_resume, name='student_resume'),
         ])),
-        url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
-        url(r'^resume/$', resume.view_student_resume, name='student_resume'),
     ])),
 
-    url(r'^score_encoding/', include([
-        url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
-        url(r'(?P<specialty_uuid>[0-9a-f-]+)/(?P<organization_uuid>[0-9a-f-]+)/', include([
-            url(r'^$', score_encoding.view_score_encoding_sheet, name='internship_score_encoding_sheet'),
-            url(r'^(?P<affectation_uuid>[0-9a-f-]+)/$',
-                score_encoding.view_score_encoding_form,
-                name="internship_score_encoding_form"),
-        ]))
-    ])),
-
-    url(r'^auth/', include([
-        url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
-        url(r'login/$', InternshipLoginView.as_view(), name="internship_score_encoding_login"),
-        url(r'^create_account/$', InternshipMasterRegistrationView.as_view(), name="internship_create_account"),
-        url(r'^activate/(?P<activation_key>[-:\w]+)/$', InternshipMasterActivationView.as_view(),
-            name='internship_master_account_activate'),
-        url(r'^create_account/success', InternshipMasterRegistrationSuccessView.as_view(),
-            name='internship_master_registration_complete'),
+    url(r'^master/', include([
+        url(r'^$', main.view_internship_master_home, name='internship_master_home'),
+        url(r'^score_encoding/', include([
+            url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
+            url(r'(?P<specialty_uuid>[0-9a-f-]+)/(?P<organization_uuid>[0-9a-f-]+)/', include([
+                url(r'^$', score_encoding.view_score_encoding_sheet, name='internship_score_encoding_sheet'),
+                url(r'^(?P<affectation_uuid>[0-9a-f-]+)/$',
+                    score_encoding.view_score_encoding_form,
+                    name="internship_score_encoding_form"),
+            ]))
+        ])),
     ])),
 ]
