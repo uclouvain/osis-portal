@@ -38,3 +38,11 @@ class InternshipAPIClient:
         api_config.api_key['Authorization'] = "Token "+settings.OSIS_PORTAL_TOKEN
         api_config.host = settings.URL_INTERNSHIP_API
         return DefaultApi(api_client=ApiClient(configuration=api_config))
+
+
+def get_first_paginated_result(response):
+    return response['results'][0] if response['count'] else None
+
+
+def get_paginated_results(response):
+    return response['results']

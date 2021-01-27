@@ -44,10 +44,19 @@ urlpatterns = [
         url(r'^resume/$', resume.view_student_resume, name='student_resume'),
     ])),
 
-    url(r'login/$', InternshipLoginView.as_view(), name="internship_score_encoding_login"),
-
     url(r'^score_encoding/', include([
         url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
+        url(r'(?P<specialty_uuid>[0-9a-f-]+)/(?P<organization_uuid>[0-9a-f-]+)/', include([
+            url(r'^$', score_encoding.view_score_encoding_sheet, name='internship_score_encoding_sheet'),
+            url(r'^(?P<affectation_uuid>[0-9a-f-]+)/$',
+                score_encoding.view_score_encoding_form,
+                name="internship_score_encoding_form"),
+        ]))
+    ])),
+
+    url(r'^auth/', include([
+        url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
+        url(r'login/$', InternshipLoginView.as_view(), name="internship_score_encoding_login"),
         url(r'^create_account/$', InternshipMasterRegistrationView.as_view(), name="internship_create_account"),
         url(r'^activate/(?P<activation_key>[-:\w]+)/$', InternshipMasterActivationView.as_view(),
             name='internship_master_account_activate'),

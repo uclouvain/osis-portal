@@ -1,0 +1,112 @@
+{% extends "dashboard_layout.html" %}
+{% load selection_tags %}
+
+{% load i18n %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'internship' %}">{% trans 'Internship' %}</a></li>
+    <li><a href="{% url 'internship_score_encoding'  %}">{% trans 'Score encoding' %}</a></li>
+    <li class="active">{{ specialty.cohort.name }} - {{ specialty.name }}</li>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h2>{% trans 'Score encoding sheet' %}</h2>
+    </div>
+    <h3>{{ specialty.cohort.name }} - {{ specialty.name }}</h3>
+    <h4>{{ organization.name }}</h4>
+    <hr/>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+          <form action="{% url 'internship_score_encoding_sheet' specialty_uuid=specialty_uuid organization_uuid=organization_uuid %}" method="get" id="filter-form">
+            <div class="form-group">
+                <label for="period">
+                {% trans 'Period' %}
+                </label>
+                <div>
+                <select class="form-control" name="period" id="period-select">
+                    <option value="all">{% trans "All periods" %}</option>
+                    {% for period in periods %}
+                        <option value="{{ period.name }}" {% if selected_period == period.name %} selected {% endif %}>{{ period.name }}</option>
+                    {% endfor %}
+                </select>
+                </div>
+            </div>
+          </form>
+      </div>
+        <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table">
+                <thead>
+                <tr><th colspan="2"></th><th colspan="15" style="text-align:center;">APD</th><th colspan="1"></th></tr>
+                    <tr>
+                        <th>{% trans 'Student' %}</th>
+                        <th>{% trans 'Period' %}</th>
+                        {% for apd in apds %}
+                            <th style="text-align:center;">{{ apd | only_number }}</th>
+                        {% endfor %}
+                        <th style="text-align:center;">{% trans 'Encoding' %}</th>
+                    </tr>
+                </thead>
+              <tbody>
+                {% for affectation in students_affectations %}
+                    <tr>
+                        <td>
+                            {{ affectation.student.person.last_name | upper }}, {{ affectation.student.person.first_name }}
+                        </td>
+                        <td>
+                            {{ affectation.period.name }}
+                        </td>
+                        {% for apd in apds %}
+                            {% if affectation.score %}
+                                <td style="text-align:center;">{{ affectation.score|get_attr:apd|default_if_none:'-'}}</td>
+                            {% else %}
+                                <td style="text-align:center;">-</td>
+                            {% endif %}
+                        {% endfor %}
+                        <td style="text-align:center;">
+                            <a class="btn btn-primary btn-xs" href="{% url 'internship_score_encoding_form' specialty_uuid=specialty_uuid organization_uuid=organization_uuid affectation_uuid=affectation.uuid %}">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.querySelector('#period-select').addEventListener("change", function(){
+           document.querySelector('#filter-form').submit();
+        });
+    </script>
+{% endblock %}

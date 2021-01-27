@@ -23,16 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.test import TestCase
+import uuid
+
+import mock
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from base.tests.factories.user import UserFactory
+from internship.tests.views.test_api_client import MockAPI
 
 
+@override_settings(URL_INTERNSHIP_API='url_test_api')
 class TestScoreEncoding(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.client.force_login(self.user)
+        self.api_patcher = mock.patch("internship.views.api_client.InternshipAPIClient.__new__", return_value=MockAPI)
+        self.api_patcher.start()
+        self.addCleanup(self.api_patcher.stop)
 
     def test_access_score_encoding(self):
         url = reverse('internship_score_encoding')
@@ -45,3 +53,31 @@ class TestScoreEncoding(TestCase):
         url = reverse('internship_score_encoding')
         response = self.client.get(url)
         self.assertRedirects(response, reverse('internship_score_encoding_login')+"?next={}".format(url))
+
+    def test_access_score_encoding_sheet(self):
+        url = reverse('internship_score_encoding_sheet', kwargs={
+            'specialty_uuid': str(uuid.uuid4()),
+            'organization_uuid': str(uuid.uuid4())
+        })
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'internship_score_encoding_sheet.html')
+
+    def test_access_score_encoding_sheet_detail(self):
+        url = reverse('internship_score_encoding_form', kwargs={
+            'specialty_uuid': str(uuid.uuid4()),
+            'organization_uuid': str(uuid.uuid4()),
+            'affectation_uuid': str(uuid.uuid4())
+        })
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'internship_score_encoding_form.html')
+
+    def test_post_score_encoding_form(self):
+        url = reverse('internship_score_encoding_form', kwargs={
+            'specialty_uuid': str(uuid.uuid4()),
+            'organization_uuid': str(uuid.uuid4()),
+            'affectation_uuid': str(uuid.uuid4())
+        })
+        response = self.client.post(url, data={'apd_1': 'A'})
+        self.assertEqual(response.status_code, 302)
