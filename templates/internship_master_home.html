@@ -9,7 +9,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -28,18 +28,32 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
-    <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
-    <li class="active">{% trans 'selection' %}</li>
+    <li class="active">{% trans 'Internships' %}</li>
 {% endblock %}
+
 
 {% block content %}
     <div class="page-header">
         <h2>{% trans 'Internships' %}</h2>
     </div>
 
+
     <div class="panel panel-default">
-        <div class="panel-body">
-            {% trans "You can no longer submit your choices." %}
+        <div class="panel panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-2 text-center">
+                            <em class="fa fa-archive" style="font-size: 400%; color: #6699FF;"></em>
+                        </div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading">
+                                <a href="{% url 'internship_score_encoding' %}">{% trans 'Score encoding' %}</a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

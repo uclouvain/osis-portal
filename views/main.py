@@ -27,7 +27,9 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import MultipleObjectsReturned
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 import base.models as mdl_base
@@ -36,17 +38,43 @@ from base.views import layout
 from dashboard.views import main as dash_main_view
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
+from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
+from internship.views.api_client import get_master_by_email
+
+
+@login_required
+def view_internship_role_selection(request):
+    try:
+        student = mdl_base.student.find_by_user(request.user)
+    except MultipleObjectsReturned:
+        return dash_main_view.show_multiple_registration_id_error(request)
+
+    master = get_master_by_email(email=request.user.email)
+
+    if master:
+        return redirect(reverse('internship_master_home'))
+    elif student:
+        return redirect(reverse('internship_student_home'))
+
+    messages.error(request, _('Access to internship is only authorized to students and internship masters'))
+    return redirect(reverse('home'))
 
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
-def view_internship_home(request, cohort_id):
+def view_internship_student_home(request, cohort_id):
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     today = datetime.date.today()
     subscription_allowed = cohort.subscription_start_date <= today <= cohort.subscription_end_date
-    return layout.render(request, "internship_home.html", locals())
+    return layout.render(request, "internship_student_home.html", locals())
+
+
+@login_required
+@redirect_if_not_master
+def view_internship_master_home(request):
+    return layout.render(request, "internship_master_home.html", locals())
 
 
 @login_required
@@ -73,14 +101,3 @@ def view_cohort_selection(request):
             _('It seems you are not subscribed to internships, you may want to check with your administration.')
         )
         return redirect(dash_main_view.home)
-
-
-@login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
-@redirect_if_multiple_registrations
-@redirect_if_not_in_cohort
-def view_internship_home(request, cohort_id):
-    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
-    today = datetime.date.today()
-    subscription_allowed = cohort.subscription_start_date <= today <= cohort.subscription_end_date
-    return layout.render(request, "internship_home.html", locals())

@@ -52,7 +52,7 @@ class TestScoreEncoding(TestCase):
         self.client.logout()
         url = reverse('internship_score_encoding')
         response = self.client.get(url)
-        self.assertRedirects(response, reverse('internship_score_encoding_login')+"?next={}".format(url))
+        self.assertRedirects(response, reverse('login')+"?next={}".format(url))
 
     def test_access_score_encoding_sheet(self):
         url = reverse('internship_score_encoding_sheet', kwargs={

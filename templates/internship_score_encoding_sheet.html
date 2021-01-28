@@ -40,6 +40,9 @@
     <h3>{{ specialty.cohort.name }} - {{ specialty.name }}</h3>
     <h4>{{ organization.name }}</h4>
     <hr/>
+
+    {% include "template_messages.html" %}
+
     <div class="panel panel-default">
       <div class="panel-heading">
           <form action="{% url 'internship_score_encoding_sheet' specialty_uuid=specialty_uuid organization_uuid=organization_uuid %}" method="get" id="filter-form">

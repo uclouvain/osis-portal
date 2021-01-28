@@ -48,8 +48,8 @@ class TestMain(TestCase):
                                                                                                  cls.student.person)
         add_permission(cls.user, "can_access_internship")
 
-    def test_can_access_internship_home(self):
-        home_url = reverse("internship_home", kwargs={'cohort_id': self.cohort.id})
+    def test_can_access_internship_student_home(self):
+        home_url = reverse("internship_student_home", kwargs={'cohort_id': self.cohort.id})
         response = self.client.get(home_url)
         self.assertEqual(response.status_code, 302)
 
