@@ -55,9 +55,9 @@ def view_internship_role_selection(request):
         return redirect(reverse('internship_master_home'))
     elif student:
         return redirect(reverse('internship_student_home'))
-    else:
-        messages.error(request, _('Access to internship is only authorized to students and internship masters'))
-        return redirect(reverse('home'))
+
+    messages.error(request, _('Access to internship is only authorized to students and internship masters'))
+    return redirect(reverse('home'))
 
 
 @login_required
