@@ -164,14 +164,17 @@ def _modify_application(application, l_container_year):
 
 
 def _create_application(global_id, application_to_create):
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if not attrib:
-        attrib = mdl_attribution.attribution_new.AttributionNew(global_id=global_id)
-    if not attrib.applications:
-        attrib.applications = []
-    application_to_create['updated_at'] = _get_serialized_time()
-    attrib.applications.append(application_to_create)
-    return attrib.save()
+    with transaction.atomic():
+        attrib = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(
+            global_id=global_id,
+        ).first()
+        if not attrib:
+            attrib = mdl_attribution.attribution_new.AttributionNew(global_id=global_id)
+        if not attrib.applications:
+            attrib.applications = []
+        application_to_create['updated_at'] = _get_serialized_time()
+        attrib.applications.append(application_to_create)
+        return attrib.save()
 
 
 def can_be_updated(application):
@@ -180,13 +183,10 @@ def can_be_updated(application):
 
 
 def _update_application(global_id, application_to_update):
-    attrib_qs = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(
-        global_id=global_id,
-    ).exclude(
-        applications=[]
-    )
     with transaction.atomic():
-        attrib = attrib_qs.first()
+        attrib = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(
+            global_id=global_id,
+        ).first()
         if not attrib:
             return None
 
