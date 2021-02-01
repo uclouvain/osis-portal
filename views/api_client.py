@@ -32,7 +32,7 @@ from osis_internship_sdk.api_client import ApiClient
 from osis_internship_sdk.configuration import Configuration
 from osis_internship_sdk.rest import ApiException
 
-from internship.views.score_encoding import DEFAULT_PERIODS
+from internship.models.score_encoding_utils import DEFAULT_PERIODS
 
 
 class InternshipAPIClient:
