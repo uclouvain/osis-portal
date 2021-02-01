@@ -32,6 +32,8 @@ from osis_internship_sdk.api_client import ApiClient
 from osis_internship_sdk.configuration import Configuration
 from osis_internship_sdk.rest import ApiException
 
+from internship.views.score_encoding import DEFAULT_PERIODS
+
 
 class InternshipAPIClient:
 
@@ -89,7 +91,7 @@ def get_paginated_students_affectations(specialty_uuid, organization_uuid, perio
     return results, previous, next, count
 
 
-def get_students_affectations(specialty_uuid, organization_uuid, period="all", with_score=False, **kwargs):
+def get_students_affectations(specialty_uuid, organization_uuid, period=DEFAULT_PERIODS, with_score=False, **kwargs):
     return InternshipAPIClient().students_affectations_specialty_organization_get(
         specialty=specialty_uuid,
         organization=organization_uuid,

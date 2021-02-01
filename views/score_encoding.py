@@ -41,6 +41,7 @@ from internship.views.api_client import get_master_by_email, get_master_allocati
 
 APD_NUMBER = 15
 COMMENTS_FIELDS = ['intermediary_evaluation', 'good_perf_ex', 'impr_areas', 'suggestions']
+DEFAULT_PERIODS = 'all'
 
 
 @login_required
@@ -68,9 +69,9 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
         selected_period = request.GET.get('period', "")
     else:
         active_period = get_active_period()
-        selected_period = active_period['name'] if active_period else "all"
+        selected_period = active_period['name'] if active_period else DEFAULT_PERIODS
 
-    pagination_params = {'limit': request.GET.get('limit'), 'offset': request.GET.get('offset', '0')}
+    pagination_params = {'limit': request.GET.get('limit', '0'), 'offset': request.GET.get('offset', '0')}
 
     apds = ['apd_{}'.format(index) for index in range(1, APD_NUMBER + 1)]
 
