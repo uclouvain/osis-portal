@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
-############################################################################
+##############################################################################
 #
-#    OSIS stands for Open Student Information System. It's an application
+# OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -16,26 +15,30 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-############################################################################
-from math import ceil
+##############################################################################
 
-from django import template
+from django.test import SimpleTestCase
 
-register = template.Library()
-
-API_LIMIT = 25
+from internship.templatetags.api_pagination import API_LIMIT, pagination
 
 
-@register.inclusion_tag('api_pagination/pagination.html', takes_context=True)
-def pagination(context):
-    pages_count = ceil(context['count']/API_LIMIT)
-    pages = [{'number': page+1, 'limit': API_LIMIT, 'offset': str(API_LIMIT*page)} for page in range(0, pages_count)]
-    context['pages'] = pages
-    return context
+class TestAPIPaginationTemplateTag(SimpleTestCase):
+
+    def test_api_pagination(self):
+        elements_count = 30
+        context = {
+            'pagination_params': {'limit': API_LIMIT, 'offset': 0},
+            'next': 'next_url',
+            'previous': 'previous_url',
+            'count': elements_count,
+        }
+        paginated_context = pagination(context)
+        self.assertTrue('pages' in paginated_context.keys())
+        self.assertEqual(len(paginated_context['pages']), 2)
