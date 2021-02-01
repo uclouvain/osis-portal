@@ -43,15 +43,15 @@ class InternshipAPIClient:
 
 
 def get_count(response):
-    return response['count'] if response['count'] else 0
+    return response.get('count', 0)
 
 
 def get_first_paginated_result(response):
-    return response['results'][0] if response['count'] else None
+    return response.get('results')[0] if response.get('count') else None
 
 
 def get_paginated_results(response):
-    return response['results']
+    return response.get('results')
 
 
 def get_master_by_email(email):
