@@ -24,6 +24,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+from urllib.parse import urlparse
 
 from django.conf import settings
 from osis_internship_sdk.api.default_api import DefaultApi
@@ -39,6 +40,10 @@ class InternshipAPIClient:
         api_config.api_key['Authorization'] = "Token "+settings.OSIS_PORTAL_TOKEN
         api_config.host = settings.URL_INTERNSHIP_API
         return DefaultApi(api_client=ApiClient(configuration=api_config))
+
+
+def get_count(response):
+    return response['count'] if response['count'] else 0
 
 
 def get_first_paginated_result(response):
@@ -69,14 +74,28 @@ def get_organization(organization_uuid):
     return InternshipAPIClient().organizations_uuid_get(uuid=organization_uuid)
 
 
-def get_students_affectations(specialty_uuid, organization_uuid, period="", with_score=False):
-    return get_paginated_results(
-        InternshipAPIClient().students_affectations_specialty_organization_get(
-            specialty=specialty_uuid,
-            organization=organization_uuid,
-            period=period,
-            with_score=with_score
-        )
+def get_students_affectations_count(specialty_uuid, organization_uuid, with_score=False):
+    return get_count(
+        get_students_affectations(specialty_uuid, organization_uuid, with_score=with_score)
+    )
+
+
+def get_paginated_students_affectations(specialty_uuid, organization_uuid, period, with_score=False, **kwargs):
+    response = get_students_affectations(specialty_uuid, organization_uuid, period, with_score, **kwargs)
+    next = urlparse(response['next']).query if response['next'] else ''
+    previous = urlparse(response['previous']).query if response['previous'] else ''
+    results = get_paginated_results(response)
+    count = response['count']
+    return results, previous, next, count
+
+
+def get_students_affectations(specialty_uuid, organization_uuid, period="all", with_score=False, **kwargs):
+    return InternshipAPIClient().students_affectations_specialty_organization_get(
+        specialty=specialty_uuid,
+        organization=organization_uuid,
+        period=period,
+        with_score=with_score,
+        **kwargs
     )
 
 

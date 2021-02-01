@@ -1,5 +1,7 @@
 {% extends "dashboard_layout.html" %}
 {% load selection_tags %}
+{% load api_pagination %}
+{% load bootstrap3 %}
 
 {% load i18n %}
 {% comment "License" %}
@@ -100,6 +102,7 @@
                 {% endfor %}
               </tbody>
           </table>
+        {% api_pagination %}
         </div>
       </div>
     </div>
