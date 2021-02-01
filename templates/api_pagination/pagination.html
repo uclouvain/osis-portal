@@ -1,0 +1,21 @@
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+    <li {% if not previous %} class="prev disabled" {% endif %}>
+      <a {% if previous %}href="{{ request.path }}?{{ previous }}"{% endif %} aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% for page in pages %}
+        <li {% if page.offset == pagination_params.offset %} class="active" {% endif %}>
+            <a href="{{ request.path }}?limit={{ page.limit }}&offset={{ page.offset }}&period={{ selected_period }}">
+                {{ page.number }}
+            </a>
+        </li>
+    {% endfor %}
+    <li {% if not next %} class="next disabled" {% endif %}>
+      <a {% if next %}href="{{ request.path }}?{{ next }}" {% endif %} aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>

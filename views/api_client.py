@@ -24,12 +24,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+from urllib.parse import urlparse
 
 from django.conf import settings
 from osis_internship_sdk.api.default_api import DefaultApi
 from osis_internship_sdk.api_client import ApiClient
 from osis_internship_sdk.configuration import Configuration
 from osis_internship_sdk.rest import ApiException
+
+from internship.models.score_encoding_utils import DEFAULT_PERIODS
 
 
 class InternshipAPIClient:
@@ -41,12 +44,16 @@ class InternshipAPIClient:
         return DefaultApi(api_client=ApiClient(configuration=api_config))
 
 
+def get_count(response):
+    return response.get('count', 0)
+
+
 def get_first_paginated_result(response):
-    return response['results'][0] if response['count'] else None
+    return response.get('results')[0] if response.get('count') else None
 
 
 def get_paginated_results(response):
-    return response['results']
+    return response.get('results')
 
 
 def get_master_by_email(email):
@@ -69,14 +76,28 @@ def get_organization(organization_uuid):
     return InternshipAPIClient().organizations_uuid_get(uuid=organization_uuid)
 
 
-def get_students_affectations(specialty_uuid, organization_uuid, period="", with_score=False):
-    return get_paginated_results(
-        InternshipAPIClient().students_affectations_specialty_organization_get(
-            specialty=specialty_uuid,
-            organization=organization_uuid,
-            period=period,
-            with_score=with_score
-        )
+def get_students_affectations_count(specialty_uuid, organization_uuid, with_score=False):
+    return get_count(
+        get_students_affectations(specialty_uuid, organization_uuid, with_score=with_score)
+    )
+
+
+def get_paginated_students_affectations(specialty_uuid, organization_uuid, period, with_score=False, **kwargs):
+    response = get_students_affectations(specialty_uuid, organization_uuid, period, with_score, **kwargs)
+    next = urlparse(response['next']).query if response['next'] else ''
+    previous = urlparse(response['previous']).query if response['previous'] else ''
+    results = get_paginated_results(response)
+    count = response['count']
+    return results, previous, next, count
+
+
+def get_students_affectations(specialty_uuid, organization_uuid, period=DEFAULT_PERIODS, with_score=False, **kwargs):
+    return InternshipAPIClient().students_affectations_specialty_organization_get(
+        specialty=specialty_uuid,
+        organization=organization_uuid,
+        period=period,
+        with_score=with_score,
+        **kwargs
     )
 
 
