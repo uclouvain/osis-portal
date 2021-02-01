@@ -70,7 +70,7 @@ class MockAPI(DefaultApi):
     def students_affectations_specialty_organization_get(*args, **kwargs):
         affectation = StudentAffectationGet(student={'uuid': uuid.uuid4()}, period={'uuid': uuid.uuid4()}).to_dict()
         affectation['uuid'] = uuid.uuid4()
-        return {'count': 1, 'results': [affectation]}
+        return {'count': 1, 'results': [affectation], 'next': 'next_url', 'previous': 'previous_url'}
 
     @classmethod
     def students_affectations_uuid_get(*args, **kwargs):
