@@ -26,19 +26,25 @@
 import uuid
 
 import mock
+from django.contrib import messages
+from django.contrib.messages import SUCCESS
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from base.tests.factories.user import UserFactory
+from internship.models.score_encoding_utils import APDS, MIN_APDS, MAX_APDS
 from internship.tests.views.test_api_client import MockAPI
 
 
 @override_settings(URL_INTERNSHIP_API='url_test_api')
 class TestScoreEncoding(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = UserFactory()
+        cls.api_patcher = mock.patch("internship.views.api_client.InternshipAPIClient.__new__", return_value=MockAPI)
+
     def setUp(self):
-        self.user = UserFactory()
         self.client.force_login(self.user)
-        self.api_patcher = mock.patch("internship.views.api_client.InternshipAPIClient.__new__", return_value=MockAPI)
         self.api_patcher.start()
         self.addCleanup(self.api_patcher.stop)
 
@@ -73,11 +79,39 @@ class TestScoreEncoding(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'internship_score_encoding_form.html')
 
-    def test_post_score_encoding_form(self):
+    def test_post_score_encoding_form_not_valid_too_many_apds(self):
+        apds_data = {apd: 'A' for apd in APDS}
+        url = reverse('internship_score_encoding_form', kwargs={
+            'specialty_uuid': str(uuid.uuid4()),
+            'organization_uuid': str(uuid.uuid4()),
+            'affectation_uuid': str(uuid.uuid4())
+        })
+        response = self.client.post(url, data=apds_data)
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(str(MIN_APDS), messages_list[0])
+        self.assertIn(str(MAX_APDS), messages_list[0])
+
+    def test_post_score_encoding_form_not_valid_too_few_apds(self):
         url = reverse('internship_score_encoding_form', kwargs={
             'specialty_uuid': str(uuid.uuid4()),
             'organization_uuid': str(uuid.uuid4()),
             'affectation_uuid': str(uuid.uuid4())
         })
         response = self.client.post(url, data={'apd_1': 'A'})
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(str(MIN_APDS), messages_list[0])
+        self.assertIn(str(MAX_APDS), messages_list[0])
+
+    def test_post_score_encoding_form_valid(self):
+        apds_data = {'apd_{}'.format(apd): 'A' for apd in range(1, MAX_APDS - 1)}
+        url = reverse('internship_score_encoding_form', kwargs={
+            'specialty_uuid': str(uuid.uuid4()),
+            'organization_uuid': str(uuid.uuid4()),
+            'affectation_uuid': str(uuid.uuid4())
+        })
+        response = self.client.post(url, data=apds_data)
+        messages_items = [item for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(messages_items[0].level, SUCCESS)
