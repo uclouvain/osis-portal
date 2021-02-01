@@ -98,6 +98,53 @@
                 </div>
             </div>
         {% endfor %}
+        <div class="row">
+            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px;">
+                <h5>{% trans 'Autonomy level (% of students according to periods)' %}</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>-</th>
+                            <th>P1 {% trans 'to' %} P2</th>
+                            <th>P3 {% trans 'to' %} P5</th>
+                            <th>P6 {% trans 'to' %} P7</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>A ({% trans 'not achieving' %})</th>
+                            <td>15%</td>
+                            <td>5%</td>
+                            <td>0%</td>
+                        </tr>
+                        <tr>
+                            <th>B ({% trans 'achieves with help' %})</th>
+                            <td>70%</td>
+                            <td>30%</td>
+                            <td>10%</td>
+                        </tr>
+                        <tr>
+                            <th>C ({% trans 'achieves without help' %})</th>
+                            <td>15%</td>
+                            <td>60%</td>
+                            <td>80%</td>
+                        </tr>
+                        <tr>
+                            <th>D ({% trans 'tremendously achieving' %})</th>
+                            <td>0%</td>
+                            <td>5%</td>
+                            <td>10%</td>
+                        </tr>
+                        <tr>
+                            <th>E ({% trans 'not observed' %})</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <h3>{% trans 'Comments' %} </h3>
         <hr/>
         {% for field in comments_fields %}
