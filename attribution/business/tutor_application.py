@@ -110,9 +110,12 @@ def delete_application(global_id, acronym, year):
 
 
 def send_mail_applications_summary(global_id):
-    application_courses_years_opened = ApplicationCoursesRemoteCalendar().get_target_years_opened()
-    application_academic_year = AcademicYear.objects.get(year=application_courses_years_opened[0])
+    try:
+        application_courses_event = ApplicationCoursesRemoteCalendar().get_opened_academic_events()[0]
+    except IndexError:
+        return _('The period of online application is closed')
 
+    application_academic_year = AcademicYear.objects.get(year=application_courses_event.authorized_target_year)
     application_list = get_application_list(global_id, application_academic_year)
     if not application_list:
         return _('No application found')
@@ -128,7 +131,7 @@ def send_mail_applications_summary(global_id):
     template_base_data = {
         'first_name': person.first_name,
         'last_name': person.last_name,
-
+        'application_courses_end_date': application_courses_event.end_date
     }
     message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
                                                             [table_applications], receivers, template_base_data, None)
