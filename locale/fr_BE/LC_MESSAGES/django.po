@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-21 14:13+0100\n"
+"POT-Creation-Date: 2021-02-01 17:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,9 +19,14 @@ msgstr ""
 msgid "APDs"
 msgstr "APDs"
 
+msgid "APDs description"
+msgstr "Description des APDs"
+
 msgid ""
 "Access to internship is only authorized to students and internship masters"
-msgstr "L'accès aux stages est seulement autorisé aux étudiants-stagiaires et aux maîtres de stage"
+msgstr ""
+"L'accès aux stages est seulement autorisé aux étudiants-stagiaires et aux "
+"maîtres de stage"
 
 msgid "Activation failed"
 msgstr "Activation échouée"
@@ -34,6 +39,16 @@ msgstr "Les affections sont disponibles depuis"
 
 msgid "All periods"
 msgstr "Toutes les périodes"
+
+msgid "An error occurred during score update"
+msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
+
+msgid "Appreciate medical emergency"
+msgstr "Reconnaitre l’urgence médicale"
+
+#, python-format
+msgid "Autonomy level (%% of students according to periods)"
+msgstr "Niveau d'autonomie (%% des étudiant.es selon les périodes)"
 
 msgid "Cancel"
 msgstr "Annuler"
@@ -66,8 +81,20 @@ msgstr "Ville"
 msgid "Comments"
 msgstr "Commentaires"
 
+msgid "Communicate (broad sense)"
+msgstr "Communiquer au sens large"
+
+msgid "Complement patient record"
+msgstr "Compléter le dossier patient"
+
+msgid "Conduct clinical examination"
+msgstr "Réaliser l’examen clinique"
+
 msgid "Contest"
 msgstr "Concours"
+
+msgid "Contribute to quality of care and patient safety"
+msgstr "Contribuer à la qualité des soins et la sécurité du patient"
 
 msgid "Country"
 msgstr "Pays"
@@ -87,17 +114,17 @@ msgstr "Formulaire d'évaluation"
 msgid "Enrollments from"
 msgstr "Inscriptions du"
 
-msgid "Example of areas for improvement"
-msgstr "Exemples de points d'amélioration"
-
-msgid "Example of good performance"
-msgstr "Exemples de bonnes performances"
+msgid "Establish a diagnosis"
+msgstr "Établir un diagnostic de travail"
 
 msgid "First choice"
 msgstr "Premier choix"
 
 msgid "First name"
 msgstr "Prénom"
+
+msgid "Formulate clinical questions"
+msgstr "Formuler des questions cliniques"
 
 msgid "Fourth choice"
 msgstr "Quatrième choix"
@@ -126,9 +153,6 @@ msgstr "Affectation de stages"
 msgid "Internship master"
 msgstr "Maître de stage"
 
-msgid "Internship master with email {} does not exist"
-msgstr "Le maître de stage ayant pour email {} n'existe pas"
-
 msgid "Internship score encoding"
 msgstr "Encodage des cotes de stage"
 
@@ -148,6 +172,9 @@ msgstr "Se connecter"
 msgid "Logout"
 msgstr "Se déconnecter"
 
+msgid "Make/receive transmission report"
+msgstr "Faire/recevoir le rapport de transmission"
+
 msgid "Maximum number of students"
 msgstr "Nombre maximum d'étudiants"
 
@@ -157,8 +184,17 @@ msgstr "Numéro de téléphone"
 msgid "Number of first choice"
 msgstr "Nombre de 1er choix"
 
+msgid "Obtain informed consent"
+msgstr "Obtenir le consentement éclairé"
+
+msgid "Oral presentation of a clinical situation"
+msgstr "Présentation orale d’une situation clinique"
+
 msgid "Password"
 msgstr "Mot de passe"
+
+msgid "Perform technical procedures"
+msgstr "Effectuer les procédures techniques"
 
 msgid "Period"
 msgstr "Période"
@@ -166,7 +202,9 @@ msgstr "Période"
 msgid ""
 "Please contact internship administration (STAC) to obtain a user account "
 "access"
-msgstr "Veuillez contacter l'administration des stages (STAC) pour obtenir un compte utilisateur"
+msgstr ""
+"Veuillez contacter l'administration des stages (STAC) pour obtenir un compte "
+"utilisateur"
 
 msgid "Preference"
 msgstr "Préférence"
@@ -180,17 +218,29 @@ msgstr "Inscription complétée"
 msgid "Registration id"
 msgstr "Id d'enregistrement"
 
+msgid "Save"
+msgstr "Enregistrer"
+
 msgid "Score encoding"
 msgstr "Encodage des cotes"
 
+msgid "Score encoding is only accessible to internship's masters"
+msgstr "L'encodage des cotes est uniquement accessible aux maîtres de stage"
+
 msgid "Score encoding sheet"
 msgstr "Feuille récapitulative des encodages"
+
+msgid "Score updated successfully for {}'s internship during {}"
+msgstr "Cotes mises à jour avec succès pour le stage de {} en {}"
 
 msgid "Second choice"
 msgstr "Second choix"
 
 msgid "Select a cohort"
 msgstr "Sélectionnez une cohorte"
+
+msgid "Select diagnostic tests"
+msgstr "Sélectionner des tests diagnostics"
 
 msgid "Selective internships"
 msgstr "Stages au choix"
@@ -219,29 +269,20 @@ msgstr "Déconnexion réalisée avec succès"
 msgid "Sump up of your choices and your affectations"
 msgstr "Résumé de vos choix et affectations"
 
+msgid "Take a history (anamnesis)"
+msgstr "Prendre l'anamnèse"
+
 msgid "Targeted APDs before internship"
 msgstr "APDs ciblés en début de stage"
 
-msgid "The account you attempted to activate is invalid."
-msgstr "Le compte que vous essayez d'activer n'est pas valide"
-
-msgid "The account you tried to activate has already been activated."
-msgstr "Le compte que vous essayez d'activer est déjà actif"
-
 msgid "The activation failed"
 msgstr "L'activation a échoué"
-
-msgid "The activation key you provided is invalid."
-msgstr "La clé d'activation fourniée n'est pas valide."
 
 msgid "The two password fields didn't match."
 msgstr "Les mots de passes sont différents"
 
 msgid "Third choice"
 msgstr "Troisième choix"
-
-msgid "This account has expired."
-msgstr "Ce compte utilisateur est expiré."
 
 msgid "User account activated"
 msgstr "Compte utilisateur activé"
@@ -252,8 +293,11 @@ msgstr "Le nom d'utilisateur et le mot de passe ne correspondent pas"
 msgid "Website"
 msgstr "Site web"
 
-msgid "Which learning methods do you suggest to improve ?"
-msgstr "Quelle(s) méthode(s) d'apprentissage suggérez-vous pour s'améliorer ?"
+msgid "Work as a team"
+msgstr "Travailler en équipe"
+
+msgid "Write medical prescriptions"
+msgstr "Rédiger les prescriptions"
 
 msgid "You already have an active account"
 msgstr "Vous avez déjà un compte utilisateur actif"
@@ -264,10 +308,15 @@ msgstr "Vous ne pouvez plus soumettre vos choix."
 msgid "You don't have an account"
 msgstr "Vous n'avez pas de compte utilisateur"
 
+msgid "You must evaluate minimum {} and maximum {} APDs"
+msgstr "Vous devez évaluer au minimum {} et au maximum {} APDs"
+
 msgid ""
 "You will find hereunder internships that have been assigned to you and for "
 "which score encoding is open "
-msgstr "Vous trouverez ci-dessous les stages avec période encodage ouverte pour lesquels vous avez été assignés"
+msgstr ""
+"Vous trouverez ci-dessous les stages avec période encodage ouverte pour "
+"lesquels vous avez été assignés"
 
 msgid ""
 "Your registration to the platform has been successfully completed. Please "
@@ -281,6 +330,12 @@ msgid ""
 msgstr ""
 "Votre compte utilisateur est maintenant actif. Vous pouvez vous connecter "
 "pour accéder à la plateforme."
+
+msgid "achieves with help"
+msgstr "réalise avec aide"
+
+msgid "achieves without help"
+msgstr "réalise sans aide"
 
 msgid "email"
 msgstr "email"
@@ -300,6 +355,12 @@ msgstr "nom"
 msgid "name"
 msgstr "nom"
 
+msgid "not achieving"
+msgstr "ne réalise pas"
+
+msgid "not observed"
+msgstr "non observé"
+
 msgid "postal code"
 msgstr "code postal"
 
@@ -307,4 +368,7 @@ msgid "selection"
 msgstr "sélection"
 
 msgid "to"
-msgstr "au"
+msgstr "à"
+
+msgid "tremendously achieving"
+msgstr "réalise de façon exceptionnelle"

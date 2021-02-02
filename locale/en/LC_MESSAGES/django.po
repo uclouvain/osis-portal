@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-21 14:13+0100\n"
+"POT-Creation-Date: 2021-02-01 17:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "APDs"
+msgstr ""
+
+msgid "APDs description"
 msgstr ""
 
 msgid ""
@@ -34,6 +37,16 @@ msgid "Affectations are available from"
 msgstr ""
 
 msgid "All periods"
+msgstr ""
+
+msgid "An error occurred during score update"
+msgstr ""
+
+msgid "Appreciate medical emergency"
+msgstr ""
+
+#, python-format
+msgid "Autonomy level (%% of students according to periods)"
 msgstr ""
 
 msgid "Cancel"
@@ -64,7 +77,19 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
+msgid "Communicate (broad sense)"
+msgstr ""
+
+msgid "Complement patient record"
+msgstr ""
+
+msgid "Conduct clinical examination"
+msgstr ""
+
 msgid "Contest"
+msgstr ""
+
+msgid "Contribute to quality of care and patient safety"
 msgstr ""
 
 msgid "Country"
@@ -85,16 +110,16 @@ msgstr ""
 msgid "Enrollments from"
 msgstr ""
 
-msgid "Example of areas for improvement"
-msgstr ""
-
-msgid "Example of good performance"
+msgid "Establish a diagnosis"
 msgstr ""
 
 msgid "First choice"
 msgstr ""
 
 msgid "First name"
+msgstr ""
+
+msgid "Formulate clinical questions"
 msgstr ""
 
 msgid "Fourth choice"
@@ -124,9 +149,6 @@ msgstr ""
 msgid "Internship master"
 msgstr ""
 
-msgid "Internship master with email {} does not exist"
-msgstr ""
-
 msgid "Internship score encoding"
 msgstr ""
 
@@ -144,6 +166,9 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
+msgid "Make/receive transmission report"
+msgstr ""
+
 msgid "Maximum number of students"
 msgstr ""
 
@@ -153,7 +178,16 @@ msgstr ""
 msgid "Number of first choice"
 msgstr ""
 
+msgid "Obtain informed consent"
+msgstr ""
+
+msgid "Oral presentation of a clinical situation"
+msgstr ""
+
 msgid "Password"
+msgstr ""
+
+msgid "Perform technical procedures"
 msgstr ""
 
 msgid "Period"
@@ -176,16 +210,28 @@ msgstr ""
 msgid "Registration id"
 msgstr ""
 
+msgid "Save"
+msgstr ""
+
 msgid "Score encoding"
 msgstr ""
 
+msgid "Score encoding is only accessible to internship's masters"
+msgstr ""
+
 msgid "Score encoding sheet"
+msgstr ""
+
+msgid "Score updated successfully for {}'s internship during {}"
 msgstr ""
 
 msgid "Second choice"
 msgstr ""
 
 msgid "Select a cohort"
+msgstr ""
+
+msgid "Select diagnostic tests"
 msgstr ""
 
 msgid "Selective internships"
@@ -215,28 +261,19 @@ msgstr ""
 msgid "Sump up of your choices and your affectations"
 msgstr ""
 
+msgid "Take a history (anamnesis)"
+msgstr ""
+
 msgid "Targeted APDs before internship"
 msgstr ""
 
-msgid "The account you attempted to activate is invalid."
-msgstr ""
-
-msgid "The account you tried to activate has already been activated."
-msgstr ""
-
 msgid "The activation failed"
-msgstr ""
-
-msgid "The activation key you provided is invalid."
 msgstr ""
 
 msgid "The two password fields didn't match."
 msgstr ""
 
 msgid "Third choice"
-msgstr ""
-
-msgid "This account has expired."
 msgstr ""
 
 msgid "User account activated"
@@ -248,7 +285,10 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-msgid "Which learning methods do you suggest to improve ?"
+msgid "Work as a team"
+msgstr ""
+
+msgid "Write medical prescriptions"
 msgstr ""
 
 msgid "You already have an active account"
@@ -258,6 +298,9 @@ msgid "You can no longer submit your choices."
 msgstr ""
 
 msgid "You don't have an account"
+msgstr ""
+
+msgid "You must evaluate minimum {} and maximum {} APDs"
 msgstr ""
 
 msgid ""
@@ -272,6 +315,12 @@ msgstr ""
 
 msgid ""
 "Your user account is now active. You can now log in to access the platform."
+msgstr ""
+
+msgid "achieves with help"
+msgstr ""
+
+msgid "achieves without help"
 msgstr ""
 
 msgid "email"
@@ -292,6 +341,12 @@ msgstr ""
 msgid "name"
 msgstr ""
 
+msgid "not achieving"
+msgstr ""
+
+msgid "not observed"
+msgstr ""
+
 msgid "postal code"
 msgstr ""
 
@@ -299,4 +354,7 @@ msgid "selection"
 msgstr ""
 
 msgid "to"
+msgstr ""
+
+msgid "tremendously achieving"
 msgstr ""

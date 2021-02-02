@@ -67,7 +67,16 @@
         <div class="table-responsive">
           <table class="table">
                 <thead>
-                <tr><th colspan="2"></th><th colspan="15" style="text-align:center;">APD</th><th colspan="1"></th></tr>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th colspan="15" style="text-align:center;">
+                            APD
+                            <a data-toggle="modal" data-target="#apd-doc" style="cursor: pointer;">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                        </th>
+                        <th colspan="1"></th>
+                    </tr>
                     <tr>
                         <th>{% trans 'Student' %}</th>
                         <th>{% trans 'Period' %}</th>
@@ -106,6 +115,8 @@
         </div>
       </div>
     </div>
+
+    {% include 'internship_apd_documentation.html' %}
 
 {% endblock %}
 
