@@ -131,7 +131,7 @@ def send_mail_applications_summary(global_id):
     template_base_data = {
         'first_name': person.first_name,
         'last_name': person.last_name,
-        'application_courses_end_date': application_courses_event.end_date
+        'application_courses_targeted_year': application_courses_event.authorized_target_year
     }
     message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
                                                             [table_applications], receivers, template_base_data, None)
