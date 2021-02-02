@@ -54,7 +54,7 @@ def view_internship_role_selection(request):
     if master:
         return redirect(reverse('internship_master_home'))
     elif student:
-        return redirect(reverse('internship_student_home'))
+        return redirect(reverse('internship_cohort_selection'))
 
     messages.error(request, _('Access to internship is only authorized to students and internship masters'))
     return redirect(reverse('home'))
