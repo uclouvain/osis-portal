@@ -23,6 +23,6 @@ openpyxl==2.3.2
 coverage==4.5.1
 django-registration==3.0
 
-git+https://github.com/uclouvain/osis-internship-sdk.git
+git+https://github.com/uclouvain/osis-internship-sdk.git@build-1.0
 
 -r ../osis_common/requirements.txt
