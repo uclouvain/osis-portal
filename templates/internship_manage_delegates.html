@@ -1,0 +1,102 @@
+{% extends "dashboard_layout.html" %}
+{% load static %}
+{% load i18n %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'internship' %}">{% trans 'Internships' %}</a></li>
+    <li><a href="{% url 'internship_master_home' %}">{% trans 'Internship master' %}</a></li>
+    <li class="active">{% trans 'Delegates' %}</li>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h2>{% trans 'Delegates' %}</h2>
+    </div>
+
+    {% include "template_messages.html" %}
+
+    <div class="panel panel-default">
+        <div class="panel panel-heading">
+            <ul class="nav nav-pills">
+                {% for allocation in allocations %}
+                    <li {% if forloop.first %}class="active"{% endif %}>
+                        <a data-toggle="pill" href="#{{ allocation.internship }}">
+                            {{ allocation.specialty.name }} - {{ allocation.organization.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="panel panel-body">
+            <div class="tab-content">
+                {% for allocation in allocations %}
+                  <div id="{{ allocation.internship }}" class="tab-pane fade in {% if forloop.first %} active {% endif %}">
+                   <table class="table table-hover" id="order_delegates">
+                        <thead>
+                            <tr>
+                                <th class="no-sort">{% trans 'Civility' %}</th>
+                                <th class="searchable">{% trans 'Name' %}</th>
+                                <th class="searchable">{% trans 'First name' %}</th>
+                                <th class="searchable">{% trans 'Email' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for delegated_allocation in allocation.delegated %}
+                            <tr>
+                                <td>{{ delegated_allocation.master.civility }}</td>
+                                <td>{{ delegated_allocation.master.person.last_name }}</td>
+                                <td>{{ delegated_allocation.master.person.first_name }}</td>
+                                <td>{{ delegated_allocation.master.person.email }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                   </table>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#delegate-form-modal"
+                            data-specialty="{{ allocation.specialty.uuid }}" data-organization="{{ allocation.organization.uuid }}">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        {% trans 'New delegate' %}
+                    </button>
+                  </div>
+
+                    {% include 'internship_delegate_form.html' %}
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        let date = new Date();
+        date.setFullYear(date.getFullYear() - 10);
+        document.querySelector('#id_birth_date').max = date.toISOString().split("T")[0];
+    </script>
+{% endblock %}
