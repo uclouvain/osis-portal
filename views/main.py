@@ -39,7 +39,8 @@ from dashboard.views import main as dash_main_view
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
-from internship.views.api_client import get_master_by_email
+from internship.models.enums.user_account_status import UserAccountStatus
+from internship.views.api_client import get_master_by_email, activate_master_account
 
 
 @login_required
@@ -52,6 +53,8 @@ def view_internship_role_selection(request):
     master = get_master_by_email(email=request.user.email)
 
     if master:
+        if master['user_account_status'] != UserAccountStatus.ACTIVE:
+            activate_master_account(master['uuid'])
         return redirect(reverse('internship_master_home'))
     elif student:
         return redirect(reverse('internship_cohort_selection'))

@@ -62,6 +62,10 @@ def get_master_by_email(email):
     )
 
 
+def activate_master_account(master_uuid):
+    return InternshipAPIClient().masters_uuid_activate_account_put(uuid=master_uuid)
+
+
 def get_master_allocations(master_uuid=None):
     return get_paginated_results(
         InternshipAPIClient().masters_uuid_allocations_get(uuid=master_uuid, current=True)
