@@ -16,9 +16,6 @@ def add_init_internship_masters_group(apps, schema_editor):
         # Add permissions to access internship
         access_internships_perm = Permission.objects.get(codename='can_access_internship')
         internship_masters_group.permissions.add(access_internships_perm)
-        # Add permissions is_internship_master
-        is_master_perm = Permission.objects.get(codename='is_internship_master')
-        internship_masters_group.permissions.add(is_master_perm)
 
 
 class Migration(migrations.Migration):

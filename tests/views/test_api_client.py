@@ -30,6 +30,7 @@ from osis_internship_sdk import DefaultApi, MasterGet, AllocationGet, PeriodGet,
     StudentAffectationGet, CohortGet, StudentGet, ScoreGet
 
 from base.tests.factories.person import PersonFactory
+from internship.models.enums.role_choice import ChoiceRole
 from internship.views.api_client import InternshipAPIClient
 
 
@@ -45,13 +46,17 @@ class TestAPIClient(TestCase):
 class MockAPI(DefaultApi):
     @classmethod
     def masters_get(*args, **kwargs):
-        return {'count': 1, 'results': [MasterGet().to_dict()]}
+        return {'count': 1, 'results': [MasterGet(role=ChoiceRole.MASTER.value).to_dict()]}
+
+    @classmethod
+    def masters_post(*args, **kwargs):
+        return MasterGet(role=ChoiceRole.DELEGATE.value)
 
     @classmethod
     def masters_uuid_allocations_get(*args, **kwargs):
         return {'count': 1, 'results': [AllocationGet(
-            organization={'uuid': uuid.uuid4()},
-            specialty={'uuid': uuid.uuid4()}
+            organization={'uuid': uuid.uuid4(), 'reference': '00'},
+            specialty={'uuid': uuid.uuid4(), 'acronym': 'TEST'}
         ).to_dict()]}
 
     @classmethod
@@ -85,3 +90,11 @@ class MockAPI(DefaultApi):
     @classmethod
     def scores_student_uuid_period_uuid_put(*args, **kwargs):
         return kwargs.get('score_get')
+
+    @classmethod
+    def masters_allocations_specialty_organization_get(*args, **kwargs):
+        return {'count': 1, 'results': [AllocationGet().to_dict()]}
+
+    @classmethod
+    def masters_allocations_specialty_organization_post(*args, **kwargs):
+        return AllocationGet()
