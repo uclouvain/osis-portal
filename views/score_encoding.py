@@ -48,11 +48,11 @@ def view_score_encoding(request):
     master = get_master_by_email(request.user.email)
     allocations = get_master_allocations(master['uuid'])
     for allocation in allocations:
-        total_amount = get_students_affectations_count(
+        allocation['total_amount'] = get_students_affectations_count(
             specialty_uuid=allocation['specialty']['uuid'],
             organization_uuid=allocation['organization']['uuid'],
         )
-        amount_encoded = get_students_affectations_count(
+        allocation['amount_encoded'] = get_students_affectations_count(
             specialty_uuid=allocation['specialty']['uuid'],
             organization_uuid=allocation['organization']['uuid'],
             with_score=True

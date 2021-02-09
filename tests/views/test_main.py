@@ -23,6 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import uuid
+
+import mock
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
@@ -30,6 +33,7 @@ from django.urls import reverse
 from base.tests.factories.student import StudentFactory
 from base.tests.factories.user import UserFactory
 from internship.models import internship_choice as mdl_internship_choice
+from internship.models.enums.user_account_status import UserAccountStatus
 from internship.tests.factories.cohort import CohortFactory
 from internship.tests.factories.internship import InternshipFactory
 from internship.tests.models import test_internship_offer, test_organization, test_internship_speciality, \
@@ -65,6 +69,15 @@ class TestMain(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 200)
+
+    @mock.patch('internship.views.main.get_master_by_email')
+    @mock.patch('internship.views.main.activate_master_account')
+    def test_first_master_access_activate_user_account(self, mock_activate, mock_get_master_email):
+        mock_get_master_email.return_value = {'uuid': uuid.uuid4(), 'user_account_status': UserAccountStatus.INACTIVE}
+        url = reverse("internship")
+        self.client.force_login(self.user)
+        self.client.get(url)
+        self.assertTrue(mock_activate.called)
 
 
 class TestSelectInternship(TestCase):
