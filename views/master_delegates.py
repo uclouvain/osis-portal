@@ -28,14 +28,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.messages import SUCCESS
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import gettext
+from django.utils.translation import gettext as _
 from osis_internship_sdk import MasterGet, Person, AllocationGet
 
 from base.views import layout
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
 from internship.models.enums.role_choice import ChoiceRole
 from internship.views.api_client import get_master_by_email, get_master_allocations, get_delegated_allocations, \
-    post_master, get_organization, get_specialty, post_master_allocation
+    post_master, get_organization, get_specialty, post_master_allocation, delete_master_allocation
 
 
 @login_required
@@ -73,10 +73,19 @@ def new_delegate(request, specialty_uuid, organization_uuid):
             allocation = post_master_allocation(allocation, specialty_uuid, organization_uuid)
             if allocation:
                 messages.add_message(
-                    request, SUCCESS, gettext('Internship delegate {} created with success'.format(
+                    request, SUCCESS, _('Internship delegate {} created with success'.format(
                         master.person.last_name
                     ))
                 )
+    return redirect(reverse('internship_manage_delegates'))
+
+
+@login_required
+@redirect_if_not_master
+def delete_delegate(request, allocation_uuid):
+    deleted_master = delete_master_allocation(allocation_uuid)
+    if(deleted_master):
+        messages.add_message(request, SUCCESS, _('Internship delegate deleted with success'))
     return redirect(reverse('internship_manage_delegates'))
 
 

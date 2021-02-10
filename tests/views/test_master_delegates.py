@@ -75,3 +75,8 @@ class TestScoreEncoding(TestCase):
             'civility': 'DOCTOR'
         })
         self.assertRedirects(response, reverse('internship_manage_delegates'))
+
+    def test_delete_delegate(self):
+        url = reverse('internship_delete_delegate', kwargs={'allocation_uuid': uuid.uuid4()})
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('internship_manage_delegates'))

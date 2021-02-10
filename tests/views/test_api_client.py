@@ -93,8 +93,12 @@ class MockAPI(DefaultApi):
 
     @classmethod
     def masters_allocations_specialty_organization_get(*args, **kwargs):
-        return {'count': 1, 'results': [AllocationGet().to_dict()]}
+        return {'count': 1, 'results': [AllocationGet(uuid=uuid.uuid4()).to_dict()]}
 
     @classmethod
     def masters_allocations_specialty_organization_post(*args, **kwargs):
-        return AllocationGet()
+        return AllocationGet(uuid=uuid.uuid4())
+
+    @classmethod
+    def masters_allocations_uuid_delete(*args, **kwargs):
+        return AllocationGet(uuid=uuid.uuid4())

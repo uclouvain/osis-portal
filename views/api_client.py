@@ -151,3 +151,7 @@ def post_master_allocation(allocation, specialty_uuid, organization_uuid):
     return InternshipAPIClient().masters_allocations_specialty_organization_post(
         allocation_get=allocation, specialty=specialty_uuid, organization=organization_uuid
     )
+
+
+def delete_master_allocation(allocation_uuid):
+    return InternshipAPIClient().masters_allocations_uuid_delete(uuid=allocation_uuid)

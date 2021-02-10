@@ -63,6 +63,7 @@
                                 <th class="searchable">{% trans 'Name' %}</th>
                                 <th class="searchable">{% trans 'First name' %}</th>
                                 <th class="searchable">{% trans 'Email' %}</th>
+                                <th class="no-sort">{% trans 'Delete' %}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,6 +73,14 @@
                                 <td>{{ delegated_allocation.master.person.last_name }}</td>
                                 <td>{{ delegated_allocation.master.person.first_name }}</td>
                                 <td>{{ delegated_allocation.master.person.email }}</td>
+                                <td>
+                                    <a class="btn btn-danger internship_btn_delete" id="delete_{{ delegated_allocation.uuid }}"
+                                       data-href="{% url 'internship_delete_delegate' allocation_uuid=delegated_allocation.uuid %}"
+                                       data-toggle="modal" data-target="#delete_modal"
+                                       data-name="{{delegated_allocation.master.person.last_name }}">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -90,6 +99,8 @@
         </div>
     </div>
 
+    {% include 'fragment/delete_confirmation_modal.html' %}
+
 {% endblock %}
 
 
@@ -98,5 +109,10 @@
         let date = new Date();
         date.setFullYear(date.getFullYear() - 10);
         document.querySelector('#id_birth_date').max = date.toISOString().split("T")[0];
+
+        $('#delete_modal').on('show.bs.modal', (e) => {
+          $('#btn-ok').attr('href', $(e.relatedTarget).data('href'));
+          $('.delete-element').html($(e.relatedTarget).data('name'));
+        });
     </script>
 {% endblock %}

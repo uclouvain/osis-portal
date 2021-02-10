@@ -26,7 +26,7 @@
 from django.conf.urls import url, include
 
 from internship.views import main, hospital, resume, selection, score_encoding
-from internship.views.master_delegates import manage_delegates, new_delegate
+from internship.views.master_delegates import manage_delegates, new_delegate, delete_delegate
 
 urlpatterns = [
     url(r'^$', main.view_internship_role_selection, name="internship"),
@@ -51,6 +51,8 @@ urlpatterns = [
             url(r'^$', manage_delegates, name='internship_manage_delegates'),
             url(r'new/(?P<specialty_uuid>[0-9a-f-]+)/(?P<organization_uuid>[0-9a-f-]+)/$', new_delegate,
                 name='internship_new_delegate'),
+            url(r'delete/(?P<allocation_uuid>[0-9a-f-]+)/$', delete_delegate,
+                name='internship_delete_delegate'),
         ])),
         url(r'^score_encoding/', include([
             url(r'^$', score_encoding.view_score_encoding, name="internship_score_encoding"),
