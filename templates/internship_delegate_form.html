@@ -1,0 +1,48 @@
+{% load i18n %}
+
+<div id="delegate-form-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{% url 'internship_new_delegate' specialty_uuid=allocation.specialty.uuid organization_uuid=allocation.organization.uuid %}"
+                  method="POST" class="form" id="delegate-form">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{% trans 'New delegate' %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group col-md-6 required_field">
+                            <label class="control-label" for="id_civility">{% trans 'Civility' %}</label>
+                            <select name="civility" class="form-control" title="" id="id_civility">
+                              <option value="" selected="">---------</option>
+                              <option value="PROFESSOR">{% trans 'Professor' %}</option>
+                              <option value="DOCTOR">{% trans 'Doctor' %}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6 required_field">
+                            <label class="control-label" for="id_email">{% trans 'Email' %}</label>
+                            <input type="email" name="email" maxlength="50" class="form-control" required id="id_email">
+                        </div>
+                        <div class="form-group col-md-6 required_field">
+                            <label class="control-label" for="id_last_name">{% trans 'Last name' %}</label>
+                            <input type="text" name="last_name" maxlength="50" class="form-control" required id="id_last_name">
+                        </div>
+                        <div class="form-group col-md-6 required_field">
+                            <label class="control-label" for="id_first_name">{% trans 'First name' %}</label>
+                            <input type="text" name="first_name" maxlength="50" class="form-control" required id="id_first_name">
+                        </div>
+                        <div class="form-group col-md-12 required_field">
+                            <label class="control-label" for="id_birth_date">{% trans 'Birth date' %}</label>
+                            <input type="date" name="birth_date" maxlength="50" class="form-control" required id="id_birth_date">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                    <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

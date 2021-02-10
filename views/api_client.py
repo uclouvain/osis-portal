@@ -32,6 +32,7 @@ from osis_internship_sdk.api_client import ApiClient
 from osis_internship_sdk.configuration import Configuration
 from osis_internship_sdk.rest import ApiException
 
+from internship.models.enums.role_choice import ChoiceRole
 from internship.models.score_encoding_utils import DEFAULT_PERIODS
 
 
@@ -69,6 +70,14 @@ def activate_master_account(master_uuid):
 def get_master_allocations(master_uuid=None):
     return get_paginated_results(
         InternshipAPIClient().masters_uuid_allocations_get(uuid=master_uuid, current=True)
+    )
+
+
+def get_delegated_allocations(specialty_uuid, organization_uuid):
+    return get_paginated_results(
+        InternshipAPIClient().masters_allocations_specialty_organization_get(
+            specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.DELEGATE.value
+        )
     )
 
 
@@ -132,3 +141,17 @@ def update_score(student_uuid, period_uuid, score):
     return InternshipAPIClient().scores_student_uuid_period_uuid_put(
         student_uuid, period_uuid, score_get=score, async_req=True
     )
+
+
+def post_master(master):
+    return InternshipAPIClient().masters_post(master_get=master)
+
+
+def post_master_allocation(allocation, specialty_uuid, organization_uuid):
+    return InternshipAPIClient().masters_allocations_specialty_organization_post(
+        allocation_get=allocation, specialty=specialty_uuid, organization=organization_uuid
+    )
+
+
+def delete_master_allocation(allocation_uuid):
+    return InternshipAPIClient().masters_allocations_uuid_delete(uuid=allocation_uuid)

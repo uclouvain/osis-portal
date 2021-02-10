@@ -27,14 +27,14 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
-    <li class="active">{% trans 'Internships' %}</li>
+    <li><a href="{% url 'internship' %}">{% trans 'Internships' %}</a></li>
+    <li class="active">{% trans 'Internship master' %}</li>
 {% endblock %}
 
 
 {% block content %}
     <div class="page-header">
-        <h2>{% trans 'Internships' %}</h2>
+        <h2>{% trans 'Internship master' %}</h2>
     </div>
 
 
@@ -44,11 +44,23 @@
                 <div class="col-md-4">
                     <div class="row">
                         <div class="col-md-2 text-center">
-                            <em class="fa fa-archive" style="font-size: 400%; color: #6699FF;"></em>
+                            <em class="fa fa-edit" style="font-size: 400%; color: #6699FF;"></em>
                         </div>
                         <div class="col-md-10">
                             <h4 class="media-heading">
                                 <a href="{% url 'internship_score_encoding' %}">{% trans 'Score encoding' %}</a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-2 text-center">
+                            <em class="fa fa-users" style="font-size: 400%; color: #6699FF;"></em>
+                        </div>
+                        <div class="col-md-10">
+                            <h4 class="media-heading">
+                                <a href="{% url 'internship_manage_delegates' %}">{% trans 'Manage delegates' %}</a>
                             </h4>
                         </div>
                     </div>
