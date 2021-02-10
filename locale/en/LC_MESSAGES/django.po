@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-01 17:34+0100\n"
+"POT-Creation-Date: 2021-02-10 10:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,6 +49,9 @@ msgstr ""
 msgid "Autonomy level (%% of students according to periods)"
 msgstr ""
 
+msgid "Birth date"
+msgstr ""
+
 msgid "Cancel"
 msgstr ""
 
@@ -74,6 +77,9 @@ msgstr ""
 msgid "City"
 msgstr ""
 
+msgid "Civility"
+msgstr ""
+
 msgid "Comments"
 msgstr ""
 
@@ -96,6 +102,15 @@ msgid "Country"
 msgstr ""
 
 msgid "Creating an internship master user account"
+msgstr ""
+
+msgid "Delegates"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Doctor"
 msgstr ""
 
 msgid "Email"
@@ -146,6 +161,12 @@ msgstr ""
 msgid "Internship affectation"
 msgstr ""
 
+msgid "Internship delegate deleted with success"
+msgstr ""
+
+msgid "Internship delegate {} created with success"
+msgstr ""
+
 msgid "Internship master"
 msgstr ""
 
@@ -160,6 +181,9 @@ msgid ""
 "your administration."
 msgstr ""
 
+msgid "Last name"
+msgstr ""
+
 msgid "Login"
 msgstr ""
 
@@ -169,10 +193,19 @@ msgstr ""
 msgid "Make/receive transmission report"
 msgstr ""
 
+msgid "Manage delegates"
+msgstr ""
+
 msgid "Maximum number of students"
 msgstr ""
 
 msgid "Mobile phone"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "New delegate"
 msgstr ""
 
 msgid "Number of first choice"
@@ -199,6 +232,9 @@ msgid ""
 msgstr ""
 
 msgid "Preference"
+msgstr ""
+
+msgid "Professor"
 msgstr ""
 
 msgid "Reference"
@@ -274,6 +310,9 @@ msgid "The two password fields didn't match."
 msgstr ""
 
 msgid "Third choice"
+msgstr ""
+
+msgid "This action will delete "
 msgstr ""
 
 msgid "User account activated"

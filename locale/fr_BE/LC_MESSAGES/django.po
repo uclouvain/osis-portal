@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-01 17:34+0100\n"
+"POT-Creation-Date: 2021-02-10 10:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,9 @@ msgstr "Reconnaitre l’urgence médicale"
 msgid "Autonomy level (%% of students according to periods)"
 msgstr "Niveau d'autonomie (%% des étudiant.es selon les périodes)"
 
+msgid "Birth date"
+msgstr ""
+
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -78,6 +81,9 @@ msgstr "Choisissez une spécialité"
 msgid "City"
 msgstr "Ville"
 
+msgid "Civility"
+msgstr "Civilité"
+
 msgid "Comments"
 msgstr "Commentaires"
 
@@ -101,6 +107,15 @@ msgstr "Pays"
 
 msgid "Creating an internship master user account"
 msgstr "Création d'un compte utilisateur pour maître de stage"
+
+msgid "Delegates"
+msgstr "Délégués"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Doctor"
+msgstr "Docteur"
 
 msgid "Email"
 msgstr "Email"
@@ -150,6 +165,12 @@ msgstr "Stage"
 msgid "Internship affectation"
 msgstr "Affectation de stages"
 
+msgid "Internship delegate deleted with success"
+msgstr "Délégué de stage supprimé avec succès"
+
+msgid "Internship delegate {} created with success"
+msgstr "Délégué de stage {} créé avec succès"
+
 msgid "Internship master"
 msgstr "Maître de stage"
 
@@ -166,6 +187,9 @@ msgstr ""
 "Il semblerait que vous ne soyez pas inscrit aux stages, nous vous "
 "recommandons de contacter votre secrétariat."
 
+msgid "Last name"
+msgstr "Nom"
+
 msgid "Login"
 msgstr "Se connecter"
 
@@ -175,11 +199,20 @@ msgstr "Se déconnecter"
 msgid "Make/receive transmission report"
 msgstr "Faire/recevoir le rapport de transmission"
 
+msgid "Manage delegates"
+msgstr "Gestion des délégués"
+
 msgid "Maximum number of students"
 msgstr "Nombre maximum d'étudiants"
 
 msgid "Mobile phone"
 msgstr "Numéro de téléphone"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "New delegate"
+msgstr "Nouveau délégué"
 
 msgid "Number of first choice"
 msgstr "Nombre de 1er choix"
@@ -208,6 +241,9 @@ msgstr ""
 
 msgid "Preference"
 msgstr "Préférence"
+
+msgid "Professor"
+msgstr "Professeur"
 
 msgid "Reference"
 msgstr "Référence"
@@ -283,6 +319,9 @@ msgstr "Les mots de passes sont différents"
 
 msgid "Third choice"
 msgstr "Troisième choix"
+
+msgid "This action will delete "
+msgstr "Cette action supprimera "
 
 msgid "User account activated"
 msgstr "Compte utilisateur activé"
