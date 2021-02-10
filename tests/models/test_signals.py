@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import mock
 from django.test import TestCase
 
 from base.models.signals import _add_person_to_group, GROUP_STUDENTS_INTERNSHIP
@@ -42,7 +43,8 @@ class UpdatePersonIfNecessary(TestCase):
         'USER_EMAIL': 'user1@user.org'
     }
 
-    def test_when_internship_installed(self):
+    @mock.patch('base.models.signals.get_master_by_email', return_value=None)
+    def test_when_internship_installed(self, mock_get_master_by_email):
         user = get_or_create_user(self.user_infos)
         person = PersonFactory(
             user=user,
