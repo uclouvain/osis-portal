@@ -106,6 +106,7 @@
 
 {% block script %}
     <script>
+        // set max birth date to 10 years before today
         let date = new Date();
         date.setFullYear(date.getFullYear() - 10);
         document.querySelector('#id_birth_date').max = date.toISOString().split("T")[0];
