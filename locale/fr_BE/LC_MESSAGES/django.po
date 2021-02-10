@@ -51,7 +51,7 @@ msgid "Autonomy level (%% of students according to periods)"
 msgstr "Niveau d'autonomie (%% des étudiant.es selon les périodes)"
 
 msgid "Birth date"
-msgstr ""
+msgstr "Date de naissance"
 
 msgid "Cancel"
 msgstr "Annuler"

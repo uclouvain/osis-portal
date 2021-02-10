@@ -84,7 +84,7 @@ def new_delegate(request, specialty_uuid, organization_uuid):
 @redirect_if_not_master
 def delete_delegate(request, allocation_uuid):
     deleted_master = delete_master_allocation(allocation_uuid)
-    if(deleted_master):
+    if deleted_master:
         messages.add_message(request, SUCCESS, _('Internship delegate deleted with success'))
     return redirect(reverse('internship_manage_delegates'))
 
