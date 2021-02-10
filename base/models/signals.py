@@ -30,14 +30,16 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
 
 from base import models as mdl
+from base.business import student as student_bsn
+from internship.views.api_client import get_master_by_email
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
-from base.business import student as student_bsn
 
 person_created = Signal(providing_args=['person'])
 
 GROUP_STUDENTS = "students"
 GROUP_STUDENTS_INTERNSHIP = "internship_students"
+GROUP_MASTERS_INTERNSHIP = "internship_masters"
 GROUP_TUTORS = "tutors"
 
 
@@ -108,6 +110,9 @@ def _add_person_to_group(person):
         from internship.models.internship_student_information import InternshipStudentInformation
         if InternshipStudentInformation.objects.filter(person=person).exists():
             _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
+        # check master exists through api client
+        if get_master_by_email(person.user.email):
+            _assign_group(person, GROUP_MASTERS_INTERNSHIP)
 
 
 def _assign_group(person, group_name):

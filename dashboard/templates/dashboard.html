@@ -42,6 +42,10 @@
             {% if perms.base.is_student %}
                 {% include 'student_dashboard.html' %}
             {% endif %}
+
+            {% if perms.base.is_internship_master %}
+                {% include 'master_dashboard.html' %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
