@@ -43,7 +43,7 @@ class UpdatePersonIfNecessary(TestCase):
         'USER_EMAIL': 'user1@user.org'
     }
 
-    @mock.patch('base.models.signals.get_master_by_email', return_value=None)
+    @mock.patch('osis_internship_sdk.api.default_api.DefaultApi.masters_get', return_value={'count': 0})
     def test_when_internship_installed(self, mock_get_master_by_email):
         user = get_or_create_user(self.user_infos)
         person = PersonFactory(
