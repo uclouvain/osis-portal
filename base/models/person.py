@@ -86,6 +86,7 @@ class Person(SerializableModel):
             ("is_tutor", "Is tutor"),
             ("is_student", "Is student"),
             ("is_administrator", "Is administrator"),
+            ("is_internship_master", "Is internship master"),
             ("is_faculty_administrator", "Is faculty administrator"),
             ("can_access_administration", "Can access administration"),
         )
