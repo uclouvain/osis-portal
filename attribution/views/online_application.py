@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,9 +28,9 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 
@@ -47,6 +47,7 @@ from base.models.academic_year import AcademicYear
 from base.models.enums import learning_unit_year_subtypes
 from base.models.enums import learning_component_year_type
 from base.models.learning_unit_year import LearningUnitYear
+from base.templatetags.academic_year_display import display_as_academic_year
 from base.views import layout
 
 
@@ -56,8 +57,34 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @login_required
 @permission_required('attribution.can_access_attribution_application', raise_exception=True)
 def outside_period(request):
-    text = _('The period of online application is closed')
-    messages.add_message(request, messages.WARNING, "%s" % text)
+    calendar = ApplicationCoursesRemoteCalendar()
+    if calendar.get_opened_academic_events():
+        return HttpResponseRedirect(reverse('applications_overview'))
+
+    previous_academic_event = calendar.get_previous_academic_event()
+    if previous_academic_event:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            _('The period of online application for courses %(year)s opened on %(start_date)s to %(end_date)s') % {
+                'year': display_as_academic_year(previous_academic_event.authorized_target_year),
+                'start_date': previous_academic_event.start_date.strftime('%d/%m/%Y'),
+                'end_date': previous_academic_event.end_date.strftime('%d/%m/%Y')
+                if previous_academic_event.end_date else ''
+            }
+        )
+
+    next_academic_event = calendar.get_next_academic_event()
+    if next_academic_event:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            _('The period of online application for courses %(year)s will open on %(start_date)s to %(end_date)s') % {
+                'year': display_as_academic_year(next_academic_event.authorized_target_year),
+                'start_date': next_academic_event.start_date.strftime('%d/%m/%Y'),
+                'end_date': next_academic_event.end_date.strftime('%d/%m/%Y') if next_academic_event.end_date else ''
+            }
+        )
     return layout.render(request, "attribution_access_denied.html", {})
 
 
