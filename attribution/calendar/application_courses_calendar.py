@@ -45,7 +45,8 @@ class ApplicationCoursesRemoteCalendar(object):
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = osis_attribution_sdk.ApplicationApi(api_client)
             try:
-                self._calendars = api_instance.applicationcoursescalendars_list()
+                self._calendars = sorted(api_instance.applicationcoursescalendars_list(),
+                                         key=lambda academic_event: academic_event.start_date)
             except (osis_attribution_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 LOGGER.error(e)
