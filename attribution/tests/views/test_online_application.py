@@ -116,7 +116,7 @@ class TestOnlineApplication(TestCase):
 
     def test_redirection_to_outside_encoding_period(self):
         # Change calendar start date + set property is_open to False
-        self.calendar.start_date = datetime.datetime.today() + datetime.timedelta(days=5)
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
         self.calendar.is_open = False
 
         url = reverse('applications_overview')
@@ -126,7 +126,7 @@ class TestOnlineApplication(TestCase):
 
     def test_message_outside_encoding_period(self):
         # Change calendar start date + set property is_open to False
-        self.calendar.start_date = datetime.datetime.today() + datetime.timedelta(days=5)
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
         self.calendar.is_open = False
 
         url = reverse('outside_applications_period')
