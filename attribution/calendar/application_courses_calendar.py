@@ -77,8 +77,5 @@ class ApplicationCoursesRemoteCalendar(object):
         """
         Return next academic event based on today
         """
-        events_filtered = [
-            event for event in self._calendars
-            if event.end_date is None or event.end_date > datetime.date.today()
-        ]
+        events_filtered = [event for event in self._calendars if event.start_date > datetime.date.today()]
         return events_filtered[0] if events_filtered else None
