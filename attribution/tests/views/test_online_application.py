@@ -38,6 +38,7 @@ from attribution.utils import tutor_application_epc
 from base.models.enums import learning_component_year_type
 from base.models.enums import learning_unit_year_subtypes
 from base.models.enums import vacant_declaration_type
+from base.templatetags.academic_year_display import display_as_academic_year
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.entity import EntityFactory
 from base.tests.factories.entity_version import EntityVersionFactory
@@ -75,8 +76,8 @@ class TestOnlineApplication(TestCase):
         # Create event to open calendar + Mock Remove API Call for calendar
         self.calendar = ApplicationCourseCalendar(
             title="Candidature aux cours vacants",
-            start_date=datetime.datetime.today() - datetime.timedelta(days=10),
-            end_date=datetime.datetime.today() + datetime.timedelta(days=15),
+            start_date=datetime.date.today() - datetime.timedelta(days=10),
+            end_date=datetime.date.today() + datetime.timedelta(days=15),
             authorized_target_year=self.application_academic_year.year,
             is_open=True
         )
@@ -120,7 +121,7 @@ class TestOnlineApplication(TestCase):
 
         url = reverse('applications_overview')
         url_outside = reverse('outside_applications_period')
-        response = self.client.get(url)
+        response = self.client.get(url, follow=False)
         self.assertRedirects(response, "%s?next=%s" % (url_outside, url))  # Redirection
 
     def test_message_outside_encoding_period(self):
@@ -130,10 +131,18 @@ class TestOnlineApplication(TestCase):
 
         url = reverse('outside_applications_period')
         response = self.client.get(url)
+
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'warning')
-        self.assertEqual(messages[0].message, _('The period of online application is closed'))
+
+        expected_msg = _('The period of online application for courses %(year)s '
+                         'will open on %(start_date)s to %(end_date)s') % {
+            'year': display_as_academic_year(self.calendar.authorized_target_year),
+            'start_date': self.calendar.start_date.strftime('%d/%m/%Y'),
+            'end_date': self.calendar.end_date.strftime('%d/%m/%Y')
+        }
+        self.assertEqual(messages[0].message, expected_msg)
 
     def test_applications_overview(self):
         url = reverse('applications_overview')

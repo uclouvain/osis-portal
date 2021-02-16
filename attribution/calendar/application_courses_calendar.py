@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import logging
 from typing import List
 
@@ -61,3 +62,23 @@ class ApplicationCoursesRemoteCalendar(object):
         Return all current academic event opened based on today
         """
         return [academic_event for academic_event in self._calendars if academic_event.is_open]
+
+    def get_previous_academic_event(self) -> osis_attribution_sdk.models.ApplicationCourseCalendar:
+        """
+        Return previous academic event based on today
+        """
+        events_filtered = [
+            event for event in self._calendars if
+            event.end_date is not None and event.end_date < datetime.date.today()
+        ]
+        return events_filtered[-1] if events_filtered else None
+
+    def get_next_academic_event(self, date=None) -> osis_attribution_sdk.models.ApplicationCourseCalendar:
+        """
+        Return next academic event based on today
+        """
+        events_filtered = [
+            event for event in self._calendars
+            if event.end_date is None or event.end_date > datetime.date.today()
+        ]
+        return events_filtered[0] if events_filtered else None
