@@ -8,9 +8,7 @@ from base.models import learning_container_year
 from base.models import learning_unit
 from base.models import learning_unit_enrollment
 from base.models import learning_unit_year
-from base.models import offer
 from base.models import offer_enrollment
-from base.models import offer_year
 from base.models import organization
 from base.models import person
 from base.models import student

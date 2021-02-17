@@ -67,14 +67,8 @@ admin.site.register(learning_unit_year.LearningUnitYear,
 admin.site.register(learning_unit_enrollment.LearningUnitEnrollment,
                     learning_unit_enrollment.LearningUnitEnrollmentAdmin)
 
-admin.site.register(offer.Offer,
-                    offer.OfferAdmin)
-
 admin.site.register(offer_enrollment.OfferEnrollment,
                     offer_enrollment.OfferEnrollmentAdmin)
-
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
 
 admin.site.register(organization.Organization,
                     organization.OrganizationAdmin)

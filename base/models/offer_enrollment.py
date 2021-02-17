@@ -27,38 +27,35 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from base.models.enums import offer_enrollment_state
-from base.models.offer_year import OfferYear
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
 
 class OfferEnrollmentAdmin(SerializableModelAdmin):
-    list_display = ('offer_year', 'student', 'date_enrollment', 'enrollment_state', 'education_group_year')
-    fieldsets = ((None, {'fields': ('offer_year', 'student', 'date_enrollment', 'enrollment_state',
-                                    'education_group_year')}),)
-    raw_id_fields = ('offer_year', 'student', 'education_group_year')
-    search_fields = ['offer_year__acronym', 'student__person__first_name', 'student__person__last_name',
-                     'student__registration_id', 'enrollment_state', 'education_group_year__acronym']
+    list_display = ('education_group_year', 'student', 'date_enrollment', 'enrollment_state',)
+    fieldsets = ((None, {'fields': ('education_group_year', 'student', 'date_enrollment', 'enrollment_state',)}),)
+    raw_id_fields = ('education_group_year', 'student', )
+    search_fields = ['education_group_year__acronym', 'student__person__first_name', 'student__person__last_name',
+                     'student__registration_id', 'enrollment_state']
 
 
 class OfferEnrollment(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
     date_enrollment = models.DateField()
-    offer_year = models.ForeignKey(OfferYear, on_delete=models.PROTECT)
     student = models.ForeignKey('Student', on_delete=models.PROTECT)
     enrollment_state = models.CharField(max_length=15, choices=offer_enrollment_state.STATES, blank=True, null=True)
-    education_group_year = models.ForeignKey('EducationGroupYear', null=True, blank=True, on_delete=models.PROTECT)
+    education_group_year = models.ForeignKey('EducationGroupYear', on_delete=models.PROTECT)
 
     def __str__(self):
-        return u"%s - %s" % (self.student, self.offer_year)
+        return u"%s - %s" % (self.student, self.education_group_year)
 
 
 def find_by_student(a_student):
     return OfferEnrollment.objects.filter(student=a_student)
 
 
-def get_by_student_offer(a_student, offer_year):
+def get_by_student_offer(a_student, education_group_year):
     try:
-        return OfferEnrollment.objects.get(student=a_student, offer_year=offer_year)
+        return OfferEnrollment.objects.get(student=a_student, education_group_year=education_group_year)
     except ObjectDoesNotExist:
         return None
 
@@ -66,7 +63,7 @@ def get_by_student_offer(a_student, offer_year):
 def find_by_student_academic_year(a_student, an_academic_year):
     return OfferEnrollment.objects.filter(
         student=a_student,
-        offer_year__academic_year=an_academic_year,
+        education_group_year__academic_year=an_academic_year,
         enrollment_state__in=[
             offer_enrollment_state.SUBSCRIBED,
             offer_enrollment_state.PROVISORY

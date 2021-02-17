@@ -352,7 +352,7 @@ def get_session_value(session_results, month_session, variable_to_get):
 def get_enrollments_dict_for_display(learning_unit_enrollment):
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
-                                           learning_unit_enrollment.offer_enrollment.offer_year.acronym)
+                                           learning_unit_enrollment.offer_enrollment.education_group_year.acronym)
 
     student_specific_profile = None
     if hasattr(learning_unit_enrollment.offer_enrollment.student, 'studentspecificprofile'):
@@ -362,7 +362,7 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
         'email': learning_unit_enrollment.offer_enrollment.student.person.email,
-        'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
+        'program': learning_unit_enrollment.offer_enrollment.education_group_year.acronym,
         'acronym': learning_unit_enrollment.learning_unit_year.acronym,
         'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
         'january_note': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE),
