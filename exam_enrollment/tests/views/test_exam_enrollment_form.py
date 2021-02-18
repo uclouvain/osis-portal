@@ -118,7 +118,7 @@ class ExamEnrollmentFormTest(TestCase):
                         or 'session_3' in random_exam_enrol.keys())
         self.assertTrue(random_exam_enrol.get('learning_unit_year'))
 
-    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_education_group_year')
     @patch("exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form")
     def test_exam_enrollment_form(self, fetch_json, mock_find_learn_unit_enrols):
         mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
@@ -199,7 +199,7 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
 
-    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_education_group_year')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
     def test_case_exam_enrollment_form_outside_period(self,
                                                       mock_get_exam_enrollment_request,
@@ -221,7 +221,7 @@ class ExamEnrollmentFormTest(TestCase):
             _("You are outside the exams enrollment period")
         )
 
-    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_education_group_year')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
     def test_case_exam_enrollment_form_not_available(self,
                                                      mock_get_exam_enrollment_request,
@@ -243,7 +243,7 @@ class ExamEnrollmentFormTest(TestCase):
             _("Exam enrollment is not available")
         )
 
-    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_education_group_year')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
     def test_case_exam_enrollment_form_no_learning_unit_enrollment_found(
             self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
@@ -264,7 +264,7 @@ class ExamEnrollmentFormTest(TestCase):
             _("no_learning_unit_enrollment_found").format(self.educ_group_year.acronym)
         )
 
-    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_education_group_year')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
     def test_case_exam_enrollment_form_no_error(
             self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
@@ -282,7 +282,7 @@ class ExamEnrollmentFormTest(TestCase):
         error_message = response.context.get("error_message")
         self.assertIsNone(error_message)
 
-    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_education_group_year')
     @patch('exam_enrollment.views.exam_enrollment._get_student_programs')
     @patch('exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form')
     def test_navigation_student_has_programs_with_data(self,
@@ -368,7 +368,7 @@ class ExamEnrollmentFormTest(TestCase):
         for index in range(0, len(exam_enrollments_unexpected)):
             self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
 
-    @patch('base.models.learning_unit_enrollment.find_by_student_and_offer_year')
+    @patch('base.models.learning_unit_enrollment.find_by_student_and_education_group_year')
     def test_case_student_has_no_learning_unit_enrollment(self, mock_find):
         mock_find.return_value = None
         off_year_enrol = OfferEnrollmentFactory(
