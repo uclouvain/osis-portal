@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-DELIBERATION = "DELIBERATION"
-DISSERTATION_SUBMISSION = "DISSERTATION_SUBMISSION"
-EXAM_ENROLLMENTS = "EXAM_ENROLLMENTS"
-SCORES_EXAM_DIFFUSION = "SCORES_EXAM_DIFFUSION"
-SCORES_EXAM_SUBMISSION = "SCORES_EXAM_SUBMISSION"
-TEACHING_CHARGE_APPLICATION = "TEACHING_CHARGE_APPLICATION"
-SUMMARY_COURSE_SUBMISSION = "SUMMARY_COURSE_SUBMISSION"
+import logging
+
+from django.conf import settings
+import osis_attribution_sdk
+
+from base.models.person import Person
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+def build_configuration(person: Person = None) -> osis_attribution_sdk.Configuration:
+    """
+    Return SDK configuration of attribution based on person provided in kwargs
+    If no person provided, it will use generic token to make request
+    """
+    if not settings.OSIS_ATTRIBUTION_SDK_HOST:
+        logger.debug("'OSIS_ATTRIBUTION_SDK_HOST' setting must be set in configuration")
+
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        # TODO : Move logic (api.get_token_from_osis) to shared utility class
+        from continuing_education.views import api
+        token = api.get_token_from_osis(person.user)
+
+    return osis_attribution_sdk.Configuration(
+        host=settings.OSIS_ATTRIBUTION_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_ATTRIBUTION_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })

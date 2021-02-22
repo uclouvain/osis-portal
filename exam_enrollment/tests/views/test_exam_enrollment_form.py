@@ -178,21 +178,17 @@ class ExamEnrollmentFormTest(TestCase):
 
     @patch('exam_enrollment.views.exam_enrollment._get_student_programs')
     @patch('exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form')
-    @patch('base.models.academic_year.current_academic_year')
     @patch('base.models.offer_year.find_by_id')
     def test_navigation_student_has_programs_but_returned_form_is_none(self,
                                                                        mock_find_by_id,
-                                                                       mock_current_academic_year,
                                                                        mock_fetch_exam_form,
                                                                        mock_get_student_programs):
         mock_find_by_id.return_value = self.off_year
-        mock_current_academic_year.return_value = None
         mock_get_student_programs.return_value = [self.off_year]
         mock_fetch_exam_form.return_value = None
         self.client.force_login(self.user)
         an_url = reverse('exam_enrollment_form', args=[self.off_year.id])
         response = self.client.get(an_url, follow=True)
-        self.assertTrue(mock_current_academic_year.called)
         self.assertRedirects(response, reverse('dashboard_home'))
 
     @patch("exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form")

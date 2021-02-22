@@ -103,5 +103,23 @@
               ]
           ]
       }
+  },
+  {
+      "model": "auth.group",
+      "fields": {
+          "name": "internship_masters",
+          "permissions": [
+              [
+                  "is_internship_master",
+                  "base",
+                  "person"
+              ],
+                [
+                  "can_access_internship",
+                  "internship",
+                  "internshipoffer"
+              ]
+          ]
+      }
   }
 ]

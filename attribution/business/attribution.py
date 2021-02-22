@@ -187,13 +187,11 @@ def _order_by_acronym_and_function(attribution_list):
     return sorted(attribution_list, key=lambda k: _sort(k))
 
 
-def get_attribution_list_about_to_expire(global_id, academic_year=None):
+def get_attribution_list_about_to_expire(global_id, academic_year):
     import attribution.business.tutor_application
-    if not academic_year:
-        academic_year = mdl_base.academic_year.current_academic_year()
 
     attribution_list = get_attribution_list(global_id, academic_year)
-    application_list = attribution.business.tutor_application.get_application_list(global_id)
+    application_list = attribution.business.tutor_application.get_application_list(global_id, academic_year)
     if attribution_list:
         # Remove application which are not about to expire
         attribution_list = _filter_attribution_about_to_expire(attribution_list, academic_year)
