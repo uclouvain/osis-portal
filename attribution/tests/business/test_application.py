@@ -44,8 +44,8 @@ class ApplicationSendSummaryMail(TestCase):
     def setUp(self):
         self.calendar = ApplicationCourseCalendar(
             title="Candidature aux cours vacants",
-            start_date=datetime.datetime.today() - datetime.timedelta(days=10),
-            end_date=datetime.datetime.today() + datetime.timedelta(days=15),
+            start_date=datetime.date.today() - datetime.timedelta(days=10),
+            end_date=datetime.date.today() + datetime.timedelta(days=15),
             authorized_target_year=self.academic_year.year,
             is_open=True
         )

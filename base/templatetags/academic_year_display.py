@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,37 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.test import TestCase
-from django.urls import reverse
 
-from base.tests.factories.user import UserFactory
+from django import template
+
+register = template.Library()
 
 
-class TestHome(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.user = UserFactory()
-        cls.url = reverse("home")
-
-    def setUp(self):
-        self.client.force_login(self.user)
-
-    def test_user_is_not_logged(self):
-        self.client.logout()
-        response = self.client.get(self.url)
-        self.assertRedirects(response, "/login/?next={}".format(self.url))
-
-    def test_template_used(self):
-        response = self.client.get(self.url)
-        self.assertTemplateUsed(response, "dashboard.html")
-
-    def test_manage_courses_url(self):
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertEqual(context["manage_courses_url"], settings.OSIS_MANAGE_COURSES_URL)
-
-    def test_osis_vpn_help_url(self):
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertEqual(context["osis_vpn_help_url"], settings.OSIS_VPN_HELP_URL)
+@register.filter()
+def display_as_academic_year(year: int):
+    if year:
+        return "{}-{}".format(year, str(year + 1)[-2:])
+    return ""

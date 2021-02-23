@@ -71,16 +71,16 @@
                 </div>
             {% endif %}
             {% if 'attribution'  in installed_apps and perms.base.is_faculty_administrator %}
-                {% if online_application_opened %}
-                    <div class="grid-item">
-                        <i class="fa fa-id-card-o"></i>
-                        <div class="description">
-                            <h4 class="media-heading"><a href="{% url 'attribution_applications' %}"
-                                                         id="lnk_my_applications">{% trans 'Applications administration' %}</a>
-                            </h4>
-                        </div>
+                <div class="grid-item">
+                    <i class="fa fa-id-card-o"></i>
+                    <div class="description">
+                        <h4 class="media-heading">
+                            <a href="{% url 'attribution_applications' %}" id="lnk_my_applications">
+                                {% trans 'Applications administration' %}
+                            </a>
+                        </h4>
                     </div>
-                {% endif %}
+                </div>
                 <div class="grid-item">
                     <i class="fa fa-list-alt"></i>
                     <div class="description">
