@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,34 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
+import logging
 
-import factory.fuzzy
-from django.utils import timezone
+from django.conf import settings
+import osis_attribution_sdk
 
-from base.tests.factories.academic_year import AcademicYearFactory
+from base.models.person import Person
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def generate_start_date(academic_calendar):
-    if academic_calendar.academic_year:
-        return academic_calendar.academic_year.start_date
+def build_configuration(person: Person = None) -> osis_attribution_sdk.Configuration:
+    """
+    Return SDK configuration of attribution based on person provided in kwargs
+    If no person provided, it will use generic token to make request
+    """
+    if not settings.OSIS_ATTRIBUTION_SDK_HOST:
+        logger.debug("'OSIS_ATTRIBUTION_SDK_HOST' setting must be set in configuration")
+
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
     else:
-        return datetime.date(timezone.now().year, 9, 30)
+        # TODO : Move logic (api.get_token_from_osis) to shared utility class
+        from continuing_education.views import api
+        token = api.get_token_from_osis(person.user)
 
-
-def generate_end_date(academic_calendar):
-    if academic_calendar.academic_year:
-        return academic_calendar.academic_year.end_date
-    else:
-        return datetime.date(timezone.now().year+1, 9, 30)
-
-
-class AcademicCalendarFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'base.AcademicCalendar'
-
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    title = factory.Sequence(lambda n: 'Academic Calendar - %d' % n)
-    start_date = factory.LazyAttribute(generate_start_date)
-    end_date = factory.LazyAttribute(generate_end_date)
-    reference = None
+    return osis_attribution_sdk.Configuration(
+        host=settings.OSIS_ATTRIBUTION_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_ATTRIBUTION_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })

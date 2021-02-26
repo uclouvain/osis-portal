@@ -33,7 +33,7 @@
         {% block breadcrumb %}
             <li>{% trans 'My applications' %}</li>
         {% endblock %}
-        <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
+        <a href="{{ help_button_url }}"
            target="help" id="lnk_user_manual_section"><span
                 class="glyphicon glyphicon-question-sign pull-right"
                 style="font-size: 14pt; color: green"
@@ -44,8 +44,8 @@
 {% block content %}
     <small style="color:black;font-family:Verdana;"
            class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans 'Application period from' %}
-        {{ application_academic_calendar.start_date | default_if_none:''|date:"d/m/Y"}} {% trans 'to' %}
-        {{ application_academic_calendar.end_date | default_if_none:''|date:"d/m/Y" }}</small>
+        {{ application_course_calendar.start_date | default_if_none:''|date:"d/m/Y"}} {% trans 'to' %}
+        {{ application_course_calendar.end_date | default_if_none:''|date:"d/m/Y" }}</small>
     <h1>{% trans 'My applications' %}</h1>
     <h2>{{ a_tutor.person.first_name }} {{ a_tutor.person.last_name }} - {{ a_tutor.person.global_id }}</h2>
 
@@ -55,7 +55,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-md-11">
-                    {% trans 'My applications' %} {{ application_year }}
+                    {% trans 'My applications' %} {{ application_academic_year }}
                 </div>
                 <div class="col-md-1">
                     {% if applications %}
@@ -93,7 +93,7 @@
     {% if attributions_about_to_expire %}
         <div class="panel panel-default" id="pnl_charges_about_to_expire">
             <div class="panel-heading">{% trans 'My charges now vacant' %}
-                ({% trans 'without application' %}) {{ current_academic_year }}</div>
+                ({% trans 'without application' %}) {{ previous_academic_year }}</div>
             <div class="panel-body">
                 {% include "attribution_renewal_list.html" with attributions=attributions_about_to_expire %}
                 <br>
@@ -102,7 +102,7 @@
     {% endif %}
 
     <div class="panel panel-default" id="pnl_charges">
-        <div class="panel-heading">{% trans 'My charges' %} {{ application_year }}</div>
+        <div class="panel-heading">{% trans 'My charges' %} {{ application_academic_year }}</div>
         <div class="panel-body">
             {% if attributions %}
                 {% include "attribution_list.html" with attributions=attributions %}

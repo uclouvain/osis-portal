@@ -24,26 +24,23 @@
 #
 ##############################################################################
 import datetime
-import time
 from decimal import Decimal
 
 from django.db import transaction
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from attribution import models as mdl_attribution
+from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
+from base.models.academic_year import AcademicYear
 from base.models.enums import learning_unit_year_subtypes
 from osis_common.messaging import message_config, send_message as message_service
 
 
-def get_application_list(global_id, academic_year=None):
+def get_application_list(global_id, academic_year):
     """
-        Return the list of attribution that a tutor have applied
+    Return the list of attribution that a tutor have applied in a specific academic year
     """
-    if not academic_year:
-        academic_year = get_application_year()
-
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib and attrib.applications:
         application_list = list(_filter_by_years(attrib.applications, academic_year.year))
@@ -69,11 +66,6 @@ def mark_attribution_already_applied(attributions_vacant, global_id, application
 
         attribution['already_applied'] = already_applied
     return attributions_vacant
-
-
-def get_application_year():
-    # Application year is always for next year
-    return mdl_base.academic_year.find_next_academic_year()
 
 
 def create_or_update_application(global_id, application):
@@ -118,7 +110,13 @@ def delete_application(global_id, acronym, year):
 
 
 def send_mail_applications_summary(global_id):
-    application_list = get_application_list(global_id)
+    try:
+        application_courses_event = ApplicationCoursesRemoteCalendar().get_opened_academic_events()[0]
+    except IndexError:
+        return _('The period of online application is closed')
+
+    application_academic_year = AcademicYear.objects.get(year=application_courses_event.authorized_target_year)
+    application_list = get_application_list(global_id, application_academic_year)
     if not application_list:
         return _('No application found')
     person = mdl_base.person.find_by_global_id(global_id)
@@ -133,7 +131,7 @@ def send_mail_applications_summary(global_id):
     template_base_data = {
         'first_name': person.first_name,
         'last_name': person.last_name,
-
+        'application_courses_targeted_year': application_courses_event.authorized_target_year
     }
     message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
                                                             [table_applications], receivers, template_base_data, None)

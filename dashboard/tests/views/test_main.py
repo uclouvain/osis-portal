@@ -23,15 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-
 from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
-from base.models.enums import academic_calendar_type
-from base.tests.factories.academic_calendar import AcademicCalendarFactory
-from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.user import UserFactory
 
 
@@ -52,21 +47,6 @@ class TestHome(TestCase):
     def test_template_used(self):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, "dashboard.html")
-
-    def test_with_online_application_not_opened(self):
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertFalse(context["online_application_opened"])
-
-    def test_with_online_application_opened(self):
-        today = datetime.date.today()
-        current_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
-                                                    end_date=today + datetime.timedelta(days=5))
-        AcademicCalendarFactory(academic_year=current_academic_year,
-                                reference=academic_calendar_type.TEACHING_CHARGE_APPLICATION)
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertTrue(context["online_application_opened"])
 
     def test_manage_courses_url(self):
         response = self.client.get(self.url)

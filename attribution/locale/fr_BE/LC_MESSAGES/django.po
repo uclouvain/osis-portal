@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-08 06:47+0100\n"
+"POT-Creation-Date: 2021-02-16 09:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,8 +119,6 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
-#, fuzzy, python-format
-#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -237,7 +234,7 @@ msgid "Pgrm"
 msgstr "Pgrm"
 
 msgid "Please enter the code of the course to which you would like to apply"
-msgstr "Veuillez introduire le sigle du cours pour lequel vous voulez postuler"
+msgstr "Veuillez introduire le code du cours pour lequel vous voulez postuler"
 
 msgid "Please precise at least a faculty or a code (or a part of a code)"
 msgstr ""
@@ -317,6 +314,20 @@ msgid "The Excel lists for encoding scores are available in"
 msgstr ""
 "Les listes Excel destinées à l'encodage des notes sont disponibles dans"
 
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s opened on "
+"%(start_date)s to %(end_date)s"
+msgstr "La période de candidatures en ligne pour les cours %(year)s était ouverte du "
+"%(start_date)s au %(end_date)s"
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s to %(end_date)s"
+msgstr "La période de candidatures en ligne pour les cours %(year)s sera ouverte du "
+"%(start_date)s au %(end_date)s"
+
 msgid "The period of online application is closed"
 msgstr ""
 "La période d'encodage des candidatures en ligne est fermée pour le moment"
@@ -333,8 +344,8 @@ msgstr ""
 "Les volumes horaires ne sont pas disponibles pour le moment. Veuillez "
 "réessayer plus tard."
 
-msgid "This action will delete the application"
-msgstr "Cette action supprimera la candidature"
+msgid "This action will delete the application."
+msgstr "Cette action supprimera la candidature."
 
 msgid ""
 "This course is team-managed. The application to this activity is based on a "
@@ -342,6 +353,13 @@ msgid ""
 msgstr ""
 "Ce cours est géré en équipe. La candidature des équipes d'enseignants "
 "s'effectue via la procédure papier."
+
+#, python-format
+msgid ""
+"This course will be discontinued in %(academic_year)s following a program "
+"reform."
+msgstr ""
+"Ce cours sera supprimé en %(academic_year)s suite à une réforme de programme."
 
 msgid "Title"
 msgstr "Intitulé"
@@ -351,7 +369,7 @@ msgid ""
 "on the button"
 msgstr ""
 "Pour poser une candidature à un cours vacant dont vous n'assuriez pas la "
-"charge, veuillez introduire ci-après le sigle du cours et cliquer sur le "
+"charge, veuillez introduire ci-après le code du cours et cliquer sur le "
 "bouton 'loupe'"
 
 msgid "To receive a confirmation email with the applications"
@@ -417,6 +435,3 @@ msgstr "au"
 
 msgid "without application"
 msgstr "sans candidature"
-
-#~ msgid "Cancel the application"
-#~ msgstr "Annuler la candidature"
