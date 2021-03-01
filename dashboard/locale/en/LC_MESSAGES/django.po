@@ -81,6 +81,9 @@ msgstr ""
 msgid "Internships"
 msgstr ""
 
+msgid "Internships assessment"
+msgstr ""
+
 msgid "Last name"
 msgstr ""
 
@@ -157,6 +160,9 @@ msgid "This process controls my attestations."
 msgstr ""
 
 msgid "This process controls students internships."
+msgstr ""
+
+msgid "This process controls internships assessment."
 msgstr ""
 
 msgid "This process controls the teaching charge"
