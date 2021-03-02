@@ -26,6 +26,19 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block style %}
+<style>
+    .period-row{
+        display: flex;
+    }
+    .period-title-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
     <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
@@ -58,6 +71,11 @@
                         <li role="presentation">
                             <a href="#affectation" aria-controls="affectation" role="tab" data-toggle="tab">
                                 {% trans 'Internship affectation' %}
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#scores" aria-controls="scores" role="tab" data-toggle="tab">
+                                {% trans 'Internships scores' %}
                             </a>
                         </li>
                     {% endif %}
@@ -131,15 +149,17 @@
                     <br>
                     <div class="row">
                         {% for internship in internships %}
-                            <strong>{{ internship.name }}</strong>
-                            <ul>
-                                {% for choice in student_choices %}
-                                    {% if choice.internship_id == internship.id %}
-                                        <li>{{ choice.organization }} | {{ choice.speciality }}
-                                            | {{ choice.choice }}</li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
+                            <div class="col-md-12">
+                                <strong>{{ internship.name }}</strong>
+                                <ul>
+                                    {% for choice in student_choices %}
+                                        {% if choice.internship_id == internship.id %}
+                                            <li>{{ choice.organization }} | {{ choice.speciality }}
+                                                | {{ choice.choice }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -147,32 +167,93 @@
                 {% if publication_allowed %}
                     <div role="tabpanel" class="tab-pane" id="affectation">
                         {% for affectation in student_affectations %}
-                            <div class="row">
-                                <br>
-                                <strong>{{ affectation.period.name }}</strong> ({{ affectation.period.date_start }}
-                                - {{ affectation.period.date_end }})
-                                {% if affectation.internship %}
-                                    <br>
-                                    {{ affectation.internship.name }}
+                            <div
+                                class="row period-row
+                                {% if affectation.period.date_end >= current_date and affectation.period.date_start <= current_date %}
+                                    bg-info
                                 {% endif %}
-                                <br>
-                                {{ affectation.speciality.name }} | {{ affectation.organization }}
-                                <br>
-                                Address: {{ affectation.organization.location }}
-                                <br>
-                                {% with organization=affectation.organization speciality=affectation.speciality %}
-                                    {% with offer=offers|get_item:organization|get_item:speciality %}
-                                        {% if offer %}
-                                            {% trans 'Internship master' %} :
-                                            {{ offer.master }}
-                                        {% endif %}
+                                ">
+                                <div class="col-xs-2 col-sm-1 period-title-container">
+                                    <div class="period-title">
+                                        <h3>
+                                            <strong>{{ affectation.period.name }}</strong>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="col-xs-10 col-sm-11 " style="margin-top: 15px; margin-bottom: 15px; border-left: 1px solid lightgray;">
+                                    <strong>{{ affectation.period.date_start }} - {{ affectation.period.date_end }}</strong>
+                                    {% if affectation.internship %}
+                                        <br>
+                                        {{ affectation.internship.name }}
+                                    {% endif %}
+                                    <br>
+                                    {{ affectation.speciality.name }} | {{ affectation.organization }}
+                                    <br>
+                                    Address: {{ affectation.organization.location }}
+                                    <br>
+                                    {% with organization=affectation.organization speciality=affectation.speciality %}
+                                        {% with offer=offers|get_item:organization|get_item:speciality %}
+                                            {% if offer %}
+                                                {% trans 'Internship master' %} :
+                                                {{ offer.master }}
+                                            {% endif %}
+                                        {% endwith %}
                                     {% endwith %}
-                                {% endwith %}
+                                </div>
                             </div>
                         {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if publication_allowed %}
+                    <div role="tabpanel" class="tab-pane" id="scores">
+                    <div class="table-responsive">
+                      <table class="table">
+                            <thead>
+                                <tr>
+                                    <th colspan="2"></th>
+                                    <th colspan="15" style="text-align:center;">
+                                        APD
+                                        <a data-toggle="modal" data-target="#apd-doc" style="cursor: pointer;">
+                                            <span class="glyphicon glyphicon-question-sign"></span>
+                                        </a>
+                                    </th>
+                                    <th colspan="1"></th>
+                                </tr>
+                                <tr>
+                                    <th>{% trans 'Period' %}</th>
+                                    <th>{% trans 'Internship' %}</th>
+                                    {% for apd in apds %}
+                                        <th style="text-align:center;">{{ apd | only_number }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                          <tbody>
+                            {% for affectation in student_affectations %}
+                                <tr>
+                                    <td>
+                                        {{ affectation.period.name }}
+                                    </td>
+                                    <td>
+                                        {{ affectation.internship }}
+                                    </td>
+                                    {% for apd in apds %}
+                                        {% if affectation.score %}
+                                            <td style="text-align:center;">{{ affectation.score|get_attr:apd|default_if_none:'-'}}</td>
+                                        {% else %}
+                                            <td style="text-align:center;">-</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                          </tbody>
+                      </table>
                     </div>
                 {% endif %}
             </div>
         </div>
     </div>
+
+    {% include 'internship_apd_documentation.html' %}
+
 {% endblock %}

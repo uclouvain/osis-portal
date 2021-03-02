@@ -27,6 +27,7 @@
 import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.datetime_safe import date
 
 from base.models import student as mdl_student
 from base.views import layout
@@ -40,6 +41,8 @@ from internship.models import internship_speciality as mdl_internship_speciality
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
 from internship.models import internship_student_information as mdl_student_information
 from internship.models import period as mdl_period
+from internship.models.score_encoding_utils import APDS
+from internship.views.api_client import get_score
 
 
 @login_required
@@ -49,7 +52,7 @@ from internship.models import period as mdl_period
 def view_student_resume(request, cohort_id):
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
     student = mdl_student.find_by_user(request.user)
-    internships = mdl_internship.Internship.objects.filter(cohort=cohort)
+    internships = mdl_internship.Internship.objects.filter(cohort=cohort).order_by('speciality', 'name')
 
     student_information = mdl_student_information.find_by_user_in_cohort(request.user, cohort=cohort)
     periods = mdl_period.Period.objects.filter(cohort=cohort)
@@ -64,6 +67,7 @@ def view_student_resume(request, cohort_id):
     publication_allowed = cohort.publication_start_date <= datetime.date.today()
     offers = {}
     for affectation in student_affectations:
+        setattr(affectation, 'score', get_score(str(affectation.student.uuid), str(affectation.period.uuid)))
         offer = mdl_internship_offer.find_offer(
             cohort=cohort,
             speciality=affectation.speciality,
@@ -81,7 +85,9 @@ def view_student_resume(request, cohort_id):
         "internships": internships,
         "publication_allowed": publication_allowed,
         "cohort": cohort,
-        "offers": offers
+        "offers": offers,
+        "current_date": date.today(),
+        "apds": APDS,
     })
 
 
