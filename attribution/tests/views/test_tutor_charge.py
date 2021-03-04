@@ -35,6 +35,7 @@ from rest_framework import status
 from attribution.views import tutor_charge
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
+from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.user import UserFactory
 
 
@@ -82,11 +83,11 @@ class TutorChargeViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.person = PersonFactory()
-        cls.current_academic_year = AcademicYearFactory(current=True)
-        cls.url = reverse('tutor_charge')
-
         perm = Permission.objects.get(codename="can_access_attribution")
         cls.person.user.user_permissions.add(perm)
+
+        cls.current_academic_year = AcademicYearFactory(current=True)
+        cls.url = reverse('tutor_charge')
 
     def setUp(self) -> None:
         self.client.force_login(self.person.user)
@@ -139,8 +140,78 @@ class TutorChargeViewTest(TestCase):
     def test_assert_context_keys(self):
         response = self.client.get(self.url)
 
-        self.assertTrue("display_years" in response.context)
+        self.assertTrue("display_years_tab" in response.context)
         self.assertEqual(response.context["person"], self.person)
+        self.assertEqual(response.context["current_year_displayed"], self.current_academic_year.year)
+        self.assertEqual(len(response.context["attributions"]), 1)
+        self.assertEqual(response.context["total_lecturing_charge"], 15.5)
+        self.assertEqual(response.context["total_practical_charge"], 40.0)
+
+
+class AdminTutorChargeViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.admin_person = PersonFactory()
+        perm = Permission.objects.get(codename="is_faculty_administrator")
+        cls.admin_person.user.user_permissions.add(perm)
+
+        cls.current_academic_year = AcademicYearFactory(current=True)
+        cls.tutor = TutorFactory()
+        cls.url = reverse('tutor_charge_admin', kwargs={'global_id': cls.tutor.person.global_id})
+
+    def setUp(self) -> None:
+        self.client.force_login(self.admin_person.user)
+
+        # Mock the OSIS Remote API Call
+        self.attribution_row = SimpleNamespace(**{
+            'code': 'LDROI1200',
+            'title_fr': 'Introduction aux droits Partie I',
+            'title_en': 'Introduction to Law Part I',
+            'year': self.current_academic_year.year,
+            'type': 'COURSE',
+            'type_text': 'Cours',
+            'credits': '15.50',
+            'total_learning_unit_charge': '55.5',
+            'start_year': 2020,
+            'function': 'COORDINATOR',
+            'function_text': 'Coordinateur',
+            'lecturing_charge': '15.5',
+            'practical_charge': '40.0',
+            'links': {},
+        })
+
+        self.attributions_list_patcher = mock.patch(
+            "attribution.views.tutor_charge.TutorChargeView.attributions",
+            new_callable=mock.PropertyMock,
+            return_value=[self.attribution_row]
+        )
+        self.mocked_attributions_list = self.attributions_list_patcher.start()
+        self.addCleanup(self.attributions_list_patcher.stop)
+
+    def test_case_user_not_logged(self):
+        self.client.logout()
+
+        response = self.client.get(self.url)
+        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+
+    def test_case_user_have_not_permission(self):
+        self.client.force_login(self.tutor.person.user)
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertTemplateUsed(response, "access_denied.html")
+
+    def test_assert_template_used(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertTemplateUsed(response, "tutor_charge_admin.html")
+
+    def test_assert_context_keys(self):
+        response = self.client.get(self.url)
+
+        self.assertTrue("display_years_tab" in response.context)
+        self.assertEqual(response.context["person"], self.tutor.person)
         self.assertEqual(response.context["current_year_displayed"], self.current_academic_year.year)
         self.assertEqual(len(response.context["attributions"]), 1)
         self.assertEqual(response.context["total_lecturing_charge"], 15.5)

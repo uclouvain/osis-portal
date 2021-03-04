@@ -27,7 +27,7 @@ import datetime
 
 import mock
 from django.test import TestCase
-from osis_attribution_sdk import ApplicationCourseCalendar
+from osis_attribution_sdk.models import ApplicationCourseCalendar
 from django.utils.translation import ugettext_lazy as _
 
 from attribution.business import tutor_application

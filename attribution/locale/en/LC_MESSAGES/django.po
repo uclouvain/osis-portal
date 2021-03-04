@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-16 09:10+0100\n"
+"POT-Creation-Date: 2021-03-04 10:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,6 +265,9 @@ msgstr ""
 msgid "Schedule"
 msgstr ""
 
+msgid "Schedule unavailable"
+msgstr ""
+
 msgid "Scores encoding"
 msgstr ""
 
@@ -327,10 +330,6 @@ msgstr ""
 
 msgid ""
 "The vacant volume of the next academic year is lower than the current one"
-msgstr ""
-
-msgid ""
-"The volume of charge is not available at the moment. Please try again later."
 msgstr ""
 
 msgid "This action will delete the application."

@@ -46,7 +46,7 @@ def build_configuration(person: Person = None) -> osis_attribution_sdk.Configura
     else:
         # TODO : Move logic (api.get_token_from_osis) to shared utility class
         from continuing_education.views import api
-        token = api.get_token_from_osis(person.user)
+        token = api.get_token_from_osis(person.user, force_user_creation=True)
 
     return osis_attribution_sdk.Configuration(
         host=settings.OSIS_ATTRIBUTION_SDK_HOST,

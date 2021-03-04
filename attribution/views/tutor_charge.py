@@ -26,9 +26,12 @@
 import contextlib
 import logging
 from types import SimpleNamespace
+from typing import List
 
 import urllib3
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.db.models import Case, When, BooleanField, Value, F, CharField
+from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -65,9 +68,9 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'display_years': self.get_displayed_years(),
+            'display_years_tab': self.get_display_years_tab(),
             'current_year_displayed': self.get_current_year_displayed(),
-            'person': self.get_person(),
+            'person': self.person,
             'attributions': self.attributions,
             'total_lecturing_charge': self.get_total_lecturing_charge(),
             'total_practical_charge': self.get_total_practical_charge()
@@ -77,15 +80,27 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         year = self.request.GET.get('displayYear') or current_academic_year().year
         return int(year)
 
-    def get_displayed_years(self):
-        return AcademicYear.objects.filter(year__gte=2018).values_list('year', flat=True).order_by('-year')
+    def get_display_years_tab(self) -> List:
+        max_year_attribution = current_academic_year().year + 4
+        return AcademicYear.objects.filter(year__gte=2015, year__lte=max_year_attribution).annotate(
+            is_active=Case(
+                When(year=self.get_current_year_displayed(), then=True),
+                default=False,
+                output_field=BooleanField(),
+            ),
+            url=Concat(Value(self.get_tutor_charge_url()), F('year'), output_field=CharField())
+        ).values('year', 'is_active', 'url').order_by('-year')
 
-    def get_person(self) -> Person:
+    @cached_property
+    def person(self) -> Person:
         return self.request.user.person
+
+    def get_tutor_charge_url(self) -> str:
+        return reverse('tutor_charge') + "?displayYear="
 
     @cached_property
     def attributions(self):
-        configuration = attribution_sdk.build_configuration(self.request.user.person)
+        configuration = attribution_sdk.build_configuration(self.person)
         attribution_types = (
             learning_container_type.COURSE, learning_container_type.INTERNSHIP, learning_container_type.DISSERTATION,
         )
@@ -96,7 +111,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 attributions = sorted(
                     api_instance.attributions_list(
                         year=str(self.get_current_year_displayed()),
-                        global_id=self.get_person().global_id
+                        global_id=self.person.global_id
                     ),
                     key=lambda attribution: attribution.code
                 )
@@ -146,25 +161,28 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
             learning_unit_year_id = LearningUnitYear.objects.get(acronym=code, academic_year__year=year).pk
             return reverse('attribution_students', kwargs={
                 'learning_unit_year_id': learning_unit_year_id,
-                'a_tutor': self.get_person().tutor.pk
+                'a_tutor': self.person.tutor.pk
             })
 
 
 class AdminTutorChargeView(TutorChargeView):
     permission_required = "base.is_faculty_administrator"
-    raise_exception = True
 
     template_name = "tutor_charge_admin.html"
 
-    def get_person(self) -> Person:
+    @cached_property
+    def person(self) -> Person:
         return Person.objects.get(global_id=self.kwargs['global_id'])
+
+    def get_tutor_charge_url(self) -> str:
+        return reverse('tutor_charge_admin', kwargs={'global_id': self.person.global_id}) + "?displayYear="
 
     def get_attribution_students_url(self, code: str, year: int):
         with contextlib.suppress(LearningUnitYear.DoesNotExist):
             learning_unit_year_id = LearningUnitYear.objects.get(acronym=code, academic_year__year=year).pk
             return reverse('attribution_students_admin', kwargs={
                 'learning_unit_year_id': learning_unit_year_id,
-                'a_tutor': self.get_person().tutor.pk
+                'a_tutor': self.person.tutor.pk
             })
 
 
