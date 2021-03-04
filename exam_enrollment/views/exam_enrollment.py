@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -254,7 +254,8 @@ def _process_exam_enrollment_form_submission(off_year, request, stud):
     # Lines before data_to_submit = ... are temporary (covid-19)
     covid_choices = ['testwe_exam', 'moodle_exam', 'teams_exam']
     all_covid_choices_made = all(request.POST.get(choice, None) for choice in covid_choices)
-    if request.POST.get('covid_period', None) and not all_covid_choices_made:
+    covid_period = request.POST.get('covid_period', None)
+    if covid_period and not all_covid_choices_made:
         messages.add_message(request, messages.ERROR, _('Form not submitted !'))
         messages.add_message(request, messages.ERROR, _('Please complete IMPERATIVELY the questionnaire below'))
         return _get_exam_enrollment_form(off_year, request, stud)
@@ -265,7 +266,10 @@ def _process_exam_enrollment_form_submission(off_year, request, stud):
     if json_data and offer_enrol:
         exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit)
-    messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
+    if covid_period:
+        messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted_covid_period'))
+    else:
+        messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
     return response.HttpResponseRedirect(reverse('dashboard_home'))
 
 
