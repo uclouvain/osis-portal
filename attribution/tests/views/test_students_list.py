@@ -27,8 +27,6 @@ import datetime
 
 from django.test import TestCase
 
-from attribution.models.enums import function
-from attribution.tests.factories.attribution import AttributionFactory
 from attribution.views import students_list
 from base.models.enums import learning_unit_year_subtypes
 from base.tests.factories.learning_container_year import LearningContainerYearInChargeFactory
@@ -60,17 +58,9 @@ class StudentsListViewTest(TestCase):
         })
         a_learning_unit_year.learning_container_year = a_container_year
         a_learning_unit_year.save()
-        an_attribution = AttributionFactory(
-            function=function.CO_HOLDER,
-            learning_unit_year=a_learning_unit_year,
-            tutor=self.a_tutor,
-            external_id="osis.attribution_8080"
-        )
-
         return {
             'academic_year': an_academic_yr,
             'learning_unit_year': a_learning_unit_year,
-            'attribution': an_attribution
         }
 
     def test_find_january_note(self):

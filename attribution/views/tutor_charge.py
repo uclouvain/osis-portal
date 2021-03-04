@@ -28,7 +28,6 @@ import logging
 from types import SimpleNamespace
 from typing import List
 
-import urllib3
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.db.models import Case, When, BooleanField, Value, F, CharField
 from django.db.models.functions import Concat
@@ -37,11 +36,9 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic.base import TemplateView
 
+from attribution.models.remote_attribution_service import RemoteAttributionService
 from base.models.academic_year import AcademicYear, current_academic_year
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import attribution as attribution_sdk
-import osis_attribution_sdk
-from osis_attribution_sdk.api import attribution_api
 from osis_attribution_sdk.models import Attribution
 
 from django.conf import settings
@@ -100,26 +97,11 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     @cached_property
     def attributions(self):
-        configuration = attribution_sdk.build_configuration(self.person)
         attribution_types = (
             learning_container_type.COURSE, learning_container_type.INTERNSHIP, learning_container_type.DISSERTATION,
         )
-
-        with osis_attribution_sdk.ApiClient(configuration) as api_client:
-            api_instance = attribution_api.AttributionApi(api_client)
-            try:
-                attributions = sorted(
-                    api_instance.attributions_list(
-                        year=str(self.get_current_year_displayed()),
-                        global_id=self.person.global_id
-                    ),
-                    key=lambda attribution: attribution.code
-                )
-                attributions = filter(lambda attribution: str(attribution.type) in attribution_types, attributions)
-            except (osis_attribution_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
-                # Run in degraded mode in order to prevent crash all app
-                logger.error(e)
-                attributions = []
+        attributions = RemoteAttributionService.get_attributions_list(self.get_current_year_displayed(), self.person)
+        attributions = filter(lambda attribution: str(attribution.type) in attribution_types, attributions)
         return [self._format_attribution_row(attribution) for attribution in attributions]
 
     def get_total_lecturing_charge(self):
