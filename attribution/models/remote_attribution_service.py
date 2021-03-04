@@ -24,35 +24,37 @@
 #
 ##############################################################################
 import logging
+from typing import List
 
-from django.conf import settings
 import osis_attribution_sdk
+import urllib3
+from django.conf import settings
 
 from base.models.person import Person
+from frontoffice.settings.osis_sdk import attribution as attribution_sdk
+
+from osis_attribution_sdk.api import attribution_api
+
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def build_configuration(person: Person = None) -> osis_attribution_sdk.Configuration:
-    """
-    Return SDK configuration of attribution based on person provided in kwargs
-    If no person provided, it will use generic token to make request
-    """
-    if not settings.OSIS_ATTRIBUTION_SDK_HOST:
-        logger.debug("'OSIS_ATTRIBUTION_SDK_HOST' setting must be set in configuration")
-
-    if person is None:
-        token = settings.OSIS_PORTAL_TOKEN
-    else:
-        # TODO : Move logic (api.get_token_from_osis) to shared utility class
-        from continuing_education.views import api
-        token = api.get_token_from_osis(person.user, force_user_creation=True)
-
-    return osis_attribution_sdk.Configuration(
-        host=settings.OSIS_ATTRIBUTION_SDK_HOST,
-        api_key_prefix={
-            'Token': settings.OSIS_ATTRIBUTION_SDK_API_KEY_PREFIX
-        },
-        api_key={
-            'Token': token
-        })
+class RemoteAttributionService:
+    @staticmethod
+    def get_attributions_list(year: int, person: Person) -> List:
+        configuration = attribution_sdk.build_configuration(person)
+        with osis_attribution_sdk.ApiClient(configuration) as api_client:
+            api_instance = attribution_api.AttributionApi(api_client)
+            try:
+                attributions = sorted(
+                    api_instance.attributions_list(
+                        year=str(year),
+                        global_id=person.global_id
+                    ),
+                    key=lambda attribution: attribution.code
+                )
+            except (osis_attribution_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                attributions = []
+        return attributions
