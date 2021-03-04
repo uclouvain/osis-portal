@@ -119,6 +119,9 @@ msgid "exam_enrollment_form_loading"
 msgstr "Exam enrollment form is loading."
 
 msgid "exam_enrollment_form_submitted"
+msgstr "Exams enrollment form successfully submitted."
+
+msgid "exam_enrollment_form_submitted_covid_period"
 msgstr "Questionnaire and exams enrollment form successfully submitted."
 
 msgid "exams_enrollment"
@@ -136,6 +139,13 @@ msgid ""
 msgstr ""
 
 msgid "info_exam_enrollment_by_default"
+msgstr ""
+"<b>You are enrolled to all checked exams below. <br>If it fits your needs, "
+"please validate your exams enrollment. </b><br>To "
+"modify your exam enrollments, please check/uncheck boxes below and then "
+"click on 'Validate my exams enrollment'."
+
+msgid "info_exam_enrollment_by_default_covid_period"
 msgstr ""
 "<b>You are enrolled to all checked exams below. <br>If it fits your needs, "
 "please validate the questionnaire and your exams enrollment. </b><br>To "
@@ -218,6 +228,9 @@ msgid "title"
 msgstr ""
 
 msgid "validate_changes"
+msgstr "Validate my exams enrollment"
+
+msgid "validate_changes_covid_period"
 msgstr "Validate the questionnaire and my exams enrollment"
 
 msgid "year"
