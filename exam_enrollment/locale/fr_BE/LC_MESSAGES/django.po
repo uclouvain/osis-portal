@@ -137,6 +137,10 @@ msgstr "Récupération du formulaire d'inscription aux examens."
 
 msgid "exam_enrollment_form_submitted"
 msgstr ""
+"Formulaire d'inscription aux examens soumis avec succès."
+
+msgid "exam_enrollment_form_submitted_covid_period"
+msgstr ""
 "Questionnaire et formulaire d'inscription aux examens soumis avec succès."
 
 msgid "exams_enrollment"
@@ -158,7 +162,14 @@ msgstr ""
 msgid "info_exam_enrollment_by_default"
 msgstr ""
 "<b>Vous êtes inscrit·e à tous les examens cochés ci-dessous. <br>Si cela "
-"vous convient, veuillez valider le questionnaire et votre inscription aux "
+"vous convient, veuillez valider votre inscription aux "
+"examens.</b><br>Vous pouvez modifier vos inscriptions aux examens en cochant/"
+"décochant les cases ci-dessous et en cliquant sur 'Valider mon inscription aux examens'."
+
+msgid "info_exam_enrollment_by_default_covid_period"
+msgstr ""
+"<b>Vous êtes inscrit·e à tous les examens cochés ci-dessous. <br>Si cela "
+"vous convient, veuillez valider votre inscription aux "
 "examens.</b><br>Vous pouvez modifier vos inscriptions aux examens en cochant/"
 "décochant les cases ci-dessous et en cliquant sur 'Valider le questionnaire "
 "et mon inscription aux examens'."
@@ -243,6 +254,9 @@ msgid "title"
 msgstr "Intitulé"
 
 msgid "validate_changes"
+msgstr "Valider mon inscription aux examens"
+
+msgid "validate_changes_covid_period"
 msgstr "Valider le questionnaire et mon inscription aux examens"
 
 msgid "year"
