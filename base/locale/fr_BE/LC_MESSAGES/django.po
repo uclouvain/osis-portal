@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:04+0200\n"
+"POT-Creation-Date: 2021-03-03 11:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,8 +56,14 @@ msgstr "Cliquez pour vous reconnectez"
 msgid "Code"
 msgstr "Code"
 
+msgid "Comment"
+msgstr "Commentaire"
+
 msgid "Content type"
 msgstr "Type de contenu"
+
+msgid "Course"
+msgstr "Cours"
 
 msgid "DDI"
 msgstr "HTM"
@@ -80,6 +86,9 @@ msgstr "Gestion des données par entité"
 msgid "Description"
 msgstr ""
 
+msgid "Dissertation"
+msgstr "Mémoire"
+
 msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr "N'hésitez pas à nous aider en contactant le"
 
@@ -91,6 +100,9 @@ msgstr "Aménagement Jury"
 
 msgid "Entrepreneur"
 msgstr "Entreprenariat"
+
+msgid "External"
+msgstr "Externe"
 
 msgid "File"
 msgstr "Fichier"
@@ -110,6 +122,9 @@ msgstr "Accompagnateur"
 msgid "High Level Promising athlete"
 msgstr "ESHN"
 
+msgid "Internship"
+msgstr "Stage"
+
 msgid "Management entity"
 msgstr "Gestion des données par entité"
 
@@ -118,6 +133,12 @@ msgstr "Mini-Formation"
 
 msgid "Not defined"
 msgstr "Non défini"
+
+msgid "Other collective"
+msgstr "Autre collectif"
+
+msgid "Other individual"
+msgstr "Autre individuel"
 
 msgid "Other special needs"
 msgstr "Autre HTM"
@@ -148,6 +169,9 @@ msgstr "Sous-type HTM"
 
 msgid "Sub type Sport"
 msgstr "Sous-type Sport"
+
+msgid "Thesis"
+msgstr "Thèse"
 
 msgid "Title in French"
 msgstr "Intitulé en français"
