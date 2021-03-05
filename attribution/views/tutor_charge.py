@@ -78,8 +78,12 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         return int(year)
 
     def get_display_years_tab(self) -> List:
-        max_year_attribution = current_academic_year().year + 4
-        return AcademicYear.objects.filter(year__gte=2015, year__lte=max_year_attribution).annotate(
+        max_year_in_past_attribution = current_academic_year().year - 5
+        max_year_in_future_attribution = current_academic_year().year + 4
+        return AcademicYear.objects.filter(
+            year__gte=max_year_in_past_attribution,
+            year__lte=max_year_in_future_attribution
+        ).annotate(
             is_active=Case(
                 When(year=self.get_current_year_displayed(), then=True),
                 default=False,
