@@ -163,10 +163,8 @@ def get_exam_enroll_request(acronym, request_timeout, stud):
 
 def get_request_timeout():
     if hasattr(settings, 'QUEUES') and settings.QUEUES:
-        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
-    else:
-        request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
-    return request_timeout
+        return settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+    return settings.DEFAULT_QUEUE_TIMEOUT
 
 
 def _get_error_message(data, off_year):
