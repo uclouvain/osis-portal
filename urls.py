@@ -64,4 +64,9 @@ urlpatterns = [
             ]))
         ])),
     ])),
+
+    url(r'^ajax/', include([
+       url(r'^(?P<affectation_uuid>[0-9a-f-]+)/validate$',
+        score_encoding.score_encoding_validate, name="internship_score_encoding_validate"),
+    ]))
 ]

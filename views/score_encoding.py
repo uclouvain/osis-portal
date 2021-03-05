@@ -23,9 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+import random
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -120,6 +122,13 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
             messages.add_message(request, messages.ERROR, _('An error occurred during score update'))
 
     return layout.render(request, "internship_score_encoding_form.html", locals())
+
+
+@login_required
+@redirect_if_not_master
+def score_encoding_validate(request, affectation_uuid):
+    # to test server behaviour
+    return JsonResponse({'success': random.choice([True, False])})
 
 
 def _show_success_update_msg(request, period, student):

@@ -65,7 +65,7 @@
       </div>
         <div class="panel-body">
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-hover">
                 <thead>
                     <tr>
                         <th colspan="2"></th>
@@ -79,11 +79,12 @@
                     </tr>
                     <tr>
                         <th>{% trans 'Student' %}</th>
-                        <th>{% trans 'Period' %}</th>
+                        <th style="text-align:center;">{% trans 'Period' %}</th>
                         {% for apd in apds %}
                             <th style="text-align:center;">{{ apd | only_number }}</th>
                         {% endfor %}
                         <th style="text-align:center;">{% trans 'Encoding' %}</th>
+                        <th style="text-align:center;">{% trans 'Validation' %}</th>
                     </tr>
                 </thead>
               <tbody>
@@ -92,7 +93,7 @@
                         <td>
                             {{ affectation.student.person.last_name | upper }}, {{ affectation.student.person.first_name }}
                         </td>
-                        <td>
+                        <td style="text-align:center;">
                             {{ affectation.period.name }}
                         </td>
                         {% for apd in apds %}
@@ -102,11 +103,27 @@
                                 <td style="text-align:center;">-</td>
                             {% endif %}
                         {% endfor %}
+                        {% if not affectation.score.validated %}
                         <td style="text-align:center;">
-                            <a class="btn btn-primary btn-xs" href="{% url 'internship_score_encoding_form' specialty_uuid=specialty_uuid organization_uuid=organization_uuid affectation_uuid=affectation.uuid %}">
+                            <a id='edit-btn-{{ affectation.uuid }}' class="btn btn-primary btn-xs" href="{% url 'internship_score_encoding_form' specialty_uuid=specialty_uuid organization_uuid=organization_uuid affectation_uuid=affectation.uuid %}">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </a>
                         </td>
+                        <td style="text-align:center;">
+                            <a id='validate-btn-{{ affectation.uuid }}' class="btn btn-info btn-xs" style="padding: 1px 5px 1px 4px;" data-toggle="modal" data-target="#validation_modal" data-student="{{ affectation.student.person.last_name }}" data-period="{{ affectation.period.name }}" data-validate-url="{% url 'internship_score_encoding_validate' affectation_uuid=affectation.uuid %}" data-affectation="{{ affectation.uuid }}">
+                                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                        {% else %}
+                        <td style="text-align:center;">
+                            <a class="btn btn-primary btn-xs" disabled>
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                        <td style="text-align:center;">
+                            <span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span>
+                        </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
               </tbody>
@@ -117,6 +134,7 @@
     </div>
 
     {% include 'internship_apd_documentation.html' %}
+    {% include 'fragment/validation_confirmation_modal.html' %}
 
 {% endblock %}
 
@@ -125,5 +143,40 @@
         document.querySelector('#period-select').addEventListener("change", function(){
            document.querySelector('#filter-form').submit();
         });
+
+        $('#validation_modal').on('show.bs.modal', (event) => {
+            $('#validation-error-alert').hide();
+            const student = $(event.relatedTarget).data('student');
+            const period = $(event.relatedTarget).data('period');
+            [...document.getElementsByClassName('student')].forEach((element) => element.innerText = student);
+            [...document.getElementsByClassName('period')].forEach((element) => element.innerText = period);
+
+            const affectation = $(event.relatedTarget).data('affectation');
+            const validateUrl = $(event.relatedTarget).data('validate-url');
+            $('#btn-validate').unbind('click').on('click', () => {
+                $('#validation-error-alert').hide();
+                $('#btn-validate').button('loading');
+                $.post(validateUrl, (data) => {
+                    if(data.success){
+                        $('#validation-progress-bar').hide();
+                        $('#validation_modal').modal('hide');
+                        updateActions(affectation);
+                    } else {
+                        $('#validation-progress-bar').hide();
+                        $('#validation-error-alert').show();
+                    }
+                    $('#btn-validate').button('reset');
+                });
+            });
+        });
+
+        function updateActions(affectation) {
+            const editBtn = document.getElementById(`edit-btn-${affectation}`);
+            const validateBtn = document.getElementById(`validate-btn-${affectation}`);
+            editBtn.removeAttribute('href');
+            editBtn.setAttribute('disabled', '');
+            validateBtn.outerHTML = '<span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span>';
+        }
+
     </script>
 {% endblock %}
