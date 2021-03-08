@@ -155,3 +155,12 @@ def post_master_allocation(allocation, specialty_uuid, organization_uuid):
 
 def delete_master_allocation(allocation_uuid):
     return InternshipAPIClient().masters_allocations_uuid_delete(uuid=allocation_uuid)
+
+
+def validate_internship_score(affectation_uuid):
+    try:
+        return InternshipAPIClient().scores_affectation_uuid_validate_get_with_http_info(
+            affectation_uuid=affectation_uuid
+        )
+    except ApiException as e:
+        return e.body, e.status, e.headers
