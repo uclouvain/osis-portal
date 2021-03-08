@@ -27,7 +27,7 @@ import datetime
 
 import mock
 from django.test import SimpleTestCase
-from osis_attribution_sdk import ApplicationCourseCalendar
+from osis_attribution_sdk.models import ApplicationCourseCalendar
 
 from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 
@@ -36,24 +36,26 @@ class ApplicationCoursesRemoteCalendarTestCase(SimpleTestCase):
     def setUp(self):
         self.event_closed = ApplicationCourseCalendar(
             title="Candidature aux cours vacants [2020]",
-            start_date=datetime.datetime.today() - datetime.timedelta(days=360),
-            end_date=datetime.datetime.today() - datetime.timedelta(days=350),
+            start_date=datetime.date.today() - datetime.timedelta(days=360),
+            end_date=datetime.date.today() - datetime.timedelta(days=350),
             authorized_target_year=2020,
             is_open=False
         )
 
         self.event_opened = ApplicationCourseCalendar(
             title="Candidature aux cours vacants [2021]",
-            start_date=datetime.datetime.today() - datetime.timedelta(days=10),
-            end_date=datetime.datetime.today() + datetime.timedelta(days=15),
+            start_date=datetime.date.today() - datetime.timedelta(days=10),
+            end_date=datetime.date.today() + datetime.timedelta(days=15),
             authorized_target_year=2021,
             is_open=True
         )
 
         self.api_call_patcher = mock.patch(
             'attribution.calendar.application_courses_calendar.'
-            'osis_attribution_sdk.ApplicationApi.applicationcoursescalendars_list',
-            return_value=[self.event_closed, self.event_opened]
+            'application_api.ApplicationApi.applicationcoursescalendars_list',
+            new_callable=mock.PropertyMock,
+            create=True,
+            return_value=lambda *args, **kwargs: [self.event_closed, self.event_opened]
         )
         self.api_call_mocked = self.api_call_patcher.start()
         self.addCleanup(self.api_call_patcher.stop)

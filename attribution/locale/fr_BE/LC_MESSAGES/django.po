@@ -271,6 +271,9 @@ msgstr "Reproduire à l'identique l'année suivante"
 msgid "Schedule"
 msgstr "Horaire"
 
+msgid "Schedule unavailable"
+msgstr "Horaire non disponible"
+
 msgid "Scores encoding"
 msgstr ""
 
