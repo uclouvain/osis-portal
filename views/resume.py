@@ -67,7 +67,9 @@ def view_student_resume(request, cohort_id):
     publication_allowed = cohort.publication_start_date <= datetime.date.today()
     offers = {}
     for affectation in student_affectations:
-        setattr(affectation, 'score', get_score(str(affectation.student.uuid), str(affectation.period.uuid)))
+        score = get_score(str(affectation.student.uuid), str(affectation.period.uuid))
+        if score.validated:
+            setattr(affectation, 'score', get_score(str(affectation.student.uuid), str(affectation.period.uuid)))
         offer = mdl_internship_offer.find_offer(
             cohort=cohort,
             speciality=affectation.speciality,
