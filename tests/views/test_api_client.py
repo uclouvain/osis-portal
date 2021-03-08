@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import random
 import uuid
 
 from django.test import TestCase, override_settings
@@ -102,3 +103,9 @@ class MockAPI(DefaultApi):
     @classmethod
     def masters_allocations_uuid_delete(*args, **kwargs):
         return AllocationGet(uuid=uuid.uuid4())
+
+    @classmethod
+    def scores_affectation_uuid_validate_get_with_http_info(*args, **kwargs):
+        success_response = None, 200, {}
+        error_response = {'error': 'error'}, 404, {}
+        return random.choice([success_response, error_response])

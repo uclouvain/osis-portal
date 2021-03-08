@@ -115,3 +115,8 @@ class TestScoreEncoding(TestCase):
         messages_items = [item for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, 302)
         self.assertEqual(messages_items[0].level, SUCCESS)
+
+    def test_score_validation(self):
+        url = reverse('internship_score_encoding_validate', kwargs={'affectation_uuid': str(uuid.uuid4())})
+        json_response = self.client.get(url).json()
+        self.assertEqual(bool(json_response.get('error')), not json_response['success'])
