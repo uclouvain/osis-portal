@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-02 14:38+0100\n"
+"POT-Creation-Date: 2021-03-10 10:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,9 @@ msgstr "Les affections sont disponibles depuis"
 
 msgid "All periods"
 msgstr "Toutes les périodes"
+
+msgid "An error occured during validation"
+msgstr "Une erreur est survenue durant la validation"
 
 msgid "An error occurred during score update"
 msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
@@ -146,6 +149,9 @@ msgstr "Quatrième choix"
 
 msgid "Generalist"
 msgstr "Généraliste"
+
+msgid "Grades modifications will no longer be allowed after validation."
+msgstr "Les modifications de cotes ne seront plus permises après validation."
 
 msgid "Hospital"
 msgstr "Hôpital"
@@ -305,7 +311,7 @@ msgstr "Encodez vos choix de stages"
 msgid "Succesfull logout"
 msgstr "Déconnexion réalisée avec succès"
 
-msgid "Sump up of your choices and your affectations"
+msgid "Sum up of your choices and your affectations"
 msgstr "Résumé de vos choix et affectations"
 
 msgid "Take a history (anamnesis)"
@@ -326,11 +332,23 @@ msgstr "Troisième choix"
 msgid "This action will delete "
 msgstr "Cette action supprimera "
 
+msgid "This action will validate the grades submitted for"
+msgstr "Cette action validera les cotes soumises pour"
+
 msgid "User account activated"
 msgstr "Compte utilisateur activé"
 
 msgid "Username and password not matching"
 msgstr "Le nom d'utilisateur et le mot de passe ne correspondent pas"
+
+msgid "Validate"
+msgstr "Valider"
+
+msgid "Validation"
+msgstr "Validation"
+
+msgid "Validation for"
+msgstr "Validation pour"
 
 msgid "Website"
 msgstr "Site web"
@@ -379,6 +397,9 @@ msgstr "réalise avec aide"
 msgid "achieves without help"
 msgstr "réalise sans aide"
 
+msgid "during"
+msgstr "pendant"
+
 msgid "email"
 msgstr "email"
 
@@ -414,3 +435,6 @@ msgstr "à"
 
 msgid "tremendously achieving"
 msgstr "réalise de façon exceptionnelle"
+
+#~ msgid "Sump up of your choices and your affectations"
+#~ msgstr "Résumé de vos choix et affectations"

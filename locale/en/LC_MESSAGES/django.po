@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-02 14:38+0100\n"
+"POT-Creation-Date: 2021-03-10 10:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,6 +37,9 @@ msgid "Affectations are available from"
 msgstr ""
 
 msgid "All periods"
+msgstr ""
+
+msgid "An error occured during validation"
 msgstr ""
 
 msgid "An error occurred during score update"
@@ -141,6 +144,9 @@ msgid "Fourth choice"
 msgstr ""
 
 msgid "Generalist"
+msgstr ""
+
+msgid "Grades modifications will no longer be allowed after validation."
 msgstr ""
 
 msgid "Hospital"
@@ -297,7 +303,7 @@ msgstr ""
 msgid "Succesfull logout"
 msgstr ""
 
-msgid "Sump up of your choices and your affectations"
+msgid "Sum up of your choices and your affectations"
 msgstr ""
 
 msgid "Take a history (anamnesis)"
@@ -318,10 +324,22 @@ msgstr ""
 msgid "This action will delete "
 msgstr ""
 
+msgid "This action will validate the grades submitted for"
+msgstr ""
+
 msgid "User account activated"
 msgstr ""
 
 msgid "Username and password not matching"
+msgstr ""
+
+msgid "Validate"
+msgstr ""
+
+msgid "Validation"
+msgstr ""
+
+msgid "Validation for"
 msgstr ""
 
 msgid "Website"
@@ -363,6 +381,9 @@ msgid "achieves with help"
 msgstr ""
 
 msgid "achieves without help"
+msgstr ""
+
+msgid "during"
 msgstr ""
 
 msgid "email"
