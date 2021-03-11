@@ -42,11 +42,13 @@ from internship.views.api_client import get_master_by_email, get_master_allocati
 @redirect_if_not_master
 def manage_delegates(request):
     master = get_master_by_email(request.user.email)
-    if master['role'] != ChoiceRole.MASTER.value:
+    allocations = get_master_allocations(master['uuid'])
+
+    master_allocations = [allocation for allocation in allocations if allocation['role'] == ChoiceRole.MASTER.value]
+    if not master_allocations:
         return redirect(reverse('internship_master_home'))
 
-    allocations = get_master_allocations(master['uuid'])
-    for allocation in allocations:
+    for allocation in master_allocations:
         allocation['internship'] = _get_internship_reference(allocation)
         allocation['delegated'] = get_delegated_allocations(
             allocation['specialty']['uuid'], allocation['organization']['uuid']
@@ -64,12 +66,17 @@ def new_delegate(request, specialty_uuid, organization_uuid):
             birth_date=request.POST.get('birth_date'),
             email=request.POST.get('email')
         )
-        master = MasterGet(person=person, role=ChoiceRole.DELEGATE.value, civility=request.POST.get('civility'))
+        master = MasterGet(person=person, civility=request.POST.get('civility'))
         created_master = post_master(master)
         if created_master:
             organization = get_organization(organization_uuid)
             specialty = get_specialty(specialty_uuid)
-            allocation = AllocationGet(master=created_master, organization=organization, specialty=specialty)
+            allocation = AllocationGet(
+                master=created_master,
+                organization=organization,
+                specialty=specialty,
+                role=ChoiceRole.DELEGATE.value
+            )
             allocation = post_master_allocation(allocation, specialty_uuid, organization_uuid)
             if allocation:
                 messages.add_message(

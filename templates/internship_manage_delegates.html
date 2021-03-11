@@ -43,7 +43,7 @@
     <div class="panel panel-default">
         <div class="panel panel-heading">
             <ul class="nav nav-pills">
-                {% for allocation in allocations %}
+                {% for allocation in master_allocations %}
                     <li {% if forloop.first %}class="active"{% endif %}>
                         <a data-toggle="pill" href="#{{ allocation.internship }}">
                             {{ allocation.specialty.name }} - {{ allocation.organization.name }}
@@ -54,7 +54,7 @@
         </div>
         <div class="panel panel-body">
             <div class="tab-content">
-                {% for allocation in allocations %}
+                {% for allocation in master_allocations %}
                   <div id="{{ allocation.internship }}" class="tab-pane fade in {% if forloop.first %} active {% endif %}">
                    <table class="table table-hover" id="order_delegates">
                         <thead>
@@ -69,7 +69,7 @@
                         <tbody>
                         {% for delegated_allocation in allocation.delegated %}
                             <tr>
-                                <td>{{ delegated_allocation.master.civility }}</td>
+                                <td>{{ delegated_allocation.master.civility|default_if_none:'-'}}</td>
                                 <td>{{ delegated_allocation.master.person.last_name }}</td>
                                 <td>{{ delegated_allocation.master.person.first_name }}</td>
                                 <td>{{ delegated_allocation.master.person.email }}</td>
