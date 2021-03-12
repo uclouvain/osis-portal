@@ -23,13 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-
-import mock
 from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
-from osis_attribution_sdk import ApplicationCourseCalendar
 
 from base.tests.factories.user import UserFactory
 
@@ -41,21 +37,6 @@ class TestHome(TestCase):
         cls.url = reverse("home")
 
     def setUp(self):
-        self.calendar = ApplicationCourseCalendar(
-            title="Candidature aux cours vacants",
-            start_date=datetime.datetime.today() - datetime.timedelta(days=10),
-            end_date=datetime.datetime.today() + datetime.timedelta(days=15),
-            authorized_target_year=2020,
-            is_open=True
-        )
-        self.application_remote_calendar_patcher = mock.patch.multiple(
-            'attribution.views.online_application.ApplicationCoursesRemoteCalendar',
-            __init__=mock.Mock(return_value=None),
-            _calendars=mock.PropertyMock(return_value=[self.calendar])
-        )
-        self.application_remote_calendar_patcher.start()
-        self.addCleanup(self.application_remote_calendar_patcher.stop)
-
         self.client.force_login(self.user)
 
     def test_user_is_not_logged(self):
@@ -66,19 +47,6 @@ class TestHome(TestCase):
     def test_template_used(self):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, "dashboard.html")
-
-    def test_with_online_application_not_opened(self):
-        self.calendar.start_date = datetime.datetime.today() + datetime.timedelta(days=5)
-        self.calendar.is_open = False
-
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertFalse(context["online_application_opened"])
-
-    def test_with_online_application_opened(self):
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertTrue(context["online_application_opened"])
 
     def test_manage_courses_url(self):
         response = self.client.get(self.url)

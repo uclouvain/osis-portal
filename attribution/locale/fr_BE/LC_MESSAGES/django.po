@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-21 13:42+0100\n"
+"POT-Creation-Date: 2021-03-03 11:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,6 +77,9 @@ msgctxt "applications"
 msgid "Code"
 msgstr "Code"
 
+msgid "Comment"
+msgstr "Commentaire"
+
 msgid "Coordinator"
 msgstr "Coordinateur(trice)"
 
@@ -120,8 +122,6 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
-#, fuzzy, python-format
-#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -271,6 +271,9 @@ msgstr "Reproduire à l'identique l'année suivante"
 msgid "Schedule"
 msgstr "Horaire"
 
+msgid "Schedule unavailable"
+msgstr "Horaire non disponible"
+
 msgid "Scores encoding"
 msgstr ""
 
@@ -317,6 +320,22 @@ msgid "The Excel lists for encoding scores are available in"
 msgstr ""
 "Les listes Excel destinées à l'encodage des notes sont disponibles dans"
 
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s opened on "
+"%(start_date)s to %(end_date)s"
+msgstr ""
+"La période de candidatures en ligne pour les cours %(year)s était ouverte du "
+"%(start_date)s au %(end_date)s"
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s to %(end_date)s"
+msgstr ""
+"La période de candidatures en ligne pour les cours %(year)s sera ouverte du "
+"%(start_date)s au %(end_date)s"
+
 msgid "The period of online application is closed"
 msgstr ""
 "La période d'encodage des candidatures en ligne est fermée pour le moment"
@@ -347,7 +366,8 @@ msgstr ""
 msgid ""
 "This course will be discontinued in %(academic_year)s following a program "
 "reform."
-msgstr "Ce cours sera supprimé en %(academic_year)s suite à une réforme de programme."
+msgstr ""
+"Ce cours sera supprimé en %(academic_year)s suite à une réforme de programme."
 
 msgid "Title"
 msgstr "Intitulé"
@@ -423,6 +443,3 @@ msgstr "au"
 
 msgid "without application"
 msgstr "sans candidature"
-
-#~ msgid "Cancel the application"
-#~ msgstr "Annuler la candidature"
