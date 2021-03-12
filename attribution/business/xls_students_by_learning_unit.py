@@ -27,10 +27,11 @@
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from openpyxl import Workbook
-from openpyxl.writer.excel import save_virtual_workbook
-from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.styles import Color
 from openpyxl.styles import Style
+from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
+from openpyxl.writer.excel import save_virtual_workbook
+
 from attribution.business.student_specific_profile import get_type_peps
 
 COLUMN_REGISTRATION_ID_NO = 5
@@ -38,10 +39,10 @@ STATUS_COL_WIDTH = 10
 NOTE_COL_WIDTH = 10
 OPENPYXL_STRING_FORMAT = '@'
 BORDER_LEFT = Border(
-        left=Side(border_style=BORDER_MEDIUM,
-                  color=Color('FF000000'),
-                  ),
-    )
+    left=Side(border_style=BORDER_MEDIUM,
+              color=Color('FF000000'),
+              ),
+)
 FIRST_COL_PEPS = 'L'
 
 
@@ -76,6 +77,7 @@ def _make_xls_list(student_list):
         _('Large print'),
         _('Specific room of examination'),
         _('Other educational facilities'),
+        _('Comment'),
         _('Educational tutor'),
     ]
     worksheet1.append(col for col in columns)
@@ -103,15 +105,17 @@ def _make_xls_list(student_list):
                 str(_('Yes')) if student_specific_profile.arrangement_appropriate_copy else '-',
                 str(_('Yes')) if student_specific_profile.arrangement_specific_locale else '-',
                 str(_('Yes')) if student_specific_profile.arrangement_other else '-',
+                str(student_specific_profile.arrangement_comment)
+                if student_specific_profile.arrangement_comment else '-',
                 str(student_specific_profile.guide) if student_specific_profile.guide else '-',
-                ])
+            ])
         else:
-            line_content.extend(["-", "-", "-", "-", "-", "-"])
+            line_content.extend(["-", "-", "-", "-", "-", "-", "-"])
         worksheet1.append(line_content)
 
     _columns_resizing(worksheet1)
     _columns_registration_id_to_text(worksheet1)
-    _set_peps_border(worksheet1, len(student_list)+1)
+    _set_peps_border(worksheet1, len(student_list) + 1)
     return save_virtual_workbook(workbook)
 
 
@@ -152,6 +156,8 @@ def _columns_resizing(ws):
     col_other_educational_facilities = ws.column_dimensions['P']
     col_other_educational_facilities.width = 25
     col_educational_tutor = ws.column_dimensions['Q']
+    col_educational_tutor.width = 30
+    col_educational_tutor = ws.column_dimensions['R']
     col_educational_tutor.width = 30
 
 

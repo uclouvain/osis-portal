@@ -30,7 +30,7 @@ from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from osis_attribution_sdk import ApplicationCourseCalendar
+from osis_attribution_sdk.models import ApplicationCourseCalendar
 
 from attribution.models.enums import function
 from attribution.tests.factories.attribution import AttributionNewFactory

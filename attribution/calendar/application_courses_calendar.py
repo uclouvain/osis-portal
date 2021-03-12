@@ -31,19 +31,23 @@ import urllib3
 from django.conf import settings
 
 from frontoffice.settings.osis_sdk import attribution as attribution_sdk
+
 import osis_attribution_sdk
+from osis_attribution_sdk.models import ApplicationCourseCalendar
+from osis_attribution_sdk.api import application_api
+
 
 LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class ApplicationCoursesRemoteCalendar(object):
-    _calendars = []  # type: List[osis_attribution_sdk.models.ApplicationCourseCalendar]
+    _calendars = []  # type: List[ApplicationCourseCalendar]
 
     def __init__(self):
         configuration = attribution_sdk.build_configuration()
 
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
-            api_instance = osis_attribution_sdk.ApplicationApi(api_client)
+            api_instance = application_api.ApplicationApi(api_client)
             try:
                 self._calendars = sorted(api_instance.applicationcoursescalendars_list(),
                                          key=lambda academic_event: academic_event.start_date)
@@ -58,13 +62,13 @@ class ApplicationCoursesRemoteCalendar(object):
         """
         return [academic_event.authorized_target_year for academic_event in self.get_opened_academic_events()]
 
-    def get_opened_academic_events(self) -> List[osis_attribution_sdk.models.ApplicationCourseCalendar]:
+    def get_opened_academic_events(self) -> List[ApplicationCourseCalendar]:
         """
         Return all current academic event opened based on today
         """
         return [academic_event for academic_event in self._calendars if academic_event.is_open]
 
-    def get_previous_academic_event(self) -> osis_attribution_sdk.models.ApplicationCourseCalendar:
+    def get_previous_academic_event(self) -> ApplicationCourseCalendar:
         """
         Return previous academic event based on today
         """
@@ -74,7 +78,7 @@ class ApplicationCoursesRemoteCalendar(object):
         ]
         return events_filtered[-1] if events_filtered else None
 
-    def get_next_academic_event(self, date=None) -> osis_attribution_sdk.models.ApplicationCourseCalendar:
+    def get_next_academic_event(self, date=None) -> ApplicationCourseCalendar:
         """
         Return next academic event based on today
         """
