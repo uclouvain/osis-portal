@@ -10,7 +10,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -153,14 +153,19 @@
                             <tr>
                                 <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%"
                                                                    aria-hidden="true"></i></td>
-                                <td>{% trans 'info_exam_enrollment_by_default' as info_exam_enrollment_by_default %}
+                                <td>
+                                    {% if covid_period %}
+                                        {% trans 'info_exam_enrollment_by_default_covid_period' as info_exam_enrollment_by_default %}
+                                    {% else %}
+                                        {% trans 'info_exam_enrollment_by_default' as info_exam_enrollment_by_default %}
+                                    {% endif%}
                                     {{ info_exam_enrollment_by_default | safe }}
                                 </td>
                             </tr>
                         </table>
                     </div>
                     <br>
-                    {% if is_11ba %}
+                    {% if is_11ba and current_number_session == 1 %}
                         <div class="alert alert-danger" style="display:inline-block;">
                             {% trans 'The first-year bachelor student must obligatorily register for the January exam session all the learning units of the first annual block taught in the first quadrimester, including those giving rise to a partial test (Art. 83 of the RGEE).' %}
                         </div>
@@ -290,7 +295,7 @@
                                     data-toggle="tooltip" data-html="true"
                                     title="{% trans 'Please complete <b>IMPERATIVELY</b> the questionnaire.' %}">
                             <span class="glyphicon glyphicon-floppy-save"
-                                  aria-hidden="true"></span> {% trans 'validate_changes' %}</button>
+                                  aria-hidden="true"></span> {% trans 'validate_changes_covid_period' %}</button>
                         {% else %}
                             <button class="btn btn-primary" id="bt_validate_exam_enrol_form" type="submit">
                             <span class="glyphicon glyphicon-floppy-save"

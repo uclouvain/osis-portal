@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -114,13 +114,8 @@ def _get_exam_enrollment_form(off_year, request, stud):
     if not learn_unit_enrols:
         messages.add_message(request, messages.WARNING, _('no_learning_unit_enrollment_found').format(off_year.acronym))
         return response.HttpResponseRedirect(reverse('dashboard_home'))
-    if hasattr(settings, 'QUEUES') and settings.QUEUES:
-        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
-    else:
-        request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
-    fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
-    exam_enroll_request = exam_enrollment_request. \
-        get_by_student_and_offer_year_acronym_and_fetch_date(stud, off_year.acronym, fetch_date_limit)
+    request_timeout = get_request_timeout()
+    exam_enroll_request = get_exam_enroll_request(off_year.acronym, request_timeout, stud)
 
     program = mdl_base.offer_year.find_by_id(off_year.id)
 
@@ -157,6 +152,19 @@ def _get_exam_enrollment_form(off_year, request, stud):
                                  'request_timeout': request_timeout,
                                  'is_11ba': program.acronym.endswith('11BA'),
                              })
+
+
+def get_exam_enroll_request(acronym, request_timeout, stud):
+    fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
+    exam_enroll_request = exam_enrollment_request. \
+        get_by_student_and_offer_year_acronym_and_fetch_date(stud, acronym, fetch_date_limit)
+    return exam_enroll_request
+
+
+def get_request_timeout():
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        return settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+    return settings.DEFAULT_QUEUE_TIMEOUT
 
 
 def _get_error_message(data, off_year):
@@ -253,8 +261,9 @@ def _exam_enrollment_up_to_date_in_db_with_document(a_student, off_year):
 def _process_exam_enrollment_form_submission(off_year, request, stud):
     # Lines before data_to_submit = ... are temporary (covid-19)
     covid_choices = ['testwe_exam', 'moodle_exam', 'teams_exam']
-    all_covid_choices_made = all(request.POST.get(choice, None) for choice in covid_choices)
-    if request.POST.get('covid_period', None) and not all_covid_choices_made:
+    all_covid_choices_made = all(request.POST.get(choice) for choice in covid_choices)
+    covid_period = request.POST.get('covid_period')
+    if covid_period and not all_covid_choices_made:
         messages.add_message(request, messages.ERROR, _('Form not submitted !'))
         messages.add_message(request, messages.ERROR, _('Please complete IMPERATIVELY the questionnaire below'))
         return _get_exam_enrollment_form(off_year, request, stud)
@@ -265,7 +274,10 @@ def _process_exam_enrollment_form_submission(off_year, request, stud):
     if json_data and offer_enrol:
         exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit)
-    messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
+    if covid_period:
+        messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted_covid_period'))
+    else:
+        messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted'))
     return response.HttpResponseRedirect(reverse('dashboard_home'))
 
 
