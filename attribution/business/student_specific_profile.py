@@ -58,7 +58,8 @@ def get_arrangements(student_specific_profile: StudentSpecificProfile) -> List[s
     if student_specific_profile.arrangement_other:
         arrangements.append(_('Other educational facilities'))
         if student_specific_profile.arrangement_comment:
-            arrangements.append("{} : {}".format(_('Comment'), student_specific_profile.arrangement_comment))
+            arrangements.append("{} : {}".format(_('Details other educational facilities'),
+                                                 student_specific_profile.arrangement_comment))
     return arrangements
 
 

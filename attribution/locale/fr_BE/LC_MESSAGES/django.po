@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-03 11:49+0100\n"
+"POT-Creation-Date: 2021-03-15 13:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,9 +77,6 @@ msgctxt "applications"
 msgid "Code"
 msgstr "Code"
 
-msgid "Comment"
-msgstr "Commentaire"
-
 msgid "Coordinator"
 msgstr "Coordinateur(trice)"
 
@@ -100,6 +97,9 @@ msgstr "Suppléant sabbatique"
 
 msgid "Deputy temporary"
 msgstr "Suppléant temporaire"
+
+msgid "Details other educational facilities"
+msgstr "Détails autre aménagement"
 
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
@@ -122,6 +122,8 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+#, fuzzy, python-format
+#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -345,12 +347,6 @@ msgid ""
 msgstr ""
 "Le volume vacant de l'année suivante est inférieur à celui actuellement "
 "affecté"
-
-msgid ""
-"The volume of charge is not available at the moment. Please try again later."
-msgstr ""
-"Les volumes horaires ne sont pas disponibles pour le moment. Veuillez "
-"réessayer plus tard."
 
 msgid "This action will delete the application."
 msgstr "Cette action supprimera la candidature."
