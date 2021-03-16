@@ -31,8 +31,8 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
-import base.tests.models.test_offer_year
 import performance.tests.models.test_student_performance
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from performance.models import student_performance as mdl_perf
 from performance.queue import student_performance as queue_stud_perf
 
@@ -41,7 +41,11 @@ class TestQueueStudentPerformance(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.student_performance = performance.tests.models.test_student_performance.create_student_performance()
-        cls.offer_year = base.tests.models.test_offer_year.create_offer_year()
+        cls.education_group_year = EducationGroupYearFactory(
+            academic_year__year=2016,
+            acronym="VETE11BA",
+            title="Première année de bachelier en médecine vétérinaire",
+        )
         cls.json_points = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points2.json")
         cls.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
