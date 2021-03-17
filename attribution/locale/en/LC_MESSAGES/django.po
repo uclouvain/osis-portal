@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-21 13:42+0100\n"
+"POT-Creation-Date: 2021-03-03 11:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,6 +73,9 @@ msgstr ""
 
 msgctxt "applications"
 msgid "Code"
+msgstr ""
+
+msgid "Comment"
 msgstr ""
 
 msgid "Coordinator"
@@ -266,6 +268,9 @@ msgstr ""
 msgid "Schedule"
 msgstr ""
 
+msgid "Schedule unavailable"
+msgstr ""
+
 msgid "Scores encoding"
 msgstr ""
 
@@ -309,6 +314,18 @@ msgid "Teaching charge"
 msgstr ""
 
 msgid "The Excel lists for encoding scores are available in"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s opened on "
+"%(start_date)s to %(end_date)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s to %(end_date)s"
 msgstr ""
 
 msgid "The period of online application is closed"

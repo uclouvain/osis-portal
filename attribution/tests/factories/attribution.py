@@ -23,26 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import operator
-
 import factory.fuzzy
-
-from attribution.models.enums import function
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.tutor import TutorFactory
-
-
-class AttributionFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'attribution.Attribution'
-
-    external_id = None
-    function = factory.Iterator(function.FUNCTIONS, getter=operator.itemgetter(0))
-    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
-    tutor = factory.SubFactory(TutorFactory)
-    start_year = None
-    end_year = None
-    summary_responsible = False
 
 
 class AttributionNewFactory(factory.DjangoModelFactory):

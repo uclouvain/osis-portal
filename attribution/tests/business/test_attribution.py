@@ -245,14 +245,15 @@ class AttributionTest(TestCase):
             'charge_lecturing_asked': 30,
             'charge_practical_asked': 30,
             'acronym': "LAGRO1530",
-            'year': next_academic_year.year,
+            'year': self.current_academic_year.year,
             'is_substitute': False
         }]
         self.attrib.applications = application
         self.attrib.save()
 
-        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(self.person.global_id,
-                                                                                             self.current_academic_year)
+        attribution_list_about_to_expired = attribution.get_attribution_list_about_to_expire(
+            self.person.global_id, self.current_academic_year
+        )
 
         self.assertEqual(len(attribution_list_about_to_expired), 1)
         self.assertFalse(attribution_list_about_to_expired[0]['is_renewable'])
