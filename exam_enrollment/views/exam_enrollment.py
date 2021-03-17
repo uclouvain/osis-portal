@@ -129,7 +129,7 @@ def _get_exam_enrollment_form(educ_group_year, request, stud):
         )
         return response.HttpResponseRedirect(reverse('dashboard_home'))
     request_timeout = get_request_timeout()
-    exam_enroll_request = get_exam_enroll_request(off_year.acronym, request_timeout, stud)
+    exam_enroll_request = get_exam_enroll_request(educ_group_year.acronym, request_timeout, stud)
 
     program = EducationGroupYear.objects.get(pk=educ_group_year.id)
 
@@ -181,7 +181,7 @@ def get_request_timeout():
     return settings.DEFAULT_QUEUE_TIMEOUT
 
 
-def _get_error_message(data, off_year):
+def _get_error_message(data, educ_group_year):
     if data.get('error_message') == 'outside_exam_enrollment_period':
         error_message = _("You are outside the exams enrollment period")
     elif data.get('error_message') == 'student_can_not_enrol_to_exam':
