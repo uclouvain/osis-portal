@@ -122,8 +122,6 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
-#, fuzzy, python-format
-#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
