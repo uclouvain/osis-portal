@@ -29,7 +29,7 @@ from django.contrib.messages import SUCCESS
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from osis_internship_sdk import MasterGet, Person, AllocationGet
+from osis_internship_sdk.models import MasterGet, Person, AllocationGet
 
 from base.views import layout
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master

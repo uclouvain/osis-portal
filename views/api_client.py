@@ -26,12 +26,11 @@
 ############################################################################
 from urllib.parse import urlparse
 
-from django.conf import settings
-from osis_internship_sdk.api.default_api import DefaultApi
+from osis_internship_sdk.api import internship_api
 from osis_internship_sdk.api_client import ApiClient
-from osis_internship_sdk.configuration import Configuration
 from osis_internship_sdk.rest import ApiException
 
+from frontoffice.settings.osis_sdk import internship as internship_sdk
 from internship.models.enums.role_choice import ChoiceRole
 from internship.models.score_encoding_utils import DEFAULT_PERIODS
 
@@ -39,15 +38,11 @@ from internship.models.score_encoding_utils import DEFAULT_PERIODS
 class InternshipAPIClient:
 
     def __new__(cls):
-        api_config = Configuration()
-        api_config.api_key['Authorization'] = "Token "+settings.OSIS_PORTAL_TOKEN
-        api_config.host = settings.URL_INTERNSHIP_API
-        return DefaultApi(api_client=ApiClient(configuration=api_config))
+        api_config = internship_sdk.build_configuration()
+        return internship_api.InternshipApi(ApiClient(configuration=api_config))
 
 
-def get_count(response):
-    return response.get('count', 0)
-
+# TODO: move each request to specific services
 
 def get_first_paginated_result(response):
     return response.get('results')[0] if response.get('count') else None
@@ -89,14 +84,14 @@ def get_organization(organization_uuid):
     return InternshipAPIClient().organizations_uuid_get(uuid=organization_uuid)
 
 
-def get_students_affectations_count(specialty_uuid, organization_uuid, with_score=False):
-    return get_count(
-        get_students_affectations(specialty_uuid, organization_uuid, with_score=with_score)
+def get_students_affectations_count(specialty_uuid, organization_uuid):
+    return InternshipAPIClient().students_affectations_specialty_organization_stats_get(
+        specialty=specialty_uuid, organization=organization_uuid
     )
 
 
-def get_paginated_students_affectations(specialty_uuid, organization_uuid, period, with_score=False, **kwargs):
-    response = get_students_affectations(specialty_uuid, organization_uuid, period, with_score, **kwargs)
+def get_paginated_students_affectations(specialty_uuid, organization_uuid, period, **kwargs):
+    response = get_students_affectations(specialty_uuid, organization_uuid, period, **kwargs)
     next = urlparse(response['next']).query if response['next'] else ''
     previous = urlparse(response['previous']).query if response['previous'] else ''
     results = get_paginated_results(response)
@@ -104,12 +99,11 @@ def get_paginated_students_affectations(specialty_uuid, organization_uuid, perio
     return results, previous, next, count
 
 
-def get_students_affectations(specialty_uuid, organization_uuid, period=DEFAULT_PERIODS, with_score=False, **kwargs):
+def get_students_affectations(specialty_uuid, organization_uuid, period=DEFAULT_PERIODS, **kwargs):
     return InternshipAPIClient().students_affectations_specialty_organization_get(
         specialty=specialty_uuid,
         organization=organization_uuid,
         period=period,
-        with_score=with_score,
         **kwargs
     )
 
@@ -158,9 +152,4 @@ def delete_master_allocation(allocation_uuid):
 
 
 def validate_internship_score(affectation_uuid):
-    try:
-        return InternshipAPIClient().scores_affectation_uuid_validate_get_with_http_info(
-            affectation_uuid=affectation_uuid
-        )
-    except ApiException as e:
-        return e.body, e.status, e.headers
+    return InternshipAPIClient().scores_affectation_uuid_validate_get(affectation_uuid=affectation_uuid)

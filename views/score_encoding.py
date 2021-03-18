@@ -30,7 +30,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from osis_internship_sdk import ScoreGet
+from osis_internship_sdk.models import ScoreGet
 
 from base.views import layout
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
@@ -49,15 +49,12 @@ def view_score_encoding(request):
     master = get_master_by_email(request.user.email)
     allocations = get_master_allocations(master['uuid'])
     for allocation in allocations:
-        allocation['total_amount'] = get_students_affectations_count(
+        stats = get_students_affectations_count(
             specialty_uuid=allocation['specialty']['uuid'],
             organization_uuid=allocation['organization']['uuid'],
         )
-        allocation['amount_encoded'] = get_students_affectations_count(
-            specialty_uuid=allocation['specialty']['uuid'],
-            organization_uuid=allocation['organization']['uuid'],
-            with_score=True
-        )
+        allocation.__dict__['total_amount'] = stats['total_count']
+        allocation.__dict__['amount_encoded'] = stats['validated_count']
     return layout.render(request, "internship_score_encoding.html", locals())
 
 
@@ -70,7 +67,7 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
         active_period = get_active_period()
         selected_period = active_period['name'] if active_period else DEFAULT_PERIODS
 
-    pagination_params = {'limit': request.GET.get('limit', '0'), 'offset': request.GET.get('offset', '0')}
+    pagination_params = {'limit': int(request.GET.get('limit', '0')), 'offset': int(request.GET.get('offset', '0'))}
 
     apds = APDS
 
@@ -82,9 +79,6 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
     )
 
     periods = Period.objects.filter(cohort__name=specialty.cohort.name).order_by('date_start')
-
-    for affectation in students_affectations:
-        affectation['score'] = get_score(affectation['student']['uuid'], affectation['period']['uuid'])
 
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 
@@ -126,8 +120,8 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
 @login_required
 @redirect_if_not_master
 def score_encoding_validate(request, affectation_uuid):
-    data, status, headers = validate_internship_score(affectation_uuid)
-    return JsonResponse({'success': status == 200, **data} if data else {'success': status == 200})
+    response = validate_internship_score(affectation_uuid)
+    return JsonResponse({'success': response.get('success'), 'error': response.get('error')})
 
 
 def _show_success_update_msg(request, period, student):
@@ -135,7 +129,7 @@ def _show_success_update_msg(request, period, student):
         request,
         messages.SUCCESS,
         _("Score updated successfully for {}'s internship during {}".format(
-            student.person.last_name, period.name
+            student.last_name, period.name
         ))
     )
 
@@ -163,7 +157,7 @@ def _build_score_to_update(post_data, score):
 
 
 def _build_comments(post_data):
-    return {field: post_data.get(field) for field in COMMENTS_FIELDS}
+    return {field_id: post_data.get(field_id) for field_id, field_label in COMMENTS_FIELDS}
 
 
 def _build_objectives(post_data):
