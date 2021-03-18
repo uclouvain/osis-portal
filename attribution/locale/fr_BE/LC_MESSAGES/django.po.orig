@@ -7,7 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-15 13:54+0100\n"
+<<<<<<< HEAD
+"POT-Creation-Date: 2021-03-04 10:43+0100\n"
+=======
+"POT-Creation-Date: 2021-03-03 11:49+0100\n"
+>>>>>>> a15ba8d77b91f55b02281fb386b3322096507c71
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,259 +21,262 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "A substitute can not renew his function of substitute"
-msgstr ""
+msgstr "Un suppléant ne peut pas reconduire sa fonction de suppléant"
 
 msgid "Acronym"
-msgstr ""
+msgstr "Sigle"
 
 msgctxt "plural"
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 msgid "An application has already been submitted"
-msgstr ""
+msgstr "Une candidature a déjà été soumise"
 
 msgid "An email with your applications have been sent"
-msgstr ""
+msgstr "Un email contenant vos candidatures vous a été envoyé"
 
 msgid "Application"
-msgstr ""
+msgstr "Candidature"
 
 msgid "Application period from"
-msgstr ""
+msgstr "Période de candidature en ligne du"
 
 msgid "Applications administration"
-msgstr ""
+msgstr "Administration des attributions"
 
 msgid "Applications in pending state"
-msgstr ""
+msgstr "Administration des candidatures"
 
 msgid "Applications of "
-msgstr ""
+msgstr "Candidatures de "
 
 msgid "Arrangements"
-msgstr ""
+msgstr "Aménagements"
 
 msgid "Attribution administration"
-msgstr ""
+msgstr "Administration des attributions"
 
 msgid "Attributions"
-msgstr ""
+msgstr "Attributions"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 msgid "Charge"
-msgstr ""
+msgstr "Charge"
 
 msgid "Choose the learning units you want to consider in the list"
 msgstr ""
+"Choisissez dans vos cours ceux que vous voulez considérer dans la liste "
+"produite"
 
 msgid "Co-holder"
-msgstr ""
+msgstr "Co-titulaire"
 
 msgid "Code"
-msgstr ""
+msgstr "Sigle"
 
 msgctxt "applications"
 msgid "Code"
-msgstr ""
+msgstr "Code"
+
+msgid "Comment"
+msgstr "Commentaire"
 
 msgid "Coordinator"
-msgstr ""
+msgstr "Coordinateur(trice)"
 
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 msgid "Delete the application"
-msgstr ""
+msgstr "Supprimer la candidature"
 
 msgid "Deputy"
-msgstr ""
+msgstr "Suppléant"
 
 msgid "Deputy authority"
-msgstr ""
+msgstr "Suppléant d'autorité"
 
 msgid "Deputy sabbatical"
-msgstr ""
+msgstr "Suppléant sabbatique"
 
 msgid "Deputy temporary"
-msgstr ""
-
-msgid "Details other educational facilities"
-msgstr ""
+msgstr "Suppléant temporaire"
 
 msgid "Display teachers"
-msgstr ""
+msgstr "Afficher les enseignants"
 
 msgid "ECT"
-msgstr ""
+msgstr "ECT"
 
 msgid "Educational tutor"
-msgstr ""
+msgstr "Accompagnateur"
 
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 msgid "End"
-msgstr ""
+msgstr "Fin"
 
 msgid "Export list (Excel)"
-msgstr ""
+msgstr "Exporter liste (Excel)"
 
 msgid "Export the students list in Excel format"
-msgstr ""
+msgstr "Exporter la liste des étudiants au format Excel"
 
-#, python-format
 msgid "Extra time (33% generally)"
-msgstr ""
+msgstr "Tiers-Temps"
 
 msgid "Faculties administration"
-msgstr ""
+msgstr "Administration des facultés"
 
 msgid "Faculty"
-msgstr ""
+msgstr "Faculté"
 
 msgid "Function"
-msgstr ""
+msgstr "Fonction"
 
 msgid "Global id"
-msgstr ""
+msgstr "Matricule fgs"
 
 msgid "Guide"
 msgstr ""
 
 msgid "Holder"
-msgstr ""
+msgstr "Titulaire"
 
 msgid "Internship co-supervisor"
-msgstr ""
+msgstr "Co-directeur de stage"
 
 msgid "Internship supervisor"
-msgstr ""
+msgstr "Directeur de stage"
 
 msgid "Jan."
-msgstr ""
+msgstr "Jan."
 
 msgid "January"
 msgstr ""
 
 msgid "June"
-msgstr ""
+msgstr "Juin"
 
 msgid "Large print"
-msgstr ""
+msgstr "Copie adaptée"
 
 msgid "Last name"
-msgstr ""
+msgstr "Nom"
 
 msgid "Learning unit"
-msgstr ""
+msgstr "Unité d'enseignement"
 
 msgid "Learning unit volumes"
-msgstr ""
+msgstr "Volumes unité d'enseignement"
 
 msgid "Lecturing charge or practical charge must be filled"
-msgstr ""
+msgstr "Le vol.1 postulé ou le vol.2 postulé doit être rempli"
 
 msgid "Legend to help you understanding the xls file"
-msgstr ""
+msgstr "Légende pour mieux comprendre le fichier xls"
 
 msgid "List of students enrolled to exams of "
-msgstr ""
+msgstr "Listes des étudiants inscrits aux examens de "
 
 msgid "List of students enrolled to my exams"
-msgstr ""
+msgstr "Listes des étudiants inscrits à mes examens"
 
 msgid "Lists of students enrollments to exams"
-msgstr ""
+msgstr "Administration des listes des inscriptions des étudiants aux examens"
 
 msgid "My application"
-msgstr ""
+msgstr "Ma candidature"
 
 msgid "My applications"
-msgstr ""
+msgstr "Mes candidatures"
 
 msgid "My charges"
-msgstr ""
+msgstr "Mes charges"
 
 msgid "My charges now vacant"
-msgstr ""
+msgstr "Mes charges échues"
 
 msgid "New application"
-msgstr ""
+msgstr "Nouvelle candidature"
 
 msgid "No application"
-msgstr ""
+msgstr "Aucune candidature"
 
 msgid "No application found"
-msgstr ""
+msgstr "Pas de candidature trouvée"
 
 msgid "No attribution renewed"
-msgstr ""
+msgstr "Pas d'attribution renouvelée"
 
 msgid "No data found"
-msgstr ""
+msgstr "Aucune donnée trouvée"
 
 msgid "No students enrolled"
-msgstr "No students enrolled"
+msgstr "Aucun étudiant inscrit au cours"
 
 msgid "No teaching charge in "
-msgstr ""
+msgstr "Pas de charge d'enseignement en "
 
 msgid "No vacant corresponding activity"
-msgstr ""
+msgstr "Pas d'activité vacante correspondante"
 
 msgid "No vacant corresponding course"
-msgstr ""
+msgstr "Pas d'activité vacante correspondante"
 
 msgid "Non-renewable"
-msgstr ""
+msgstr "Non-reconductible"
 
 msgid "Other educational facilities"
-msgstr ""
+msgstr "Autre aménagement"
 
 msgid "Pedagogy proposal"
-msgstr ""
+msgstr "Votre proposition d'organisation pédagogique"
 
 msgid "Pgrm"
-msgstr ""
+msgstr "Pgrm"
 
 msgid "Please enter the code of the course to which you would like to apply"
-msgstr ""
+msgstr "Veuillez introduire le code du cours pour lequel vous voulez postuler"
 
 msgid "Please precise at least a faculty or a code (or a part of a code)"
 msgstr ""
+"Veuillez au minimum sélectionner une faculté ou introduire un code(complet "
+"ou partiel)"
 
 msgid "Please refresh the page"
-msgstr ""
+msgstr "Veuillez rafraichir la page"
 
 msgid "Produce xls"
-msgstr ""
+msgstr "Produire xls"
 
 msgid "Professor"
-msgstr ""
+msgstr "Professeur"
 
 msgid "Program"
 msgstr ""
 
 msgid "Registration id"
-msgstr "Registration id"
+msgstr "Noma"
 
 msgid "Remark"
-msgstr ""
+msgstr "Remarque"
 
 msgid "Renew"
-msgstr ""
+msgstr "Reconduire"
 
 msgid "Reproduce identically in the following year"
-msgstr ""
+msgstr "Reproduire à l'identique l'année suivante"
 
 msgid "Schedule"
-msgstr ""
+msgstr "Horaire"
 
 msgid "Schedule unavailable"
-msgstr ""
+msgstr "Horaire non disponible"
 
 msgid "Scores encoding"
 msgstr ""
@@ -278,144 +285,159 @@ msgid "Search"
 msgstr ""
 
 msgid "Select/deselect all attributions to renew"
-msgstr ""
+msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
 
 msgid "Sept."
-msgstr ""
+msgstr "Sept."
 
 msgid "September"
 msgstr ""
 
 msgid "Specific room of examination"
-msgstr ""
+msgstr "Local spécifique"
 
 msgid "Specifications"
-msgstr ""
+msgstr "Cahier de charges"
 
 msgid "Start"
-msgstr ""
+msgstr "Début"
 
 msgid "State"
-msgstr ""
+msgstr "Etat"
 
 msgid "Student"
-msgstr ""
+msgstr "Etudiant"
 
 msgid "Students"
-msgstr ""
+msgstr "Etudiants"
 
 msgid "Submit"
-msgstr ""
+msgstr "Soumettre"
 
 msgid "Teachers"
-msgstr ""
+msgstr "Enseignants"
 
 msgid "Teaching charge"
-msgstr ""
+msgstr "Charge d'enseignement"
 
 msgid "The Excel lists for encoding scores are available in"
 msgstr ""
+"Les listes Excel destinées à l'encodage des notes sont disponibles dans"
 
 #, python-format
 msgid ""
 "The period of online application for courses %(year)s opened on "
 "%(start_date)s to %(end_date)s"
 msgstr ""
+"La période de candidatures en ligne pour les cours %(year)s était ouverte du "
+"%(start_date)s au %(end_date)s"
 
 #, python-format
 msgid ""
 "The period of online application for courses %(year)s will open on "
 "%(start_date)s to %(end_date)s"
 msgstr ""
+"La période de candidatures en ligne pour les cours %(year)s sera ouverte du "
+"%(start_date)s au %(end_date)s"
 
 msgid "The period of online application is closed"
 msgstr ""
+"La période d'encodage des candidatures en ligne est fermée pour le moment"
 
 msgid ""
 "The vacant volume of the next academic year is lower than the current one"
 msgstr ""
+"Le volume vacant de l'année suivante est inférieur à celui actuellement "
+"affecté"
 
 msgid "This action will delete the application."
-msgstr ""
+msgstr "Cette action supprimera la candidature."
 
 msgid ""
 "This course is team-managed. The application to this activity is based on a "
 "paper transmission."
 msgstr ""
+"Ce cours est géré en équipe. La candidature des équipes d'enseignants "
+"s'effectue via la procédure papier."
 
 #, python-format
 msgid ""
 "This course will be discontinued in %(academic_year)s following a program "
 "reform."
 msgstr ""
+"Ce cours sera supprimé en %(academic_year)s suite à une réforme de programme."
 
 msgid "Title"
-msgstr ""
+msgstr "Intitulé"
 
 msgid ""
 "To find a vacant learning unit to candidate to, introduce the code and click "
 "on the button"
 msgstr ""
+"Pour poser une candidature à un cours vacant dont vous n'assuriez pas la "
+"charge, veuillez introduire ci-après le code du cours et cliquer sur le "
+"bouton 'loupe'"
 
 msgid "To receive a confirmation email with the applications"
 msgstr ""
+"Pour recevoir un email de confirmation avec toutes les candidatures en ligne"
 
 msgid "Too much"
-msgstr ""
+msgstr "Trop élevé"
 
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 msgid "Type of specific profile"
-msgstr ""
+msgstr "Type PEPS"
 
 msgid "Vacant"
-msgstr ""
+msgstr "Vacant"
 
 msgid "Vacant course search"
-msgstr ""
+msgstr "Recherche de cours vacant"
 
 msgid "Vacant learning unit"
-msgstr ""
+msgstr "Cours vacant"
 
 msgid "Vol.1"
-msgstr ""
+msgstr "Vol.1"
 
 msgid "Vol.1 applied"
-msgstr ""
+msgstr "Vol.1 postulé"
 
 msgid "Vol.1 vacant"
-msgstr ""
+msgstr "Vol.1 vacant"
 
 msgid "Vol.2"
-msgstr ""
+msgstr "Vol.2"
 
 msgid "Vol.2 applied"
-msgstr ""
+msgstr "Vol.2 postulé"
 
 msgid "Vol.2 vacant"
-msgstr ""
+msgstr "Vol.2 vacant"
 
 msgid "Warning, this is not a list for encoding scores."
-msgstr ""
+msgstr "Attention, ceci n'est pas une liste destinée à l'encodage des notes."
 
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 msgid "You already apply to this course."
-msgstr ""
+msgstr "Vous avez déjà candidaté pour ce cours."
 
 msgid "You aren't teaching for any learning unit"
-msgstr ""
+msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 
 msgid "student_list"
-msgstr ""
+msgstr "Liste_etudiants"
 
 msgid "students enrolled from"
-msgstr ""
+msgstr "  étudiants inscrits au cours"
 
 msgid "to"
-msgstr ""
+msgstr "au"
 
 msgid "without application"
-msgstr ""
+msgstr "sans candidature"

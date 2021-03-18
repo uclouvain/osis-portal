@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,19 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import functools
 import logging
+import operator
 import urllib
+from typing import List
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
-from attribution import models as mdl_attribution
+from attribution.models.remote_attribution_service import RemoteAttributionService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
+from base.models.learning_unit_year import LearningUnitYear
+from base.models.person import Person
 from base.views import layout
 
 NO_DATA_VALUE = "-"
@@ -57,16 +63,22 @@ def get_learning_units(a_user):
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
-            attributions = mdl_attribution.attribution.find_by_tutor_year(tutor, current_academic_year)
+            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
+    return {'person': a_person, 'my_learning_units': learning_units}
 
-            for attribution in attributions:
-                if attribution.learning_unit_year not in learning_units:
-                    learning_units.append(attribution.learning_unit_year)
-    data = {
-        'person': a_person,
-        'my_learning_units': learning_units
-    }
-    return data
+
+def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
+    attributions = RemoteAttributionService.get_attributions_list(year, person)
+    if attributions:
+        filter_clause = functools.reduce(
+            operator.or_,
+            (
+                (Q(acronym=attribution.code) & Q(academic_year__year=attribution.year))
+                for attribution in attributions
+            )
+        )
+        return list(LearningUnitYear.objects.filter(filter_clause))
+    return []
 
 
 def get_codes_parameter(request, academic_yr):
@@ -124,8 +136,7 @@ def fetch_student_exam_enrollment(academic_year, codes):
     document_base_path = server_top_url + settings.ATTRIBUTION_CONFIG.get('ATTRIBUTION_PATH')
     if document_base_path:
         try:
-            document_url = document_base_path.format(anac=academic_year,
-                                                     codes=codes)
+            document_url = document_base_path.format(anac=academic_year, codes=codes)
             return _fetch_with_basic_auth(server_top_url, document_url)
         except Exception:
             logger.exception(
@@ -175,12 +186,8 @@ def get_learning_units_by_person(global_id):
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
-            attributions = mdl_attribution.attribution.find_by_tutor_year(tutor, current_academic_year)
-            for attribution in attributions:
-                if attribution.learning_unit_year not in learning_units:
-                    learning_units.append(attribution.learning_unit_year)
-    data = {'person': a_person, 'learning_units': learning_units}
-    return data
+            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
+    return {'person': a_person, 'learning_units': learning_units}
 
 
 @login_required
