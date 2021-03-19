@@ -32,7 +32,6 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from mock import patch
 
-import base.tests.models.test_offer_year
 import base.tests.models.test_student
 import performance.tests.models.test_student_performance
 from base.forms.base_forms import RegistrationIdForm
@@ -58,7 +57,11 @@ class TestMain(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.student_performance = performance.tests.models.test_student_performance.create_student_performance()
-        cls.offer_year = base.tests.models.test_offer_year.create_offer_year()
+        cls.education_group_year = EducationGroupYearFactory(
+            academic_year__year=2016,
+            acronym="VETE11BA",
+            title="Première année de bachelier en médecine vétérinaire",
+        )
         cls.json_points = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points2.json")
         cls.json_points_2 = performance.tests.models.test_student_performance.load_json_file(

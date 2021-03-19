@@ -28,8 +28,8 @@ def _discriminate_student(students):
         enrollment_state__in=offer_enrollment_state.VALID_ENROLLMENT_STATES))
 
     for offer_enrollment in offers_enrollments:
-        offer_year = offer_enrollment.education_group_year.academic_year.year
-        student_offer_enrollments[offer_year].add(offer_enrollment.student)
+        year = offer_enrollment.education_group_year.academic_year.year
+        student_offer_enrollments[year].add(offer_enrollment.student)
 
     if student_offer_enrollments:
         max_year = max(student_offer_enrollments.keys())
