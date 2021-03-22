@@ -91,7 +91,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
     period = affectation.period
     student = affectation.student
 
-    score = get_score(student.uuid, period.uuid)
+    score = get_score(affectation.score.uuid)
     specialty = get_specialty(specialty_uuid)
     organization = get_organization(organization_uuid)
 
@@ -104,7 +104,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
         if not _validate_score(request.POST):
             _show_invalid_update_msg(request)
             return layout.render(request, "internship_score_encoding_form.html", locals())
-        update = update_score(student.uuid, period.uuid, score)
+        update = update_score(score)
         if update:
             _show_success_update_msg(request, period, student)
             return redirect(reverse('internship_score_encoding_sheet', kwargs={
@@ -120,8 +120,9 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
 @login_required
 @redirect_if_not_master
 def score_encoding_validate(request, affectation_uuid):
-    response = validate_internship_score(affectation_uuid)
-    return JsonResponse({'success': response.get('success'), 'error': response.get('error')})
+    data, status, headers = validate_internship_score(affectation_uuid)
+    is_success = status == 204
+    return JsonResponse({} if is_success else {'error': _('An error occured during validation')})
 
 
 def _show_success_update_msg(request, period, student):
@@ -146,8 +147,7 @@ def _build_score_to_update(post_data, score):
     comments = _build_comments(post_data)
     objectives = _build_objectives(post_data)
     score = ScoreGet(
-        student=score.student,
-        period=score.period,
+        uuid=score.uuid,
         cohort=score.cohort,
         comments=comments,
         objectives=objectives,

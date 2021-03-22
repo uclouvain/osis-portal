@@ -38,4 +38,4 @@ COMMENTS_FIELDS = [
     ('suggestions', _("Suggested learning methods"))
 ]
 DEFAULT_PERIODS = 'all'
-AVAILABLE_GRADES = ['A', 'B', 'C', 'D', 'E']
+AVAILABLE_GRADES = ['A', 'B', 'C', 'D']
