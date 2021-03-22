@@ -77,7 +77,7 @@ def new_delegate(request, specialty_uuid, organization_uuid):
                 specialty=specialty,
                 role=ChoiceRole.DELEGATE.value
             )
-            allocation = post_master_allocation(allocation, specialty_uuid, organization_uuid)
+            allocation = post_master_allocation(allocation)
             if allocation:
                 messages.add_message(
                     request, SUCCESS, _('Internship delegate {} created with success'.format(

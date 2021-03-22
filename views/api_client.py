@@ -59,7 +59,7 @@ def get_master_by_email(email):
 
 
 def activate_master_account(master_uuid):
-    return InternshipAPIClient().masters_uuid_activate_account_put(uuid=master_uuid)
+    return InternshipAPIClient().masters_uuid_activate_account_post(uuid=master_uuid)
 
 
 def get_master_allocations(master_uuid=None):
@@ -68,9 +68,17 @@ def get_master_allocations(master_uuid=None):
     )
 
 
+def get_mastered_allocations(specialty_uuid, organization_uuid):
+    return get_paginated_results(
+        InternshipAPIClient().masters_allocations_get(
+            specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.MASTER.value
+        )
+    )
+
+
 def get_delegated_allocations(specialty_uuid, organization_uuid):
     return get_paginated_results(
-        InternshipAPIClient().masters_allocations_specialty_organization_get(
+        InternshipAPIClient().masters_allocations_get(
             specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.DELEGATE.value
         )
     )
@@ -122,18 +130,16 @@ def get_active_period():
     )
 
 
-def get_score(student_uuid, period_uuid):
+def get_score(score_uuid):
     try:
-        return InternshipAPIClient().scores_student_uuid_period_uuid_get(
-            student_uuid=student_uuid, period_uuid=period_uuid
-        )
+        return InternshipAPIClient().scores_uuid_get(score_uuid)
     except ApiException:
         return None
 
 
-def update_score(student_uuid, period_uuid, score):
-    return InternshipAPIClient().scores_student_uuid_period_uuid_put(
-        student_uuid, period_uuid, score_get=score, async_req=True
+def update_score(score):
+    return InternshipAPIClient().scores_uuid_put(
+        score.uuid, score_get=score, async_req=True
     )
 
 
@@ -142,8 +148,8 @@ def post_master(master):
 
 
 def post_master_allocation(allocation, specialty_uuid, organization_uuid):
-    return InternshipAPIClient().masters_allocations_specialty_organization_post(
-        allocation_get=allocation, specialty=specialty_uuid, organization=organization_uuid
+    return InternshipAPIClient().masters_allocations_post(
+        allocation_get=allocation,
     )
 
 
@@ -152,4 +158,10 @@ def delete_master_allocation(allocation_uuid):
 
 
 def validate_internship_score(affectation_uuid):
-    return InternshipAPIClient().scores_affectation_uuid_validate_get(affectation_uuid=affectation_uuid)
+    try:
+        return InternshipAPIClient().scores_affectation_uuid_validate_post(
+            affectation_uuid=affectation_uuid,
+            _return_http_data_only=False
+        )
+    except ApiException as e:
+        return e.body, e.status, e.headers

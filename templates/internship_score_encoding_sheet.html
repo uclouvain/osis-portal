@@ -157,13 +157,13 @@
                 $('#validation-error-alert').hide();
                 $('#btn-validate').button('loading');
                 $.post(validateUrl, (data) => {
-                    if(data.success){
-                        $('#validation-progress-bar').hide();
+                    if(!data.error){
                         $('#validation_modal').modal('hide');
                         updateActions(affectation);
                     } else {
-                        $('#validation-progress-bar').hide();
-                        $('#validation-error-alert').show();
+                        const errorAlert = $('#validation-error-alert')
+                        errorAlert.innerText = data.error;
+                        errorAlert.show();
                     }
                     $('#btn-validate').button('reset');
                 });
