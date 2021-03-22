@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-18 17:36+0100\n"
+"POT-Creation-Date: 2021-03-22 11:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,9 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "APDs"
-msgstr ""
 
 msgid "APDs description"
 msgstr ""
@@ -147,6 +144,9 @@ msgid "Generalist"
 msgstr ""
 
 msgid "Good performance examples"
+msgstr ""
+
+msgid "Grade"
 msgstr ""
 
 msgid "Grades modifications will no longer be allowed after validation."
@@ -318,7 +318,7 @@ msgstr ""
 msgid "Take a history (anamnesis)"
 msgstr ""
 
-msgid "Targeted APDs before internship"
+msgid "Targeted APD"
 msgstr ""
 
 msgid "The activation failed"
