@@ -56,6 +56,14 @@ STUDENT_LIST_EMAIL_END = '@listes-student.uclouvain.be'
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
+LEARNING_UNIT_TYPES_DISPLAYED = (
+    learning_container_type.COURSE,
+    learning_container_type.INTERNSHIP,
+    learning_container_type.DISSERTATION,
+    learning_container_type.OTHER_COLLECTIVE
+)
+
+
 class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     permission_required = "attribution.can_access_attribution"
     raise_exception = False
@@ -101,11 +109,8 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     @cached_property
     def attributions(self):
-        attribution_types = (
-            learning_container_type.COURSE, learning_container_type.INTERNSHIP, learning_container_type.DISSERTATION,
-        )
         attributions = RemoteAttributionService.get_attributions_list(self.get_current_year_displayed(), self.person)
-        attributions = filter(lambda attribution: str(attribution.type) in attribution_types, attributions)
+        attributions = filter(lambda attribution: str(attribution.type) in LEARNING_UNIT_TYPES_DISPLAYED, attributions)
         return [self._format_attribution_row(attribution) for attribution in attributions]
 
     def get_total_lecturing_charge(self):

@@ -33,6 +33,7 @@ from django.urls import reverse
 from rest_framework import status
 
 from attribution.views import tutor_charge
+from base.models.enums import learning_container_type
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
@@ -98,7 +99,7 @@ class TutorChargeViewTest(TestCase):
             'title_fr': 'Introduction aux droits Partie I',
             'title_en': 'Introduction to Law Part I',
             'year': self.current_academic_year.year,
-            'type': 'COURSE',
+            'type': learning_container_type.COURSE,
             'type_text': 'Cours',
             'credits': '15.50',
             'total_learning_unit_charge': '55.5',
