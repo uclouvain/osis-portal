@@ -77,7 +77,7 @@ def _make_xls_list(student_list):
         _('Large print'),
         _('Specific room of examination'),
         _('Other educational facilities'),
-        _('Comment'),
+        _('Details other educational facilities'),
         _('Educational tutor'),
     ]
     worksheet1.append(col for col in columns)

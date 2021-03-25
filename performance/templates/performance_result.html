@@ -9,7 +9,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% if on_site_exams_info %}
+                        {% if on_site_exams_info and covid_period %}
                             <div class="row">
                                 <div class="alert alert-warning" role="alert">
                                     <h4>{% trans 'Session of ' %}{% trans on_site_exams_info.moisSession %}</h4>
