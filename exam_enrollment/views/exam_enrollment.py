@@ -131,6 +131,7 @@ def _get_exam_enrollment_form(educ_group_year, request, stud):
     request_timeout = get_request_timeout()
     exam_enroll_request = get_exam_enroll_request(educ_group_year.acronym, request_timeout, stud)
 
+
     program = EducationGroupYear.objects.get(pk=educ_group_year.id)
 
     if exam_enroll_request:
