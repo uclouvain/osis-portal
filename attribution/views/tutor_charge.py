@@ -101,11 +101,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     @cached_property
     def attributions(self):
-        attribution_types = (
-            learning_container_type.COURSE, learning_container_type.INTERNSHIP, learning_container_type.DISSERTATION,
-        )
         attributions = RemoteAttributionService.get_attributions_list(self.get_current_year_displayed(), self.person)
-        attributions = filter(lambda attribution: str(attribution.type) in attribution_types, attributions)
         return [self._format_attribution_row(attribution) for attribution in attributions]
 
     def get_total_lecturing_charge(self):
