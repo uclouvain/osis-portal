@@ -128,14 +128,8 @@ def _get_exam_enrollment_form(educ_group_year, request, stud):
             _('no_learning_unit_enrollment_found').format(educ_group_year.acronym)
         )
         return response.HttpResponseRedirect(reverse('dashboard_home'))
-
-    if hasattr(settings, 'QUEUES') and settings.QUEUES:
-        request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
-    else:
-        request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
-    fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
-    exam_enroll_request = exam_enrollment_request. \
-        get_by_student_and_offer_year_acronym_and_fetch_date(stud, educ_group_year.acronym, fetch_date_limit)
+    request_timeout = get_request_timeout()
+    exam_enroll_request = get_exam_enroll_request(educ_group_year.acronym, request_timeout, stud)
 
     program = EducationGroupYear.objects.get(pk=educ_group_year.id)
 
@@ -172,6 +166,19 @@ def _get_exam_enrollment_form(educ_group_year, request, stud):
                                  'request_timeout': request_timeout,
                                  'is_11ba': program.acronym.endswith('11BA'),
                              })
+
+
+def get_exam_enroll_request(acronym, request_timeout, stud):
+    fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
+    exam_enroll_request = exam_enrollment_request. \
+        get_by_student_and_offer_year_acronym_and_fetch_date(stud, acronym, fetch_date_limit)
+    return exam_enroll_request
+
+
+def get_request_timeout():
+    if hasattr(settings, 'QUEUES') and settings.QUEUES:
+        return settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+    return settings.DEFAULT_QUEUE_TIMEOUT
 
 
 def _get_error_message(data, educ_group_year):
