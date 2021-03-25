@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-03 11:48+0100\n"
+"POT-Creation-Date: 2021-03-15 13:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,9 +56,6 @@ msgstr "Cliquez pour vous reconnectez"
 msgid "Code"
 msgstr "Code"
 
-msgid "Comment"
-msgstr "Commentaire"
-
 msgid "Content type"
 msgstr "Type de contenu"
 
@@ -85,6 +82,9 @@ msgstr "Gestion des données par entité"
 
 msgid "Description"
 msgstr ""
+
+msgid "Details other educational facilities"
+msgstr "Détails autre aménagement"
 
 msgid "Dissertation"
 msgstr "Mémoire"
