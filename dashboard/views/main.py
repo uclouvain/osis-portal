@@ -29,14 +29,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext_lazy as _
 
-from attribution.utils import permission
 from base.views import layout
 
 
 @login_required
 def home(request):
     return layout.render(request, "dashboard.html", {
-        'online_application_opened': permission.is_online_application_opened(request.user),
         'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
         'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL
     })
@@ -46,13 +44,14 @@ def home(request):
 def faculty_administration(request):
     if not _can_access_administration(request):
         raise PermissionDenied
-    return layout.render(request, "faculty_administrator_dashboard.html",
-                         {'online_application_opened': permission.is_online_application_opened(request.user)})
+    return layout.render(request, "faculty_administrator_dashboard.html", {})
 
 
 def show_multiple_registration_id_error(request):
-    msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-            "contact the registration departement (SIC). Thank you.")
+    msg = _("A problem was detected with your registration : 2 registration id's are linked to your user.</br> Please "
+            "contact <a href=\"{registration_department_url}\" "
+            "target=\"_blank\">the Registration department</a>. Thank you.")\
+        .format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
     messages.add_message(request, messages.ERROR, msg)
     return home(request)
 

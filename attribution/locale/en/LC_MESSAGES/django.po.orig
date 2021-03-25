@@ -1,0 +1,425 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
+"POT-Creation-Date: 2021-03-04 10:43+0100\n"
+=======
+"POT-Creation-Date: 2021-03-03 11:49+0100\n"
+>>>>>>> a15ba8d77b91f55b02281fb386b3322096507c71
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "A substitute can not renew his function of substitute"
+msgstr ""
+
+msgid "Acronym"
+msgstr ""
+
+msgctxt "plural"
+msgid "All"
+msgstr ""
+
+msgid "An application has already been submitted"
+msgstr ""
+
+msgid "An email with your applications have been sent"
+msgstr ""
+
+msgid "Application"
+msgstr ""
+
+msgid "Application period from"
+msgstr ""
+
+msgid "Applications administration"
+msgstr ""
+
+msgid "Applications in pending state"
+msgstr ""
+
+msgid "Applications of "
+msgstr ""
+
+msgid "Arrangements"
+msgstr ""
+
+msgid "Attribution administration"
+msgstr ""
+
+msgid "Attributions"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Charge"
+msgstr ""
+
+msgid "Choose the learning units you want to consider in the list"
+msgstr ""
+
+msgid "Co-holder"
+msgstr ""
+
+msgid "Code"
+msgstr ""
+
+msgctxt "applications"
+msgid "Code"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Coordinator"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete the application"
+msgstr ""
+
+msgid "Deputy"
+msgstr ""
+
+msgid "Deputy authority"
+msgstr ""
+
+msgid "Deputy sabbatical"
+msgstr ""
+
+msgid "Deputy temporary"
+msgstr ""
+
+msgid "Display teachers"
+msgstr ""
+
+msgid "ECT"
+msgstr ""
+
+msgid "Educational tutor"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "End"
+msgstr ""
+
+msgid "Export list (Excel)"
+msgstr ""
+
+msgid "Export the students list in Excel format"
+msgstr ""
+
+#, python-format
+msgid "Extra time (33% generally)"
+msgstr ""
+
+msgid "Faculties administration"
+msgstr ""
+
+msgid "Faculty"
+msgstr ""
+
+msgid "Function"
+msgstr ""
+
+msgid "Global id"
+msgstr ""
+
+msgid "Guide"
+msgstr ""
+
+msgid "Holder"
+msgstr ""
+
+msgid "Internship co-supervisor"
+msgstr ""
+
+msgid "Internship supervisor"
+msgstr ""
+
+msgid "Jan."
+msgstr ""
+
+msgid "January"
+msgstr ""
+
+msgid "June"
+msgstr ""
+
+msgid "Large print"
+msgstr ""
+
+msgid "Last name"
+msgstr ""
+
+msgid "Learning unit"
+msgstr ""
+
+msgid "Learning unit volumes"
+msgstr ""
+
+msgid "Lecturing charge or practical charge must be filled"
+msgstr ""
+
+msgid "Legend to help you understanding the xls file"
+msgstr ""
+
+msgid "List of students enrolled to exams of "
+msgstr ""
+
+msgid "List of students enrolled to my exams"
+msgstr ""
+
+msgid "Lists of students enrollments to exams"
+msgstr ""
+
+msgid "My application"
+msgstr ""
+
+msgid "My applications"
+msgstr ""
+
+msgid "My charges"
+msgstr ""
+
+msgid "My charges now vacant"
+msgstr ""
+
+msgid "New application"
+msgstr ""
+
+msgid "No application"
+msgstr ""
+
+msgid "No application found"
+msgstr ""
+
+msgid "No attribution renewed"
+msgstr ""
+
+msgid "No data found"
+msgstr ""
+
+msgid "No students enrolled"
+msgstr "No students enrolled"
+
+msgid "No teaching charge in "
+msgstr ""
+
+msgid "No vacant corresponding activity"
+msgstr ""
+
+msgid "No vacant corresponding course"
+msgstr ""
+
+msgid "Non-renewable"
+msgstr ""
+
+msgid "Other educational facilities"
+msgstr ""
+
+msgid "Pedagogy proposal"
+msgstr ""
+
+msgid "Pgrm"
+msgstr ""
+
+msgid "Please enter the code of the course to which you would like to apply"
+msgstr ""
+
+msgid "Please precise at least a faculty or a code (or a part of a code)"
+msgstr ""
+
+msgid "Please refresh the page"
+msgstr ""
+
+msgid "Produce xls"
+msgstr ""
+
+msgid "Professor"
+msgstr ""
+
+msgid "Program"
+msgstr ""
+
+msgid "Registration id"
+msgstr "Registration id"
+
+msgid "Remark"
+msgstr ""
+
+msgid "Renew"
+msgstr ""
+
+msgid "Reproduce identically in the following year"
+msgstr ""
+
+msgid "Schedule"
+msgstr ""
+
+msgid "Schedule unavailable"
+msgstr ""
+
+msgid "Scores encoding"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Select/deselect all attributions to renew"
+msgstr ""
+
+msgid "Sept."
+msgstr ""
+
+msgid "September"
+msgstr ""
+
+msgid "Specific room of examination"
+msgstr ""
+
+msgid "Specifications"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Student"
+msgstr ""
+
+msgid "Students"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Teachers"
+msgstr ""
+
+msgid "Teaching charge"
+msgstr ""
+
+msgid "The Excel lists for encoding scores are available in"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s opened on "
+"%(start_date)s to %(end_date)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s to %(end_date)s"
+msgstr ""
+
+msgid "The period of online application is closed"
+msgstr ""
+
+msgid ""
+"The vacant volume of the next academic year is lower than the current one"
+msgstr ""
+
+msgid "This action will delete the application."
+msgstr ""
+
+msgid ""
+"This course is team-managed. The application to this activity is based on a "
+"paper transmission."
+msgstr ""
+
+#, python-format
+msgid ""
+"This course will be discontinued in %(academic_year)s following a program "
+"reform."
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid ""
+"To find a vacant learning unit to candidate to, introduce the code and click "
+"on the button"
+msgstr ""
+
+msgid "To receive a confirmation email with the applications"
+msgstr ""
+
+msgid "Too much"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Type of specific profile"
+msgstr ""
+
+msgid "Vacant"
+msgstr ""
+
+msgid "Vacant course search"
+msgstr ""
+
+msgid "Vacant learning unit"
+msgstr ""
+
+msgid "Vol.1"
+msgstr ""
+
+msgid "Vol.1 applied"
+msgstr ""
+
+msgid "Vol.1 vacant"
+msgstr ""
+
+msgid "Vol.2"
+msgstr ""
+
+msgid "Vol.2 applied"
+msgstr ""
+
+msgid "Vol.2 vacant"
+msgstr ""
+
+msgid "Warning, this is not a list for encoding scores."
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "You already apply to this course."
+msgstr ""
+
+msgid "You aren't teaching for any learning unit"
+msgstr ""
+
+msgid "student_list"
+msgstr ""
+
+msgid "students enrolled from"
+msgstr ""
+
+msgid "to"
+msgstr ""
+
+msgid "without application"
+msgstr ""

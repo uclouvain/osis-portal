@@ -25,19 +25,20 @@
 ##############################################################################
 import datetime
 
+import mock
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from osis_attribution_sdk.models import ApplicationCourseCalendar
 
 from attribution.models.enums import function
 from attribution.tests.factories.attribution import AttributionNewFactory
 from attribution.utils import tutor_application_epc
-from base.models.enums import academic_calendar_type
 from base.models.enums import learning_component_year_type
 from base.models.enums import learning_unit_year_subtypes
 from base.models.enums import vacant_declaration_type
-from base.tests.factories.academic_calendar import AcademicCalendarFactory
+from base.templatetags.academic_year_display import display_as_academic_year
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.entity import EntityFactory
 from base.tests.factories.entity_version import EntityVersionFactory
@@ -50,75 +51,98 @@ from base.tests.factories.user import UserFactory
 
 
 class TestOnlineApplication(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         # Create Group tutor
         Group.objects.create(name="tutors")
 
         # Create user
-        user = UserFactory(username="tutor_application")
-        person = PersonFactory(global_id="578945612", user=user)
-        self.tutor = TutorFactory(person=person)
+        cls.user = UserFactory(username="tutor_application")
+        cls.person = PersonFactory(global_id="578945612", user=cls.user)
+        cls.tutor = TutorFactory(person=cls.person)
 
         # Add permission and log into app
-        add_permission(user, "can_access_attribution_application")
-        self.client.force_login(user)
+        add_permission(cls.user, "can_access_attribution_application")
+
+        cls.agro_entity = EntityFactory()
+        cls.drt_entity = EntityFactory()
 
         # Create current academic year
-        self.current_academic_year = create_current_academic_year()
-
+        cls.current_academic_year = create_current_academic_year()
         # Create application year
-        # Application is always next year
-        self.application_academic_year = AcademicYearFactory(
+        cls.application_academic_year = AcademicYearFactory(year=cls.current_academic_year.year + 1)
 
-            year=self.current_academic_year.year + 1
+    def setUp(self):
+        # Create event to open calendar + Mock Remove API Call for calendar
+        self.calendar = ApplicationCourseCalendar(
+            title="Candidature aux cours vacants",
+            start_date=datetime.date.today() - datetime.timedelta(days=10),
+            end_date=datetime.date.today() + datetime.timedelta(days=15),
+            authorized_target_year=self.application_academic_year.year,
+            is_open=True
+        )
+        self.application_remote_calendar_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationCoursesRemoteCalendar',
+            __init__=mock.Mock(return_value=None),
+            _calendars=mock.PropertyMock(return_value=[self.calendar])
+        )
+        self.application_remote_calendar_patcher.start()
+        self.addCleanup(self.application_remote_calendar_patcher.stop)
+
+        self.agro_entity_version = EntityVersionFactory(
+            entity=self.agro_entity,
+            acronym="AGRO",
+            entity_type='FACULTY',
+            start_date=self.calendar.start_date,
+            end_date=self.calendar.end_date
         )
 
-        # Create Event to allow teacher to register
-        start_date = datetime.datetime.today() - datetime.timedelta(days=10)
-        end_date = datetime.datetime.today() + datetime.timedelta(days=15)
-        self.academic_calendar = AcademicCalendarFactory(
-            academic_year=self.current_academic_year,
-            reference=academic_calendar_type.TEACHING_CHARGE_APPLICATION,
-            start_date=start_date,
-            end_date=end_date
+        self.drt_entity_version = EntityVersionFactory(
+            entity=self.drt_entity,
+            acronym="DRT",
+            entity_type='FACULTY',
+            start_date=self.calendar.start_date,
+            end_date=self.calendar.end_date
         )
-        self.agro_entity = EntityFactory()
-        self.agro_entity_version = EntityVersionFactory(entity=self.agro_entity, acronym="AGRO",
-                                                        entity_type='FACULTY',
-                                                        start_date=self.academic_calendar.start_date,
-                                                        end_date=self.academic_calendar.end_date)
-
-        self.drt_entity = EntityFactory()
-        self.drt_entity_version = EntityVersionFactory(entity=self.drt_entity, acronym="DRT",
-                                                       entity_type='FACULTY',
-                                                       start_date=self.academic_calendar.start_date,
-                                                       end_date=self.academic_calendar.end_date)
+        self.client.force_login(self.user)
 
         # Creation context with multiple learning container year
-        self._create_multiple_learning_container_year()
+        _create_multiple_learning_container_year(self)
         self.attribution = AttributionNewFactory(
-            global_id=person.global_id,
-            applications=self._get_default_application_list(),
-            attributions=self._get_default_attribution_list()
+            global_id=self.person.global_id,
+            applications=_get_default_application_list(self),
+            attributions=_get_default_attribution_list(self)
         )
 
     def test_redirection_to_outside_encoding_period(self):
-        # Remove teaching charge application event
-        self.academic_calendar.delete()
+        # Change calendar start date + set property is_open to False
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
         url = reverse('applications_overview')
         url_outside = reverse('outside_applications_period')
-        response = self.client.get(url)
+        response = self.client.get(url, follow=False)
         self.assertRedirects(response, "%s?next=%s" % (url_outside, url))  # Redirection
 
     def test_message_outside_encoding_period(self):
-        # Remove teaching charge application event
-        self.academic_calendar.delete()
+        # Change calendar start date + set property is_open to False
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
         url = reverse('outside_applications_period')
         response = self.client.get(url)
+
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'warning')
-        self.assertEqual(messages[0].message, _('The period of online application is closed'))
+
+        expected_msg = _('The period of online application for courses %(year)s '
+                         'will open on %(start_date)s to %(end_date)s') % {
+            'year': display_as_academic_year(self.calendar.authorized_target_year),
+            'start_date': self.calendar.start_date.strftime('%d/%m/%Y'),
+            'end_date': self.calendar.end_date.strftime('%d/%m/%Y')
+        }
+        self.assertEqual(messages[0].message, expected_msg)
 
     def test_applications_overview(self):
         url = reverse('applications_overview')
@@ -126,8 +150,10 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 200)
         context = response.context[-1]
         self.assertEqual(context['a_tutor'], self.tutor)
-        self.assertEqual(context['current_academic_year'], self.current_academic_year)
-        self.assertEqual(context['application_year'], self.application_academic_year)
+        self.assertEqual(context['previous_academic_year'], self.current_academic_year)
+        self.assertEqual(context['application_academic_year'], self.application_academic_year)
+        self.assertEqual(context['application_course_calendar'], self.calendar)
+
         self.assertEqual(len(context['attributions']), 1)
         self.assertEqual(context['attributions'][0]['acronym'], self.lagro2500_next.acronym)
         self.assertEqual(len(context['applications']), 1)
@@ -178,14 +204,33 @@ class TestOnlineApplication(TestCase):
         self.assertEqual(response.status_code, 200)
         context = response.context[-1]
         self.assertEqual(len(context['attributions_vacant']), 2)
+        self.assertEqual(context['attributions_vacant'][0]['acronym'], self.lagro1600_next.acronym)
+        self.assertEqual(context['attributions_vacant'][1]['acronym'], self.lagro2500_next.acronym)
+
+    def test_search_vacant_attribution_search_list_by_faculty_take_account_of_declaration_vacant_type(self):
+        self.lagro1600_next.type_declaration_vacant = vacant_declaration_type.EXCEPTIONAL_PROCEDURE
+        self.lagro1600_next.save()
+
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(
+            url, data={
+                'learning_container_acronym': 'LAGRO',
+                'faculty': self.agro_entity_version.id
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['attributions_vacant']), 1)
+        self.assertEqual(context['attributions_vacant'][0]['acronym'], self.lagro2500_next.acronym)
 
     def test_search_vacant_attribution_with_declaration_vac_not_allowed(self):
         # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
         self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
         # Creation learning container for next academic year [==> application academic year]
-        self.lagro1234_next = _create_learning_container_with_components \
-            ("LAGRO1234", self.application_academic_year, 70, 70,
-             type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN)
+        self.lagro1234_next = _create_learning_container_with_components(
+            "LAGRO1234", self.application_academic_year, 70, 70,
+            type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN
+        )
         url = reverse('vacant_attributions_search')
         response = self.client.get(url, data={'learning_container_acronym': 'LAGRO1234'})
         self.assertEqual(response.status_code, 200)
@@ -194,9 +239,24 @@ class TestOnlineApplication(TestCase):
         self.assertTrue(context['search_form'])
         self.assertFalse(context['attributions_vacant'])
 
+    def test_search_vacant_attribution_with_team_set_to_true(self):
+        self.lagro1600_next.team = True
+        self.lagro1600_next.save()
+        url = reverse('vacant_attributions_search')
+        response = self.client.get(
+            url, data={
+                'learning_container_acronym': 'LAGRO'
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        context = response.context[-1]
+        self.assertEqual(len(context['attributions_vacant']), 2)
+
     def test_renew_applications(self):
+        lbir1300_next = _create_learning_container_with_components("LBIR1300", self.application_academic_year,
+                                                                   60, 60)
         url = reverse('renew_applications')
-        post_data = {'learning_container_year_' + self.lbir1300_next.acronym: 'on'}
+        post_data = {'learning_container_year_' + lbir1300_next.acronym: 'on'}
         response = self.client.post(url, data=post_data)
         self.assertEqual(response.status_code, 302)  # redirection
         self.attribution.refresh_from_db()
@@ -322,52 +382,56 @@ class TestOnlineApplication(TestCase):
         with self.assertRaises(KeyError):
             context['applications'][0]['LECTURING']
 
-    def _create_multiple_learning_container_year(self):
-        # Creation learning container for current academic year
-        self.lbir1200_current = _create_learning_container_with_components("LBIR1200", self.current_academic_year)
-        self.lbir1300_current = _create_learning_container_with_components("LBIR1300", self.current_academic_year)
-        self.ldroi1500_current = _create_learning_container_with_components("LDROI1500", self.current_academic_year)
 
-        # Creation learning container for next academic year [==> application academic year]
-        self.lbir1200_next = _create_learning_container_with_components("LBIR1200", self.application_academic_year,
-                                                                        70, 70)
-        self.lbir1300_next = _create_learning_container_with_components("LBIR1300", self.application_academic_year,
-                                                                        60, 60)
-        self.lagro1600_next = _create_learning_container_with_components("LAGRO1600", self.application_academic_year,
-                                                                         54, 7)
-        self.lagro2500_next = _create_learning_container_with_components("LAGRO2500", self.application_academic_year,
-                                                                         0, 70)
-        self._create_entity_container_yrs()
+def _create_multiple_learning_container_year(cls):
+    # Creation learning container for current academic year
+    cls.lbir1200_current = _create_learning_container_with_components("LBIR1200", cls.current_academic_year)
+    cls.lbir1300_current = _create_learning_container_with_components("LBIR1300", cls.current_academic_year)
+    cls.ldroi1500_current = _create_learning_container_with_components("LDROI1500", cls.current_academic_year)
 
-    def _get_default_application_list(self):
-        return [
-            _get_application_example(self.lagro1600_next, '15', '0')
-        ]
+    # Creation learning container for next academic year [==> application academic year]
+    cls.lbir1200_next = _create_learning_container_with_components("LBIR1200", cls.application_academic_year,
+                                                                   70, 70)
+    cls.lbir1300_next = _create_learning_container_with_components("LBIR1300", cls.application_academic_year,
+                                                                   60, 60)
+    cls.lagro1600_next = _create_learning_container_with_components("LAGRO1600", cls.application_academic_year,
+                                                                    54, 7)
+    cls.lagro2500_next = _create_learning_container_with_components("LAGRO2500", cls.application_academic_year,
+                                                                    0, 70)
+    _create_entity_container_yrs(cls)
 
-    def _get_default_attribution_list(self):
-        return [
-            # Attribution in current year
-            _get_attribution_example(self.lbir1200_current, '20.0', '31.5', 2015, self.current_academic_year.year + 1),
-            _get_attribution_example(self.lbir1300_current, '21.5', '40', 2015, self.current_academic_year.year),
-            # Attribution in next year
-            _get_attribution_example(self.lagro2500_next, '29', '10', 2015, 2020)
-        ]
 
-    def _create_entity_container_yrs(self):
-        self.lbir1200_current.allocation_entity = self.agro_entity
-        self.lbir1200_current.save()
-        self.lbir1300_current.allocation_entity = self.agro_entity
-        self.lbir1300_current.save()
-        self.lbir1200_next.allocation_entity = self.agro_entity
-        self.lbir1200_next.save()
-        self.lbir1300_next.allocation_entity = self.agro_entity
-        self.lbir1300_next.save()
-        self.lagro1600_next.allocation_entity = self.agro_entity
-        self.lagro1600_next.save()
-        self.lagro2500_next.allocation_entity = self.agro_entity
-        self.lagro2500_next.save()
-        self.ldroi1500_current.allocation_entity = self.drt_entity
-        self.ldroi1500_current.save()
+def _get_default_application_list(cls):
+    return [
+        _get_application_example(cls.lagro1600_next, '15', '0')
+    ]
+
+
+def _get_default_attribution_list(cls):
+    return [
+        # Attribution in current year
+        _get_attribution_example(cls.lbir1200_current, '20.0', '31.5', 2015, cls.current_academic_year.year + 1),
+        _get_attribution_example(cls.lbir1300_current, '21.5', '40', 2015, cls.current_academic_year.year),
+        # Attribution in next year
+        _get_attribution_example(cls.lagro2500_next, '29', '10', 2015, 2020)
+    ]
+
+
+def _create_entity_container_yrs(cls):
+    cls.lbir1200_current.allocation_entity = cls.agro_entity
+    cls.lbir1200_current.save()
+    cls.lbir1300_current.allocation_entity = cls.agro_entity
+    cls.lbir1300_current.save()
+    cls.lbir1200_next.allocation_entity = cls.agro_entity
+    cls.lbir1200_next.save()
+    cls.lbir1300_next.allocation_entity = cls.agro_entity
+    cls.lbir1300_next.save()
+    cls.lagro1600_next.allocation_entity = cls.agro_entity
+    cls.lagro1600_next.save()
+    cls.lagro2500_next.allocation_entity = cls.agro_entity
+    cls.lagro2500_next.save()
+    cls.ldroi1500_current.allocation_entity = cls.drt_entity
+    cls.ldroi1500_current.save()
 
 
 def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None,

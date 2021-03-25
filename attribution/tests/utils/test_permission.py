@@ -23,51 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-
-from django.contrib.auth.models import User
+import mock
 from django.test import TestCase
 
+from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 from attribution.utils import permission
-from base.models.enums import academic_calendar_type
-from base.tests.models import test_academic_year, test_academic_calendar
-
-now = datetime.datetime.now()
-
-CURRENT_YEAR = now.year
-NEXT_YEAR = now.year + 1
+from base.tests.factories.user import UserFactory
 
 
-class TestPermission(TestCase):
+class TestIsOnlineApplicationOpened(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.a_user = UserFactory()
 
-    def setUp(self):
-        self.a_user = User.objects.create_user(username='legat', email='legat@localhost', password='top_secret')
+    @mock.patch.object(ApplicationCoursesRemoteCalendar, '__init__', return_value=None)
+    @mock.patch.object(ApplicationCoursesRemoteCalendar, 'get_target_years_opened', return_value=[])
+    def test_is_online_application_opened_case_closed_on_remote_server(self, *mock_obj):
+        self.assertFalse(
+            permission.is_online_application_opened(self.a_user)
+        )
 
-    def test_permission_is_undefined_no_academic_year(self):
-        self.assertEqual(permission.is_online_application_opened(self.a_user), False)
-
-    def test_permission_is_undefined_no_academic_calendar(self):
-        test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
-        test_academic_year.create_academic_year_with_year(NEXT_YEAR)
-        self.assertEqual(permission.is_online_application_opened(self.a_user), False)
-
-    def test_application_session_period_opened(self):
-        current_academic_year = test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
-        test_academic_year.create_academic_year_with_year(NEXT_YEAR)
-
-        test_academic_calendar.create_academic_calendar(current_academic_year,
-                                                        academic_calendar_type.TEACHING_CHARGE_APPLICATION,
-                                                        now,
-                                                        now)
-
-        self.assertEqual(permission.is_online_application_opened(self.a_user), True)
-
-    def test_application_session_period_closed(self):
-        current_academic_year = test_academic_year.create_academic_year_with_year(CURRENT_YEAR)
-        test_academic_year.create_academic_year_with_year(NEXT_YEAR)
-        two_weeks_ago = datetime.datetime.today() - datetime.timedelta(15)
-        test_academic_calendar.create_academic_calendar(current_academic_year,
-                                                        academic_calendar_type.TEACHING_CHARGE_APPLICATION,
-                                                        two_weeks_ago,
-                                                        two_weeks_ago + datetime.timedelta(1))
-        self.assertEqual(permission.is_online_application_opened(self.a_user), False)
+    @mock.patch.object(ApplicationCoursesRemoteCalendar, '__init__', return_value=None)
+    @mock.patch.object(ApplicationCoursesRemoteCalendar, 'get_target_years_opened', return_value=[2020])
+    def test_is_online_application_opened_case_opened_on_remote_server(self, *mock_obj):
+        self.assertTrue(
+            permission.is_online_application_opened(self.a_user)
+        )

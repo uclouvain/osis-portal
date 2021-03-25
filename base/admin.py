@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,9 +27,6 @@ from django.contrib import admin
 
 from base.models import *
 from base.models import education_group, education_group_type, education_group_year
-
-admin.site.register(academic_calendar.AcademicCalendar,
-                    academic_calendar.AcademicCalendarAdmin)
 
 admin.site.register(academic_year.AcademicYear,
                     academic_year.AcademicYearAdmin)
@@ -70,20 +67,8 @@ admin.site.register(learning_unit_year.LearningUnitYear,
 admin.site.register(learning_unit_enrollment.LearningUnitEnrollment,
                     learning_unit_enrollment.LearningUnitEnrollmentAdmin)
 
-admin.site.register(offer.Offer,
-                    offer.OfferAdmin)
-
 admin.site.register(offer_enrollment.OfferEnrollment,
                     offer_enrollment.OfferEnrollmentAdmin)
-
-admin.site.register(external_offer.ExternalOffer,
-                    external_offer.ExternalOfferAdmin)
-
-admin.site.register(offer_year.OfferYear,
-                    offer_year.OfferYearAdmin)
-
-admin.site.register(offer_year_domain.OfferYearDomain,
-                    offer_year_domain.OfferYearDomainAdmin)
 
 admin.site.register(organization.Organization,
                     organization.OrganizationAdmin)
@@ -93,6 +78,9 @@ admin.site.register(person.Person,
 
 admin.site.register(student.Student,
                     student.StudentAdmin)
+
+admin.site.register(student_specific_profile.StudentSpecificProfile,
+                    student_specific_profile.StudentSpecificProfileAdmin)
 
 admin.site.register(tutor.Tutor,
                     tutor.TutorAdmin)

@@ -35,7 +35,7 @@ class LearningUnitEnrollmentAdmin(SerializableModelAdmin):
     list_filter = ('learning_unit_year__academic_year', 'enrollment_state',)
     raw_id_fields = ('offer_enrollment', 'learning_unit_year')
     search_fields = ['learning_unit_year__acronym',
-                     'offer_enrollment__offer_year__acronym',
+                     'offer_enrollment__education_group_year__acronym',
                      'offer_enrollment__student__registration_id',
                      'offer_enrollment__student__person__first_name',
                      'offer_enrollment__student__person__last_name']
@@ -58,7 +58,7 @@ class LearningUnitEnrollment(SerializableModel):
 
     @property
     def offer(self):
-        return self.offer_enrollment.offer_year
+        return self.offer_enrollment.education_group_year
 
     def __str__(self):
         return u"%s - %s" % (self.learning_unit_year, self.offer_enrollment.student)
@@ -68,7 +68,7 @@ def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=Non
     qs = LearningUnitEnrollment.objects.select_related("learning_unit_year__academic_year",
                                                          "learning_unit_year__learning_unit",
                                                          "offer_enrollment__student__person",
-                                                         "offer_enrollment__offer_year",)\
+                                                         "offer_enrollment__education_group_year",)\
         .filter(learning_unit_year__in=learning_unit_years)\
         .order_by('offer_enrollment__student__person__last_name', 'offer_enrollment__student__person__first_name')
 
@@ -80,6 +80,6 @@ def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=Non
     return qs
 
 
-def find_by_student_and_offer_year(student, off_year):
+def find_by_student_and_education_group_year(student, educ_group_year):
     return LearningUnitEnrollment.objects.filter(offer_enrollment__student=student)\
-                                         .filter(offer_enrollment__offer_year=off_year)
+                                         .filter(offer_enrollment__education_group_year=educ_group_year)

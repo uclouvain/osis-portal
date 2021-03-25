@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,12 +27,23 @@
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 from openpyxl import Workbook
+from openpyxl.styles import Color
+from openpyxl.styles import Style
+from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.writer.excel import save_virtual_workbook
+
+from attribution.business.student_specific_profile import get_type_peps
 
 COLUMN_REGISTRATION_ID_NO = 5
 STATUS_COL_WIDTH = 10
 NOTE_COL_WIDTH = 10
 OPENPYXL_STRING_FORMAT = '@'
+BORDER_LEFT = Border(
+    left=Side(border_style=BORDER_MEDIUM,
+              color=Color('FF000000'),
+              ),
+)
+FIRST_COL_PEPS = 'L'
 
 
 def get_xls(student_list, a_learning_unit_year):
@@ -49,34 +60,62 @@ def _make_xls_list(student_list):
     workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = _("Students")
-    COLUMNS = [_('Program'),
-               _('Learning unit'),
-               _('Email'),
-               _('Student'),
-               _('Registration id'),
-               _('State'),
-               _('January'),
-               _('State'),
-               _('June'),
-               _('State'),
-               _('September')]
-    worksheet1.append(col for col in COLUMNS)
+    columns = [
+        _('Program'),
+        _('Learning unit'),
+        _('Email'),
+        _('Student'),
+        _('Registration id'),
+        _('State'),
+        _('January'),
+        _('State'),
+        _('June'),
+        _('State'),
+        _('September'),
+        _('Type of specific profile'),
+        _('Extra time (33% generally)'),
+        _('Large print'),
+        _('Specific room of examination'),
+        _('Other educational facilities'),
+        _('Details other educational facilities'),
+        _('Educational tutor'),
+    ]
+    worksheet1.append(col for col in columns)
     for student in student_list:
-        worksheet1.append([student.get('program'),
-                           student.get('acronym'),
-                           student.get('email'),
-                           student.get('name'),
-                           student.get('registration_id'),
-                           student.get('january_status'),
-                           student.get('january_note'),
-                           student.get('june_status'),
-                           student.get('june_note'),
-                           student.get('september_status'),
-                           student.get('september_note')
-                           ])
+        line_content = [
+            student.get('program'),
+            student.get('acronym'),
+            student.get('email'),
+            student.get('name'),
+            student.get('registration_id'),
+            student.get('january_status'),
+            student.get('january_note'),
+            student.get('june_status'),
+            student.get('june_note'),
+            student.get('september_status'),
+            student.get('september_note'),
+        ]
+
+        student_specific_profile = student.get('student_specific_profile')
+
+        if student_specific_profile:
+            line_content.extend([
+                get_type_peps(student_specific_profile),
+                str(_('Yes')) if student_specific_profile.arrangement_additional_time else '-',
+                str(_('Yes')) if student_specific_profile.arrangement_appropriate_copy else '-',
+                str(_('Yes')) if student_specific_profile.arrangement_specific_locale else '-',
+                str(_('Yes')) if student_specific_profile.arrangement_other else '-',
+                str(student_specific_profile.arrangement_comment)
+                if student_specific_profile.arrangement_comment else '-',
+                str(student_specific_profile.guide) if student_specific_profile.guide else '-',
+            ])
+        else:
+            line_content.extend(["-", "-", "-", "-", "-", "-", "-"])
+        worksheet1.append(line_content)
 
     _columns_resizing(worksheet1)
     _columns_registration_id_to_text(worksheet1)
+    _set_peps_border(worksheet1, len(student_list) + 1)
     return save_virtual_workbook(workbook)
 
 
@@ -106,14 +145,44 @@ def _columns_resizing(ws):
     col_september_status.width = STATUS_COL_WIDTH
     col_september_note = ws.column_dimensions['K']
     col_september_note.width = NOTE_COL_WIDTH
+    col_type_of_specific_profile = ws.column_dimensions['L']
+    col_type_of_specific_profile.width = 20
+    col_extra_time = ws.column_dimensions['M']
+    col_extra_time.width = 25
+    col_large_print = ws.column_dimensions['N']
+    col_large_print.width = 15
+    col_specific_room_of_examination = ws.column_dimensions['O']
+    col_specific_room_of_examination.width = 25
+    col_other_educational_facilities = ws.column_dimensions['P']
+    col_other_educational_facilities.width = 25
+    col_educational_tutor = ws.column_dimensions['Q']
+    col_educational_tutor.width = 30
+    col_educational_tutor = ws.column_dimensions['R']
+    col_educational_tutor.width = 30
 
 
 def _columns_registration_id_to_text(ws):
     """
-    Necesseray, otherwise the registration_id is considered as a number and set with a quote while looking at the
+    Necessary, otherwise the registration_id is considered as a number and set with a quote while looking at the
     input line
     """
     for row in ws.iter_rows():
         for cell in row:
             if cell.col_idx == COLUMN_REGISTRATION_ID_NO:
                 cell.number_format = OPENPYXL_STRING_FORMAT
+
+
+def _set_peps_border(ws, last_row_number):
+    """
+    Set border at the left of the first peps column
+    """
+    for cpt in range(1, last_row_number + 1):
+        cell = ws["{}{}".format(FIRST_COL_PEPS, cpt)]
+        _update_border_for_first_peps_column(cell)
+
+
+def _update_border_for_first_peps_column(cell):
+    c = cell.style if cell.has_style else Style()
+
+    c.border = BORDER_LEFT
+    cell.style = c

@@ -43,7 +43,7 @@
             {% endif %}
             <li>{% trans 'My application' %}</li>
         {% endblock %}
-        <a href="http://uclouvain.github.io/osis/assets/user_manual_portal_fr.pdf"
+        <a href="{{ help_button_url }}"
            target="help" id="lnk_user_manual_section"><span
                 class="glyphicon glyphicon-question-sign pull-right"
                 style="font-size: 14pt; color: green"
@@ -73,12 +73,12 @@
                     <div class="col-md-2">
                         <label>{% trans 'Code' %}</label>
                         <br>
-                        {{ form.learning_unit_year.acronym }}
+                        {{ learning_unit_year.acronym }}
                     </div>
                     <div class="col-md-6">
                         <label>{% trans 'Title' %}</label>
                         <br>
-                        {{ form.learning_unit_year.complete_title }}
+                        {{ learning_unit_year.complete_title }}
                     </div>
                 </div>
                 <br>
@@ -141,7 +141,7 @@
                     <div class="col-md-12">
                         <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                              title="{% if not can_be_saved %}
-                                                {% trans 'Wait validation' %}
+                                                {% trans 'Please refresh the page' %}
                                             {% endif %}">
                             <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'Submit' %}"
                                     {% if not can_be_saved %} disabled {% endif %}>

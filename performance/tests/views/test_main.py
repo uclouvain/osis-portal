@@ -25,16 +25,18 @@
 ##############################################################################
 import json
 
+from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from mock import patch
 
-import base.tests.models.test_offer_year
 import base.tests.models.test_student
 import performance.tests.models.test_student_performance
 from base.forms.base_forms import RegistrationIdForm
+from base.tests.factories.education_group_year import EducationGroupYearFactory
+from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from performance.models.enums import offer_registration_state
@@ -44,14 +46,25 @@ from performance.views import main
 OK = 200
 ACCESS_DENIED = 401
 
+MULTIPLE_STUDENT_ERROR = _("A problem was detected with your registration : 2 registration id's are "
+                           "linked to your user.</br> Please contact <a href="
+                           "\"{registration_department_url}\" target=\"_blank\">the Registration "
+                           "department</a>. Thank you.") \
+    .format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
+
 
 class TestMain(TestCase):
-    def setUp(self):
-        self.student_performance = performance.tests.models.test_student_performance.create_student_performance()
-        self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = performance.tests.models.test_student_performance.load_json_file(
+    @classmethod
+    def setUpTestData(cls):
+        cls.student_performance = performance.tests.models.test_student_performance.create_student_performance()
+        cls.education_group_year = EducationGroupYearFactory(
+            academic_year__year=2016,
+            acronym="VETE11BA",
+            title="Première année de bachelier en médecine vétérinaire",
+        )
+        cls.json_points = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points2.json")
-        self.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
+        cls.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points3.json")
 
     def test_convert_student_performance_to_dic(self):
@@ -82,14 +95,17 @@ class TestMain(TestCase):
 
 
 class ViewPerformanceHomeTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
 
-        self.student = StudentFactory()
+        cls.student = StudentFactory()
 
-        self.url = reverse('performance_home')
+        cls.url = reverse('performance_home')
+
+    def setUp(self):
         self.client.force_login(self.student.person.user)
 
     def test_user_not_logged(self):
@@ -108,9 +124,10 @@ class ViewPerformanceHomeTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
-        StudentFactory(person=self.student.person)
-        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-                "contact the registration departement (SIC). Thank you.")
+        student2 = StudentFactory(person=self.student.person)
+        education_group_year = EducationGroupYearFactory()
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
 
         response = self.client.get(self.url)
 
@@ -120,7 +137,7 @@ class ViewPerformanceHomeTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, msg)
+        self.assertEqual(messages[0].message, MULTIPLE_STUDENT_ERROR)
 
     def test_with_empty_programs_list(self):
         response = self.client.get(self.url)
@@ -145,24 +162,27 @@ class ViewPerformanceHomeTest(TestCase):
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'],
                          [{
-                              'academic_year': '2017 - 2018',
-                              'acronym': a_student_performance.acronym,
-                              'offer_registration_state': 'CESSATION',
-                              'pk': a_student_performance.pk,
-                              'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
-                          }]
+                             'academic_year': '2017 - 2018',
+                             'acronym': a_student_performance.acronym,
+                             'offer_registration_state': 'CESSATION',
+                             'pk': a_student_performance.pk,
+                             'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
+                         }]
                          )
         self.assertEqual(response.context['registration_states_to_show'],
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)
 
 
 class DisplayResultForSpecificStudentPerformanceTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
 
-        self.student = StudentFactory()
+        cls.student = StudentFactory()
+
+    def setUp(self):
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
 
         self.url = reverse('performance_student_result', args=[self.student_performance.pk])
@@ -184,9 +204,10 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
-        StudentFactory(person=self.student.person)
-        msg = _("A problem was detected with your registration : 2 registration id's are linked to your user. Please "
-                "contact the registration departement (SIC). Thank you.")
+        student2 = StudentFactory(person=self.student.person)
+        education_group_year = EducationGroupYearFactory()
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
+        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
 
         response = self.client.get(self.url)
 
@@ -196,7 +217,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, msg)
+        self.assertEqual(messages[0].message, MULTIPLE_STUDENT_ERROR)
 
     def test_when_none_student_performance(self):
         self.student_performance.delete()
@@ -242,21 +263,75 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
             'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-                           % {"session_month": self.student_performance.get_session_locked_display()}
+            % {"session_month": self.student_performance.get_session_locked_display()}
+        self.assertEqual(response.context['not_authorized_message'],
+                         response_message)
+
+    def test_not_authorized_verrour_solde(self):
+        self.student_performance.authorized = False
+        with open("performance/tests/ressources/points_verrou_solde.json") as f:
+            self.student_performance.data = json.load(f)
+        self.student_performance.save()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'performance_result_student.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
+        self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
+        self.assertEqual(response.context['update_date'], self.student_performance.update_date)
+        self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = \
+            _('The publication of the notes from the %(session_month)s session is not authorized '
+              'because, unless there is an error, there is still a balance of '
+              'your registration fees to be paid.<br/><br/>If you have paid very recently, '
+              'given the technical and banking delays, your situation may not yet have been updated. '
+              'In this case, your notes will be available the day after the regularization of your file. '
+              'If you have any questions about your debt to the university, please contact '
+              'the <a href=\"%(accounting_enrollment_service_url)s\" target=\"_blank\">Accounting Department '
+              'of the Enrollment Service</a>') % {
+               "session_month": self.student_performance.get_session_locked_display(),
+               "accounting_enrollment_service_url": settings.REGISTRATION_ACCOUNT_SERVICE_URL
+                }
+        self.assertEqual(response.context['not_authorized_message'],
+                         response_message)
+
+    def test_not_authorized_verrou_faculte(self):
+        self.student_performance.authorized = False
+        with open("performance/tests/ressources/points_verrou_faculte.json") as f:
+            self.student_performance.data = json.load(f)
+        self.student_performance.save()
+
+        response = self.client.get(self.url)
+
+        self.assertTemplateUsed(response, 'performance_result_student.html')
+        self.assertEqual(response.status_code, OK)
+
+        self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
+        self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
+        self.assertEqual(response.context['update_date'], self.student_performance.update_date)
+        self.assertEqual(response.context['fetch_timed_out'], False)
+        response_message = _(
+            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
+            % {"session_month": self.student_performance.get_session_locked_display()}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 
 
 class SelectStudentTest(TestCase):
-    def setUp(self):
-        self.person = PersonFactory()
-        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+        cls.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
-        self.student = StudentFactory()
-        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
-        self.url = reverse('performance_administration')
+        cls.student = StudentFactory()
+        cls.student_performance = StudentPerformanceFactory(registration_id=cls.student.registration_id)
+        cls.url = reverse('performance_administration')
+
+    def setUp(self):
         self.client.force_login(self.person.user)
 
     def test_user_not_logged(self):
@@ -320,17 +395,20 @@ class SelectStudentTest(TestCase):
 
 
 class VisualizeStudentPrograms(TestCase):
-    def setUp(self):
-        self.person = PersonFactory()
-        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+        cls.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
-        self.student = StudentFactory()
+        cls.student = StudentFactory()
+
+        cls.url = reverse('performance_student_programs_admin', args=[cls.student.registration_id])
+
+    def setUp(self):
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
                                                              academic_year=2017)
-
-        self.url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
         self.client.force_login(self.person.user)
 
     def test_user_not_logged(self):
@@ -387,12 +465,12 @@ class VisualizeStudentPrograms(TestCase):
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'],
                          [{
-                              'academic_year': '2017 - 2018',
-                              'acronym': self.student_performance.acronym,
-                              'offer_registration_state': 'CESSATION',
-                              'pk': self.student_performance.pk,
-                              'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
-                          }]
+                             'academic_year': '2017 - 2018',
+                             'acronym': self.student_performance.acronym,
+                             'offer_registration_state': 'CESSATION',
+                             'pk': self.student_performance.pk,
+                             'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
+                         }]
                          )
         self.assertEqual(response.context['registration_states_to_show'],
                          offer_registration_state.STATES_TO_SHOW_ON_PAGE)
@@ -431,27 +509,26 @@ class VisualizeStudentPrograms(TestCase):
 
 
 class VisualizeStudentResult(TestCase):
-
-    def setUp(self):
-        self.person = PersonFactory()
-        self.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
+    @classmethod
+    def setUpTestData(cls):
+        cls.person = PersonFactory()
+        cls.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
+        cls.a_person = PersonFactory()
+
+    def setUp(self):
         self.student_performance = StudentPerformanceFactory(acronym='CHIM1BA')
         self.url = reverse('performance_student_result_admin', args=[self.student_performance.pk])
-
-    def tearDown(self):
-        self.client.logout()
+        self.client.force_login(self.a_person.user)
 
     def test_user_not_logged(self):
+        self.client.logout()
         response = self.client.get(self.url)
         self.assertRedirects(response, "/login/?next={}".format(self.url))
 
     def test_user_has_not_permission(self):
-        a_person = PersonFactory()
-        self.client.force_login(a_person.user)
-
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, ACCESS_DENIED)
@@ -526,13 +603,12 @@ class VisualizeStudentResult(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
             'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-                           % {"session_month": self.student_performance.get_session_locked_display()}
+            % {"session_month": self.student_performance.get_session_locked_display()}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 
 
 class ViewPerformanceByAcronymAndYear(TestCase):
-
     def __test_access_denied(self, url):
         response = self.client.get(url)
         self.assertEqual(response.status_code, ACCESS_DENIED)
@@ -543,30 +619,33 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'performance_result_student.html')
 
-    def setUp(self):
-        self.simple_acronym_input = 'DROI1BA'
-        self.simple_acronym = "DROI1BA"
-        self.complex_acronym_input = 'DROI2MS_G'
-        self.complex_acronym = "DROI2MS/G"
-        self.invalid_acronym_input = "BIR1BA"
-        self.acronym_with_space_input = "IAG IS"
-        self.acronym_with_space = "IAG IS"
-        self.valid_year = 2017
-        self.invalid_year = 2020
-        self.person = PersonFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.simple_acronym_input = 'DROI1BA'
+        cls.simple_acronym = "DROI1BA"
+        cls.complex_acronym_input = 'DROI2MS_G'
+        cls.complex_acronym = "DROI2MS/G"
+        cls.invalid_acronym_input = "BIR1BA"
+        cls.acronym_with_space_input = "IAG IS"
+        cls.acronym_with_space = "IAG IS"
+        cls.valid_year = 2017
+        cls.invalid_year = 2020
+        cls.person = PersonFactory()
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
-        self.student = StudentFactory()
-        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
-                                                             academic_year=self.valid_year,
-                                                             acronym=self.simple_acronym)
-        self.student_performance_complex = StudentPerformanceFactory(registration_id=self.student.registration_id,
-                                                                     academic_year=self.valid_year,
-                                                                     acronym=self.complex_acronym)
-        self.student_performance_with_space = StudentPerformanceFactory(registration_id=self.student.registration_id,
-                                                                        academic_year=self.valid_year,
-                                                                        acronym=self.acronym_with_space)
+        cls.student = StudentFactory()
+        cls.student_performance = StudentPerformanceFactory(registration_id=cls.student.registration_id,
+                                                            academic_year=cls.valid_year,
+                                                            acronym=cls.simple_acronym)
+        cls.student_performance_complex = StudentPerformanceFactory(registration_id=cls.student.registration_id,
+                                                                    academic_year=cls.valid_year,
+                                                                    acronym=cls.complex_acronym)
+        cls.student_performance_with_space = StudentPerformanceFactory(registration_id=cls.student.registration_id,
+                                                                       academic_year=cls.valid_year,
+                                                                       acronym=cls.acronym_with_space)
+
+    def setUp(self):
         self.client.force_login(self.student.person.user)
 
     def test_clean_acronym(self):

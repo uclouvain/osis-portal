@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:52+0200\n"
+"POT-Creation-Date: 2021-03-15 13:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,6 +47,9 @@ msgstr ""
 msgid "Applications of "
 msgstr ""
 
+msgid "Arrangements"
+msgstr ""
+
 msgid "Attribution administration"
 msgstr ""
 
@@ -55,9 +57,6 @@ msgid "Attributions"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
-
-msgid "Cancel the application"
 msgstr ""
 
 msgid "Charge"
@@ -72,7 +71,17 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
+msgctxt "applications"
+msgid "Code"
+msgstr ""
+
 msgid "Coordinator"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete the application"
 msgstr ""
 
 msgid "Deputy"
@@ -87,10 +96,16 @@ msgstr ""
 msgid "Deputy temporary"
 msgstr ""
 
+msgid "Details other educational facilities"
+msgstr ""
+
 msgid "Display teachers"
 msgstr ""
 
 msgid "ECT"
+msgstr ""
+
+msgid "Educational tutor"
 msgstr ""
 
 msgid "Email"
@@ -105,6 +120,10 @@ msgstr ""
 msgid "Export the students list in Excel format"
 msgstr ""
 
+#, python-format
+msgid "Extra time (33% generally)"
+msgstr ""
+
 msgid "Faculties administration"
 msgstr ""
 
@@ -115,6 +134,9 @@ msgid "Function"
 msgstr ""
 
 msgid "Global id"
+msgstr ""
+
+msgid "Guide"
 msgstr ""
 
 msgid "Holder"
@@ -133,6 +155,9 @@ msgid "January"
 msgstr ""
 
 msgid "June"
+msgstr ""
+
+msgid "Large print"
 msgstr ""
 
 msgid "Last name"
@@ -192,10 +217,16 @@ msgstr "No students enrolled"
 msgid "No teaching charge in "
 msgstr ""
 
+msgid "No vacant corresponding activity"
+msgstr ""
+
 msgid "No vacant corresponding course"
 msgstr ""
 
 msgid "Non-renewable"
+msgstr ""
+
+msgid "Other educational facilities"
 msgstr ""
 
 msgid "Pedagogy proposal"
@@ -208,6 +239,9 @@ msgid "Please enter the code of the course to which you would like to apply"
 msgstr ""
 
 msgid "Please precise at least a faculty or a code (or a part of a code)"
+msgstr ""
+
+msgid "Please refresh the page"
 msgstr ""
 
 msgid "Produce xls"
@@ -234,6 +268,12 @@ msgstr ""
 msgid "Schedule"
 msgstr ""
 
+msgid "Schedule unavailable"
+msgstr ""
+
+msgid "Scores encoding"
+msgstr ""
+
 msgid "Search"
 msgstr ""
 
@@ -244,6 +284,9 @@ msgid "Sept."
 msgstr ""
 
 msgid "September"
+msgstr ""
+
+msgid "Specific room of examination"
 msgstr ""
 
 msgid "Specifications"
@@ -270,6 +313,21 @@ msgstr ""
 msgid "Teaching charge"
 msgstr ""
 
+msgid "The Excel lists for encoding scores are available in"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s opened on "
+"%(start_date)s to %(end_date)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s to %(end_date)s"
+msgstr ""
+
 msgid "The period of online application is closed"
 msgstr ""
 
@@ -277,13 +335,18 @@ msgid ""
 "The vacant volume of the next academic year is lower than the current one"
 msgstr ""
 
-msgid ""
-"The volume of charge is not available at the moment. Please try again later."
+msgid "This action will delete the application."
 msgstr ""
 
 msgid ""
 "This course is team-managed. The application to this activity is based on a "
 "paper transmission."
+msgstr ""
+
+#, python-format
+msgid ""
+"This course will be discontinued in %(academic_year)s following a program "
+"reform."
 msgstr ""
 
 msgid "Title"
@@ -301,6 +364,9 @@ msgid "Too much"
 msgstr ""
 
 msgid "Total"
+msgstr ""
+
+msgid "Type of specific profile"
 msgstr ""
 
 msgid "Vacant"
@@ -330,7 +396,10 @@ msgstr ""
 msgid "Vol.2 vacant"
 msgstr ""
 
-msgid "Wait validation"
+msgid "Warning, this is not a list for encoding scores."
+msgstr ""
+
+msgid "Yes"
 msgstr ""
 
 msgid "You already apply to this course."

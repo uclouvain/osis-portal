@@ -29,7 +29,7 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
-import base.tests.models.test_offer_year
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from performance import models as mdl_performance
 from performance.models import student_performance as mdl_perf
 from performance.models.enums import offer_registration_state
@@ -58,10 +58,17 @@ def load_json_file(json_path):
 
 
 class TestModelStudentPerformance(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.education_group_year = EducationGroupYearFactory(
+            academic_year__year=2016,
+            acronym="VETE11BA",
+            title="Première année de bachelier en médecine vétérinaire",
+        )
+        cls.json_points = load_json_file("performance/tests/ressources/points2.json")
+
     def setUp(self):
         self.student_performance = create_student_performance()
-        self.offer_year = base.tests.models.test_offer_year.create_offer_year()
-        self.json_points = load_json_file("performance/tests/ressources/points2.json")
 
     def test_search(self):
         student_performances = mdl_perf.search(registration_id=self.student_performance.registration_id)

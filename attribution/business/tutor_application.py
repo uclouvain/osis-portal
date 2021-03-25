@@ -23,26 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import time
+import datetime
 from decimal import Decimal
 
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-
+from django.db import transaction
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from attribution import models as mdl_attribution
+from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 from attribution.utils import tutor_application_epc
 from base import models as mdl_base
+from base.models.academic_year import AcademicYear
 from base.models.enums import learning_unit_year_subtypes
 from osis_common.messaging import message_config, send_message as message_service
 
 
-def get_application_list(global_id, academic_year=None):
+def get_application_list(global_id, academic_year):
     """
-        Return the list of attribution that a tutor have applied
+    Return the list of attribution that a tutor have applied in a specific academic year
     """
-    if not academic_year:
-        academic_year = get_application_year()
-
     attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
     if attrib and attrib.applications:
         application_list = list(_filter_by_years(attrib.applications, academic_year.year))
@@ -68,11 +66,6 @@ def mark_attribution_already_applied(attributions_vacant, global_id, application
 
         attribution['already_applied'] = already_applied
     return attributions_vacant
-
-
-def get_application_year():
-    # Application year is always for next year
-    return mdl_base.academic_year.find_next_academic_year()
 
 
 def create_or_update_application(global_id, application):
@@ -117,7 +110,13 @@ def delete_application(global_id, acronym, year):
 
 
 def send_mail_applications_summary(global_id):
-    application_list = get_application_list(global_id)
+    try:
+        application_courses_event = ApplicationCoursesRemoteCalendar().get_opened_academic_events()[0]
+    except IndexError:
+        return _('The period of online application is closed')
+
+    application_academic_year = AcademicYear.objects.get(year=application_courses_event.authorized_target_year)
+    application_list = get_application_list(global_id, application_academic_year)
     if not application_list:
         return _('No application found')
     person = mdl_base.person.find_by_global_id(global_id)
@@ -127,12 +126,12 @@ def send_mail_applications_summary(global_id):
     receivers = [message_config.create_receiver(person.id, person.email, person.language)]
     applications = _get_applications_table(application_list)
     table_applications = message_config.create_table('applications',
-                                                     [_('Acronym'), 'Vol. 1', 'Vol. 2'],
+                                                     [pgettext_lazy("applications", "Code"), 'Vol. 1', 'Vol. 2'],
                                                      applications)
     template_base_data = {
         'first_name': person.first_name,
         'last_name': person.last_name,
-
+        'application_courses_targeted_year': application_courses_event.authorized_target_year
     }
     message_content = message_config.create_message_content(html_template_ref, txt_template_ref,
                                                             [table_applications], receivers, template_base_data, None)
@@ -163,14 +162,17 @@ def _modify_application(application, l_container_year):
 
 
 def _create_application(global_id, application_to_create):
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if not attrib:
-        attrib = mdl_attribution.attribution_new.AttributionNew(global_id=global_id)
-    if not attrib.applications:
-        attrib.applications = []
-    application_to_create['updated_at'] = _get_unix_time()
-    attrib.applications.append(application_to_create)
-    return attrib.save()
+    with transaction.atomic():
+        attrib = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(
+            global_id=global_id,
+        ).first()
+        if not attrib:
+            attrib = mdl_attribution.attribution_new.AttributionNew(global_id=global_id)
+        if not attrib.applications:
+            attrib.applications = []
+        application_to_create['updated_at'] = _get_serialized_time()
+        attrib.applications.append(application_to_create)
+        return attrib.save()
 
 
 def can_be_updated(application):
@@ -179,16 +181,22 @@ def can_be_updated(application):
 
 
 def _update_application(global_id, application_to_update):
-    attrib = mdl_attribution.attribution_new.find_by_global_id(global_id)
-    if attrib and attrib.applications:
+    with transaction.atomic():
+        attrib = mdl_attribution.attribution_new.AttributionNew.objects.select_for_update().filter(
+            global_id=global_id,
+        ).first()
+        if not attrib:
+            return None
+
         acronym = application_to_update.get('acronym')
         year = application_to_update.get('year')
+
         # Remove and append new records to json array
         attrib.applications = _delete_application_in_list(acronym, year, attrib.applications)
-        application_to_update['updated_at'] = _get_unix_time()
+        application_to_update['updated_at'] = _get_serialized_time()
         attrib.applications.append(application_to_update)
+
         return attrib.save()
-    return None
 
 
 def _delete_application_in_list(acronym, year, application_list):
@@ -206,12 +214,12 @@ def _find_application(acronym, year, applications_list):
 
 def _get_applications_table(application_list):
     applications = []
-    validation_str = "({})".format(_('Wait validation'))
     for application in application_list:
-        applications.append(("{} {}".format(validation_str if application.get('pending') else '',
-                                            application.get('acronym', '')),
-                             application.get('charge_lecturing_asked', ''),
-                             application.get('charge_practical_asked', '')))
+        applications.append(
+            (application.get('acronym', ''),
+             application.get('charge_lecturing_asked', ''),
+             application.get('charge_practical_asked', ''))
+        )
     return applications
 
 
@@ -221,9 +229,8 @@ def _filter_by_years(attribution_list, year):
             yield attribution
 
 
-def _get_unix_time():
-    now = timezone.now()
-    return time.mktime(now.timetuple())
+def _get_serialized_time() -> str:
+    return str(datetime.datetime.now())
 
 
 def _order_by_pending_and_acronym(application_list):

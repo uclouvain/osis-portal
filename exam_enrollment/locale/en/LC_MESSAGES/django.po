@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:57+0200\n"
+"POT-Creation-Date: 2020-11-03 08:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,19 +28,79 @@ msgstr ""
 msgid "Credited"
 msgstr ""
 
+msgid "Exam enrollment is not available"
+msgstr ""
+
 msgid "First name"
+msgstr ""
+
+msgid ""
+"For the <strong><u>distance</u></strong> exams, in view of the difficulties "
+"to find yourself in good conditions to take your exams from your place of "
+"living, it is possible to come in a equipped room at UCLouvain."
+msgstr ""
+
+msgid "Form not submitted !"
+msgstr ""
+
+msgid ""
+"In case of force majeure, it is always possible to modify the choices made "
+"via this questionnaire, by contacting your faculty."
+msgstr ""
+
+msgid ""
+"In case one of my oral exams is or will be held in distance with Teams, I "
+"would present it :"
+msgstr ""
+
+msgid ""
+"In case one of my written exams is or will be held in distance with "
+"Gradescope, I would present it :"
+msgstr ""
+
+msgid ""
+"In case one of my written exams is or will be held in distance with Moodle, "
+"I would present it :"
 msgstr ""
 
 msgid "Last name"
 msgstr ""
 
+msgid "No"
+msgstr ""
+
+msgid "No exam enrollment found"
+msgstr ""
+
+msgid "Not concerned"
+msgstr ""
+
+msgid "Please complete <b>IMPERATIVELY</b> the questionnaire."
+msgstr ""
+
+msgid "Please complete IMPERATIVELY the questionnaire below"
+msgstr ""
+
 msgid "Register to exams or update my exam enrollments"
+msgstr ""
+
+msgid ""
+"The first-year bachelor student must obligatorily register for the January "
+"exam session all the learning units of the first annual block taught in the "
+"first quadrimester, including those giving rise to a partial test (Art. 83 "
+"of the RGEE)."
 msgstr ""
 
 msgid "Which action do you want to perform ?"
 msgstr ""
 
+msgid "Yes"
+msgstr ""
+
 msgid "You are outside the exams enrollment period"
+msgstr ""
+
+msgid "You can not enrol to exam"
 msgstr ""
 
 msgid "acronym"
@@ -59,7 +119,10 @@ msgid "exam_enrollment_form_loading"
 msgstr "Exam enrollment form is loading."
 
 msgid "exam_enrollment_form_submitted"
-msgstr "Exam enrollment form successfully submitted."
+msgstr "Exams enrollment form successfully submitted."
+
+msgid "exam_enrollment_form_submitted_covid_period"
+msgstr "Questionnaire and exams enrollment form successfully submitted."
 
 msgid "exams_enrollment"
 msgstr "Exams enrollment"
@@ -67,11 +130,27 @@ msgstr "Exams enrollment"
 msgid "form_unavailable"
 msgstr "Form unavailable"
 
+msgid "from my place of living"
+msgstr ""
+
+msgid ""
+"in an equipped room at UCLouvain (because it is impossible for me to present "
+"it from my place of living)"
+msgstr ""
+
 msgid "info_exam_enrollment_by_default"
 msgstr ""
 "<b>You are enrolled to all checked exams below. <br>If it fits your needs, "
-"then you don't have to do anything. </b><br>To modify your exam enrollments, "
-"please check/uncheck boxes below and then click on 'Validate changes'."
+"please validate your exams enrollment. </b><br>To "
+"modify your exam enrollments, please check/uncheck boxes below and then "
+"click on 'Validate my exams enrollment'."
+
+msgid "info_exam_enrollment_by_default_covid_period"
+msgstr ""
+"<b>You are enrolled to all checked exams below. <br>If it fits your needs, "
+"please validate the questionnaire and your exams enrollment. </b><br>To "
+"modify your exam enrollments, please check/uncheck boxes below and then "
+"click on 'Validate the questionnaire and my exams enrollment'."
 
 msgid "inscr"
 msgstr ""
@@ -149,7 +228,10 @@ msgid "title"
 msgstr ""
 
 msgid "validate_changes"
-msgstr "Validate changes"
+msgstr "Validate my exams enrollment"
+
+msgid "validate_changes_covid_period"
+msgstr "Validate the questionnaire and my exams enrollment"
 
 msgid "year"
 msgstr "Year"

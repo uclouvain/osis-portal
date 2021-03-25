@@ -70,22 +70,20 @@ class Person(SerializableModel):
 
     def __str__(self):
         first_name = ""
-        middle_name = ""
         last_name = ""
         if self.first_name:
             first_name = self.first_name
-        if self.middle_name:
-            middle_name = self.middle_name
         if self.last_name:
             last_name = self.last_name + ","
 
-        return u"%s %s %s" % (last_name.upper(), first_name, middle_name)
+        return u"%s %s" % (last_name.upper(), first_name)
 
     class Meta:
         permissions = (
             ("is_tutor", "Is tutor"),
             ("is_student", "Is student"),
             ("is_administrator", "Is administrator"),
+            ("is_internship_master", "Is internship master"),
             ("is_faculty_administrator", "Is faculty administrator"),
             ("can_access_administration", "Can access administration"),
         )

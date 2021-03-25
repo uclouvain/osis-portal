@@ -9,7 +9,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -61,14 +61,15 @@
                     <div class="col-md-12 alert alert-warning">
                         {% trans 'The server is actually overloaded. Please excuse us and try again later.' %}
                     </div>
-                    {% elif not_authorized_message %}
+                {% elif not_authorized_message %}
                     <div class="col-md-12 alert alert-danger">
-                        {{ not_authorized_message }}
+                        {{ not_authorized_message | safe }}
                     </div>
                 {% endif %}
                 <div class="row container-fluid">
                     <div class="col-md-6 text-left">
-                        <small><strong>{% trans 'Date of the next document regeneration' %}:</strong> {{ update_date }}</small>
+                        <small><strong>{% trans 'Date of the next document regeneration' %}:</strong> {{ update_date }}
+                        </small>
                     </div>
                     <div class="col-md-6 text-right">
                         <small><strong>{% trans 'Generated on' %}:</strong> {{ creation_date }}</small>
@@ -76,10 +77,48 @@
                 </div>
                 <hr>
                 <div class="row container-fluid">
-                    <div class="col-md-6 pull-left">
+                    <div class="col-md-6 pull-left" id="courseMessagesDivId">
                         {% if course_registration_message %}
-                            <div class="alert alert-info" role="alert">
-                                {{ course_registration_message |safe }}
+                            <div class="row">
+                                <div class="alert alert-info" role="alert">
+                                    {{ course_registration_message |safe }}
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if on_site_exams_info and covid_period %}
+                            <div class="row">
+                                <div class="alert alert-warning" role="alert">
+                                    <h4>{% trans 'Session of ' %}{% trans on_site_exams_info.moisSession %}</h4>
+                                    <p>{% trans 'For the ' %}<strong><u>{% trans 'distance exams' %}</u></strong>{% trans ', if applicable, I will present one or more' %}
+                                    </p>
+                                    <ul>
+                                        <li>{% trans 'written exams with Moodle, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.examMoodle is None %}{% trans 'Not defined' %}
+                                                {% elif on_site_exams_info.examMoodle == "SUR_SITE" %}{% trans 'Yes' %}
+                                                {% elif on_site_exams_info.examMoodle == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif on_site_exams_info.examMoodle == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% else %}{% trans 'Error' %}
+                                            {% endif %}</li>
+                                        <li>{% trans 'written exams with Gradescope, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.examTestWe is None %}{% trans 'Not defined' %}
+                                                {% elif on_site_exams_info.examTestWe == "SUR_SITE" %}{% trans 'Yes' %}
+                                                {% elif on_site_exams_info.examTestWe == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif on_site_exams_info.examTestWe == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% else %}{% trans 'Error' %}
+                                            {% endif %}</li>
+                                        <li>{% trans 'oral exams with Teams, in a room at UCLouvain' %} :
+                                            {% if  on_site_exams_info.examTeams is None %}{% trans 'Not defined' %}
+                                                {% elif on_site_exams_info.examTeams == "SUR_SITE" %}{% trans 'Yes' %}
+                                                {% elif on_site_exams_info.examTeams == "PAS_SUR_SITE" %}{% trans 'No' %}
+                                                {% elif on_site_exams_info.examTeams == "NON_CONCERNE" %}{% trans 'Not concerned' %}
+                                                {% else %}{% trans 'Error' %}
+                                            {% endif %}</li>
+                                        <br/>
+                                    </ul>
+                                    <p>
+                                        <strong>{% trans 'If this information is not correct, please contact your faculty' %}</strong>
+                                    </p>
+                                </div>
                             </div>
                         {% endif %}
                     </div>

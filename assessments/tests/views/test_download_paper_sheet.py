@@ -26,7 +26,7 @@
 
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import User
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
 
 from assessments.tests.factories.score_encoding import ScoreEncodingFactory
@@ -34,29 +34,28 @@ from base.tests.models import test_tutor
 
 
 class DownloadPaperSheetTest(TestCase):
-    def setUp(self):
-        self.score_encoding = ScoreEncodingFactory()
-        self.global_id = self.score_encoding.global_id
-        self.tutor = test_tutor.create_tutor()
-        self.tutor.person.user = User.objects.create_user('testo', password='testopw')
-        self.tutor.person.save()
+    @classmethod
+    def setUpTestData(cls):
+        cls.score_encoding = ScoreEncodingFactory()
+        cls.global_id = cls.score_encoding.global_id
+        cls.tutor = test_tutor.create_tutor()
+        cls.tutor.person.user = User.objects.create_user('testo', password='testopw')
+        cls.tutor.person.save()
         perm = Permission.objects.get(codename="is_tutor")
-        self.tutor.person.user.user_permissions.add(perm)
+        cls.tutor.person.user.user_permissions.add(perm)
 
     def test_when_score_sheet(self):
         self.tutor.person.global_id = self.global_id
         self.tutor.person.save()
-        c = Client()
-        c.force_login(self.tutor.person.user)
+        self.client.force_login(self.tutor.person.user)
         url = reverse('scores_download', args=[self.global_id])
-        response = c.get(url)
+        response = self.client.get(url)
         self.assertTrue(response.content)
 
     def test_when_no_score_sheet(self):
         self.tutor.person.global_id = "0124"
         self.tutor.person.save()
-        c = Client()
-        c.force_login(self.tutor.person.user)
+        self.client.force_login(self.tutor.person.user)
         url = reverse('scores_download', args=["0124"])
-        response = c.get(url)
+        response = self.client.get(url)
         self.assertEqual(response.context['scores_sheets_unavailable'], True)

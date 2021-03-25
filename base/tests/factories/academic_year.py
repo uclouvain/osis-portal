@@ -55,6 +55,11 @@ class AcademicYearFactory(factory.django.DjangoModelFactory):
             year=get_current_year()
         )
 
+    @staticmethod
+    def produce(base_year=None, number_past=1, number_future=1):
+        current_year = base_year or get_current_year()
+        return [AcademicYearFactory(year=current_year + i) for i in range(-number_past, number_future + 1)]
+
 
 def create_current_academic_year():
     return AcademicYearFactory(year=get_current_year())

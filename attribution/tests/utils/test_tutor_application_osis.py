@@ -38,36 +38,35 @@ from base.tests.factories.tutor import TutorFactory
 
 
 class TestTutorApplicationEpc(TestCase):
-    def setUp(self):
-        self.academic_year = AcademicYearFactory(year=2017)
+    @classmethod
+    def setUpTestData(cls):
+        cls.academic_year = AcademicYearFactory(year=2017)
         external_id = tutor_application_osis.LEARNING_CONTAINER_YEAR_PREFIX_EXTERNAL_ID + '35654987_2017'
-        self.lbir1200 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LBIR1200",
-                                                     external_id=external_id)
-        self.lagro2630 = LearningContainerYearFactory(academic_year=self.academic_year, acronym="LAGRO2630")
-        self.bio = LearningContainerYearFactory(academic_year=self.academic_year, acronym="BIO5213")
+        cls.lbir1200 = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="LBIR1200",
+                                                    external_id=external_id)
+        cls.lagro2630 = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="LAGRO2630")
+        cls.bio = LearningContainerYearFactory(academic_year=cls.academic_year, acronym="BIO5213")
 
         # Creation Person/Tutor
         Group.objects.create(name="tutors")
-        person = PersonFactory(global_id="98363454")
+        cls.person = PersonFactory(global_id="98363454")
         external_id = tutor_application_osis.TUTOR_PREFIX_EXTERNAL_ID + '2089590559'
-        self.tutor = TutorFactory(external_id=external_id, person=person)
+        cls.tutor = TutorFactory(external_id=external_id, person=cls.person)
 
+    def setUp(self):
         # Create two tutor applications
-        applications = [_get_application_example(self.lbir1200, '30.5', '40.5'),
-                        _get_application_example(self.lagro2630, '12.5', '10.5'),
-                        _get_application_example(self.bio, '10.5', '9.5')]
+        self.applications = [_get_application_example(self.lbir1200, '30.5', '40.5'),
+                             _get_application_example(self.lagro2630, '12.5', '10.5'),
+                             _get_application_example(self.bio, '10.5', '9.5')]
         self.attribution_new = AttributionNewFactory(
-            global_id=person.global_id,
-            applications=applications
+            global_id=self.person.global_id,
+            applications=self.applications
         )
 
     def test_process_message_update_operation(self):
         person = self.tutor.person
         _set_all_application_in_pending_state(self.attribution_new.applications)
         self.attribution_new.save()
-        self.assertEqual(len(self.attribution_new.applications), 3)
-        self.assertEqual(self.attribution_new.applications[0]['pending'], tutor_application_osis.UPDATE_OPERATION)
-        self.assertEqual(self.attribution_new.applications[1]['pending'], tutor_application_osis.UPDATE_OPERATION)
 
         body = [{
             'global_id': person.global_id,
@@ -76,21 +75,19 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2020-12-08 09:58:57+00:00"
+                'updated_at': "2020-12-08 09:58:57+00:00"
             }]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_osis.process_message(body_encoded)
         self.attribution_new.refresh_from_db()
-        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '0')
+        self.assertEqual(self.attribution_new.applications[2]['acronym'], 'LBIR1200')
+        self.assertEqual(self.attribution_new.applications[2]['charge_lecturing_asked'], '0')
 
     def test_process_message_no_update_operation(self):
         person = self.tutor.person
         _set_all_application_in_pending_state(self.attribution_new.applications)
         self.attribution_new.save()
-        self.assertEqual(len(self.attribution_new.applications), 3)
-        self.assertEqual(self.attribution_new.applications[0]['pending'], tutor_application_osis.UPDATE_OPERATION)
-        self.assertEqual(self.attribution_new.applications[1]['pending'], tutor_application_osis.UPDATE_OPERATION)
 
         body = [{
             'global_id': person.global_id,
@@ -99,13 +96,13 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2013-12-08 09:58:57+00:00"
+                'updated_at': "2013-12-08 09:58:57+00:00"
             }]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_osis.process_message(body_encoded)
         self.attribution_new.refresh_from_db()
-        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '12.5')
+        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '30.5')
 
     def test_process_message_with_delete_pending(self):
         person = self.tutor.person
@@ -120,14 +117,14 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2016-12-08 09:58:57+00:00"
+                'updated_at': "2019-12-08 09:58:57+00:00"
             }]
         }]
         body_encoded = bytearray(json.dumps(body), "utf-8")
         tutor_application_osis.process_message(body_encoded)
         self.attribution_new.refresh_from_db()
-        self.assertEqual(len(self.attribution_new.applications), 1)
-        self.assertEqual(self.attribution_new.applications[0]['charge_lecturing_asked'], '12.5')
+        self.assertEqual(len(self.attribution_new.applications), 3)
+        self.assertEqual(self.attribution_new.applications[1]['charge_lecturing_asked'], '10.5')
 
     def test_process_when_attribution_new_not_exist(self):
         body = [{
@@ -137,7 +134,7 @@ class TestTutorApplicationEpc(TestCase):
                 'year': self.academic_year.year,
                 'charge_lecturing_asked': '0',
                 'charge_practical_asked': '0',
-                'last_changed': "2016-12-08 09:58:57+00:00"
+                'updated_at': "2016-12-08 09:58:57+00:00"
             }]
         }]
         self.assertEqual(find_by_global_id("321654"), None)
@@ -160,21 +157,21 @@ class TestTutorApplicationEpc(TestCase):
                     'year': self.academic_year.year,
                     'charge_lecturing_asked': '0',
                     'charge_practical_asked': '0',
-                    'last_changed': "2021-12-08 09:58:57+00:00"
+                    'updated_at': "2021-12-08 09:58:57+00:00"
                 },
                 {
                     'acronym': 'LBIR1200',
                     'year': self.academic_year.year,
                     'charge_lecturing_asked': '0',
                     'charge_practical_asked': '0',
-                    'last_changed': "2013-12-08 09:58:57+00:00"
+                    'updated_at': "2013-12-08 09:58:57+00:00"
                 },
                 {
                     'acronym': 'BIO5213',
                     'year': self.academic_year.year,
                     'charge_lecturing_asked': '0',
                     'charge_practical_asked': '0',
-                    'last_changed': "2013-12-08 09:58:57+00:00"
+                    'updated_at': "2013-12-08 09:58:57+00:00"
                 }
             ]
         }]
@@ -195,7 +192,7 @@ def _get_application_example(learning_container_year, volume_lecturing, volume_p
         'charge_practical_asked': volume_practical_exercice,
         'acronym': learning_container_year.acronym,
         'year': learning_container_year.academic_year.year,
-        'last_changed': "2018-12-08 09:58:57+00:00"
+        'updated_at': "2018-12-08 09:58:57+00:00"
     }
 
 

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,8 +27,9 @@ import datetime
 
 import factory.fuzzy
 
-from base.models.enums import vacant_declaration_type
+from base.models.enums import vacant_declaration_type, learning_container_type
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.learning_container import LearningContainerFactory
 from osis_common.utils.datetime import get_tzinfo
 
 
@@ -41,6 +42,14 @@ class LearningContainerYearFactory(factory.django.DjangoModelFactory):
                                           datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
     acronym = factory.Sequence(lambda n: 'LCY-%d' % n)
     academic_year = factory.SubFactory(AcademicYearFactory)
+    container_type = learning_container_type.COURSE
     common_title = factory.Sequence(lambda n: 'Learning container year - %d' % n)
     common_title_english = factory.Sequence(lambda n: 'Learning container year - %d' % n)
     type_declaration_vacant = vacant_declaration_type.RESERVED_FOR_INTERNS
+    learning_container = factory.SubFactory(LearningContainerFactory)
+
+
+class LearningContainerYearInChargeFactory(LearningContainerYearFactory):
+    container_type = factory.Iterator(
+        [learning_container_type.COURSE, learning_container_type.DISSERTATION, learning_container_type.INTERNSHIP]
+    )

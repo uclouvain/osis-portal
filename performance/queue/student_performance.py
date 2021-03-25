@@ -247,6 +247,7 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
                                                                                              None))
     learning_units_outside_catalog = json_data.pop("coursHorsPgmPrerequis", None)
     course_registration_message = json_data.get("messageInscrCours", '')
+    on_site_exams_info = json_data.pop("infosSurSite", None)
     fields = {
         "data": json_data,
         "update_date": update_date,
@@ -256,7 +257,8 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
         "offer_registration_state": offer_registration_state,
         "courses_registration_validated": courses_registration_validated,
         "learning_units_outside_catalog": learning_units_outside_catalog,
-        "course_registration_message": course_registration_message
+        "course_registration_message": course_registration_message,
+        "on_site_exams_info": on_site_exams_info
     }
     try:
         obj = update_or_create(registration_id, academic_year, acronym, fields)
