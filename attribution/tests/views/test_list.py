@@ -34,11 +34,11 @@ from osis_attribution_sdk.model.attribution import Attribution
 
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
-from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 
@@ -122,15 +122,15 @@ class StudentsListTest(TestCase):
                 year=a_learning_unit_year.academic_year.year,
             )
         ]
-        offer_year = OfferYearFactory(academic_year=an_academic_year)
+        education_group_year = EducationGroupYearFactory(academic_year=an_academic_year)
 
         # Create two enrollment to exam [Enrolled]
-        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
+        off_enrollment = OfferEnrollmentFactory(education_group_year=education_group_year)
         LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment)
-        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
+        off_enrollment = OfferEnrollmentFactory(education_group_year=education_group_year)
         LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment)
         # Create an enrollment to exam [NOT enrolled]
-        off_enrollment = OfferEnrollmentFactory(offer_year=offer_year)
+        off_enrollment = OfferEnrollmentFactory(education_group_year=education_group_year)
         LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment,
                                       enrollment_state="")
 

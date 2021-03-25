@@ -34,6 +34,7 @@ from base.tests.factories.academic_year import AcademicYearFactory, create_curre
 now = datetime.datetime.now()
 
 
+# TODO :: to remove
 def create_academic_year():
     an_academic_year = mdl_base.academic_year.AcademicYear()
     an_academic_year.year = 2016
