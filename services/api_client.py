@@ -24,24 +24,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-from functools import wraps
 
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.utils.translation import gettext as _
+from osis_internship_sdk.api import internship_api
+from osis_internship_sdk.api_client import ApiClient
 
-from internship.services.internship import InternshipAPIService
+from frontoffice.settings.osis_sdk import internship as internship_sdk
 
 
-def redirect_if_not_master(function):
-    @wraps(function)
-    def wrapper(request, *args, **kwargs):
-        if not InternshipAPIService.get_master_by_email(email=request.user.email):
-            messages.add_message(
-                request, messages.ERROR, _("Score encoding is only accessible to internship's masters")
-            )
-            return redirect(reverse('home'))
-        response = function(request, *args, **kwargs)
-        return response
-    return wrapper
+class InternshipAPIClient:
+
+    def __new__(cls):
+        api_config = internship_sdk.build_configuration()
+        return internship_api.InternshipApi(ApiClient(configuration=api_config))

@@ -34,7 +34,7 @@ from osis_internship_sdk.models import MasterGet, AllocationGet, PeriodGet, Spec
     StudentAffectationGet, CohortGet, ScoreGet
 
 from internship.models.enums.role_choice import ChoiceRole
-from internship.views.api_client import InternshipAPIClient
+from internship.services.api_client import InternshipAPIClient
 
 
 class TestAPIClient(TestCase):

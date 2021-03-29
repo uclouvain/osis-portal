@@ -24,24 +24,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-from functools import wraps
 
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.utils.translation import gettext as _
-
-from internship.services.internship import InternshipAPIService
+def get_first_paginated_result(response):
+    return response.get('results')[0] if response.get('count') else None
 
 
-def redirect_if_not_master(function):
-    @wraps(function)
-    def wrapper(request, *args, **kwargs):
-        if not InternshipAPIService.get_master_by_email(email=request.user.email):
-            messages.add_message(
-                request, messages.ERROR, _("Score encoding is only accessible to internship's masters")
-            )
-            return redirect(reverse('home'))
-        response = function(request, *args, **kwargs)
-        return response
-    return wrapper
+def get_paginated_results(response):
+    return response.get('results')

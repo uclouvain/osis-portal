@@ -37,19 +37,17 @@ from internship.decorators.score_encoding_view_decorators import redirect_if_not
 from internship.models.period import Period
 from internship.models.score_encoding_utils import DEFAULT_PERIODS, APDS, COMMENTS_FIELDS, MIN_APDS, MAX_APDS, \
     AVAILABLE_GRADES
+from internship.services.internship import InternshipAPIService
 from internship.templatetags.selection_tags import only_number
-from internship.views.api_client import get_master_by_email, get_master_allocations, get_active_period, get_specialty, \
-    get_organization, get_score, get_affectation, update_score, \
-    get_students_affectations_count, get_paginated_students_affectations, validate_internship_score
 
 
 @login_required
 @redirect_if_not_master
 def view_score_encoding(request):
-    master = get_master_by_email(request.user.email)
-    allocations = get_master_allocations(master['uuid'])
+    master = InternshipAPIService.get_master_by_email(request.user.email)
+    allocations = InternshipAPIService.get_master_allocations(master['uuid'])
     for allocation in allocations:
-        stats = get_students_affectations_count(
+        stats = InternshipAPIService.get_students_affectations_count(
             specialty_uuid=allocation['specialty']['uuid'],
             organization_uuid=allocation['organization']['uuid'],
         )
@@ -64,17 +62,17 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
     if request.GET.get('period'):
         selected_period = request.GET.get('period', "")
     else:
-        active_period = get_active_period()
+        active_period = InternshipAPIService.get_active_period()
         selected_period = active_period['name'] if active_period else DEFAULT_PERIODS
 
     pagination_params = {'limit': int(request.GET.get('limit', '0')), 'offset': int(request.GET.get('offset', '0'))}
 
     apds = APDS
 
-    specialty = get_specialty(specialty_uuid)
-    organization = get_organization(organization_uuid)
+    specialty = InternshipAPIService.get_specialty(specialty_uuid)
+    organization = InternshipAPIService.get_organization(organization_uuid)
 
-    students_affectations, previous, next, count = get_paginated_students_affectations(
+    students_affectations, previous, next, count = InternshipAPIService.get_paginated_students_affectations(
         specialty_uuid, organization_uuid, selected_period, **pagination_params
     )
 
@@ -87,13 +85,13 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
 @redirect_if_not_master
 def view_score_encoding_form(request, specialty_uuid, organization_uuid, affectation_uuid):
 
-    affectation = get_affectation(affectation_uuid)
+    affectation = InternshipAPIService.get_affectation(affectation_uuid)
     period = affectation.period
     student = affectation.student
 
-    score = get_score(affectation.score.uuid)
-    specialty = get_specialty(specialty_uuid)
-    organization = get_organization(organization_uuid)
+    score = InternshipAPIService.get_score(affectation.score.uuid)
+    specialty = InternshipAPIService.get_specialty(specialty_uuid)
+    organization = InternshipAPIService.get_organization(organization_uuid)
 
     apds = APDS
     comments_fields = COMMENTS_FIELDS
@@ -104,7 +102,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
         if not _validate_score(request.POST):
             _show_invalid_update_msg(request)
             return layout.render(request, "internship_score_encoding_form.html", locals())
-        if update_score(score):
+        if InternshipAPIService.update_score(score):
             _show_success_update_msg(request, period, student)
             return redirect(reverse('internship_score_encoding_sheet', kwargs={
                 'specialty_uuid': specialty_uuid,
@@ -118,7 +116,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
 @login_required
 @redirect_if_not_master
 def score_encoding_validate(request, affectation_uuid):
-    data, status, headers = validate_internship_score(affectation_uuid)
+    data, status, headers = InternshipAPIService.validate_internship_score(affectation_uuid)
     is_success = status == 204
     return JsonResponse({} if is_success else {'error': _('An error occured during validation')})
 
