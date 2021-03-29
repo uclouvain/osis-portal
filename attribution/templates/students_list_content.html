@@ -32,6 +32,11 @@
 {% else %}
     <h4>{% trans 'No students enrolled' %}</h4>
 {% endif %}
+{% if has_peps %}
+    <div class="alert alert-warning">
+        {% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}
+    </div>
+{% endif %}
 {% if students %}
     <form method="get" action="{% url 'produce_xls_students' learning_unit_year.id %}">
         <button class="btn btn-success pull-left" id="bt_produce_xls" type="submit"

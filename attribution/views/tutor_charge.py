@@ -37,6 +37,7 @@ from django.utils.functional import cached_property
 from django.views.generic.base import TemplateView
 
 from attribution.models.remote_attribution_service import RemoteAttributionService
+from attribution.views.students_list import check_peps
 from base.models.academic_year import AcademicYear, current_academic_year
 from base.models.person import Person
 from osis_attribution_sdk.models import Attribution
@@ -45,7 +46,6 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 
 from base.forms.base_forms import GlobalIdForm
-from base.models.enums import learning_container_type
 from base.models.learning_unit_year import LearningUnitYear
 from base.utils import string_utils
 from base.views import layout
@@ -134,7 +134,8 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 **attribution.to_dict(),
                 'students_list_email': get_email_students(attribution.code, attribution.year),
                 'percentage_allocation_charge': percentage_allocation_charge,
-                'attribution_students_url': self.get_attribution_students_url(attribution.code, attribution.year)
+                'attribution_students_url': self.get_attribution_students_url(attribution.code, attribution.year),
+                'has_peps': check_peps(attribution.code, attribution.year),
             }
         )
 
