@@ -28,6 +28,7 @@ from urllib.parse import urlparse
 
 from osis_internship_sdk.api import internship_api
 from osis_internship_sdk.api_client import ApiClient
+from osis_internship_sdk.model.organization_get import OrganizationGet
 from osis_internship_sdk.rest import ApiException
 
 from frontoffice.settings.osis_sdk import internship as internship_sdk
@@ -88,7 +89,7 @@ def get_specialty(specialty_uuid):
     return InternshipAPIClient().specialties_uuid_get(uuid=specialty_uuid)
 
 
-def get_organization(organization_uuid):
+def get_organization(organization_uuid) -> OrganizationGet:
     return InternshipAPIClient().organizations_uuid_get(uuid=organization_uuid)
 
 
@@ -138,23 +139,30 @@ def get_score(score_uuid):
 
 
 def update_score(score):
-    return InternshipAPIClient().scores_uuid_put(
-        score.uuid, score_get=score, async_req=True
+    data, status, headers = InternshipAPIClient().scores_uuid_put(
+        score.uuid,
+        score_get=score,
+        _return_http_data_only=False
     )
+    return status == 200
 
 
 def post_master(master):
     return InternshipAPIClient().masters_post(master_get=master)
 
 
-def post_master_allocation(allocation, specialty_uuid, organization_uuid):
+def post_master_allocation(allocation):
     return InternshipAPIClient().masters_allocations_post(
         allocation_get=allocation,
     )
 
 
 def delete_master_allocation(allocation_uuid):
-    return InternshipAPIClient().masters_allocations_uuid_delete(uuid=allocation_uuid)
+    data, status, headers = InternshipAPIClient().masters_allocations_uuid_delete(
+        uuid=allocation_uuid,
+        _return_http_data_only=False
+    )
+    return status == 204
 
 
 def validate_internship_score(affectation_uuid):

@@ -49,8 +49,8 @@ def manage_delegates(request):
         return redirect(reverse('internship_master_home'))
 
     for allocation in master_allocations:
-        allocation['internship'] = _get_internship_reference(allocation)
-        allocation['delegated'] = get_delegated_allocations(
+        allocation.__dict__['internship'] = _get_internship_reference(allocation)
+        allocation.__dict__['delegated'] = get_delegated_allocations(
             allocation['specialty']['uuid'], allocation['organization']['uuid']
         )
     return layout.render(request, "internship_manage_delegates.html", locals())
@@ -90,8 +90,7 @@ def new_delegate(request, specialty_uuid, organization_uuid):
 @login_required
 @redirect_if_not_master
 def delete_delegate(request, allocation_uuid):
-    deleted_master = delete_master_allocation(allocation_uuid)
-    if deleted_master:
+    if delete_master_allocation(allocation_uuid):
         messages.add_message(request, SUCCESS, _('Internship delegate deleted with success'))
     return redirect(reverse('internship_manage_delegates'))
 

@@ -116,7 +116,17 @@ class TestScoreEncoding(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(messages_items[0].level, SUCCESS)
 
-    def test_score_validation(self):
+    @mock.patch('internship.tests.views.test_api_client.MockAPI.scores_affectation_uuid_validate_post')
+    def test_score_validation_success(self, mock_validation_response):
+        mock_validation_response.return_value = {}, 204, {}
         url = reverse('internship_score_encoding_validate', kwargs={'affectation_uuid': str(uuid.uuid4())})
         json_response = self.client.get(url).json()
-        self.assertEqual(bool(json_response.get('error')), not json_response['success'])
+        self.assertDictEqual(json_response, {})
+
+    @mock.patch('internship.tests.views.test_api_client.MockAPI.scores_affectation_uuid_validate_post')
+    def test_score_validation_fail(self, mock_validation_response):
+        mock_validation_response.return_value = {'error': 'error'}, 404, {}
+        url = reverse('internship_score_encoding_validate', kwargs={'affectation_uuid': str(uuid.uuid4())})
+        json_response = self.client.get(url).json()
+        self.assertDictEqual(json_response, {'error': 'An error occured during validation'})
+

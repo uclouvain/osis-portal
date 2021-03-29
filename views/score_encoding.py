@@ -78,7 +78,7 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
         specialty_uuid, organization_uuid, selected_period, **pagination_params
     )
 
-    periods = Period.objects.filter(cohort__name=specialty.cohort.name).order_by('date_start')
+    periods = Period.objects.filter(cohort__uuid=specialty.cohort.uuid).order_by('date_start')
 
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 
@@ -104,15 +104,13 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
         if not _validate_score(request.POST):
             _show_invalid_update_msg(request)
             return layout.render(request, "internship_score_encoding_form.html", locals())
-        update = update_score(score)
-        if update:
+        if update_score(score):
             _show_success_update_msg(request, period, student)
             return redirect(reverse('internship_score_encoding_sheet', kwargs={
                 'specialty_uuid': specialty_uuid,
                 'organization_uuid': organization_uuid,
-            }))
-        else:
-            messages.add_message(request, messages.ERROR, _('An error occurred during score update'))
+            }) + '?period={}'.format(period.name))
+        messages.add_message(request, messages.ERROR, _('An error occurred during score update'))
 
     return layout.render(request, "internship_score_encoding_form.html", locals())
 
@@ -148,7 +146,6 @@ def _build_score_to_update(post_data, score):
     objectives = _build_objectives(post_data)
     score = ScoreGet(
         uuid=score.uuid,
-        cohort=score.cohort,
         comments=comments,
         objectives=objectives,
         **{key: post_data.get(key) for key in ScoreGet.attribute_map.keys() if key in post_data.keys()}
