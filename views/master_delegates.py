@@ -83,6 +83,8 @@ def new_delegate(request, specialty_uuid, organization_uuid):
                         master.person.last_name
                     ))
                 )
+            internship_ref = _get_internship_reference(allocation)
+            return redirect(reverse('internship_manage_delegates') + "?internship={}".format(internship_ref))
     return redirect(reverse('internship_manage_delegates'))
 
 
