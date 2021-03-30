@@ -57,7 +57,7 @@ class InternshipAPIService:
     def get_mastered_allocations(cls, specialty_uuid, organization_uuid):
         return get_paginated_results(
             InternshipAPIClient().masters_allocations_get(
-                specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.MASTER.value
+                specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.MASTER.name
             )
         )
 
@@ -65,7 +65,7 @@ class InternshipAPIService:
     def get_delegated_allocations(cls, specialty_uuid, organization_uuid):
         return get_paginated_results(
             InternshipAPIClient().masters_allocations_get(
-                specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.DELEGATE.value
+                specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.DELEGATE.name
             )
         )
 

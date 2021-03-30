@@ -43,7 +43,7 @@ def manage_delegates(request):
     master = InternshipAPIService.get_master_by_email(request.user.email)
     allocations = InternshipAPIService.get_master_allocations(master['uuid'])
 
-    master_allocations = [allocation for allocation in allocations if allocation['role'] == ChoiceRole.MASTER.value]
+    master_allocations = [allocation for allocation in allocations if allocation['role'] == ChoiceRole.MASTER.name]
     if not master_allocations:
         return redirect(reverse('internship_master_home'))
 
@@ -74,7 +74,7 @@ def new_delegate(request, specialty_uuid, organization_uuid):
                 master=created_master,
                 organization=organization,
                 specialty=specialty,
-                role=ChoiceRole.DELEGATE.value
+                role=ChoiceRole.DELEGATE.name
             )
             allocation = InternshipAPIService.post_master_allocation(allocation)
             if allocation:
