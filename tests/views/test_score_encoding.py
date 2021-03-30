@@ -30,6 +30,7 @@ from django.contrib import messages
 from django.contrib.messages import SUCCESS
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from base.tests.factories.user import UserFactory
 from internship.models.score_encoding_utils import APDS, MIN_APDS, MAX_APDS
@@ -128,5 +129,5 @@ class TestScoreEncoding(TestCase):
         mock_validation_response.return_value = {'error': 'error'}, 404, {}
         url = reverse('internship_score_encoding_validate', kwargs={'affectation_uuid': str(uuid.uuid4())})
         json_response = self.client.get(url).json()
-        self.assertDictEqual(json_response, {'error': 'An error occured during validation'})
+        self.assertDictEqual(json_response, {'error': _('An error occured during validation')})
 
