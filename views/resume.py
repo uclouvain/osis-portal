@@ -42,7 +42,7 @@ from internship.models import internship_student_affectation_stat as mdl_student
 from internship.models import internship_student_information as mdl_student_information
 from internship.models import period as mdl_period
 from internship.models.score_encoding_utils import APDS
-from internship.views.api_client import get_score
+from internship.services.internship import InternshipAPIService
 
 
 @login_required
@@ -67,9 +67,10 @@ def view_student_resume(request, cohort_id):
     publication_allowed = cohort.publication_start_date <= datetime.date.today()
     offers = {}
     for affectation in student_affectations:
-        score = get_score(str(affectation.student.uuid), str(affectation.period.uuid))
+        score = InternshipAPIService.get_score(affectation.score.uuid)
+        masters = InternshipAPIService.get_mastered_allocations(str(affectation.speciality.uuid), str(affectation.organization.uuid))
         if score.validated:
-            setattr(affectation, 'score', get_score(str(affectation.student.uuid), str(affectation.period.uuid)))
+            setattr(affectation, 'score', score)
         offer = mdl_internship_offer.find_offer(
             cohort=cohort,
             speciality=affectation.speciality,

@@ -6,7 +6,7 @@
       </a>
     </li>
     {% for page in pages %}
-        <li {% if page.offset == pagination_params.offset %} class="active" {% endif %}>
+        <li {% if page.offset|add:0 == pagination_params.offset|add:0 %} class="active" {% endif %}>
             <a href="{{ request.path }}?limit={{ page.limit }}&offset={{ page.offset }}&period={{ selected_period }}">
                 {{ page.number }}
             </a>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-10 10:41+0100\n"
+"POT-Creation-Date: 2021-03-18 17:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,6 +150,9 @@ msgstr "Quatrième choix"
 msgid "Generalist"
 msgstr "Généraliste"
 
+msgid "Good performance examples"
+msgstr "Exemples de bonne performance"
+
 msgid "Grades modifications will no longer be allowed after validation."
 msgstr "Les modifications de cotes ne seront plus permises après validation."
 
@@ -161,6 +164,9 @@ msgstr "Liste des hôpitaux"
 
 msgid "Hospitals"
 msgstr "Hôpitaux"
+
+msgid "Improvement areas"
+msgstr "Points à améliorer"
 
 msgid "Intermediary evaluation (optional)"
 msgstr "Evaluation intermédiaire (facultative)"
@@ -310,6 +316,9 @@ msgstr "Encodez vos choix de stages"
 
 msgid "Succesfull logout"
 msgstr "Déconnexion réalisée avec succès"
+
+msgid "Suggested learning methods"
+msgstr "Méthodes d'apprentissage suggérées"
 
 msgid "Sum up of your choices and your affectations"
 msgstr "Résumé de vos choix et affectations"

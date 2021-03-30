@@ -45,7 +45,7 @@
             {{ specialty.cohort.name }} - {{ specialty.name }}
         </a>
     </li>
-    <li class="active">{{ student.person.last_name | upper }}, {{ student.person.first_name }}</li>
+    <li class="active">{{ student.last_name | upper }}, {{ student.first_name }}</li>
 {% endblock %}
 
 {% block content %}
@@ -57,7 +57,7 @@
 
     <div class="panel panel-default">
     <div class="panel-heading">
-            <h3 class="pull-right">{{ student.person.last_name | upper }}, {{ student.person.first_name }}</h3>
+            <h3 class="pull-right">{{ student.last_name | upper }}, {{ student.first_name }}</h3>
             <h2 class="pull-left" style="margin-right: 20px;">{{ period.name }}</h2>
             <h4>{{ specialty.cohort.name }} - {{ specialty.name }}</h4>
             <h4>{{ organization.name }}</h4>
@@ -148,10 +148,8 @@
         <h3>{% trans 'Comments' %} </h3>
         <hr/>
         {% for field in comments_fields %}
-            <label for="{{ field }}">
-                {% trans "Intermediary evaluation (optional)" %}
-            </label>
-            <textarea id="{{ field }}" name="{{ field }}" class="form-control" rows="5" style="width: 100%;">{% if score %}{{ score.comments|get_item:field }}{% endif %}</textarea>
+            <label for="{{ field.0 }}">{{ field.1 }}</label>
+            <textarea id="{{ field.0 }}" name="{{ field.0 }}" class="form-control" rows="5" style="width: 100%;">{% if score %}{{ score.comments|get_item:field.0 }}{% endif %}</textarea>
             <br/>
             <br/>
         {% endfor %}
