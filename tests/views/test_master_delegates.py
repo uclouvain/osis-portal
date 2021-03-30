@@ -34,7 +34,7 @@ from osis_internship_sdk.model.allocation_get import AllocationGet
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from internship.models.enums.role_choice import ChoiceRole
-from internship.tests.views.test_api_client import MockAPI
+from internship.tests.services.test_api_client import MockAPI
 
 
 @override_settings(URL_INTERNSHIP_API='url_test_api')
@@ -55,7 +55,7 @@ class TestScoreEncoding(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'internship_manage_delegates.html')
 
-    @mock.patch('internship.tests.views.test_api_client.MockAPI.masters_uuid_allocations_get')
+    @mock.patch('internship.tests.services.test_api_client.MockAPI.masters_uuid_allocations_get')
     def test_delegates_cannot_access_manage_delegates(self, mock_masters_allocations):
         mock_masters_allocations.return_value = {'count': 1, 'results': [
             AllocationGet(uuid=str(uuid.uuid4()), role=ChoiceRole.DELEGATE.name)
