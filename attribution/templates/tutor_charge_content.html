@@ -73,14 +73,13 @@
                 <td>
                     <a href="{{ attribution.attribution_students_url }}">
                         <span class="fa fa-group" aria-hidden="true"></span>
-                        {% if attribution.has_peps %}
-                            <span class="badge warning-color"
-                                  title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)'%}">
-                                PEPS
-                            </span>
-                        {% endif%}
-
                     </a>
+                    {% if attribution.has_peps %}
+                        <span class="label label-warning"
+                              title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)'%}">
+                            PEPS
+                        </span>
+                    {% endif%}
                 </td>
                 <td>
                     {% if attribution.links.schedule %}
