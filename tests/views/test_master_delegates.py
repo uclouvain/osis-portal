@@ -64,7 +64,8 @@ class TestScoreEncoding(TestCase):
         response = self.client.get(url)
         self.assertRedirects(response, reverse('internship_master_home'))
 
-    def test_create_new_delegate(self):
+    @mock.patch('internship.views.master_delegates._get_internship_reference', return_value='A01')
+    def test_create_new_delegate(self, mock_internship_reference):
         url = reverse('internship_new_delegate', kwargs={
             'specialty_uuid': uuid.uuid4(),
             'organization_uuid': uuid.uuid4()
@@ -77,7 +78,9 @@ class TestScoreEncoding(TestCase):
             'email': person.email,
             'civility': 'DOCTOR'
         })
-        self.assertRedirects(response, reverse('internship_manage_delegates'))
+        self.assertRedirects(response, reverse('internship_manage_delegates')+"?internship={}".format(
+            mock_internship_reference.return_value
+        ))
 
     def test_delete_delegate(self):
         url = reverse('internship_delete_delegate', kwargs={'allocation_uuid': uuid.uuid4()})
