@@ -27,13 +27,21 @@
 
 from urllib.parse import urlparse
 
-from osis_internship_sdk import ApiException
+from osis_internship_sdk import ApiException, ApiClient
+from osis_internship_sdk.api import internship_api
 from osis_internship_sdk.model.organization_get import OrganizationGet
 
+from frontoffice.settings.osis_sdk import internship as internship_sdk
 from internship.models.enums.role_choice import ChoiceRole
 from internship.models.score_encoding_utils import DEFAULT_PERIODS
-from internship.services.api_client import InternshipAPIClient
 from internship.services.utils import get_first_paginated_result, get_paginated_results
+
+
+class InternshipAPIClient:
+
+    def __new__(cls):
+        api_config = internship_sdk.build_configuration()
+        return internship_api.InternshipApi(ApiClient(configuration=api_config))
 
 
 class InternshipAPIService:
