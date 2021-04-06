@@ -89,7 +89,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
     period = affectation.period
     student = affectation.student
 
-    score = InternshipAPIService.get_score(affectation.score.uuid)
+    score = InternshipAPIService.get_score(affectation.score.uuid) if affectation.score else None
     specialty = InternshipAPIService.get_specialty(specialty_uuid)
     organization = InternshipAPIService.get_organization(organization_uuid)
 
