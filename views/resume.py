@@ -41,6 +41,7 @@ from internship.models import internship_speciality as mdl_internship_speciality
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
 from internship.models import internship_student_information as mdl_student_information
 from internship.models import period as mdl_period
+from internship.models.enums.civility import Civility
 from internship.models.score_encoding_utils import APDS
 from internship.services.internship import InternshipAPIService
 
@@ -75,6 +76,7 @@ def view_student_resume(request, cohort_id):
             speciality=affectation.speciality,
             organization=affectation.organization
         ).first()
+        offer.__dict__['master'] = _get_internship_masters_repr(affectation)
         try:
             offers[affectation.organization].update({affectation.speciality: offer})
         except KeyError:
@@ -91,6 +93,19 @@ def view_student_resume(request, cohort_id):
         "current_date": date.today(),
         "apds": APDS,
     })
+
+
+def _get_internship_masters_repr(affectation):
+    allocations = InternshipAPIService.get_mastered_allocations(
+        specialty_uuid=str(affectation.speciality.uuid),
+        organization_uuid=str(affectation.organization.uuid)
+    )
+    return " & ".join(
+        ["{} {}".format(
+            Civility.get_acronym(alloc.master.civility),
+            alloc.master.person.last_name.upper()
+        ) for alloc in allocations]
+    )
 
 
 def save_from_form(form, person, cohort):
