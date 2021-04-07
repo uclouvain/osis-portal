@@ -101,7 +101,7 @@ class MockAPI(InternshipApi):
         return kwargs.get('score_get')
 
     @classmethod
-    def scores_uuid_get(*args, **kwargs):
+    def scores_affectation_uuid_get(*args, **kwargs):
         return ScoreGet(uuid=str(uuid.uuid4()), objectives={}, comments={})
 
     @classmethod
@@ -123,7 +123,7 @@ class MockAPI(InternshipApi):
         return random.choice([success_response, error_response])
 
     @classmethod
-    def scores_uuid_put(*args, **kwargs):
+    def scores_affectation_uuid_put(*args, **kwargs):
         return {}, 200, {}
 
     @classmethod

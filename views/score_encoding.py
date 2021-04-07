@@ -89,7 +89,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
     period = affectation.period
     student = affectation.student
 
-    score = InternshipAPIService.get_score(affectation.score.uuid) if affectation.score else None
+    score = InternshipAPIService.get_score(affectation_uuid)
     specialty = InternshipAPIService.get_specialty(specialty_uuid)
     organization = InternshipAPIService.get_organization(organization_uuid)
 
@@ -102,7 +102,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
         if not _validate_score(request.POST):
             _show_invalid_update_msg(request)
             return layout.render(request, "internship_score_encoding_form.html", locals())
-        if InternshipAPIService.update_score(score):
+        if InternshipAPIService.update_score(affectation_uuid, score):
             _show_success_update_msg(request, period, student)
             return redirect(reverse('internship_score_encoding_sheet', kwargs={
                 'specialty_uuid': specialty_uuid,

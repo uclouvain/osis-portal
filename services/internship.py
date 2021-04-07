@@ -124,16 +124,16 @@ class InternshipAPIService:
         )
 
     @classmethod
-    def get_score(cls, score_uuid):
+    def get_score(cls, affectation_uuid):
         try:
-            return InternshipAPIClient().scores_uuid_get(score_uuid)
+            return InternshipAPIClient().scores_affectation_uuid_get(affectation_uuid)
         except ApiException:
             return None
 
     @classmethod
-    def update_score(cls, score):
-        data, status, headers = InternshipAPIClient().scores_uuid_put(
-            score.uuid,
+    def update_score(cls, affectation_uuid, score):
+        data, status, headers = InternshipAPIClient().scores_affectation_uuid_put(
+            affectation_uuid,
             score_get=score,
             _return_http_data_only=False
         )
