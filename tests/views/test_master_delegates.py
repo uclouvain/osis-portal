@@ -28,12 +28,13 @@ import uuid
 import mock
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from osis_internship_sdk import MasterGet
+from django.utils.datetime_safe import date
+from osis_internship_sdk.model.allocation_get import AllocationGet
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from internship.models.enums.role_choice import ChoiceRole
-from internship.tests.views.test_api_client import MockAPI
+from internship.tests.services.test_api_client import MockAPI
 
 
 @override_settings(URL_INTERNSHIP_API='url_test_api')
@@ -41,7 +42,7 @@ class TestScoreEncoding(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = UserFactory()
-        cls.api_patcher = mock.patch("internship.views.api_client.InternshipAPIClient.__new__", return_value=MockAPI)
+        cls.api_patcher = mock.patch("internship.services.internship.InternshipAPIClient.__new__", return_value=MockAPI)
 
     def setUp(self):
         self.client.force_login(self.user)
@@ -54,14 +55,17 @@ class TestScoreEncoding(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'internship_manage_delegates.html')
 
-    @mock.patch('internship.tests.views.test_api_client.MockAPI.masters_get')
-    def test_delegates_cannot_access_manage_delegates(self, mock_masters_get):
-        mock_masters_get.return_value = {'count': 1, 'results': [MasterGet(role=ChoiceRole.DELEGATE.value).to_dict()]}
+    @mock.patch('internship.tests.services.test_api_client.MockAPI.masters_uuid_allocations_get')
+    def test_delegates_cannot_access_manage_delegates(self, mock_masters_allocations):
+        mock_masters_allocations.return_value = {'count': 1, 'results': [
+            AllocationGet(uuid=str(uuid.uuid4()), role=ChoiceRole.DELEGATE.name)
+        ]}
         url = reverse('internship_manage_delegates')
         response = self.client.get(url)
         self.assertRedirects(response, reverse('internship_master_home'))
 
-    def test_create_new_delegate(self):
+    @mock.patch('internship.views.master_delegates._get_internship_reference', return_value='A01')
+    def test_create_new_delegate(self, mock_internship_reference):
         url = reverse('internship_new_delegate', kwargs={
             'specialty_uuid': uuid.uuid4(),
             'organization_uuid': uuid.uuid4()
@@ -70,11 +74,13 @@ class TestScoreEncoding(TestCase):
         response = self.client.post(url, data={
             'first_name': person.first_name,
             'last_name': person.last_name,
-            'birth_date': '01-01-2000',
+            'birth_date': date.today(),
             'email': person.email,
             'civility': 'DOCTOR'
         })
-        self.assertRedirects(response, reverse('internship_manage_delegates'))
+        self.assertRedirects(response, reverse('internship_manage_delegates')+"?internship={}".format(
+            mock_internship_reference.return_value
+        ))
 
     def test_delete_delegate(self):
         url = reverse('internship_delete_delegate', kwargs={'allocation_uuid': uuid.uuid4()})

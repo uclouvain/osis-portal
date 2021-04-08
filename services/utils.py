@@ -1,4 +1,5 @@
-##############################################################################
+# -*- coding: utf-8 -*-
+############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -22,20 +23,11 @@
 #    at the root of the source code of this program.  If not,
 #    see http://www.gnu.org/licenses/.
 #
-##############################################################################
-from django.utils.translation import gettext as _
+############################################################################
 
-APD_NUMBER = 15
-MIN_APDS = 5
-MAX_APDS = 9
+def get_first_paginated_result(response):
+    return response.get('results')[0] if response.get('count') else None
 
-APDS = ['apd_{}'.format(index) for index in range(1, APD_NUMBER + 1)]
 
-COMMENTS_FIELDS = [
-    ('intermediary_evaluation', _("Intermediary evaluation (optional)")),
-    ('good_perf_ex', _("Good performance examples")),
-    ('impr_areas', _("Improvement areas")),
-    ('suggestions', _("Suggested learning methods"))
-]
-DEFAULT_PERIODS = 'all'
-AVAILABLE_GRADES = ['A', 'B', 'C', 'D']
+def get_paginated_results(response):
+    return response.get('results')

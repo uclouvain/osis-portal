@@ -70,7 +70,7 @@
                     <tr>
                         <th colspan="2"></th>
                         <th colspan="15" style="text-align:center;">
-                            APD
+                            Activités Professionnelles délégables (APD)
                             <a data-toggle="modal" data-target="#apd-doc" style="cursor: pointer;">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </a>
@@ -91,7 +91,7 @@
                 {% for affectation in students_affectations %}
                     <tr>
                         <td>
-                            {{ affectation.student.person.last_name | upper }}, {{ affectation.student.person.first_name }}
+                            {{ affectation.student.last_name | upper }}, {{ affectation.student.first_name }}
                         </td>
                         <td style="text-align:center;">
                             {{ affectation.period.name }}
@@ -110,7 +110,7 @@
                             </a>
                         </td>
                         <td style="text-align:center;">
-                            <a id='validate-btn-{{ affectation.uuid }}' class="btn btn-info btn-xs" style="padding: 1px 5px 1px 4px;" data-toggle="modal" data-target="#validation_modal" data-student="{{ affectation.student.person.last_name }}" data-period="{{ affectation.period.name }}" data-validate-url="{% url 'internship_score_encoding_validate' affectation_uuid=affectation.uuid %}" data-affectation="{{ affectation.uuid }}">
+                            <a id='validate-btn-{{ affectation.uuid }}' class="btn btn-info btn-xs" style="padding: 1px 5px 1px 4px;" data-toggle="modal" data-target="#validation_modal" data-student="{{ affectation.student.last_name }}" data-period="{{ affectation.period.name }}" data-validate-url="{% url 'internship_score_encoding_validate' affectation_uuid=affectation.uuid %}" data-affectation="{{ affectation.uuid }}">
                                 <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
                             </a>
                         </td>
@@ -157,13 +157,13 @@
                 $('#validation-error-alert').hide();
                 $('#btn-validate').button('loading');
                 $.post(validateUrl, (data) => {
-                    if(data.success){
-                        $('#validation-progress-bar').hide();
+                    if(!data.error){
                         $('#validation_modal').modal('hide');
                         updateActions(affectation);
                     } else {
-                        $('#validation-progress-bar').hide();
-                        $('#validation-error-alert').show();
+                        const errorAlert = $('#validation-error-alert')
+                        errorAlert.innerText = data.error;
+                        errorAlert.show();
                     }
                     $('#btn-validate').button('reset');
                 });

@@ -29,26 +29,27 @@ from django.contrib.messages import SUCCESS
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from osis_internship_sdk import MasterGet, Person, AllocationGet
+from osis_internship_sdk.models import MasterGet, Person, AllocationGet
 
 from base.views import layout
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
 from internship.models.enums.role_choice import ChoiceRole
-from internship.views.api_client import get_master_by_email, get_master_allocations, get_delegated_allocations, \
-    post_master, get_organization, get_specialty, post_master_allocation, delete_master_allocation
+from internship.services.internship import InternshipAPIService
 
 
 @login_required
 @redirect_if_not_master
 def manage_delegates(request):
-    master = get_master_by_email(request.user.email)
-    if master['role'] != ChoiceRole.MASTER.value:
+    master = InternshipAPIService.get_master_by_email(request.user.email)
+    allocations = InternshipAPIService.get_master_allocations(master['uuid'])
+
+    master_allocations = [allocation for allocation in allocations if allocation['role'] == ChoiceRole.MASTER.name]
+    if not master_allocations:
         return redirect(reverse('internship_master_home'))
 
-    allocations = get_master_allocations(master['uuid'])
-    for allocation in allocations:
-        allocation['internship'] = _get_internship_reference(allocation)
-        allocation['delegated'] = get_delegated_allocations(
+    for allocation in master_allocations:
+        allocation.__dict__['internship'] = _get_internship_reference(allocation)
+        allocation.__dict__['delegated'] = InternshipAPIService.get_delegated_allocations(
             allocation['specialty']['uuid'], allocation['organization']['uuid']
         )
     return layout.render(request, "internship_manage_delegates.html", locals())
@@ -64,27 +65,33 @@ def new_delegate(request, specialty_uuid, organization_uuid):
             birth_date=request.POST.get('birth_date'),
             email=request.POST.get('email')
         )
-        master = MasterGet(person=person, role=ChoiceRole.DELEGATE.value, civility=request.POST.get('civility'))
-        created_master = post_master(master)
+        master = MasterGet(person=person, civility=request.POST.get('civility'))
+        created_master = InternshipAPIService.post_master(master)
         if created_master:
-            organization = get_organization(organization_uuid)
-            specialty = get_specialty(specialty_uuid)
-            allocation = AllocationGet(master=created_master, organization=organization, specialty=specialty)
-            allocation = post_master_allocation(allocation, specialty_uuid, organization_uuid)
+            organization = InternshipAPIService.get_organization(organization_uuid)
+            specialty = InternshipAPIService.get_specialty(specialty_uuid)
+            allocation = AllocationGet(
+                master=created_master,
+                organization=organization,
+                specialty=specialty,
+                role=ChoiceRole.DELEGATE.name
+            )
+            allocation = InternshipAPIService.post_master_allocation(allocation)
             if allocation:
                 messages.add_message(
                     request, SUCCESS, _('Internship delegate {} created with success'.format(
                         master.person.last_name
                     ))
                 )
+            internship_ref = _get_internship_reference(allocation)
+            return redirect(reverse('internship_manage_delegates') + "?internship={}".format(internship_ref))
     return redirect(reverse('internship_manage_delegates'))
 
 
 @login_required
 @redirect_if_not_master
 def delete_delegate(request, allocation_uuid):
-    deleted_master = delete_master_allocation(allocation_uuid)
-    if deleted_master:
+    if InternshipAPIService.delete_master_allocation(allocation_uuid):
         messages.add_message(request, SUCCESS, _('Internship delegate deleted with success'))
     return redirect(reverse('internship_manage_delegates'))
 

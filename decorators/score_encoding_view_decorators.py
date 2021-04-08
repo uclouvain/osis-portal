@@ -31,13 +31,13 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from internship.views.api_client import get_master_by_email
+from internship.services.internship import InternshipAPIService
 
 
 def redirect_if_not_master(function):
     @wraps(function)
     def wrapper(request, *args, **kwargs):
-        if not get_master_by_email(email=request.user.email):
+        if not InternshipAPIService.get_master_by_email(email=request.user.email):
             messages.add_message(
                 request, messages.ERROR, _("Score encoding is only accessible to internship's masters")
             )

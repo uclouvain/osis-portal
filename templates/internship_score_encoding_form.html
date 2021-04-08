@@ -45,7 +45,7 @@
             {{ specialty.cohort.name }} - {{ specialty.name }}
         </a>
     </li>
-    <li class="active">{{ student.person.last_name | upper }}, {{ student.person.first_name }}</li>
+    <li class="active">{{ student.last_name | upper }}, {{ student.first_name }}</li>
 {% endblock %}
 
 {% block content %}
@@ -57,7 +57,7 @@
 
     <div class="panel panel-default">
     <div class="panel-heading">
-            <h3 class="pull-right">{{ student.person.last_name | upper }}, {{ student.person.first_name }}</h3>
+            <h3 class="pull-right">{{ student.last_name | upper }}, {{ student.first_name }}</h3>
             <h2 class="pull-left" style="margin-right: 20px;">{{ period.name }}</h2>
             <h4>{{ specialty.cohort.name }} - {{ specialty.name }}</h4>
             <h4>{{ organization.name }}</h4>
@@ -66,21 +66,21 @@
         <form method="post" class="form-inline">
         {% csrf_token %}
         <h3>
-            {% trans 'APDs' %}
+            Activités Professionnelles délégables (APD)
             <a data-toggle="modal" data-target="#apd-doc" style="cursor: pointer;">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </a>
         </h3>
         <hr/>
         <div class="col-xs-12">
-            <label>{% trans 'Targeted APDs before internship' %}</label>
+            <label>{% trans 'Targeted APD' %}</label>
             <div class="form-group">
                 {% for apd in apds %}
                 <div class="checkbox">
                   <label for="obj-{{ apd }}" style="text-align: right; width: 30px;">
                       <span class="apd-label-text">{{ apd | only_number}}</span>
                   </label>
-                  <input type="checkbox" id="obj-{{ apd }}" name="obj-{{ apd }}" value="obj-{{ apd }}" {% if score and apd|only_number in score.objectives.apds %}checked{% endif %}>
+                  <input class="apd-checkbox" type="checkbox" id="{{ apd }}" name="obj-{{ apd }}" value="obj-{{ apd }}" {% if score and apd|only_number in score.objectives.apds %}checked{% endif %}>
                 </div>
                 {% endfor %}
             </div>
@@ -89,7 +89,7 @@
             <div class="col-md-4 form-group" style="margin-top: 20px; margin-bottom: 20px;">
                 <label for="{{ apd }}" class="col-md-4 text-center" style="line-height:2.5;">APD {{ apd | only_number }}</label>
                 <div class="col-md-8">
-                <select style="width: 100%;" class="form-control" name="{{ apd }}" id="{{ apd }}">
+                <select style="width: 100%;" class="form-control" name="{{ apd }}" id="input-{{ apd }}" disabled>
                     <option value="">-</option>
                     {% for grade in available_grades %}
                         <option value="{{ grade }}" {% if score and score|get_attr:apd == grade %} selected {% endif %}>{{ grade }}</option>
@@ -100,11 +100,13 @@
         {% endfor %}
         <div class="row">
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px;">
-                <h5>{% trans 'Autonomy level (% of students according to periods)' %}</h5>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>-</th>
+                            <h5><b>{% trans 'Autonomy level (% of students according to periods)' %}</b></h5>
+                        </tr>
+                        <tr>
+                            <th>{% trans 'Grade' %}</th>
                             <th>P1 {% trans 'to' %} P2</th>
                             <th>P3 {% trans 'to' %} P5</th>
                             <th>P6 {% trans 'to' %} P7</th>
@@ -136,7 +138,7 @@
                             <td>10%</td>
                         </tr>
                         <tr>
-                            <th>E ({% trans 'not observed' %})</th>
+                            <th>- ({% trans 'not observed' %})</th>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -148,10 +150,8 @@
         <h3>{% trans 'Comments' %} </h3>
         <hr/>
         {% for field in comments_fields %}
-            <label for="{{ field }}">
-                {% trans "Intermediary evaluation (optional)" %}
-            </label>
-            <textarea id="{{ field }}" name="{{ field }}" class="form-control" rows="5" style="width: 100%;">{% if score %}{{ score.comments|get_item:field }}{% endif %}</textarea>
+            <label for="{{ field.0 }}">{{ field.1 }}</label>
+            <textarea id="{{ field.0 }}" name="{{ field.0 }}" class="form-control" rows="5" style="width: 100%;">{% if score %}{{ score.comments|get_item:field.0 }}{% endif %}</textarea>
             <br/>
             <br/>
         {% endfor %}
@@ -163,3 +163,20 @@
     {% include 'internship_apd_documentation.html' %}
 
 {% endblock %}
+
+{% block script %}
+    <script>
+        // enable/disable apd inputs according to targeted apd
+        document.querySelectorAll('.apd-checkbox').forEach((checkbox) => {
+            enableCheckedAPDInput(checkbox);
+            checkbox.addEventListener('change', () => {
+                enableCheckedAPDInput(checkbox);
+            })
+        })
+
+        function enableCheckedAPDInput(checkbox){
+            document.querySelector(`#input-${checkbox.id}`).disabled = !checkbox.checked;
+        }
+    </script>
+{% endblock %}
+
