@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,29 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
+import logging
 
-from base.models import offer_enrollment
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+import osis_internship_sdk
+from django.conf import settings
 
+from base.models.person import Person
 
-class OfferAdmin(SerializableModelAdmin):
-    fieldsets = ((None, {'fields': ('title',)}),)
-    search_fields = ['title']
-
-
-class Offer(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    title = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.title
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def find_by_id(offer_id):
-    return Offer.objects.get(pk=offer_id)
+def build_configuration(person: Person = None) -> osis_internship_sdk.Configuration:
+    """
+    Return SDK configuration of internship based on person provided in kwargs
+    If no person provided, it will use generic token to make request
+    """
+    if not settings.OSIS_INTERNSHIP_SDK_HOST:
+        logger.debug("'OSIS_INTERNSHIP_SDK_HOST' setting must be set in configuration")
 
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        # TODO : Move logic (api.get_token_from_osis) to shared utility class
+        from continuing_education.views import api
+        token = api.get_token_from_osis(person.user, force_user_creation=True)
 
-def find_by_student(student):
-    offer_ids = offer_enrollment.find_by_student(student).values('offer_year__offer_id')
-    return Offer.objects.filter(pk__in=offer_ids)
+    return osis_internship_sdk.Configuration(
+        host=settings.OSIS_INTERNSHIP_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_INTERNSHIP_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })

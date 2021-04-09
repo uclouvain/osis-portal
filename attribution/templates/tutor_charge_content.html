@@ -8,7 +8,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -74,6 +74,12 @@
                     <a href="{{ attribution.attribution_students_url }}">
                         <span class="fa fa-group" aria-hidden="true"></span>
                     </a>
+                    {% if attribution.has_peps %}
+                        <span class="label label-warning"
+                              title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)'%}">
+                            PEPS
+                        </span>
+                    {% endif%}
                 </td>
                 <td>
                     {% if attribution.links.schedule %}

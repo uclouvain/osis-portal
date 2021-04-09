@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,21 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import string
+
 import factory.fuzzy
 
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.offer import OfferFactory
+from base.tests.factories.student import StudentFactory
+from base.models.enums import peps_type
 
 
-def generate_title(offer_year):
-    return '{obj.academic_year} {obj.acronym}'.format(obj=offer_year).lower()
-
-
-class OfferYearFactory(factory.django.DjangoModelFactory):
+class StudentSpecificProlileFactory(factory.DjangoModelFactory):
     class Meta:
-        model = "base.OfferYear"
+        model = 'base.StudentSpecificProfile'
 
-    offer = factory.SubFactory(OfferFactory)
-    academic_year = factory.SubFactory(AcademicYearFactory)
-    acronym = factory.Sequence(lambda n: 'Offer %d' % n)
-    title = factory.LazyAttribute(generate_title)
+    student = factory.SubFactory(StudentFactory)
+    type = peps_type.PepsTypes.ARTIST
+    subtype_disability = ''
+    subtype_sport= ''
+    guide = None
+    arrangement_additional_time = False
+    arrangement_appropriate_copy = False
+    arrangement_other = False
+    arrangement_specific_locale = False
+    arrangement_comment = None

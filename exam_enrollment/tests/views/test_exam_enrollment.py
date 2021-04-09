@@ -27,9 +27,9 @@ from django.test import TestCase
 
 from base.models.enums import offer_enrollment_state
 from base.tests.factories.academic_year import AcademicYearFactory
+from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.group import GroupFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
-from base.tests.factories.offer_year import OfferYearFactory
 from base.tests.factories.student import StudentFactory
 from exam_enrollment.views import exam_enrollment
 
@@ -39,14 +39,14 @@ class TestExamEnrollment(TestCase):
     def setUpTestData(cls):
         GroupFactory(name='students')
         cls.academic_year = AcademicYearFactory()
-        cls.off_year = OfferYearFactory(academic_year=cls.academic_year)
+        cls.educ_group_year = EducationGroupYearFactory(academic_year=cls.academic_year)
         cls.student = StudentFactory()
 
     def test_get_student_programs(self):
-        OfferEnrollmentFactory(student=self.student, offer_year=self.off_year,
+        OfferEnrollmentFactory(student=self.student, education_group_year=self.educ_group_year,
                                enrollment_state=offer_enrollment_state.PROVISORY)
-        OfferEnrollmentFactory(student=self.student, offer_year=self.off_year,
+        OfferEnrollmentFactory(student=self.student, education_group_year=self.educ_group_year,
                                enrollment_state=offer_enrollment_state.SUBSCRIBED)
-        OfferEnrollmentFactory(student=self.student, offer_year=self.off_year, enrollment_state=None)
+        OfferEnrollmentFactory(student=self.student, education_group_year=self.educ_group_year, enrollment_state=None)
         enrollments = exam_enrollment._get_student_programs(self.student, self.academic_year)
         self.assertEqual(len(enrollments), 2)

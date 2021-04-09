@@ -35,7 +35,7 @@ from osis_common.queue import queue_sender
 class ExamEnrollmentSubmittedAdmin(admin.ModelAdmin):
     list_display = ('offer_enrollment',)
     fieldsets = ((None, {'fields': ('offer_enrollment', 'document')}),)
-    search_fields = ['offer_enrollment__student__registration_id', 'offer_enrollment__offer_year__acronym']
+    search_fields = ['offer_enrollment__student__registration_id', 'offer_enrollment__education_group_year__acronym']
     raw_id_fields = ('offer_enrollment',)
     actions = ['resend_messages_to_queue']
 
