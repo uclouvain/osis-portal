@@ -78,6 +78,11 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
 
     periods = Period.objects.filter(cohort__uuid=specialty.cohort.uuid).order_by('date_start')
 
+    stats = InternshipAPIService.get_students_affectations_count(
+        specialty_uuid=specialty_uuid,
+        organization_uuid=organization_uuid,
+    )
+
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 
 
