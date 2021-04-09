@@ -46,7 +46,7 @@
     {% include "template_messages.html" %}
 
     <div class="panel panel-default">
-        {% if stats.total_count != stats.validated_count %}
+        {% if not_validated_count > 0 %}
         <div id="scores-not-validated-warning" class="alert alert-warning" role="alert" style="margin-bottom: 0;">
             <table>
                 <tr>
@@ -163,8 +163,7 @@
            document.querySelector('#filter-form').submit();
         });
 
-        let totalCount = {{ stats.total_count }};
-        let validatedCount = {{ stats.validated_count }};
+        let notValidatedCount = {{ not_validated_count }};
 
         $('#validation_modal').on('show.bs.modal', (event) => {
             $('#validation-error-alert').hide();
@@ -198,8 +197,8 @@
             editBtn.removeAttribute('href');
             editBtn.setAttribute('disabled', '');
             validateBtn.outerHTML = '<span class="glyphicon glyphicon-ok-sign text-success" aria-hidden="true"></span>';
-            validatedCount+=1;
-            if(validatedCount === totalCount){
+            notValidatedCount-=1;
+            if(notValidatedCount === 0){
                 $('#scores-not-validated-warning').hide();
             }
         }
