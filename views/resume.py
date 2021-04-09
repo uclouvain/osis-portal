@@ -76,7 +76,7 @@ def view_student_resume(request, cohort_id):
             speciality=affectation.speciality,
             organization=affectation.organization
         ).first()
-        offer.__dict__['master'] = _get_internship_masters_repr(affectation)
+        offer.master = _get_internship_masters_repr(affectation)
         try:
             offers[affectation.organization].update({affectation.speciality: offer})
         except KeyError:
