@@ -76,12 +76,11 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
         specialty_uuid, organization_uuid, selected_period, **pagination_params
     )
 
-    periods = Period.objects.filter(cohort__uuid=specialty.cohort.uuid).order_by('date_start')
-
-    stats = InternshipAPIService.get_students_affectations_count(
-        specialty_uuid=specialty_uuid,
-        organization_uuid=organization_uuid,
+    not_validated_count = len(
+        [_ for affectation in students_affectations if affectation.score and not affectation.score.validated]
     )
+
+    periods = Period.objects.filter(cohort__uuid=specialty.cohort.uuid).order_by('date_start')
 
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 
@@ -104,8 +103,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
 
     if request.POST:
         score = _build_score_to_update(request.POST, score)
-        if not _validate_score(request.POST):
-            _show_invalid_update_msg(request)
+        if not _validate_score(request) or not _required_response(request):
             return layout.render(request, "internship_score_encoding_form.html", locals())
         if InternshipAPIService.update_score(affectation_uuid, score):
             _show_success_update_msg(request, period, student)
@@ -144,6 +142,14 @@ def _show_invalid_update_msg(request):
     )
 
 
+def _show_required_response_msg(request):
+    messages.add_message(
+        request,
+        messages.ERROR,
+        _("You must reply to the required question about internship student attendance during evaluation")
+    )
+
+
 def _build_score_to_update(post_data, score):
     comments = _build_comments(post_data)
     objectives = _build_objectives(post_data)
@@ -151,6 +157,7 @@ def _build_score_to_update(post_data, score):
         uuid=score.uuid,
         comments=comments,
         objectives=objectives,
+        student_presence=post_data.get('presence') == 'yes',
         **{key: post_data.get(key) for key in ScoreGet.attribute_map.keys() if key in post_data.keys()}
     )
     return score
@@ -165,6 +172,16 @@ def _build_objectives(post_data):
     return {'apds': [only_number(apd) for apd in apds_objectives if apd]}
 
 
-def _validate_score(post_data):
-    apds_data = [post_data.get(apd) for apd in APDS if post_data.get(apd)]
-    return MIN_APDS <= len(apds_data) <= MAX_APDS
+def _validate_score(request):
+    apds_data = [request.POST.get(apd) for apd in APDS if request.POST.get(apd)]
+    if not MIN_APDS <= len(apds_data) <= MAX_APDS:
+        _show_invalid_update_msg(request)
+        return False
+    return True
+
+
+def _required_response(request):
+    if not request.POST.get('presence'):
+        _show_required_response_msg(request)
+        return False
+    return True

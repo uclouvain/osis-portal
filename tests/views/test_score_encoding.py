@@ -105,7 +105,7 @@ class TestScoreEncoding(TestCase):
         self.assertIn(str(MIN_APDS), messages_list[0])
         self.assertIn(str(MAX_APDS), messages_list[0])
 
-    def test_post_score_encoding_form_valid(self):
+    def test_post_score_encoding_form_not_valid_no_required_question(self):
         apds_data = {'apd_{}'.format(apd): 'A' for apd in range(1, MAX_APDS - 1)}
         url = reverse('internship_score_encoding_form', kwargs={
             'specialty_uuid': str(uuid.uuid4()),
@@ -113,6 +113,21 @@ class TestScoreEncoding(TestCase):
             'affectation_uuid': str(uuid.uuid4())
         })
         response = self.client.post(url, data=apds_data)
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            _('You must reply to the required question about internship student attendance during evaluation'),
+            messages_list[0]
+        )
+
+    def test_post_score_encoding_form_valid(self):
+        apds_data = {'apd_{}'.format(apd): 'A' for apd in range(1, MAX_APDS - 1)}
+        url = reverse('internship_score_encoding_form', kwargs={
+            'specialty_uuid': str(uuid.uuid4()),
+            'organization_uuid': str(uuid.uuid4()),
+            'affectation_uuid': str(uuid.uuid4())
+        })
+        response = self.client.post(url, data={**apds_data, **{'presence': 'yes'}})
         messages_items = [item for item in messages.get_messages(response.wsgi_request)]
         self.assertEqual(response.status_code, 302)
         self.assertEqual(messages_items[0].level, SUCCESS)

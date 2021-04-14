@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-09 11:27+0200\n"
+"POT-Creation-Date: 2021-04-09 17:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,6 +128,9 @@ msgstr ""
 msgid "Establish a diagnosis"
 msgstr ""
 
+msgid "Evaluation conducted in attendance of the internship student ?"
+msgstr ""
+
 msgid "First choice"
 msgstr ""
 
@@ -221,6 +224,9 @@ msgid "Name"
 msgstr ""
 
 msgid "New delegate"
+msgstr ""
+
+msgid "No"
 msgstr ""
 
 msgid "Number of first choice"
@@ -364,6 +370,9 @@ msgstr ""
 msgid "Write medical prescriptions"
 msgstr ""
 
+msgid "Yes"
+msgstr ""
+
 msgid "You already have an active account"
 msgstr ""
 
@@ -374,6 +383,11 @@ msgid "You don't have an account"
 msgstr ""
 
 msgid "You must evaluate minimum {} and maximum {} APDs"
+msgstr ""
+
+msgid ""
+"You must reply to the required question about internship student attendance "
+"during evaluation"
 msgstr ""
 
 msgid ""
