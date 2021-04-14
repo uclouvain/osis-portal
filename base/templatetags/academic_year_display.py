@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,9 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import forms
+
+from django import template
+
+register = template.Library()
 
 
-class AttributionForm(forms.Form):
-    year = forms.IntegerField()
-    next_year = forms.IntegerField()
+@register.filter()
+def display_as_academic_year(year: int):
+    if year:
+        return "{}-{}".format(year, str(year + 1)[-2:])
+    return ""

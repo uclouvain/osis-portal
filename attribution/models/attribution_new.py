@@ -46,6 +46,7 @@ class AttributionNew(models.Model):
     class Meta:
         permissions = (
             ("can_access_attribution_application", "Can access attribution application"),
+            ("can_access_attribution", "Can access attribution"),
         )
 
     def __str__(self):

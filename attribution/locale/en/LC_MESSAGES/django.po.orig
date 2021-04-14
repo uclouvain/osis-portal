@@ -7,7 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-15 13:54+0100\n"
+<<<<<<< HEAD
+"POT-Creation-Date: 2021-03-04 10:43+0100\n"
+=======
+"POT-Creation-Date: 2021-03-03 11:49+0100\n"
+>>>>>>> a15ba8d77b91f55b02281fb386b3322096507c71
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,6 +79,9 @@ msgctxt "applications"
 msgid "Code"
 msgstr ""
 
+msgid "Comment"
+msgstr ""
+
 msgid "Coordinator"
 msgstr ""
 
@@ -94,9 +101,6 @@ msgid "Deputy sabbatical"
 msgstr ""
 
 msgid "Deputy temporary"
-msgstr ""
-
-msgid "Details other educational facilities"
 msgstr ""
 
 msgid "Display teachers"

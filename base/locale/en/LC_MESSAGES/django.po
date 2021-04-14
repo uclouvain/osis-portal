@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-31 15:04+0200\n"
+"POT-Creation-Date: 2021-03-15 13:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,9 @@ msgstr ""
 msgid "Content type"
 msgstr ""
 
+msgid "Course"
+msgstr ""
+
 msgid "DDI"
 msgstr ""
 
@@ -80,6 +83,12 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+msgid "Details other educational facilities"
+msgstr ""
+
+msgid "Dissertation"
+msgstr ""
+
 msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr ""
 
@@ -90,6 +99,9 @@ msgid "Educational facilities accepted by Jury"
 msgstr ""
 
 msgid "Entrepreneur"
+msgstr ""
+
+msgid "External"
 msgstr ""
 
 msgid "File"
@@ -110,6 +122,9 @@ msgstr ""
 msgid "High Level Promising athlete"
 msgstr ""
 
+msgid "Internship"
+msgstr ""
+
 msgid "Management entity"
 msgstr ""
 
@@ -117,6 +132,12 @@ msgid "Mini-Training"
 msgstr ""
 
 msgid "Not defined"
+msgstr ""
+
+msgid "Other collective"
+msgstr ""
+
+msgid "Other individual"
 msgstr ""
 
 msgid "Other special needs"
@@ -147,6 +168,9 @@ msgid "Sub type Disability"
 msgstr ""
 
 msgid "Sub type Sport"
+msgstr ""
+
+msgid "Thesis"
 msgstr ""
 
 msgid "Title in French"

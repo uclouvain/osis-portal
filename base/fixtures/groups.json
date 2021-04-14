@@ -30,12 +30,12 @@
               [
                   "can_access_attribution",
                   "attribution",
-                  "attribution"
+                  "attributionnew"
               ],
               [
                   "can_access_attribution_application",
                   "attribution",
-                  "tutorapplication"
+                  "attributionnew"
               ]
           ]
       }
