@@ -72,11 +72,13 @@ def _load_students(learning_unit_year_id, a_tutor):
         "academic_year",
         "learning_unit"
     ).get(pk=learning_unit_year_id)
+    students = _get_learning_unit_yr_enrollments_list(a_learning_unit_year)
     return {
         'global_id': request_tutor.person.global_id,
-        'students': _get_learning_unit_yr_enrollments_list(a_learning_unit_year),
+        'students': students,
         'learning_unit_year': a_learning_unit_year,
-        'tutor_id': request_tutor.id
+        'tutor_id': request_tutor.id,
+        'has_peps': _has_peps_student(students),
     }
 
 
@@ -146,7 +148,7 @@ def get_session_value(session_results, month_session, variable_to_get):
 def get_enrollments_dict_for_display(learning_unit_enrollment):
     session_results = get_sessions_results(learning_unit_enrollment.offer_enrollment.student.registration_id,
                                            learning_unit_enrollment.learning_unit_year,
-                                           learning_unit_enrollment.offer_enrollment.offer_year.acronym)
+                                           learning_unit_enrollment.offer_enrollment.education_group_year.acronym)
 
     student_specific_profile = None
     if hasattr(learning_unit_enrollment.offer_enrollment.student, 'studentspecificprofile'):
@@ -156,7 +158,7 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
         'email': learning_unit_enrollment.offer_enrollment.student.person.email,
-        'program': learning_unit_enrollment.offer_enrollment.offer_year.acronym,
+        'program': learning_unit_enrollment.offer_enrollment.education_group_year.acronym,
         'acronym': learning_unit_enrollment.learning_unit_year.acronym,
         'registration_id': learning_unit_enrollment.offer_enrollment.student.registration_id,
         'january_note': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE),
@@ -189,3 +191,15 @@ def _get_learning_unit_yr_enrollments_list(a_learning_unit_year) -> List[Dict]:
         for lue in get_learning_unit_enrollments_list(a_learning_unit_year)
     ]
     return sorted(enrollments, key=itemgetter('program'))
+
+
+def _has_peps_student(students):
+    for enrollment in students:
+        if enrollment.get('student_specific_profile'):
+            return True
+    return False
+
+
+def check_peps(code: str, year: int) -> bool:
+    luy = LearningUnitYear.objects.get(acronym=code, academic_year__year=year)
+    return _has_peps_student(_get_learning_unit_yr_enrollments_list(luy))
