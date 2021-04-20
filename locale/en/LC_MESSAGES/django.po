@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 16:38+0200\n"
+"POT-Creation-Date: 2021-04-20 14:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,6 +191,9 @@ msgstr ""
 msgid "Internship score encoding"
 msgstr ""
 
+msgid "Internship student was present during evaluation process"
+msgstr ""
+
 msgid "Internships"
 msgstr ""
 
@@ -200,6 +203,9 @@ msgstr ""
 msgid ""
 "It seems you are not subscribed to internships, you may want to check with "
 "your administration."
+msgstr ""
+
+msgid "Known to student"
 msgstr ""
 
 msgid "Last name"
@@ -349,6 +355,11 @@ msgstr ""
 msgid "This action will validate the grades submitted for"
 msgstr ""
 
+msgid ""
+"This screen enables you to manage delegates only. Any substitution of an "
+"internship's master should be notified to internship administration"
+msgstr ""
+
 msgid "User account activated"
 msgstr ""
 
@@ -450,4 +461,7 @@ msgid "to"
 msgstr ""
 
 msgid "tremendously achieving"
+msgstr ""
+
+msgid "yes,no,"
 msgstr ""
