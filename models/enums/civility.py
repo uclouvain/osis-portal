@@ -38,6 +38,8 @@ class Civility(ChoiceEnum):
             return "Prof."
         elif civility == cls.DOCTOR.value:
             return "Dr."
+        else:
+            return ""
 
     @classmethod
     def choices(cls):
