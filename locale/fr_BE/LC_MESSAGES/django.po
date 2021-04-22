@@ -181,7 +181,7 @@ msgid "Internship affectation"
 msgstr "Affectation de stages"
 
 msgid "Internship delegate"
-msgstr "Délégué de stage"
+msgstr "Délégué·e de stage"
 
 msgid "Internship delegate deleted with success"
 msgstr "Délégué de stage supprimé avec succès"
