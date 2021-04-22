@@ -128,9 +128,9 @@ def _show_success_update_msg(request, period, student):
     messages.add_message(
         request,
         messages.SUCCESS,
-        _("Score updated successfully for {}'s internship during {}".format(
+        _("Score updated successfully for {}'s internship during {}").format(
             student.last_name, period.name
-        ))
+        )
     )
 
 
