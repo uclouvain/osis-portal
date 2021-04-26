@@ -23,13 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import uuid
+from collections import namedtuple
+
+import mock
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
+from osis_internship_sdk.model.allocation_get import AllocationGet
+from osis_internship_sdk.model.master_get import MasterGet
+from osis_internship_sdk.model.person import Person
 
 from base.tests.factories.student import StudentFactory
+from internship.models.enums.civility import Civility
 from internship.tests.factories.cohort import CohortFactory
 from internship.tests.models import test_internship_student_information
+from internship.views.resume import _get_internship_masters_repr
 
 
 class TestResumeUrl(TestCase):
@@ -52,3 +61,16 @@ class TestResumeUrl(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    @mock.patch('internship.services.internship.InternshipAPIService.get_mastered_allocations')
+    def test_get_internship_masters_repr(self, mock_mastered_allocations):
+        mock_mastered_allocations.return_value = [
+            AllocationGet(master=MasterGet(civility=Civility.PROFESSOR.name, person=Person(last_name='TEST')))
+        ]
+
+        StudentAffectation = namedtuple('StudentAffectation', ['speciality', 'organization'])
+        UuidObj = namedtuple('Object', ['uuid'])
+
+        affectation = StudentAffectation(speciality=UuidObj(uuid=uuid.uuid4()), organization=UuidObj(uuid=uuid.uuid4()))
+        repr = _get_internship_masters_repr(affectation)
+        self.assertEqual(repr, "Prof. TEST")

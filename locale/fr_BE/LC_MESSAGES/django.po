@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-10 10:41+0100\n"
+"POT-Creation-Date: 2021-04-20 14:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,9 +15,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid "APDs"
-msgstr "APDs"
 
 msgid "APDs description"
 msgstr "Description des APDs"
@@ -135,6 +132,9 @@ msgstr "Inscriptions du"
 msgid "Establish a diagnosis"
 msgstr "Établir un diagnostic de travail"
 
+msgid "Evaluation conducted in attendance of the internship student ?"
+msgstr "L'évaluation a-t-elle été réalisée en présence du stagiaire ?"
+
 msgid "First choice"
 msgstr "Premier choix"
 
@@ -150,6 +150,12 @@ msgstr "Quatrième choix"
 msgid "Generalist"
 msgstr "Généraliste"
 
+msgid "Good performance examples"
+msgstr "Exemples de bonne performance"
+
+msgid "Grade"
+msgstr "Cote"
+
 msgid "Grades modifications will no longer be allowed after validation."
 msgstr "Les modifications de cotes ne seront plus permises après validation."
 
@@ -162,6 +168,9 @@ msgstr "Liste des hôpitaux"
 msgid "Hospitals"
 msgstr "Hôpitaux"
 
+msgid "Improvement areas"
+msgstr "Points à améliorer"
+
 msgid "Intermediary evaluation (optional)"
 msgstr "Evaluation intermédiaire (facultative)"
 
@@ -170,6 +179,9 @@ msgstr "Stage"
 
 msgid "Internship affectation"
 msgstr "Affectation de stages"
+
+msgid "Internship delegate"
+msgstr "Délégué·e de stage"
 
 msgid "Internship delegate deleted with success"
 msgstr "Délégué de stage supprimé avec succès"
@@ -183,6 +195,9 @@ msgstr "Maître de stage"
 msgid "Internship score encoding"
 msgstr "Encodage des cotes de stage"
 
+msgid "Internship student was present during evaluation process"
+msgstr "Le stagiaire était présent pendant le processus d'évaluation"
+
 msgid "Internships"
 msgstr "Stages"
 
@@ -195,6 +210,9 @@ msgid ""
 msgstr ""
 "Il semblerait que vous ne soyez pas inscrit aux stages, nous vous "
 "recommandons de contacter votre secrétariat."
+
+msgid "Known to student"
+msgstr "Connu de l'étudiant"
 
 msgid "Last name"
 msgstr "Nom"
@@ -222,6 +240,9 @@ msgstr "Nom"
 
 msgid "New delegate"
 msgstr "Nouveau délégué"
+
+msgid "No"
+msgstr "Non"
 
 msgid "Number of first choice"
 msgstr "Nombre de 1er choix"
@@ -290,6 +311,10 @@ msgstr "Sélectionner des tests diagnostics"
 msgid "Selective internships"
 msgstr "Stages au choix"
 
+msgid ""
+"Some grades have not been validated yet, please do not forget to validate"
+msgstr "Il existe encore des cotes non validées, n'oubliez pas de les valider"
+
 msgid "Specialist"
 msgstr "Spécialiste"
 
@@ -311,14 +336,17 @@ msgstr "Encodez vos choix de stages"
 msgid "Succesfull logout"
 msgstr "Déconnexion réalisée avec succès"
 
+msgid "Suggested learning methods"
+msgstr "Méthodes d'apprentissage suggérées"
+
 msgid "Sum up of your choices and your affectations"
 msgstr "Résumé de vos choix et affectations"
 
 msgid "Take a history (anamnesis)"
 msgstr "Prendre l'anamnèse"
 
-msgid "Targeted APDs before internship"
-msgstr "APDs ciblés en début de stage"
+msgid "Targeted APD"
+msgstr "APDs ciblés"
 
 msgid "The activation failed"
 msgstr "L'activation a échoué"
@@ -334,6 +362,14 @@ msgstr "Cette action supprimera "
 
 msgid "This action will validate the grades submitted for"
 msgstr "Cette action validera les cotes soumises pour"
+
+msgid ""
+"This screen enables you to manage delegates only. Any substitution of an "
+"internship's master should be notified to internship administration"
+msgstr ""
+"Cet écran vous permet seulement de gérer les délégués de stage. Tout "
+"remplacement d'un maître de stage devra être communiqué au préalable à "
+"l'administration des stages."
 
 msgid "User account activated"
 msgstr "Compte utilisateur activé"
@@ -359,6 +395,9 @@ msgstr "Travailler en équipe"
 msgid "Write medical prescriptions"
 msgstr "Rédiger les prescriptions"
 
+msgid "Yes"
+msgstr "Oui"
+
 msgid "You already have an active account"
 msgstr "Vous avez déjà un compte utilisateur actif"
 
@@ -370,6 +409,13 @@ msgstr "Vous n'avez pas de compte utilisateur"
 
 msgid "You must evaluate minimum {} and maximum {} APDs"
 msgstr "Vous devez évaluer au minimum {} et au maximum {} APDs"
+
+msgid ""
+"You must reply to the required question about internship student attendance "
+"during evaluation"
+msgstr ""
+"Vous devez répondre à la question concernant la présence du stagiaire "
+"pendant l'évaluation"
 
 msgid ""
 "You will find hereunder internships that have been assigned to you and for "
@@ -436,5 +482,5 @@ msgstr "à"
 msgid "tremendously achieving"
 msgstr "réalise de façon exceptionnelle"
 
-#~ msgid "Sump up of your choices and your affectations"
-#~ msgstr "Résumé de vos choix et affectations"
+msgid "yes,no,"
+msgstr "oui,non,"

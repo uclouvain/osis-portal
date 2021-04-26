@@ -40,11 +40,30 @@
 
     {% include "template_messages.html" %}
 
-    <div class="panel panel-default">
-        <div class="panel panel-heading">
+    <div class="alert alert-info" role="alert" style="margin-bottom: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+        <table>
+            <tr>
+                <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:180%" aria-hidden="true"></i></td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                {% trans "This screen enables you to manage delegates only. Any substitution of an internship's master should be notified to internship administration" %}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="panel panel-default" style="border-radius: 0;">
+        <div class="panel panel-heading" style="border-radius: 0;">
             <ul class="nav nav-pills">
-                {% for allocation in allocations %}
-                    <li {% if forloop.first %}class="active"{% endif %}>
+                {% for allocation in master_allocations %}
+                    <li {% if allocation.internship == request.GET.internship or not request.GET.internship and forloop.first %}
+                        class="active"
+                    {% endif %}>
                         <a data-toggle="pill" href="#{{ allocation.internship }}">
                             {{ allocation.specialty.name }} - {{ allocation.organization.name }}
                         </a>
@@ -54,8 +73,11 @@
         </div>
         <div class="panel panel-body">
             <div class="tab-content">
-                {% for allocation in allocations %}
-                  <div id="{{ allocation.internship }}" class="tab-pane fade in {% if forloop.first %} active {% endif %}">
+                {% for allocation in master_allocations %}
+                  <div id="{{ allocation.internship }}" class="tab-pane fade in
+                    {% if allocation.internship == request.GET.internship or not request.GET.internship and forloop.first %}
+                     active
+                    {% endif %}">
                    <table class="table table-hover" id="order_delegates">
                         <thead>
                             <tr>
@@ -69,7 +91,7 @@
                         <tbody>
                         {% for delegated_allocation in allocation.delegated %}
                             <tr>
-                                <td>{{ delegated_allocation.master.civility }}</td>
+                                <td>{{ delegated_allocation.master.civility|default_if_none:'-'}}</td>
                                 <td>{{ delegated_allocation.master.person.last_name }}</td>
                                 <td>{{ delegated_allocation.master.person.first_name }}</td>
                                 <td>{{ delegated_allocation.master.person.email }}</td>
@@ -85,15 +107,13 @@
                         {% endfor %}
                         </tbody>
                    </table>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#delegate-form-modal"
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#delegate-form-modal-{{ allocation.uuid }}"
                             data-specialty="{{ allocation.specialty.uuid }}" data-organization="{{ allocation.organization.uuid }}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                         {% trans 'New delegate' %}
                     </button>
                   </div>
-
-                    {% include 'internship_delegate_form.html' %}
-
+                  {% include 'internship_delegate_form.html' %}
                 {% endfor %}
             </div>
         </div>

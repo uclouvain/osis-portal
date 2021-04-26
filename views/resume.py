@@ -41,8 +41,9 @@ from internship.models import internship_speciality as mdl_internship_speciality
 from internship.models import internship_student_affectation_stat as mdl_student_affectation
 from internship.models import internship_student_information as mdl_student_information
 from internship.models import period as mdl_period
+from internship.models.enums.civility import Civility
 from internship.models.score_encoding_utils import APDS
-from internship.views.api_client import get_score
+from internship.services.internship import InternshipAPIService
 
 
 @login_required
@@ -67,14 +68,15 @@ def view_student_resume(request, cohort_id):
     publication_allowed = cohort.publication_start_date <= datetime.date.today()
     offers = {}
     for affectation in student_affectations:
-        score = get_score(str(affectation.student.uuid), str(affectation.period.uuid))
-        if score.validated:
-            setattr(affectation, 'score', get_score(str(affectation.student.uuid), str(affectation.period.uuid)))
+        score = InternshipAPIService.get_affectation(str(affectation.uuid)).score
+        if score and score.validated:
+            setattr(affectation, 'score', score)
         offer = mdl_internship_offer.find_offer(
             cohort=cohort,
             speciality=affectation.speciality,
             organization=affectation.organization
         ).first()
+        offer.master = _get_internship_masters_repr(affectation)
         try:
             offers[affectation.organization].update({affectation.speciality: offer})
         except KeyError:
@@ -91,6 +93,19 @@ def view_student_resume(request, cohort_id):
         "current_date": date.today(),
         "apds": APDS,
     })
+
+
+def _get_internship_masters_repr(affectation):
+    allocations = InternshipAPIService.get_mastered_allocations(
+        specialty_uuid=str(affectation.speciality.uuid),
+        organization_uuid=str(affectation.organization.uuid)
+    )
+    return " & ".join(
+        ["{} {}".format(
+            Civility.get_acronym(alloc.master.civility),
+            alloc.master.person.last_name.upper()
+        ) for alloc in allocations]
+    )
 
 
 def save_from_form(form, person, cohort):

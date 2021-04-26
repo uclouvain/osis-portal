@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div id="delegate-form-modal" class="modal fade" role="dialog">
+<div id="delegate-form-modal-{{ allocation.uuid }}" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="{% url 'internship_new_delegate' specialty_uuid=allocation.specialty.uuid organization_uuid=allocation.organization.uuid %}"

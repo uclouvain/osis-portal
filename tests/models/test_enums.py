@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,19 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.utils.translation import gettext as _
+from django.test.testcases import TestCase
 
-APD_NUMBER = 15
-MIN_APDS = 5
-MAX_APDS = 9
+from internship.models.enums.civility import Civility
 
-APDS = ['apd_{}'.format(index) for index in range(1, APD_NUMBER + 1)]
 
-COMMENTS_FIELDS = [
-    ('intermediary_evaluation', _("Intermediary evaluation (optional)")),
-    ('good_perf_ex', _("Good performance examples")),
-    ('impr_areas', _("Improvement areas")),
-    ('suggestions', _("Suggested learning methods"))
-]
-DEFAULT_PERIODS = 'all'
-AVAILABLE_GRADES = ['A', 'B', 'C', 'D']
+class TestEnums(TestCase):
+    def test_civility(self):
+        for civility in [civility for civility in dir(Civility) if not civility.startswith('__')]:
+            value = Civility.__getattr__(civility)._value_
+            self.assertIn(value, str(Civility.choices()))
+
+    def test_civility_acronym(self):
+        dr_acronym = Civility.get_acronym(Civility.DOCTOR.name)
+        prof_acronym = Civility.get_acronym(Civility.PROFESSOR.name)
+        self.assertEqual(dr_acronym, "Dr.")
+        self.assertEqual(prof_acronym, "Prof.")
