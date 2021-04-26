@@ -181,8 +181,8 @@ msgstr "Accès à mes données personnelles."
 msgid "This requires a"
 msgstr "Ceci nécessite un"
 
-msgid "This requires a VPN access outside UCL."
-msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
+msgid "This requires a VPN access outside UCLouvain."
+msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCLouvain."
 
 msgid "VPN access"
 msgstr "accès VPN"
@@ -190,5 +190,5 @@ msgstr "accès VPN"
 msgid "View my annual program and exam marks"
 msgstr "Voir mon programme annuel et mes notes d'examen"
 
-msgid "outside UCL."
-msgstr "en dehors du réseau de l'UCL."
+msgid "outside UCLouvain."
+msgstr "en dehors du réseau de l'UCLouvain."
