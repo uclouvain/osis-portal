@@ -69,4 +69,4 @@ msgid "VPN access"
 msgstr "Accès VPN"
 
 msgid "outside UCL"
-msgstr "en dehors de l'UCL"
+msgstr "en dehors de l'UCLouvain"
