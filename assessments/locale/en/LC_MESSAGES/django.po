@@ -62,7 +62,7 @@ msgstr ""
 msgid "This requires a "
 msgstr ""
 
-msgid "This requires a VPN access outside UCL."
+msgid "This requires a VPN access outside UCLouvain."
 msgstr ""
 
 msgid "VPN access"
