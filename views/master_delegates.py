@@ -80,6 +80,7 @@ def new_delegate(request, specialty_uuid, organization_uuid):
             )
             allocation = InternshipAPIService.post_master_allocation(allocation)
             if allocation:
+                # TODO : remove when migrate to osis
                 _add_existing_user_to_internship_masters_group(person)
                 messages.add_message(
                     request, SUCCESS, _('Internship delegate {} created with success'.format(
