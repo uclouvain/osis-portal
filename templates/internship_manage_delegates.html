@@ -91,7 +91,7 @@
                         <tbody>
                         {% for delegated_allocation in allocation.delegated %}
                             <tr>
-                                <td>{{ delegated_allocation.master.civility|default_if_none:'-'}}</td>
+                                <td>{{ delegated_allocation.master.civility|get_civility_acronym|default_if_none:'-'}}</td>
                                 <td>{{ delegated_allocation.master.person.last_name }}</td>
                                 <td>{{ delegated_allocation.master.person.first_name }}</td>
                                 <td>{{ delegated_allocation.master.person.email }}</td>
