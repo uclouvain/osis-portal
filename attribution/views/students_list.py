@@ -28,6 +28,7 @@ from operator import itemgetter
 from typing import List, Dict
 
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 
 from attribution.business import xls_students_by_learning_unit
@@ -201,5 +202,8 @@ def _has_peps_student(students):
 
 
 def check_peps(code: str, year: int) -> bool:
-    luy = LearningUnitYear.objects.get(acronym=code, academic_year__year=year)
-    return _has_peps_student(_get_learning_unit_yr_enrollments_list(luy))
+    try:
+        luy = LearningUnitYear.objects.get(acronym=code, academic_year__year=year)
+        return _has_peps_student(_get_learning_unit_yr_enrollments_list(luy))
+    except ObjectDoesNotExist:
+        return False
