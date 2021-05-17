@@ -174,7 +174,7 @@ msgstr ""
 msgid "This requires a"
 msgstr ""
 
-msgid "This requires a VPN access outside UCL."
+msgid "This requires a VPN access outside UCLouvain."
 msgstr ""
 
 msgid "VPN access"
@@ -183,5 +183,5 @@ msgstr ""
 msgid "View my annual program and exam marks"
 msgstr ""
 
-msgid "outside UCL."
+msgid "outside UCLouvain."
 msgstr ""
