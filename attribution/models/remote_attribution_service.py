@@ -29,19 +29,17 @@ from typing import List
 import osis_attribution_sdk
 import urllib3
 from django.conf import settings
+from osis_attribution_sdk.api import attribution_api
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import attribution as attribution_sdk
-
-from osis_attribution_sdk.api import attribution_api
-
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class RemoteAttributionService:
     @staticmethod
-    def get_attributions_list(year: int, person: Person) -> List:
+    def get_attributions_list(year: int, person: Person, with_classes=False) -> List:
         configuration = attribution_sdk.build_configuration(person)
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = attribution_api.AttributionApi(api_client)
@@ -49,7 +47,8 @@ class RemoteAttributionService:
                 attributions = sorted(
                     api_instance.attributions_list(
                         year=str(year),
-                        global_id=person.global_id
+                        global_id=person.global_id,
+                        with_classes=with_classes
                     ),
                     key=lambda attribution: attribution.code
                 )
