@@ -68,7 +68,7 @@ def get_learning_units(a_user):
 
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    attributions = RemoteAttributionService.get_attributions_list(year, person)
+    attributions = RemoteAttributionService.get_attributions_list(year, person, with_classes=True)
     if attributions:
         filter_clause = functools.reduce(
             operator.or_,
