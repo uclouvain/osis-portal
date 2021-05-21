@@ -64,5 +64,29 @@
         </div>
     </div>
 {% endif %}
-
-
+{% if 'dissertation' in installed_apps and request.user.person.adviser %}
+    <div class="grid-item">
+        <i class="fa fa-edit"></i>
+        <div class="description">
+            <h4 class="media-heading">
+                <a href="{{ dissertation_url }}" id="lnk_dissertation">
+                    {% trans 'Dissertation' %}
+                </a>
+            </h4>
+            <p>{% trans "Student's dissertations management" %}.</p>
+            <p>
+                <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
+                {% if osis_vpn_help_url %}
+                    <span class="dashboard-vpn-warning">
+                    {% trans 'This requires a' %} <a href="{{ osis_vpn_help_url }}"
+                                                     target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain.' %}
+               </span>
+                {% else %}
+                    <span class="dashboard-vpn-warning">
+                    {% trans 'This requires a VPN access outside UCLouvain.' %}
+                </span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+{% endif %}
