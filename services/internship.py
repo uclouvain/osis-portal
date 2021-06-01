@@ -44,6 +44,10 @@ class InternshipAPIClient:
         return internship_api.InternshipApi(ApiClient(configuration=api_config))
 
 
+class InternshipServiceException(Exception):
+    pass
+
+
 class InternshipAPIService:
     @classmethod
     def get_master_by_email(cls, email):
@@ -141,7 +145,10 @@ class InternshipAPIService:
 
     @classmethod
     def post_master(cls, master):
-        return InternshipAPIClient().masters_post(master_get=master)
+        try:
+            return InternshipAPIClient().masters_post(master_get=master)
+        except ApiException:
+            raise InternshipServiceException
 
     @classmethod
     def post_master_allocation(cls, allocation):

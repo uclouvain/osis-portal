@@ -34,6 +34,10 @@
             padding-left: 10px;
           }
         }
+        .form-group-lg.required .control-label:after {
+           content:"*";
+           color:red;
+        }
     </style>
 {% endblock %}
 
@@ -155,6 +159,31 @@
             <br/>
             <br/>
         {% endfor %}
+
+        <hr/>
+
+        <div class="row form-group-lg required">
+            <label class="control-label col-xs-8">
+                {% trans "Evaluation conducted in attendance of the internship student ?" %}
+            </label>
+            <div class="col-xs-offset-1 col-xs-3 input-group" style="text-align: left;">
+                <label for="yes" class="col-xs-6">
+                    <input type="radio" id="yes" name="presence" value="yes" required
+                           {% if request.POST.presence == "yes" or score.student_presence == True %} checked {% endif %}
+                    >
+                    {% trans 'Yes' %}
+                </label>
+                <label for="no" class="col-xs-6">
+                    <input type="radio" id="no" name="presence" value="no" required
+                           {% if request.POST.presence == "no" or score.student_presence == False %} checked {% endif %}
+                    >
+                    {% trans 'No' %}
+                </label>
+            </div>
+        </div>
+
+        <hr/>
+
         <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
         </form>
       </div>
@@ -175,7 +204,11 @@
         })
 
         function enableCheckedAPDInput(checkbox){
-            document.querySelector(`#input-${checkbox.id}`).disabled = !checkbox.checked;
+            const APDInput = document.querySelector(`#input-${checkbox.id}`);
+            APDInput.disabled = !checkbox.checked;
+            if(APDInput.disabled){
+                APDInput.value = "";
+            }
         }
     </script>
 {% endblock %}

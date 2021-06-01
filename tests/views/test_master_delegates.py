@@ -31,6 +31,7 @@ from django.urls import reverse
 from django.utils.datetime_safe import date
 from osis_internship_sdk.model.allocation_get import AllocationGet
 
+from base.models.signals import GROUP_MASTERS_INTERNSHIP
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 from internship.models.enums.role_choice import ChoiceRole
@@ -81,6 +82,26 @@ class TestScoreEncoding(TestCase):
         self.assertRedirects(response, reverse('internship_manage_delegates')+"?internship={}".format(
             mock_internship_reference.return_value
         ))
+
+    @mock.patch('internship.views.master_delegates._get_internship_reference', return_value='A01')
+    def test_should_add_existing_user_to_group_when_delegate_created(self, mock_internship_reference):
+        existing_user = UserFactory()
+        url = reverse('internship_new_delegate', kwargs={
+            'specialty_uuid': uuid.uuid4(),
+            'organization_uuid': uuid.uuid4()
+        })
+        person = PersonFactory()
+        response = self.client.post(url, data={
+            'first_name': person.first_name,
+            'last_name': person.last_name,
+            'birth_date': date.today(),
+            'email': existing_user.email,
+            'civility': 'DOCTOR'
+        })
+        self.assertRedirects(response, reverse('internship_manage_delegates')+"?internship={}".format(
+            mock_internship_reference.return_value
+        ))
+        self.assertIn(GROUP_MASTERS_INTERNSHIP, existing_user.groups.all().values_list('name', flat=True))
 
     def test_delete_delegate(self):
         url = reverse('internship_delete_delegate', kwargs={'allocation_uuid': uuid.uuid4()})
