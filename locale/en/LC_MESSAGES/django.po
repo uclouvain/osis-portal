@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-22 11:51+0100\n"
+"POT-Creation-Date: 2021-05-05 10:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,6 +34,11 @@ msgid "Affectations are available from"
 msgstr ""
 
 msgid "All periods"
+msgstr ""
+
+msgid ""
+"An error occurred during delegate creation, please contact internships "
+"administration (STAC)"
 msgstr ""
 
 msgid "An error occured during validation"
@@ -128,6 +133,9 @@ msgstr ""
 msgid "Establish a diagnosis"
 msgstr ""
 
+msgid "Evaluation conducted in attendance of the internship student ?"
+msgstr ""
+
 msgid "First choice"
 msgstr ""
 
@@ -173,6 +181,9 @@ msgstr ""
 msgid "Internship affectation"
 msgstr ""
 
+msgid "Internship delegate"
+msgstr ""
+
 msgid "Internship delegate deleted with success"
 msgstr ""
 
@@ -185,6 +196,9 @@ msgstr ""
 msgid "Internship score encoding"
 msgstr ""
 
+msgid "Internship student was present during evaluation process"
+msgstr ""
+
 msgid "Internships"
 msgstr ""
 
@@ -194,6 +208,9 @@ msgstr ""
 msgid ""
 "It seems you are not subscribed to internships, you may want to check with "
 "your administration."
+msgstr ""
+
+msgid "Known to student"
 msgstr ""
 
 msgid "Last name"
@@ -221,6 +238,9 @@ msgid "Name"
 msgstr ""
 
 msgid "New delegate"
+msgstr ""
+
+msgid "No"
 msgstr ""
 
 msgid "Number of first choice"
@@ -288,6 +308,10 @@ msgstr ""
 msgid "Selective internships"
 msgstr ""
 
+msgid ""
+"Some grades have not been validated yet, please do not forget to validate"
+msgstr ""
+
 msgid "Specialist"
 msgstr ""
 
@@ -336,6 +360,11 @@ msgstr ""
 msgid "This action will validate the grades submitted for"
 msgstr ""
 
+msgid ""
+"This screen enables you to manage delegates only. Any substitution of an "
+"internship's master should be notified to internship administration"
+msgstr ""
+
 msgid "User account activated"
 msgstr ""
 
@@ -360,6 +389,9 @@ msgstr ""
 msgid "Write medical prescriptions"
 msgstr ""
 
+msgid "Yes"
+msgstr ""
+
 msgid "You already have an active account"
 msgstr ""
 
@@ -370,6 +402,11 @@ msgid "You don't have an account"
 msgstr ""
 
 msgid "You must evaluate minimum {} and maximum {} APDs"
+msgstr ""
+
+msgid ""
+"You must reply to the required question about internship student attendance "
+"during evaluation"
 msgstr ""
 
 msgid ""
@@ -429,4 +466,7 @@ msgid "to"
 msgstr ""
 
 msgid "tremendously achieving"
+msgstr ""
+
+msgid "yes,no,"
 msgstr ""
