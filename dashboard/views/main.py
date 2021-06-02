@@ -36,7 +36,8 @@ from base.views import layout
 def home(request):
     return layout.render(request, "dashboard.html", {
         'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
-        'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL
+        'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL,
+        'dissertation_url': settings.OSIS_DISSERTATION_URL,
     })
 
 
