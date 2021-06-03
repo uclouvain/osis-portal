@@ -36,7 +36,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic.base import TemplateView
 
-from attribution.models.remote_attribution_service import RemoteAttributionService
+from attribution.services.attribution import AttributionService
 from attribution.views.students_list import check_peps
 from base.models.academic_year import AcademicYear, current_academic_year
 from base.models.person import Person
@@ -101,7 +101,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     @cached_property
     def attributions(self):
-        attributions = RemoteAttributionService.get_attributions_list(self.get_current_year_displayed(), self.person)
+        attributions = AttributionService.get_attributions_list(self.get_current_year_displayed(), self.person)
         return [self._format_attribution_row(attribution) for attribution in attributions]
 
     def get_total_lecturing_charge(self):

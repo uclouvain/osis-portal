@@ -47,17 +47,28 @@ urlpatterns = [
         name='produce_xls_students'),
 
     url(r'^applications/', include([
-        url(r'^$', online_application.overview, name='applications_overview'),
+        url(r'^$', online_application.ApplicationOverviewView.as_view(), name='applications_overview'),
         url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
-        url(r'^search_vacant$', online_application.search_vacant_attribution, name='vacant_attributions_search'),
+        url(
+            r'^search_vacant_courses$',
+            online_application.SearchVacantCoursesView.as_view(),
+            name='search_vacant_courses'
+        ),
         url(r'^send_summary$', online_application.send_mail_applications_summary,
             name='email_tutor_application_confirmation'),
-        url(r'^renew/$', online_application.renew_applications, name='renew_applications'),
-        url(r'^(?P<learning_container_year_id>[0-9]+)/', include([
-            url(r'^edit/$', online_application.create_or_update_application,
-                name='create_or_update_tutor_application'),
-            url(r'^delete/$', online_application.delete_application,
-                name='delete_tutor_application'),
+        url(
+            r'^(?P<vacant_course_code>[0-9A-Za-z-]+)/create$',
+            online_application.CreateApplicationView.as_view(),
+            name='create_application'
+        ),
+        url(
+            r'^renew/$',
+            online_application.RenewMultipleAttributionsAboutToExpireView.as_view(),
+            name='renew_applications',
+        ),
+        url(r'^(?P<application_uuid>[0-9a-z-]+)/', include([
+            url(r'^delete$', online_application.DeleteApplicationView.as_view(), name='delete_application'),
+            url(r'^update$', online_application.UpdateApplicationView.as_view(), name='update_application'),
         ]))
     ])),
 
@@ -76,8 +87,11 @@ urlpatterns = [
         url(r'^applications/', include([
             url(r'^$', online_application.administration_applications,
                 name='attribution_applications'),
-            url(r'^(?P<global_id>[0-9]+)/$', online_application.visualize_tutor_applications,
-                name="visualize_tutor_applications")
+            url(
+                r'^(?P<global_id>[0-9]+)/$',
+                online_application.ApplicationOverviewAdminView.as_view(),
+                name="visualize_tutor_applications"
+            )
         ])),
     ])),
     url(r'^list/students$', list.students_list, name='students_list'),

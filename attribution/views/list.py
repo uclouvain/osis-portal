@@ -37,7 +37,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
-from attribution.models.remote_attribution_service import RemoteAttributionService
+from attribution.services.attribution import AttributionService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.learning_unit_year import LearningUnitYear
@@ -68,7 +68,7 @@ def get_learning_units(a_user):
 
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    attributions = RemoteAttributionService.get_attributions_list(year, person)
+    attributions = AttributionService.get_attributions_list(year, person)
     if attributions:
         filter_clause = functools.reduce(
             operator.or_,

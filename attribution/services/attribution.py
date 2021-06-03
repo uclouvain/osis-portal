@@ -39,7 +39,7 @@ from osis_attribution_sdk.api import attribution_api
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class RemoteAttributionService:
+class AttributionService:
     @staticmethod
     def get_attributions_list(year: int, person: Person) -> List:
         configuration = attribution_sdk.build_configuration(person)

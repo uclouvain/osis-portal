@@ -30,36 +30,37 @@ from django import forms
 from django.core.validators import MinValueValidator
 from django.utils.translation import ugettext_lazy as _, pgettext
 
-from attribution.business import attribution
 from base.forms.base_forms import BootstrapForm
 from base.models.entity_version import search
-from base.models.enums import learning_component_year_type
 
 MAXIMUM_REMARK_LENGTH = 250
 
 
 class ApplicationForm(BootstrapForm):
-    charge_lecturing_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, required=False,
-                                                localize=True,
-                                                validators=[MinValueValidator(0)])
-    charge_practical_asked = forms.DecimalField(max_digits=5, decimal_places=1, initial=0, required=False,
-                                                localize=True,
-                                                validators=[MinValueValidator(0)])
+    code = forms.CharField(disabled=True, required=False)
+    title = forms.CharField(disabled=True, required=False)
+    charge_lecturing_asked = forms.DecimalField(
+        max_digits=5,
+        decimal_places=1,
+        initial=0,
+        required=False,
+        localize=True,
+        validators=[MinValueValidator(0)]
+    )
+    charge_practical_asked = forms.DecimalField(
+        max_digits=5,
+        decimal_places=1,
+        initial=0,
+        required=False,
+        localize=True,
+        validators=[MinValueValidator(0)],
+    )
     course_summary = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False)
     remark = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False, max_length=MAXIMUM_REMARK_LENGTH)
 
-    acronym = forms.CharField(widget=forms.HiddenInput, required=False)
-    year = forms.IntegerField(widget=forms.HiddenInput, required=False)
-
-    def __init__(self, *args, **kwargs):
-        self.learning_container_year = kwargs.pop('learning_container_year')
-        self._load_vacant_attribution()
-        super(ApplicationForm, self).__init__(*args, **kwargs)
-
-    def _load_vacant_attribution(self):
-        self.attribution_vacant = attribution.get_attribution_vacant(
-            learning_container_year=self.learning_container_year
-        )
+    def __init__(self, *args, vacant_course=None, **kwargs):
+        self.vacant_course = vacant_course
+        super().__init__(*args, **kwargs)
 
     def clean(self):
         cleaned_data = super(ApplicationForm, self).clean()
@@ -67,16 +68,10 @@ class ApplicationForm(BootstrapForm):
         if cleaned_data.get('charge_lecturing_asked') is None and cleaned_data.get('charge_practical_asked') is None:
             raise forms.ValidationError(_('Lecturing charge or practical charge must be filled'))
 
-    def clean_acronym(self):
-        return self.learning_container_year.acronym
-
-    def clean_year(self):
-        return self.learning_container_year.academic_year.year
-
     def clean_charge_lecturing_asked(self):
         data_cleaned = self.cleaned_data['charge_lecturing_asked']
         if data_cleaned is not None:
-            max_value = self.attribution_vacant.get(learning_component_year_type.LECTURING, 0)
+            max_value = getattr(self.vacant_course, 'lecturing_volume_available', Decimal('0.0'))
             if data_cleaned > max_value:
                 self.add_error('charge_lecturing_asked', "{0} (max: {1})".format(_('Too much'), max_value))
             return Decimal('{:.1f}'.format(data_cleaned))
@@ -85,7 +80,7 @@ class ApplicationForm(BootstrapForm):
     def clean_charge_practical_asked(self):
         data_cleaned = self.cleaned_data['charge_practical_asked']
         if data_cleaned is not None:
-            max_value = self.attribution_vacant.get(learning_component_year_type.PRACTICAL_EXERCISES, 0)
+            max_value = getattr(self.vacant_course, 'practical_volume_available', Decimal('0.0'))
             if data_cleaned > max_value:
                 self.add_error('charge_practical_asked', "{0} (max: {1})".format(_('Too much'), max_value))
             return Decimal('{:.1f}'.format(data_cleaned))

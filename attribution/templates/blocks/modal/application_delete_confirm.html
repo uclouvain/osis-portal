@@ -27,7 +27,7 @@
 {% block modal_id %}modalConfirmApplicationDelete{{application.learning_container_year_id}}{% endblock %}
 
 {% block modal_content %}
-    <form action="{% url 'delete_tutor_application' application.learning_container_year_id %}"
+    <form action="{% url 'delete_application' application.learning_container_year_id %}"
           id="form_delete_{{ application.learning_container_year_id }}"
           method="POST">
         {% csrf_token %}

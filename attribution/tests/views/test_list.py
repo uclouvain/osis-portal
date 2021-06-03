@@ -92,7 +92,7 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['my_learning_units'], [])
 
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     def test_with_attributions(self, mock_get_attributions_list):
         an_academic_year = create_current_academic_year()
 
@@ -110,7 +110,7 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
 
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     def test_with_attribution_students(self, mock_get_attributions_list):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
@@ -193,7 +193,7 @@ class ListBuildTest(TestCase):
         'SERVER_TO_FETCH_URL': '/server',
         'ATTRIBUTION_PATH': '/path'
     })
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self, mock_fetch, mock_get_attributions_list):
         today = datetime.datetime.today()
@@ -222,7 +222,7 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [a_learning_unit_year])
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     def test_when_trying_to_access_other_tutor_students_list(self, mock_get_attributions_list):
         an_other_tutor = TutorFactory()
         an_other_tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
@@ -247,7 +247,7 @@ class ListBuildTest(TestCase):
         'SERVER_TO_FETCH_URL': '/server',
         'ATTRIBUTION_PATH': '/path'
     })
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self, mock_fetch, mock_get_attributions_list):
         today = datetime.datetime.today()
@@ -309,7 +309,7 @@ class AdminStudentsListTest(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'admin/students_list.html')
 
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     def test_with_attributions(self, mock_get_attributions_list):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
@@ -374,7 +374,7 @@ class AdminListBuildTest(TestCase):
         'SERVER_TO_FETCH_URL': '/server',
         'ATTRIBUTION_PATH': '/path'
     })
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self, mock_fetch, mock_get_attributions_list):
         today = datetime.datetime.today()
@@ -405,7 +405,7 @@ class AdminListBuildTest(TestCase):
         'SERVER_TO_FETCH_URL': '/server',
         'ATTRIBUTION_PATH': '/path'
     })
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self, mock_fetch, mock_get_attributions_list):
         today = datetime.datetime.today()
