@@ -27,24 +27,22 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView, FormView
 
-from attribution.business import tutor_application
 from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 from attribution.forms.application import ApplicationForm, VacantAttributionFilterForm
 from attribution.services.application import ApplicationService
 from attribution.services.attribution import AttributionService
 from attribution.utils import permission
-from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.tutor import Tutor
 from base.templatetags.academic_year_display import display_as_academic_year
@@ -318,7 +316,12 @@ class UpdateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormVie
         return super().form_valid(form)
 
     def get_initial(self):
-        return self.application
+        return {
+            'charge_lecturing_asked': self.application.lecturing_volume,
+            'charge_practical_asked': self.application.practical_volume,
+            'course_summary': self.application.course_summary,
+            'remark': self.application.remark
+        }
 
     def get_form_kwargs(self):
         return {
@@ -373,16 +376,15 @@ class DeleteApplicationView(LoginRequiredMixin, PermissionRequiredMixin, View):
         return redirect('applications_overview')
 
 
-@login_required
-@permission_required('attribution.can_access_attribution_application', raise_exception=True)
-@require_http_methods(["POST"])
-@user_passes_test(permission.is_online_application_opened, login_url=reverse_lazy('outside_applications_period'))
-def send_mail_applications_summary(request):
-    tutor = mdl_base.tutor.find_by_user(request.user)
-    global_id = tutor.person.global_id
-    error_msg = tutor_application.send_mail_applications_summary(global_id)
-    if error_msg:
-        messages.add_message(request, messages.ERROR, _(error_msg))
-    else:
+class SendApplicationsSummaryView(LoginRequiredMixin, PermissionRequiredMixin, View):
+    # PermissionRequiredMixin
+    permission_required = "attribution.can_access_attribution_application"
+    raise_exception = True
+
+    def post(self, request, *args, **kwargs):
+        if not permission.is_online_application_opened(self.request.user):
+            return redirect("outside_applications_period")
+
+        ApplicationService.send_applications_summary(self.request.user.person)
         messages.add_message(request, messages.INFO, _('An email with your applications have been sent'))
-    return redirect('applications_overview')
+        return redirect('applications_overview')

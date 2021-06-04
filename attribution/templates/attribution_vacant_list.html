@@ -152,7 +152,7 @@
                                                 {% trans 'This course is team-managed. The application to this activity is based on a paper transmission.' %}
                                             {% endif %}">
                                     <a id="lnk_submit_application_new" class="btn btn-primary pull-right"
-                                       href="{% url 'create_or_update_tutor_application' learning_container_year_id=1 %}"
+                                       href="{% url 'create_application' vacant_course.code %}"
                                        {% if vacant_course.is_in_team %} disabled {% endif %}>
 
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>

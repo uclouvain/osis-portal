@@ -57,21 +57,21 @@
             {% endif %}
         >
             <td>
-                {{ attribution.acronym }}
+                {{ attribution.code }}
                 {% if attribution.is_in_suppression_proposal %}
                     <span class="fa fa-warning" aria-hidden="true"></span>
                 {% endif %}
             </td>
             <td>{{ attribution.title }}</td>
-            <td>{{ attribution.lecturing_vol }}</td>
-            <td>{{ attribution.practical_exercises_vol }}</td>
-            <td style="border-left: 1px solid;">{{ attribution.volume_lecturing_vacant| floatformat:1 }}</td>
-            <td>{{ attribution.volume_practical_exercices_vacant| floatformat:1 }}</td>
-            <td style="border-left: 1px solid;">{{ attribution.LECTURING }}</td>
-            <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
-            <td>{{ attribution.function|function_text }}</td>
-            <td>{{ attribution.start_academic_year | default_if_none:''}}</td>
-            <td>{{ attribution.end_academic_year | default_if_none:''}}</td>
+            <td>{{ attribution.total_lecturing_volume_course }}</td>
+            <td>{{ attribution.total_practical_volume_course }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.lecturing_volume_available }}</td>
+            <td>{{ attribution.practical_volume_available }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.lecturing_volume }}</td>
+            <td>{{ attribution.practical_volume }}</td>
+            <td>{{ attribution.function_text }}</td>
+            <td>{{ attribution.start_year }}</td>
+            <td>{{ attribution.end_year }}</td>
             <td>
 
                 {% if attribution.teachers %}

@@ -54,8 +54,11 @@ urlpatterns = [
             online_application.SearchVacantCoursesView.as_view(),
             name='search_vacant_courses'
         ),
-        url(r'^send_summary$', online_application.send_mail_applications_summary,
-            name='email_tutor_application_confirmation'),
+        url(
+            r'^send_summary$',
+            online_application.SendApplicationsSummaryView.as_view(),
+            name='email_tutor_application_confirmation'
+        ),
         url(
             r'^(?P<vacant_course_code>[0-9A-Za-z-]+)/create$',
             online_application.CreateApplicationView.as_view(),

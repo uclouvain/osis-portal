@@ -71,8 +71,8 @@ class ApplicationForm(BootstrapForm):
     def clean_charge_lecturing_asked(self):
         data_cleaned = self.cleaned_data['charge_lecturing_asked']
         if data_cleaned is not None:
-            max_value = getattr(self.vacant_course, 'lecturing_volume_available', Decimal('0.0'))
-            if data_cleaned > max_value:
+            max_value = getattr(self.vacant_course, 'lecturing_volume_available', '0.0')
+            if data_cleaned > Decimal(max_value):
                 self.add_error('charge_lecturing_asked', "{0} (max: {1})".format(_('Too much'), max_value))
             return Decimal('{:.1f}'.format(data_cleaned))
         return Decimal('0.0')
@@ -80,11 +80,17 @@ class ApplicationForm(BootstrapForm):
     def clean_charge_practical_asked(self):
         data_cleaned = self.cleaned_data['charge_practical_asked']
         if data_cleaned is not None:
-            max_value = getattr(self.vacant_course, 'practical_volume_available', Decimal('0.0'))
-            if data_cleaned > max_value:
+            max_value = getattr(self.vacant_course, 'practical_volume_available', '0.0')
+            if data_cleaned > Decimal(max_value):
                 self.add_error('charge_practical_asked', "{0} (max: {1})".format(_('Too much'), max_value))
             return Decimal('{:.1f}'.format(data_cleaned))
         return Decimal('0.0')
+
+    def clean_course_summary(self):
+        return self.cleaned_data['course_summary'] or ''
+
+    def clean_remark(self):
+        return self.cleaned_data['remark'] or ''
 
 
 class VacantAttributionFilterForm(BootstrapForm):

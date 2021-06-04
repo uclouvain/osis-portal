@@ -24,11 +24,10 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block modal_id %}modalConfirmApplicationDelete{{application.learning_container_year_id}}{% endblock %}
+{% block modal_id %}modalConfirmApplicationDelete{{application.code}}{{ application.year }}{% endblock %}
 
 {% block modal_content %}
-    <form action="{% url 'delete_application' application.learning_container_year_id %}"
-          id="form_delete_{{ application.learning_container_year_id }}"
+    <form action="{% url 'delete_application' application.uuid %}" id="form_delete_{{ application.uuid }}"
           method="POST">
         {% csrf_token %}
         <div class="modal-body">

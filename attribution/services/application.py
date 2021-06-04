@@ -75,7 +75,7 @@ class ApplicationService:
     def get_application(application_uuid: str, person: Person):
         applications = ApplicationService.get_applications(person)
         try:
-            return next(application for application in applications if applications.uuid == application_uuid)
+            return next(application for application in applications if application.uuid == application_uuid)
         except StopIteration:
             raise Http404
 
@@ -147,3 +147,10 @@ class ApplicationService:
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
             api_instance.application_delete(application_uuid=application_uuid)
+
+    @staticmethod
+    def send_applications_summary(person: Person):
+        configuration = attribution_sdk.build_configuration(person)
+        with osis_attribution_sdk.ApiClient(configuration) as api_client:
+            api_instance = application_api.ApplicationApi(api_client)
+            api_instance.applications_summary_send()

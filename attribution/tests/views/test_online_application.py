@@ -559,3 +559,59 @@ class TestDeleteApplicationView(OnlineApplicationContextTestMixin, TestCase):
 
         self.assertTrue(self.delete_application_mocked.called)
 
+
+class TestSendApplicationsSummaryView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('email_tutor_application_confirmation')
+        cls.tutor = TutorFactory(person__global_id='578945612')
+
+    def setUp(self):
+        self.open_application_course_calendar()
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
+
+        # Create mock ApplicationService
+        self.send_applications_summary_mocked = mock.Mock(return_value=[])
+        self.application_service_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationService',
+            send_applications_summary=self.send_applications_summary_mocked
+        )
+        self.application_service_patcher.start()
+        self.addCleanup(self.application_service_patcher.stop)
+
+        self.client.force_login(self.tutor.person.user)
+
+    def test_case_user_not_logged(self):
+        self.client.logout()
+
+        response = self.client.post(self.url, follow=False)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_user_without_permission(self):
+        self.client.force_login(UserFactory())
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
+        expected_redirect = reverse('outside_applications_period')
+        response = self.client.post(self.url, follow=False)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+    def test_assert_methods_not_allowed(self):
+        methods_not_allowed = ['get']
+
+        for method in methods_not_allowed:
+            response = getattr(self.client, method)(self.url)
+            self.assertEqual(response.status_code, HttpResponseNotAllowed.status_code)
+
+    def test_post_assert_call_application_service(self):
+        response = self.client.post(self.url, data={}, follow=False)
+
+        expected_redirect = reverse('applications_overview')
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+        self.assertTrue(self.send_applications_summary_mocked.called)

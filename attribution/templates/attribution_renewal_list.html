@@ -8,7 +8,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -66,35 +66,35 @@
         </tr>
         </thead>
         <tbody>
-        {% for attribution in attributions %}
+        {% for attribution_about_to_expire in attributions %}
             <tr>
                 <td class="text-center">
                     <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
-                         title="{% if attribution.not_renewable_reason %}
-                                                {% trans attribution.not_renewable_reason %}
-                                            {% endif %}">
-                        {% if attribution.is_renewable %}
+                         title="{% if attribution_about_to_expire.unavailable_renewal_reason %}
+                                   {{ attribution_about_to_expire.unavailable_renewal_reason }}
+                                 {% endif %}"
+                    >
+                        {% if attribution_about_to_expire.is_renewable %}
                             <input type="checkbox"
                                    id="chb_attribution_renew_{{ forloop.counter }}"
-                                   name="learning_container_year_{{ attribution.acronym }}"/>
+                                   name="vacant_course_{{ attribution_about_to_expire.code }}"/>
                         {% else %}
                             <span class="fa fa-exclamation-triangle" aria-hidden="true"
                                   title="{% trans 'Non-renewable' %}"></span>
                         {% endif %}
                     </div>
                 </td>
-                <td>{{ attribution.acronym }}</td>
-                <td>{% if attribution.title_next_yr %}{{ attribution.title_next_yr }}{% else %}
-                    {{ attribution.title }}{% endif %}</td>
-                <td style="border-left: 1px solid;">{{ attribution.lecturing_vol }}</td>
-                <td>{{ attribution.practical_exercises_vol }}</td>
-                <td>{{ attribution.attribution_vacant.LECTURING }}</td>
-                <td>{{ attribution.attribution_vacant.PRACTICAL_EXERCISES }}</td>
-                <td style="border-left: 1px solid;">{{ attribution.start_academic_year|default_if_none:''}}</td>
-                <td>{{ attribution.end_academic_year|default_if_none:''}}</td>
-                <td>{{ attribution.LECTURING }}</td>
-                <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
-                <td>{{ attribution.function|function_text }}</td>
+                <td>{{ attribution_about_to_expire.code }}</td>
+                <td>{{ attribution_about_to_expire.title }}</td>
+                <td style="border-left: 1px solid;">{{ attribution_about_to_expire.total_lecturing_volume_course|default_if_none:''}}</td>
+                <td>{{ attribution_about_to_expire.total_practical_volume_course|default_if_none:''}}</td>
+                <td>{{ attribution_about_to_expire.lecturing_volume_available|default_if_none:'' }}</td>
+                <td>{{ attribution_about_to_expire.practical_volume_available|default_if_none:''}}</td>
+                <td style="border-left: 1px solid;">{{ attribution_about_to_expire.start_year}}</td>
+                <td>{{ attribution_about_to_expire.end_year}}</td>
+                <td>{{ attribution_about_to_expire.lecturing_volume }}</td>
+                <td>{{ attribution_about_to_expire.practical_volume }}</td>
+                <td>{{ attribution.function }}</td>
             </tr>
         {% endfor %}
         </tbody>
