@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 12:41+0200\n"
+"POT-Creation-Date: 2021-05-25 08:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,9 @@ msgid "Country"
 msgstr ""
 
 msgid "Dashboard"
+msgstr ""
+
+msgid "Dissertations"
 msgstr ""
 
 msgid "Email"
@@ -153,6 +156,12 @@ msgstr ""
 msgid "Student ID data administration"
 msgstr ""
 
+msgid "Student's dissertations management"
+msgstr ""
+
+msgid "This process controls internships assessment."
+msgstr ""
+
 msgid "This process controls my applications"
 msgstr ""
 
@@ -160,9 +169,6 @@ msgid "This process controls my attestations."
 msgstr ""
 
 msgid "This process controls students internships."
-msgstr ""
-
-msgid "This process controls internships assessment."
 msgstr ""
 
 msgid "This process controls the teaching charge"
