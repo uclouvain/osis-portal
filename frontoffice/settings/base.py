@@ -277,6 +277,7 @@ LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
 OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
 OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
+OSIS_DISSERTATION_URL = os.environ.get('OSIS_DISSERTATION_URL', None)
 
 
 # Queues Definition

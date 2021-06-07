@@ -62,11 +62,11 @@ msgstr "Feuilles de notes prêtes!"
 msgid "This requires a "
 msgstr "Ceci nécessite un "
 
-msgid "This requires a VPN access outside UCL."
-msgstr "Ceci nécessite un accès VPN en dehors de l'UCL."
+msgid "This requires a VPN access outside UCLouvain."
+msgstr "Ceci nécessite un accès VPN en dehors de l'UCLouvain."
 
 msgid "VPN access"
 msgstr "Accès VPN"
 
 msgid "outside UCL"
-msgstr "en dehors de l'UCL"
+msgstr "en dehors de l'UCLouvain"
