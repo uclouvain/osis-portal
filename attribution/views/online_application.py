@@ -133,23 +133,22 @@ class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, Templ
         return ApplicationService.get_attribution_about_to_expires(self.tutor.person)
 
     @cached_property
-    def attributions_of_application_year(self):
-        application_course_year = self.application_course_calendar.authorized_target_year
-        return AttributionService.get_attributions_list(application_course_year, self.tutor.person)
+    def charge_summary(self):
+        return ApplicationService.get_my_charge_summary(self.tutor.person)
 
     def get_total_lecturing_charge(self):
         return sum(
             [
-                float(attribution.lecturing_charge) if attribution.lecturing_charge else 0
-                for attribution in self.attributions_of_application_year
+                float(attribution.lecturing_volume) if attribution.lecturing_volume else 0
+                for attribution in self.charge_summary
             ]
         )
 
     def get_total_practical_charge(self):
         return sum(
             [
-                float(attribution.practical_charge) if attribution.practical_charge else 0
-                for attribution in self.attributions_of_application_year
+                float(attribution.practical_volume) if attribution.practical_volume else 0
+                for attribution in self.charge_summary
             ]
         )
 
@@ -158,7 +157,7 @@ class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, Templ
             **super().get_context_data(),
             'application_course_calendar': self.application_course_calendar,
             'attributions_about_to_expire': self.attributions_about_to_expire,
-            'attributions': self.attributions_of_application_year,
+            'attributions': self.charge_summary,
             'tot_lecturing': self.get_total_lecturing_charge(),
             'tot_practical': self.get_total_practical_charge(),
             'applications': self.applications,

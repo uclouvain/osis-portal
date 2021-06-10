@@ -132,15 +132,15 @@
                             <td style="border-left: 1px solid;">{{ vacant_course.lecturing_volume_available }}</td>
                             <td>{{ vacant_course.practical_volume_available }}</td>
                             <td>
-                                {% if vacant_course.teachers %}
-                                    {% with teacher_number=forloop.counter0 %}
+                                {% if vacant_course.tutors %}
+                                    {% with tutor_number=forloop.counter0 %}
                                         <a role="button" data-toggle="collapse"
-                                           href=".collapse_teachers{{ teacher_number }}"
-                                           aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}"
+                                           href=".collapse_teachers{{ tutor_number }}"
+                                           aria-expanded="false" aria-controls="collapse_teachers{{ tutor_number }}"
                                            style="border:0;padding:0;"
-                                           onclick="changeOrientation(expandButton{{ teacher_number }})"
+                                           onclick="changeOrientation(expandButton{{ tutor_number }})"
                                            title="{% trans 'Display teachers' %}">
-                                            <span id="expandButton{{ teacher_number }}"
+                                            <span id="expandButton{{ tutor_number }}"
                                                   class="glyphicon glyphicon-expand" aria-hidden="true"></span>
                                         </a>
                                     {% endwith %}
@@ -162,12 +162,12 @@
                             </td>
                         </tr>
 
-                        {% with teacher_number=forloop.counter0 %}
-                            {% if vacant_course.teachers %}
-                                <tr class="collapse collapse_teachers{{ teacher_number }}"
+                        {% with tutor_number=forloop.counter0 %}
+                            {% if vacant_course.tutors %}
+                                <tr class="collapse collapse_teachers{{ tutor_number }}"
                                     style="background-color: white;">
                                     <td colspan="11">
-                                        {% include "teachers.html" %}
+                                        {% include "tutor_attribution_list.html" with tutors=vacant_course.tutors %}
                                     </td>
                                 </tr>
                             {% endif %}

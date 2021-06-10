@@ -88,6 +88,14 @@ class ApplicationService:
             return getattr(api_response, 'results', [])
 
     @staticmethod
+    def get_my_charge_summary(person: Person):
+        configuration = attribution_sdk.build_configuration(person)
+        with osis_attribution_sdk.ApiClient(configuration) as api_client:
+            api_instance = application_api.ApplicationApi(api_client)
+            api_response = api_instance.my_charge_summary()
+            return getattr(api_response, 'results', [])
+
+    @staticmethod
     def create_application(
         vacant_course_code: str,
         lecturing_volume: Decimal,

@@ -69,7 +69,7 @@ urlpatterns = [
             online_application.RenewMultipleAttributionsAboutToExpireView.as_view(),
             name='renew_applications',
         ),
-        url(r'^(?P<application_uuid>[0-9a-z-]+)/', include([
+        url(r'^(?P<application_uuid>[0-9A-Za-z-]+)/', include([
             url(r'^delete$', online_application.DeleteApplicationView.as_view(), name='delete_application'),
             url(r'^update$', online_application.UpdateApplicationView.as_view(), name='update_application'),
         ]))

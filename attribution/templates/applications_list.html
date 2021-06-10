@@ -58,11 +58,11 @@
                    id="lnk_application_edit_title_{{ application.code }}_{{ application.year }}"
                    href="#"
                    target="_blank">
-                    {{ application.title }}
+                    {{ application.course_title }}
                 </a>
             </td>
-            <td style="border-left: 1px solid black;">VOLUME LECTURING VACANT </td>
-            <td>VOLUME PRACTICAL VACANT</td>
+            <td style="border-left: 1px solid black;">{{ application.lecturing_volume_available }}</td>
+            <td>{{ application.practical_volume_available }}</td>
             <td style="border-left: 1px solid black;"> {{ application.lecturing_volume }}</td>
             <td>{{ application.practical_volume }}</td>
             <td colspan="2" style="width:130px;">
