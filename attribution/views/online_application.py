@@ -40,14 +40,13 @@ from django.views.generic import TemplateView, FormView
 
 from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 from attribution.forms.application import ApplicationForm, VacantAttributionFilterForm
-from attribution.services.application import ApplicationService
-from attribution.services.attribution import AttributionService
+from attribution.services.application import ApplicationService, ApplicationBusinessException
 from attribution.utils import permission
 from base.forms.base_forms import GlobalIdForm
 from base.models.tutor import Tutor
 from base.templatetags.academic_year_display import display_as_academic_year
 from base.views import layout
-
+from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -249,14 +248,23 @@ class CreateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormVie
         }
 
     def form_valid(self, form):
-        response = ApplicationService.create_application(
-            vacant_course_code=self.kwargs['vacant_course_code'],
-            lecturing_volume=form.cleaned_data['charge_lecturing_asked'],
-            practical_volume=form.cleaned_data['charge_practical_asked'],
-            remark=form.cleaned_data['remark'],
-            course_summary=form.cleaned_data['course_summary'],
-            person=self.tutor.person
-        )
+        try:
+            ApplicationService.create_application(
+                vacant_course_code=self.kwargs['vacant_course_code'],
+                lecturing_volume=form.cleaned_data['charge_lecturing_asked'],
+                practical_volume=form.cleaned_data['charge_practical_asked'],
+                remark=form.cleaned_data['remark'],
+                course_summary=form.cleaned_data['course_summary'],
+                person=self.tutor.person
+            )
+        except MultipleApiBusinessException as multiple_business_api_exception:
+            for exception in multiple_business_api_exception.exceptions:
+                if exception.status_code == ApplicationBusinessException.LecturingAndPracticalChargeNotFilled.value:
+                    form.add_error('charge_lecturing_asked', exception.detail)
+                    form.add_error('charge_practical_asked', exception.detail)
+                else:
+                    messages.add_message(self.request, messages.ERROR, exception.detail)
+            return self.render_to_response(self.get_context_data(form=form))
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -304,14 +312,23 @@ class UpdateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormVie
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        response = ApplicationService.update_application(
-            application_uuid=self.kwargs['application_uuid'],
-            lecturing_volume=form.cleaned_data['charge_lecturing_asked'],
-            practical_volume=form.cleaned_data['charge_practical_asked'],
-            remark=form.cleaned_data['remark'],
-            course_summary=form.cleaned_data['course_summary'],
-            person=self.tutor.person
-        )
+        try:
+            ApplicationService.update_application(
+                application_uuid=self.kwargs['application_uuid'],
+                lecturing_volume=form.cleaned_data['charge_lecturing_asked'],
+                practical_volume=form.cleaned_data['charge_practical_asked'],
+                remark=form.cleaned_data['remark'],
+                course_summary=form.cleaned_data['course_summary'],
+                person=self.tutor.person
+            )
+        except MultipleApiBusinessException as multiple_business_api_exception:
+            for exception in multiple_business_api_exception.exceptions:
+                if exception.status_code == ApplicationBusinessException.LecturingAndPracticalChargeNotFilled.value:
+                    form.add_error('charge_lecturing_asked', exception.detail)
+                    form.add_error('charge_practical_asked', exception.detail)
+                else:
+                    messages.add_message(self.request, messages.ERROR, exception.detail)
+            return self.render_to_response(self.get_context_data(form=form))
         return super().form_valid(form)
 
     def get_initial(self):
@@ -372,6 +389,7 @@ class DeleteApplicationView(LoginRequiredMixin, PermissionRequiredMixin, View):
             return redirect("outside_applications_period")
 
         ApplicationService.delete_application(self.kwargs['application_uuid'], self.request.user.person)
+        messages.add_message(request, messages.SUCCESS, _('Application successfully deleted'))
         return redirect('applications_overview')
 
 

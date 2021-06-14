@@ -119,23 +119,16 @@ class TestApplicationOverviewView(OnlineApplicationContextTestMixin, TestCase):
         # Mock application service
         self.get_applications_mocked = mock.Mock(return_value=[])
         self.get_attribution_about_to_expires_mocked = mock.Mock(return_value=[])
+        self.get_my_charge_summary_mocked = mock.Mock(return_value=[])
         self.application_service_patcher = mock.patch.multiple(
             'attribution.views.online_application.ApplicationService',
             get_applications=self.get_applications_mocked,
             get_attribution_about_to_expires=self.get_attribution_about_to_expires_mocked,
+            get_my_charge_summary=self.get_my_charge_summary_mocked
 
         )
         self.application_service_patcher.start()
         self.addCleanup(self.application_service_patcher.stop)
-
-        # Mock attribution service
-        self.get_attributions_list = mock.Mock(return_value=[])
-        self.attribution_service_patcher = mock.patch.multiple(
-            'attribution.views.online_application.AttributionService',
-            get_attributions_list=self.get_attributions_list,
-        )
-        self.attribution_service_patcher.start()
-        self.addCleanup(self.attribution_service_patcher.stop)
 
         self.client.force_login(self.tutor.person.user)
 
@@ -199,9 +192,7 @@ class TestApplicationOverviewView(OnlineApplicationContextTestMixin, TestCase):
         # Application Service
         self.assertTrue(self.get_applications_mocked.called)
         self.assertTrue(self.get_attribution_about_to_expires_mocked.called)
-
-        # Attribution Service
-        self.assertTrue(self.get_attributions_list.called)
+        self.assertTrue(self.get_my_charge_summary_mocked.called)
 
 
 class TestSearchVacantCourseView(OnlineApplicationContextTestMixin, TestCase):

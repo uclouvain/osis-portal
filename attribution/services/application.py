@@ -25,11 +25,13 @@
 ##############################################################################
 import logging
 from decimal import Decimal
+from enum import Enum
 from typing import List
 
 import osis_attribution_sdk
 from django.conf import settings
 from django.http import Http404
+from osis_attribution_sdk import ApiException
 from osis_attribution_sdk.model.application_create_command import ApplicationCreateCommand
 from osis_attribution_sdk.model.application_update_command import ApplicationUpdateCommand
 from osis_attribution_sdk.model.renew_attribution_about_to_expire_command import RenewAttributionAboutToExpireCommand
@@ -39,6 +41,7 @@ from frontoffice.settings.osis_sdk import attribution as attribution_sdk
 
 from osis_attribution_sdk.api import application_api
 
+from frontoffice.settings.osis_sdk.utils import api_exception_handler
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -96,6 +99,7 @@ class ApplicationService:
             return getattr(api_response, 'results', [])
 
     @staticmethod
+    @api_exception_handler(api_exception_cls=ApiException)
     def create_application(
         vacant_course_code: str,
         lecturing_volume: Decimal,
@@ -117,6 +121,7 @@ class ApplicationService:
             return api_instance.application_create(application_create_command=command)
 
     @staticmethod
+    @api_exception_handler(api_exception_cls=ApiException)
     def update_application(
         application_uuid: str,
         lecturing_volume: Decimal,
@@ -150,6 +155,7 @@ class ApplicationService:
             )
 
     @staticmethod
+    @api_exception_handler(api_exception_cls=ApiException)
     def delete_application(application_uuid: str, person: Person):
         configuration = attribution_sdk.build_configuration(person)
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
@@ -162,3 +168,15 @@ class ApplicationService:
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
             api_instance.applications_summary_send()
+
+
+class ApplicationBusinessException(Enum):
+    LecturingAndPracticalChargeNotFilled = "APPLICATION-1"
+    ApplicationAlreadyExists = "APPLICATION-2"
+    VacantCourseNotFound = "APPLICATION-3"
+    VacantCourseNotAllowedDeclarationType = "APPLICATION-4"
+    VacantCourseApplicationManagedInTeam = "APPLICATION-5"
+    VolumesAskedShouldBeLowerOrEqualToVolumeAvailable = "APPLICATION-6"
+    AttributionAboutToExpireNotFound = "APPLICATION-7"
+    AttributionAboutToExpireFunction = "APPLICATION-8"
+    NotAuthorOfApplication = "APPLICATION-9"

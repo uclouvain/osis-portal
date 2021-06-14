@@ -42,7 +42,7 @@ class ApplicationForm(BootstrapForm):
     charge_lecturing_asked = forms.DecimalField(
         max_digits=5,
         decimal_places=1,
-        initial=0,
+        initial=Decimal('0.0'),
         required=False,
         localize=True,
         validators=[MinValueValidator(0)]
@@ -50,7 +50,7 @@ class ApplicationForm(BootstrapForm):
     charge_practical_asked = forms.DecimalField(
         max_digits=5,
         decimal_places=1,
-        initial=0,
+        initial=Decimal('0.0'),
         required=False,
         localize=True,
         validators=[MinValueValidator(0)],
