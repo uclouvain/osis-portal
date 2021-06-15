@@ -50,7 +50,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 def students_list(request):
     data = get_learning_units(request.user)
     return render(request, "list/students_exam.html", data)
@@ -114,7 +114,7 @@ def get_anac_parameter(current_academic_year):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 @require_POST
 def list_build(request):
     current_academic_year = mdl_base.academic_year.current_academic_year()
@@ -166,7 +166,7 @@ def _make_xls_list(excel_list_student_enrolled):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 def lists_of_students_exams_enrollments(request):
     if request.method == "POST":
         form = GlobalIdForm(request.POST)
@@ -191,7 +191,7 @@ def get_learning_units_by_person(global_id):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 @require_POST
 def list_build_by_person(request, global_id):
     current_academic_year = mdl_base.academic_year.current_academic_year()

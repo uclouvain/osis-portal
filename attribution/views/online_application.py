@@ -52,7 +52,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 @login_required
-@permission_required('attribution.can_access_attribution_application', raise_exception=True)
+@permission_required('base.can_access_attribution_application', raise_exception=True)
 def outside_period(request):
     calendar = ApplicationCoursesRemoteCalendar()
     if calendar.get_opened_academic_events():
@@ -101,7 +101,7 @@ def administration_applications(request):
 
 class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     # PermissionRequiredMixin
-    permission_required = "attribution.can_access_attribution_application"
+    permission_required = "base.can_access_attribution_application"
     raise_exception = True
 
     # TemplateView
@@ -182,7 +182,7 @@ class ApplicationOverviewAdminView(ApplicationOverviewView):
 
 class SearchVacantCoursesView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     # PermissionRequiredMixin
-    permission_required = "attribution.can_access_attribution_application"
+    permission_required = "base.can_access_attribution_application"
     raise_exception = True
 
     # TemplateView
@@ -216,7 +216,7 @@ class SearchVacantCoursesView(LoginRequiredMixin, PermissionRequiredMixin, Templ
 
 class CreateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
     # PermissionRequiredMixin
-    permission_required = "attribution.can_access_attribution_application"
+    permission_required = "base.can_access_attribution_application"
     raise_exception = True
 
     # FormView
@@ -282,7 +282,7 @@ class CreateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormVie
 
 class UpdateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
     # PermissionRequiredMixin
-    permission_required = "attribution.can_access_attribution_application"
+    permission_required = "base.can_access_attribution_application"
     raise_exception = True
 
     # FormView
@@ -360,7 +360,7 @@ class UpdateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormVie
 
 class RenewMultipleAttributionsAboutToExpireView(LoginRequiredMixin, PermissionRequiredMixin, View):
     # PermissionRequiredMixin
-    permission_required = "attribution.can_access_attribution_application"
+    permission_required = "base.can_access_attribution_application"
     raise_exception = True
 
     def post(self, request, *args, **kwargs):
@@ -381,7 +381,7 @@ class RenewMultipleAttributionsAboutToExpireView(LoginRequiredMixin, PermissionR
 
 class DeleteApplicationView(LoginRequiredMixin, PermissionRequiredMixin, View):
     # PermissionRequiredMixin
-    permission_required = "attribution.can_access_attribution_application"
+    permission_required = "base.can_access_attribution_application"
     raise_exception = True
 
     def post(self, request, *args, **kwargs):
@@ -395,7 +395,7 @@ class DeleteApplicationView(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 class SendApplicationsSummaryView(LoginRequiredMixin, PermissionRequiredMixin, View):
     # PermissionRequiredMixin
-    permission_required = "attribution.can_access_attribution_application"
+    permission_required = "base.can_access_attribution_application"
     raise_exception = True
 
     def post(self, request, *args, **kwargs):

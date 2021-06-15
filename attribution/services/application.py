@@ -55,7 +55,8 @@ class ApplicationService:
             api_instance = application_api.ApplicationApi(api_client)
             api_response = api_instance.vacantcourses_list(
                 code=code,
-                allocation_faculty=allocation_faculty
+                allocation_faculty=allocation_faculty,
+                accept_language=person.language
             )
             return getattr(api_response, 'results', [])
 
@@ -71,7 +72,7 @@ class ApplicationService:
         configuration = attribution_sdk.build_configuration(person)
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_response = api_instance.application_list()
+            api_response = api_instance.application_list(accept_language=person.language)
             return getattr(api_response, 'results', [])
 
     @staticmethod
@@ -87,7 +88,7 @@ class ApplicationService:
         configuration = attribution_sdk.build_configuration(person)
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_response = api_instance.attributionsabouttoexpire_list()
+            api_response = api_instance.attributionsabouttoexpire_list(accept_language=person.language)
             return getattr(api_response, 'results', [])
 
     @staticmethod
@@ -95,7 +96,7 @@ class ApplicationService:
         configuration = attribution_sdk.build_configuration(person)
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_response = api_instance.my_charge_summary()
+            api_response = api_instance.my_charge_summary(accept_language=person.language)
             return getattr(api_response, 'results', [])
 
     @staticmethod
@@ -118,7 +119,7 @@ class ApplicationService:
                 remark=remark,
                 course_summary=course_summary,
             )
-            return api_instance.application_create(application_create_command=command)
+            return api_instance.application_create(application_create_command=command, accept_language=person.language)
 
     @staticmethod
     @api_exception_handler(api_exception_cls=ApiException)
@@ -142,6 +143,7 @@ class ApplicationService:
             return api_instance.application_update(
                 application_uuid=application_uuid,
                 application_update_command=command,
+                accept_language=person.language
             )
 
     @staticmethod
@@ -151,7 +153,8 @@ class ApplicationService:
             api_instance = application_api.ApplicationApi(api_client)
             cmd = RenewAttributionAboutToExpireCommand(codes=vacant_courses_code)
             return api_instance.attributionsabouttoexpire_renew(
-                renew_attribution_about_to_expire_command=cmd
+                renew_attribution_about_to_expire_command=cmd,
+                accept_language=person.language
             )
 
     @staticmethod
@@ -160,14 +163,14 @@ class ApplicationService:
         configuration = attribution_sdk.build_configuration(person)
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_instance.application_delete(application_uuid=application_uuid)
+            api_instance.application_delete(application_uuid=application_uuid, accept_language=person.language)
 
     @staticmethod
     def send_applications_summary(person: Person):
         configuration = attribution_sdk.build_configuration(person)
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_instance.applications_summary_send()
+            api_instance.applications_summary_send(accept_language=person.language)
 
 
 class ApplicationBusinessException(Enum):

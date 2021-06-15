@@ -57,7 +57,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    permission_required = "attribution.can_access_attribution"
+    permission_required = "base.can_access_attribution"
     raise_exception = False
 
     template_name = "tutor_charge.html"
