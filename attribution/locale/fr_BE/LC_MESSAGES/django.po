@@ -348,6 +348,9 @@ msgstr ""
 msgid "Title"
 msgstr "Intitulé"
 
+msgid "Deputy disease or maternity"
+msgstr "Suppléant maladie/maternité"
+
 msgid ""
 "To find a vacant learning unit to candidate to, introduce the code and click "
 "on the button"

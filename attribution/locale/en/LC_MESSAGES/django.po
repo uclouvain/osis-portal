@@ -384,6 +384,9 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
+msgid "Deputy disease or maternity"
+msgstr ""
+
 msgid "You aren't teaching for any learning unit"
 msgstr ""
 
