@@ -183,3 +183,5 @@ class ApplicationBusinessException(Enum):
     AttributionAboutToExpireNotFound = "APPLICATION-7"
     AttributionAboutToExpireFunction = "APPLICATION-8"
     NotAuthorOfApplication = "APPLICATION-9"
+    AttributionAboutToExpireWithoutVolume = "APPLICATION-10"
+    AttributionSubstitute = "APPLICATION-11"
