@@ -54,13 +54,6 @@ class GlobalIdForm(forms.Form):
                 self.add_error('global_id', _('no tutor with this global_id'))
 
 
-class BootstrapModelForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(BootstrapModelForm, self).__init__(*args, **kwargs)
-        set_form_control(self)
-
-
 class BootstrapForm(forms.Form):
 
     def __init__(self, *args, **kwargs):

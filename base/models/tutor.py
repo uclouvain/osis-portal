@@ -37,8 +37,8 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class TutorAdmin(SerializableModelAdmin):
     list_display = ('external_id', 'person', 'changed')
-    fieldsets = ((None, {'fields': ('external_id','person',)}),)
-    raw_id_fields = ('person', )
+    fieldsets = ((None, {'fields': ('external_id', 'person',)}),)
+    raw_id_fields = ('person',)
     search_fields = ['person__first_name', 'person__last_name']
 
 
@@ -47,6 +47,12 @@ class Tutor(SerializableModel):
     changed = models.DateTimeField(null=True)
     person = models.OneToOneField('Person', on_delete=models.CASCADE)
 
+    class Meta:
+        permissions = (
+            ("can_access_attribution_application", "Can access attribution application"),
+            ("can_access_attribution", "Can access attribution"),
+        )
+
     def __str__(self):
         return u"%s" % self.person
 
@@ -54,15 +60,6 @@ class Tutor(SerializableModel):
 def find_by_person(a_person):
     try:
         tutor = Tutor.objects.get(person=a_person)
-        return tutor
-    except ObjectDoesNotExist:
-        return None
-
-
-def find_by_user(a_user):
-    try:
-        pers = model_person.find_by_user(a_user)
-        tutor = Tutor.objects.get(person=pers)
         return tutor
     except ObjectDoesNotExist:
         return None
