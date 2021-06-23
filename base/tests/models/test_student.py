@@ -54,28 +54,6 @@ class TestModelStudent(TestCase):
         student = mdl_student.find_by_registration_id(self.student.registration_id)
         self.assertEqual(student, self.student)
 
-    def test_search(self):
-        self.assertEqual(mdl_student.search(), None)
-
-        self.assertListEqual(list(mdl_student.search(registration_id=self.student.registration_id[:5])),
-                             [self.student])
-        self.assertListEqual(list(mdl_student.search(person_name=self.student.person.last_name)),
-                             [self.student])
-        self.assertListEqual(list(mdl_student.search(person_username=self.student.person.user.username)),
-                             [self.student])
-        self.assertListEqual(list(mdl_student.search(person_first_name=self.student.person.first_name)),
-                             [self.student])
-        self.assertListEqual(list(mdl_student.search(registration_id=self.student.registration_id,
-                                                     full_registration=True)),
-                             [self.student])
-
-    def test_is_student(self):
-        a_person = PersonFactory()
-
-        self.assertFalse(mdl_student.is_student(a_person.user))
-
-        self.assertTrue(mdl_student.is_student(self.student.person.user))
-
 
 class StudentAdminTest(TestCase):
     def test_add_to_group(self):

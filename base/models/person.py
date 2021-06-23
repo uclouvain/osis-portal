@@ -89,10 +89,6 @@ class Person(SerializableModel):
         )
 
 
-def find_by_id(person_id):
-    return Person.objects.get(id=person_id)
-
-
 def find_by_user(user):
     return Person.objects.filter(user=user).first()
 
