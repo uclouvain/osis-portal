@@ -81,9 +81,11 @@
             <div class="form-group">
                 {% for apd in apds %}
                 <div class="checkbox">
-                  <label for="obj-{{ apd }}" style="text-align: right; width: 30px;">
-                      <span class="apd-label-text">{{ apd | only_number}}</span>
+                {% with apd|only_number as apd_number %}
+                  <label for="{{ apd }}" style="text-align: right; width: 30px;">
+                      <span data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" class="apd-label-text">{{ apd | only_number}}</span>
                   </label>
+                {% endwith %}
                   <input class="apd-checkbox" type="checkbox" id="{{ apd }}" name="obj-{{ apd }}" value="obj-{{ apd }}" {% if score and apd|only_number in score.objectives.apds %}checked{% endif %}>
                 </div>
                 {% endfor %}
@@ -91,7 +93,10 @@
         </div>
         {% for apd in apds %}
             <div class="col-md-4 form-group" style="margin-top: 20px; margin-bottom: 20px;">
-                <label for="{{ apd }}" class="col-md-4 text-center" style="line-height:2.5;">APD {{ apd | only_number }}</label>
+                {% with apd|only_number as apd_number %}
+                <label data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" for="{{ apd }}" class="col-md-4 text-center" style="text-decoration: underline; text-decoration-style: dotted;
+ line-height:2.5; cursor: help;">APD {{ apd_number }}</label>
+                {% endwith %}
                 <div class="col-md-8">
                 <select style="width: 100%;" class="form-control" name="{{ apd }}" id="input-{{ apd }}" disabled>
                     <option value="">-</option>

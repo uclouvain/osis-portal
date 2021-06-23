@@ -36,7 +36,7 @@ from base.views import layout
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
 from internship.models.period import Period
 from internship.models.score_encoding_utils import DEFAULT_PERIODS, APDS, COMMENTS_FIELDS, MIN_APDS, MAX_APDS, \
-    AVAILABLE_GRADES
+    AVAILABLE_GRADES, APDS_DESCRIPTIONS
 from internship.services.internship import InternshipAPIService
 from internship.templatetags.selection_tags import only_number
 
@@ -98,6 +98,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
     organization = InternshipAPIService.get_organization(organization_uuid)
 
     apds = APDS
+    apds_descriptions = APDS_DESCRIPTIONS
     comments_fields = COMMENTS_FIELDS
     available_grades = AVAILABLE_GRADES
 
