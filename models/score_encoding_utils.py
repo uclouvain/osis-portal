@@ -39,3 +39,21 @@ COMMENTS_FIELDS = [
 ]
 DEFAULT_PERIODS = 'all'
 AVAILABLE_GRADES = ['A', 'B', 'C', 'D']
+
+APDS_DESCRIPTIONS = {
+    "1": _("Take a history (anamnesis)"),
+    "2": _("Conduct clinical examination"),
+    "3": _("Appreciate medical emergency"),
+    "4": _("Establish a diagnosis"),
+    "5": _("Complement patient record"),
+    "6": _("Oral presentation of a clinical situation"),
+    "7": _("Select diagnostic tests"),
+    "8": _("Write medical prescriptions"),
+    "9": _("Perform technical procedures"),
+    "10": _("Formulate clinical questions"),
+    "11": _("Communicate (broad sense)"),
+    "12": _("Work as a team"),
+    "13": _("Make/receive transmission report"),
+    "14": _("Obtain informed consent"),
+    "15": _("Contribute to quality of care and patient safety"),
+}
