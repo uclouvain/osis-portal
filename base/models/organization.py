@@ -49,29 +49,3 @@ class Organization(SerializableModel):
 
     def __str__(self):
         return self.name
-
-
-def find_by_id(organization_id):
-    return Organization.objects.get(pk=organization_id)
-
-
-def search(acronym=None, name=None, type=None, prefix=None):
-    out = None
-    queryset = Organization.objects
-
-    if acronym:
-        queryset = queryset.filter(acronym=acronym)
-
-    if name:
-        queryset = queryset.filter(name=name)
-
-    if type:
-        queryset = queryset.filter(type=type)
-
-    if prefix:
-        queryset = queryset.filter(prefix=prefix)
-
-    if acronym or name or type or prefix:
-        out = queryset
-
-    return out
