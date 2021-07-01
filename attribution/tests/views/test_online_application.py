@@ -24,61 +24,34 @@
 #
 ##############################################################################
 import datetime
+import uuid
 
 import mock
-from django.contrib.auth.models import Group, Permission
-from django.test import TestCase
+from django.contrib.auth.models import Permission, User
+from django.http import HttpResponseNotAllowed, HttpResponse
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from osis_attribution_sdk.model.application import Application
+from osis_attribution_sdk.model.vacant_course import VacantCourse
+from osis_attribution_sdk.model.vacant_declaration_type_enum import VacantDeclarationTypeEnum
 from osis_attribution_sdk.models import ApplicationCourseCalendar
 
-from attribution.models.enums import function
-from attribution.tests.factories.attribution import AttributionNewFactory
-from attribution.utils import tutor_application_epc
-from base.models.enums import learning_component_year_type
-from base.models.enums import learning_unit_year_subtypes
-from base.models.enums import vacant_declaration_type
+from attribution.forms.application import VacantAttributionFilterForm
 from base.templatetags.academic_year_display import display_as_academic_year
-from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
-from base.tests.factories.entity import EntityFactory
-from base.tests.factories.entity_version import EntityVersionFactory
-from base.tests.factories.learning_component_year import LearningComponentYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.user import UserFactory
 
 
-class TestOnlineApplication(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        # Create Group tutor
-        Group.objects.create(name="tutors")
+class OnlineApplicationContextTestMixin:
+    calendar = None
 
-        # Create user
-        cls.user = UserFactory(username="tutor_application")
-        cls.person = PersonFactory(global_id="578945612", user=cls.user)
-        cls.tutor = TutorFactory(person=cls.person)
-
-        # Add permission and log into app
-        add_permission(cls.user, "can_access_attribution_application")
-
-        cls.agro_entity = EntityFactory()
-        cls.drt_entity = EntityFactory()
-
-        # Create current academic year
-        cls.current_academic_year = create_current_academic_year()
-        # Create application year
-        cls.application_academic_year = AcademicYearFactory(year=cls.current_academic_year.year + 1)
-
-    def setUp(self):
-        # Create event to open calendar + Mock Remove API Call for calendar
+    def open_application_course_calendar(self):
         self.calendar = ApplicationCourseCalendar(
             title="Candidature aux cours vacants",
             start_date=datetime.date.today() - datetime.timedelta(days=10),
             end_date=datetime.date.today() + datetime.timedelta(days=15),
-            authorized_target_year=self.application_academic_year.year,
+            authorized_target_year=2020,
             is_open=True
         )
         self.application_remote_calendar_patcher = mock.patch.multiple(
@@ -89,414 +62,547 @@ class TestOnlineApplication(TestCase):
         self.application_remote_calendar_patcher.start()
         self.addCleanup(self.application_remote_calendar_patcher.stop)
 
-        self.agro_entity_version = EntityVersionFactory(
-            entity=self.agro_entity,
-            acronym="AGRO",
-            entity_type='FACULTY',
-            start_date=self.calendar.start_date,
-            end_date=self.calendar.end_date
-        )
+    def add_can_access_application_permission_to_user(self, user: User):
+        codename = "can_access_attribution_application"
+        perm = Permission.objects.filter(codename=codename).first()
+        user.user_permissions.add(perm)
 
-        self.drt_entity_version = EntityVersionFactory(
-            entity=self.drt_entity,
-            acronym="DRT",
-            entity_type='FACULTY',
-            start_date=self.calendar.start_date,
-            end_date=self.calendar.end_date
-        )
-        self.client.force_login(self.user)
 
-        # Creation context with multiple learning container year
-        _create_multiple_learning_container_year(self)
-        self.attribution = AttributionNewFactory(
-            global_id=self.person.global_id,
-            applications=_get_default_application_list(self),
-            attributions=_get_default_attribution_list(self)
-        )
+class TestOutsideEncodingPeriodView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('outside_applications_period')
+        cls.tutor = TutorFactory(person__global_id='578945612')
 
-    def test_redirection_to_outside_encoding_period(self):
-        # Change calendar start date + set property is_open to False
+    def setUp(self) -> None:
+        self.open_application_course_calendar()
+
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
+        self.client.force_login(self.tutor.person.user)
+
+    def test_case_period_closed_assert_message_displayed(self):
         self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
         self.calendar.is_open = False
 
-        url = reverse('applications_overview')
-        url_outside = reverse('outside_applications_period')
-        response = self.client.get(url, follow=False)
-        self.assertRedirects(response, "%s?next=%s" % (url_outside, url))  # Redirection
-
-    def test_message_outside_encoding_period(self):
-        # Change calendar start date + set property is_open to False
-        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
-        self.calendar.is_open = False
-
-        url = reverse('outside_applications_period')
-        response = self.client.get(url)
+        response = self.client.get(self.url)
 
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'warning')
 
-        expected_msg = _('The period of online application for courses %(year)s '
-                         'will open on %(start_date)s to %(end_date)s') % {
-            'year': display_as_academic_year(self.calendar.authorized_target_year),
-            'start_date': self.calendar.start_date.strftime('%d/%m/%Y'),
-            'end_date': self.calendar.end_date.strftime('%d/%m/%Y')
-        }
+        expected_msg = _(
+            'The period of online application for courses %(year)s will open on %(start_date)s to %(end_date)s'
+        ) % {
+           'year': display_as_academic_year(self.calendar.authorized_target_year),
+           'start_date': self.calendar.start_date.strftime('%d/%m/%Y'),
+           'end_date': self.calendar.end_date.strftime('%d/%m/%Y')
+       }
         self.assertEqual(messages[0].message, expected_msg)
 
-    def test_applications_overview(self):
-        url = reverse('applications_overview')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['a_tutor'], self.tutor)
-        self.assertEqual(context['previous_academic_year'], self.current_academic_year)
-        self.assertEqual(context['application_academic_year'], self.application_academic_year)
-        self.assertEqual(context['application_course_calendar'], self.calendar)
+    def test_case_period_opened_assert_redirect_to_overview(self):
+        expected_redirect = reverse('applications_overview')
+        response = self.client.get(self.url, follow=False)
 
-        self.assertEqual(len(context['attributions']), 1)
-        self.assertEqual(context['attributions'][0]['acronym'], self.lagro2500_next.acronym)
-        self.assertEqual(len(context['applications']), 1)
-        self.assertEqual(context['applications'][0]['acronym'], self.lagro1600_next.acronym)
-        self.assertEqual(len(context['attributions_about_to_expire']), 1)
-        self.assertEqual(context['attributions_about_to_expire'][0]['acronym'], self.lbir1300_current.acronym)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)  # Redirection
 
-    def test_applications_overview_post_method_not_allowed(self):
-        url = reverse('applications_overview')
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, 405)
 
-    def test_search_vacant_attribution_initial(self):
-        url = reverse('vacant_attributions_search')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        context = response.context[0]
-        self.assertEqual(context['a_tutor'], self.tutor)
-        self.assertTrue(context['search_form'])
-        self.assertIsNone(context['attributions_vacant'])
+class TestApplicationOverviewView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('applications_overview')
+        cls.tutor = TutorFactory(person__global_id='578945612')
 
-    def test_search_vacant_attribution_post_not_allowed(self):
-        url = reverse('vacant_attributions_search')
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, 405)
+    def setUp(self) -> None:
+        self.open_application_course_calendar()
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
 
-    def test_search_vacant_attribution_search_list(self):
-        url = reverse('vacant_attributions_search')
-        response = self.client.get(url, data={'learning_container_acronym': 'LAGRO'})
-        self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(context['a_tutor'], self.tutor)
-        self.assertTrue(context['search_form'])
-        self.assertEqual(len(context['attributions_vacant']), 2)
-        # Check if LAGRO1600 have the boolean already applied
-        self.assertTrue((next(attrib for attrib in context['attributions_vacant']
-                              if attrib.get('acronym') == self.lagro1600_next.acronym and
-                              attrib.get('already_applied')), False))
+        # Mock application service
+        self.get_applications_mocked = mock.Mock(return_value=[])
+        self.get_attribution_about_to_expires_mocked = mock.Mock(return_value=[])
+        self.get_my_charge_summary_mocked = mock.Mock(return_value=[])
+        self.application_service_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationService',
+            get_applications=self.get_applications_mocked,
+            get_attribution_about_to_expires=self.get_attribution_about_to_expires_mocked,
+            get_my_charge_summary=self.get_my_charge_summary_mocked
 
-    def test_search_vacant_attribution_search_list_by_faculty(self):
-        url = reverse('vacant_attributions_search')
-        response = self.client.get(
-            url, data={
-                'learning_container_acronym': 'LAGRO',
-                'faculty': self.agro_entity_version.id
-            }
         )
-        self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(len(context['attributions_vacant']), 2)
-        self.assertEqual(context['attributions_vacant'][0]['acronym'], self.lagro1600_next.acronym)
-        self.assertEqual(context['attributions_vacant'][1]['acronym'], self.lagro2500_next.acronym)
+        self.application_service_patcher.start()
+        self.addCleanup(self.application_service_patcher.stop)
 
-    def test_search_vacant_attribution_search_list_by_faculty_take_account_of_declaration_vacant_type(self):
-        self.lagro1600_next.type_declaration_vacant = vacant_declaration_type.EXCEPTIONAL_PROCEDURE
-        self.lagro1600_next.save()
+        self.client.force_login(self.tutor.person.user)
 
-        url = reverse('vacant_attributions_search')
-        response = self.client.get(
-            url, data={
-                'learning_container_acronym': 'LAGRO',
-                'faculty': self.agro_entity_version.id
-            }
+    def test_case_user_not_logged(self):
+        self.client.logout()
+
+        response = self.client.get(self.url, follow=False)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_user_without_permission(self):
+        self.client.force_login(UserFactory())
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
+        expected_redirect = reverse('outside_applications_period')
+        response = self.client.get(self.url, follow=False)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)  # Redirection
+
+    def test_assert_methods_not_allowed(self):
+        methods_not_allowed = ['post']
+
+        for method in methods_not_allowed:
+            response = getattr(self.client, method)(self.url)
+            self.assertEqual(response.status_code, HttpResponseNotAllowed.status_code)
+
+    @override_settings(ATTRIBUTION_CONFIG={
+        "HELP_BUTTON_URL": "https://dummy-url.com",
+        "CATALOG_URL": "https://catalogue_url.com"
+    })
+    def test_get_method_assert_context(self):
+        response = self.client.get(self.url, follow=False)
+
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertEqual(response.context['a_tutor'], self.tutor)
+        self.assertEqual(response.context['application_course_calendar'], self.calendar)
+        self.assertEqual(
+            response.context['application_academic_year'],
+            display_as_academic_year(self.calendar.authorized_target_year)
         )
-        self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(len(context['attributions_vacant']), 1)
-        self.assertEqual(context['attributions_vacant'][0]['acronym'], self.lagro2500_next.acronym)
-
-    def test_search_vacant_attribution_with_declaration_vac_not_allowed(self):
-        # Create container with type_declaration_vacant not in [RESEVED_FOR_INTERNS, OPEN_FOR_EXTERNS]
-        self.lagro1234_current = _create_learning_container_with_components("LAGRO1234", self.current_academic_year)
-        # Creation learning container for next academic year [==> application academic year]
-        self.lagro1234_next = _create_learning_container_with_components(
-            "LAGRO1234", self.application_academic_year, 70, 70,
-            type_declaration_vacant=vacant_declaration_type.DO_NOT_ASSIGN
+        self.assertEqual(
+            response.context['previous_academic_year'],
+            display_as_academic_year(self.calendar.authorized_target_year - 1)
         )
-        url = reverse('vacant_attributions_search')
-        response = self.client.get(url, data={'learning_container_acronym': 'LAGRO1234'})
-        self.assertEqual(response.status_code, 200)
-        context = response.context[0]
-        self.assertEqual(context['a_tutor'], self.tutor)
-        self.assertTrue(context['search_form'])
-        self.assertFalse(context['attributions_vacant'])
+        self.assertEqual(response.context['help_button_url'], "https://dummy-url.com")
+        self.assertEqual(response.context['catalog_url'], "https://catalogue_url.com")
 
-    def test_search_vacant_attribution_with_team_set_to_true(self):
-        self.lagro1600_next.team = True
-        self.lagro1600_next.save()
-        url = reverse('vacant_attributions_search')
-        response = self.client.get(
-            url, data={
-                'learning_container_acronym': 'LAGRO'
-            }
+        self.assertTrue("attributions_about_to_expire" in response.context)
+        self.assertTrue("attributions" in response.context)
+        self.assertTrue("tot_lecturing" in response.context)
+        self.assertTrue("tot_practical" in response.context)
+        self.assertTrue("applications" in response.context)
+
+    def test_get_method_called_multiple_service_to_fetch_data(self):
+        self.client.get(self.url, follow=False)
+
+        # Application Service
+        self.assertTrue(self.get_applications_mocked.called)
+        self.assertTrue(self.get_attribution_about_to_expires_mocked.called)
+        self.assertTrue(self.get_my_charge_summary_mocked.called)
+
+
+class TestSearchVacantCourseView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('search_vacant_courses')
+        cls.tutor = TutorFactory(person__global_id='578945612')
+
+    def setUp(self):
+        self.open_application_course_calendar()
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
+
+        # Create mock ApplicationService
+        self.search_vacant_courses_mocked = mock.Mock(return_value=[])
+        self.application_service_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationService',
+            search_vacant_courses=self.search_vacant_courses_mocked
         )
-        self.assertEqual(response.status_code, 200)
-        context = response.context[-1]
-        self.assertEqual(len(context['attributions_vacant']), 2)
+        self.application_service_patcher.start()
+        self.addCleanup(self.application_service_patcher.stop)
 
-    def test_renew_applications(self):
-        lbir1300_next = _create_learning_container_with_components("LBIR1300", self.application_academic_year,
-                                                                   60, 60)
-        url = reverse('renew_applications')
-        post_data = {'learning_container_year_' + lbir1300_next.acronym: 'on'}
-        response = self.client.post(url, data=post_data)
-        self.assertEqual(response.status_code, 302)  # redirection
-        self.attribution.refresh_from_db()
-        self.assertEqual(len(self.attribution.applications), 2)  # Now we have two applications
+        self.client.force_login(self.tutor.person.user)
 
-    def test_renew_applications_with_bad_learning_container(self):
-        url = reverse('renew_applications')
-        post_data = {'learning_container_year_' + self.lagro2500_next.acronym: 'on'}
-        response = self.client.post(url, data=post_data, follow=True)
-        self.assertEqual(response.status_code, 200)
-        messages = list(response.context['messages'])
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, _('No attribution renewed'))
+    def test_case_user_not_logged(self):
+        self.client.logout()
 
-    def test_renew_applications_method_not_allowed(self):
-        url = reverse('renew_applications')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 405)
+        response = self.client.get(self.url, follow=False)
+        self.assertEqual(response.status_code, 401)
 
-    def test_delete_application(self):
-        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, 302)  # redirection
-        self.attribution.refresh_from_db()
-        # pending flag must be set to 'deleted'
-        self.assertTrue((next(attrib for attrib in self.attribution.applications
-                              if attrib.get('acronym') == self.lagro1600_next.acronym and
-                              attrib.get('pending') == tutor_application_epc.DELETE_OPERATION), False))
+    def test_case_user_without_permission(self):
+        self.client.force_login(UserFactory())
 
-    def test_delete_application_with_wrong_container(self):
-        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lbir1300_next.id})
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, 404)  # Not found
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 401)
 
-    def test_delete_application_method_not_allowed(self):
-        url = reverse('delete_tutor_application', kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 405)
+    def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
 
-    def test_get_edit_application_form(self):
-        url = reverse('create_or_update_tutor_application',
-                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        context = response.context[0]
-        self.assertEqual(context['a_tutor'], self.tutor)
-        self.assertEqual(context['learning_container_year'], self.lagro1600_next)
-        self.assertTrue(context['form'])
+        expected_redirect = reverse('outside_applications_period')
+        response = self.client.get(self.url, follow=False)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)  # Redirection
 
-    def test_post_edit_application_form(self):
-        url = reverse('create_or_update_tutor_application',
-                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        post_data = _get_application_example(self.lagro1600_next, '54', '7')
-        response = self.client.post(url, data=post_data, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.attribution.refresh_from_db()
-        self.assertEqual(len(self.attribution.applications), 1)
-        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '54.0')
-        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '7.0')
-        self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
+    def test_assert_methods_not_allowed(self):
+        methods_not_allowed = ['post']
 
-    def test_post_edit_application_form_with_empty_value(self):
-        url = reverse('create_or_update_tutor_application',
-                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        post_data = _get_application_example(self.lagro1600_next, "a", "")
-        response = self.client.post(url, data=post_data)
-        self.assertEqual(response.status_code, 200)
-        context = response.context[0]
-        self.assertTrue(context.get('form'))
-        form = context['form']
-        self.assertTrue(form.errors)  # Not valid because not number entered
+        for method in methods_not_allowed:
+            response = getattr(self.client, method)(self.url)
+            self.assertEqual(response.status_code, HttpResponseNotAllowed.status_code)
 
-    def test_post_edit_application_form_with_empty_lecturing_value(self):
-        url = reverse('create_or_update_tutor_application',
-                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        post_data = _get_application_example(self.lagro1600_next, "15", "")
-        response = self.client.post(url, data=post_data)
-        self.assertEqual(response.status_code, 302)
-        self.attribution.refresh_from_db()
-        self.assertEqual(len(self.attribution.applications), 1)
-        self.assertEqual(self.attribution.applications[0]['charge_lecturing_asked'], '15.0')
-        self.assertEqual(self.attribution.applications[0]['charge_practical_asked'], '0.0')
-        self.assertEqual(self.attribution.applications[0]['pending'], tutor_application_epc.UPDATE_OPERATION)
+    @override_settings(ATTRIBUTION_CONFIG={
+        "HELP_BUTTON_URL": "https://dummy-url.com"
+    })
+    def test_get_assert_context(self):
+        response = self.client.get(self.url)
 
-    def test_post_edit_application_form_with_value_under_zero(self):
-        url = reverse('create_or_update_tutor_application',
-                      kwargs={'learning_container_year_id': self.lagro1600_next.id})
-        post_data = _get_application_example(self.lagro1600_next, '-1', '5')
-        response = self.client.post(url, data=post_data)
-        self.assertEqual(response.status_code, 200)
-        context = response.context[0]
-        self.assertTrue(context.get('form'))
-        form = context['form']
-        self.assertTrue(form.errors)  # Not valid because -1 entered
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertEqual(response.context['a_tutor'], self.tutor)
+        self.assertIsInstance(response.context['form'], VacantAttributionFilterForm)
+        self.assertEqual(response.context['help_button_url'], "https://dummy-url.com")
 
-    def test_post_overview_with_lecturing_and_practical_component_partim(self):
-        lbira2101a_next = _create_learning_container_with_components("LBIRA2101A", self.application_academic_year,
-                                                                     volume_lecturing=20, volume_practical_exercices=20,
-                                                                     subtype=learning_unit_year_subtypes.PARTIM)
-        lbira2101a_current = _create_learning_container_with_components(
-            "LBIRA2101A", self.current_academic_year,
-            volume_lecturing=20, volume_practical_exercices=20,
-            subtype=learning_unit_year_subtypes.PARTIM)
-        _link_components_and_learning_unit_year_to_container(lbira2101a_current, "LBIRA2101",
-                                                             subtype=learning_unit_year_subtypes.FULL)
-        _link_components_and_learning_unit_year_to_container(lbira2101a_next, "LBIRA2101",
-                                                             subtype=learning_unit_year_subtypes.FULL)
-        self.attribution.delete()
-        self.attribution = AttributionNewFactory(
-            global_id=self.tutor.person.global_id,
-            applications=[_get_application_example(lbira2101a_next, "10", "10")]
+    def test_get_with_queryparams_assert_call_application_service(self):
+        query_params = {'learning_container_acronym': 'LDR'}
+
+        response = self.client.get(self.url, data=query_params)
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+
+        self.assertTrue(self.search_vacant_courses_mocked.called)
+
+
+class TestCreateApplicationView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('create_application', kwargs={'vacant_course_code': 'LDROI1200'})
+        cls.tutor = TutorFactory(person__global_id='578945612')
+
+    def setUp(self):
+        # Create event to open calendar + Mock Remove API Call for calendar
+        self.open_application_course_calendar()
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
+
+        # Create mock ApplicationService
+        self.create_application_mocked = mock.Mock(return_value=None)
+        self.get_vacant_course_mocked = mock.Mock(
+            return_value=VacantCourse(
+                code='LDROI1200',
+                year=2020,
+                lecturing_volume_total='20.0',
+                practical_volume_total='10.0',
+                lecturing_volume_available='10.0',
+                practical_volume_available='10.0',
+                title='Introduction au droit',
+                vacant_declaration_type=VacantDeclarationTypeEnum("RESEVED_FOR_INTERNS"),
+                vacant_declaration_type_text='Reserved for interns',
+                is_in_team=False,
+                allocation_entity='DRT',
+            )
         )
 
-        url = reverse('applications_overview')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        context = response.context[0]
-        self.assertEqual(len(context['applications']), 1)
-        self.assertEqual(context['applications'][0]['acronym'], lbira2101a_next.acronym)
-        with self.assertRaises(KeyError):
-            context['applications'][0]['PRACTICAL_EXERCISES']
-        with self.assertRaises(KeyError):
-            context['applications'][0]['LECTURING']
-
-
-def _create_multiple_learning_container_year(cls):
-    # Creation learning container for current academic year
-    cls.lbir1200_current = _create_learning_container_with_components("LBIR1200", cls.current_academic_year)
-    cls.lbir1300_current = _create_learning_container_with_components("LBIR1300", cls.current_academic_year)
-    cls.ldroi1500_current = _create_learning_container_with_components("LDROI1500", cls.current_academic_year)
-
-    # Creation learning container for next academic year [==> application academic year]
-    cls.lbir1200_next = _create_learning_container_with_components("LBIR1200", cls.application_academic_year,
-                                                                   70, 70)
-    cls.lbir1300_next = _create_learning_container_with_components("LBIR1300", cls.application_academic_year,
-                                                                   60, 60)
-    cls.lagro1600_next = _create_learning_container_with_components("LAGRO1600", cls.application_academic_year,
-                                                                    54, 7)
-    cls.lagro2500_next = _create_learning_container_with_components("LAGRO2500", cls.application_academic_year,
-                                                                    0, 70)
-    _create_entity_container_yrs(cls)
-
-
-def _get_default_application_list(cls):
-    return [
-        _get_application_example(cls.lagro1600_next, '15', '0')
-    ]
-
-
-def _get_default_attribution_list(cls):
-    return [
-        # Attribution in current year
-        _get_attribution_example(cls.lbir1200_current, '20.0', '31.5', 2015, cls.current_academic_year.year + 1),
-        _get_attribution_example(cls.lbir1300_current, '21.5', '40', 2015, cls.current_academic_year.year),
-        # Attribution in next year
-        _get_attribution_example(cls.lagro2500_next, '29', '10', 2015, 2020)
-    ]
-
-
-def _create_entity_container_yrs(cls):
-    cls.lbir1200_current.allocation_entity = cls.agro_entity
-    cls.lbir1200_current.save()
-    cls.lbir1300_current.allocation_entity = cls.agro_entity
-    cls.lbir1300_current.save()
-    cls.lbir1200_next.allocation_entity = cls.agro_entity
-    cls.lbir1200_next.save()
-    cls.lbir1300_next.allocation_entity = cls.agro_entity
-    cls.lbir1300_next.save()
-    cls.lagro1600_next.allocation_entity = cls.agro_entity
-    cls.lagro1600_next.save()
-    cls.lagro2500_next.allocation_entity = cls.agro_entity
-    cls.lagro2500_next.save()
-    cls.ldroi1500_current.allocation_entity = cls.drt_entity
-    cls.ldroi1500_current.save()
-
-
-def _create_learning_container_with_components(acronym, academic_year, volume_lecturing=None,
-                                               volume_practical_exercices=None,
-                                               subtype=learning_unit_year_subtypes.FULL,
-                                               type_declaration_vacant=vacant_declaration_type.RESERVED_FOR_INTERNS):
-    l_container = LearningContainerYearFactory(acronym=acronym, academic_year=academic_year,
-                                               type_declaration_vacant=type_declaration_vacant)
-    return _link_components_and_learning_unit_year_to_container(l_container, l_container.acronym,
-                                                                volume_lecturing, volume_practical_exercices, subtype)
-
-
-def _link_components_and_learning_unit_year_to_container(l_container, acronym,
-                                                         volume_lecturing=None,
-                                                         volume_practical_exercices=None,
-                                                         subtype=learning_unit_year_subtypes.FULL):
-    a_learning_unit_year = LearningUnitYearFactory(acronym=acronym, academic_year=l_container.academic_year,
-                                                   specific_title=l_container.common_title, subtype=subtype,
-                                                   learning_container_year=l_container)
-    if volume_lecturing:
-        LearningComponentYearFactory(
-            learning_unit_year=a_learning_unit_year,
-            type=learning_component_year_type.LECTURING,
-            volume_declared_vacant=volume_lecturing
+        self.application_service_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationService',
+            create_application=self.create_application_mocked,
+            get_vacant_course=self.get_vacant_course_mocked
         )
-    if volume_practical_exercices:
-        LearningComponentYearFactory(
-            learning_unit_year=a_learning_unit_year,
-            type=learning_component_year_type.PRACTICAL_EXERCISES,
-            volume_declared_vacant=volume_practical_exercices
+        self.application_service_patcher.start()
+        self.addCleanup(self.application_service_patcher.stop)
+
+        self.client.force_login(self.tutor.person.user)
+
+    def test_case_user_not_logged(self):
+        self.client.logout()
+
+        response = self.client.get(self.url, follow=False)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_user_without_permission(self):
+        self.client.force_login(UserFactory())
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
+        expected_redirect = reverse('outside_applications_period')
+        response = self.client.get(self.url, follow=False)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+    @override_settings(ATTRIBUTION_CONFIG={
+        "HELP_BUTTON_URL": "https://dummy-url.com"
+    })
+    def test_get_method_assert_context(self):
+        response = self.client.get(self.url, follow=False)
+
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertEqual(response.context['a_tutor'], self.tutor)
+        self.assertEqual(response.context['save_url'], self.url)
+        self.assertEqual(response.context['cancel_url'], reverse('applications_overview'))
+        self.assertEqual(response.context['help_button_url'], "https://dummy-url.com")
+
+    def test_post_assert_call_application_service(self):
+        response = self.client.post(self.url, data={}, follow=False)
+
+        expected_redirect = reverse('applications_overview')
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+        self.assertTrue(self.create_application_mocked.called)
+
+
+class TestUpdateApplicationView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.application_uuid = uuid.uuid4()
+        cls.url = reverse('update_application', kwargs={'application_uuid': cls.application_uuid})
+        cls.tutor = TutorFactory(person__global_id='578945612')
+
+    def setUp(self):
+        self.open_application_course_calendar()
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
+
+        # Create mock ApplicationService
+        self.update_application_mocked = mock.Mock(return_value=None)
+        self.get_vacant_course_mocked = mock.Mock(
+            return_value=VacantCourse(
+                code='LDROI1200',
+                year=2020,
+                lecturing_volume_total='20.0',
+                practical_volume_total='10.0',
+                lecturing_volume_available='10.0',
+                practical_volume_available='10.0',
+                title='Introduction au droit',
+                vacant_declaration_type=VacantDeclarationTypeEnum("RESEVED_FOR_INTERNS"),
+                vacant_declaration_type_text='Reserved for interns',
+                is_in_team=False,
+                allocation_entity='DRT',
+            )
         )
-    return l_container
+        self.get_application_mocked = mock.Mock(
+            return_value=Application(
+                uuid=str(self.application_uuid),
+                code='LDROI1200',
+                year=2020,
+                lecturing_volume='10.0',
+                practical_volume='5.0',
+                remark='',
+                course_summary='',
+            )
+        )
+
+        self.application_service_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationService',
+            update_application=self.update_application_mocked,
+            get_application=self.get_application_mocked,
+            get_vacant_course=self.get_vacant_course_mocked
+        )
+        self.application_service_patcher.start()
+        self.addCleanup(self.application_service_patcher.stop)
+
+        self.client.force_login(self.tutor.person.user)
+
+    def test_case_user_not_logged(self):
+        self.client.logout()
+
+        response = self.client.get(self.url, follow=False)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_user_without_permission(self):
+        self.client.force_login(UserFactory())
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
+        expected_redirect = reverse('outside_applications_period')
+        response = self.client.get(self.url, follow=False)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+    @override_settings(ATTRIBUTION_CONFIG={
+        "HELP_BUTTON_URL": "https://dummy-url.com"
+    })
+    def test_get_method_assert_context(self):
+        response = self.client.get(self.url, data={}, follow=False)
+
+        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertEqual(response.context['a_tutor'], self.tutor)
+        self.assertEqual(response.context['save_url'], self.url)
+        self.assertEqual(response.context['cancel_url'], reverse('applications_overview'))
+        self.assertEqual(response.context['help_button_url'], "https://dummy-url.com")
+
+    def test_post_assert_call_application_service(self):
+        response = self.client.post(self.url, data={}, follow=False)
+
+        expected_redirect = reverse('applications_overview')
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+        self.assertTrue(self.update_application_mocked.called)
 
 
-def _get_application_example(learning_container_year, volume_lecturing, volume_practical_exercice, flag=None):
-    return {
-        'remark': 'This is the remarks',
-        'course_summary': 'This is the course summary',
-        'charge_lecturing_asked': volume_lecturing,
-        'charge_practical_asked': volume_practical_exercice,
-        'acronym': learning_container_year.acronym,
-        'year': learning_container_year.academic_year.year,
-        'pending': flag or ""
-    }
+class TestRenewMultipleAttributionsAboutToExpireView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('renew_applications')
+        cls.tutor = TutorFactory(person__global_id='578945612')
+
+    def setUp(self):
+        self.open_application_course_calendar()
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
+
+        # Create mock ApplicationService
+        self.renew_attributions_about_to_expire_mocked = mock.Mock(return_value=[])
+        self.application_service_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationService',
+            renew_attributions_about_to_expire=self.renew_attributions_about_to_expire_mocked
+        )
+        self.application_service_patcher.start()
+        self.addCleanup(self.application_service_patcher.stop)
+
+        self.client.force_login(self.tutor.person.user)
+
+    def test_case_user_not_logged(self):
+        self.client.logout()
+
+        response = self.client.post(self.url, follow=False)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_user_without_permission(self):
+        self.client.force_login(UserFactory())
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
+        expected_redirect = reverse('outside_applications_period')
+        response = self.client.post(self.url, follow=False)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+    def test_assert_methods_not_allowed(self):
+        methods_not_allowed = ['get']
+
+        for method in methods_not_allowed:
+            response = getattr(self.client, method)(self.url)
+            self.assertEqual(response.status_code, HttpResponseNotAllowed.status_code)
+
+    def test_post_assert_call_application_service(self):
+        post_data = {'vacant_course_LDROI1200': 'on'}
+
+        response = self.client.post(self.url, data=post_data, follow=False)
+
+        expected_redirect = reverse('applications_overview')
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+        self.assertTrue(self.renew_attributions_about_to_expire_mocked.called)
 
 
-def _get_attribution_example(learning_container_year, volume_lecturing, volume_practical_exercice,
-                             start_year, end_year):
-    return {
-        'acronym': learning_container_year.acronym,
-        'title': learning_container_year.common_title,
-        'year': learning_container_year.academic_year.year,
-        learning_component_year_type.LECTURING: volume_lecturing,
-        learning_component_year_type.PRACTICAL_EXERCISES: volume_practical_exercice,
-        'start_year': start_year,
-        'end_year': end_year,
-        'function': function.HOLDER,
-        'is_substitute': False
-    }
+class TestDeleteApplicationView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('delete_application', kwargs={'application_uuid': uuid.uuid4()})
+        cls.tutor = TutorFactory(person__global_id='578945612')
+
+    def setUp(self):
+        self.open_application_course_calendar()
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
+
+        # Create mock ApplicationService
+        self.delete_application_mocked = mock.Mock(return_value=[])
+        self.application_service_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationService',
+            delete_application=self.delete_application_mocked
+        )
+        self.application_service_patcher.start()
+        self.addCleanup(self.application_service_patcher.stop)
+
+        self.client.force_login(self.tutor.person.user)
+
+    def test_case_user_not_logged(self):
+        self.client.logout()
+
+        response = self.client.post(self.url, follow=False)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_user_without_permission(self):
+        self.client.force_login(UserFactory())
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
+        expected_redirect = reverse('outside_applications_period')
+        response = self.client.post(self.url, follow=False)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+    def test_assert_methods_not_allowed(self):
+        methods_not_allowed = ['get']
+
+        for method in methods_not_allowed:
+            response = getattr(self.client, method)(self.url)
+            self.assertEqual(response.status_code, HttpResponseNotAllowed.status_code)
+
+    def test_post_assert_call_application_service(self):
+        response = self.client.post(self.url, data={}, follow=False)
+
+        expected_redirect = reverse('applications_overview')
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+        self.assertTrue(self.delete_application_mocked.called)
 
 
-def get_permission(codename):
-    return Permission.objects.filter(codename=codename).first()
+class TestSendApplicationsSummaryView(OnlineApplicationContextTestMixin, TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('email_tutor_application_confirmation')
+        cls.tutor = TutorFactory(person__global_id='578945612')
 
+    def setUp(self):
+        self.open_application_course_calendar()
+        self.add_can_access_application_permission_to_user(self.tutor.person.user)
 
-def add_permission(user, codename):
-    perm = get_permission(codename)
-    user.user_permissions.add(perm)
+        # Create mock ApplicationService
+        self.send_applications_summary_mocked = mock.Mock(return_value=[])
+        self.application_service_patcher = mock.patch.multiple(
+            'attribution.views.online_application.ApplicationService',
+            send_applications_summary=self.send_applications_summary_mocked
+        )
+        self.application_service_patcher.start()
+        self.addCleanup(self.application_service_patcher.stop)
+
+        self.client.force_login(self.tutor.person.user)
+
+    def test_case_user_not_logged(self):
+        self.client.logout()
+
+        response = self.client.post(self.url, follow=False)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_user_without_permission(self):
+        self.client.force_login(UserFactory())
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
+        self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
+        self.calendar.is_open = False
+
+        expected_redirect = reverse('outside_applications_period')
+        response = self.client.post(self.url, follow=False)
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+    def test_assert_methods_not_allowed(self):
+        methods_not_allowed = ['get']
+
+        for method in methods_not_allowed:
+            response = getattr(self.client, method)(self.url)
+            self.assertEqual(response.status_code, HttpResponseNotAllowed.status_code)
+
+    def test_post_assert_call_application_service(self):
+        response = self.client.post(self.url, data={}, follow=False)
+
+        expected_redirect = reverse('applications_overview')
+        self.assertRedirects(response, expected_redirect, fetch_redirect_response=False)
+
+        self.assertTrue(self.send_applications_summary_mocked.called)

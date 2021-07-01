@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 09:32+0200\n"
+"POT-Creation-Date: 2021-06-17 17:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,17 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "A substitute can not renew his function of substitute"
-msgstr ""
-
 msgid "Acronym"
 msgstr ""
 
 msgctxt "plural"
 msgid "All"
-msgstr ""
-
-msgid "An application has already been submitted"
 msgstr ""
 
 msgid "An email with your applications have been sent"
@@ -38,10 +32,10 @@ msgstr ""
 msgid "Application period from"
 msgstr ""
 
-msgid "Applications administration"
+msgid "Application successfully deleted"
 msgstr ""
 
-msgid "Applications in pending state"
+msgid "Applications administration"
 msgstr ""
 
 msgid "Applications of "
@@ -71,10 +65,6 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
-msgctxt "applications"
-msgid "Code"
-msgstr ""
-
 msgid "Coordinator"
 msgstr ""
 
@@ -88,9 +78,6 @@ msgid "Deputy"
 msgstr ""
 
 msgid "Deputy authority"
-msgstr ""
-
-msgid "Deputy disease or maternity"
 msgstr ""
 
 msgid "Deputy sabbatical"
@@ -205,9 +192,6 @@ msgstr ""
 msgid "No application"
 msgstr ""
 
-msgid "No application found"
-msgstr ""
-
 msgid "No attribution renewed"
 msgstr ""
 
@@ -218,9 +202,6 @@ msgid "No students enrolled"
 msgstr "No students enrolled"
 
 msgid "No teaching charge in "
-msgstr ""
-
-msgid "No vacant corresponding activity"
 msgstr ""
 
 msgid "No vacant corresponding course"
@@ -242,9 +223,6 @@ msgid "Please enter the code of the course to which you would like to apply"
 msgstr ""
 
 msgid "Please precise at least a faculty or a code (or a part of a code)"
-msgstr ""
-
-msgid "Please refresh the page"
 msgstr ""
 
 msgid "Produce xls"
@@ -339,10 +317,6 @@ msgstr ""
 msgid "The period of online application is closed"
 msgstr ""
 
-msgid ""
-"The vacant volume of the next academic year is lower than the current one"
-msgstr ""
-
 msgid "This action will delete the application."
 msgstr ""
 
@@ -410,7 +384,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-msgid "You already apply to this course."
+msgid "Deputy disease or maternity"
 msgstr ""
 
 msgid "You aren't teaching for any learning unit"

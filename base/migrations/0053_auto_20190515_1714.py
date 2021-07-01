@@ -3,8 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-
-import base.models.learning_component_year
+from django.db.models import DecimalField
 
 
 class Migration(migrations.Migration):
@@ -17,16 +16,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='learningcomponentyear',
             name='repartition_volume_additional_entity_1',
-            field=base.models.learning_component_year.RepartitionVolumeField(blank=True, decimal_places=2, max_digits=6, null=True),
+            field=DecimalField(blank=True, decimal_places=2, max_digits=6, null=True),
         ),
         migrations.AddField(
             model_name='learningcomponentyear',
             name='repartition_volume_additional_entity_2',
-            field=base.models.learning_component_year.RepartitionVolumeField(blank=True, decimal_places=2, max_digits=6, null=True),
+            field=DecimalField(blank=True, decimal_places=2, max_digits=6, null=True),
         ),
         migrations.AddField(
             model_name='learningcomponentyear',
             name='repartition_volume_requirement_entity',
-            field=base.models.learning_component_year.RepartitionVolumeField(blank=True, decimal_places=2, max_digits=6, null=True),
+            field=DecimalField(blank=True, decimal_places=2, max_digits=6, null=True),
         ),
     ]
