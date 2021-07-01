@@ -1,2 +1,0 @@
-from attribution.models import remote_attribution_service
-from attribution.models import attribution_new

@@ -58,9 +58,6 @@ admin.site.register(learning_container.LearningContainer,
 admin.site.register(learning_container_year.LearningContainerYear,
                     learning_container_year.LearningContainerYearAdmin)
 
-admin.site.register(learning_component_year.LearningComponentYear,
-                    learning_component_year.LearningComponentYearAdmin)
-
 admin.site.register(learning_unit_year.LearningUnitYear,
                     learning_unit_year.LearningUnitYearAdmin)
 

@@ -50,13 +50,13 @@ def show_students_admin(request, learning_unit_year_id, a_tutor):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 def show_students(request, learning_unit_year_id, a_tutor):
     return render(request, "students_list.html", _load_students(learning_unit_year_id, a_tutor))
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 def students_list_build_by_learning_unit(request, learning_unit_year_id):
     a_learning_unit_yr = LearningUnitYear.objects.select_related(
         "academic_year",

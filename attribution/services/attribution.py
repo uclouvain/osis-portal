@@ -37,7 +37,7 @@ from frontoffice.settings.osis_sdk import attribution as attribution_sdk
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class RemoteAttributionService:
+class AttributionService:
     @staticmethod
     def get_attributions_list(year: int, person: Person, with_classes=False) -> List:
         configuration = attribution_sdk.build_configuration(person)
