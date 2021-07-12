@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,38 +27,16 @@ from django.template import Context, Template
 from django.test import TestCase
 from django.test import override_settings
 
-from base.models.enums import learning_unit_year_subtypes
-from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-
 
 class UrlCatalogTagTests(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.academic_year = AcademicYearFactory(year=2015)
-        cls.learning_container_year = LearningContainerYearFactory(acronym='LBIR1200',
-                                                                   academic_year=cls.academic_year)
-        cls.learning_unit_year = LearningUnitYearFactory(acronym='LBIR1200',
-                                                 academic_year=cls.academic_year,
-                                                 learning_container_year=cls.learning_container_year,
-                                                 subtype=learning_unit_year_subtypes.FULL)
-
-        cls.partims = LearningUnitYearFactory.create_batch(
-            2,
-            academic_year=cls.academic_year,
-            learning_container_year=cls.learning_container_year,
-            subtype=learning_unit_year_subtypes.PARTIM
-        )
-
-
     @override_settings(ATTRIBUTION_CONFIG={'CATALOG_URL': 'http://www.uclouvain.be/cours-{0}-{1}.html'})
     def test_url_catalogs(self):
         url_expected = "http://www.uclouvain.be/cours-2015-lbir1200.html"
         out = Template(
             "{% load urls_catalog %}"
-            "{{ learning_container_year.id | get_url_learning_unit_year }}"
+            "{% catalog_url_learning_unit code year %}"
         ).render(Context({
-            'learning_container_year': self.learning_container_year
+            'code': 'LBIR1200',
+            'year': 2015
         }))
         self.assertEqual(out, url_expected)
