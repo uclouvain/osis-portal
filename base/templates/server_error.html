@@ -31,15 +31,8 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="center-block"><h3>{% trans 'Unexpected error occurred' %}</h3></div>
-            <div class="center-block">
-                <h3>
-                    {% trans 'We have been automatically informed about this problem.' %}
-                    {% trans 'Do not hesitate to help us to solve this problem by contacting the' %}
-                        <a href='https://uclouvain.be/ServiceDesk' target='_blank'> Service Desk </a>
-                    {% trans 'to describe what you intended to do in more details.' %}
-                </h3>
-            </div>
+            <div class="center-block"><h3>{% trans 'A server error occured.' %}</h3></div>
+            <div class="center-block"><h3>{% trans 'Please report this incident to the Service Desk' %} : <a href="mailto:8282@uclouvain.be">8282@uclouvain.be</a></h3></div>
         </div>
     </div>
 {% endblock %}
