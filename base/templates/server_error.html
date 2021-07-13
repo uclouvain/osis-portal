@@ -32,7 +32,7 @@
     <div class="container">
         <div class="row">
             <div class="center-block"><h3>{% trans 'A server error occured.' %}</h3></div>
-            <div class="center-block"><h3>{% trans 'Please report this incident to the Service Desk' %} : <a href="mailto:8282@uclouvain.be">8282@uclouvain.be</a></h3></div>
+            <div class="center-block"><h3>{% trans 'Please report this incident to the Service Desk' %} : <a href="mailto:{{ email_service_desk }}">{{ email_service_desk }}</a></h3></div>
         </div>
     </div>
 {% endblock %}

@@ -57,10 +57,13 @@ def common_context_processor(request):
         env = settings.ENVIRONMENT
     else:
         env = 'DEV'
-    context = {'environment': env,
-               'installed_apps': settings.INSTALLED_APPS,
-               'debug': settings.DEBUG,
-               'logout_button': settings.LOGOUT_BUTTON}
+    context = {
+        'environment': env,
+        'installed_apps': settings.INSTALLED_APPS,
+        'debug': settings.DEBUG,
+        'logout_button': settings.LOGOUT_BUTTON,
+        'email_service_desk': settings.EMAIL_SERVICE_DESK,
+    }
     _check_notice(request, context)
     return context
 
