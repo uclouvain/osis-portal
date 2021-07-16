@@ -25,7 +25,7 @@
 ##############################################################################
 import logging
 
-import osis_internship_sdk
+import osis_dissertation_sdk
 from django.conf import settings
 
 from base.models.person import Person
@@ -34,23 +34,23 @@ from frontoffice.settings.osis_sdk import utils
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def build_configuration(person: Person = None) -> osis_internship_sdk.Configuration:
+def build_configuration(person: Person = None) -> osis_dissertation_sdk.Configuration:
     """
-    Return SDK configuration of internship based on person provided in kwargs
+    Return SDK configuration of dissertation based on person provided in kwargs
     If no person provided, it will use generic token to make request
     """
-    if not settings.OSIS_INTERNSHIP_SDK_HOST:
-        logger.debug("'OSIS_INTERNSHIP_SDK_HOST' setting must be set in configuration")
+    if not settings.OSIS_DISSERTATION_SDK_HOST:
+        logger.debug("'OSIS_DISSERTATION_SDK_HOST' setting must be set in configuration")
 
     if person is None:
         token = settings.OSIS_PORTAL_TOKEN
     else:
         token = utils.get_token_from_osis(person.user, force_user_creation=True)
 
-    return osis_internship_sdk.Configuration(
-        host=settings.OSIS_INTERNSHIP_SDK_HOST,
+    return osis_dissertation_sdk.Configuration(
+        host=settings.OSIS_DISSERTATION_SDK_HOST,
         api_key_prefix={
-            'Token': settings.OSIS_INTERNSHIP_SDK_API_KEY_PREFIX
+            'Token': settings.OSIS_DISSERTATION_SDK_API_KEY_PREFIX
         },
         api_key={
             'Token': token

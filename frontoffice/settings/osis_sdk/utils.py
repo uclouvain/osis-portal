@@ -27,7 +27,24 @@ import json
 from functools import wraps
 from typing import Set
 
+import requests
+from django.conf import settings
 from django.http import HttpResponseBadRequest
+from rest_framework import status
+
+
+def get_token_from_osis(username, force_user_creation=False):
+    response = requests.post(
+        url=settings.URL_AUTH_API,
+        headers={'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN},
+        data={
+            'username': username,
+            'force_user_creation': force_user_creation
+        }
+    )
+    if response.status_code == status.HTTP_200_OK:
+        return response.json()['token']
+    return ""
 
 
 def api_exception_handler(api_exception_cls):
