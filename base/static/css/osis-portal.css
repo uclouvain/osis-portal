@@ -107,3 +107,7 @@
     line-height: 15px !important;
     padding-left: 0 !important;
 }
+
+.required_field .control-label:after {
+    content: " *";
+}

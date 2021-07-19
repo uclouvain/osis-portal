@@ -33,13 +33,24 @@ from django.http import HttpResponseBadRequest
 from rest_framework import status
 
 
-def get_token_from_osis(username, force_user_creation=False):
+def get_token_from_osis(person, force_user_creation=False):
     response = requests.post(
         url=settings.URL_AUTH_API,
         headers={'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN},
-        data={
-            'username': username,
-            'force_user_creation': force_user_creation
+        json={
+            'username': person.user.username,
+            'force_user_creation': force_user_creation,
+            'person': {
+                'global_id': person.global_id,
+                'gender': person.gender or '',
+                'first_name': person.first_name or '',
+                'middle_name': person.middle_name or '',
+                'last_name': person.last_name or '',
+                'email': person.email or '',
+                'phone': person.phone or '',
+                'phone_mobile': person.phone_mobile or '',
+                'language': person.language or '',
+            }
         }
     )
     if response.status_code == status.HTTP_200_OK:

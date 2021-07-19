@@ -45,7 +45,7 @@ def build_configuration(person: Person = None) -> osis_dissertation_sdk.Configur
     if person is None:
         token = settings.OSIS_PORTAL_TOKEN
     else:
-        token = utils.get_token_from_osis(person.user, force_user_creation=True)
+        token = utils.get_token_from_osis(person, force_user_creation=True)
 
     return osis_dissertation_sdk.Configuration(
         host=settings.OSIS_DISSERTATION_SDK_HOST,

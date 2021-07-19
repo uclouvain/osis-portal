@@ -45,7 +45,7 @@ def build_configuration(person: Person = None) -> osis_attribution_sdk.Configura
     if person is None:
         token = settings.OSIS_PORTAL_TOKEN
     else:
-        token = utils.get_token_from_osis(person.user, force_user_creation=True)
+        token = utils.get_token_from_osis(person, force_user_creation=True)
 
     return osis_attribution_sdk.Configuration(
         host=settings.OSIS_ATTRIBUTION_SDK_HOST,
