@@ -111,3 +111,7 @@
 .required_field .control-label:after {
     content: " *";
 }
+
+.w-100 {
+    width: 100%;
+}
