@@ -10,18 +10,10 @@ project_branch = subprocess.check_output('git branch --show-current', shell=True
 default_module_branch = 'dev'
 modules_branches = {}
 modules = {
-    "admission": "git@github.com:uclouvain/osis-admission.git",
-    "assistant": "git@github.com:uclouvain/osis-assistant.git",
-    "continuing_education": "git@github.com:uclouvain/osis-continuing-education.git",
-    "dissertation": "git@github.com:uclouvain/osis-dissertation.git",
-    "internship": "git@github.com:uclouvain/osis-internship.git",
+    "continuing_education": "https://github.com/uclouvain/osis-portal-continuing-education.git",
+    "dissertation": "https://github.com/uclouvain/osis-portal-dissertation.git",
+    "internship": "https://github.com/uclouvain/osis-portal-internship.git",
     "osis_common": "git@github.com:uclouvain/osis-common.git",
-    "osis_document": "git@github.com:uclouvain/osis-document.git",
-    "osis_history": "git@github.com:uclouvain/osis-history.git",
-    "osis_mail_template": "git@github.com:uclouvain/osis-mail-template.git",
-    "osis_notification": "git@github.com:uclouvain/osis-notification.git",
-    "osis_signature": "git@github.com:uclouvain/osis-signature.git",
-    "partnership": "git@github.com:uclouvain/osis-partnership.git",
 }
 arguments = len(sys.argv) - 1
 if arguments > 0:
@@ -48,11 +40,11 @@ print('')
 
 for module, git_url in modules.items():
     module_dir = os.path.join(project_dir, module)
+    specific_module_branch = default_module_branch
     if path.exists(module_dir) and path.isdir(module_dir):
         print('')
         print('Module {} exists in project directory'.format(module))
         print('Updating module {} from branch {}'.format(module, default_module_branch))
-        specific_module_branch = default_module_branch
         if module in modules_branches:
             specific_module_branch = modules_branches.get(module)
         fetch_command = 'git fetch origin {branch}'.format(branch=specific_module_branch)
