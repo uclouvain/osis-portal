@@ -104,3 +104,9 @@ fabric.properties
 .idea/modules.xml
 .idea/preferred-vcs.xml
 .idea/encodings.xml
+
+# Ne jamais ajouter les ous-modules au dépôt
+continuing_education
+dissertation
+internship
+osis_common
