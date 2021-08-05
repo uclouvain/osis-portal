@@ -107,7 +107,7 @@ def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, us
                 if learning_unit_years is None:
                     learning_unit_years = "{0}".format(learning_unit.acronym)
                 else:
-                    learning_unit_years = "{0},{1}".format(learning_unit_years, learning_unit)
+                    learning_unit_years = "{0},{1}".format(learning_unit_years, learning_unit.acronym)
     return learning_unit_years
 
 
