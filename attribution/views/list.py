@@ -83,7 +83,7 @@ def __get_learning_unit_year_attributed(year: int, person: Person, with_class=Fa
 
 
 def get_codes_parameter(request, academic_yr, with_class=False):
-    learning_unit_years = []
+    learning_unit_years = None
     user_learning_units_assigned = get_learning_units(request.user, with_class).get('my_learning_units', [])
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
@@ -212,7 +212,7 @@ def list_build_by_person(request, global_id):
 
 
 def get_codes_parameter_list(request, academic_yr, data):
-    learning_unit_years = []
+    learning_unit_years = None
     user_learning_units_assigned = data.get('learning_units', [])
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
