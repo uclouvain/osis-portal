@@ -56,19 +56,20 @@ def students_list(request):
     return render(request, "list/students_exam.html", data)
 
 
-def get_learning_units(a_user):
+def get_learning_units(a_user, with_class=False):
     a_person = mdl_base.person.find_by_user(a_user)
     learning_units = []
     if a_person:
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
-            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
+            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person, with_class)
     return {'person': a_person, 'my_learning_units': learning_units}
 
 
-def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    attributions = AttributionService.get_attributions_list(year, person)
+def __get_learning_unit_year_attributed(year: int, person: Person, with_class=False) -> List:
+
+    attributions = AttributionService.get_attributions_list(year, person, with_class)
     if attributions:
         filter_clause = functools.reduce(
             operator.or_,
@@ -81,9 +82,9 @@ def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
     return []
 
 
-def get_codes_parameter(request, academic_yr):
+def get_codes_parameter(request, academic_yr, with_class=False):
     learning_unit_years = None
-    user_learning_units_assigned = get_learning_units(request.user).get('my_learning_units', [])
+    user_learning_units_assigned = get_learning_units(request.user, with_class).get('my_learning_units', [])
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
@@ -119,7 +120,7 @@ def get_anac_parameter(current_academic_year):
 def list_build(request):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
-    codes = get_codes_parameter(request, current_academic_year)
+    codes = get_codes_parameter(request, current_academic_year, with_class=True)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
