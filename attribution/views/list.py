@@ -108,7 +108,7 @@ def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, us
                     learning_unit_years = "{0}".format(learning_unit.acronym)
                 else:
                     learning_unit_years = "{0},{1}".format(learning_unit_years, learning_unit)
-    return learning_unit_years_in
+    return learning_unit_years
 
 
 def get_anac_parameter(current_academic_year):
