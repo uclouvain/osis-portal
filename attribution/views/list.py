@@ -56,20 +56,19 @@ def students_list(request):
     return render(request, "list/students_exam.html", data)
 
 
-def get_learning_units(a_user, with_class=False):
+def get_learning_units(a_user):
     a_person = mdl_base.person.find_by_user(a_user)
     learning_units = []
     if a_person:
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
-            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person, with_class)
+            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
     return {'person': a_person, 'my_learning_units': learning_units}
 
 
-def __get_learning_unit_year_attributed(year: int, person: Person, with_class=False) -> List:
-
-    attributions = AttributionService.get_attributions_list(year, person, with_class)
+def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
+    attributions = AttributionService.get_attributions_list(year, person)
     if attributions:
         filter_clause = functools.reduce(
             operator.or_,
@@ -82,9 +81,9 @@ def __get_learning_unit_year_attributed(year: int, person: Person, with_class=Fa
     return []
 
 
-def get_codes_parameter(request, academic_yr, with_class=False):
+def get_codes_parameter(request, academic_yr):
     learning_unit_years = None
-    user_learning_units_assigned = get_learning_units(request.user, with_class).get('my_learning_units', [])
+    user_learning_units_assigned = get_learning_units(request.user).get('my_learning_units', [])
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
@@ -100,14 +99,11 @@ def get_codes_parameter(request, academic_yr, with_class=False):
 def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned):
     learning_unit_years = learning_unit_years_in
     learning_units = mdl_base.learning_unit_year.find_by_acronym(acronym, academic_yr)
-    acronym_assigned = [user_learning_unit.acronym for user_learning_unit in user_learning_units_assigned]
-    if learning_units:
-        for learning_unit in learning_units:
-            if learning_unit.acronym in acronym_assigned:
-                if learning_unit_years is None:
-                    learning_unit_years = "{0}".format(learning_unit.acronym)
-                else:
-                    learning_unit_years = "{0},{1}".format(learning_unit_years, learning_unit.acronym)
+    if learning_units and learning_units[0] in user_learning_units_assigned:
+        if learning_unit_years is None:
+            learning_unit_years = "{0}".format(learning_units[0].acronym)
+        else:
+            learning_unit_years = "{0},{1}".format(learning_unit_years, learning_units[0].acronym)
     return learning_unit_years
 
 
@@ -123,7 +119,7 @@ def get_anac_parameter(current_academic_year):
 def list_build(request):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
-    codes = get_codes_parameter(request, current_academic_year, with_class=True)
+    codes = get_codes_parameter(request, current_academic_year)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
