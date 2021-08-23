@@ -31,11 +31,6 @@
                   "can_access_attribution",
                   "base",
                   "tutor"
-              ],
-              [
-                  "can_access_attribution_application",
-                  "base",
-                  "tutor"
               ]
           ]
       }
