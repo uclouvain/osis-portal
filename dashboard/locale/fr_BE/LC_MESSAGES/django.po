@@ -31,6 +31,9 @@ msgstr ""
 msgid "Annual program"
 msgstr "Programme annuel"
 
+msgid "Annual program administration"
+msgstr "Administration du programme annuel"
+
 msgid "Applications administration"
 msgstr "Administration des candidatures en ligne"
 
@@ -162,6 +165,9 @@ msgstr "Administration des données personnelles de l'étudiant"
 
 msgid "Student's dissertations management"
 msgstr "Gestion des mémoires des étudiants"
+
+msgid "Teaching charges administration"
+msgstr "Administration des charges d'enseignement"
 
 msgid "This process controls internships assessment."
 msgstr "Gestion des évaluations de stages."

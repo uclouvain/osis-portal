@@ -27,6 +27,9 @@ msgstr ""
 msgid "Annual program"
 msgstr ""
 
+msgid "Annual program administration"
+msgstr ""
+
 msgid "Applications administration"
 msgstr ""
 
@@ -157,6 +160,9 @@ msgid "Student ID data administration"
 msgstr ""
 
 msgid "Student's dissertations management"
+msgstr ""
+
+msgid "Teaching charges administration"
 msgstr ""
 
 msgid "This process controls internships assessment."
