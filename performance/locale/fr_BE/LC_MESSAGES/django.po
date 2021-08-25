@@ -261,7 +261,3 @@ msgstr "examens écrits sur Gradescope, dans une salle UCLouvain"
 
 msgid "written exams with Moodle, in a room at UCLouvain"
 msgstr "examens écrits sur Moodle, dans une salle UCLouvain"
-
-#~ msgid "Exam marks and registration state administration"
-#~ msgstr ""
-#~ "Administration de l'état d'inscription aux cours et des notes d'examen"
