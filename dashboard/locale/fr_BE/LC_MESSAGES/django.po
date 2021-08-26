@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 08:46+0200\n"
+"POT-Creation-Date: 2021-08-24 13:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,9 @@ msgstr ""
 msgid "Annual program"
 msgstr "Programme annuel"
 
+msgid "Annual program administration"
+msgstr "Administration du programme annuel"
+
 msgid "Applications administration"
 msgstr "Administration des candidatures en ligne"
 
@@ -38,16 +41,16 @@ msgid "Attestations administration"
 msgstr "Administration des attestations"
 
 msgid "Birth date"
-msgstr ""
+msgstr "Date de naissance"
 
 msgid "Birth location"
-msgstr ""
+msgstr "Lieu de naissance"
 
 msgid "City"
-msgstr ""
+msgstr "Ville"
 
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
 msgid "Dashboard"
 msgstr "Tableau de bord"
@@ -56,10 +59,7 @@ msgid "Dissertations"
 msgstr "Mémoires"
 
 msgid "Email"
-msgstr ""
-
-msgid "Exam marks and registration state administration"
-msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
+msgstr "Email"
 
 msgid "Exam student list"
 msgstr "Liste des examens d'étudiants"
@@ -71,13 +71,13 @@ msgid "Faculty administration"
 msgstr "Administration facultaire"
 
 msgid "First name"
-msgstr ""
+msgstr "Prénom"
 
 msgid "Get scores encoding papersheet and encode scores of your students."
 msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
 
 msgid "Global id"
-msgstr ""
+msgstr "Matricule fgs"
 
 msgid "ID data"
 msgstr "Identification"
@@ -92,7 +92,7 @@ msgid "Internships assessment"
 msgstr "Évaluation des stages"
 
 msgid "Last name"
-msgstr ""
+msgstr "Nom"
 
 msgid "List of students enrolled to my exams"
 msgstr "Liste des étudiants inscrits à mes examens"
@@ -128,7 +128,7 @@ msgid "Personal address"
 msgstr "Adresse du domicile"
 
 msgid "Postal code"
-msgstr ""
+msgstr "Code postal"
 
 msgid "Private email"
 msgstr "Courriel privé"
@@ -137,7 +137,7 @@ msgid "Registration department"
 msgstr "Service des inscriptions"
 
 msgid "Registration id"
-msgstr ""
+msgstr "Noma"
 
 msgid "Scores encoding"
 msgstr "Encodage de notes"
@@ -162,6 +162,9 @@ msgstr "Administration des données personnelles de l'étudiant"
 
 msgid "Student's dissertations management"
 msgstr "Gestion des mémoires des étudiants"
+
+msgid "Teaching charges administration"
+msgstr "Administration des charges d'enseignement"
 
 msgid "This process controls internships assessment."
 msgstr "Gestion des évaluations de stages."
