@@ -47,14 +47,14 @@ class PersonAdmin(SerializableModelAdmin):
 class Person(SerializableModel):
     GENDER_CHOICES = (
         ('F', _('female')),
-        ('M', _('male')),
-        ('U', _('unknown')))
+        ('H', _('male')),
+        ('X', _('unknown')))
 
     external_id = models.CharField(max_length=100, blank=True, null=True)
     changed = models.DateTimeField(null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     global_id = models.CharField(max_length=10, blank=True, null=True)
-    gender = models.CharField(max_length=1, blank=True, null=True, choices=GENDER_CHOICES, default='U')
+    gender = models.CharField(max_length=1, blank=True, null=True, choices=GENDER_CHOICES, default='X')
     first_name = models.CharField(max_length=50, blank=True, null=True, db_index=True)
     middle_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True, db_index=True)
