@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 17:09+0200\n"
+"POT-Creation-Date: 2021-08-30 14:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,6 +82,9 @@ msgstr "Suppléant"
 msgid "Deputy authority"
 msgstr "Suppléant d'autorité"
 
+msgid "Deputy disease or maternity"
+msgstr "Suppléant maladie/maternité"
+
 msgid "Deputy sabbatical"
 msgstr "Suppléant sabbatique"
 
@@ -120,6 +123,9 @@ msgstr "Administration des facultés"
 
 msgid "Faculty"
 msgstr "Faculté"
+
+msgid "Faculty administration"
+msgstr "Administration des facultés"
 
 msgid "Function"
 msgstr "Fonction"
@@ -304,6 +310,9 @@ msgstr "Enseignants"
 msgid "Teaching charge"
 msgstr "Charge d'enseignement"
 
+msgid "Teaching charges administration"
+msgstr "Administration des charges d'enseignement"
+
 msgid "The Excel lists for encoding scores are available in"
 msgstr ""
 "Les listes Excel destinées à l'encodage des notes sont disponibles dans"
@@ -347,9 +356,6 @@ msgstr ""
 
 msgid "Title"
 msgstr "Intitulé"
-
-msgid "Deputy disease or maternity"
-msgstr "Suppléant maladie/maternité"
 
 msgid ""
 "To find a vacant learning unit to candidate to, introduce the code and click "
