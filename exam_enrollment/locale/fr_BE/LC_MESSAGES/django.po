@@ -79,7 +79,7 @@ msgid "Last name"
 msgstr "Nom"
 
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 msgid "No exam enrollment found"
 msgstr "Formulaire d'inscription aux examens non trouvé"
@@ -111,7 +111,7 @@ msgid "Which action do you want to perform ?"
 msgstr "Quelle action souhaitez-vous effectuer ?"
 
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 msgid "You are outside the exams enrollment period"
 msgstr "Vous êtes en dehors de la période d'inscription aux examens"

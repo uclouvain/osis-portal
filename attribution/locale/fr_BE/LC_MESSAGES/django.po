@@ -134,7 +134,7 @@ msgid "Global id"
 msgstr "Matricule fgs"
 
 msgid "Guide"
-msgstr ""
+msgstr "Guide"
 
 msgid "Holder"
 msgstr "Titulaire"
@@ -149,7 +149,7 @@ msgid "Jan."
 msgstr "Jan."
 
 msgid "January"
-msgstr ""
+msgstr "Janvier"
 
 msgid "June"
 msgstr "Juin"
@@ -241,7 +241,7 @@ msgid "Professor"
 msgstr "Professeur"
 
 msgid "Program"
-msgstr ""
+msgstr "Programme"
 
 msgid "Registration id"
 msgstr "Noma"
@@ -262,10 +262,10 @@ msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
 msgid "Scores encoding"
-msgstr ""
+msgstr "Encodage des notes"
 
 msgid "Search"
-msgstr ""
+msgstr "Rechercher"
 
 msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
@@ -274,7 +274,7 @@ msgid "Sept."
 msgstr "Sept."
 
 msgid "September"
-msgstr ""
+msgstr "Septembre"
 
 msgid ""
 "Some of the students enrolled to this course have a PEPS status (Program for "

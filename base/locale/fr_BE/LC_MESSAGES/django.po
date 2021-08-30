@@ -24,7 +24,7 @@ msgid "Acronym"
 msgstr "Sigle"
 
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
 
 msgid "Administration entity"
 msgstr "Entité d'administration"
@@ -81,7 +81,7 @@ msgid "Data management by entity"
 msgstr "Gestion des données par entité"
 
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 msgid "Details other educational facilities"
 msgstr "Détails autre aménagement"
@@ -180,7 +180,7 @@ msgid "Training"
 msgstr "Formation"
 
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgid "Type of training"
 msgstr "Type de formation"
@@ -204,7 +204,7 @@ msgid "dissertation"
 msgstr "dissertation"
 
 msgid "execute"
-msgstr ""
+msgstr "executer"
 
 msgid "female"
 msgstr "femme"
