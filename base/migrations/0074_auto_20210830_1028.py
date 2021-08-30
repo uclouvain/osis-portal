@@ -11,7 +11,7 @@ def edit_gender_values(apps, schema_editor):
             person.gender = 'H'
             persons_to_update.append(person)
 
-    Person.objects.bulk_update(persons_to_update, ['sex', 'gender'], batch_size=1000)
+    Person.objects.bulk_update(persons_to_update, ['gender'], batch_size=1000)
 
 
 class Migration(migrations.Migration):
