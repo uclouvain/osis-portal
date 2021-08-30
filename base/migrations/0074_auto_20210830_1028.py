@@ -3,6 +3,17 @@
 from django.db import migrations, models
 
 
+def edit_gender_values(apps, schema_editor):
+    Person = apps.get_model('base', 'Person')
+    persons_to_update = []
+    for person in Person.objects.all():
+        if person.gender == 'M':
+            person.gender = 'H'
+            persons_to_update.append(person)
+
+    Person.objects.bulk_update(persons_to_update, ['sex', 'gender'], batch_size=1000)
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -10,6 +21,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(edit_gender_values),
         migrations.AlterField(
             model_name='person',
             name='gender',
