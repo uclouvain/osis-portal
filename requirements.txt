@@ -1,3 +1,3 @@
 --extra-index-url https://uclouvain.github.io/osis-internship-sdk/
 
-git+https://github.com/uclouvain/osis-internship-sdk.git@build-1.1.2
+git+https://github.com/uclouvain/osis-internship-sdk.git@build-1.1.4

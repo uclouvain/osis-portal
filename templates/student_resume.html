@@ -230,6 +230,7 @@
                                         {% trans 'Known to student' %}
                                         <span data-toggle="tooltip" title="{% trans 'Internship student was present during evaluation process' %}" class="glyphicon glyphicon-question-sign"></span>
                                     </th>
+                                    <th>Com.</th>
                                 </tr>
                             </thead>
                           <tbody>
@@ -253,6 +254,17 @@
                                         {{ affectation.score.student_presence|yesno:_("yes,no,") }}
                                     {% endif %}
                                     </td>
+                                    <td>
+                                        {% if affectation.score.comments %}
+                                            <a data-toggle="modal" data-target="#comments-modal" type="button" class="btn btn-xs btn-default btn-edit-score"
+                                               id="comment-btn-{{ student.pk }}-{{ affectation.period.pk }}"
+                                               data-student="{{ student }}" data-period="{{ affectation.period }}"
+                                               data-comments="{{ affectation.score.comments|to_json }}" data-organization="{{ affectation.organization }}"
+                                               data-specialty="{{ affectation.speciality }}">
+                                                <icon class="fa fa-comment"></icon>
+                                            </a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                           </tbody>
@@ -264,5 +276,41 @@
     </div>
 
     {% include 'internship_apd_documentation.html' %}
+
+    {% include 'fragment/internship_comments_modal.html' %}
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+
+    //triggered when comments modal is about to be shown
+    $('#comments-modal').on('show.bs.modal', function(e) {
+        const student = $(e.relatedTarget).data('student');
+        const period = $(e.relatedTarget).data('period');
+        const comments = $(e.relatedTarget).data('comments');
+
+        const specialty = $(e.relatedTarget).data('specialty');
+        const organization = $(e.relatedTarget).data('organization');
+
+        $(e.currentTarget).find('#modal-student-period').text(`${student} - ${period}`);
+
+        $(e.currentTarget).find('#modal-internship').text(`${specialty} - ${organization}`);
+
+        let commentsModalBody = $(e.currentTarget).find('#modal-comments');
+        let commentsModalBodyContent = $('<span/>');
+
+        for (const [key, comment] of Object.entries(comments)) {
+          commentsModalBodyContent.append("" +
+              "<div class='panel panel-default'>" +
+              `<div class='panel-heading'>${key}</div>` +
+              `<div class='panel-body'>${comment}</div>`
+          );
+        }
+        commentsModalBody.html(commentsModalBodyContent);
+    });
+
+    </script>
 
 {% endblock %}
