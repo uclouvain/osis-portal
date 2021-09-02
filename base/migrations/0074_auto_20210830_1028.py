@@ -25,7 +25,42 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='person',
             name='gender',
-            field=models.CharField(blank=True, choices=[('F', 'female'), ('H', 'male'), ('X', 'unknown')], default='X',
+            field=models.CharField(blank=True, choices=[('F', 'Female'), ('H', 'male'), ('X', 'unknown')], default='X',
                                    max_length=1, null=True),
+        ),
+        migrations.AlterField(
+            model_name='person',
+            name='external_id',
+            field=models.CharField(blank=True, default='', max_length=100),
+        ),
+        migrations.AlterField(
+            model_name='person',
+            name='first_name',
+            field=models.CharField(blank=True, db_index=True, default='', max_length=50),
+        ),
+        migrations.AlterField(
+            model_name='person',
+            name='global_id',
+            field=models.CharField(blank=True, default='', max_length=10),
+        ),
+        migrations.AlterField(
+            model_name='person',
+            name='last_name',
+            field=models.CharField(blank=True, db_index=True, default='', max_length=50),
+        ),
+        migrations.AlterField(
+            model_name='person',
+            name='middle_name',
+            field=models.CharField(blank=True, default='', max_length=50),
+        ),
+        migrations.AlterField(
+            model_name='person',
+            name='phone',
+            field=models.CharField(blank=True, default='', max_length=30),
+        ),
+        migrations.AlterField(
+            model_name='person',
+            name='phone_mobile',
+            field=models.CharField(blank=True, default='', max_length=30),
         ),
     ]

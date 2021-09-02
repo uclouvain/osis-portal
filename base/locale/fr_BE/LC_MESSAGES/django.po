@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-30 14:30+0200\n"
+"POT-Creation-Date: 2021-09-02 08:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,6 +104,9 @@ msgstr "Entreprenariat"
 msgid "External"
 msgstr "Externe"
 
+msgid "Female"
+msgstr "Femme"
+
 msgid "File"
 msgstr "Fichier"
 
@@ -125,6 +128,9 @@ msgstr "ESHN"
 msgid "Internship"
 msgstr "Stage"
 
+msgid "Male"
+msgstr "Homme"
+
 msgid "Management entity"
 msgstr "Gestion des données par entité"
 
@@ -133,6 +139,9 @@ msgstr "Mini-Formation"
 
 msgid "Not defined"
 msgstr "Non défini"
+
+msgid "Other"
+msgstr "Autre"
 
 msgid "Other collective"
 msgstr "Autre collectif"
@@ -206,17 +215,11 @@ msgstr "dissertation"
 msgid "execute"
 msgstr "executer"
 
-msgid "female"
-msgstr "femme"
-
 msgid "log in"
 msgstr "se connecter"
 
 msgid "logout"
 msgstr "déconnexion"
-
-msgid "male"
-msgstr "homme"
 
 msgid "no student with this registration_id"
 msgstr "pas d'étudiant avec ce registration_id"
@@ -232,9 +235,6 @@ msgstr "réinitialiser"
 
 msgid "to describe what you intended to do in more details."
 msgstr "et en décrivant l'opération effectuée de manière plus détaillée."
-
-msgid "unknown"
-msgstr "inconnu"
 
 msgid "user"
 msgstr "utilisateur"
