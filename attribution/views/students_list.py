@@ -35,6 +35,7 @@ from base import models as mdl_base
 from base.models.enums import offer_enrollment_state, learning_unit_year_subtypes
 from base.models.learning_unit_year import LearningUnitYear
 from performance import models as mdl_performance
+from base.views.common import paginate_queryset
 
 JSON_LEARNING_UNIT_NOTE = 'note'
 JSON_LEARNING_UNIT_STATUS = 'etatExam'
@@ -46,13 +47,13 @@ SEPTEMBER = "septembre"
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def show_students_admin(request, learning_unit_year_id, a_tutor):
-    return render(request, "students_list_admin.html", _load_students(learning_unit_year_id, a_tutor))
+    return render(request, "students_list_admin.html", _load_students(learning_unit_year_id, a_tutor, request))
 
 
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
 def show_students(request, learning_unit_year_id, a_tutor):
-    return render(request, "students_list.html", _load_students(learning_unit_year_id, a_tutor))
+    return render(request, "students_list.html", _load_students(learning_unit_year_id, a_tutor, request))
 
 
 @login_required
@@ -66,13 +67,14 @@ def students_list_build_by_learning_unit(request, learning_unit_year_id):
     return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
 
 
-def _load_students(learning_unit_year_id, a_tutor):
+def _load_students(learning_unit_year_id, a_tutor, request):
     request_tutor = mdl_base.tutor.find_by_id(a_tutor)
     a_learning_unit_year = LearningUnitYear.objects.select_related(
         "academic_year",
         "learning_unit"
     ).get(pk=learning_unit_year_id)
     students = _get_learning_unit_yr_enrollments_list(a_learning_unit_year)
+    students = paginate_queryset(students, request.GET)
     return {
         'global_id': request_tutor.person.global_id,
         'students': students,

@@ -32,6 +32,9 @@ from django.utils import translation
 from base.models import person as person_mdl
 from base.views import layout, api
 from osis_common.models import application_notice
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+ITEMS_PER_PAGE = 25
 
 
 def return_error_response(request, template, status_code):
@@ -111,3 +114,17 @@ def log_out(request):
 
 def logged_out(request):
     return layout.render(request, 'logged_out.html', {})
+
+
+def paginate_queryset(qs, request_get, items_per_page=None):
+    items_per_page = items_per_page or ITEMS_PER_PAGE
+    paginator = Paginator(qs, items_per_page)
+
+    page = request_get.get('page')
+    try:
+        paginated_qs = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_qs = paginator.page(1)
+    except EmptyPage:
+        paginated_qs = paginator.page(paginator.num_pages)
+    return paginated_qs

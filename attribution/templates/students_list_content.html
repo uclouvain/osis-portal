@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load i18n detail_student_specific_profile %}
-
+{% load bootstrap3 %}
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -96,4 +96,7 @@
         {% endfor %}
         </tbody>
     </table>
+    <div style="text-align:center">
+        {% bootstrap_pagination students extra=request.GET.urlencode %}
+    </div>
 {% endif %}
