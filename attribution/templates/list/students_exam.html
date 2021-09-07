@@ -34,10 +34,6 @@
 {% endblock %}
 {% block content %}
     <h1>{% trans 'List of students enrolled to my exams' %}</h1>
-    <div class="alert alert-warning">
-        {% trans 'Warning, this is not a list for encoding scores.' %}<br/>
-        {% trans 'The Excel lists for encoding scores are available in' %} <a href="{% url 'scores_encoding' %}" id="lnk_home_osis">{% trans 'Scores encoding' %}</a>
-    </div>
     {% if msg_error %}
         <br>
         <div class="alert alert-info">{{ msg_error }}</div>
