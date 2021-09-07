@@ -39,7 +39,7 @@ from django.db.utils import OperationalError as DjangoOperationalError, Interfac
 from django.http import HttpResponse, Http404
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_GET
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 from voluptuous import error as voluptuous_error
 
 import assessments.models
@@ -74,14 +74,6 @@ def tutor_scores_sheets(request, global_id):
     scores_in_db_and_uptodate = _check_person_and_scores_in_db(person)
     request_timeout = queue_utils.get_timeout_or_default('PAPER_SHEET_TIMEOUT')
     return layout.render(request, "scores_sheets.html", locals())
-
-
-@login_required
-@permission_required('base.is_tutor', raise_exception=True)
-def score_encoding(request):
-    score_encoding_url = settings.OSIS_SCORE_ENCODING_URL
-    score_encoding_vpn_help_url = settings.OSIS_VPN_HELP_URL
-    return layout.render(request, "score_encoding.html", locals())
 
 
 @login_required

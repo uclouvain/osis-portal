@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 13:30+0200\n"
+"POT-Creation-Date: 2021-09-07 10:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,9 +73,6 @@ msgstr "Administration facultaire"
 msgid "First name"
 msgstr "Prénom"
 
-msgid "Get scores encoding papersheet and encode scores of your students."
-msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
-
 msgid "Global id"
 msgstr "Matricule fgs"
 
@@ -139,8 +136,11 @@ msgstr "Service des inscriptions"
 msgid "Registration id"
 msgstr "Noma"
 
-msgid "Scores encoding"
+msgid "Scores Encoding"
 msgstr "Encodage de notes"
+
+msgid "Scores encoding of my students"
+msgstr "Encoder les notes de mes étudiants"
 
 msgid "Scores sheets administration"
 msgstr "Administration des feuilles de notes"
@@ -187,6 +187,9 @@ msgstr "Accès à mes données personnelles."
 msgid "This requires a"
 msgstr "Ceci nécessite un"
 
+msgid "This requires a "
+msgstr "Ceci nécessite un"
+
 msgid "This requires a VPN access outside UCLouvain."
 msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCLouvain."
 
@@ -195,6 +198,9 @@ msgstr "accès VPN"
 
 msgid "View my annual program and exam marks"
 msgstr "Voir mon programme annuel et mes notes d'examen"
+
+msgid "outside UCLouvain"
+msgstr "en dehors du réseau de l'UCLouvain."
 
 msgid "outside UCLouvain."
 msgstr "en dehors du réseau de l'UCLouvain."

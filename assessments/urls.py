@@ -28,7 +28,6 @@ from django.conf.urls import url, include
 from .views import score_encoding
 
 urlpatterns = [
-    url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
     url(r'^scores_encoding/my_scores_sheets/$', score_encoding.scores_sheets, name='my_scores_sheets'),
     url(r'^scores_encoding/my_scores_sheets/ask/([0-9a-z-]+)/$', score_encoding.ask_papersheet, name='ask_papersheet'),
     url(r'^scores_encoding/my_scores_sheets/check/([0-9a-z-]+)/$', score_encoding.check_papersheet,
