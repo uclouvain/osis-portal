@@ -99,15 +99,6 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
             queue_name='PERFORMANCE_UPDATE_EXP_DATE'
         )
 
-    # Thread in wich is running the listening of the queue used to receive the json of scores_sheets from osis
-    if 'assessments' in settings.INSTALLED_APPS:
-        from assessments.views.score_encoding import insert_or_update_document_from_queue
-
-        _listen_to_queue_with_callback(
-            callback=insert_or_update_document_from_queue,
-            queue_name='SCORE_ENCODING_PDF_RESPONSE'
-        )
-
     if 'exam_enrollment' in settings.INSTALLED_APPS:
         from exam_enrollment.views.exam_enrollment import insert_or_update_document_from_queue
 
