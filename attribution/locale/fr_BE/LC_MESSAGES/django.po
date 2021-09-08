@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-08 16:32+0200\n"
+"POT-Creation-Date: 2021-09-08 17:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid " in the column \"Students\""
+msgstr " repris dans la colonne \"Etudiants\""
 
 msgid "Acronym"
 msgstr "Sigle"
@@ -115,10 +118,9 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
-#, fuzzy, python-format
-#| msgid "Extra time (33% generally)"
+#, python-format
 msgid "Extra time (33% generally)"
-msgstr "Tiers-Temps"
+msgstr "Extra time (33% generally)"
 
 msgid "Faculties administration"
 msgstr "Administration des facultés"
@@ -126,8 +128,6 @@ msgstr "Administration des facultés"
 msgid "Faculty"
 msgstr "Faculté"
 
-#, fuzzy
-#| msgid "Faculties administration"
 msgid "Faculty administration"
 msgstr "Administration des facultés"
 
@@ -182,12 +182,8 @@ msgstr "Listes des étudiants inscrits aux examens de "
 msgid "List of students enrolled to my exams"
 msgstr "Listes des étudiants inscrits à mes examens"
 
-msgid ""
-"Lists of students are available by clicking on the symbol [PICTO] in the "
-"column \"Students\""
-msgstr ""
-"Les listes des étudiants sont disponibles en cliquant sur le symbole [PICTO] "
-"repris dans la colonne \"Etudiants\""
+msgid "Lists of students are available by clicking on the symbol"
+msgstr "Les listes des étudiants sont disponibles en cliquant sur le symbole"
 
 msgid "Lists of students enrollments to exams"
 msgstr "Administration des listes des inscriptions des étudiants aux examens"
@@ -324,10 +320,8 @@ msgstr "Enseignants"
 msgid "Teaching charge"
 msgstr "Charge d'enseignement"
 
-#, fuzzy
-#| msgid "Faculties administration"
 msgid "Teaching charges administration"
-msgstr "Administration des facultés"
+msgstr "Administration des charges d'enseignement"
 
 msgid "The Excel lists for encoding scores are available in"
 msgstr ""
