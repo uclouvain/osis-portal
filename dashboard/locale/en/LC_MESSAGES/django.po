@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 13:30+0200\n"
+"POT-Creation-Date: 2021-09-08 11:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,9 +67,6 @@ msgid "Faculty administration"
 msgstr ""
 
 msgid "First name"
-msgstr ""
-
-msgid "Get scores encoding papersheet and encode scores of your students."
 msgstr ""
 
 msgid "Global id"
@@ -135,7 +132,10 @@ msgstr ""
 msgid "Registration id"
 msgstr ""
 
-msgid "Scores encoding"
+msgid "Scores Encoding"
+msgstr ""
+
+msgid "Scores encoding of my students"
 msgstr ""
 
 msgid "Scores sheets administration"
@@ -181,6 +181,9 @@ msgid "This process shows personal data."
 msgstr ""
 
 msgid "This requires a"
+msgstr ""
+
+msgid "This requires a "
 msgstr ""
 
 msgid "This requires a VPN access outside UCLouvain."
