@@ -24,10 +24,40 @@
 #
 ##############################################################################
 import json
+import requests
 from functools import wraps
 from typing import Set
 
+from django.conf import settings
 from django.http import HttpResponseBadRequest
+from rest_framework import status
+
+
+def get_user_token(person, force_user_creation=False):
+    response = requests.post(
+        url=settings.URL_AUTH_API,
+        headers={
+            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+            **build_custom_headers(person)
+        },
+        json={
+            'username': person.user.username,
+            'force_user_creation': force_user_creation,
+        }
+    )
+    if response.status_code == status.HTTP_200_OK:
+        return response.json()['token']
+    return ""
+
+
+def build_custom_headers(person):
+    return {
+        'X-User-FirstName': person.first_name or '',
+        'X-User-LastName': person.last_name or '',
+        'X-User-Email': person.email or '',
+        'X-User-GlobalID': person.global_id,
+        'Accept-Language': person.language
+    }
 
 
 def api_exception_handler(api_exception_cls):
