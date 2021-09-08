@@ -28,6 +28,8 @@ import logging
 from types import SimpleNamespace
 from typing import List
 
+from django.conf import settings
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.db.models import Case, When, BooleanField, Value, F, CharField
 from django.db.models.functions import Concat
@@ -35,18 +37,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic.base import TemplateView
-
-from attribution.services.attribution import AttributionService
-from attribution.views.students_list import check_peps
-from base.models.academic_year import AcademicYear, current_academic_year
-from base.models.person import Person
 from osis_attribution_sdk.models import Attribution
 
-from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
-
+from attribution.services.attribution import AttributionService
 from base.forms.base_forms import GlobalIdForm
+from base.models.academic_year import AcademicYear, current_academic_year
 from base.models.learning_unit_year import LearningUnitYear
+from base.models.person import Person
 from base.utils import string_utils
 from base.views import layout
 
@@ -135,7 +132,6 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 'students_list_email': get_email_students(attribution.code, attribution.year),
                 'percentage_allocation_charge': percentage_allocation_charge,
                 'attribution_students_url': self.get_attribution_students_url(attribution.code, attribution.year),
-                'has_peps': check_peps(attribution.code, attribution.year),
             }
         )
 
