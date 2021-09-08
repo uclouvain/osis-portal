@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import datetime
+from types import SimpleNamespace
 
 import mock
 from django.contrib.auth.models import Group, Permission
@@ -32,6 +33,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
 
+from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group_year import EducationGroupYearFactory
@@ -64,6 +66,7 @@ class StudentsListTest(TestCase):
         person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         person.save()
 
+        cls.enrollments = [SimpleNamespace(**EnrollmentDictFactory()) for _ in range(2)]
         cls.url = reverse('students_list')
 
     def setUp(self):
@@ -111,7 +114,9 @@ class StudentsListTest(TestCase):
         self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_with_attribution_students(self, mock_get_attributions_list):
+    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments_list")
+    def test_with_attribution_students(self, mock_students_list_endpoint, mock_get_attributions_list):
+        mock_students_list_endpoint.return_value = self.enrollments
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))

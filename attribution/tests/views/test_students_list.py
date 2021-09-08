@@ -24,17 +24,18 @@
 #
 ##############################################################################
 import datetime
+from types import SimpleNamespace
+from unittest import mock
 
 from django.test import TestCase
 
+from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views import students_list
 from base.models.enums import learning_unit_year_subtypes
 from base.tests.factories.learning_container_year import LearningContainerYearInChargeFactory
-from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.models import test_academic_year, test_learning_unit_year
 from performance.tests.models import test_student_performance
-from base.tests.factories.student_specific_profile import StudentSpecificProlileFactory
 
 
 # TODO: Rewrite test because not lisible!!!
@@ -45,6 +46,15 @@ class StudentsListViewTest(TestCase):
 
         self.a_tutor = TutorFactory()
         self.full_luy = self.create_lu_yr_annual_data(self.current_year)
+
+        self.enrollments = [
+            SimpleNamespace(
+                **EnrollmentDictFactory(
+                    learning_unit_acronym=self.full_luy['learning_unit_year'].acronym,
+                    program=program,
+                )
+            ) for program in ['PROG2', 'PROG1']
+        ]
 
     def create_lu_yr_annual_data(self, a_year):
         an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
@@ -98,32 +108,11 @@ class StudentsListViewTest(TestCase):
     def test_get_no_student_performance_data_dict(self):
         self.assertIsNone(students_list.get_student_data_dict(None))
 
-    def test_get_learning_unit_enrollments_list(self):
+    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments_list")
+    def test_get_learning_unit_enrollments_list(self, mock_enrollments):
+        mock_enrollments.return_value = self.enrollments
         luy_full = self.full_luy['learning_unit_year']
-        luy_partim = test_learning_unit_year.create_learning_unit_year({
-            'acronym': "{}A".format('LINGI2145'),
-            'specific_title': 'Dummy title',
-            'academic_year': self.full_luy['academic_year'],
-            'weight': 5,
-            'subtype': learning_unit_year_subtypes.PARTIM,
-        })
-        luy_partim.learning_container_year = luy_full.learning_container_year
-        luy_partim.save()
-        for _ in range(5):
-            LearningUnitEnrollmentFactory(learning_unit_year=luy_full)
-            LearningUnitEnrollmentFactory(learning_unit_year=luy_partim)
-
         self.assertEqual(
-            len(students_list._get_learning_unit_yr_enrollments_list(luy_full)),
-            10
+            len(students_list._get_learning_unit_yr_enrollments_list(luy_full, self.a_tutor)),
+            2
         )
-
-    def test_has_no_peps(self):
-        self.assertFalse((students_list.check_peps(self.full_luy['learning_unit_year'].acronym,
-                                                   self.full_luy['academic_year'].year)))
-
-    def test_has_peps(self):
-        student_peps = StudentSpecificProlileFactory()
-        enrollment = LearningUnitEnrollmentFactory(offer_enrollment__student=student_peps.student)
-        self.assertTrue(students_list.check_peps(enrollment.learning_unit_year.acronym,
-                                                 enrollment.learning_unit_year.academic_year.year))
