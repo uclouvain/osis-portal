@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 17:09+0200\n"
+"POT-Creation-Date: 2021-09-08 16:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,6 +82,9 @@ msgstr "Suppléant"
 msgid "Deputy authority"
 msgstr "Suppléant d'autorité"
 
+msgid "Deputy disease or maternity"
+msgstr "Suppléant maladie/maternité"
+
 msgid "Deputy sabbatical"
 msgstr "Suppléant sabbatique"
 
@@ -112,6 +115,8 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+#, fuzzy, python-format
+#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -120,6 +125,11 @@ msgstr "Administration des facultés"
 
 msgid "Faculty"
 msgstr "Faculté"
+
+#, fuzzy
+#| msgid "Faculties administration"
+msgid "Faculty administration"
+msgstr "Administration des facultés"
 
 msgid "Function"
 msgstr "Fonction"
@@ -172,6 +182,13 @@ msgstr "Listes des étudiants inscrits aux examens de "
 msgid "List of students enrolled to my exams"
 msgstr "Listes des étudiants inscrits à mes examens"
 
+msgid ""
+"Lists of students are available by clicking on the symbol [PICTO] in the "
+"column \"Students\""
+msgstr ""
+"Les listes des étudiants sont disponibles en cliquant sur le symbole [PICTO] "
+"repris dans la colonne \"Etudiants\""
+
 msgid "Lists of students enrollments to exams"
 msgstr "Administration des listes des inscriptions des étudiants aux examens"
 
@@ -186,6 +203,9 @@ msgstr "Mes charges"
 
 msgid "My charges now vacant"
 msgstr "Mes charges échues"
+
+msgid "My teaching charge"
+msgstr "Ma charge d'enseignement"
 
 msgid "New application"
 msgstr "Nouvelle candidature"
@@ -304,6 +324,11 @@ msgstr "Enseignants"
 msgid "Teaching charge"
 msgstr "Charge d'enseignement"
 
+#, fuzzy
+#| msgid "Faculties administration"
+msgid "Teaching charges administration"
+msgstr "Administration des facultés"
+
 msgid "The Excel lists for encoding scores are available in"
 msgstr ""
 "Les listes Excel destinées à l'encodage des notes sont disponibles dans"
@@ -347,9 +372,6 @@ msgstr ""
 
 msgid "Title"
 msgstr "Intitulé"
-
-msgid "Deputy disease or maternity"
-msgstr "Suppléant maladie/maternité"
 
 msgid ""
 "To find a vacant learning unit to candidate to, introduce the code and click "
