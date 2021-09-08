@@ -33,7 +33,6 @@ from django.shortcuts import render
 from attribution.business import xls_students_by_learning_unit
 from attribution.services.enrollments import LearningUnitEnrollmentService
 from base import models as mdl_base
-from base.models.enums import offer_enrollment_state, learning_unit_year_subtypes
 from base.models.learning_unit_year import LearningUnitYear
 from base.models.student_specific_profile import StudentSpecificProfile
 from performance import models as mdl_performance
@@ -179,20 +178,6 @@ def get_enrollments_dict_for_display(learning_unit_enrollment, learning_unit_yea
     }
 
 
-def get_learning_unit_enrollments_list(a_learning_unit_year):
-    enrollment_states = [offer_enrollment_state.PROVISORY, offer_enrollment_state.SUBSCRIBED]
-    learning_unit_years = [a_learning_unit_year]
-    if a_learning_unit_year.subtype == learning_unit_year_subtypes.FULL:
-        learning_unit_years = list(
-            LearningUnitYear.objects.filter(learning_container_year=a_learning_unit_year.learning_container_year)
-        )
-    return mdl_base.learning_unit_enrollment.find_by_learning_unit_years(
-        learning_unit_years,
-        offer_enrollment_states=enrollment_states,
-        only_enrolled=True
-    )
-
-
 def _get_learning_unit_yr_enrollments_list(a_learning_unit_year, request_tutor) -> List[Dict]:
     enrollments_list = LearningUnitEnrollmentService.get_enrollments_list(
         year=a_learning_unit_year.academic_year.year,
@@ -212,7 +197,3 @@ def _has_peps_student(students):
             return True
     return False
 
-
-def check_peps(code: str, year: int) -> bool:
-    luy = LearningUnitYear.objects.get(acronym=code, academic_year__year=year)
-    return _has_peps_student(_get_learning_unit_yr_enrollments_list(luy))
