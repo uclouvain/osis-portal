@@ -39,7 +39,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class AttributionService:
     @staticmethod
-    def get_attributions_list(year: int, person: Person, with_classes=False) -> List:
+    def get_attributions_list(year: int, person: Person, with_effective_class_repartition=False) -> List:
         configuration = attribution_sdk.build_configuration(person)
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = attribution_api.AttributionApi(api_client)
@@ -48,7 +48,7 @@ class AttributionService:
                     api_instance.attributions_list(
                         year=str(year),
                         global_id=person.global_id,
-                        with_classes=with_classes
+                        with_effective_class_repartition=with_effective_class_repartition
                     ),
                     key=lambda attribution: attribution.code
                 )

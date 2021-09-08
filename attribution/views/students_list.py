@@ -198,8 +198,3 @@ def _has_peps_student(students):
         if enrollment.get('student_specific_profile'):
             return True
     return False
-
-
-def check_peps(code: str, year: int) -> bool:
-    luy = LearningUnitYear.objects.get(acronym=code, academic_year__year=year)
-    return _has_peps_student(_get_learning_unit_yr_enrollments_list(luy))
