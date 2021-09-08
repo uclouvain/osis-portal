@@ -39,7 +39,7 @@ msgid "Online Scores Encoding"
 msgstr "Encodage de notes en ligne"
 
 msgid "Scores Encoding"
-msgstr "Encodage de Notes"
+msgstr "Encodage de notes"
 
 msgid "Scores sheet"
 msgstr "Feuille de notes"

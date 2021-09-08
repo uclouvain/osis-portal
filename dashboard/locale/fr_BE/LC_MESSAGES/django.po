@@ -137,7 +137,7 @@ msgid "Registration id"
 msgstr "Noma"
 
 msgid "Scores Encoding"
-msgstr ""
+msgstr "Encodage de notes"
 
 msgid "Scores encoding of my students"
 msgstr "Encoder les notes de mes étudiants"
