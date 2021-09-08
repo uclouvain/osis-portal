@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 17:09+0200\n"
+"POT-Creation-Date: 2021-09-08 14:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,6 +80,9 @@ msgstr ""
 msgid "Deputy authority"
 msgstr ""
 
+msgid "Deputy disease or maternity"
+msgstr ""
+
 msgid "Deputy sabbatical"
 msgstr ""
 
@@ -118,6 +121,9 @@ msgid "Faculties administration"
 msgstr ""
 
 msgid "Faculty"
+msgstr ""
+
+msgid "Faculty administration"
 msgstr ""
 
 msgid "Function"
@@ -299,6 +305,9 @@ msgstr ""
 msgid "Teaching charge"
 msgstr ""
 
+msgid "Teaching charges administration"
+msgstr ""
+
 msgid "The Excel lists for encoding scores are available in"
 msgstr ""
 
@@ -382,9 +391,6 @@ msgid "Warning, this is not a list for encoding scores."
 msgstr ""
 
 msgid "Yes"
-msgstr ""
-
-msgid "Deputy disease or maternity"
 msgstr ""
 
 msgid "You aren't teaching for any learning unit"
