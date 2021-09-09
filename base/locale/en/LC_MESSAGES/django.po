@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-15 13:55+0100\n"
+"POT-Creation-Date: 2021-09-09 14:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,6 +92,12 @@ msgstr ""
 msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr ""
 
+msgid "ES"
+msgstr ""
+
+msgid "ESHN"
+msgstr ""
+
 msgid "Education group year"
 msgstr ""
 
@@ -119,9 +125,6 @@ msgstr ""
 msgid "Guide"
 msgstr ""
 
-msgid "High Level Promising athlete"
-msgstr ""
-
 msgid "Internship"
 msgstr ""
 
@@ -143,13 +146,10 @@ msgstr ""
 msgid "Other special needs"
 msgstr ""
 
+msgid "PMR"
+msgstr ""
+
 msgid "Page not found"
-msgstr ""
-
-msgid "Person with reduced mobility"
-msgstr ""
-
-msgid "Promising athlete"
 msgstr ""
 
 msgid "Result"
