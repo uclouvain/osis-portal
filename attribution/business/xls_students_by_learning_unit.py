@@ -43,7 +43,7 @@ BORDER_LEFT = Border(
               color=Color('FF000000'),
               ),
 )
-FIRST_COL_PEPS = 'L'
+FIRST_COL_PEPS = 'M'
 
 
 def get_xls(student_list, a_learning_unit_year):
@@ -72,6 +72,7 @@ def _make_xls_list(student_list):
         _('June'),
         _('State'),
         _('September'),
+        _('Last note'),
         _('Type of specific profile'),
         _('Extra time (33% generally)'),
         _('Large print'),
@@ -94,6 +95,7 @@ def _make_xls_list(student_list):
             student.get('june_note'),
             student.get('september_status'),
             student.get('september_note'),
+            student.get('last_note')
         ]
 
         student_specific_profile = student.get('student_specific_profile')
@@ -145,19 +147,21 @@ def _columns_resizing(ws):
     col_september_status.width = STATUS_COL_WIDTH
     col_september_note = ws.column_dimensions['K']
     col_september_note.width = NOTE_COL_WIDTH
-    col_type_of_specific_profile = ws.column_dimensions['L']
+    col_last_note = ws.column_dimensions['L']
+    col_last_note.width = 15
+    col_type_of_specific_profile = ws.column_dimensions['M']
     col_type_of_specific_profile.width = 20
-    col_extra_time = ws.column_dimensions['M']
+    col_extra_time = ws.column_dimensions['N']
     col_extra_time.width = 25
-    col_large_print = ws.column_dimensions['N']
+    col_large_print = ws.column_dimensions['O']
     col_large_print.width = 15
-    col_specific_room_of_examination = ws.column_dimensions['O']
+    col_specific_room_of_examination = ws.column_dimensions['P']
     col_specific_room_of_examination.width = 25
-    col_other_educational_facilities = ws.column_dimensions['P']
+    col_other_educational_facilities = ws.column_dimensions['Q']
     col_other_educational_facilities.width = 25
-    col_educational_tutor = ws.column_dimensions['Q']
-    col_educational_tutor.width = 30
     col_educational_tutor = ws.column_dimensions['R']
+    col_educational_tutor.width = 30
+    col_educational_tutor = ws.column_dimensions['S']
     col_educational_tutor.width = 30
 
 
