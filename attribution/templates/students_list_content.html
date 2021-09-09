@@ -95,7 +95,7 @@
         <thead>
         <tr>
             <th>{% trans 'Pgrm' %}</th>
-            <th>{% trans 'Learning unit' %}</th>
+            <th>{% trans 'Code UE' %}</th>
             <th><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></th>
             <th>{% trans 'Last name' %}</th>
             <th>{% trans 'Registration id' %}</th>
@@ -106,6 +106,7 @@
             <th>{% trans 'June' %}</th>
             <th>{% trans 'State' %}</th>
             <th>{% trans 'Sept.' %}</th>
+            <th>{% trans 'Last note' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -138,6 +139,7 @@
                 <td>{{ student.june_note | default_if_none:''}}</td>
                 <td>{{ student.september_status| default_if_none:''}}</td>
                 <td>{{ student.september_note | default_if_none:''}}</td>
+                <td>{{ student.last_note }}</td>
             </tr>
         {% endfor %}
         </tbody>

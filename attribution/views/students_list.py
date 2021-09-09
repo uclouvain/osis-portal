@@ -153,7 +153,17 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
     student_specific_profile = None
     if hasattr(learning_unit_enrollment.offer_enrollment.student, 'studentspecificprofile'):
         student_specific_profile = learning_unit_enrollment.offer_enrollment.student.studentspecificprofile
-
+    note_september = get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE)
+    note_june = get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE)
+    note_january = get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE)
+    if note_september != "-":
+        last_note = note_september
+    elif note_june != "-":
+        last_note = note_june
+    elif note_january != "-":
+        last_note = note_january
+    else:
+        last_note = "-"
     return {
         'name': "{0}, {1}".format(learning_unit_enrollment.offer_enrollment.student.person.last_name,
                                   learning_unit_enrollment.offer_enrollment.student.person.first_name),
@@ -167,7 +177,8 @@ def get_enrollments_dict_for_display(learning_unit_enrollment):
         'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
         'september_note': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
         'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS),
-        'student_specific_profile': student_specific_profile
+        'student_specific_profile': student_specific_profile,
+        'last_note': last_note
     }
 
 

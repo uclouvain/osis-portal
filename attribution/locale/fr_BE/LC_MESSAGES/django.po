@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-09 14:26+0200\n"
+"POT-Creation-Date: 2021-09-09 16:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,9 @@ msgstr "Co-titulaire"
 
 msgid "Code"
 msgstr "Sigle"
+
+msgid "Code UE"
+msgstr "Code UE"
 
 msgid "Coordinator"
 msgstr "Coordinateur(trice)"
@@ -187,6 +190,9 @@ msgstr "Copie adaptée"
 
 msgid "Last name"
 msgstr "Nom"
+
+msgid "Last note"
+msgstr "Dernière note"
 
 msgid "Learning unit"
 msgstr "Unité d'enseignement"
