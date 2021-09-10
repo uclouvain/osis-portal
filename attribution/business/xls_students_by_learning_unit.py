@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 ##############################################################################
 
 from django.http import HttpResponse
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ugettext as _
 from openpyxl import Workbook
 from openpyxl.styles import Color
@@ -118,6 +119,23 @@ def _make_xls_list(student_list):
     _columns_resizing(worksheet1)
     _columns_registration_id_to_text(worksheet1)
     _set_peps_border(worksheet1, len(student_list) + 1)
+    workbook.create_sheet(_("Legend"))
+    workbook.worksheets[1].append([_("Legend")])
+    workbook.worksheets[1].append(
+        [_("P - Examen partiel"), "", _("PEPS"), _("Program for Students with a Specific Profile")])
+    workbook.worksheets[1].append(
+        [_("I - Première inscription"), "", _("DDI"), _("Disability, Disorder or Illness Students")])
+    workbook.worksheets[1].append([_("Y - Deuxième inscription"), "", _("PMR"), _("Person with reduced mobility")])
+    workbook.worksheets[1].append(
+        [_("J - Report de note de janvier vers septembre"), "", _("ESHN"), _("High Level Promising athlete")])
+    workbook.worksheets[1].append(
+        [_("R - Report de note de la session précédente"), "", _("ES"), _("Promising athlete")])
+    workbook.worksheets[1].append([_("T - Note résultant d’un test")])
+    workbook.worksheets[1].append([_("V - Evaluation satisfaisante (la note ne compte pas)")])
+    workbook.worksheets[1].append([_("W - Evaluation non satisfaisante (la note ne compte pas)")])
+    workbook.worksheets[1].column_dimensions['A'].width = 50
+    workbook.worksheets[1].column_dimensions['C'].width = 6
+    workbook.worksheets[1].column_dimensions['D'].width = 50
     return save_virtual_workbook(workbook)
 
 
@@ -190,3 +208,8 @@ def _update_border_for_first_peps_column(cell):
 
     c.border = BORDER_LEFT
     cell.style = c
+
+
+def _build_legend_block():
+    legend_text = str(_('Legend:'))
+    return legend_text
