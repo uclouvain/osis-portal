@@ -45,11 +45,57 @@
             <i class="fa fa-table" aria-hidden="true" style="padding-left:10px;"></i>
         </button>
     </form>
+        <br><br>
+    <div class="alert alert-info" style="background-color: white">
+        <div class="accordion" id="accordionExample">
+            <a role="button" data-toggle="collapse" data-target="#legend" aria-expanded="false"
+               aria-controls="tutors_by_course"  title="{% trans 'Legend' %}">
+              <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> {% trans 'Legend' %}
+            </a>
+            <div class="collapse" id="legend">
+                <div class="row">
+                    <div class="col-md-3">
+                        <br><br>
+                        <p><strong>{% trans 'Exam registration state' %}</strong></p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>{% trans 'P - Examen partiel' %}</p>
+                        <p>{% trans 'I - Première inscription' %}</p>
+                        <p>{% trans 'Y - Deuxième inscription' %}</p>
+                        <p>{% trans 'J - Report de note de janvier vers septembre' %}</p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>{% trans 'R - Report de note de la session précédente' %}</p>
+                        <p>{% trans 'T - Note résultant d’un test' %}</p>
+                        <p>{% trans 'V - Evaluation satisfaisante (la note ne compte pas)' %}</p>
+                        <p>{% trans 'W - Evaluation non satisfaisante (la note ne compte pas)' %}</p>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                        <p><strong>{% trans 'PEPS' %}</strong></p>
+                        <p><strong>{% trans 'DDI' %}</strong></p>
+                        <p><strong>{% trans 'PMR' %}</strong></p>
+                        <p><strong>{% trans 'ESHN' %}</strong></p>
+                        <p><strong>{% trans 'ES' %}</strong></p>
+                    </div>
+                    <div class="col-md-9">
+                        <p>{% trans 'Program for Students with a Specific Profile' %}</p>
+                        <p>{% trans 'Disability, Disorder or Illness Students' %}</p>
+                        <p>{% trans 'Person with reduced mobility' %}</p>
+                        <p>{% trans 'High Level Promising athlete' %}</p>
+                        <p>{% trans 'Promising athlete' %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <table class="table table-striped table-hover" id="students_table">
         <thead>
         <tr>
             <th>{% trans 'Pgrm' %}</th>
-            <th>{% trans 'Learning unit' %}</th>
+            <th>{% trans 'Code UE' %}</th>
             <th><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></th>
             <th>{% trans 'Last name' %}</th>
             <th>{% trans 'Registration id' %}</th>
@@ -60,6 +106,7 @@
             <th>{% trans 'June' %}</th>
             <th>{% trans 'State' %}</th>
             <th>{% trans 'Sept.' %}</th>
+            <th>{% trans 'Last note' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -92,6 +139,7 @@
                 <td>{{ student.june_note | default_if_none:''}}</td>
                 <td>{{ student.september_status| default_if_none:''}}</td>
                 <td>{{ student.september_note | default_if_none:''}}</td>
+                <td>{{ student.last_note }}</td>
             </tr>
         {% endfor %}
         </tbody>

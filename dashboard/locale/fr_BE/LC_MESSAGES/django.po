@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 13:30+0200\n"
+"POT-Creation-Date: 2021-09-13 12:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,9 +33,6 @@ msgstr "Programme annuel"
 
 msgid "Annual program administration"
 msgstr "Administration du programme annuel"
-
-msgid "Applications administration"
-msgstr "Administration des candidatures en ligne"
 
 msgid "Attestations administration"
 msgstr "Administration des attestations"
@@ -97,9 +94,6 @@ msgstr "Nom"
 msgid "List of students enrolled to my exams"
 msgstr "Liste des étudiants inscrits à mes examens"
 
-msgid "Lists of students exams enrollments"
-msgstr "Liste des étudiants inscrits aux examens"
-
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
 
@@ -121,8 +115,8 @@ msgstr "Mes attestations"
 msgid "My personal data"
 msgstr "Mes données personnelles"
 
-msgid "My teaching charge"
-msgstr "Ma charge d'enseignement"
+msgid "My teaching charge and access to List of students"
+msgstr "Ma charge d'enseignement et accès aux listes d'étudiants"
 
 msgid "Personal address"
 msgstr "Adresse du domicile"
@@ -142,9 +136,6 @@ msgstr "Noma"
 msgid "Scores encoding"
 msgstr "Encodage de notes"
 
-msgid "Scores sheets administration"
-msgstr "Administration des feuilles de notes"
-
 msgid "Sex"
 msgstr "Sexe"
 
@@ -162,9 +153,6 @@ msgstr "Administration des données personnelles de l'étudiant"
 
 msgid "Student's dissertations management"
 msgstr "Gestion des mémoires des étudiants"
-
-msgid "Teaching charges administration"
-msgstr "Administration des charges d'enseignement"
 
 msgid "This process controls internships assessment."
 msgstr "Gestion des évaluations de stages."

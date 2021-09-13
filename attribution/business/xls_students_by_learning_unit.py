@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 ##############################################################################
 
 from django.http import HttpResponse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext_lazy as _
 from openpyxl import Workbook
 from openpyxl.styles import Color
 from openpyxl.styles import Style
@@ -43,7 +43,7 @@ BORDER_LEFT = Border(
               color=Color('FF000000'),
               ),
 )
-FIRST_COL_PEPS = 'L'
+FIRST_COL_PEPS = 'M'
 
 
 def get_xls(student_list, a_learning_unit_year):
@@ -72,6 +72,7 @@ def _make_xls_list(student_list):
         _('June'),
         _('State'),
         _('September'),
+        _('Last note'),
         _('Type of specific profile'),
         _('Extra time (33% generally)'),
         _('Large print'),
@@ -94,6 +95,7 @@ def _make_xls_list(student_list):
             student.get('june_note'),
             student.get('september_status'),
             student.get('september_note'),
+            student.get('last_note')
         ]
 
         student_specific_profile = student.get('student_specific_profile')
@@ -116,6 +118,23 @@ def _make_xls_list(student_list):
     _columns_resizing(worksheet1)
     _columns_registration_id_to_text(worksheet1)
     _set_peps_border(worksheet1, len(student_list) + 1)
+    workbook.create_sheet(_("Legend"))
+    workbook.worksheets[1].append([_("Legend")])
+    workbook.worksheets[1].append(
+        [_("P - Examen partiel"), "", _("PEPS"), _("Program for Students with a Specific Profile")])
+    workbook.worksheets[1].append(
+        [_("I - Première inscription"), "", _("DDI"), _("Disability, Disorder or Illness Students")])
+    workbook.worksheets[1].append([_("Y - Deuxième inscription"), "", _("PMR"), _("Person with reduced mobility")])
+    workbook.worksheets[1].append(
+        [_("J - Report de note de janvier vers septembre"), "", _("ESHN"), _("High Level Promising athlete")])
+    workbook.worksheets[1].append(
+        [_("R - Report de note de la session précédente"), "", _("ES"), _("Promising athlete")])
+    workbook.worksheets[1].append([_("T - Note résultant d’un test")])
+    workbook.worksheets[1].append([_("V - Evaluation satisfaisante (la note ne compte pas)")])
+    workbook.worksheets[1].append([_("W - Evaluation non satisfaisante (la note ne compte pas)")])
+    workbook.worksheets[1].column_dimensions['A'].width = 50
+    workbook.worksheets[1].column_dimensions['C'].width = 6
+    workbook.worksheets[1].column_dimensions['D'].width = 50
     return save_virtual_workbook(workbook)
 
 
@@ -145,19 +164,21 @@ def _columns_resizing(ws):
     col_september_status.width = STATUS_COL_WIDTH
     col_september_note = ws.column_dimensions['K']
     col_september_note.width = NOTE_COL_WIDTH
-    col_type_of_specific_profile = ws.column_dimensions['L']
+    col_last_note = ws.column_dimensions['L']
+    col_last_note.width = 15
+    col_type_of_specific_profile = ws.column_dimensions['M']
     col_type_of_specific_profile.width = 20
-    col_extra_time = ws.column_dimensions['M']
+    col_extra_time = ws.column_dimensions['N']
     col_extra_time.width = 25
-    col_large_print = ws.column_dimensions['N']
+    col_large_print = ws.column_dimensions['O']
     col_large_print.width = 15
-    col_specific_room_of_examination = ws.column_dimensions['O']
+    col_specific_room_of_examination = ws.column_dimensions['P']
     col_specific_room_of_examination.width = 25
-    col_other_educational_facilities = ws.column_dimensions['P']
+    col_other_educational_facilities = ws.column_dimensions['Q']
     col_other_educational_facilities.width = 25
-    col_educational_tutor = ws.column_dimensions['Q']
-    col_educational_tutor.width = 30
     col_educational_tutor = ws.column_dimensions['R']
+    col_educational_tutor.width = 30
+    col_educational_tutor = ws.column_dimensions['S']
     col_educational_tutor.width = 30
 
 

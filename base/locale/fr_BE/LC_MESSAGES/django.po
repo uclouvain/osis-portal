@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-02 08:17+0200\n"
+"POT-Creation-Date: 2021-09-13 15:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,6 +92,12 @@ msgstr "Mémoire"
 msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr "N'hésitez pas à nous aider en contactant le"
 
+msgid "ES"
+msgstr "ES"
+
+msgid "ESHN"
+msgstr "ESHN"
+
 msgid "Education group year"
 msgstr "Organisation de formations annualisée"
 
@@ -122,9 +128,6 @@ msgstr "Groupe"
 msgid "Guide"
 msgstr "Accompagnateur"
 
-msgid "High Level Promising athlete"
-msgstr "ESHN"
-
 msgid "Internship"
 msgstr "Stage"
 
@@ -152,14 +155,11 @@ msgstr "Autre individuel"
 msgid "Other special needs"
 msgstr "Autre HTM"
 
-msgid "Page not found"
-msgstr "Page inexistante"
-
-msgid "Person with reduced mobility"
+msgid "PMR"
 msgstr "PMR"
 
-msgid "Promising athlete"
-msgstr "ES"
+msgid "Page not found"
+msgstr "Page inexistante"
 
 msgid "Result"
 msgstr "Résultat"
