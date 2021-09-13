@@ -176,7 +176,7 @@ msgid "This requires a"
 msgstr "Ceci nécessite un"
 
 msgid "This requires a "
-msgstr "Ceci nécessite un"
+msgstr "Ceci nécessite un "
 
 msgid "This requires a VPN access outside UCLouvain."
 msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCLouvain."
