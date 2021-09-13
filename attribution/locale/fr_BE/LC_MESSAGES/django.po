@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 12:00+0200\n"
+"POT-Creation-Date: 2021-09-13 15:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,6 +136,8 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+#, fuzzy, python-format
+#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -155,7 +157,7 @@ msgid "Global id"
 msgstr "Matricule fgs"
 
 msgid "Guide"
-msgstr ""
+msgstr "Guide"
 
 msgid "High Level Promising athlete"
 msgstr "Sportifs de haut niveau"
@@ -179,7 +181,7 @@ msgid "Jan."
 msgstr "Jan."
 
 msgid "January"
-msgstr ""
+msgstr "Janvier"
 
 msgid "June"
 msgstr "Juin"
@@ -295,7 +297,7 @@ msgid "Professor"
 msgstr "Professeur"
 
 msgid "Program"
-msgstr ""
+msgstr "Programme"
 
 msgid "Program for Students with a Specific Profile"
 msgstr "Projet pour étudiant.e à profil spécifique"
@@ -325,10 +327,10 @@ msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
 msgid "Scores encoding"
-msgstr ""
+msgstr "Encodage des notes"
 
 msgid "Search"
-msgstr ""
+msgstr "Rechercher"
 
 msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
@@ -337,7 +339,7 @@ msgid "Sept."
 msgstr "Sept."
 
 msgid "September"
-msgstr ""
+msgstr "Septembre"
 
 msgid ""
 "Some of the students enrolled to this course have a PEPS status (Program for "

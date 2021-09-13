@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 11:59+0200\n"
+"POT-Creation-Date: 2021-09-13 15:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,6 +110,9 @@ msgstr ""
 msgid "External"
 msgstr ""
 
+msgid "Female"
+msgstr ""
+
 msgid "File"
 msgstr ""
 
@@ -128,6 +131,9 @@ msgstr ""
 msgid "Internship"
 msgstr ""
 
+msgid "Male"
+msgstr ""
+
 msgid "Management entity"
 msgstr ""
 
@@ -135,6 +141,9 @@ msgid "Mini-Training"
 msgstr ""
 
 msgid "Not defined"
+msgstr ""
+
+msgid "Other"
 msgstr ""
 
 msgid "Other collective"
@@ -206,16 +215,10 @@ msgstr ""
 msgid "execute"
 msgstr ""
 
-msgid "female"
-msgstr ""
-
 msgid "log in"
 msgstr ""
 
 msgid "logout"
-msgstr ""
-
-msgid "male"
 msgstr ""
 
 msgid "no student with this registration_id"
@@ -231,9 +234,6 @@ msgid "reset"
 msgstr ""
 
 msgid "to describe what you intended to do in more details."
-msgstr ""
-
-msgid "unknown"
 msgstr ""
 
 msgid "user"
