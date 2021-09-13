@@ -32,9 +32,7 @@ from django.shortcuts import render
 
 from attribution.business import xls_students_by_learning_unit
 from attribution.services.enrollments import LearningUnitEnrollmentService
-from base import models as mdl_base
-from base.models.learning_unit_year import LearningUnitYear
-from base.models.student_specific_profile import StudentSpecificProfile
+from attribution.services.learning_unit import LearningUnitService
 from performance import models as mdl_performance
 
 JSON_LEARNING_UNIT_NOTE = 'note'
@@ -46,32 +44,38 @@ SEPTEMBER = "septembre"
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def show_students_admin(request, learning_unit_year_id):
-    return render(request, "students_list_admin.html", _load_students(learning_unit_year_id, request.user))
+def show_students_admin(request, learning_unit_acronym, learning_unit_year):
+    return render(request, "students_list_admin.html", _load_students(
+        learning_unit_acronym, learning_unit_year, request.user
+    ))
 
 
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
-def show_students(request, learning_unit_year_id):
-    return render(request, "students_list.html", _load_students(learning_unit_year_id, request.user))
+def show_students(request, learning_unit_acronym, learning_unit_year):
+    return render(request, "students_list.html", _load_students(
+        learning_unit_acronym, learning_unit_year, request.user
+    ))
 
 
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
-def students_list_build_by_learning_unit(request, learning_unit_year_id):
-    a_learning_unit_yr = LearningUnitYear.objects.select_related(
-        "academic_year",
-        "learning_unit"
-    ).get(pk=learning_unit_year_id)
-    student_list = _get_learning_unit_yr_enrollments_list(a_learning_unit_yr)
+def students_list_build_by_learning_unit(request, learning_unit_acronym, learning_unit_year):
+    a_learning_unit_yr = LearningUnitService.get_learning_unit(
+        acronym=learning_unit_acronym,
+        year=learning_unit_year,
+        person=request.user.person
+    )
+    student_list = _get_learning_unit_yr_enrollments_list(a_learning_unit_yr, request.user)
     return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
 
 
-def _load_students(learning_unit_year_id, user):
-    a_learning_unit_year = LearningUnitYear.objects.select_related(
-        "academic_year",
-        "learning_unit"
-    ).get(pk=learning_unit_year_id)
+def _load_students(learning_unit_acronym, learning_unit_year, user):
+    a_learning_unit_year = LearningUnitService.get_learning_unit(
+        acronym=learning_unit_acronym,
+        year=learning_unit_year,
+        person=user.person
+    )
     students = _get_learning_unit_yr_enrollments_list(a_learning_unit_year, user)
     return {
         'global_id': user.person.global_id,
@@ -83,7 +87,7 @@ def _load_students(learning_unit_year_id, user):
 
 def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym):
     results = {}
-    academic_year = a_learning_unit_year.academic_year.year
+    academic_year = a_learning_unit_year.academic_year
     a_student_performance = mdl_performance.student_performance \
         .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
 
@@ -174,7 +178,7 @@ def get_enrollments_dict_for_display(learning_unit_enrollment, learning_unit_yea
 
 def _get_learning_unit_yr_enrollments_list(a_learning_unit_year, user) -> List[Dict]:
     enrollments_list = LearningUnitEnrollmentService.get_enrollments_list(
-        year=a_learning_unit_year.academic_year.year,
+        year=a_learning_unit_year.academic_year,
         acronym=a_learning_unit_year.acronym,
         person=user.person
     )

@@ -38,7 +38,7 @@
     </div>
 {% endif %}
 {% if students %}
-    <form method="get" action="{% url 'produce_xls_students' learning_unit_year.id %}">
+    <form method="get" action="{% url 'produce_xls_students' learning_unit_year.acronym learning_unit_year.academic_year %}">
         <button class="btn btn-success pull-left" id="bt_produce_xls" type="submit"
                 title="{% trans 'Export the students list in Excel format' %}">
             {% trans 'Export list (Excel)' %}

@@ -39,10 +39,10 @@ urlpatterns = [
 
     url(r'^$', HomeAttribution.as_view(), name='attribution_home'),
     url(r'^charge/$', TutorChargeView.as_view(), name='tutor_charge'),
-    url(r'^students/(?P<learning_unit_year_id>[0-9]+)$',
+    url(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)$',
         attribution.views.students_list.show_students,
         name='attribution_students'),
-    url(r'^students/list/xls/(?P<learning_unit_year_id>[0-9]+)',
+    url(r'^students/list/xls/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)',
         attribution.views.students_list.students_list_build_by_learning_unit,
         name='produce_xls_students'),
 
@@ -77,7 +77,7 @@ urlpatterns = [
 
     url(r'^administration/', include([
         url(r'^charge/(?P<global_id>[0-9a-z-]+)/$', AdminTutorChargeView.as_view(), name='tutor_charge_admin'),
-        url(r'^students/(?P<learning_unit_year_id>[0-9]+)/(?P<a_tutor>[0-9]+)/$',
+        url(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/$',
             attribution.views.students_list.show_students_admin,
             name='attribution_students_admin'),
         url(r'^attributions/$', tutor_charge.attribution_administration, name='attribution_administration'),
