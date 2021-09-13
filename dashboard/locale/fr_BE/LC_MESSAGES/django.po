@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 13:30+0200\n"
+"POT-Creation-Date: 2021-09-13 09:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,9 +33,6 @@ msgstr "Programme annuel"
 
 msgid "Annual program administration"
 msgstr "Administration du programme annuel"
-
-msgid "Applications administration"
-msgstr "Administration des candidatures en ligne"
 
 msgid "Attestations administration"
 msgstr "Administration des attestations"
@@ -73,9 +70,6 @@ msgstr "Administration facultaire"
 msgid "First name"
 msgstr "Prénom"
 
-msgid "Get scores encoding papersheet and encode scores of your students."
-msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
-
 msgid "Global id"
 msgstr "Matricule fgs"
 
@@ -96,9 +90,6 @@ msgstr "Nom"
 
 msgid "List of students enrolled to my exams"
 msgstr "Liste des étudiants inscrits à mes examens"
-
-msgid "Lists of students exams enrollments"
-msgstr "Liste des étudiants inscrits aux examens"
 
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
@@ -140,10 +131,10 @@ msgid "Registration id"
 msgstr "Noma"
 
 msgid "Scores encoding"
-msgstr "Encodage de notes"
+msgstr "Encodage des notes"
 
-msgid "Scores sheets administration"
-msgstr "Administration des feuilles de notes"
+msgid "Scores encoding of my students"
+msgstr "Encoder les notes de mes étudiants"
 
 msgid "Sex"
 msgstr "Sexe"
@@ -162,9 +153,6 @@ msgstr "Administration des données personnelles de l'étudiant"
 
 msgid "Student's dissertations management"
 msgstr "Gestion des mémoires des étudiants"
-
-msgid "Teaching charges administration"
-msgstr "Administration des charges d'enseignement"
 
 msgid "This process controls internships assessment."
 msgstr "Gestion des évaluations de stages."
@@ -186,6 +174,9 @@ msgstr "Accès à mes données personnelles."
 
 msgid "This requires a"
 msgstr "Ceci nécessite un"
+
+msgid "This requires a "
+msgstr "Ceci nécessite un "
 
 msgid "This requires a VPN access outside UCLouvain."
 msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCLouvain."
