@@ -138,10 +138,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
     def get_attribution_students_url(self, code: str, year: int):
         with contextlib.suppress(LearningUnitYear.DoesNotExist):
             learning_unit_year_id = LearningUnitYear.objects.get(acronym=code, academic_year__year=year).pk
-            return reverse('attribution_students', kwargs={
-                'learning_unit_year_id': learning_unit_year_id,
-                'a_tutor': self.person.tutor.pk
-            })
+            return reverse('attribution_students', kwargs={'learning_unit_year_id': learning_unit_year_id})
 
 
 class AdminTutorChargeView(TutorChargeView):

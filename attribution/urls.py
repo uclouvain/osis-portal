@@ -39,7 +39,7 @@ urlpatterns = [
 
     url(r'^$', HomeAttribution.as_view(), name='attribution_home'),
     url(r'^charge/$', TutorChargeView.as_view(), name='tutor_charge'),
-    url(r'^students/(?P<learning_unit_year_id>[0-9]+)/(?P<a_tutor>[0-9]+)/$',
+    url(r'^students/(?P<learning_unit_year_id>[0-9]+)$',
         attribution.views.students_list.show_students,
         name='attribution_students'),
     url(r'^students/list/xls/(?P<learning_unit_year_id>[0-9]+)',

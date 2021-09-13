@@ -47,9 +47,9 @@ class LearningUnitEnrollmentService:
                 enrollments = api_instance.enrollments_list(
                         year=year,
                         acronym=acronym
-                )
+                ).results
             except (osis_learning_unit_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
                 enrollments = []
-        return enrollments.results
+        return enrollments

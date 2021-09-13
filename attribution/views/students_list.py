@@ -46,14 +46,14 @@ SEPTEMBER = "septembre"
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
-def show_students_admin(request, learning_unit_year_id, a_tutor):
-    return render(request, "students_list_admin.html", _load_students(learning_unit_year_id, a_tutor))
+def show_students_admin(request, learning_unit_year_id):
+    return render(request, "students_list_admin.html", _load_students(learning_unit_year_id, request.user))
 
 
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
-def show_students(request, learning_unit_year_id, a_tutor):
-    return render(request, "students_list.html", _load_students(learning_unit_year_id, a_tutor))
+def show_students(request, learning_unit_year_id):
+    return render(request, "students_list.html", _load_students(learning_unit_year_id, request.user))
 
 
 @login_required
@@ -67,18 +67,16 @@ def students_list_build_by_learning_unit(request, learning_unit_year_id):
     return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
 
 
-def _load_students(learning_unit_year_id, a_tutor):
-    request_tutor = mdl_base.tutor.find_by_id(a_tutor)
+def _load_students(learning_unit_year_id, user):
     a_learning_unit_year = LearningUnitYear.objects.select_related(
         "academic_year",
         "learning_unit"
     ).get(pk=learning_unit_year_id)
-    students = _get_learning_unit_yr_enrollments_list(a_learning_unit_year, request_tutor)
+    students = _get_learning_unit_yr_enrollments_list(a_learning_unit_year, user)
     return {
-        'global_id': request_tutor.person.global_id,
+        'global_id': user.person.global_id,
         'students': students,
         'learning_unit_year': a_learning_unit_year,
-        'tutor_id': request_tutor.id,
         'has_peps': _has_peps_student(students),
     }
 
@@ -153,11 +151,7 @@ def get_enrollments_dict_for_display(learning_unit_enrollment, learning_unit_yea
         learning_unit_enrollment.program
     )
 
-    student_specific_profile = None
-    if learning_unit_enrollment.type_peps:
-        student_specific_profile = StudentSpecificProfile.objects.get(
-            student__registration_id=learning_unit_enrollment.student_registration_id
-        )
+    student_specific_profile = learning_unit_enrollment.specific_profile
 
     return {
         'name': "{0}, {1}".format(
@@ -178,11 +172,11 @@ def get_enrollments_dict_for_display(learning_unit_enrollment, learning_unit_yea
     }
 
 
-def _get_learning_unit_yr_enrollments_list(a_learning_unit_year, request_tutor) -> List[Dict]:
+def _get_learning_unit_yr_enrollments_list(a_learning_unit_year, user) -> List[Dict]:
     enrollments_list = LearningUnitEnrollmentService.get_enrollments_list(
         year=a_learning_unit_year.academic_year.year,
         acronym=a_learning_unit_year.acronym,
-        person=request_tutor.person
+        person=user.person
     )
     enrollments = [
         get_enrollments_dict_for_display(enrollment, a_learning_unit_year)
