@@ -12,10 +12,10 @@ class PepsTypes(ChoiceEnum):
 
 
 class HtmSubtypes(ChoiceEnum):
-    REDUCED_MOBILITY = _('Person with reduced mobility')
+    REDUCED_MOBILITY = _('PMR')
     OTHER_DISABILITY = _('Other special needs')
 
 
 class SportSubtypes(ChoiceEnum):
-    PROMISING_ATHLETE_HL = _('High Level Promising athlete')
-    PROMISING_ATHLETE = _('Promising athlete')
+    PROMISING_ATHLETE_HL = _('ESHN')
+    PROMISING_ATHLETE = _('ES')

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 13:30+0200\n"
+"POT-Creation-Date: 2021-09-13 12:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,9 +28,6 @@ msgid "Annual program"
 msgstr ""
 
 msgid "Annual program administration"
-msgstr ""
-
-msgid "Applications administration"
 msgstr ""
 
 msgid "Attestations administration"
@@ -93,9 +90,6 @@ msgstr ""
 msgid "List of students enrolled to my exams"
 msgstr ""
 
-msgid "Lists of students exams enrollments"
-msgstr ""
-
 msgid "Manage description fiche"
 msgstr ""
 
@@ -117,7 +111,7 @@ msgstr ""
 msgid "My personal data"
 msgstr ""
 
-msgid "My teaching charge"
+msgid "My teaching charge and access to List of students"
 msgstr ""
 
 msgid "Personal address"
@@ -138,9 +132,6 @@ msgstr ""
 msgid "Scores encoding"
 msgstr ""
 
-msgid "Scores sheets administration"
-msgstr ""
-
 msgid "Sex"
 msgstr ""
 
@@ -157,9 +148,6 @@ msgid "Student ID data administration"
 msgstr ""
 
 msgid "Student's dissertations management"
-msgstr ""
-
-msgid "Teaching charges administration"
 msgstr ""
 
 msgid "This process controls internships assessment."
