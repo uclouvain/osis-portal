@@ -140,8 +140,8 @@ class StudentsListTest(TestCase):
                                       enrollment_state="")
 
         url = reverse('attribution_students', kwargs={
-            'learning_unit_year_id': a_learning_unit_year.id,
-            'a_tutor': self.tutor.id
+            'learning_unit_acronym': a_learning_unit_year.acronym,
+            'learning_unit_year': a_learning_unit_year.academic_year.year
         })
         response = self.client.get(url)
         self.assertEqual(response.status_code, OK)
