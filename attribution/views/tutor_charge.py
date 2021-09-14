@@ -105,7 +105,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         return sum(
             [
                 float(attribution.lecturing_charge) if attribution.lecturing_charge else 0
-                for attribution in self.attributions
+                for attribution in self.attributions if not attribution.is_partim
             ]
         )
 
@@ -113,7 +113,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         return sum(
             [
                 float(attribution.practical_charge) if attribution.practical_charge else 0
-                for attribution in self.attributions
+                for attribution in self.attributions if not attribution.is_partim
             ]
         )
 
