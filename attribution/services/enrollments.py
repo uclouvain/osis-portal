@@ -45,7 +45,7 @@ class LearningUnitEnrollmentService:
             api_instance = enrollment_api.EnrollmentApi(api_client)
             try:
                 enrollments = api_instance.enrollments_list(
-                        year=int(year),
+                        year=year,
                         acronym=acronym
                 ).results
             except (osis_learning_unit_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:

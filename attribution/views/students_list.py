@@ -65,7 +65,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
 
     def get_learning_unit_yr_enrollments_list(self) -> List[Dict]:
         enrollments_list = LearningUnitEnrollmentService.get_enrollments_list(
-            year=self.kwargs['learning_unit_year'],
+            year=int(self.kwargs['learning_unit_year']),
             acronym=self.kwargs['learning_unit_acronym'],
             person=self.request.user.person
         )
