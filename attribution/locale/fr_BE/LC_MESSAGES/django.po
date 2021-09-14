@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 17:09+0200\n"
+"POT-Creation-Date: 2021-08-30 14:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,6 +82,9 @@ msgstr "Suppléant"
 msgid "Deputy authority"
 msgstr "Suppléant d'autorité"
 
+msgid "Deputy disease or maternity"
+msgstr "Suppléant maladie/maternité"
+
 msgid "Deputy sabbatical"
 msgstr "Suppléant sabbatique"
 
@@ -121,6 +124,9 @@ msgstr "Administration des facultés"
 msgid "Faculty"
 msgstr "Faculté"
 
+msgid "Faculty administration"
+msgstr "Administration des facultés"
+
 msgid "Function"
 msgstr "Fonction"
 
@@ -128,7 +134,7 @@ msgid "Global id"
 msgstr "Matricule fgs"
 
 msgid "Guide"
-msgstr ""
+msgstr "Guide"
 
 msgid "Holder"
 msgstr "Titulaire"
@@ -143,7 +149,7 @@ msgid "Jan."
 msgstr "Jan."
 
 msgid "January"
-msgstr ""
+msgstr "Janvier"
 
 msgid "June"
 msgstr "Juin"
@@ -235,7 +241,7 @@ msgid "Professor"
 msgstr "Professeur"
 
 msgid "Program"
-msgstr ""
+msgstr "Programme"
 
 msgid "Registration id"
 msgstr "Noma"
@@ -256,10 +262,10 @@ msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
 msgid "Scores encoding"
-msgstr ""
+msgstr "Encodage des notes"
 
 msgid "Search"
-msgstr ""
+msgstr "Rechercher"
 
 msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
@@ -268,7 +274,7 @@ msgid "Sept."
 msgstr "Sept."
 
 msgid "September"
-msgstr ""
+msgstr "Septembre"
 
 msgid ""
 "Some of the students enrolled to this course have a PEPS status (Program for "
@@ -303,6 +309,9 @@ msgstr "Enseignants"
 
 msgid "Teaching charge"
 msgstr "Charge d'enseignement"
+
+msgid "Teaching charges administration"
+msgstr "Administration des charges d'enseignement"
 
 msgid "The Excel lists for encoding scores are available in"
 msgstr ""
@@ -347,9 +356,6 @@ msgstr ""
 
 msgid "Title"
 msgstr "Intitulé"
-
-msgid "Deputy disease or maternity"
-msgstr "Suppléant maladie/maternité"
 
 msgid ""
 "To find a vacant learning unit to candidate to, introduce the code and click "
