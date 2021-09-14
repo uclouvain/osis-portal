@@ -27,13 +27,13 @@ import json
 from operator import itemgetter
 from typing import List, Dict
 
-from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic import TemplateView
 
 from attribution.business import xls_students_by_learning_unit
 from attribution.services.enrollments import LearningUnitEnrollmentService
 from attribution.services.learning_unit import LearningUnitService
-from performance import models as mdl_performance
+from performance.models import student_performance
 
 JSON_LEARNING_UNIT_NOTE = 'note'
 JSON_LEARNING_UNIT_STATUS = 'etatExam'
@@ -42,156 +42,145 @@ JUNE = "juin"
 SEPTEMBER = "septembre"
 
 
-@login_required
-@permission_required('base.is_faculty_administrator', raise_exception=True)
-def show_students_admin(request, learning_unit_acronym, learning_unit_year):
-    return render(request, "students_list_admin.html", _load_students(
-        learning_unit_acronym, learning_unit_year, request.user
-    ))
+class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    permission_required = "base.can_access_attribution"
+    template_name = "students_list.html"
+
+    def get_context_data(self, **kwargs):
+        enrollments = self.get_learning_unit_yr_enrollments_list()
+        return {
+            **super().get_context_data(**kwargs),
+            'global_id': self.request.user.person.global_id,
+            'students': enrollments,
+            'learning_unit_year': self.get_learning_unit(),
+            'has_peps': self.has_peps_student(enrollments),
+        }
+
+    def get_learning_unit(self):
+        return LearningUnitService.get_learning_unit(
+            acronym=self.kwargs['learning_unit_acronym'],
+            year=self.kwargs['learning_unit_year'],
+            person=self.request.user.person
+        )
+
+    def get_learning_unit_yr_enrollments_list(self) -> List[Dict]:
+        enrollments_list = LearningUnitEnrollmentService.get_enrollments_list(
+            year=self.kwargs['learning_unit_year'],
+            acronym=self.kwargs['learning_unit_acronym'],
+            person=self.request.user.person
+        )
+        enrollments = [
+            self.get_enrollments_dict_for_display(enrollment)
+            for enrollment in enrollments_list
+        ]
+        return sorted(enrollments, key=itemgetter('program'))
+
+    def get_enrollments_dict_for_display(self, enrollment):
+        session_results = self.get_sessions_results(enrollment)
+
+        return {
+            'name': "{0}, {1}".format(
+                enrollment.student_first_name,
+                enrollment.student_last_name
+            ),
+            'email': enrollment.student_email,
+            'program': enrollment.program,
+            'acronym': enrollment.learning_unit_acronym,
+            'registration_id': enrollment.student_registration_id,
+            'january_note': self.get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE),
+            'january_status': self.get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_STATUS),
+            'june_note': self.get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
+            'june_status': self.get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
+            'september_note': self.get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
+            'september_status': self.get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS),
+            'student_specific_profile': enrollment.specific_profile
+        }
+
+    def get_sessions_results(self, enrollment):
+        a_registration_id = enrollment.student_registration_id
+        offer_acronym = enrollment.program
+        academic_year = self.kwargs['learning_unit_year']
+
+        results = {}
+        a_student_performance = student_performance.find_by_student_and_offer_year(
+            a_registration_id, academic_year, offer_acronym
+        )
+
+        if a_student_performance:
+            student_data = self.get_student_data_dict(a_student_performance)
+            monAnnee = student_data['monAnnee']
+            if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(academic_year):
+                monOffre = monAnnee['monOffre']
+                offre = monOffre['offre']
+                if offre['sigleComplet'] == offer_acronym:
+                    cours_list = monOffre['cours']
+                    self.manage_cours_list(cours_list, results)
+        return results
+
+    @staticmethod
+    def get_student_data_dict(a_student_performance):
+        try:
+            data_input = json.dumps(a_student_performance.data)
+            return json.loads(data_input)
+        except (AttributeError, ValueError):
+            return None
+
+    def manage_cours_list(self, cours_list, results):
+        if cours_list:
+            nb_cours = 0
+            while nb_cours < len(cours_list):
+                cours = cours_list[nb_cours]
+                if cours['sigleComplet'] == self.kwargs['learning_unit_acronym']:
+                    self.get_student_results(cours, results)
+                nb_cours = nb_cours + 1
+
+    def get_student_results(self, cours, results):
+        sessions = cours['session']
+        nb_session = 0
+        while nb_session < len(sessions):
+            results.update({
+                sessions[nb_session]['mois']: {
+                    JSON_LEARNING_UNIT_NOTE: self.get_value(sessions[nb_session], JSON_LEARNING_UNIT_NOTE),
+                    JSON_LEARNING_UNIT_STATUS: self.get_value(sessions[nb_session], JSON_LEARNING_UNIT_STATUS)
+                }
+            })
+            nb_session = nb_session + 1
+
+    @staticmethod
+    def get_value(session, variable_name):
+        try:
+            return session[variable_name]
+        except KeyError:
+            return None
+
+    @staticmethod
+    def get_session_value(session_results, month_session, variable_to_get):
+        try:
+            return session_results[month_session][variable_to_get]
+        except KeyError:
+            return None
+
+    @staticmethod
+    def has_peps_student(enrollments):
+        for enrollment in enrollments:
+            if enrollment.get('student_specific_profile'):
+                return True
+        return False
 
 
-@login_required
-@permission_required('base.can_access_attribution', raise_exception=True)
-def show_students(request, learning_unit_acronym, learning_unit_year):
-    return render(request, "students_list.html", _load_students(
-        learning_unit_acronym, learning_unit_year, request.user
-    ))
+class AdminStudentsListView(StudentsListView):
+    permission_required = "base.is_faculty_administrator"
+    template_name = "students_list_admin.html"
 
 
-@login_required
-@permission_required('base.can_access_attribution', raise_exception=True)
-def students_list_build_by_learning_unit(request, learning_unit_acronym, learning_unit_year):
-    a_learning_unit_yr = LearningUnitService.get_learning_unit(
-        acronym=learning_unit_acronym,
-        year=learning_unit_year,
-        person=request.user.person
-    )
-    student_list = _get_learning_unit_yr_enrollments_list(a_learning_unit_yr, request.user)
-    return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
+class StudentsListXlsView(StudentsListView):
+    permission_required = "base.can_access_attribution"
 
-
-def _load_students(learning_unit_acronym, learning_unit_year, user):
-    a_learning_unit_year = LearningUnitService.get_learning_unit(
-        acronym=learning_unit_acronym,
-        year=learning_unit_year,
-        person=user.person
-    )
-    students = _get_learning_unit_yr_enrollments_list(a_learning_unit_year, user)
-    return {
-        'global_id': user.person.global_id,
-        'students': students,
-        'learning_unit_year': a_learning_unit_year,
-        'has_peps': _has_peps_student(students),
-    }
-
-
-def get_sessions_results(a_registration_id, a_learning_unit_year, offer_acronym):
-    results = {}
-    academic_year = a_learning_unit_year.academic_year
-    a_student_performance = mdl_performance.student_performance \
-        .find_by_student_and_offer_year(a_registration_id, academic_year, offer_acronym)
-
-    if a_student_performance:
-        student_data = get_student_data_dict(a_student_performance)
-        monAnnee = student_data['monAnnee']
-        if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(academic_year):
-            monOffre = monAnnee['monOffre']
-            offre = monOffre['offre']
-            if offre['sigleComplet'] == offer_acronym:
-                cours_list = monOffre['cours']
-                _manage_cours_list(a_learning_unit_year, cours_list, results)
-    return results
-
-
-def _manage_cours_list(a_learning_unit_year, cours_list, results):
-    if cours_list:
-        nb_cours = 0
-        while nb_cours < len(cours_list):
-            cours = cours_list[nb_cours]
-            if cours['sigleComplet'] == a_learning_unit_year.acronym:
-                get_student_results(cours, results)
-            nb_cours = nb_cours + 1
-
-
-def get_student_results(cours, results):
-    sessions = cours['session']
-    nb_session = 0
-    while nb_session < len(sessions):
-        results.update({
-            sessions[nb_session]['mois']: {
-                JSON_LEARNING_UNIT_NOTE: get_value(sessions[nb_session], JSON_LEARNING_UNIT_NOTE),
-                JSON_LEARNING_UNIT_STATUS: get_value(sessions[nb_session], JSON_LEARNING_UNIT_STATUS)
-            }
-        })
-        nb_session = nb_session + 1
-
-
-def get_student_data_dict(a_student_performance):
-    try:
-        data_input = json.dumps(a_student_performance.data)
-        return json.loads(data_input)
-    except (AttributeError, ValueError):
-        return None
-
-
-def get_value(session, variable_name):
-    try:
-        return session[variable_name]
-    except KeyError:
-        return None
-
-
-def get_session_value(session_results, month_session, variable_to_get):
-    try:
-        return session_results[month_session][variable_to_get]
-    except KeyError:
-        return None
-
-
-def get_enrollments_dict_for_display(learning_unit_enrollment, learning_unit_year):
-    session_results = get_sessions_results(
-        learning_unit_enrollment.student_registration_id,
-        learning_unit_year,
-        learning_unit_enrollment.program
-    )
-
-    student_specific_profile = learning_unit_enrollment.specific_profile
-
-    return {
-        'name': "{0}, {1}".format(
-            learning_unit_enrollment.student_first_name,
-            learning_unit_enrollment.student_last_name
-        ),
-        'email': learning_unit_enrollment.student_email,
-        'program': learning_unit_enrollment.program,
-        'acronym': learning_unit_enrollment.learning_unit_acronym,
-        'registration_id': learning_unit_enrollment.student_registration_id,
-        'january_note': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE),
-        'january_status': get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_STATUS),
-        'june_note': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE),
-        'june_status': get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
-        'september_note': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
-        'september_status': get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS),
-        'student_specific_profile': student_specific_profile
-    }
-
-
-def _get_learning_unit_yr_enrollments_list(a_learning_unit_year, user) -> List[Dict]:
-    enrollments_list = LearningUnitEnrollmentService.get_enrollments_list(
-        year=a_learning_unit_year.academic_year,
-        acronym=a_learning_unit_year.acronym,
-        person=user.person
-    )
-    enrollments = [
-        get_enrollments_dict_for_display(enrollment, a_learning_unit_year)
-        for enrollment in enrollments_list
-    ]
-    return sorted(enrollments, key=itemgetter('program'))
-
-
-def _has_peps_student(students):
-    for enrollment in students:
-        if enrollment.get('type_peps'):
-            return True
-    return False
-
+    def get(self, *args, **kwargs):
+        a_learning_unit_yr = LearningUnitService.get_learning_unit(
+            acronym=self.kwargs['learning_unit_acronym'],
+            year=self.kwargs['learning_unit_year'],
+            person=self.request.user.person
+        )
+        student_list = self.get_learning_unit_yr_enrollments_list()
+        return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)

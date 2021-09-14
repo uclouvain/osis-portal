@@ -113,6 +113,6 @@ class StudentsListViewTest(TestCase):
         mock_enrollments.return_value = self.enrollments
         luy_full = self.full_luy['learning_unit_year']
         self.assertEqual(
-            len(students_list._get_learning_unit_yr_enrollments_list(luy_full, self.a_tutor)),
+            len(students_list._get_learning_unit_yr_enrollments_list(luy_full, self.user)),
             2
         )
