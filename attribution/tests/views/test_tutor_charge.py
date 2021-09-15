@@ -109,6 +109,7 @@ class TutorChargeViewTest(TestCase):
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
             'links': {},
+            'is_partim': False
         })
 
         self.attributions_list_patcher = mock.patch(
@@ -179,6 +180,7 @@ class AdminTutorChargeViewTest(TestCase):
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
             'links': {},
+            'is_partim': False
         })
 
         self.attributions_list_patcher = mock.patch(

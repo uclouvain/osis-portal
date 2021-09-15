@@ -96,14 +96,14 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     @cached_property
     def attributions(self):
-        attributions = AttributionService.get_attributions_list(self.get_current_year_displayed(), self.person)
+        attributions = AttributionService.get_attributions_list(self.get_current_year_displayed(), self.person, True)
         return [self._format_attribution_row(attribution) for attribution in attributions]
 
     def get_total_lecturing_charge(self):
         return sum(
             [
                 float(attribution.lecturing_charge) if attribution.lecturing_charge else 0
-                for attribution in self.attributions
+                for attribution in self.attributions if not attribution.is_partim
             ]
         )
 
@@ -111,7 +111,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         return sum(
             [
                 float(attribution.practical_charge) if attribution.practical_charge else 0
-                for attribution in self.attributions
+                for attribution in self.attributions if not attribution.is_partim
             ]
         )
 
@@ -123,7 +123,10 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
             float(attribution.practical_charge) if attribution.practical_charge else 0,
             float(attribution.total_learning_unit_charge) if attribution.total_learning_unit_charge else 0
         ) if attribution.lecturing_charge or attribution.practical_charge else None
-
+        for class_repartition in attribution.effective_class_repartition:
+            clean_code = class_repartition.code.replace('-', '').replace('_', '')
+            class_repartition.students_list_email = get_email_students(clean_code, attribution.year)
+            class_repartition.repartition_students_url = ''  # FIXME: Create Url + View and use here
         return SimpleNamespace(
             **{
                 **attribution.to_dict(),
