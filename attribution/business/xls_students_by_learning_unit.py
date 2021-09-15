@@ -120,6 +120,7 @@ def _make_xls_list(student_list):
     _set_peps_border(worksheet1, len(student_list) + 1)
     workbook.create_sheet(str(_("Legend")))
     workbook.worksheets[1].append([str(_("Legend"))])
+    workbook.worksheets[1].append([str(_("Exam registration state"))])
     workbook.worksheets[1].append(
         [str(_("P - Examen partiel")), "", str(_("PEPS")), str(_("Program for Students with a Specific Profile"))])
     workbook.worksheets[1].append(
