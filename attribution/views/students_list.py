@@ -162,10 +162,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
 
     @staticmethod
     def has_peps_student(enrollments):
-        for enrollment in enrollments:
-            if enrollment.get('student_specific_profile'):
-                return True
-        return False
+        return any(enrollment.get('student_specific_profile') for enrollment in enrollments)
 
 
 class AdminStudentsListView(StudentsListView):
