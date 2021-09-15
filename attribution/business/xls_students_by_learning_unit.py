@@ -59,27 +59,27 @@ def get_xls(student_list, a_learning_unit_year):
 def _make_xls_list(student_list):
     workbook = Workbook()
     worksheet1 = workbook.active
-    worksheet1.title = _("Students")
+    worksheet1.title = str(_("Students"))
     columns = [
-        _('Program'),
-        _('Learning unit'),
-        _('Email'),
-        _('Student'),
-        _('Registration id'),
-        _('State'),
-        _('January'),
-        _('State'),
-        _('June'),
-        _('State'),
-        _('September'),
-        _('Last note'),
-        _('Type of specific profile'),
-        _('Extra time (33% generally)'),
-        _('Large print'),
-        _('Specific room of examination'),
-        _('Other educational facilities'),
-        _('Details other educational facilities'),
-        _('Educational tutor'),
+        str(_('Program')),
+        str(_('Learning unit')),
+        str(_('Email')),
+        str(_('Student')),
+        str(_('Registration id')),
+        str(_('State')),
+        str(_('January')),
+        str(_('State')),
+        str(_('June')),
+        str(_('State')),
+        str(_('September')),
+        str(_('Last score')),
+        str(_('Type of specific profile')),
+        str(_('Extra time (33% generally)')),
+        str(_('Large print')),
+        str(_('Specific room of examination')),
+        str(_('Other educational facilities')),
+        str(_('Details other educational facilities')),
+        str(_('Educational tutor')),
     ]
     worksheet1.append(col for col in columns)
     for student in student_list:
@@ -118,20 +118,22 @@ def _make_xls_list(student_list):
     _columns_resizing(worksheet1)
     _columns_registration_id_to_text(worksheet1)
     _set_peps_border(worksheet1, len(student_list) + 1)
-    workbook.create_sheet(_("Legend"))
-    workbook.worksheets[1].append([_("Legend")])
+    workbook.create_sheet(str(_("Legend")))
+    workbook.worksheets[1].append([str(_("Legend"))])
     workbook.worksheets[1].append(
-        [_("P - Examen partiel"), "", _("PEPS"), _("Program for Students with a Specific Profile")])
+        [str(_("P - Examen partiel")), "", str(_("PEPS")), str(_("Program for Students with a Specific Profile"))])
     workbook.worksheets[1].append(
-        [_("I - Première inscription"), "", _("DDI"), _("Disability, Disorder or Illness Students")])
-    workbook.worksheets[1].append([_("Y - Deuxième inscription"), "", _("PMR"), _("Person with reduced mobility")])
+        [str(_("I - Première inscription")), "", str(_("DDI")), str(_("Disability, Disorder or Illness Students"))])
     workbook.worksheets[1].append(
-        [_("J - Report de note de janvier vers septembre"), "", _("ESHN"), _("High Level Promising athlete")])
+        [str(_("Y - Deuxième inscription")), "", str(_("PMR")), str(_("Person with reduced mobility"))])
     workbook.worksheets[1].append(
-        [_("R - Report de note de la session précédente"), "", _("ES"), _("Promising athlete")])
-    workbook.worksheets[1].append([_("T - Note résultant d’un test")])
-    workbook.worksheets[1].append([_("V - Evaluation satisfaisante (la note ne compte pas)")])
-    workbook.worksheets[1].append([_("W - Evaluation non satisfaisante (la note ne compte pas)")])
+        [str(_("J - Report de note de janvier vers septembre")), "", str(_("ESHN")),
+         str(_("High Level Promising athlete"))])
+    workbook.worksheets[1].append(
+        [str(_("R - Report de note de la session précédente")), "", str(_("ES")), str(_("Promising athlete"))])
+    workbook.worksheets[1].append([str(_("T - Note résultant d’un test"))])
+    workbook.worksheets[1].append([str(_("V - Evaluation satisfaisante (la note ne compte pas)"))])
+    workbook.worksheets[1].append([str(_("W - Evaluation non satisfaisante (la note ne compte pas)"))])
     workbook.worksheets[1].column_dimensions['A'].width = 50
     workbook.worksheets[1].column_dimensions['C'].width = 6
     workbook.worksheets[1].column_dimensions['D'].width = 50
