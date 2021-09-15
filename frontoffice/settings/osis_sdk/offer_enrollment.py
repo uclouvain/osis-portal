@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,23 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+import logging
 
-from performance.views import main
-from performance.views.performance_home import PerformanceHome
+import osis_offer_enrollment_sdk
+from django.conf import settings
 
-urlpatterns = [
-    url(r'^$', PerformanceHome.as_view(), name='performance_home'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_student_result'),
-    url(
-        r'^result/(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/$',
-        main.display_results_by_acronym_and_year,
-        name='performance_student_by_acronym_and_year'
-    ),
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(r'^administration/student_programs/(?P<registration_id>[0-9]+)/$', main.visualize_student_programs,
-        name='performance_student_programs_admin'),
-    url(r'^administration/student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result_admin'),
-]
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+def build_configuration(person: Person = None) -> osis_offer_enrollment_sdk.Configuration:
+    """
+    Return SDK configuration of learning unit
+    """
+    if not settings.OSIS_OFFER_ENROLLMENT_SDK_HOST:
+        logger.debug("'OSIS_OFFER_ENROLLMENT_SDK_HOST' setting must be set in configuration")
+
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        token = utils.get_user_token(person, force_user_creation=True)
+
+    return osis_offer_enrollment_sdk.Configuration(
+        host=settings.OSIS_OFFER_ENROLLMENT_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })

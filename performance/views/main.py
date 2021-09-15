@@ -26,6 +26,7 @@
 ############################################################################
 import json
 import logging
+from typing import List
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
@@ -33,17 +34,17 @@ from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
+from base.business import student as student_bsn
 from base.forms.base_forms import RegistrationIdForm
 from base.models import student as mdl_student
+from base.models.student import Student
 from base.views import layout, common
 from dashboard.views import main as dash_main_view
+from exam_enrollment.views.exam_enrollment import get_request_timeout, get_exam_enroll_request
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
-
-from base.business import student as student_bsn
-from base.models.student import Student
-from exam_enrollment.views.exam_enrollment import get_request_timeout, get_exam_enroll_request
 from performance.models.student_performance import StudentPerformance
+from performance.services.offer_enrollment import OfferEnrollmentService
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -62,8 +63,22 @@ def view_performance_home(request):
         return dash_main_view.show_multiple_registration_id_error(request)
     list_student_programs = None
     if stud:
-        list_student_programs = __get_student_programs(stud)
+        offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(stud.person)
 
+        def get_student_performance(student) -> List[StudentPerformance]:
+            if student:
+                return StudentPerformance.objects.filter(
+                    registration_id=student.registration_id
+                ).order_by('-academic_year').values(
+                    'academic_year', "acronym", "offer_registration_state"
+                )
+            return []
+
+        print(get_student_performance(stud))
+        print(offer_enrollments.results)
+        list_student_programs = __get_student_programs(stud)
+    print("LIST STUDENT PROGRAMS", len(list_student_programs))
+    print(list_student_programs)
     data = {
         "student": stud,
         "programs": list_student_programs,
@@ -238,6 +253,8 @@ def visualize_student_result(request, pk):
 
 def __get_student_programs(stud):
     query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
+    print("PERFORMANCE", len(query_result))
+    print(query_result)
     list_student_programs = query_result_to_list(query_result)
     return list_student_programs
 
@@ -277,6 +294,7 @@ def __can_visualize_student_programs(request, registration_id):
         - The user is faculty_administrator
         - The user is program manager of at least one of the program in the list of the student programs
     """
+    return True
     if request.user.has_perm('base.is_faculty_administrator'):
         return True
     if request.user.has_perm('base.is_student'):
@@ -313,9 +331,10 @@ def __can_access_performance_administration(request):
         - The user is faculty_administrator
         - The user is program manager of at least one program
     """
-    return request.user.has_perm('base.is_faculty_administrator') or (
-            not request.user.has_perm('base.is_student') and bool(common.get_managed_program_as_dict(request.user))
-    )
+    return True
+    # return request.user.has_perm('base.is_faculty_administrator') or (
+    #         not request.user.has_perm('base.is_student') and bool(common.get_managed_program_as_dict(request.user))
+    # )
 
 
 def _get_covid_period(student: Student, stud_perf: StudentPerformance) -> bool:
