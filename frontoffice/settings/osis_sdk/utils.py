@@ -25,7 +25,7 @@
 ##############################################################################
 import json
 from functools import wraps
-from typing import Set
+from typing import Set, List
 
 import requests
 from django.conf import settings
@@ -75,21 +75,22 @@ def api_exception_handler(api_exception_cls):
 def api_paginated_response(func, default_limit=25, offset=0):
     """A decorator that enables to retrieve paginated response given desired limit and offset"""
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args, **kwargs) -> PaginatedResponse:
         response = func(*args, limit=kwargs.pop('limit', default_limit), offset=kwargs.pop('offset', offset), **kwargs)
-        return response.results, response.count
+        return PaginatedResponse(response.results, response.count)
     return wrapper
 
 
 def gather_all_api_paginated_results(func):
     """A decorator that enables to gather all paginated responses into a unique list of results"""
     @wraps(func)
-    def wrapper(*args, **kwargs):
-        results, count = api_paginated_response(func)(*args, **kwargs)
-        while len(results) < count:
-            to_append, to_append_count = api_paginated_response(func, offset=len(results))(*args, **kwargs)
-            results.extend(to_append)
-        return results, count
+    def wrapper(*args, **kwargs) -> PaginatedResponse:
+        paginated_response = api_paginated_response(func)(*args, **kwargs)
+        while len(paginated_response.results) < paginated_response.count:
+            paginated_response.extend(api_paginated_response(
+                func, offset=len(paginated_response.results)
+            )(*args, **kwargs))
+        return paginated_response
     return wrapper
 
 
@@ -122,3 +123,15 @@ class ApiExceptionHandler:
                 api_business_exceptions |= {ApiBusinessException(**exception) for exception in exceptions}
             raise MultipleApiBusinessException(exceptions=api_business_exceptions)
         raise api_exception
+
+
+class PaginatedResponse:
+    results: List
+    count: int
+
+    def __init__(self, results: List, count: int):
+        self.results = results
+        self.count = count
+
+    def extend(self, paginated_response: 'PaginatedResponse'):
+        self.results.extend(paginated_response.results)
