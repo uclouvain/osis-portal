@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 11:13+0200\n"
+"POT-Creation-Date: 2021-09-15 10:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,6 +68,9 @@ msgstr ""
 msgid "Coordinator"
 msgstr ""
 
+msgid "Credits"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -93,9 +96,6 @@ msgid "Details other educational facilities"
 msgstr ""
 
 msgid "Display teachers"
-msgstr ""
-
-msgid "ECT"
 msgstr ""
 
 msgid "Educational tutor"
@@ -338,6 +338,12 @@ msgstr ""
 msgid ""
 "This course will be discontinued in %(academic_year)s following a program "
 "reform."
+msgstr ""
+
+msgid ""
+"This learning unit has classes. Students are enrolled at the class level "
+"(see below). If you do not see any classes, please contact your faculty so "
+"that you can be assigned to the classes you teach."
 msgstr ""
 
 msgid "Title"

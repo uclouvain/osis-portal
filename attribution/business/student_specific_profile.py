@@ -26,9 +26,9 @@
 from typing import List
 
 from django.utils.translation import ugettext as _
+from osis_learning_unit_enrollment_sdk.model.student_specific_profile import StudentSpecificProfile
 
 from base.models.enums import peps_type
-from base.models.student_specific_profile import StudentSpecificProfile
 
 
 def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
