@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 09:15+0200\n"
+"POT-Creation-Date: 2021-09-15 10:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,9 +171,6 @@ msgstr "Gestion de ma charge d'enseignement"
 
 msgid "This process shows personal data."
 msgstr "Accès à mes données personnelles."
-
-msgid "This requires a"
-msgstr "Ceci nécessite un"
 
 msgid "This requires a "
 msgstr "Ceci nécessite un "
