@@ -72,7 +72,7 @@ def _make_xls_list(student_list):
         str(_('June')),
         str(_('State')),
         str(_('September')),
-        str(_('Last note')),
+        str(_('Last score')),
         str(_('Type of specific profile')),
         str(_('Extra time (33% generally)')),
         str(_('Large print')),
