@@ -25,7 +25,6 @@
 ##############################################################################
 import logging
 
-import osis_learning_unit_enrollment_sdk
 import osis_learning_unit_sdk
 from django.conf import settings
 
@@ -35,7 +34,7 @@ from frontoffice.settings.osis_sdk import utils
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def build_configuration(person: Person = None) -> osis_learning_unit_enrollment_sdk.Configuration:
+def build_configuration(person: Person = None) -> osis_learning_unit_sdk.Configuration:
     """
     Return SDK configuration of learning unit
     """

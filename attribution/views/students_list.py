@@ -33,7 +33,8 @@ from django.views.generic import TemplateView
 from attribution.business import xls_students_by_learning_unit
 from attribution.services.enrollments import LearningUnitEnrollmentService
 from attribution.services.learning_unit import LearningUnitService
-from performance.models import student_performance
+from osis_common.utils.models import get_object_or_none
+from performance.models.student_performance import StudentPerformance
 
 JSON_LEARNING_UNIT_NOTE = 'note'
 JSON_LEARNING_UNIT_STATUS = 'etatExam'
@@ -102,14 +103,17 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
         academic_year = self.kwargs['learning_unit_year']
 
         results = {}
-        a_student_performance = student_performance.find_by_student_and_offer_year(
-            a_registration_id, academic_year, offer_acronym
+        a_student_performance = get_object_or_none(
+            StudentPerformance,
+            registration_id=a_registration_id,
+            academic_year=academic_year,
+            acronym=offer_acronym
         )
 
         if a_student_performance:
             student_data = self.get_student_data_dict(a_student_performance)
             monAnnee = student_data['monAnnee']
-            if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == str(academic_year):
+            if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == academic_year:
                 monOffre = monAnnee['monOffre']
                 offre = monOffre['offre']
                 if offre['sigleComplet'] == offer_acronym:
@@ -174,10 +178,6 @@ class StudentsListXlsView(StudentsListView):
     permission_required = "base.can_access_attribution"
 
     def get(self, *args, **kwargs):
-        a_learning_unit_yr = LearningUnitService.get_learning_unit(
-            acronym=self.kwargs['learning_unit_acronym'],
-            year=self.kwargs['learning_unit_year'],
-            person=self.request.user.person
-        )
+        a_learning_unit_yr = self.get_learning_unit()
         student_list = self.get_learning_unit_yr_enrollments_list()
         return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
