@@ -28,6 +28,7 @@ from typing import List
 
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import MultipleObjectsReturned
+from django.http import HttpRequest
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
@@ -54,7 +55,7 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
         }
 
     @cached_property
-    def offer_enrollments_list(self):
+    def offer_enrollments_list(self) -> List[SimpleNamespace]:
         offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(self.student.person).results
         allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
         offer_enrollments_to_display = []
@@ -116,7 +117,7 @@ class PerformanceHomeStudent(PerformanceHomeMixin, PermissionRequiredMixin):
             return dash_main_view.show_multiple_registration_id_error(self.request)
 
 
-def _can_visualize_student_programs(request, registration_id):
+def _can_visualize_student_programs(request: HttpRequest, registration_id: str) -> bool:
     """
     Student cannot access administration
     User can visualize student programs if :

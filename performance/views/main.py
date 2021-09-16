@@ -30,6 +30,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
+from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext as _
@@ -285,7 +286,7 @@ def __can_visualize_student_result(request, performance_result_pk):
     return False
 
 
-def _can_access_performance_administration(request):
+def _can_access_performance_administration(request: HttpRequest) -> bool:
     """
     Student cannot access administration
     User can access performance results administration if :
