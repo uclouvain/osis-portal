@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import logging
-from collections import namedtuple
 from typing import List
 
 import osis_learning_unit_sdk
@@ -40,15 +39,14 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class LearningUnitService:
     @staticmethod
-    def get_learning_unit(year: int, acronym: str, person: Person) -> List:
+    def get_learning_unit_title(year: int, acronym: str, person: Person) -> List:
         configuration = learning_unit_sdk.build_configuration(person)
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
             api_instance = learning_units_api.LearningUnitsApi(api_client)
             try:
-                learning_unit_dict = api_instance.learningunits_read(year=int(year), acronym=acronym)
-                learning_unit = namedtuple('LearningUnit', learning_unit_dict.keys())(*learning_unit_dict.values())
+                learning_unit_title = api_instance.learningunitstitle_read(year=int(year), acronym=acronym)['title']
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
-                learning_unit = None
-        return learning_unit
+                learning_unit_title = ''
+        return learning_unit_title

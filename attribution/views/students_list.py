@@ -28,6 +28,7 @@ from operator import itemgetter
 from typing import List, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 
@@ -54,13 +55,16 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             **super().get_context_data(**kwargs),
             'global_id': self.request.user.person.global_id,
             'students': enrollments,
-            'learning_unit_year': self.learning_unit,
+            'learning_unit_year': self.kwargs['learning_unit_year'],
+            'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
+            'learning_unit_title': self.learning_unit_title,
             'has_peps': self.has_peps_student(enrollments),
+            'produce_xls_url': self.get_produce_xls_url(),
         }
 
     @cached_property
-    def learning_unit(self):
-        return LearningUnitService.get_learning_unit(
+    def learning_unit_title(self):
+        return LearningUnitService.get_learning_unit_title(
             acronym=self.kwargs['learning_unit_acronym'],
             year=self.kwargs['learning_unit_year'],
             person=self.request.user.person
@@ -171,6 +175,12 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     def has_peps_student(enrollments):
         return any(enrollment.get('student_specific_profile') for enrollment in enrollments)
 
+    def get_produce_xls_url(self):
+        return reverse('produce_xls_students', kwargs={
+            'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
+            'learning_unit_year': self.kwargs['learning_unit_year']
+        })
+
 
 class AdminStudentsListView(StudentsListView):
     permission_required = "base.is_faculty_administrator"
@@ -181,6 +191,9 @@ class StudentsListXlsView(StudentsListView):
     permission_required = "base.can_access_attribution"
 
     def get(self, *args, **kwargs):
-        a_learning_unit_yr = self.learning_unit
         student_list = self.learning_unit_yr_enrollments_list
-        return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
+        return xls_students_by_learning_unit.get_xls(
+            student_list,
+            self.kwargs['learning_unit_acronym'],
+            self.kwargs['learning_unit_year']
+        )
