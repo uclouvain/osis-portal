@@ -38,6 +38,8 @@ def home(request):
         'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
         'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL,
         'dissertation_url': settings.OSIS_DISSERTATION_URL,
+        'score_encoding_url': settings.OSIS_SCORE_ENCODING_URL,
+        'score_encoding_vpn_help_url': settings.OSIS_VPN_HELP_URL
     })
 
 
