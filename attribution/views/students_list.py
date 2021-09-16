@@ -28,6 +28,7 @@ from operator import itemgetter
 from typing import List, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 
 from attribution.business import xls_students_by_learning_unit
@@ -48,23 +49,25 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     template_name = "students_list.html"
 
     def get_context_data(self, **kwargs):
-        enrollments = self.get_learning_unit_yr_enrollments_list()
+        enrollments = self.learning_unit_yr_enrollments_list
         return {
             **super().get_context_data(**kwargs),
             'global_id': self.request.user.person.global_id,
             'students': enrollments,
-            'learning_unit_year': self.get_learning_unit(),
+            'learning_unit_year': self.learning_unit,
             'has_peps': self.has_peps_student(enrollments),
         }
 
-    def get_learning_unit(self):
+    @cached_property
+    def learning_unit(self):
         return LearningUnitService.get_learning_unit(
             acronym=self.kwargs['learning_unit_acronym'],
             year=self.kwargs['learning_unit_year'],
             person=self.request.user.person
         )
 
-    def get_learning_unit_yr_enrollments_list(self) -> List[Dict]:
+    @cached_property
+    def learning_unit_yr_enrollments_list(self) -> List[Dict]:
         enrollments_paginated_response = LearningUnitEnrollmentService.get_enrollments_list(
             year=int(self.kwargs['learning_unit_year']),
             acronym=self.kwargs['learning_unit_acronym'],
@@ -178,6 +181,6 @@ class StudentsListXlsView(StudentsListView):
     permission_required = "base.can_access_attribution"
 
     def get(self, *args, **kwargs):
-        a_learning_unit_yr = self.get_learning_unit()
-        student_list = self.get_learning_unit_yr_enrollments_list()
+        a_learning_unit_yr = self.learning_unit
+        student_list = self.learning_unit_yr_enrollments_list
         return xls_students_by_learning_unit.get_xls(student_list, a_learning_unit_yr)
