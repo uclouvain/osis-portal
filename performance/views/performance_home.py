@@ -95,9 +95,6 @@ class PerformanceHomeAdmin(PerformanceHomeMixin, UserPassesTestMixin):
     def test_func(self):
         can_access_performance_administration = _can_access_performance_administration(self.request)
         has_student = self.student is not None
-        print("TEST FUNC", can_access_performance_administration)
-        print("OTHER FUNC",
-              has_student and not _can_visualize_student_programs(self.request, self.student.registration_id))
         return can_access_performance_administration and not (
                 has_student and not _can_visualize_student_programs(self.request, self.student.registration_id)
         )
@@ -114,7 +111,6 @@ class PerformanceHomeStudent(PerformanceHomeMixin, PermissionRequiredMixin):
     @cached_property
     def student(self) -> Student:
         try:
-            print("YOLOOO", student_business.find_by_user_and_discriminate(self.request.user))
             return student_business.find_by_user_and_discriminate(self.request.user)
         except MultipleObjectsReturned:
             return dash_main_view.show_multiple_registration_id_error(self.request)
