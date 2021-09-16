@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import contextlib
 import logging
 from types import SimpleNamespace
 from typing import List
@@ -42,7 +41,6 @@ from osis_attribution_sdk.models import Attribution
 from attribution.services.attribution import AttributionService
 from base.forms.base_forms import GlobalIdForm
 from base.models.academic_year import AcademicYear, current_academic_year
-from base.models.learning_unit_year import LearningUnitYear
 from base.models.person import Person
 from base.utils import string_utils
 from base.views import layout
@@ -139,12 +137,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         )
 
     def get_attribution_students_url(self, code: str, year: int):
-        with contextlib.suppress(LearningUnitYear.DoesNotExist):
-            learning_unit_year_id = LearningUnitYear.objects.get(acronym=code, academic_year__year=year).pk
-            return reverse('attribution_students', kwargs={
-                'learning_unit_year_id': learning_unit_year_id,
-                'a_tutor': self.person.tutor.pk
-            })
+        return reverse('attribution_students', kwargs={'learning_unit_acronym': code, 'learning_unit_year': year})
 
 
 class AdminTutorChargeView(TutorChargeView):
@@ -160,12 +153,7 @@ class AdminTutorChargeView(TutorChargeView):
         return reverse('tutor_charge_admin', kwargs={'global_id': self.person.global_id}) + "?displayYear="
 
     def get_attribution_students_url(self, code: str, year: int):
-        with contextlib.suppress(LearningUnitYear.DoesNotExist):
-            learning_unit_year_id = LearningUnitYear.objects.get(acronym=code, academic_year__year=year).pk
-            return reverse('attribution_students_admin', kwargs={
-                'learning_unit_year_id': learning_unit_year_id,
-                'a_tutor': self.person.tutor.pk
-            })
+        return reverse('attribution_students', kwargs={'learning_unit_acronym': code, 'learning_unit_year': year})
 
 
 @login_required

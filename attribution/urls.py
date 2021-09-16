@@ -25,10 +25,10 @@
 ##############################################################################
 from django.conf.urls import url, include
 
-import attribution.views.students_list
 from attribution.views import online_application
 from attribution.views import tutor_charge, list
 from attribution.views.home import HomeAttribution
+from attribution.views.students_list import StudentsListView, AdminStudentsListView, StudentsListXlsView
 from attribution.views.tutor_charge import TutorChargeView, AdminTutorChargeView
 
 js_info_dict = {
@@ -39,11 +39,10 @@ urlpatterns = [
 
     url(r'^$', HomeAttribution.as_view(), name='attribution_home'),
     url(r'^charge/$', TutorChargeView.as_view(), name='tutor_charge'),
-    url(r'^students/(?P<learning_unit_year_id>[0-9]+)/(?P<a_tutor>[0-9]+)/$',
-        attribution.views.students_list.show_students,
-        name='attribution_students'),
-    url(r'^students/list/xls/(?P<learning_unit_year_id>[0-9]+)',
-        attribution.views.students_list.students_list_build_by_learning_unit,
+    url(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)$',
+        StudentsListView.as_view(), name='attribution_students'),
+    url(r'^students/list/xls/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)',
+        StudentsListXlsView.as_view(),
         name='produce_xls_students'),
 
     url(r'^applications/', include([
@@ -77,9 +76,8 @@ urlpatterns = [
 
     url(r'^administration/', include([
         url(r'^charge/(?P<global_id>[0-9a-z-]+)/$', AdminTutorChargeView.as_view(), name='tutor_charge_admin'),
-        url(r'^students/(?P<learning_unit_year_id>[0-9]+)/(?P<a_tutor>[0-9]+)/$',
-            attribution.views.students_list.show_students_admin,
-            name='attribution_students_admin'),
+        url(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/$',
+            AdminStudentsListView.as_view(), name='attribution_students_admin'),
         url(r'^attributions/$', tutor_charge.attribution_administration, name='attribution_administration'),
         url(r'^select_tutor/$', tutor_charge.select_tutor_attributions,
             name='attribution_admin_select_tutor'),

@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import datetime
+from types import SimpleNamespace
 
 import mock
 from django.contrib.auth.models import Group, Permission
@@ -32,6 +33,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
 
+from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group_year import EducationGroupYearFactory
@@ -63,7 +65,10 @@ class StudentsListTest(TestCase):
         person.global_id = "001923265"
         person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         person.save()
-
+        cls.learning_unit_year = LearningUnitYearFactory()
+        cls.enrollments = SimpleNamespace(**{'results': [
+            SimpleNamespace(**EnrollmentDictFactory()) for _ in range(2)
+        ], 'count': 1})
         cls.url = reverse('students_list')
 
     def setUp(self):
@@ -111,17 +116,24 @@ class StudentsListTest(TestCase):
         self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_with_attribution_students(self, mock_get_attributions_list):
+    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments_list")
+    @mock.patch("attribution.services.learning_unit.LearningUnitService.get_learning_unit")
+    def test_with_attribution_students(self, mock_lu, mock_students_list_endpoint, mock_get_attributions_list):
+        mock_students_list_endpoint.return_value = self.enrollments
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
-        mock_get_attributions_list.return_value = [
-            Attribution(
-                code=a_learning_unit_year.acronym,
-                year=a_learning_unit_year.academic_year.year,
-            )
-        ]
+        mock_lu.return_value = a_learning_unit_year
+        mock_get_attributions_list.return_value = SimpleNamespace(**{
+            'results': [
+                Attribution(
+                    code=a_learning_unit_year.acronym,
+                    year=a_learning_unit_year.academic_year.year,
+                )
+            ],
+            'count': 1
+        })
         education_group_year = EducationGroupYearFactory(academic_year=an_academic_year)
 
         # Create two enrollment to exam [Enrolled]
@@ -135,8 +147,8 @@ class StudentsListTest(TestCase):
                                       enrollment_state="")
 
         url = reverse('attribution_students', kwargs={
-            'learning_unit_year_id': a_learning_unit_year.id,
-            'a_tutor': self.tutor.id
+            'learning_unit_acronym': a_learning_unit_year.acronym,
+            'learning_unit_year': a_learning_unit_year.academic_year.year
         })
         response = self.client.get(url)
         self.assertEqual(response.status_code, OK)
