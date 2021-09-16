@@ -100,12 +100,15 @@ class StudentsListTest(TestCase):
         an_academic_year = create_current_academic_year()
 
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
-        mock_get_attributions_list.return_value = [
-            Attribution(
-                code=a_learning_unit_year.acronym,
-                year=a_learning_unit_year.academic_year.year,
-            )
-        ]
+        mock_get_attributions_list.return_value = SimpleNamespace(**{
+            'results': [
+                Attribution(
+                    code=a_learning_unit_year.acronym,
+                    year=a_learning_unit_year.academic_year.year,
+                )
+            ],
+            'count': 1
+        })
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'list/students_exam.html')
