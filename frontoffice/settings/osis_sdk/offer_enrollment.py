@@ -36,7 +36,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 def build_configuration(person: Person = None) -> osis_offer_enrollment_sdk.Configuration:
     """
-    Return SDK configuration of learning unit
+    Return SDK configuration of offer enrollment
     """
     if not settings.OSIS_OFFER_ENROLLMENT_SDK_HOST:
         logger.debug("'OSIS_OFFER_ENROLLMENT_SDK_HOST' setting must be set in configuration")
