@@ -50,3 +50,19 @@ class OfferEnrollmentService:
                 logger.error(e)
                 enrollments = {'results': [], 'count': 0}
         return enrollments
+
+    @staticmethod
+    def get_my_enrollments_year_list(person: Person, year: int, **kwargs) -> EnrollmentList:
+        configuration = offer_enrollment_sdk.build_configuration(person)
+        with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
+            api_instance = enrollment_api.EnrollmentApi(api_client)
+            try:
+                enrollments = api_instance.my_enrollments_year_list(
+                    year=year,
+                    **kwargs
+                )
+            except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                enrollments = {'results': [], 'count': 0}
+        return enrollments

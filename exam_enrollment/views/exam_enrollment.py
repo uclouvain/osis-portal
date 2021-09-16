@@ -56,36 +56,36 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
 
-@login_required
-@permission_required('base.is_student', raise_exception=True)
-def choose_offer(request):
-    return navigation(request, False)
+# @login_required
+# @permission_required('base.is_student', raise_exception=True)
+# def choose_offer(request):
+#     return navigation(request, False)
+#
+#
+# @login_required
+# @permission_required('base.is_student', raise_exception=True)
+# def choose_offer_direct(request):
+#     return navigation(request, False)
 
 
-@login_required
-@permission_required('base.is_student', raise_exception=True)
-def choose_offer_direct(request):
-    return navigation(request, False)
-
-
-def navigation(request, navigate_direct_to_form):
-    try:
-        stud = student_bsn.find_by_user_and_discriminate(request.user)
-    except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
-    current_academic_year = mdl_base.academic_year.starting_academic_year()
-    student_programs = _get_student_programs(stud, current_academic_year)
-    if student_programs:
-        if navigate_direct_to_form and len(student_programs) == 1:
-            return _get_exam_enrollment_form(student_programs[0], request, stud)
-        else:
-            return layout.render(request, 'offer_choice.html', {
-                'programs': student_programs,
-                'student': stud
-            })
-    else:
-        messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found').format(current_academic_year))
-        return response.HttpResponseRedirect(reverse('dashboard_home'))
+# def navigation(request, navigate_direct_to_form):
+#     try:
+#         stud = student_bsn.find_by_user_and_discriminate(request.user)
+#     except MultipleObjectsReturned:
+#         return dash_main_view.show_multiple_registration_id_error(request)
+#     current_academic_year = mdl_base.academic_year.starting_academic_year()
+#     student_programs = _get_student_programs(stud, current_academic_year)
+#     if student_programs:
+#         if navigate_direct_to_form and len(student_programs) == 1:
+#             return _get_exam_enrollment_form(student_programs[0], request, stud)
+#         else:
+#             return layout.render(request, 'offer_choice.html', {
+#                 'programs': student_programs,
+#                 'student': stud
+#             })
+#     else:
+#         messages.add_message(request, messages.WARNING, _('no_offer_enrollment_found').format(current_academic_year))
+#         return response.HttpResponseRedirect(reverse('dashboard_home'))
 
 
 @login_required
@@ -102,18 +102,18 @@ def exam_enrollment_form(request, education_group_year_id):
         return _get_exam_enrollment_form(educ_group_year, request, stud)
 
 
-def _get_student_programs(stud, acad_year):
-    if stud:
-        offer_enrollments = list(
-            mdl_base.offer_enrollment.find_by_student_academic_year(
-                stud,
-                acad_year
-            ).select_related('education_group_year')
-        )
-        return [
-            enrol.education_group_year for enrol in offer_enrollments
-        ]
-    return None
+# def _get_student_programs(stud, acad_year):
+#     if stud:
+#         offer_enrollments = list(
+#             mdl_base.offer_enrollment.find_by_student_academic_year(
+#                 stud,
+#                 acad_year
+#             ).select_related('education_group_year')
+#         )
+#         return [
+#             enrol.education_group_year for enrol in offer_enrollments
+#         ]
+#     return None
 
 
 def _get_exam_enrollment_form(educ_group_year, request, stud):

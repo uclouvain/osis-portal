@@ -146,13 +146,13 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    def test_get_programs_student_is_none(self):
-        self.assertIsNone(exam_enrollment._get_student_programs(None, self.current_academic_year))
-
-    def test_get_one_program(self):
-        self.client.force_login(self.user)
-        self.assertEqual(exam_enrollment._get_student_programs(self.student, self.current_academic_year)[0],
-                         self.learn_unit_enrol.offer_enrollment.education_group_year)
+    # def test_get_programs_student_is_none(self):
+    #     self.assertIsNone(exam_enrollment._get_student_programs(None, self.current_academic_year))
+    #
+    # def test_get_one_program(self):
+    #     self.client.force_login(self.user)
+    #     self.assertEqual(exam_enrollment._get_student_programs(self.student, self.current_academic_year)[0],
+    #                      self.learn_unit_enrol.offer_enrollment.education_group_year)
 
     def test_navigation_with_no_offer_in_current_academic_year(self):
         self.client.force_login(self.user2)
