@@ -189,18 +189,17 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
         self.assertEqual(response.context['update_date'], self.student_performance.update_date)
         self.assertEqual(response.context['fetch_timed_out'], False)
-        response_message = \
-            _('The publication of the notes from the %(session_month)s session is not authorized '
-              'because, unless there is an error, there is still a balance of '
-              'your registration fees to be paid.<br/><br/>If you have paid very recently, '
-              'given the technical and banking delays, your situation may not yet have been updated. '
-              'In this case, your notes will be available the day after the regularization of your file. '
-              'If you have any questions about your debt to the university, please contact '
-              'the <a href=\"%(accounting_enrollment_service_url)s\" target=\"_blank\">Accounting Department '
-              'of the Enrollment Service</a>') % {
-                "session_month": self.student_performance.get_session_locked_display(),
-                "accounting_enrollment_service_url": settings.REGISTRATION_ACCOUNT_SERVICE_URL
-            }
+        response_message = _(
+            'The publication of the notes from the %(session_month)s session is not authorized '
+            'because, unless there is an error, there is still a balance of '
+            'your registration fees to be paid.<br/><br/>If you have paid very recently, '
+            'given the technical and banking delays, your situation may not yet have been updated. '
+            'In this case, your notes will be available the day after the regularization of your file. '
+            'If you have any questions about your debt to the university, please contact '
+            'the <a href=\"%(accounting_enrollment_service_url)s\" target=\"_blank\">Accounting Department '
+            'of the Enrollment Service</a>'
+        ) % {"session_month": self.student_performance.get_session_locked_display(),
+             "accounting_enrollment_service_url": settings.REGISTRATION_ACCOUNT_SERVICE_URL}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 

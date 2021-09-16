@@ -97,7 +97,7 @@ class PerformanceHomeAdmin(PerformanceHomeMixin, UserPassesTestMixin):
         can_access_performance_administration = _can_access_performance_administration(self.request)
         has_student = self.student is not None
         return can_access_performance_administration and not (
-                has_student and not _can_visualize_student_programs(self.request, self.student.registration_id)
+            has_student and not _can_visualize_student_programs(self.request, self.student.registration_id)
         )
 
     @cached_property
