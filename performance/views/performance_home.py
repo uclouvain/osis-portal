@@ -1,28 +1,49 @@
+##############################################################################
+#
+#    OSIS stands for Open Student Information System. It's an application
+#    designed to manage the core business of higher education institutions,
+#    such as universities, faculties, institutes and professional schools.
+#    The core business involves the administration of students, teachers,
+#    courses, programs and so on.
+#
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    GNU General Public License for more details.
+#
+#    A copy of this license - GNU General Public License - is available
+#    at the root of the source code of this program.  If not,
+#    see http://www.gnu.org/licenses/.
+#
+##############################################################################
 from types import SimpleNamespace
 from typing import List
 
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.core.exceptions import MultipleObjectsReturned, PermissionDenied
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import MultipleObjectsReturned
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
 from base.business import student as student_business
+from base.models import student as student_model
 from base.models.student import Student
 from dashboard.views import main as dash_main_view
 from performance.models.enums import offer_registration_state
 from performance.models.student_performance import StudentPerformance
 from performance.services.offer_enrollment import OfferEnrollmentService
-from performance.views import main as performance_main_view
+from performance.views.main import _can_access_performance_administration, _can_visualize_student_programs
 
 
-class PerformanceHome(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    permission_required = "base.is_student"
-    template_name = "performance_home_student.html"
-    raise_exception = True
-
+class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
-        print(self.student.registration_id)
         return {
             **super().get_context_data(**kwargs),
             "student": self.student,
@@ -46,7 +67,6 @@ class PerformanceHome(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                         pk=student_performance.pk
                     )
                 )
-                print(offer_enrollment)
         return offer_enrollments_to_display
 
     def _get_correspondant_student_performance(self, offer_enrollment: Enrollment) -> StudentPerformance:
@@ -59,13 +79,6 @@ class PerformanceHome(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         )
 
     @cached_property
-    def student(self) -> Student:
-        try:
-            return student_business.find_by_user_and_discriminate(self.request.user)
-        except MultipleObjectsReturned:
-            return dash_main_view.show_multiple_registration_id_error(self.request)
-
-    @cached_property
     def student_performances(self) -> List[StudentPerformance]:
         if self.student:
             return StudentPerformance.objects.filter(
@@ -74,17 +87,32 @@ class PerformanceHome(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         return []
 
 
-class PerformanceHomeAdmin(PerformanceHome):
-    template_name = "performance_home_admin.html"
-    raise_exception = False
+class PerformanceHomeAdmin(PerformanceHomeMixin, UserPassesTestMixin):
+    template_name = "admin/performance_home_admin.html"
 
-    def _check_permissions(self):
-        if not performance_main_view.__can_access_performance_administration(self.request):
-            raise PermissionDenied
-        if self.student and \
-                not performance_main_view.__can_visualize_student_programs(self.request, self.student.registration_id):
-            raise PermissionDenied
+    def test_func(self):
+        can_access_performance_administration = _can_access_performance_administration(self.request)
+        has_student = self.student is not None
+        print("TEST FUNC", can_access_performance_administration)
+        print("OTHER FUNC",
+              has_student and not _can_visualize_student_programs(self.request, self.student.registration_id))
+        return can_access_performance_administration and not (
+                has_student and not _can_visualize_student_programs(self.request, self.student.registration_id)
+        )
 
-    def get_context_data(self, **kwargs):
-        self._check_permissions()
-        return super().get_context_data(**kwargs)
+    @cached_property
+    def student(self) -> Student:
+        return student_model.find_by_registration_id(self.kwargs['registration_id'])
+
+
+class PerformanceHomeStudent(PerformanceHomeMixin, PermissionRequiredMixin):
+    permission_required = "base.is_student"
+    template_name = "performance_home_student.html"
+
+    @cached_property
+    def student(self) -> Student:
+        try:
+            print("YOLOOO", student_business.find_by_user_and_discriminate(self.request.user))
+            return student_business.find_by_user_and_discriminate(self.request.user)
+        except MultipleObjectsReturned:
+            return dash_main_view.show_multiple_registration_id_error(self.request)

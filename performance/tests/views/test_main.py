@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,7 +24,9 @@
 #
 ##############################################################################
 import json
+from types import SimpleNamespace
 
+import mock
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
@@ -46,11 +48,12 @@ from performance.views import main
 OK = 200
 ACCESS_DENIED = 401
 
-MULTIPLE_STUDENT_ERROR = _("A problem was detected with your registration : 2 registration id's are "
-                           "linked to your user.</br> Please contact <a href="
-                           "\"{registration_department_url}\" target=\"_blank\">the Registration "
-                           "department</a>. Thank you.") \
-    .format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
+MULTIPLE_STUDENT_ERROR = _(
+    "A problem was detected with your registration : 2 registration id's are "
+    "linked to your user.</br> Please contact <a href="
+    "\"{registration_department_url}\" target=\"_blank\">the Registration "
+    "department</a>. Thank you."
+).format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
 
 
 class TestMain(TestCase):
@@ -92,85 +95,6 @@ class TestMain(TestCase):
         student = base.tests.models.test_student.create_student(registration_id="879466")
         has_access = main.check_right_access(self.student_performance, student)
         self.assertFalse(has_access)
-
-
-class ViewPerformanceHomeTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        students_group = Group.objects.create(name="students")
-        permission = Permission.objects.get(codename="is_student")
-        students_group.permissions.add(permission)
-
-        cls.student = StudentFactory()
-
-        cls.url = reverse('performance_home')
-
-    def setUp(self):
-        self.client.force_login(self.student.person.user)
-
-    def test_user_not_logged(self):
-        self.client.logout()
-        response = self.client.get(self.url, follow=True)
-        self.assertRedirects(response, "/login/?next={}".format(self.url))
-
-    def test_user_not_a_student(self):
-        a_person = PersonFactory()
-        self.client.logout()
-        self.client.force_login(a_person.user)
-
-        response = self.client.get(self.url, follow=True)
-
-        self.assertEqual(response.status_code, ACCESS_DENIED)
-        self.assertTemplateUsed(response, 'access_denied.html')
-
-    def test_multiple_students_objects_for_one_user(self):
-        student2 = StudentFactory(person=self.student.person)
-        education_group_year = EducationGroupYearFactory()
-        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
-        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
-
-        response = self.client.get(self.url)
-
-        self.assertTemplateUsed(response, 'dashboard.html')
-
-        messages = list(response.context['messages'])
-
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, MULTIPLE_STUDENT_ERROR)
-
-    def test_with_empty_programs_list(self):
-        response = self.client.get(self.url)
-
-        self.assertTemplateUsed(response, 'performance_home_student.html')
-        self.assertEqual(response.status_code, OK)
-
-        self.assertEqual(response.context['student'], self.student)
-        self.assertEqual(response.context['programs'], [])
-        self.assertEqual(response.context['registration_states_to_show'],
-                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
-
-    def test_with_program_list(self):
-        a_student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
-                                                          academic_year=2017)
-
-        response = self.client.get(self.url)
-
-        self.assertTemplateUsed(response, 'performance_home_student.html')
-        self.assertEqual(response.status_code, OK)
-
-        self.assertEqual(response.context['student'], self.student)
-        self.assertEqual(response.context['programs'],
-                         [{
-                             'academic_year': '2017 - 2018',
-                             'acronym': a_student_performance.acronym,
-                             'offer_registration_state': 'CESSATION',
-                             'pk': a_student_performance.pk,
-                             'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
-                         }]
-                         )
-        self.assertEqual(response.context['registration_states_to_show'],
-                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
 
 
 class DisplayResultForSpecificStudentPerformanceTest(TestCase):
@@ -263,7 +187,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
             'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-            % {"session_month": self.student_performance.get_session_locked_display()}
+                           % {"session_month": self.student_performance.get_session_locked_display()}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 
@@ -291,9 +215,9 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
               'If you have any questions about your debt to the university, please contact '
               'the <a href=\"%(accounting_enrollment_service_url)s\" target=\"_blank\">Accounting Department '
               'of the Enrollment Service</a>') % {
-               "session_month": self.student_performance.get_session_locked_display(),
-               "accounting_enrollment_service_url": settings.REGISTRATION_ACCOUNT_SERVICE_URL
-                }
+                "session_month": self.student_performance.get_session_locked_display(),
+                "accounting_enrollment_service_url": settings.REGISTRATION_ACCOUNT_SERVICE_URL
+            }
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 
@@ -313,10 +237,9 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertEqual(response.context['update_date'], self.student_performance.update_date)
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
-            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-            % {"session_month": self.student_performance.get_session_locked_display()}
-        self.assertEqual(response.context['not_authorized_message'],
-                         response_message)
+            'The publication of the notes from the %(session_month)s session was not authorized by our faculty.'
+        ) % {"session_month": self.student_performance.get_session_locked_display()}
+        self.assertEqual(response.context['not_authorized_message'], response_message)
 
 
 class SelectStudentTest(TestCase):
@@ -371,10 +294,27 @@ class SelectStudentTest(TestCase):
         self.assertEqual(len(response.context['form'].errors), 1)
 
     def test_valid_post_request(self):
+        # Mock the OSIS Remote API Call
+        offer_enrollment_row = SimpleNamespace(**{
+            'acronym': 'FSA1BA',
+            'year': 2021,
+            'title': "Bachelier en sciences de l'ingénieur",
+            'pk': 123456,
+            'offer_registration_state': offer_registration_state.REGISTERED,
+        })
+        enrollments_list_patcher = mock.patch(
+            "performance.views.performance_home.PerformanceHomeMixin.offer_enrollments_list",
+            new_callable=mock.PropertyMock,
+            return_value=[offer_enrollment_row]
+        )
+        enrollments_list_patcher.start()
+
         response = self.client.post(self.url, data={'registration_id': self.student.registration_id})
 
         expected_url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
         self.assertRedirects(response, expected_url)
+
+        enrollments_list_patcher.stop()
 
     def test_user_is_a_student(self):
         self.client.logout()
@@ -392,120 +332,6 @@ class SelectStudentTest(TestCase):
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'admin/performance_administration.html')
-
-
-class VisualizeStudentPrograms(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.person = PersonFactory()
-        cls.person.user.user_permissions.add(Permission.objects.get(codename="is_faculty_administrator"))
-        students_group = Group.objects.create(name="students")
-        permission = Permission.objects.get(codename="is_student")
-        students_group.permissions.add(permission)
-        cls.student = StudentFactory()
-
-        cls.url = reverse('performance_student_programs_admin', args=[cls.student.registration_id])
-
-    def setUp(self):
-        self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id,
-                                                             academic_year=2017)
-        self.client.force_login(self.person.user)
-
-    def test_user_not_logged(self):
-        self.client.logout()
-        response = self.client.get(self.url)
-        self.assertRedirects(response, "/login/?next={}".format(self.url))
-
-    def test_user_has_not_permission(self):
-        self.client.logout()
-        patcher = patch('base.views.api.get_managed_programs_as_dict')
-        mock_api_call = patcher.start()
-        mock_api_call.return_value = {}
-        a_person = PersonFactory()
-        self.client.force_login(a_person.user)
-
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, ACCESS_DENIED)
-        self.assertTemplateUsed(response, 'access_denied.html')
-        patcher.stop()
-
-    def test_with_no_corresponding_student(self):
-        self.student.delete()
-
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
-
-        self.assertEqual(response.context['student'], None)
-        self.assertEqual(response.context['programs'], None)
-        self.assertEqual(response.context['registration_states_to_show'],
-                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
-
-    def test_when_empty_programs_list(self):
-        self.student_performance.delete()
-
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
-
-        self.assertEqual(response.context['student'], self.student)
-        self.assertEqual(response.context['programs'], [])
-        self.assertEqual(response.context['registration_states_to_show'],
-                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
-
-    def test_when_program(self):
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
-
-        self.assertEqual(response.context['student'], self.student)
-        self.assertEqual(response.context['programs'],
-                         [{
-                             'academic_year': '2017 - 2018',
-                             'acronym': self.student_performance.acronym,
-                             'offer_registration_state': 'CESSATION',
-                             'pk': self.student_performance.pk,
-                             'title': ' Master [120] en sciences informatiques, à finalité spécialisée '
-                         }]
-                         )
-        self.assertEqual(response.context['registration_states_to_show'],
-                         offer_registration_state.STATES_TO_SHOW_ON_PAGE)
-
-    def test_pgm_manager_ok(self):
-        self.client.logout()
-        pgm_manager = PersonFactory()
-        StudentPerformanceFactory(acronym='PHYS1BA',
-                                  registration_id=self.student.registration_id,
-                                  academic_year=2017)
-        self.client.force_login(pgm_manager.user)
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, OK)
-        self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
-
-    def test_pgm_manager_wrong_program(self):
-        self.client.logout()
-        pgm_manager = PersonFactory()
-        new_student = StudentFactory()
-        StudentPerformanceFactory(acronym='DROI1BA',
-                                  registration_id=new_student.registration_id,
-                                  academic_year=2017)
-        self.url = reverse('performance_student_programs_admin', args=[new_student.registration_id])
-        self.client.force_login(pgm_manager.user)
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, ACCESS_DENIED)
-        self.assertTemplateUsed(response, 'access_denied.html')
-
-    def test_user_is_a_student(self):
-        self.client.logout()
-        self.client.force_login(self.student.person.user)
-        response = self.client.get(self.url, follow=True)
-
-        self.assertEqual(response.status_code, ACCESS_DENIED)
-        self.assertTemplateUsed(response, 'access_denied.html')
 
 
 class VisualizeStudentResult(TestCase):
@@ -603,7 +429,7 @@ class VisualizeStudentResult(TestCase):
         self.assertEqual(response.context['fetch_timed_out'], False)
         response_message = _(
             'The publication of the notes from the %(session_month)s session was not authorized by our faculty.') \
-            % {"session_month": self.student_performance.get_session_locked_display()}
+                           % {"session_month": self.student_performance.get_session_locked_display()}
         self.assertEqual(response.context['not_authorized_message'],
                          response_message)
 

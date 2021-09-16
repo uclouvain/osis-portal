@@ -31,6 +31,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.translation import ugettext as _
 
 from base.business import student as student_bsn
@@ -178,13 +179,13 @@ def select_student(request):
     View to select a student to visualize his/her results.
     !!! Should only be accessible for staff having the rights.
     """
-    if not __can_access_performance_administration(request):
+    if not _can_access_performance_administration(request):
         raise PermissionDenied
     if request.method == "POST":
         form = RegistrationIdForm(request.POST)
         if form.is_valid():
             registration_id = form.cleaned_data['registration_id']
-            return redirect(visualize_student_programs, registration_id=registration_id)
+            return redirect(reverse('performance_student_programs_admin', kwargs={'registration_id': registration_id}))
     else:
         form = RegistrationIdForm()
     return layout.render(request, "admin/performance_administration.html", {"form": form})
@@ -196,12 +197,12 @@ def visualize_student_programs(request, registration_id):
     View to visualize a particular student list of academic programs.
     !!! Should only be accessible for staff having the rights.
     """
-    if not __can_access_performance_administration(request):
+    if not _can_access_performance_administration(request):
         raise PermissionDenied
     stud = mdl_student.find_by_registration_id(registration_id)
     list_student_programs = None
     if stud:
-        if not __can_visualize_student_programs(request, registration_id):
+        if not _can_visualize_student_programs(request, registration_id):
             raise PermissionDenied
         list_student_programs = __get_student_programs(stud)
 
@@ -219,7 +220,7 @@ def visualize_student_result(request, pk):
     View to visualize a particular student program courses result.
     !!! Should only be accessible for staff having the rights.
     """
-    if not __can_access_performance_administration(request):
+    if not _can_access_performance_administration(request):
         raise PermissionDenied
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     if stud_perf and not __can_visualize_student_result(request, pk):
@@ -268,7 +269,7 @@ def check_right_access(student_performance, student):
     return student_performance and student and student_performance.registration_id == student.registration_id
 
 
-def __can_visualize_student_programs(request, registration_id):
+def _can_visualize_student_programs(request, registration_id):
     """
     Student cannot access administration
     User can visualize student programs if :
@@ -277,12 +278,17 @@ def __can_visualize_student_programs(request, registration_id):
     """
     # return True
     if request.user.has_perm('base.is_faculty_administrator'):
+        print("IS FACULTY")
         return True
     if request.user.has_perm('base.is_student'):
         return False
     managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
+    print("MANAGED", managed_programs_as_dict)
+    print("BEFORE FOR STUDPERFS")
     for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id):
+        print("STUD PERFS", stud_perfs)
         if stud_perfs.acronym in managed_programs_as_dict.get(stud_perfs.academic_year, []):
+            print("YOLO IN STUDPERFS")
             return True
     return False
 
@@ -305,7 +311,7 @@ def __can_visualize_student_result(request, performance_result_pk):
     return False
 
 
-def __can_access_performance_administration(request):
+def _can_access_performance_administration(request):
     """
     Student cannot access administration
     User can access performance results administration if :
@@ -313,6 +319,9 @@ def __can_access_performance_administration(request):
         - The user is program manager of at least one program
     """
     # return True
+    print("YOLO STUDENT", request.user.has_perm('base.is_student'))
+    print("YOLO", bool(common.get_managed_program_as_dict(request.user)),
+          common.get_managed_program_as_dict(request.user))
     return request.user.has_perm('base.is_faculty_administrator') or (
             not request.user.has_perm('base.is_student') and bool(common.get_managed_program_as_dict(request.user))
     )
