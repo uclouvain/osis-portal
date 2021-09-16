@@ -70,23 +70,6 @@ class TestMain(TestCase):
         cls.json_points_2 = performance.tests.models.test_student_performance.load_json_file(
             "performance/tests/ressources/points3.json")
 
-    def test_convert_student_performance_to_dic(self):
-        student_performance_dic = main.convert_student_performance_to_dic(self.student_performance)
-        expected = {
-            "academic_year": '2016 - 2017',
-            "acronym": "SINF2MS/G",
-            "title": " Master [120] en sciences informatiques, à finalité spécialisée ",
-            "pk": self.student_performance.pk,
-            "offer_registration_state": offer_registration_state.REGISTERED
-        }
-        self.assertDictEqual(student_performance_dic, expected)
-
-    def test_convert_student_performance_misformated_to_dict(self):
-        student_perf = performance.tests.models.test_student_performance.create_student_performance(acronym="SINF1BA")
-        with open("performance/tests/ressources/points_missformated.json") as f:
-            student_perf.data = json.load(f)
-        self.assertIsNone(main.convert_student_performance_to_dic(student_perf))
-
     def test_check_right_access(self):
         student = base.tests.models.test_student.create_student(self.student_performance.registration_id)
         has_access = main.check_right_access(self.student_performance, student)

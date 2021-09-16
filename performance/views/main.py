@@ -36,13 +36,11 @@ from django.utils.translation import ugettext as _
 
 from base.business import student as student_bsn
 from base.forms.base_forms import RegistrationIdForm
-from base.models import student as mdl_student
 from base.models.student import Student
 from base.views import layout, common
 from dashboard.views import main as dash_main_view
 from exam_enrollment.views.exam_enrollment import get_request_timeout, get_exam_enroll_request
 from performance import models as mdl_performance
-from performance.models.enums import offer_registration_state
 from performance.models.student_performance import StudentPerformance
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -50,25 +48,25 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 # Students Views
 
-@login_required
-@permission_required('base.is_student', raise_exception=True)
-def view_performance_home(request):
-    """
-    Display the academic programs of the student.
-    """
-    try:
-        stud = student_bsn.find_by_user_and_discriminate(request.user)
-    except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
-    list_student_programs = None
-    if stud:
-        list_student_programs = __get_student_programs(stud)
-    data = {
-        "student": stud,
-        "programs": list_student_programs,
-        "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
-    }
-    return layout.render(request, "performance_home_student.html", data)
+# @login_required
+# @permission_required('base.is_student', raise_exception=True)
+# def view_performance_home(request):
+#     """
+#     Display the academic programs of the student.
+#     """
+#     try:
+#         stud = student_bsn.find_by_user_and_discriminate(request.user)
+#     except MultipleObjectsReturned:
+#         return dash_main_view.show_multiple_registration_id_error(request)
+#     list_student_programs = None
+#     if stud:
+#         list_student_programs = __get_student_programs(stud)
+#     data = {
+#         "student": stud,
+#         "programs": list_student_programs,
+#         "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
+#     }
+#     return layout.render(request, "performance_home_student.html", data)
 
 
 def __make_not_authorized_message(stud_perf):
@@ -191,27 +189,27 @@ def select_student(request):
     return layout.render(request, "admin/performance_administration.html", {"form": form})
 
 
-@login_required
-def visualize_student_programs(request, registration_id):
-    """
-    View to visualize a particular student list of academic programs.
-    !!! Should only be accessible for staff having the rights.
-    """
-    if not _can_access_performance_administration(request):
-        raise PermissionDenied
-    stud = mdl_student.find_by_registration_id(registration_id)
-    list_student_programs = None
-    if stud:
-        if not _can_visualize_student_programs(request, registration_id):
-            raise PermissionDenied
-        list_student_programs = __get_student_programs(stud)
-
-    data = {
-        "student": stud,
-        "programs": list_student_programs,
-        "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
-    }
-    return layout.render(request, "admin/performance_home_admin.html", data)
+# @login_required
+# def visualize_student_programs(request, registration_id):
+#     """
+#     View to visualize a particular student list of academic programs.
+#     !!! Should only be accessible for staff having the rights.
+#     """
+#     if not _can_access_performance_administration(request):
+#         raise PermissionDenied
+#     stud = mdl_student.find_by_registration_id(registration_id)
+#     list_student_programs = None
+#     if stud:
+#         if not _can_visualize_student_programs(request, registration_id):
+#             raise PermissionDenied
+#         list_student_programs = __get_student_programs(stud)
+#
+#     data = {
+#         "student": stud,
+#         "programs": list_student_programs,
+#         "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
+#     }
+#     return layout.render(request, "admin/performance_home_admin.html", data)
 
 
 @login_required
@@ -235,62 +233,38 @@ def visualize_student_result(request, pk):
                          perf_data)
 
 
-def __get_student_programs(stud):
-    query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
-    list_student_programs = query_result_to_list(query_result)
-    return list_student_programs
+# def __get_student_programs(stud):
+#     query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
+#     list_student_programs = query_result_to_list(query_result)
+#     return list_student_programs
 
 
-def query_result_to_list(query_result):
-    performance_results_list = []
-    for row in query_result:
-        performance_dict = convert_student_performance_to_dic(row)
-        allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
-        if performance_dict and performance_dict.get("offer_registration_state") in allowed_registration_states:
-            performance_results_list.append(performance_dict)
-    return performance_results_list
+# def query_result_to_list(query_result):
+#     performance_results_list = []
+#     for row in query_result:
+#         performance_dict = convert_student_performance_to_dic(row)
+#         allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
+#         if performance_dict and performance_dict.get("offer_registration_state") in allowed_registration_states:
+#             performance_results_list.append(performance_dict)
+#     return performance_results_list
 
 
-def convert_student_performance_to_dic(student_performance_obj):
-    d = dict()
-    try:
-        d["academic_year"] = student_performance_obj.academic_year_template_formated
-        d["acronym"] = student_performance_obj.acronym
-        d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"][
-            "intituleComplet"]
-        d["pk"] = student_performance_obj.pk
-        d["offer_registration_state"] = student_performance_obj.offer_registration_state
-    except Exception:
-        d = None
-    return d
+# def convert_student_performance_to_dic(student_performance_obj):
+#     d = dict()
+#     try:
+#         d["academic_year"] = student_performance_obj.academic_year_template_formated
+#         d["acronym"] = student_performance_obj.acronym
+#         d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"][
+#             "intituleComplet"]
+#         d["pk"] = student_performance_obj.pk
+#         d["offer_registration_state"] = student_performance_obj.offer_registration_state
+#     except Exception:
+#         d = None
+#     return d
 
 
 def check_right_access(student_performance, student):
     return student_performance and student and student_performance.registration_id == student.registration_id
-
-
-def _can_visualize_student_programs(request, registration_id):
-    """
-    Student cannot access administration
-    User can visualize student programs if :
-        - The user is faculty_administrator
-        - The user is program manager of at least one of the program in the list of the student programs
-    """
-    # return True
-    if request.user.has_perm('base.is_faculty_administrator'):
-        print("IS FACULTY")
-        return True
-    if request.user.has_perm('base.is_student'):
-        return False
-    managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
-    print("MANAGED", managed_programs_as_dict)
-    print("BEFORE FOR STUDPERFS")
-    for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id):
-        print("STUD PERFS", stud_perfs)
-        if stud_perfs.acronym in managed_programs_as_dict.get(stud_perfs.academic_year, []):
-            print("YOLO IN STUDPERFS")
-            return True
-    return False
 
 
 def __can_visualize_student_result(request, performance_result_pk):
@@ -318,10 +292,6 @@ def _can_access_performance_administration(request):
         - The user is faculty_administrator
         - The user is program manager of at least one program
     """
-    # return True
-    print("YOLO STUDENT", request.user.has_perm('base.is_student'))
-    print("YOLO", bool(common.get_managed_program_as_dict(request.user)),
-          common.get_managed_program_as_dict(request.user))
     return request.user.has_perm('base.is_faculty_administrator') or (
             not request.user.has_perm('base.is_student') and bool(common.get_managed_program_as_dict(request.user))
     )

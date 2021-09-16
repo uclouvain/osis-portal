@@ -35,11 +35,13 @@ from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 from base.business import student as student_business
 from base.models import student as student_model
 from base.models.student import Student
+from base.views import common
 from dashboard.views import main as dash_main_view
+from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
 from performance.models.student_performance import StudentPerformance
 from performance.services.offer_enrollment import OfferEnrollmentService
-from performance.views.main import _can_access_performance_administration, _can_visualize_student_programs
+from performance.views.main import _can_access_performance_administration
 
 
 class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
@@ -116,3 +118,21 @@ class PerformanceHomeStudent(PerformanceHomeMixin, PermissionRequiredMixin):
             return student_business.find_by_user_and_discriminate(self.request.user)
         except MultipleObjectsReturned:
             return dash_main_view.show_multiple_registration_id_error(self.request)
+
+
+def _can_visualize_student_programs(request, registration_id):
+    """
+    Student cannot access administration
+    User can visualize student programs if :
+        - The user is faculty_administrator
+        - The user is program manager of at least one of the program in the list of the student programs
+    """
+    if request.user.has_perm('base.is_faculty_administrator'):
+        return True
+    if request.user.has_perm('base.is_student'):
+        return False
+    managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
+    for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id):
+        if stud_perfs.acronym in managed_programs_as_dict.get(stud_perfs.academic_year, []):
+            return True
+    return False
