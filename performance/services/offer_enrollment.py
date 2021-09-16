@@ -23,26 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+import logging
 
-from performance.views import main
-from performance.views.performance_home import PerformanceHomeStudent, PerformanceHomeAdmin
+import osis_offer_enrollment_sdk
+import urllib3
+from django.conf import settings
+from osis_offer_enrollment_sdk.api import enrollment_api
+from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
-urlpatterns = [
-    url(r'^$', PerformanceHomeStudent.as_view(), name='performance_home'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
-        main.display_result_for_specific_student_performance, name='performance_student_result'),
-    url(
-        r'^result/(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/$',
-        main.display_results_by_acronym_and_year,
-        name='performance_student_by_acronym_and_year'
-    ),
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(
-        r'^administration/student_programs/(?P<registration_id>[0-9]+)/$',
-        PerformanceHomeAdmin.as_view(),
-        name='performance_student_programs_admin'
-    ),
-    url(r'^administration/student_result/(?P<pk>[0-9]+)/$',
-        main.visualize_student_result, name='performance_student_result_admin'),
-]
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+class OfferEnrollmentService:
+    @staticmethod
+    def get_my_enrollments_list(person: Person, **kwargs) -> EnrollmentList:
+        configuration = offer_enrollment_sdk.build_configuration(person)
+        with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
+            api_instance = enrollment_api.EnrollmentApi(api_client)
+            try:
+                enrollments = api_instance.my_enrollments_list(**kwargs)
+            except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                enrollments = {'results': [], 'count': 0}
+        return enrollments
