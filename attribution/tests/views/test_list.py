@@ -65,8 +65,10 @@ class StudentsListTest(TestCase):
         person.global_id = "001923265"
         person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         person.save()
-
-        cls.enrollments = [SimpleNamespace(**EnrollmentDictFactory()) for _ in range(2)]
+        cls.learning_unit_year = LearningUnitYearFactory()
+        cls.enrollments = SimpleNamespace(**{'results': [
+            SimpleNamespace(**EnrollmentDictFactory()) for _ in range(2)
+        ], 'count': 1})
         cls.url = reverse('students_list')
 
     def setUp(self):
@@ -100,15 +102,12 @@ class StudentsListTest(TestCase):
         an_academic_year = create_current_academic_year()
 
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
-        mock_get_attributions_list.return_value = SimpleNamespace(**{
-            'results': [
-                Attribution(
-                    code=a_learning_unit_year.acronym,
-                    year=a_learning_unit_year.academic_year.year,
-                )
-            ],
-            'count': 1
-        })
+        mock_get_attributions_list.return_value = [
+            Attribution(
+                code=a_learning_unit_year.acronym,
+                year=a_learning_unit_year.academic_year.year,
+            )
+        ]
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'list/students_exam.html')
@@ -118,18 +117,23 @@ class StudentsListTest(TestCase):
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments_list")
-    def test_with_attribution_students(self, mock_students_list_endpoint, mock_get_attributions_list):
+    @mock.patch("attribution.services.learning_unit.LearningUnitService.get_learning_unit")
+    def test_with_attribution_students(self, mock_lu, mock_students_list_endpoint, mock_get_attributions_list):
         mock_students_list_endpoint.return_value = self.enrollments
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
-        mock_get_attributions_list.return_value = [
-            Attribution(
-                code=a_learning_unit_year.acronym,
-                year=a_learning_unit_year.academic_year.year,
-            )
-        ]
+        mock_lu.return_value = a_learning_unit_year
+        mock_get_attributions_list.return_value = SimpleNamespace(**{
+            'results': [
+                Attribution(
+                    code=a_learning_unit_year.acronym,
+                    year=a_learning_unit_year.academic_year.year,
+                )
+            ],
+            'count': 1
+        })
         education_group_year = EducationGroupYearFactory(academic_year=an_academic_year)
 
         # Create two enrollment to exam [Enrolled]

@@ -40,7 +40,9 @@ class EnrollmentDictFactory(dict, factory.DictFactory):
     sport_subtype_peps = None
     disability_subtype_peps = None
     program = factory.fuzzy.FuzzyText(length=7)
+    learning_unit_year = 2020
     learning_unit_acronym = "{}{}".format(
         factory.fuzzy.FuzzyText(length=5),
         factory.fuzzy.FuzzyInteger(low=1000, high=2000)
     )
+    specific_profile = None
