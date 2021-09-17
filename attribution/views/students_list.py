@@ -64,20 +64,24 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
 
     @cached_property
     def learning_unit_title(self):
-        class_code = self.kwargs.get('class_code')
-        if class_code:
-            classes = LearningUnitService.get_effective_classes(
-                acronym=self.kwargs['learning_unit_acronym'],
-                year=self.kwargs['learning_unit_year'],
-                person=self.request.user.person
-            )
-            for effective_class in classes:
-                if effective_class.code == class_code:
-                    return effective_class.title_fr
+        return self._get_learning_class_title() if 'class_code' in self.kwargs else self._get_learning_unit_title()
+
+    def _get_learning_unit_title(self):
         return LearningUnitService.get_learning_unit_title(
             acronym=self.kwargs['learning_unit_acronym'],
             year=self.kwargs['learning_unit_year'],
             person=self.request.user.person
+        )
+
+    def _get_learning_class_title(self):
+        classes = LearningUnitService.get_effective_classes(
+            acronym=self.kwargs['learning_unit_acronym'],
+            year=self.kwargs['learning_unit_year'],
+            person=self.request.user.person
+        )
+        return next(
+            effective_class.title_fr for effective_class in classes
+            if effective_class.code == self.kwargs['class_code']
         )
 
     @cached_property

@@ -40,14 +40,11 @@ urlpatterns = [
     url(r'^$', HomeAttribution.as_view(), name='attribution_home'),
     url(r'^charge/$', TutorChargeView.as_view(), name='tutor_charge'),
     url(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/', include([
-        url(r'^$', StudentsListView.as_view(), name='attribution_students'),
-        url(r'^(?P<class_code>[0-9A-Za-z-]{1})$', StudentsListView.as_view(), name='attribution_class_students')
+        url(r'^$', StudentsListView.as_view(), name='student_enrollments_by_learning_unit'),
+        url(r'^(?P<class_code>[0-9A-Za-z-]{1})$', StudentsListView.as_view(),
+            name='student_enrollments_by_learning_class'),
+        url(r'^xls$', StudentsListXlsView.as_view(), name='produce_xls_students')
     ])),
-    url(
-        r'^students/list/xls/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)',
-        StudentsListXlsView.as_view(),
-        name='produce_xls_students'
-    ),
     url(r'^applications/', include([
         url(r'^$', online_application.ApplicationOverviewView.as_view(), name='applications_overview'),
         url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),

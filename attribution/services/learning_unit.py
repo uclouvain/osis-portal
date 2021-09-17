@@ -45,7 +45,7 @@ class LearningUnitService:
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
             api_instance = learning_units_api.LearningUnitsApi(api_client)
             try:
-                learning_unit_title = api_instance.learningunitstitle_read(year=int(year), acronym=acronym)['title']
+                learning_unit_title = api_instance.learningunitstitle_read(year=year, acronym=acronym)['title']
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
@@ -58,7 +58,7 @@ class LearningUnitService:
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
             api_instance = learning_units_api.LearningUnitsApi(api_client)
             try:
-                effective_classes = api_instance.get_learning_unit_classes(year=int(year), acronym=acronym)
+                effective_classes = api_instance.get_learning_unit_classes(year=year, acronym=acronym)
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
