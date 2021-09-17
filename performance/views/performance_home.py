@@ -38,10 +38,10 @@ from base.models import student as student_model
 from base.models.student import Student
 from base.views import common
 from dashboard.views import main as dash_main_view
+from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
 from performance.models.student_performance import StudentPerformance
-from performance.services.offer_enrollment import OfferEnrollmentService
 from performance.views.main import _can_access_performance_administration
 
 

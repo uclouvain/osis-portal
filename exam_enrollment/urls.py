@@ -26,10 +26,16 @@
 from django.conf.urls import url
 
 from exam_enrollment.views import exam_enrollment
+from exam_enrollment.views.offer_choice import OfferChoice
 
 urlpatterns = [
-    url(r'^$', exam_enrollment.choose_offer, name='exam_enrollment_offer_choice'),
-    url(r'^direct/$', exam_enrollment.choose_offer_direct, name='exam_enrollment_form_direct'),
-    url(r'^([0-9]+)/form/$', exam_enrollment.exam_enrollment_form, name='exam_enrollment_form'),
+    url(r'^$', OfferChoice.as_view(), name='exam_enrollment_offer_choice'),
+    # url(r'^direct/$', OfferChoice.as_view(), name='exam_enrollment_form_direct'),
+    # url(r'^([0-9]+)/form/$', exam_enrollment.exam_enrollment_form, name='exam_enrollment_form'),
+    url(
+        r'^(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/form/$',
+        exam_enrollment.exam_enrollment_form,
+        name='exam_enrollment_form'
+    ),
     url(r'^([0-9]+)/check/$', exam_enrollment.check_exam_enrollment_form, name='check_exam_enrollment_form'),
 ]

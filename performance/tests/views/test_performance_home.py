@@ -120,7 +120,7 @@ class ViewPerformanceHomeStudentTest(TestCase):
         self.assertTemplateUsed(response, 'performance_home_student.html')
 
 
-class VisualizeStudentPrograms(TestCase):
+class ViewPerformanceHomeAdminTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.person = PersonFactory()
