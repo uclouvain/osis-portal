@@ -80,8 +80,11 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             person=self.request.user.person
         )
         return next(
-            effective_class.title_fr for effective_class in classes
-            if effective_class.code == self.kwargs['class_code']
+            (
+                effective_class.title_fr for effective_class in classes
+                if effective_class.code == self.kwargs['class_code']
+            ),
+            ''
         )
 
     @cached_property
