@@ -117,14 +117,16 @@ class StudentsListTest(TestCase):
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments_list")
-    @mock.patch("attribution.services.learning_unit.LearningUnitService.get_learning_unit")
+    @mock.patch("attribution.views.students_list.StudentsListView.learning_unit_title", new_callable=mock.PropertyMock)
     def test_with_attribution_students(self, mock_lu, mock_students_list_endpoint, mock_get_attributions_list):
         mock_students_list_endpoint.return_value = self.enrollments
+        mock_lu.return_value = "TITLE"
         today = datetime.datetime.today()
-        an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
-                                               end_date=today + datetime.timedelta(days=5))
+        an_academic_year = AcademicYearFactory(
+            year=today.year, start_date=today - datetime.timedelta(days=5),
+            end_date=today + datetime.timedelta(days=5)
+        )
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
-        mock_lu.return_value = a_learning_unit_year
         mock_get_attributions_list.return_value = SimpleNamespace(**{
             'results': [
                 Attribution(
@@ -155,7 +157,9 @@ class StudentsListTest(TestCase):
         self.assertTemplateUsed(response, 'students_list.html')
 
         self.assertEqual(response.context['global_id'], self.tutor.person.global_id)
-        self.assertEqual(response.context['learning_unit_year'], a_learning_unit_year)
+        self.assertEqual(response.context['learning_unit_year'], str(a_learning_unit_year.academic_year.year))
+        self.assertEqual(response.context['learning_unit_acronym'], str(a_learning_unit_year.acronym))
+        self.assertEqual(response.context['learning_unit_title'], "TITLE")
         self.assertTrue(response.context['students'])
         self.assertEqual(len(response.context['students']), 2)
 
