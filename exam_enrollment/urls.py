@@ -30,7 +30,7 @@ from exam_enrollment.views.offer_choice import OfferChoice
 
 urlpatterns = [
     url(r'^$', OfferChoice.as_view(), name='exam_enrollment_offer_choice'),
-    url(r'^direct/$', OfferChoice.as_view(), name='exam_enrollment_form_direct'),
+    # url(r'^direct/$', OfferChoice.as_view(), name='exam_enrollment_form_direct'),
     # url(r'^([0-9]+)/form/$', exam_enrollment.exam_enrollment_form, name='exam_enrollment_form'),
     url(
         r'^(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/form/$',

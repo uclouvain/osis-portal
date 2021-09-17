@@ -38,6 +38,7 @@ from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 from base.business import student as student_business
 from base.models import academic_year
 from base.models.academic_year import AcademicYear
+from base.models.student import Student
 from dashboard.views import main as dash_main_view
 from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
 
@@ -54,7 +55,7 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         }
 
     @cached_property
-    def student(self):
+    def student(self) -> Student:
         try:
             return student_business.find_by_user_and_discriminate(self.request.user)
         except MultipleObjectsReturned:

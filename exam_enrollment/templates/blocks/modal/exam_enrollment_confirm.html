@@ -39,7 +39,7 @@
             <a type="button" class="btn btn-primary"
                href="{% url 'exam_enrollment_form' program.acronym program.year %}">
         {% else %}
-            <a type="button" class="btn btn-primary" href="{% url 'exam_enrollment_form_direct' %}">
+            <a type="button" class="btn btn-primary" href="{% url 'exam_enrollment_offer_choice' %}">
         {% endif %}
         {% trans "Register to exams or update my exam enrollments" %}
         </a>

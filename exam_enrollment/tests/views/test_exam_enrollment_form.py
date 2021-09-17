@@ -69,23 +69,26 @@ class ExamEnrollmentFormTest(TestCase):
         group.permissions.add(Permission.objects.get(codename='is_student'))
         cls.user = User.objects.create_user(username='jsmith', email='jsmith@localhost', password='secret')
         cls.user2 = User.objects.create_user(username='jsmath', email='jsmath@localhost', password='secret')
-        cls.user_not_student = User.objects.create_user(username='pjashar',
-                                                        email='pjashar@localhost',
-                                                        password='secret')
+        cls.user_not_student = User.objects.create_user(
+            username='pjashar',
+            email='pjashar@localhost',
+            password='secret'
+        )
         cls.user.groups.add(group)
         cls.user2.groups.add(group)
         cls.person = test_person.create_person_with_user(cls.user, first_name="James", last_name="Smith")
         cls.person2 = test_person.create_person_with_user(cls.user2, first_name="Jimmy", last_name="Smath")
         cls.student = test_student.create_student_with_registration_person("12345678", cls.person)
         cls.student2 = test_student.create_student_with_registration_person("12457896", cls.person2)
-        educ_group_year_id = 1234
         cls.educ_group_year = EducationGroupYearFactory(
-            id=educ_group_year_id,
             acronym='SINF1BA',
             title='Bechelor in informatica',
             academic_year=cls.academic_year,
         )
-        cls.url = "/exam_enrollment/{}/form/".format(educ_group_year_id)
+        cls.url = "/exam_enrollment/{acronym}/{year}/form/".format(
+            acronym=cls.educ_group_year.acronym,
+            year=cls.academic_year.year
+        )
         cls.correct_exam_enrol_form = load_json_file(
             "exam_enrollment/tests/resources/exam_enrollment_form_example.json")
         cls.current_academic_year = test_academic_year.create_academic_year_current()
@@ -98,8 +101,10 @@ class ExamEnrollmentFormTest(TestCase):
             'specific_title': 'Bachelor in law',
             'academic_year': cls.academic_year
         })
-        cls.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(cls.off_enrol,
-                                                                                             learn_unit_year)
+        cls.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(
+            cls.off_enrol,
+            learn_unit_year
+        )
 
     def test_json_form_content(self):
         form = self.correct_exam_enrol_form
@@ -146,47 +151,14 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    # def test_get_programs_student_is_none(self):
-    #     self.assertIsNone(exam_enrollment._get_student_programs(None, self.current_academic_year))
-    #
-    # def test_get_one_program(self):
-    #     self.client.force_login(self.user)
-    #     self.assertEqual(exam_enrollment._get_student_programs(self.student, self.current_academic_year)[0],
-    #                      self.learn_unit_enrol.offer_enrollment.education_group_year)
-
-    def test_navigation_with_no_offer_in_current_academic_year(self):
-        self.client.force_login(self.user2)
-        an_url = reverse('exam_enrollment_form_direct')
-        response = self.client.get(an_url, follow=True)
-        self.assertRedirects(response, reverse('dashboard_home'))
-        self.assertEqual('dashboard.html', response.templates[0].name)
-
-    @patch('base.business.student.find_by_user_and_discriminate')
-    def test_choose_offer_no_student_for_current_user(self, mock_find_by_user):
-        mock_find_by_user.return_value = None
-        self.client.force_login(self.user)
-        an_url = reverse('exam_enrollment_offer_choice')
-        response = self.client.get(an_url, follow=True)
-        self.assertRedirects(response, reverse('dashboard_home'))
-
-    @patch('exam_enrollment.views.exam_enrollment._get_student_programs')
-    def test_navigation_student_has_no_programs(self, mock_student_programs):
-        mock_student_programs.return_value = None
-        self.client.force_login(self.user)
-        an_url = reverse('exam_enrollment_offer_choice')
-        response = self.client.get(an_url, follow=True)
-        self.assertRedirects(response, reverse('dashboard_home'))
-        self.assertEqual('dashboard.html', response.templates[0].name)
-
-    @patch('exam_enrollment.views.exam_enrollment._get_student_programs')
     @patch('exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form')
-    def test_navigation_student_has_programs_but_returned_form_is_none(self,
-                                                                       mock_fetch_exam_form,
-                                                                       mock_get_student_programs):
-        mock_get_student_programs.return_value = [self.educ_group_year]
+    def test_navigation_student_has_programs_but_returned_form_is_none(self, mock_fetch_exam_form):
         mock_fetch_exam_form.return_value = None
         self.client.force_login(self.user)
-        an_url = reverse('exam_enrollment_form', args=[self.educ_group_year.id])
+        an_url = reverse(
+            'exam_enrollment_form',
+            args=[self.educ_group_year.acronym, self.educ_group_year.academic_year.year]
+        )
         response = self.client.get(an_url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
 
@@ -283,20 +255,18 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertIsNone(error_message)
 
     @patch('base.models.learning_unit_enrollment.find_by_student_and_education_group_year')
-    @patch('exam_enrollment.views.exam_enrollment._get_student_programs')
     @patch('exam_enrollment.views.exam_enrollment.ask_exam_enrollment_form')
-    def test_navigation_student_has_programs_with_data(self,
-                                                       mock_fetch_exam_form,
-                                                       mock_get_student_programs,
-                                                       mock_find_learn_unit_enrols):
-        mock_get_student_programs.return_value = [self.educ_group_year]
+    def test_navigation_student_has_programs_with_data(self, mock_fetch_exam_form, mock_find_learn_unit_enrols):
         mock_fetch_exam_form.return_value = {
             'exam_enrollments': [],
             'current_number_session': 0,
         }
         mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
         self.client.force_login(self.user)
-        an_url = reverse('exam_enrollment_form', args=[self.educ_group_year.id])
+        an_url = reverse(
+            'exam_enrollment_form',
+            args=[self.educ_group_year.acronym, self.educ_group_year.academic_year.year]
+        )
         response = self.client.get(an_url, follow=True)
         self.assertEqual('exam_enrollment_form.html', response.templates[0].name)
 
@@ -379,7 +349,7 @@ class ExamEnrollmentFormTest(TestCase):
         response = self.client.get(
             reverse(
                 'exam_enrollment_form',
-                args=[off_year_enrol.education_group_year.id]
+                args=[off_year_enrol.education_group_year.acronym, self.current_academic_year.year]
             ),
             follow=True
         )

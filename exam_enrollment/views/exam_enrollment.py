@@ -88,14 +88,31 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 #         return response.HttpResponseRedirect(reverse('dashboard_home'))
 
 
+# @login_required
+# @permission_required('base.is_student', raise_exception=True)
+# def exam_enrollment_form(request, education_group_year_id):
+#     try:
+#         stud = student_bsn.find_by_user_and_discriminate(request.user)
+#     except MultipleObjectsReturned:
+#         return dash_main_view.show_multiple_registration_id_error(request)
+#     educ_group_year = EducationGroupYear.objects.get(pk=education_group_year_id)
+#     if request.method == 'POST':
+#         return _process_exam_enrollment_form_submission(educ_group_year, request, stud)
+#     else:
+#         return _get_exam_enrollment_form(educ_group_year, request, stud)
+
+
 @login_required
 @permission_required('base.is_student', raise_exception=True)
-def exam_enrollment_form(request, education_group_year_id):
+def exam_enrollment_form(request, acronym: str, academic_year: int):
     try:
         stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
-    educ_group_year = EducationGroupYear.objects.get(pk=education_group_year_id)
+    educ_group_year = EducationGroupYear.objects.get(
+        acronym=acronym,
+        academic_year__year=academic_year
+    )
     if request.method == 'POST':
         return _process_exam_enrollment_form_submission(educ_group_year, request, stud)
     else:
