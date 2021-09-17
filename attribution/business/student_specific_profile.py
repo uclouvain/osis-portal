@@ -32,10 +32,8 @@ from base.models.enums import peps_type
 
 
 def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
-    if student_specific_profile.type.value == peps_type.PepsTypes.SPORT.name:
-        return "{} - {}".format(student_specific_profile.type_text, student_specific_profile.subtype_sport_text)
-    if student_specific_profile.type.value == peps_type.PepsTypes.DISABILITY.name:
-        return "{} - {}".format(student_specific_profile.type_text, student_specific_profile.subtype_disability_text)
+    if student_specific_profile.type.value in [peps_type.PepsTypes.SPORT.name, peps_type.PepsTypes.DISABILITY.name]:
+        return "{} - {}".format(student_specific_profile.type_text, student_specific_profile.subtype_text)
     if student_specific_profile.type.value == peps_type.PepsTypes.NOT_DEFINED.name:
         return "-"
     return student_specific_profile.type_text or "-"

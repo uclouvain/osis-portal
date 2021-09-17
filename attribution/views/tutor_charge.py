@@ -142,10 +142,11 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     def get_attribution_students_url(self, code: str, year: int, class_code: str = None):
         if class_code:
-            return reverse('attribution_class_students', kwargs={
+            return reverse('student_enrollments_by_learning_class', kwargs={
                 'learning_unit_acronym': code, 'learning_unit_year': year, 'class_code': class_code
             })
-        return reverse('attribution_students', kwargs={'learning_unit_acronym': code, 'learning_unit_year': year})
+        return reverse('student_enrollments_by_learning_unit',
+                       kwargs={'learning_unit_acronym': code, 'learning_unit_year': year})
 
 
 class AdminTutorChargeView(TutorChargeView):

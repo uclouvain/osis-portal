@@ -148,7 +148,7 @@ class StudentsListTest(TestCase):
         LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment,
                                       enrollment_state="")
 
-        url = reverse('attribution_students', kwargs={
+        url = reverse('student_enrollments_by_learning_unit', kwargs={
             'learning_unit_acronym': a_learning_unit_year.acronym,
             'learning_unit_year': a_learning_unit_year.academic_year.year
         })

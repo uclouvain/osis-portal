@@ -69,14 +69,14 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     def _get_learning_unit_title(self):
         return LearningUnitService.get_learning_unit_title(
             acronym=self.kwargs['learning_unit_acronym'],
-            year=self.kwargs['learning_unit_year'],
+            year=int(self.kwargs['learning_unit_year']),
             person=self.request.user.person
         )
 
     def _get_learning_class_title(self):
         classes = LearningUnitService.get_effective_classes(
             acronym=self.kwargs['learning_unit_acronym'],
-            year=self.kwargs['learning_unit_year'],
+            year=int(self.kwargs['learning_unit_year']),
             person=self.request.user.person
         )
         return next(

@@ -87,16 +87,6 @@ class LearningUnitYearTest(TestCase):
                                                                  a_learning_unit_1)),
                          [ldroi1000_learning_unit_year])
 
-    def test_find_by_acronym(self):
-        ldroi1000_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year,
-                                                               acronym=LDROI1000)
-        LearningUnitYearFactory(academic_year=self.an_academic_year, acronym=LAUT5263)
-        ldroi2000_learning_unit_year = LearningUnitYearFactory(academic_year=self.an_academic_year,
-                                                               acronym=LDROI2000)
-
-        self.assertCountEqual(mdl_base.learning_unit_year.find_by_acronym('LDR', self.an_academic_year),
-                              [ldroi1000_learning_unit_year, ldroi2000_learning_unit_year])
-
     def _create_learning_unit_year_partim(self, common_title, speicific_title):
         return LearningUnitYear(
             subtype=learning_unit_year_subtypes.PARTIM,
