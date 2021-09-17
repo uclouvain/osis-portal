@@ -126,7 +126,11 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         for class_repartition in attribution.effective_class_repartition:
             clean_code = class_repartition.code.replace('-', '').replace('_', '')
             class_repartition.students_list_email = get_email_students(clean_code, attribution.year)
-            class_repartition.repartition_students_url = self.get_attribution_students_url(clean_code, attribution.year)
+            class_repartition.repartition_students_url = self.get_attribution_students_url(
+                attribution.code,
+                attribution.year,
+                clean_code[-1]
+            )
         return SimpleNamespace(
             **{
                 **attribution.to_dict(),
@@ -136,7 +140,11 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
             }
         )
 
-    def get_attribution_students_url(self, code: str, year: int):
+    def get_attribution_students_url(self, code: str, year: int, class_code: str = None):
+        if class_code:
+            return reverse('attribution_class_students', kwargs={
+                'learning_unit_acronym': code, 'learning_unit_year': year, 'class_code': class_code
+            })
         return reverse('attribution_students', kwargs={'learning_unit_acronym': code, 'learning_unit_year': year})
 
 
