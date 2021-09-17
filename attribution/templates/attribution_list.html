@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% load i18n %}
+{% load i18n academic_year_display %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -70,8 +70,8 @@
             <td style="border-left: 1px solid;">{{ attribution.lecturing_volume}}</td>
             <td>{{ attribution.practical_volume}}</td>
             <td>{{ attribution.function_text }}</td>
-            <td>{{ attribution.start_year }}</td>
-            <td>{{ attribution.end_year }}</td>
+            <td>{{ attribution.start_year|display_as_academic_year }}</td>
+            <td>{{ attribution.end_year|display_as_academic_year }}</td>
             <td>
 
                 {% if attribution.tutors %}
