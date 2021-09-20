@@ -42,7 +42,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            {% if exam_enrollments %}
+            {% if not exam_enrollments %}
                 <div id="message_box" class="alert alert-info" style="margin-top: 1em;display: block;">
                     {% if error_message %}
                         <span id="status_message">{% trans error_message %}</span>
