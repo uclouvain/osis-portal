@@ -33,15 +33,15 @@ from osis_learning_unit_enrollment_sdk.api import enrollment_api
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import learning_unit_enrollment as learning_unit_enrollment_sdk
-from frontoffice.settings.osis_sdk.utils import gather_all_api_paginated_results, PaginatedResponse
+from frontoffice.settings.osis_sdk.utils import gather_all_api_paginated_results, PaginatedResponse, \
+    api_paginated_response
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class LearningUnitEnrollmentService:
     @staticmethod
-    @gather_all_api_paginated_results
-    def get_enrollments_list(year: int, acronym: str, person: Person, **kwargs) -> PaginatedResponse:
+    def get_enrollments(year: int, acronym: str, person: Person, **kwargs) -> PaginatedResponse:
         configuration = learning_unit_enrollment_sdk.build_configuration(person)
         with osis_learning_unit_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
@@ -56,3 +56,13 @@ class LearningUnitEnrollmentService:
                 logger.error(e)
                 enrollments = SimpleNamespace(**{'results': [], 'count': 0})
         return enrollments
+
+    @classmethod
+    @api_paginated_response
+    def get_enrollments_paginated_list(cls, **kwargs) -> PaginatedResponse:
+        return cls.get_enrollments(**kwargs)
+
+    @classmethod
+    @gather_all_api_paginated_results
+    def get_all_enrollments_list(cls, **kwargs) -> PaginatedResponse:
+        return cls.get_enrollments(**kwargs)

@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load i18n detail_student_specific_profile %}
+{% load api_template_tags %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -28,7 +29,7 @@
 <h2>{{ learning_unit_year }} - {{ learning_unit_acronym }}
     - {{ learning_unit_title }}</h2>
 {% if students %}
-    <h4>{{ students|length }} {% trans 'students enrolled from' %}</h4>
+    <h4>{{ count }} {% trans 'students enrolled from' %}</h4>
 {% else %}
     <h4>{% trans 'No students enrolled' %}</h4>
 {% endif %}
@@ -97,4 +98,5 @@
         {% endfor %}
         </tbody>
     </table>
+    {% pagination %}
 {% endif %}
