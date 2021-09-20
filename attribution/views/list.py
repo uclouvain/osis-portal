@@ -68,7 +68,7 @@ def get_learning_units(a_user):
 
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    attributions = AttributionService.get_attributions_list(year, person, with_classes=True)
+    attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
     if attributions:
         filter_clause = functools.reduce(
             operator.or_,
@@ -84,7 +84,9 @@ def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
 def get_codes_parameter(request, academic_yr):
     learning_unit_years = None
     user_learning_units_assigned = get_learning_units(request.user).get('my_learning_units', [])
+    print(user_learning_units_assigned)
     for key, value in request.POST.items():
+        print(key, value)
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
             learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
@@ -170,7 +172,9 @@ def _make_xls_list(excel_list_student_enrolled):
 def lists_of_students_exams_enrollments(request):
     if request.method == "POST":
         form = GlobalIdForm(request.POST)
+        print(form.errors)
         if form.is_valid():
+            print("is_valid")
             global_id = form.cleaned_data['global_id']
             data = get_learning_units_by_person(global_id)
             return render(request, "admin/students_exam_list.html", data)
@@ -186,6 +190,7 @@ def get_learning_units_by_person(global_id):
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
+            print("ook?")
             learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
     return {'person': a_person, 'learning_units': learning_units}
 
@@ -198,8 +203,11 @@ def list_build_by_person(request, global_id):
     anac = get_anac_parameter(current_academic_year)
     person = mdl_base.person.find_by_global_id(global_id)
     data = get_learning_units_by_person(person.global_id)
+    print(data)
     codes = get_codes_parameter_list(request, current_academic_year, data)
+    print(codes)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
+    print(list_exam_enrollments_xls)
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
     else:
@@ -210,11 +218,14 @@ def list_build_by_person(request, global_id):
 def get_codes_parameter_list(request, academic_yr, data):
     learning_unit_years = None
     user_learning_units_assigned = data.get('learning_units', [])
+    print(request.POST)
     for key, value in request.POST.items():
+        print(key, value)
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
             learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
                                                               user_learning_units_assigned)
+            print("luyyy", learning_unit_years)
     if learning_unit_years:
         return learning_unit_years
     return NO_DATA_VALUE

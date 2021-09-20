@@ -40,7 +40,7 @@ from base.forms.base_forms import RegistrationIdForm
 from base.models.student import Student
 from base.views import layout, common
 from dashboard.views import main as dash_main_view
-from exam_enrollment.views.exam_enrollment import get_request_timeout, get_exam_enroll_request
+from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request
 from performance import models as mdl_performance
 from performance.models.student_performance import StudentPerformance
 

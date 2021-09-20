@@ -25,8 +25,10 @@
 ##############################################################################
 from django.contrib import admin
 from django.contrib.postgres.fields import JSONField
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+
+from base.models.student import Student
+from osis_common.utils.models import get_object_or_none
 
 
 class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
@@ -56,10 +58,10 @@ def insert_or_update_document(acronym, student, document):
     return exam_enrollment_request_object
 
 
-def get_by_student_and_offer_year_acronym_and_fetch_date(student, offer_year_acronym, fetch_date_limit):
-    try:
-        return ExamEnrollmentRequest.objects.get(student=student,
-                                                 offer_year_acronym=offer_year_acronym,
-                                                 fetch_date__gte=fetch_date_limit)
-    except ObjectDoesNotExist:
-        return None
+def get_by_student_and_offer_year_acronym_and_fetch_date(student: Student, offer_year_acronym: str, fetch_date_limit):
+    return get_object_or_none(
+        ExamEnrollmentRequest,
+        student=student,
+        offer_year_acronym=offer_year_acronym,
+        fetch_date__gte=fetch_date_limit
+    )

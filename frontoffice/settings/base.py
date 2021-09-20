@@ -289,7 +289,43 @@ def get_queue_timeout(timeout_name, default_timeout):
 # The Queues are optional
 # They are used to ensure the migration of Data between Osis and other application (ex : Osis <> Osis-Portal)
 # See in settings.dev.example to configure the queues
-QUEUES = {}
+QUEUES = {
+    'QUEUE_URL': os.environ.get('RABBITMQ_HOST', 'localhost'),
+    'QUEUE_USER': os.environ.get('RABBITMQ_USER', 'guest'),
+    'QUEUE_PASSWORD': os.environ.get('RABBITMQ_PASSWORD', 'guest'),
+    'QUEUE_PORT': int(os.environ.get('RABBITMQ_PORT', 5672)),
+    'QUEUE_CONTEXT_ROOT': os.environ.get('RABBITMQ_CONTEXT_ROOT', '/'),
+    'QUEUES_NAME': {
+        'MIGRATIONS_TO_PRODUCE': 'osis',
+        'MIGRATIONS_TO_CONSUME': 'osis_portal',
+        'PERFORMANCE': 'performance_to_client',
+        'STUDENT_PERFORMANCE': 'rpc_performance_from_client',
+        'PERFORMANCE_UPDATE_EXP_DATE': 'performance_exp_date',
+        'ATTRIBUTION': 'attribution',
+        'ATTESTATION': 'rpc_attestation',
+        'ATTESTATION_STATUS': 'rpc_attestation_status',
+        'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form',
+        'EXAM_ENROLLMENT_FORM_REQUEST': 'exam_enrollment_form_request',
+        'EXAM_ENROLLMENT_FORM_RESPONSE': 'exam_enrollment_form_response',
+        'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
+        'SCORE_ENCODING_PDF_REQUEST': 'score_encoding_pdf_request',
+        'SCORE_ENCODING_PDF_RESPONSE': 'score_encoding_pdf_response',
+        'ATTRIBUTION_RESPONSE': 'attribution_response',
+        'APPLICATION_REQUEST': 'application_request',
+        'APPLICATION_RESPONSE': 'application_response',
+        'APPLICATION_OSIS_PORTAL': 'application_osis_portal',
+    },
+    'QUEUES_TIMEOUT': {
+        'EXAM_ENROLLMENT_FORM_RESPONSE': get_queue_timeout('EXAM_ENROLLMENT_FORM_RESPONSE_TIMEOUT', 15),
+        'PAPER_SHEET_TIMEOUT': get_queue_timeout('PAPER_SHEET_TIMEOUT', 60),
+    },
+    'RPC_QUEUES_TIMEOUT': {
+        'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE_TIMEOUT', 15),
+        'ATTESTATION_STATUS': get_queue_timeout('ATTESTATION_STATUS_TIMEOUT', 10),
+        'ATTESTATION': get_queue_timeout('ATTESTATION_TIMEOUT', 60),
+        'EXAM_ENROLLMENT_FORM': get_queue_timeout('EXAM_ENROLLMENT_FORM_TIMEOUT', 15)
+    }
+}
 
 # Additionnal Locale Path
 # Add local path in your environment settings (ex: dev.py)
@@ -409,6 +445,18 @@ OSIS_INTERNSHIP_SDK_API_KEY_PREFIX = os.environ.get("OSIS_INTERNSHIP_SDK_API_KEY
 OSIS_OFFER_ENROLLMENT_SDK_HOST = os.environ.get("OSIS_OFFER_ENROLLMENT_SDK_HOST", "")
 OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get(
     "OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX", "Token"
+)
+
+# EDUCATION-GROUP-SDK-CONFIGURATION
+OSIS_EDUCATION_GROUP_SDK_HOST = os.environ.get("OSIS_EDUCATION_GROUP_SDK_HOST", "")
+OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX", "Token"
+)
+
+# LEARNING-UNIT-SDK-CONFIGURATION
+OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST = os.environ.get("OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST", "")
+OSIS_LEARNING_UNIT_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_LEARNING_UNIT_ENROLLMENT_SDK_API_KEY_PREFIX", "Token"
 )
 
 # BASE_API_TESTING
