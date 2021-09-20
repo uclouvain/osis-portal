@@ -205,34 +205,34 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 #     }
 #
 
-def check_exam_enrollment_form(request, acronym, academic_year):
-    a_student = student_bsn.find_by_user_and_discriminate(request.user)
-    educ_group_year = EducationGroupYear.objects.filter(
-        acronym=acronym,
-        academic_year__year=academic_year
-    ).first()
-    if 'exam_enrollment' in settings.INSTALLED_APPS:
-        if _exam_enrollment_up_to_date_in_db_with_document(a_student, educ_group_year):
-            return HttpResponse(status=200)
-        else:
-            return HttpResponse(status=404)
-    return HttpResponse(status=405)
+# def check_exam_enrollment_form(request, acronym, academic_year):
+#     a_student = student_bsn.find_by_user_and_discriminate(request.user)
+#     educ_group_year = EducationGroupYear.objects.filter(
+#         acronym=acronym,
+#         academic_year__year=academic_year
+#     ).first()
+#     if 'exam_enrollment' in settings.INSTALLED_APPS:
+#         if _exam_enrollment_up_to_date_in_db_with_document(a_student, educ_group_year):
+#             return HttpResponse(status=200)
+#         else:
+#             return HttpResponse(status=404)
+#     return HttpResponse(status=405)
 
 
-def _exam_enrollment_up_to_date_in_db_with_document(a_student, educ_group_year):
-    an_offer_enrollment = mdl_base.offer_enrollment.get_by_student_offer(a_student, educ_group_year)
-    if an_offer_enrollment:
-        if hasattr(settings, 'QUEUES') and settings.QUEUES:
-            request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
-        else:
-            request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
-        fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
-        exam_enroll_request = exam_enrollment_request. \
-            get_by_student_and_offer_year_acronym_and_fetch_date(a_student, educ_group_year.acronym, fetch_date_limit)
-        return exam_enroll_request and exam_enroll_request.document
-    else:
-        logger.warning("This student is not enrolled in this offer_year")
-        return False
+# def _exam_enrollment_up_to_date_in_db_with_document(a_student, educ_group_year):
+#     an_offer_enrollment = mdl_base.offer_enrollment.get_by_student_offer(a_student, educ_group_year)
+#     if an_offer_enrollment:
+#         if hasattr(settings, 'QUEUES') and settings.QUEUES:
+#             request_timeout = settings.QUEUES.get("QUEUES_TIMEOUT").get("EXAM_ENROLLMENT_FORM_RESPONSE")
+#         else:
+#             request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
+#         fetch_date_limit = timezone.now() - timezone.timedelta(seconds=request_timeout)
+#         exam_enroll_request = exam_enrollment_request. \
+#             get_by_student_and_offer_year_acronym_and_fetch_date(a_student, educ_group_year.acronym, fetch_date_limit)
+#         return exam_enroll_request and exam_enroll_request.document
+#     else:
+#         logger.warning("This student is not enrolled in this offer_year")
+#         return False
 
 #
 # def _process_exam_enrollment_form_submission(educ_group_year, request, stud):
@@ -250,7 +250,8 @@ def _exam_enrollment_up_to_date_in_db_with_document(a_student, educ_group_year):
 #     offer_enrol = offer_enrollment.get_by_student_offer(stud, educ_group_year)
 #     if json_data and offer_enrol:
 #         exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
-#     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit)
+#     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), 
+# data_to_submit)
 #     if covid_period:
 #         messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted_covid_period'))
 #     else:
