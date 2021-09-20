@@ -91,7 +91,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     def learning_unit_yr_enrollments_list(self) -> List[Dict]:
         enrollments_paginated_response = LearningUnitEnrollmentService.get_enrollments_list(
             year=int(self.kwargs['learning_unit_year']),
-            acronym=self.kwargs['learning_unit_acronym'],
+            acronym="{}{}".format(self.kwargs['learning_unit_acronym'], self.kwargs.get('class_code', "")),
             person=self.request.user.person,
         )
         enrollments = [
