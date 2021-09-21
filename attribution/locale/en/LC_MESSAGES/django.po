@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 11:06+0200\n"
+"POT-Creation-Date: 2021-09-21 09:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,6 +161,9 @@ msgstr ""
 msgid "Holder"
 msgstr ""
 
+msgid "I - First registration"
+msgstr ""
+
 msgid "I - Première inscription"
 msgstr ""
 
@@ -168,6 +171,9 @@ msgid "Internship co-supervisor"
 msgstr ""
 
 msgid "Internship supervisor"
+msgstr ""
+
+msgid "J - Carry-over from January to September"
 msgstr ""
 
 msgid "J - Report de note de janvier vers septembre"
@@ -266,6 +272,9 @@ msgstr ""
 msgid "P - Examen partiel"
 msgstr ""
 
+msgid "P - Partial examination"
+msgstr ""
+
 msgid "PEPS"
 msgstr ""
 
@@ -300,6 +309,9 @@ msgid "Program for Students with a Specific Profile"
 msgstr ""
 
 msgid "Promising athlete"
+msgstr ""
+
+msgid "R - Carry-over from previous session"
 msgstr ""
 
 msgid "R - Report de note de la session précédente"
@@ -367,6 +379,9 @@ msgstr ""
 msgid "T - Note résultant d’un test"
 msgstr ""
 
+msgid "T - Test grade"
+msgstr ""
+
 msgid "Teachers"
 msgstr ""
 
@@ -431,6 +446,9 @@ msgstr ""
 msgid "V - Evaluation satisfaisante (la note ne compte pas)"
 msgstr ""
 
+msgid "V - Satisfactory assessment (mark does not count)"
+msgstr ""
+
 msgid "Vacant"
 msgstr ""
 
@@ -461,10 +479,16 @@ msgstr ""
 msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr ""
 
+msgid "W - Unsatisfactory assessment (mark does not count)"
+msgstr ""
+
 msgid "Warning, this is not a list for encoding scores."
 msgstr ""
 
 msgid "Y - Deuxième inscription"
+msgstr ""
+
+msgid "Y - Second registration"
 msgstr ""
 
 msgid "Yes"
