@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 09:40+0200\n"
+"POT-Creation-Date: 2021-09-21 10:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,9 +70,6 @@ msgstr "Administration facultaire"
 msgid "First name"
 msgstr "Prénom"
 
-msgid "Get scores encoding papersheet and encode scores of your students."
-msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
-
 msgid "Global id"
 msgstr "Matricule fgs"
 
@@ -128,7 +125,9 @@ msgid "Private email"
 msgstr "Courriel privé"
 
 msgid "Read my teaching charge and access to lists and emails of students"
-msgstr "Consulter ma charge d'enseignement et accéder aux listes et courriels des étudiants."
+msgstr ""
+"Consulter ma charge d'enseignement et accéder aux listes et courriels des "
+"étudiants."
 
 msgid "Registration department"
 msgstr "Service des inscriptions"
@@ -137,7 +136,10 @@ msgid "Registration id"
 msgstr "Noma"
 
 msgid "Scores encoding"
-msgstr "Encodage de notes"
+msgstr "Encodage des notes"
+
+msgid "Scores encoding of my students"
+msgstr "Encoder les notes de mes étudiants"
 
 msgid "Sex"
 msgstr "Sexe"
@@ -172,8 +174,8 @@ msgstr "Gestion des stages des étudiants."
 msgid "This process shows personal data."
 msgstr "Accès à mes données personnelles."
 
-msgid "This requires a"
-msgstr "Ceci nécessite un"
+msgid "This requires a "
+msgstr "Ceci nécessite un "
 
 msgid "This requires a VPN access outside UCLouvain."
 msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCLouvain."
