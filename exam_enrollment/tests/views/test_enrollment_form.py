@@ -32,7 +32,7 @@ from unittest.mock import patch
 import mock
 from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
-from django.http import HttpResponse, HttpResponseNotAllowed
+from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -366,13 +366,3 @@ class ExamEnrollmentFormTest(TestCase):
             follow=True
         )
         self.assertRedirects(response, reverse('dashboard_home'))
-
-    @mock.patch('base.models.learning_unit_enrollment.LearningUnitEnrollment.objects.filter')
-    @mock.patch('exam_enrollment.views.utils.get_exam_enroll_request')
-    def test_get_exam_enrollment_form(self, mock_get, mock_find_learn_unit_enrols):
-        mock_get.return_value = None
-        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
-        if hasattr(settings, 'QUEUES') and settings.QUEUES:
-            self.assertEqual(self.client.get(self.url).status_code, HttpResponse.status_code)
-        else:
-            self.assertEqual(self.client.get(self.url).status_code, HttpResponseNotAllowed.status_code)

@@ -26,13 +26,6 @@
 import logging
 
 from django.conf import settings
-from django.http import HttpResponse
-from django.utils import timezone
-
-from base import models as mdl_base
-from base.business import student as student_bsn
-from base.models.education_group_year import EducationGroupYear
-from exam_enrollment.models import exam_enrollment_request
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
@@ -250,7 +243,7 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 #     offer_enrol = offer_enrollment.get_by_student_offer(stud, educ_group_year)
 #     if json_data and offer_enrol:
 #         exam_enrollment_submitted.insert_or_update_document(offer_enrol, json_data)
-#     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), 
+#     queue_sender.send_message(settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'),
 # data_to_submit)
 #     if covid_period:
 #         messages.add_message(request, messages.SUCCESS, _('exam_enrollment_form_submitted_covid_period'))

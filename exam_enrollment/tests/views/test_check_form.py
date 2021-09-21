@@ -40,7 +40,6 @@ from base.utils import queue_utils
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
 from exam_enrollment.tests.views.test_enrollment_form import HTTP_RESPONSE_NOTFOUND, load_json_file
-from exam_enrollment.views import exam_enrollment
 
 
 class ExamEnrollmentFormTest(TestCase):
@@ -112,7 +111,7 @@ class ExamEnrollmentFormTest(TestCase):
         )
 
         request_url = reverse(
-            exam_enrollment.check_exam_enrollment_form,
+            'check_exam_enrollment_form',
             args=[educ_group_year.acronym, educ_group_year.academic_year.year]
         )
         response = self.client.get(request_url)
@@ -137,7 +136,7 @@ class ExamEnrollmentFormTest(TestCase):
         )
 
         request_url = reverse(
-            exam_enrollment.check_exam_enrollment_form,
+            'check_exam_enrollment_form',
             args=[educ_group_year.acronym, educ_group_year.academic_year.year]
         )
         response = self.client.get(request_url)
