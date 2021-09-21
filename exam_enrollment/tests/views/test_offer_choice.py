@@ -33,7 +33,7 @@ from django.utils.translation import gettext_lazy as _
 
 from base.tests.factories.person import PersonFactory
 from base.tests.models import test_academic_year, test_student, test_person
-from exam_enrollment.tests.views.test_exam_enrollment_form import _create_group
+from exam_enrollment.tests.views.test_enrollment_form import _create_group
 from performance.models.enums import offer_registration_state
 from performance.tests.views.test_main import ACCESS_DENIED, OK
 
