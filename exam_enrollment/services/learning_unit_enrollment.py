@@ -44,7 +44,8 @@ class LearningUnitEnrollmentService:
         with osis_learning_unit_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
             try:
-                enrollments = api_instance.my_enrollments_list(**kwargs)
+                enrollments = {'results': [], 'count': 0}
+                # FIXME : create endpoint to get ue enrollment for a student
             except (osis_learning_unit_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)

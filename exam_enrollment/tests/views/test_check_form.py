@@ -34,54 +34,23 @@ from django.utils import timezone
 
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
-from base.tests.models import test_student, test_person, test_academic_year, \
-    test_learning_unit_enrollment, test_learning_unit_year
+from base.tests.models import test_student, test_person, test_academic_year
 from base.utils import queue_utils
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
-from exam_enrollment.tests.views.test_enrollment_form import HTTP_RESPONSE_NOTFOUND, load_json_file
+from exam_enrollment.tests.views.test_enrollment_form import HTTP_RESPONSE_NOTFOUND
 
 
 class ExamEnrollmentFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.academic_year = test_academic_year.create_academic_year()
         cls.user = User.objects.create_user(username='jsmith', email='jsmith@localhost', password='secret')
-        cls.user2 = User.objects.create_user(username='jsmath', email='jsmath@localhost', password='secret')
-        cls.user_not_student = User.objects.create_user(
-            username='pjashar',
-            email='pjashar@localhost',
-            password='secret'
-        )
         cls.person = test_person.create_person_with_user(cls.user, first_name="James", last_name="Smith")
-        cls.person2 = test_person.create_person_with_user(cls.user2, first_name="Jimmy", last_name="Smath")
         cls.student = test_student.create_student_with_registration_person("12345678", cls.person)
-        cls.student2 = test_student.create_student_with_registration_person("12457896", cls.person2)
-        cls.educ_group_year = EducationGroupYearFactory(
-            acronym='SINF1BA',
-            title='Bechelor in informatica',
-            academic_year=cls.academic_year,
-        )
-        cls.url = "/exam_enrollment/{acronym}/{year}/form/".format(
-            acronym=cls.educ_group_year.acronym,
-            year=cls.academic_year.year
-        )
-        cls.correct_exam_enrol_form = load_json_file(
-            "exam_enrollment/tests/resources/exam_enrollment_form_example.json"
-        )
         cls.current_academic_year = test_academic_year.create_academic_year_current()
         cls.off_enrol = OfferEnrollmentFactory(
             student=cls.student,
             education_group_year=EducationGroupYearFactory(academic_year=cls.current_academic_year)
-        )
-        learn_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': 'LDROI1234',
-            'specific_title': 'Bachelor in law',
-            'academic_year': cls.academic_year
-        })
-        cls.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(
-            cls.off_enrol,
-            learn_unit_year
         )
 
     def setUp(self) -> None:

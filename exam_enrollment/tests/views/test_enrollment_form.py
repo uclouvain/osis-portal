@@ -67,18 +67,14 @@ class ExamEnrollmentFormTest(TestCase):
         group = _create_group('students')
         group.permissions.add(Permission.objects.get(codename='is_student'))
         cls.user = User.objects.create_user(username='jsmith', email='jsmith@localhost', password='secret')
-        cls.user2 = User.objects.create_user(username='jsmath', email='jsmath@localhost', password='secret')
         cls.user_not_student = User.objects.create_user(
             username='pjashar',
             email='pjashar@localhost',
             password='secret'
         )
         cls.user.groups.add(group)
-        cls.user2.groups.add(group)
         cls.person = test_person.create_person_with_user(cls.user, first_name="James", last_name="Smith")
-        cls.person2 = test_person.create_person_with_user(cls.user2, first_name="Jimmy", last_name="Smath")
         cls.student = test_student.create_student_with_registration_person("12345678", cls.person)
-        cls.student2 = test_student.create_student_with_registration_person("12457896", cls.person2)
         cls.educ_group_year = EducationGroupYearFactory(
             acronym='SINF1BA',
             title='Bechelor in informatica',
@@ -89,7 +85,8 @@ class ExamEnrollmentFormTest(TestCase):
             year=cls.academic_year.year
         )
         cls.correct_exam_enrol_form = load_json_file(
-            "exam_enrollment/tests/resources/exam_enrollment_form_example.json")
+            "exam_enrollment/tests/resources/exam_enrollment_form_example.json"
+        )
         cls.current_academic_year = test_academic_year.create_academic_year_current()
         cls.off_enrol = OfferEnrollmentFactory(
             student=cls.student,
