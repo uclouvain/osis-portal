@@ -124,7 +124,7 @@ msgstr "Code postal"
 msgid "Private email"
 msgstr "Courriel privé"
 
-msgid "Read my teaching charge and access to lists and emails of students"
+msgid "Read my teaching charge and access to lists and emails of students."
 msgstr ""
 "Consulter ma charge d'enseignement et accéder aux listes et courriels des "
 "étudiants."

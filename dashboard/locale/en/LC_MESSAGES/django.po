@@ -120,7 +120,7 @@ msgstr ""
 msgid "Private email"
 msgstr ""
 
-msgid "Read my teaching charge and access to lists and emails of students"
+msgid "Read my teaching charge and access to lists and emails of students."
 msgstr ""
 
 msgid "Registration department"
