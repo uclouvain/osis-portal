@@ -33,6 +33,7 @@ from django.views.generic import TemplateView
 from osis_learning_unit_enrollment_sdk.model.student_specific_profile import StudentSpecificProfile
 
 from attribution.business import xls_students_by_learning_unit
+from attribution.services.attribution import AttributionService
 from attribution.services.enrollments import LearningUnitEnrollmentService
 from attribution.services.learning_unit import LearningUnitService
 from frontoffice.settings.osis_sdk.utils import ApiPaginationMixin, ApiRetrieveAllObjectsMixin
@@ -62,7 +63,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
             'learning_unit_title': self.learning_unit_title,
             # TODO:  provide endpoint to check luy has_peps
-            'has_peps': self.has_peps_student(self.enrollments_list),
+            'has_peps': self.has_peps_student(),
             'produce_xls_url': self.get_produce_xls_url(),
             'count': self.count
         }
@@ -191,9 +192,14 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
         except KeyError:
             return None
 
-    @staticmethod
-    def has_peps_student(enrollments):
-        return any(enrollment.get('student_specific_profile') for enrollment in enrollments)
+    def has_peps_student(self):
+        attributions = AttributionService.get_attributions_list(
+            year=int(self.kwargs['learning_unit_year']),
+            person=self.request.user.person,
+            with_effective_class_repartition=True
+        )
+        attribution = next(a for a in attributions if a['code'] == self.kwargs['learning_unit_acronym'])
+        return attribution['has_peps']
 
     def get_produce_xls_url(self):
         return reverse('produce_xls_students', kwargs={
