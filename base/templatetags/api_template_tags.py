@@ -43,3 +43,8 @@ def pagination(context):
     context['last_offset'] = (pages_count-1) * DEFAULT_API_LIMIT
 
     return context
+
+
+@register.inclusion_tag('api/search.html', takes_context=True)
+def search(context):
+    return context

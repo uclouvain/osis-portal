@@ -6,7 +6,7 @@
       </a>
     </li>
     {% for page in pages %}
-        <li {% if page.offset|add:0 == request.GET.offset|add:0 %} class="active" {% endif %}>
+        <li {% if not request.GET.offset and page.number == 1 or page.offset|add:0 == request.GET.offset|add:0 %} class="active" {% endif %}>
             <a href="{{ request.path }}?limit={{ page.limit }}&offset={{ page.offset }}">
                 {{ page.number }}
             </a>
