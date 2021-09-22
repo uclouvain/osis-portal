@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import json
-from operator import itemgetter
 from typing import List, Union, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -102,8 +101,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
 
     @cached_property
     def enrollments_list(self) -> List[EnrollmentDict]:
-        enrollments = map(self.get_enrollments_dict_for_display, super().page_objects_list)
-        return sorted(enrollments, key=itemgetter('program'))
+        return list(map(self.get_enrollments_dict_for_display, super().page_objects_list))
 
     def get_enrollments_dict_for_display(self, enrollment) -> EnrollmentDict:
         session_results = self.get_sessions_results(enrollment)

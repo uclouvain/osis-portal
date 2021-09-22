@@ -48,3 +48,9 @@ def pagination(context):
 @register.inclusion_tag('api/search.html', takes_context=True)
 def search(context):
     return context
+
+
+@register.inclusion_tag('api/ordering.html', takes_context=True)
+def ordering(context, api_field_name):
+    context['ordering_field_name'] = api_field_name
+    return context

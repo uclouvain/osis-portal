@@ -158,6 +158,10 @@ class ApiPaginationMixin:
     def search(self):
         return self.request.GET.get('search', '')
 
+    @property
+    def ordering(self):
+        return self.request.GET.get('ordering', '')
+
     @cached_property
     def page_objects_list(self) -> List:
         paginated_response = self.api_call(**self.get_api_kwargs())
@@ -177,7 +181,8 @@ class ApiPaginationMixin:
             'person': self.request.user.person,
             'limit':  self.limit,
             'offset': self.offset,
-            'search': self.search
+            'search': self.search,
+            'ordering': self.ordering
         }
 
 
