@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 09:40+0200\n"
+"POT-Creation-Date: 2021-09-21 10:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,9 +66,6 @@ msgstr ""
 msgid "First name"
 msgstr ""
 
-msgid "Get scores encoding papersheet and encode scores of your students."
-msgstr ""
-
 msgid "Global id"
 msgstr ""
 
@@ -123,7 +120,7 @@ msgstr ""
 msgid "Private email"
 msgstr ""
 
-msgid "Read my teaching charge and access to lists and emails of students"
+msgid "Read my teaching charge and access to lists and emails of students."
 msgstr ""
 
 msgid "Registration department"
@@ -133,6 +130,9 @@ msgid "Registration id"
 msgstr ""
 
 msgid "Scores encoding"
+msgstr ""
+
+msgid "Scores encoding of my students"
 msgstr ""
 
 msgid "Sex"
@@ -168,7 +168,7 @@ msgstr ""
 msgid "This process shows personal data."
 msgstr ""
 
-msgid "This requires a"
+msgid "This requires a "
 msgstr ""
 
 msgid "This requires a VPN access outside UCLouvain."
