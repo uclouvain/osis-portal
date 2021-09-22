@@ -88,8 +88,10 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    def test_with_no_attributions(self):
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    def test_with_no_attributions(self, mock_get_attributions_list):
         response = self.client.get(self.url)
+        mock_get_attributions_list.return_value = []
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'list/students_exam.html')
