@@ -35,7 +35,12 @@ class ExamEnrollmentRequestdAdmin(admin.ModelAdmin):
     list_display = ('student', 'offer_year_acronym', 'fetch_date')
     fieldsets = ((None, {'fields': ('student', 'document', 'offer_year_acronym', 'fetch_date')}),)
     readonly_fields = ('fetch_date',)
-    search_fields = ['student__registration_id']
+    search_fields = [
+        'student__registration_id',
+        'student__person__last_name',
+        'student__person__first_name',
+        'offer_year_acronym'
+    ]
     raw_id_fields = ('student',)
 
 

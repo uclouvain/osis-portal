@@ -85,8 +85,7 @@ class OfferChoiceTest(TestCase):
     def test_choose_offer_no_offer_redirect_to_dashboard(self):
         current_academic_year = test_academic_year.create_academic_year_current()
         self.mocked_attributions_list.return_value = []
-        an_url = reverse('exam_enrollment_offer_choice')
-        response = self.client.get(an_url, follow=True)
+        response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, reverse('dashboard_home'))
         messages = list(response.context['messages'])
 
