@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 11:06+0200\n"
+"POT-Creation-Date: 2021-09-21 09:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -160,6 +160,9 @@ msgstr "Sportifs de haut niveau"
 msgid "Holder"
 msgstr "Titulaire"
 
+msgid "I - First registration"
+msgstr "I - Première inscription"
+
 msgid "I - Première inscription"
 msgstr "I - Première inscription"
 
@@ -168,6 +171,9 @@ msgstr "Co-directeur de stage"
 
 msgid "Internship supervisor"
 msgstr "Directeur de stage"
+
+msgid "J - Carry-over from January to September"
+msgstr "J - Report de note de janvier vers septembre"
 
 msgid "J - Report de note de janvier vers septembre"
 msgstr "J - Report de note de janvier vers septembre"
@@ -265,6 +271,9 @@ msgstr "Autre aménagement"
 msgid "P - Examen partiel"
 msgstr "P - Examen partiel"
 
+msgid "P - Partial examination"
+msgstr "P - Examen partiel"
+
 msgid "PEPS"
 msgstr "PEPS"
 
@@ -302,6 +311,9 @@ msgstr "Projet pour étudiant.e à profil spécifique"
 
 msgid "Promising athlete"
 msgstr "Espoirs sportifs"
+
+msgid "R - Carry-over from previous session"
+msgstr "R - Report de note de la session précédente"
 
 msgid "R - Report de note de la session précédente"
 msgstr "R - Report de note de la session précédente"
@@ -368,6 +380,9 @@ msgid "Submit"
 msgstr "Soumettre"
 
 msgid "T - Note résultant d’un test"
+msgstr "T - Note résultant d’un test"
+
+msgid "T - Test grade"
 msgstr "T - Note résultant d’un test"
 
 msgid "Teachers"
@@ -447,6 +462,9 @@ msgstr "Type PEPS"
 msgid "V - Evaluation satisfaisante (la note ne compte pas)"
 msgstr "V - Evaluation satisfaisante (la note ne compte pas)"
 
+msgid "V - Satisfactory assessment (mark does not count)"
+msgstr "V - Evaluation satisfaisante (la note ne compte pas)"
+
 msgid "Vacant"
 msgstr "Vacant"
 
@@ -477,10 +495,16 @@ msgstr "Vol.2 vacant"
 msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
 
+msgid "W - Unsatisfactory assessment (mark does not count)"
+msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
+
 msgid "Warning, this is not a list for encoding scores."
 msgstr "Attention, ceci n'est pas une liste destinée à l'encodage des notes."
 
 msgid "Y - Deuxième inscription"
+msgstr "Y - Deuxième inscription"
+
+msgid "Y - Second registration"
 msgstr "Y - Deuxième inscription"
 
 msgid "Yes"
