@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 09:55+0200\n"
+"POT-Creation-Date: 2021-09-23 09:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,6 +73,9 @@ msgstr "Sigle"
 msgid "Coordinator"
 msgstr "Coordinateur(trice)"
 
+msgid "Credits"
+msgstr "Crédits"
+
 msgid "DDI"
 msgstr "DDI"
 
@@ -106,9 +109,6 @@ msgstr "Personnes porteuses de handicap, trouble ou maladie"
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
-msgid "ECT"
-msgstr "ECT"
-
 msgid "ES"
 msgstr "ES"
 
@@ -133,6 +133,8 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+#, fuzzy, python-format
+#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -195,9 +197,6 @@ msgstr "Nom"
 
 msgid "Last score"
 msgstr "Dernière note"
-
-msgid "Learning Unit"
-msgstr "Unité d'enseignement"
 
 msgid "Learning unit"
 msgstr "Unité d'enseignement"
@@ -392,7 +391,7 @@ msgid "Teaching charge"
 msgstr "Charge d'enseignement"
 
 msgid "Teaching charges administration"
-msgstr "Administration des charges d'enseignement"
+msgstr "Administration des charges d'enseignements"
 
 msgid "The Excel lists for encoding scores are available in"
 msgstr ""
@@ -434,6 +433,16 @@ msgid ""
 "reform."
 msgstr ""
 "Ce cours sera supprimé en %(academic_year)s suite à une réforme de programme."
+
+msgid ""
+"This learning unit has classes. Students are enrolled at the class level "
+"(see below). If you do not see any classes, please contact your faculty so "
+"that you can be assigned to the classes you teach."
+msgstr ""
+"Cette unité d'enseignement possède des classes. Les étudiants sont inscrits "
+"au niveau des classes (ci-dessous). Si vous ne voyez aucune classe, merci de "
+"contacter votre faculté afin qu'on vous affecte aux classes auxquelles vous "
+"enseignez."
 
 msgid "Title"
 msgstr "Intitulé"
