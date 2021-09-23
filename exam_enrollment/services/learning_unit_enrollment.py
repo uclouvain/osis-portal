@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import logging
+from types import SimpleNamespace
 
 import osis_learning_unit_enrollment_sdk
 import urllib3
@@ -52,5 +53,5 @@ class LearningUnitEnrollmentService:
             except (osis_learning_unit_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
-                enrollments = {'results': [], 'count': 0}
+                enrollments = SimpleNamespace(**{'results': [], 'count': 0})
         return enrollments
