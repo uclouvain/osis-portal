@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 09:55+0200\n"
+"POT-Creation-Date: 2021-09-23 09:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,9 @@ msgstr ""
 msgid "Coordinator"
 msgstr ""
 
+msgid "Credits"
+msgstr ""
+
 msgid "DDI"
 msgstr ""
 
@@ -102,9 +105,6 @@ msgid "Disability, Disorder or Illness Students"
 msgstr ""
 
 msgid "Display teachers"
-msgstr ""
-
-msgid "ECT"
 msgstr ""
 
 msgid "ES"
@@ -195,9 +195,6 @@ msgid "Last name"
 msgstr ""
 
 msgid "Last score"
-msgstr ""
-
-msgid "Learning Unit"
 msgstr ""
 
 msgid "Learning unit"
@@ -421,6 +418,12 @@ msgstr ""
 msgid ""
 "This course will be discontinued in %(academic_year)s following a program "
 "reform."
+msgstr ""
+
+msgid ""
+"This learning unit has classes. Students are enrolled at the class level "
+"(see below). If you do not see any classes, please contact your faculty so "
+"that you can be assigned to the classes you teach."
 msgstr ""
 
 msgid "Title"

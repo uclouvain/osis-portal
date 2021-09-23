@@ -24,36 +24,34 @@
 #
 ##############################################################################
 import logging
-from typing import List
 
-import osis_attribution_sdk
-import urllib3
+import osis_learning_unit_enrollment_sdk
 from django.conf import settings
-from osis_attribution_sdk.api import attribution_api
 
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import attribution as attribution_sdk
+from frontoffice.settings.osis_sdk import utils
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class AttributionService:
-    @staticmethod
-    def get_attributions_list(year: int, person: Person, with_effective_class_repartition=False) -> List:
-        configuration = attribution_sdk.build_configuration(person)
-        with osis_attribution_sdk.ApiClient(configuration) as api_client:
-            api_instance = attribution_api.AttributionApi(api_client)
-            try:
-                attributions = sorted(
-                    api_instance.attributions_list(
-                        year=str(year),
-                        global_id=person.global_id,
-                        with_effective_class_repartition=with_effective_class_repartition
-                    ),
-                    key=lambda attribution: attribution.code
-                )
-            except (osis_attribution_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
-                # Run in degraded mode in order to prevent crash all app
-                logger.error(e)
-                attributions = []
-        return attributions
+def build_configuration(person: Person = None) -> osis_learning_unit_enrollment_sdk.Configuration:
+    """
+    Return SDK configuration of attribution based on person provided in kwargs
+    If no person provided, it will use generic token to make request
+    """
+    if not settings.OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST:
+        logger.debug("'OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST' setting must be set in configuration")
+
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        token = utils.get_user_token(person, force_user_creation=True)
+
+    return osis_learning_unit_enrollment_sdk.Configuration(
+        host=settings.OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_LEARNING_UNIT_ENROLLMENT_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })

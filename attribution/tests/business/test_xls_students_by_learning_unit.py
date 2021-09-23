@@ -43,7 +43,10 @@ class XlsStudentsByLearningUnitTest(TestCase):
         cls.tutor = TutorFactory()
         cls.tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
 
-        cls.url = reverse('produce_xls_students', args=['01234567'])
+        cls.url = reverse('produce_xls_students', kwargs={
+            'learning_unit_acronym': 'LTEST1234',
+            'learning_unit_year': '2021'
+        })
 
     def setUp(self):
         self.client.force_login(self.tutor.person.user)
