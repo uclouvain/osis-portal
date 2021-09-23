@@ -67,11 +67,12 @@
                     <div class="col-md-6">
                         <label>{% trans 'program' %}</label>
                         <br>
-                        {{ program.acronym }} - {{ program.title }}
+                        {{ program_code }} - {{ title }}
                     </div>
                 </div>
                 <br>
-                <form id="exam_enrollment_form" method="POST" action="{% url 'exam_enrollment_form' program.id %}">
+                <form id="exam_enrollment_form" method="POST"
+                      action="{% url 'exam_enrollment_form' program_code year %}">
                     {% csrf_token %}
                     <input type="hidden" name="current_number_session" value="{{ current_number_session }}"/>
                     {% if covid_period %}
@@ -283,7 +284,7 @@
                                 <td style="padding-right:12px;"><i class="fa fa-info-circle" style="font-size:250%"
                                                                    aria-hidden="true"></i></td>
                                 <td>{% trans 'message_exam_enrolment_state' %} <a
-                                        href="{% url 'performance_student_by_acronym_and_year' program.acronym|replace_slash_to__ academic_year.year %}"><em>{% trans 'message_exam_enrolment_state_link_label' %}</em></a>.
+                                        href="{% url 'performance_student_by_acronym_and_year' program_code|replace_slash_to__ academic_year.year %}"><em>{% trans 'message_exam_enrolment_state_link_label' %}</em></a>.
                                 </td>
                             </tr>
                         </table>
@@ -375,7 +376,7 @@
         function check_result() {
             $.ajax({
                 method: 'GET',
-                url: "{% url 'check_exam_enrollment_form' program.id %}",
+                url: "{% url 'check_exam_enrollment_form' program_code year %}",
                 success: function () {
                     var check_data = '{{exam_enrollments}}';
                     if (!check_data) {

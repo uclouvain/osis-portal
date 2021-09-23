@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,17 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from django.urls import include
+import logging
 
-from exam_enrollment.views.check_form import CheckForm
-from exam_enrollment.views.enrollment_form import ExamEnrollmentForm
-from exam_enrollment.views.offer_choice import OfferChoice
+import osis_offer_enrollment_sdk
+from django.conf import settings
 
-urlpatterns = [
-    url(r'^$', OfferChoice.as_view(), name='exam_enrollment_offer_choice'),
-    url(r'^(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/', include([
-        url(r'^form/$', ExamEnrollmentForm.as_view(), name='exam_enrollment_form'),
-        url(r'^check/$', CheckForm.as_view(), name='check_exam_enrollment_form'),
-    ]))
-]
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+def build_configuration(person: Person = None) -> osis_offer_enrollment_sdk.Configuration:
+    """
+    Return SDK configuration of offer enrollment
+    """
+    if not settings.OSIS_OFFER_ENROLLMENT_SDK_HOST:
+        logger.debug("'OSIS_OFFER_ENROLLMENT_SDK_HOST' setting must be set in configuration")
+
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        token = utils.get_user_token(person, force_user_creation=True)
+
+    return osis_offer_enrollment_sdk.Configuration(
+        host=settings.OSIS_OFFER_ENROLLMENT_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })
