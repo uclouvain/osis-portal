@@ -39,13 +39,16 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class LearningUnitEnrollmentService:
     @staticmethod
-    def get_my_enrollments_list(person: Person, **kwargs) -> EnrollmentList:
+    def get_my_enrollments_list(program_code: str, year: int, person: Person, **kwargs) -> EnrollmentList:
         configuration = learning_unit_enrollment_sdk.build_configuration(person)
         with osis_learning_unit_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
             try:
-                enrollments = {'results': [], 'count': 0}
-                # FIXME : create endpoint to get ue enrollment for a student
+                enrollments = api_instance.my_enrollments_list(
+                    program_code=program_code,
+                    year=year,
+                    **kwargs
+                )
             except (osis_learning_unit_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)

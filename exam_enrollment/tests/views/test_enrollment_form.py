@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import json
 import random
 import warnings
@@ -37,10 +38,10 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from base.models.enums import learning_unit_enrollment_state
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
-from base.tests.models import test_student, test_person, test_academic_year, \
-    test_learning_unit_enrollment, test_learning_unit_year
+from base.tests.models import test_student, test_person, test_academic_year
 from exam_enrollment.enums.covid_exam_choice import CovidExamChoice
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
 from exam_enrollment.views.enrollment_form import _exam_enrollment_form_submission_message
@@ -75,31 +76,14 @@ class ExamEnrollmentFormTest(TestCase):
         cls.user.groups.add(group)
         cls.person = test_person.create_person_with_user(cls.user, first_name="James", last_name="Smith")
         cls.student = test_student.create_student_with_registration_person("12345678", cls.person)
-        cls.educ_group_year = EducationGroupYearFactory(
-            acronym='SINF1BA',
-            title='Bechelor in informatica',
-            academic_year=cls.academic_year,
-        )
-        cls.url = "/exam_enrollment/{acronym}/{year}/form/".format(
-            acronym=cls.educ_group_year.acronym,
-            year=cls.academic_year.year
+        cls.program_code = "FSA1BA"
+        cls.ue_code = "LFSAB1101"
+        cls.url = reverse(
+            'exam_enrollment_form',
+            args=[cls.program_code, cls.academic_year.year]
         )
         cls.correct_exam_enrol_form = load_json_file(
             "exam_enrollment/tests/resources/exam_enrollment_form_example.json"
-        )
-        cls.current_academic_year = test_academic_year.create_academic_year_current()
-        cls.off_enrol = OfferEnrollmentFactory(
-            student=cls.student,
-            education_group_year=EducationGroupYearFactory(academic_year=cls.current_academic_year)
-        )
-        learn_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': 'LDROI1234',
-            'specific_title': 'Bachelor in law',
-            'academic_year': cls.academic_year
-        })
-        cls.learn_unit_enrol = test_learning_unit_enrollment.create_learning_unit_enrollment(
-            cls.off_enrol,
-            learn_unit_year
         )
 
     def setUp(self) -> None:
@@ -107,9 +91,9 @@ class ExamEnrollmentFormTest(TestCase):
 
         # Mock the OSIS Remote API Call
         self.offer_enrollment_row = SimpleNamespace(**{
-            'acronym': self.off_enrol.education_group_year.acronym,
-            'title': self.off_enrol.education_group_year.title,
-            'year': self.off_enrol.education_group_year.academic_year.year,
+            'acronym': self.program_code,
+            'title': "TITLE",
+            'year': self.academic_year.year,
         })
 
         self.offer_enrollment_patcher = mock.patch(
@@ -119,6 +103,27 @@ class ExamEnrollmentFormTest(TestCase):
         )
         self.mocked_offer_enrollment = self.offer_enrollment_patcher.start()
         self.addCleanup(self.offer_enrollment_patcher.stop)
+
+        self.learning_unit_enrollment_row = SimpleNamespace(**{
+            'date_enrollment': datetime.datetime.now(),
+            'enrollment_state': learning_unit_enrollment_state.ENROLLED,
+            'student_last_name': self.person.last_name,
+            'student_first_name': self.person.first_name,
+            'student_email': self.person.email,
+            'student_registration_id': self.student.registration_id,
+            'specific_profile': None,
+            'program': self.program_code,
+            'learning_unit_acronym': self.ue_code,
+            'learning_unit_year': self.academic_year.year,
+        })
+
+        self.learning_unit_enrollment_patcher = mock.patch(
+            "exam_enrollment.views.enrollment_form.ExamEnrollmentForm.learning_unit_enrollments",
+            new_callable=mock.PropertyMock,
+            return_value=self.learning_unit_enrollment_row
+        )
+        self.mocked_learning_unit_enrollment = self.learning_unit_enrollment_patcher.start()
+        self.addCleanup(self.learning_unit_enrollment_patcher.stop)
 
     def test_json_form_content(self):
         form = self.correct_exam_enrol_form
@@ -137,10 +142,8 @@ class ExamEnrollmentFormTest(TestCase):
                         or 'session_3' in random_exam_enrol.keys())
         self.assertTrue(random_exam_enrol.get('learning_unit_year'))
 
-    @patch('base.models.learning_unit_enrollment.LearningUnitEnrollment.objects.filter')
     @patch("exam_enrollment.views.enrollment_form.ExamEnrollmentForm.ask_exam_enrollment_form")
-    def test_exam_enrollment_form(self, fetch_json, mock_find_learn_unit_enrols):
-        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+    def test_exam_enrollment_form(self, fetch_json):
         fetch_json.return_value = self.correct_exam_enrol_form
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, HttpResponse.status_code)
@@ -154,41 +157,13 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertIn('program_code', returned_data)
         self.assertIn('title', returned_data)
 
-    @patch("exam_enrollment.views.enrollment_form.ExamEnrollmentForm.ask_exam_enrollment_form")
-    def test_outside_score_encoding_period(self, fetch_json):
-        fetch_json.return_value = None
-        response = self.client.get(self.url, follow=True)
-        self.assertRedirects(response, reverse('dashboard_home'))
-
     def test_case_user_is_not_student(self):
         self.client.force_login(self.user_not_student)
         response = self.client.get(self.url, follow=True)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    @patch('exam_enrollment.views.enrollment_form.ExamEnrollmentForm.ask_exam_enrollment_form')
-    def test_navigation_student_has_programs_but_returned_form_is_none(self, mock_fetch_exam_form):
-        mock_fetch_exam_form.return_value = None
-        an_url = reverse(
-            'exam_enrollment_form',
-            args=[self.educ_group_year.acronym, self.educ_group_year.academic_year.year]
-        )
-        response = self.client.get(an_url, follow=True)
-        self.assertRedirects(response, reverse('dashboard_home'))
-
-    @patch("exam_enrollment.views.enrollment_form.ExamEnrollmentForm.ask_exam_enrollment_form")
-    def test_case_exam_enrollment_form_contains_error_message(self, mock_fetch_json):
-        form = self.correct_exam_enrol_form
-        form['error_message'] = "an_error_message_key"
-        mock_fetch_json.return_value = form
-        response = self.client.get(self.url, follow=True)
-        self.assertRedirects(response, reverse('dashboard_home'))
-
-    @patch('base.models.learning_unit_enrollment.LearningUnitEnrollment.objects.filter')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
-    def test_case_exam_enrollment_form_outside_period(self,
-                                                      mock_get_exam_enrollment_request,
-                                                      mock_find_learn_unit_enrols):
-        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+    def test_case_exam_enrollment_form_outside_period(self, mock_get_exam_enrollment_request):
         mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
             document='{"error_message": "outside_exam_enrollment_period",'
                      '"registration_id":" 12345678",'
@@ -204,12 +179,8 @@ class ExamEnrollmentFormTest(TestCase):
             _("You are outside the exams enrollment period")
         )
 
-    @patch('base.models.learning_unit_enrollment.LearningUnitEnrollment.objects.filter')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
-    def test_case_exam_enrollment_form_not_available(self,
-                                                     mock_get_exam_enrollment_request,
-                                                     mock_find_learn_unit_enrols):
-        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+    def test_case_exam_enrollment_form_not_available(self, mock_get_exam_enrollment_request):
         mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
             document='{"error_message": "no_exam_enrollment_avalaible",'
                      '"registration_id":" 12345678",'
@@ -225,11 +196,8 @@ class ExamEnrollmentFormTest(TestCase):
             _("Exam enrollment is not available")
         )
 
-    @patch('base.models.learning_unit_enrollment.LearningUnitEnrollment.objects.filter')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
-    def test_case_exam_enrollment_form_no_learning_unit_enrollment_found(
-            self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
-        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+    def test_case_exam_enrollment_form_no_learning_unit_enrollment_found(self, mock_get_exam_enrollment_request):
         mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
             document='{"error_message": "no_learning_unit_enrollment_found",'
                      '"registration_id":" 12345678",'
@@ -242,14 +210,11 @@ class ExamEnrollmentFormTest(TestCase):
         error_message = response.context.get("error_message")
         self.assertEqual(
             error_message,
-            _("no_learning_unit_enrollment_found").format(self.educ_group_year.acronym)
+            _("no_learning_unit_enrollment_found").format(self.program_code)
         )
 
-    @patch('base.models.learning_unit_enrollment.LearningUnitEnrollment.objects.filter')
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
-    def test_case_exam_enrollment_form_no_error(
-            self, mock_get_exam_enrollment_request, mock_find_learn_unit_enrols):
-        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
+    def test_case_exam_enrollment_form_no_error(self, mock_get_exam_enrollment_request):
         mock_get_exam_enrollment_request.return_value = ExamEnrollmentRequestFactory(
             document='{"error_message": null,'
                      '"registration_id":" 12345678",'
@@ -262,19 +227,13 @@ class ExamEnrollmentFormTest(TestCase):
         error_message = response.context.get("error_message")
         self.assertIsNone(error_message)
 
-    @patch('base.models.learning_unit_enrollment.LearningUnitEnrollment.objects.filter')
     @patch('exam_enrollment.views.enrollment_form.ExamEnrollmentForm.ask_exam_enrollment_form')
-    def test_navigation_student_has_programs_with_data(self, mock_fetch_exam_form, mock_find_learn_unit_enrols):
+    def test_navigation_student_has_programs_with_data(self, mock_fetch_exam_form):
         mock_fetch_exam_form.return_value = {
             'exam_enrollments': [],
             'current_number_session': 0,
         }
-        mock_find_learn_unit_enrols.return_value = [self.learn_unit_enrol]
-        an_url = reverse(
-            'exam_enrollment_form',
-            args=[self.educ_group_year.acronym, self.educ_group_year.academic_year.year]
-        )
-        response = self.client.get(an_url, follow=True)
+        response = self.client.get(self.url, follow=True)
         self.assertEqual('exam_enrollment_form.html', response.templates[0].name)
 
     if hasattr(settings, 'QUEUES') and settings.QUEUES:
@@ -348,17 +307,16 @@ class ExamEnrollmentFormTest(TestCase):
         for index in range(0, len(exam_enrollments_unexpected)):
             self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
 
-    @patch('base.models.learning_unit_enrollment.LearningUnitEnrollment.objects.filter')
-    def test_case_student_has_no_learning_unit_enrollment(self, mock_find):
-        mock_find.return_value = None
+    def test_case_student_has_no_learning_unit_enrollment(self):
+        self.mocked_learning_unit_enrollment.return_value = None
         off_year_enrol = OfferEnrollmentFactory(
             student=self.student,
-            education_group_year=EducationGroupYearFactory(academic_year=self.current_academic_year)
+            education_group_year=EducationGroupYearFactory(academic_year=self.academic_year)
         )
         response = self.client.get(
             reverse(
                 'exam_enrollment_form',
-                args=[off_year_enrol.education_group_year.acronym, self.current_academic_year.year]
+                args=[off_year_enrol.education_group_year.acronym, self.academic_year.year]
             ),
             follow=True
         )

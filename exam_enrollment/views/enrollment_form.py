@@ -42,11 +42,11 @@ from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
 from base.business import student as student_business
 from base.models.academic_year import current_academic_year
-from base.models.learning_unit_enrollment import LearningUnitEnrollment
 from base.models.student import Student
 from base.views import layout
 from dashboard.views import main as dash_main_view
 from exam_enrollment.models import exam_enrollment_submitted
+from exam_enrollment.services.learning_unit_enrollment import LearningUnitEnrollmentService
 from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
 from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request, ask_queue_for_exam_enrollment_form
 from osis_common.queue import queue_sender
@@ -126,13 +126,7 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         return get_request_timeout()
 
     def _get_exam_enrollment_form(self):
-        # FIXME: Get by API
-        learn_unit_enrols = LearningUnitEnrollment.objects.filter(
-            offer_enrollment__student=self.student,
-            offer_enrollment__education_group_year__acronym=self.program_code,
-            offer_enrollment__education_group_year__academic_year__year=self.year
-        )
-        if not learn_unit_enrols:
+        if not self.learning_unit_enrollments:
             messages.add_message(
                 self.request,
                 messages.WARNING,
@@ -152,12 +146,20 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
             self.ask_exam_enrollment_form()
         return layout.render(self.request, self.template_name, self._get_context(data))
 
+    @cached_property
+    def learning_unit_enrollments(self):
+        return LearningUnitEnrollmentService.get_my_enrollments_list(
+            program_code=self.program_code,
+            year=self.year,
+            person=self.student.person
+        ).results
+
     def _get_context(self, data: Dict) -> Dict:
         return {
             'error_message': self._get_error_message(data),
-            'exam_enrollments': data.get('exam_enrollments'),
+            'exam_enrollments': data.get('exam_enrollments', ""),
             'student': self.student,
-            'current_number_session': data.get('current_number_session'),
+            'current_number_session': data.get('current_number_session', ""),
             'academic_year': current_academic_year(),
             'program_code': self.program_code,
             'title': self.title,
