@@ -37,8 +37,8 @@ def pagination(context):
     pages_count = ceil(context['count']/DEFAULT_API_LIMIT)
     pages = [
         {
-            'number': page+1, 
-            'limit': DEFAULT_API_LIMIT, 
+            'number': page+1,
+            'limit': DEFAULT_API_LIMIT,
             'offset': str(DEFAULT_API_LIMIT*page)
         } for page in range(0, pages_count)
     ]
