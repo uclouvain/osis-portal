@@ -23,35 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import logging
+import factory.fuzzy
+from factory.faker import faker
 
-import osis_learning_unit_enrollment_sdk
-from django.conf import settings
-
-from base.models.person import Person
-from frontoffice.settings.osis_sdk import utils
-
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
+fake = faker.Faker()
 
 
-def build_configuration(person: Person = None) -> osis_learning_unit_enrollment_sdk.Configuration:
-    """
-    Return SDK configuration of attribution based on person provided in kwargs
-    If no person provided, it will use generic token to make request
-    """
-    if not settings.OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST:
-        logger.debug("'OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST' setting must be set in configuration")
-
-    if person is None:
-        token = settings.OSIS_PORTAL_TOKEN
-    else:
-        token = utils.get_user_token(person, force_user_creation=True)
-
-    return osis_learning_unit_enrollment_sdk.Configuration(
-        host=settings.OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST,
-        api_key_prefix={
-            'Token': settings.OSIS_LEARNING_UNIT_ENROLLMENT_SDK_API_KEY_PREFIX
-        },
-        api_key={
-            'Token': token
-        })
+class EnrollmentDictFactory(dict, factory.DictFactory):
+    date_enrollment = "2020-09-16"
+    enrollment_state = "ENROLLED"
+    student_last_name = fake.last_name(),
+    student_first_name = fake.first_name(),
+    student_email = fake.email(),
+    student_registration_id = factory.fuzzy.FuzzyText(length=10)
+    type_peps = None
+    sport_subtype_peps = None
+    disability_subtype_peps = None
+    program = factory.fuzzy.FuzzyText(length=7)
+    learning_unit_year = 2020
+    learning_unit_acronym = "{}{}".format(
+        factory.fuzzy.FuzzyText(length=5),
+        factory.fuzzy.FuzzyInteger(low=1000, high=2000)
+    )
+    specific_profile = None
