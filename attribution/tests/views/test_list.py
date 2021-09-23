@@ -118,7 +118,7 @@ class StudentsListTest(TestCase):
         self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments_list")
+    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
     @mock.patch("attribution.views.students_list.StudentsListView.learning_unit_title", new_callable=mock.PropertyMock)
     def test_with_attribution_students(self, mock_lu, mock_students_list_endpoint, mock_get_attributions_list):
         mock_students_list_endpoint.return_value = self.enrollments
@@ -129,15 +129,13 @@ class StudentsListTest(TestCase):
             end_date=today + datetime.timedelta(days=5)
         )
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
-        mock_get_attributions_list.return_value = SimpleNamespace(**{
-            'results': [
-                Attribution(
-                    code=a_learning_unit_year.acronym,
-                    year=a_learning_unit_year.academic_year.year,
-                )
-            ],
-            'count': 1
-        })
+        mock_get_attributions_list.return_value = [
+            {
+                'code': a_learning_unit_year.acronym,
+                'year': a_learning_unit_year.academic_year.year,
+                'has_peps': False
+            }
+        ]
         education_group_year = EducationGroupYearFactory(academic_year=an_academic_year)
 
         # Create two enrollment to exam [Enrolled]

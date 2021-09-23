@@ -30,7 +30,10 @@ from typing import Set, List
 import requests
 from django.conf import settings
 from django.http import HttpResponseBadRequest
+from django.utils.functional import cached_property
 from rest_framework import status
+
+DEFAULT_API_LIMIT = 25
 
 
 def get_user_token(person, force_user_creation=False):
@@ -72,7 +75,7 @@ def api_exception_handler(api_exception_cls):
     return api_exception_decorator
 
 
-def api_paginated_response(func, default_limit=25, offset=0):
+def api_paginated_response(func, default_limit=DEFAULT_API_LIMIT, offset=0):
     """A decorator that enables to retrieve paginated response given desired limit and offset"""
     @wraps(func)
     def wrapper(*args, **kwargs) -> PaginatedResponse:
@@ -135,3 +138,57 @@ class PaginatedResponse:
 
     def extend(self, paginated_response: 'PaginatedResponse'):
         self.results.extend(paginated_response.results)
+
+
+class ApiPaginationMixin:
+    count: int = 0
+
+    request = None
+    api_call = None
+
+    @property
+    def limit(self):
+        return int(self.request.GET.get('limit', DEFAULT_API_LIMIT))
+
+    @property
+    def offset(self):
+        return int(self.request.GET.get('offset', 0))
+
+    @property
+    def search(self):
+        return self.request.GET.get('search', '')
+
+    @property
+    def ordering(self):
+        return self.request.GET.get('ordering', '')
+
+    @cached_property
+    def page_objects_list(self) -> List:
+        paginated_response = self.api_call(**self.get_api_kwargs())
+        self.count = paginated_response.count
+        return paginated_response.results
+
+    def get_context_data(self, *args, **kwargs):
+        inherited_context = super().get_context_data(**kwargs) if hasattr(super(), 'get_context_data') else {}
+        return {
+            **inherited_context,
+            'count': self.count,
+            'objects_list': self.page_objects_list,
+        }
+
+    def get_api_kwargs(self):
+        return {
+            'person': self.request.user.person,
+            'limit':  self.limit,
+            'offset': self.offset,
+            'search': self.search,
+            'ordering': self.ordering
+        }
+
+
+class ApiRetrieveAllObjectsMixin(ApiPaginationMixin):
+
+    def get_api_kwargs(self):
+        kwargs = super().get_api_kwargs()
+        kwargs.pop('offset')
+        return kwargs

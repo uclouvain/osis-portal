@@ -24,17 +24,19 @@
 #
 ##############################################################################
 import json
-from operator import itemgetter
-from typing import List, Dict
+from typing import List, Union, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
+from osis_learning_unit_enrollment_sdk.model.student_specific_profile import StudentSpecificProfile
 
 from attribution.business import xls_students_by_learning_unit
+from attribution.services.attribution import AttributionService
 from attribution.services.enrollments import LearningUnitEnrollmentService
 from attribution.services.learning_unit import LearningUnitService
+from frontoffice.settings.osis_sdk.utils import ApiPaginationMixin, ApiRetrieveAllObjectsMixin
 from osis_common.utils.models import get_object_or_none
 from performance.models.student_performance import StudentPerformance
 
@@ -44,22 +46,26 @@ JANUARY = "janvier"
 JUNE = "juin"
 SEPTEMBER = "septembre"
 
+EnrollmentDict = Dict[str, Union[str, StudentSpecificProfile]]
 
-class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+
+class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView, ApiPaginationMixin):
     permission_required = "base.can_access_attribution"
     template_name = "students_list.html"
+    api_call = LearningUnitEnrollmentService.get_enrollments_paginated_list
 
     def get_context_data(self, **kwargs):
-        enrollments = self.learning_unit_yr_enrollments_list
         return {
             **super().get_context_data(**kwargs),
             'global_id': self.request.user.person.global_id,
-            'students': enrollments,
+            'students': self.enrollments_list,
             'learning_unit_year': self.kwargs['learning_unit_year'],
             'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
             'learning_unit_title': self.learning_unit_title,
-            'has_peps': self.has_peps_student(enrollments),
+            # TODO:  provide endpoint to check luy has_peps
+            'has_peps': self.has_peps_student(),
             'produce_xls_url': self.get_produce_xls_url(),
+            'count': self.count
         }
 
     @cached_property
@@ -87,20 +93,18 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             ''
         )
 
-    @cached_property
-    def learning_unit_yr_enrollments_list(self) -> List[Dict]:
-        enrollments_paginated_response = LearningUnitEnrollmentService.get_enrollments_list(
-            year=int(self.kwargs['learning_unit_year']),
-            acronym="{}{}".format(self.kwargs['learning_unit_acronym'], self.kwargs.get('class_code', "")),
-            person=self.request.user.person,
-        )
-        enrollments = [
-            self.get_enrollments_dict_for_display(enrollment)
-            for enrollment in enrollments_paginated_response.results
-        ]
-        return sorted(enrollments, key=itemgetter('program'))
+    def get_api_kwargs(self):
+        return {
+            **super().get_api_kwargs(),
+            'year': int(self.kwargs['learning_unit_year']),
+            'acronym': "{}{}".format(self.kwargs['learning_unit_acronym'], self.kwargs.get('class_code', "")),
+        }
 
-    def get_enrollments_dict_for_display(self, enrollment):
+    @cached_property
+    def enrollments_list(self) -> List[EnrollmentDict]:
+        return list(map(self.get_enrollments_dict_for_display, super().page_objects_list))
+
+    def get_enrollments_dict_for_display(self, enrollment) -> EnrollmentDict:
         session_results = self.get_sessions_results(enrollment)
 
         return {
@@ -188,9 +192,14 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
         except KeyError:
             return None
 
-    @staticmethod
-    def has_peps_student(enrollments):
-        return any(enrollment.get('student_specific_profile') for enrollment in enrollments)
+    def has_peps_student(self):
+        attributions = AttributionService.get_attributions_list(
+            year=int(self.kwargs['learning_unit_year']),
+            person=self.request.user.person,
+            with_effective_class_repartition=True
+        )
+        attribution = next(a for a in attributions if a['code'] == self.kwargs['learning_unit_acronym'])
+        return attribution['has_peps']
 
     def get_produce_xls_url(self):
         return reverse('produce_xls_students', kwargs={
@@ -204,11 +213,12 @@ class AdminStudentsListView(StudentsListView):
     template_name = "students_list_admin.html"
 
 
-class StudentsListXlsView(StudentsListView):
+class StudentsListXlsView(StudentsListView, ApiRetrieveAllObjectsMixin):
     permission_required = "base.can_access_attribution"
+    api_call = LearningUnitEnrollmentService.get_all_enrollments_list
 
     def get(self, *args, **kwargs):
-        student_list = self.learning_unit_yr_enrollments_list
+        student_list = self.enrollments_list
         return xls_students_by_learning_unit.get_xls(
             student_list,
             self.kwargs['learning_unit_acronym'],
