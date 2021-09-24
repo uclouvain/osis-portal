@@ -25,7 +25,7 @@
 ##############################################################################
 import json
 from functools import wraps
-from typing import Set, List
+from typing import Set, List, Dict
 
 import requests
 from django.conf import settings
@@ -80,7 +80,7 @@ def api_paginated_response(func, default_limit=DEFAULT_API_LIMIT, offset=0):
     @wraps(func)
     def wrapper(*args, **kwargs) -> PaginatedResponse:
         response = func(*args, limit=kwargs.pop('limit', default_limit), offset=kwargs.pop('offset', offset), **kwargs)
-        return PaginatedResponse(response.results, response.count)
+        return PaginatedResponse(**{key: getattr(response, key) for key in response.attribute_map.keys()})
     return wrapper
 
 
@@ -130,45 +130,56 @@ class ApiExceptionHandler:
 
 class PaginatedResponse:
     results: List
-    count: int
+    count: int = 0
+    extra: Dict
 
-    def __init__(self, results: List, count: int):
+    def __init__(self, results: List, count: int, **extra):
         self.results = results
         self.count = count
+        self.extra = extra
 
     def extend(self, paginated_response: 'PaginatedResponse'):
         self.results.extend(paginated_response.results)
 
+    def get_extra(self, key):
+        return self.extra[key]
+
 
 class ApiPaginationMixin:
-    count: int = 0
 
     request = None
     api_call = None
 
     @property
-    def limit(self):
+    def limit(self) -> int:
         return int(self.request.GET.get('limit', DEFAULT_API_LIMIT))
 
     @property
-    def offset(self):
+    def offset(self) -> int:
         return int(self.request.GET.get('offset', 0))
 
     @property
-    def search(self):
+    def search(self) -> str:
         return self.request.GET.get('search', '')
 
     @property
-    def ordering(self):
+    def ordering(self) -> str:
         return self.request.GET.get('ordering', '')
+
+    @property
+    def count(self) -> int:
+        return self.paginated_response.count
+
+    @cached_property
+    def paginated_response(self) -> PaginatedResponse:
+        return self.api_call(**self.get_api_kwargs())
 
     @cached_property
     def page_objects_list(self) -> List:
         paginated_response = self.api_call(**self.get_api_kwargs())
-        self.count = paginated_response.count
         return paginated_response.results
 
-    def get_context_data(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs) -> Dict:
         inherited_context = super().get_context_data(**kwargs) if hasattr(super(), 'get_context_data') else {}
         return {
             **inherited_context,
@@ -176,7 +187,7 @@ class ApiPaginationMixin:
             'objects_list': self.page_objects_list,
         }
 
-    def get_api_kwargs(self):
+    def get_api_kwargs(self) -> Dict:
         return {
             'person': self.request.user.person,
             'limit':  self.limit,
@@ -188,7 +199,7 @@ class ApiPaginationMixin:
 
 class ApiRetrieveAllObjectsMixin(ApiPaginationMixin):
 
-    def get_api_kwargs(self):
+    def get_api_kwargs(self) -> Dict:
         kwargs = super().get_api_kwargs()
         kwargs.pop('offset')
         return kwargs

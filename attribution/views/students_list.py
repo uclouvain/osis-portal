@@ -100,6 +100,10 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             'acronym': "{}{}".format(self.kwargs['learning_unit_acronym'], self.kwargs.get('class_code', "")),
         }
 
+    @property
+    def count(self) -> int:
+        return self.paginated_response.get_extra('enrolled_students_count')
+
     @cached_property
     def enrollments_list(self) -> List[EnrollmentDict]:
         return list(map(self.get_enrollments_dict_for_display, super().page_objects_list))
