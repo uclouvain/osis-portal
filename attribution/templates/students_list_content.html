@@ -29,7 +29,7 @@
 <h2>{{ learning_unit_year }} - {{ learning_unit_acronym }}
     - {{ learning_unit_title }}</h2>
 {% if students %}
-    <h4>{{ count }} {% trans 'students enrolled from' %}</h4>
+    <h4>{{ enrolled_students_count }} {% trans 'students enrolled from' %}</h4>
 {% else %}
     <h4>{% trans 'No students enrolled' %}</h4>
 {% endif %}
