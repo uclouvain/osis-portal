@@ -57,12 +57,12 @@
     <table class="table table-striped table-hover" id="students_table">
         <thead>
         <tr>
-            <th>{% trans 'Pgrm' %}{% ordering 'program' %}</th>
+            <th>{% ordering _('Pgrm') 'program' %}</th>
             <th>{% trans 'Learning unit' %}</th>
             <th><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></th>
-            <th>{% trans 'Last name' %}{% ordering 'student_last_name' %}</th>
-            <th>{% trans 'Registration id' %}{% ordering 'student_registration_id' %}</th>
-            <th>{% trans 'Type of specific profile' %}{% ordering 'specific_profile' %}</th>
+            <th>{% ordering _('Last name') 'student_last_name' %}</th>
+            <th>{% ordering _('Registration id') 'student_registration_id' %}</th>
+            <th>{% ordering _('Type of specific profile') 'specific_profile' %}</th>
             <th>{% trans 'State' %}</th>
             <th>{% trans 'Jan.' %}</th>
             <th>{% trans 'State' %}</th>

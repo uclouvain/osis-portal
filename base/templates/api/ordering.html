@@ -1,5 +1,7 @@
 <form method="get" style="display: inline;">
-    <i onclick="this.parentElement.submit();"
+    <span class="ordering-label" onclick="this.parentElement.submit();">
+    {{ column_name }}
+    <i
         {% if request.GET.ordering == ordering_field_name %}
             class="active-sort-icon glyphicon glyphicon-sort-by-attributes"
         {% elif request.GET.ordering == "-"|add:ordering_field_name %}
@@ -20,4 +22,5 @@
     {% if request.GET.search %}
         <input type="hidden" name="search" value="{{ request.GET.search }}" />
     {% endif %}
+    </span>
 </form>

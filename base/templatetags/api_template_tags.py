@@ -57,6 +57,7 @@ def search(context):
 
 
 @register.inclusion_tag('api/ordering.html', takes_context=True)
-def ordering(context, api_field_name):
+def ordering(context, column_name, api_field_name):
+    context['column_name'] = column_name
     context['ordering_field_name'] = api_field_name
     return context
