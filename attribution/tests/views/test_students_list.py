@@ -135,14 +135,19 @@ class StudentsListViewTest(TestCase):
     )
     @mock.patch("attribution.views.students_list.StudentsListView.has_peps_student", return_value=True)
     def test_get_learning_unit_enrollments_list(self, mock_peps, mock_title, mock_enrollments):
-        mock_enrollments.return_value = SimpleNamespace(**{'count': 2, 'results': [
-            SimpleNamespace(
-                **EnrollmentDictFactory(
-                    learning_unit_acronym=self.full_luy['learning_unit_year'].acronym,
-                    program=program,
-                )
-            ) for program in ['PROG2', 'PROG1']
-        ]})
+        mock_enrollments.return_value = SimpleNamespace(**{
+            'count': 2,
+            'enrolled_students_count': 2,
+            'results': [
+                SimpleNamespace(
+                    **EnrollmentDictFactory(
+                        learning_unit_acronym=self.full_luy['learning_unit_year'].acronym,
+                        program=program,
+                    )
+                ) for program in ['PROG2', 'PROG1']
+             ],
+            'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'}),
+        })
         response = self.client.get(self.url)
         self.assertEqual(len(response.context['students']), 2)
         self.assertEqual(response.context['learning_unit_title'], "TITLE")
