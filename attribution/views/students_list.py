@@ -65,7 +65,8 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             # TODO:  provide endpoint to check luy has_peps
             'has_peps': self.has_peps_student(),
             'produce_xls_url': self.get_produce_xls_url(),
-            'count': self.count
+            'count': self.count,
+            'enrolled_students_count': self.paginated_response.get_extra('enrolled_students_count')
         }
 
     @cached_property

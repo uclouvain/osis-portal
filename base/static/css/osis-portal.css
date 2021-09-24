@@ -121,11 +121,13 @@
 .active-sort-icon{
     opacity: 0.6;
     font-weight: bolder;
-    cursor: pointer;
 }
 
 .inactive-sort-icon{
     opacity: 0.2;
     font-weight: bolder;
+}
+
+.ordering-label{
     cursor: pointer;
 }
