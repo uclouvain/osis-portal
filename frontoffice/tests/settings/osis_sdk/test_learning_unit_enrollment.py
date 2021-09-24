@@ -24,24 +24,24 @@
 #
 ##############################################################################
 import mock
-import osis_attribution_sdk
+import osis_learning_unit_enrollment_sdk
 from django.test import SimpleTestCase, override_settings
 
 from base.tests.factories.person import PersonFactory
-from frontoffice.settings.osis_sdk import attribution as attribution_sdk
+from frontoffice.settings.osis_sdk import learning_unit_enrollment as learning_unit_enrollment_sdk
 
 
 @override_settings(
-    OSIS_ATTRIBUTION_SDK_HOST="http://dummy-api.com/api/attribution",
+    OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST="http://dummy-api.com/api/learning_unit_enrollment",
     OSIS_PORTAL_TOKEN="generic-token",
 )
-class BuildConfigurationAttributionTestCase(SimpleTestCase):
+class BuildConfigurationLearningUnitTestCase(SimpleTestCase):
 
     def test_build_configuration_case_anonymous_call(self):
-        configuration = attribution_sdk.build_configuration()
+        configuration = learning_unit_enrollment_sdk.build_configuration()
 
-        self.assertIsInstance(configuration, osis_attribution_sdk.Configuration)
-        self.assertEqual(configuration.host, "http://dummy-api.com/api/attribution")
+        self.assertIsInstance(configuration, osis_learning_unit_enrollment_sdk.Configuration)
+        self.assertEqual(configuration.host, "http://dummy-api.com/api/learning_unit_enrollment")
         self.assertDictEqual(
             configuration.api_key,
             {"Token": "generic-token"}
@@ -51,9 +51,9 @@ class BuildConfigurationAttributionTestCase(SimpleTestCase):
     def test_build_configuration_case_call_with_person_provided(self, mock_get_token_from_osis):
         person = PersonFactory.build()
 
-        configuration = attribution_sdk.build_configuration(person=person)
-        self.assertIsInstance(configuration, osis_attribution_sdk.Configuration)
-        self.assertEqual(configuration.host, "http://dummy-api.com/api/attribution")
+        configuration = learning_unit_enrollment_sdk.build_configuration(person=person)
+        self.assertIsInstance(configuration, osis_learning_unit_enrollment_sdk.Configuration)
+        self.assertEqual(configuration.host, "http://dummy-api.com/api/learning_unit_enrollment")
         self.assertDictEqual(
             configuration.api_key,
             {"Token": "personal-token"}
