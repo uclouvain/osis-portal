@@ -145,7 +145,7 @@ class StudentsListViewTest(TestCase):
                         program=program,
                     )
                 ) for program in ['PROG2', 'PROG1']
-             ],
+            ],
             'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'}),
         })
         response = self.client.get(self.url)

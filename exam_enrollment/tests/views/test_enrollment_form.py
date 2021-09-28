@@ -294,16 +294,18 @@ class ExamEnrollmentFormTest(TestCase):
             self.assertIn(exam_enrol, exam_enrollments)
 
     def assert_none_etat_to_inscr_not_in_submitted_form(self, exam_enrollments):
-        exam_enrollments_unexpected = [{
-            "acronym": "LBIO4567",
-            "is_enrolled": False,
-            "etat_to_inscr": None
-        },
+        exam_enrollments_unexpected = [
+            {
+                "acronym": "LBIO4567",
+                "is_enrolled": False,
+                "etat_to_inscr": None
+            },
             {
                 "acronym": "LDROI1111",
                 "is_enrolled": False,
                 "etat_to_inscr": None
-            }]
+            }
+        ]
         for index in range(0, len(exam_enrollments_unexpected)):
             self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
 
