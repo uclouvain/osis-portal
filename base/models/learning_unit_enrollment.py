@@ -78,8 +78,3 @@ def find_by_learning_unit_years(learning_unit_years, offer_enrollment_states=Non
         qs = qs.filter(enrollment_state=learning_unit_enrollment_state.ENROLLED)
 
     return qs
-
-
-def find_by_student_and_education_group_year(student, educ_group_year):
-    return LearningUnitEnrollment.objects.filter(offer_enrollment__student=student)\
-                                         .filter(offer_enrollment__education_group_year=educ_group_year)

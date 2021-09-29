@@ -68,7 +68,7 @@ def get_learning_units(a_user):
 
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    attributions = AttributionService.get_attributions_list(year, person)
+    attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
     if attributions:
         filter_clause = functools.reduce(
             operator.or_,
@@ -98,7 +98,13 @@ def get_codes_parameter(request, academic_yr):
 
 def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned):
     learning_unit_years = learning_unit_years_in
-    learning_units = mdl_base.learning_unit_year.find_by_acronym(acronym, academic_yr)
+    learning_units = LearningUnitYear.objects.select_related(
+        "academic_year",
+        "learning_unit"
+    ).filter(
+        acronym__startswith=acronym,
+        academic_year=academic_yr
+    )
     if learning_units and learning_units[0] in user_learning_units_assigned:
         if learning_unit_years is None:
             learning_unit_years = "{0}".format(learning_units[0].acronym)
