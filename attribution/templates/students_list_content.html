@@ -28,7 +28,7 @@
 
 <h2>{{ learning_unit_year }} - {{ learning_unit_acronym }}
     - {{ learning_unit_title }}</h2>
-{% if students %}
+{% if enrolled_students_count %}
     <h4>{{ enrolled_students_count }} {% trans 'students enrolled from' %}</h4>
 {% else %}
     <h4>{% trans 'No students enrolled' %}</h4>
@@ -38,7 +38,7 @@
         <i class="fa fa-exclamation-triangle"></i>  {% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}
     </div>
 {% endif %}
-{% if students %}
+{% if enrolled_students_count %}
     <div class="row">
         <div class="col-md-3 col-sm-3 col-xs-12 col-md-push-9 col-sm-push-9">
             <form method="get" action="{{produce_xls_url}}">
@@ -72,37 +72,45 @@
         </tr>
         </thead>
         <tbody>
-        {% for student in students %}
+        {% if count %}
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.program }}</td>
+                    <td>{{ student.acronym }}</td>
+                    <td>{% if student.email %}
+                        <a href="mailto:{{ student.email }}" data-toggle="tooltip" data-placement="right"
+                           title="{{ student.email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a>
+                    {% else %}
+                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                    {% endif %}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.registration_id | default_if_none:''}}</td>
+                    <td>{{ student.student_specific_profile|type_peps | default_if_none:'-'}}
+                        {% with student_specific_profile_detail=student.student_specific_profile|arrangements_and_guide %}
+                            {% if student_specific_profile_detail %}
+                                <span id="arrangements" data-toggle="tooltip" data-placement="right"
+                                      title="{{ student_specific_profile_detail }}"
+                                      data-html="true">
+                                    <i class="fa fa-list-ul" style="color: #6699FF;" ></i>
+                                </span>
+                            {% endif%}
+                        {% endwith %}
+                    </td>
+                    <td>{{ student.january_status| default_if_none:''}}</td>
+                    <td>{{ student.january_note | default_if_none:''}}</td>
+                    <td>{{ student.june_status| default_if_none:''}}</td>
+                    <td>{{ student.june_note | default_if_none:''}}</td>
+                    <td>{{ student.september_status| default_if_none:''}}</td>
+                    <td>{{ student.september_note | default_if_none:''}}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
             <tr>
-                <td>{{ student.program }}</td>
-                <td>{{ student.acronym }}</td>
-                <td>{% if student.email %}
-                    <a href="mailto:{{ student.email }}" data-toggle="tooltip" data-placement="right"
-                       title="{{ student.email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a>
-                {% else %}
-                    <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                {% endif %}</td>
-                <td>{{ student.name }}</td>
-                <td>{{ student.registration_id | default_if_none:''}}</td>
-                <td>{{ student.student_specific_profile|type_peps | default_if_none:'-'}}
-                    {% with student_specific_profile_detail=student.student_specific_profile|arrangements_and_guide %}
-                        {% if student_specific_profile_detail %}
-                            <span id="arrangements" data-toggle="tooltip" data-placement="right"
-                                  title="{{ student_specific_profile_detail }}"
-                                  data-html="true">
-                                <i class="fa fa-list-ul" style="color: #6699FF;" ></i>
-                            </span>
-                        {% endif%}
-                    {% endwith %}
+                <td colspan="12" class="text-center">
+                    {% trans 'No data found' %}
                 </td>
-                <td>{{ student.january_status| default_if_none:''}}</td>
-                <td>{{ student.january_note | default_if_none:''}}</td>
-                <td>{{ student.june_status| default_if_none:''}}</td>
-                <td>{{ student.june_note | default_if_none:''}}</td>
-                <td>{{ student.september_status| default_if_none:''}}</td>
-                <td>{{ student.september_note | default_if_none:''}}</td>
             </tr>
-        {% endfor %}
+        {% endif %}
         </tbody>
     </table>
     {% pagination %}
