@@ -17,6 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "A server error occured."
+msgstr ""
+
 msgid "Access denied"
 msgstr ""
 
@@ -89,9 +92,6 @@ msgstr ""
 msgid "Dissertation"
 msgstr ""
 
-msgid "Do not hesitate to help us to solve this problem by contacting the"
-msgstr ""
-
 msgid "Education group year"
 msgstr ""
 
@@ -158,6 +158,9 @@ msgstr ""
 msgid "Person with reduced mobility"
 msgstr ""
 
+msgid "Please report this incident to the Service Desk"
+msgstr ""
+
 msgid "Promising athlete"
 msgstr ""
 
@@ -197,16 +200,10 @@ msgstr ""
 msgid "Type of training"
 msgstr ""
 
-msgid "Unexpected error occurred"
-msgstr ""
-
 msgid "Username or password not valid"
 msgstr ""
 
 msgid "Validity"
-msgstr ""
-
-msgid "We have been automatically informed about this problem."
 msgstr ""
 
 msgid "You are now logged out"
@@ -237,6 +234,9 @@ msgid "reset"
 msgstr ""
 
 msgid "to describe what you intended to do in more details."
+msgstr ""
+
+msgid "unknown"
 msgstr ""
 
 msgid "user"
