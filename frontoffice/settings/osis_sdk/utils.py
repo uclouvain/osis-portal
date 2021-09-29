@@ -176,8 +176,7 @@ class ApiPaginationMixin:
 
     @cached_property
     def page_objects_list(self) -> List:
-        paginated_response = self.api_call(**self.get_api_kwargs())
-        return paginated_response.results
+        return self.paginated_response.results
 
     def get_context_data(self, *args, **kwargs) -> Dict:
         inherited_context = super().get_context_data(**kwargs) if hasattr(super(), 'get_context_data') else {}
