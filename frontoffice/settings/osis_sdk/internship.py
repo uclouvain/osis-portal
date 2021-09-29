@@ -29,6 +29,7 @@ import osis_internship_sdk
 from django.conf import settings
 
 from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -44,9 +45,7 @@ def build_configuration(person: Person = None) -> osis_internship_sdk.Configurat
     if person is None:
         token = settings.OSIS_PORTAL_TOKEN
     else:
-        # TODO : Move logic (api.get_token_from_osis) to shared utility class
-        from continuing_education.views import api
-        token = api.get_token_from_osis(person.user, force_user_creation=True)
+        token = utils.get_user_token(person, force_user_creation=True)
 
     return osis_internship_sdk.Configuration(
         host=settings.OSIS_INTERNSHIP_SDK_HOST,
