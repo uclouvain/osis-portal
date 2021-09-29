@@ -13,7 +13,6 @@ jsi18n/
 /frontoffice/settings/dev.py
 .coverage
 .env_bak
-.pylintrc
 VENV/
 coverage.xml
 htmlcov/
@@ -104,3 +103,9 @@ fabric.properties
 .idea/modules.xml
 .idea/preferred-vcs.xml
 .idea/encodings.xml
+
+# Ne jamais ajouter les ous-modules au dépôt
+continuing_education
+dissertation
+internship
+osis_common

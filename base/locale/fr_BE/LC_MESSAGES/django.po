@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-13 14:31+0200\n"
+"POT-Creation-Date: 2021-09-23 11:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgid "Acronym"
 msgstr "Sigle"
 
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
 
 msgid "Administration entity"
 msgstr "Entité d'administration"
@@ -84,7 +84,7 @@ msgid "Data management by entity"
 msgstr "Gestion des données par entité"
 
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 msgid "Details other educational facilities"
 msgstr "Détails autre aménagement"
@@ -103,6 +103,9 @@ msgstr "Entreprenariat"
 
 msgid "External"
 msgstr "Externe"
+
+msgid "Female"
+msgstr "Femme"
 
 msgid "File"
 msgstr "Fichier"
@@ -125,6 +128,9 @@ msgstr "ESHN"
 msgid "Internship"
 msgstr "Stage"
 
+msgid "Male"
+msgstr "Homme"
+
 msgid "Management entity"
 msgstr "Gestion des données par entité"
 
@@ -133,6 +139,9 @@ msgstr "Mini-Formation"
 
 msgid "Not defined"
 msgstr "Non défini"
+
+msgid "Other"
+msgstr "Autre"
 
 msgid "Other collective"
 msgstr "Autre collectif"
@@ -164,6 +173,9 @@ msgstr "Commande SQL"
 msgid "SQL readonly"
 msgstr "SQL en lecture seule"
 
+msgid "Search"
+msgstr "Rechercher"
+
 msgid "Sport"
 msgstr "Sport"
 
@@ -183,7 +195,7 @@ msgid "Training"
 msgstr "Formation"
 
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgid "Type of training"
 msgstr "Type de formation"
@@ -201,19 +213,13 @@ msgid "dissertation"
 msgstr "dissertation"
 
 msgid "execute"
-msgstr ""
-
-msgid "female"
-msgstr "femme"
+msgstr "executer"
 
 msgid "log in"
 msgstr "se connecter"
 
 msgid "logout"
 msgstr "déconnexion"
-
-msgid "male"
-msgstr "homme"
 
 msgid "no student with this registration_id"
 msgstr "pas d'étudiant avec ce registration_id"
@@ -226,6 +232,9 @@ msgstr "mot de passe"
 
 msgid "reset"
 msgstr "réinitialiser"
+
+msgid "to describe what you intended to do in more details."
+msgstr "et en décrivant l'opération effectuée de manière plus détaillée."
 
 msgid "unknown"
 msgstr "inconnu"

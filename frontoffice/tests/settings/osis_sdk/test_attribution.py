@@ -47,7 +47,7 @@ class BuildConfigurationAttributionTestCase(SimpleTestCase):
             {"Token": "generic-token"}
         )
 
-    @mock.patch('continuing_education.views.api.get_token_from_osis', return_value="personal-token")
+    @mock.patch('frontoffice.settings.osis_sdk.utils.get_user_token', return_value="personal-token")
     def test_build_configuration_case_call_with_person_provided(self, mock_get_token_from_osis):
         person = PersonFactory.build()
 
