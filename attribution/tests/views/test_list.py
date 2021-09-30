@@ -66,9 +66,12 @@ class StudentsListTest(TestCase):
         person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         person.save()
         cls.learning_unit_year = LearningUnitYearFactory()
-        cls.enrollments = SimpleNamespace(**{'results': [
-            SimpleNamespace(**EnrollmentDictFactory()) for _ in range(2)
-        ], 'count': 1})
+        cls.enrollments = SimpleNamespace(**{
+            'results': [SimpleNamespace(**EnrollmentDictFactory()) for _ in range(2)],
+            'count': 1,
+            'enrolled_students_count': 1,
+            'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})
+        })
         cls.url = reverse('students_list')
 
     def setUp(self):

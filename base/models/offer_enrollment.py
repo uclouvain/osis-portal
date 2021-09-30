@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from base.models.enums import offer_enrollment_state
@@ -51,13 +50,6 @@ class OfferEnrollment(SerializableModel):
 
 def find_by_student(a_student):
     return OfferEnrollment.objects.filter(student=a_student)
-
-
-def get_by_student_offer(a_student, education_group_year):
-    try:
-        return OfferEnrollment.objects.get(student=a_student, education_group_year=education_group_year)
-    except ObjectDoesNotExist:
-        return None
 
 
 def find_by_student_academic_year(a_student, an_academic_year):
