@@ -92,6 +92,15 @@ msgstr ""
 msgid "Dissertation"
 msgstr ""
 
+msgid "Do not hesitate to help us to solve this problem by contacting the"
+msgstr ""
+
+msgid "ES"
+msgstr ""
+
+msgid "ESHN"
+msgstr ""
+
 msgid "Education group year"
 msgstr ""
 
@@ -122,9 +131,6 @@ msgstr ""
 msgid "Guide"
 msgstr ""
 
-msgid "High Level Promising athlete"
-msgstr ""
-
 msgid "Internship"
 msgstr ""
 
@@ -150,6 +156,9 @@ msgid "Other individual"
 msgstr ""
 
 msgid "Other special needs"
+msgstr ""
+
+msgid "PMR"
 msgstr ""
 
 msgid "Page not found"
