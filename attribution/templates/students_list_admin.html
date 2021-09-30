@@ -46,20 +46,3 @@
 {% block content %}
     {% include 'students_list_content.html' %}
 {% endblock %}
-{% block script %}
-    <script>
-        $(document).ready(function () {
-            $('#students_table').DataTable({
-                paging: false,
-                stateSave: true,
-                info: false,
-                language: {
-                    search: '{% trans 'Search' %}',
-                    infoEmpty: gettext('no_record'),
-                    zeroRecords: gettext('no_record'),
-
-                }
-            });
-        });
-    </script>
-{% endblock %}
