@@ -107,7 +107,16 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
 
     def get_enrollments_dict_for_display(self, enrollment) -> EnrollmentDict:
         session_results = self.get_sessions_results(enrollment)
-
+        note_september = self.get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE)
+        note_june = self.get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_NOTE)
+        note_january = self.get_session_value(session_results, JANUARY, JSON_LEARNING_UNIT_NOTE)
+        last_note = None
+        if note_september != "-":
+            last_note = note_september
+        elif note_june != "-":
+            last_note = note_june
+        elif note_january != "-":
+            last_note = note_january
         return {
             'name': "{0}, {1}".format(
                 enrollment.student_first_name,
@@ -123,7 +132,8 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             'june_status': self.get_session_value(session_results, JUNE, JSON_LEARNING_UNIT_STATUS),
             'september_note': self.get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
             'september_status': self.get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS),
-            'student_specific_profile': enrollment.specific_profile
+            'student_specific_profile': enrollment.specific_profile,
+            'last_note': last_note
         }
 
     def get_sessions_results(self, enrollment):

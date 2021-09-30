@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-29 14:51+0200\n"
+"POT-Creation-Date: 2021-09-23 09:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid " in the column \"Students\""
+msgstr ""
 
 msgid "Acronym"
 msgstr ""
@@ -71,6 +74,9 @@ msgstr ""
 msgid "Credits"
 msgstr ""
 
+msgid "DDI"
+msgstr ""
+
 msgid "Delete"
 msgstr ""
 
@@ -95,7 +101,16 @@ msgstr ""
 msgid "Details other educational facilities"
 msgstr ""
 
+msgid "Disability, Disorder or Illness Students"
+msgstr ""
+
 msgid "Display teachers"
+msgstr ""
+
+msgid "ES"
+msgstr ""
+
+msgid "ESHN"
 msgstr ""
 
 msgid "Educational tutor"
@@ -106,6 +121,11 @@ msgstr ""
 
 msgid "End"
 msgstr ""
+
+#, fuzzy
+#| msgid "Registration id"
+msgid "Exam registration state"
+msgstr "Registration id"
 
 msgid "Export list (Excel)"
 msgstr ""
@@ -135,13 +155,28 @@ msgstr ""
 msgid "Guide"
 msgstr ""
 
+msgid "High Level Promising athlete"
+msgstr ""
+
 msgid "Holder"
+msgstr ""
+
+msgid "I - First registration"
+msgstr ""
+
+msgid "I - Première inscription"
 msgstr ""
 
 msgid "Internship co-supervisor"
 msgstr ""
 
 msgid "Internship supervisor"
+msgstr ""
+
+msgid "J - Carry-over from January to September"
+msgstr ""
+
+msgid "J - Report de note de janvier vers septembre"
 msgstr ""
 
 msgid "Jan."
@@ -159,6 +194,9 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
+msgid "Last score"
+msgstr ""
+
 msgid "Learning unit"
 msgstr ""
 
@@ -168,6 +206,9 @@ msgstr ""
 msgid "Lecturing charge or practical charge must be filled"
 msgstr ""
 
+msgid "Legend"
+msgstr ""
+
 msgid "Legend to help you understanding the xls file"
 msgstr ""
 
@@ -175,6 +216,9 @@ msgid "List of students enrolled to exams of "
 msgstr ""
 
 msgid "List of students enrolled to my exams"
+msgstr ""
+
+msgid "Lists of students are available by clicking on the symbol"
 msgstr ""
 
 msgid "Lists of students enrollments to exams"
@@ -190,6 +234,9 @@ msgid "My charges"
 msgstr ""
 
 msgid "My charges now vacant"
+msgstr ""
+
+msgid "My teaching charge"
 msgstr ""
 
 msgid "New application"
@@ -219,7 +266,22 @@ msgstr ""
 msgid "Other educational facilities"
 msgstr ""
 
+msgid "P - Examen partiel"
+msgstr ""
+
+msgid "P - Partial examination"
+msgstr ""
+
+msgid "PEPS"
+msgstr ""
+
+msgid "PMR"
+msgstr ""
+
 msgid "Pedagogy proposal"
+msgstr ""
+
+msgid "Person with reduced mobility"
 msgstr ""
 
 msgid "Pgrm"
@@ -238,6 +300,18 @@ msgid "Professor"
 msgstr ""
 
 msgid "Program"
+msgstr ""
+
+msgid "Program for Students with a Specific Profile"
+msgstr ""
+
+msgid "Promising athlete"
+msgstr ""
+
+msgid "R - Carry-over from previous session"
+msgstr ""
+
+msgid "R - Report de note de la session précédente"
 msgstr ""
 
 msgid "Registration id"
@@ -259,6 +333,9 @@ msgid "Schedule unavailable"
 msgstr ""
 
 msgid "Scores encoding"
+msgstr ""
+
+msgid "Search"
 msgstr ""
 
 msgid "Select/deselect all attributions to renew"
@@ -294,6 +371,12 @@ msgid "Students"
 msgstr ""
 
 msgid "Submit"
+msgstr ""
+
+msgid "T - Note résultant d’un test"
+msgstr ""
+
+msgid "T - Test grade"
 msgstr ""
 
 msgid "Teachers"
@@ -363,6 +446,12 @@ msgstr ""
 msgid "Type of specific profile"
 msgstr ""
 
+msgid "V - Evaluation satisfaisante (la note ne compte pas)"
+msgstr ""
+
+msgid "V - Satisfactory assessment (mark does not count)"
+msgstr ""
+
 msgid "Vacant"
 msgstr ""
 
@@ -390,7 +479,19 @@ msgstr ""
 msgid "Vol.2 vacant"
 msgstr ""
 
+msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
+msgstr ""
+
+msgid "W - Unsatisfactory assessment (mark does not count)"
+msgstr ""
+
 msgid "Warning, this is not a list for encoding scores."
+msgstr ""
+
+msgid "Y - Deuxième inscription"
+msgstr ""
+
+msgid "Y - Second registration"
 msgstr ""
 
 msgid "Yes"

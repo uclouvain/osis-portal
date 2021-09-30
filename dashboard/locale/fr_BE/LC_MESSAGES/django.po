@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 10:02+0200\n"
+"POT-Creation-Date: 2021-09-21 10:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -124,6 +124,11 @@ msgstr "Code postal"
 msgid "Private email"
 msgstr "Courriel privé"
 
+msgid "Read my teaching charge and access to lists and emails of students."
+msgstr ""
+"Consulter ma charge d'enseignement et accéder aux listes et courriels des "
+"étudiants."
+
 msgid "Registration department"
 msgstr "Service des inscriptions"
 
@@ -165,9 +170,6 @@ msgstr "Gestion de mes attestations."
 
 msgid "This process controls students internships."
 msgstr "Gestion des stages des étudiants."
-
-msgid "This process controls the teaching charge"
-msgstr "Gestion de ma charge d'enseignement"
 
 msgid "This process shows personal data."
 msgstr "Accès à mes données personnelles."
