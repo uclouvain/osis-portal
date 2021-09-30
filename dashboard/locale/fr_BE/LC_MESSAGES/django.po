@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-23 12:41+0200\n"
+"POT-Creation-Date: 2021-09-15 10:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,32 +31,32 @@ msgstr ""
 msgid "Annual program"
 msgstr "Programme annuel"
 
-msgid "Applications administration"
-msgstr "Administration des candidatures en ligne"
+msgid "Annual program administration"
+msgstr "Administration du programme annuel"
 
 msgid "Attestations administration"
 msgstr "Administration des attestations"
 
 msgid "Birth date"
-msgstr ""
+msgstr "Date de naissance"
 
 msgid "Birth location"
-msgstr ""
+msgstr "Lieu de naissance"
 
 msgid "City"
-msgstr ""
+msgstr "Ville"
 
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-msgid "Email"
-msgstr ""
+msgid "Dissertations"
+msgstr "Mémoires"
 
-msgid "Exam marks and registration state administration"
-msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
+msgid "Email"
+msgstr "Email"
 
 msgid "Exam student list"
 msgstr "Liste des examens d'étudiants"
@@ -68,13 +68,10 @@ msgid "Faculty administration"
 msgstr "Administration facultaire"
 
 msgid "First name"
-msgstr ""
-
-msgid "Get scores encoding papersheet and encode scores of your students."
-msgstr "Obtenir mes feuilles de notes et encoder les notes de mes étudiants."
+msgstr "Prénom"
 
 msgid "Global id"
-msgstr ""
+msgstr "Matricule fgs"
 
 msgid "ID data"
 msgstr "Identification"
@@ -89,13 +86,10 @@ msgid "Internships assessment"
 msgstr "Évaluation des stages"
 
 msgid "Last name"
-msgstr ""
+msgstr "Nom"
 
 msgid "List of students enrolled to my exams"
 msgstr "Liste des étudiants inscrits à mes examens"
-
-msgid "Lists of students exams enrollments"
-msgstr "Liste des étudiants inscrits aux examens"
 
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
@@ -125,7 +119,7 @@ msgid "Personal address"
 msgstr "Adresse du domicile"
 
 msgid "Postal code"
-msgstr ""
+msgstr "Code postal"
 
 msgid "Private email"
 msgstr "Courriel privé"
@@ -134,13 +128,13 @@ msgid "Registration department"
 msgstr "Service des inscriptions"
 
 msgid "Registration id"
-msgstr ""
+msgstr "Noma"
 
 msgid "Scores encoding"
-msgstr "Encodage de notes"
+msgstr "Encodage des notes"
 
-msgid "Scores sheets administration"
-msgstr "Administration des feuilles de notes"
+msgid "Scores encoding of my students"
+msgstr "Encoder les notes de mes étudiants"
 
 msgid "Sex"
 msgstr "Sexe"
@@ -157,6 +151,12 @@ msgstr "Données personnelles de l'étudiant"
 msgid "Student ID data administration"
 msgstr "Administration des données personnelles de l'étudiant"
 
+msgid "Student's dissertations management"
+msgstr "Gestion des mémoires des étudiants"
+
+msgid "This process controls internships assessment."
+msgstr "Gestion des évaluations de stages."
+
 msgid "This process controls my applications"
 msgstr "Gestion de mes candidatures aux cours vacants"
 
@@ -166,23 +166,17 @@ msgstr "Gestion de mes attestations."
 msgid "This process controls students internships."
 msgstr "Gestion des stages des étudiants."
 
-msgid "This process controls the students internship."
-msgstr "Gestion des stages des étudiants."
-
-msgid "This process controls internships assessment."
-msgstr "Gestion des évaluations de stages."
-
 msgid "This process controls the teaching charge"
 msgstr "Gestion de ma charge d'enseignement"
 
 msgid "This process shows personal data."
 msgstr "Accès à mes données personnelles."
 
-msgid "This requires a"
-msgstr "Ceci nécessite un"
+msgid "This requires a "
+msgstr "Ceci nécessite un "
 
-msgid "This requires a VPN access outside UCL."
-msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCL."
+msgid "This requires a VPN access outside UCLouvain."
+msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCLouvain."
 
 msgid "VPN access"
 msgstr "accès VPN"
@@ -190,5 +184,5 @@ msgstr "accès VPN"
 msgid "View my annual program and exam marks"
 msgstr "Voir mon programme annuel et mes notes d'examen"
 
-msgid "outside UCL."
-msgstr "en dehors du réseau de l'UCL."
+msgid "outside UCLouvain."
+msgstr "en dehors du réseau de l'UCLouvain."

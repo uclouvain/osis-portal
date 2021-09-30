@@ -26,7 +26,14 @@ django-registration==3.0
 django-autocomplete-light==3.4.1
 django-hijack==2.1.10
 django-hijack-admin==2.1.10
-git+https://github.com/uclouvain/osis-attribution-sdk.git@build-1.11.0
-git+https://github.com/uclouvain/osis-internship-sdk.git@build-1.0
+pycodestyle==2.4.0
+pylint==2.4.4
+diff-cover==3.0.1
+tblib==1.7.0
+git+https://github.com/uclouvain/osis-attribution-sdk.git@build-1.15.0
+git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@build-1.0.0
+git+https://github.com/uclouvain/osis-learning-unit-sdk.git@build-1.7.0
+git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@build-1.0.0
+git+https://github.com/uclouvain/osis-education-group-sdk.git@build-1.8.0
 
 -r ./osis_common/requirements.txt

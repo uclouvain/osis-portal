@@ -29,13 +29,8 @@
               ],
               [
                   "can_access_attribution",
-                  "attribution",
-                  "attributionnew"
-              ],
-              [
-                  "can_access_attribution_application",
-                  "attribution",
-                  "attributionnew"
+                  "base",
+                  "tutor"
               ]
           ]
       }

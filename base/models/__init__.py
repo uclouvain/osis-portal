@@ -2,7 +2,6 @@ from base.models import academic_year
 from base.models import campus
 from base.models import entity
 from base.models import entity_version
-from base.models import learning_component_year
 from base.models import learning_container
 from base.models import learning_container_year
 from base.models import learning_unit

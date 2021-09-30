@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-15 13:55+0100\n"
+"POT-Creation-Date: 2021-09-23 11:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "A server error occured."
+msgstr "Une erreur inattendue s'est produite"
+
 msgid "Access denied"
 msgstr "Accès refusé"
 
@@ -24,7 +27,7 @@ msgid "Acronym"
 msgstr "Sigle"
 
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
 
 msgid "Administration entity"
 msgstr "Entité d'administration"
@@ -81,16 +84,13 @@ msgid "Data management by entity"
 msgstr "Gestion des données par entité"
 
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 msgid "Details other educational facilities"
 msgstr "Détails autre aménagement"
 
 msgid "Dissertation"
 msgstr "Mémoire"
-
-msgid "Do not hesitate to help us to solve this problem by contacting the"
-msgstr "N'hésitez pas à nous aider en contactant le"
 
 msgid "Education group year"
 msgstr "Organisation de formations annualisée"
@@ -103,6 +103,9 @@ msgstr "Entreprenariat"
 
 msgid "External"
 msgstr "Externe"
+
+msgid "Female"
+msgstr "Femme"
 
 msgid "File"
 msgstr "Fichier"
@@ -125,6 +128,9 @@ msgstr "ESHN"
 msgid "Internship"
 msgstr "Stage"
 
+msgid "Male"
+msgstr "Homme"
+
 msgid "Management entity"
 msgstr "Gestion des données par entité"
 
@@ -133,6 +139,9 @@ msgstr "Mini-Formation"
 
 msgid "Not defined"
 msgstr "Non défini"
+
+msgid "Other"
+msgstr "Autre"
 
 msgid "Other collective"
 msgstr "Autre collectif"
@@ -149,6 +158,9 @@ msgstr "Page inexistante"
 msgid "Person with reduced mobility"
 msgstr "PMR"
 
+msgid "Please report this incident to the Service Desk"
+msgstr "Merci de signaler cet incident au Service Desk"
+
 msgid "Promising athlete"
 msgstr "ES"
 
@@ -160,6 +172,9 @@ msgstr "Commande SQL"
 
 msgid "SQL readonly"
 msgstr "SQL en lecture seule"
+
+msgid "Search"
+msgstr "Rechercher"
 
 msgid "Sport"
 msgstr "Sport"
@@ -180,22 +195,16 @@ msgid "Training"
 msgstr "Formation"
 
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgid "Type of training"
 msgstr "Type de formation"
-
-msgid "Unexpected error occurred"
-msgstr "Une erreur inattendue s'est produite"
 
 msgid "Username or password not valid"
 msgstr "Utilisateur ou mot de passe non valide"
 
 msgid "Validity"
 msgstr "Validité"
-
-msgid "We have been automatically informed about this problem."
-msgstr "Nous avons été automatiquement informés du problème."
 
 msgid "You are now logged out"
 msgstr "Vous êtes à présent déconnecté"
@@ -204,19 +213,13 @@ msgid "dissertation"
 msgstr "dissertation"
 
 msgid "execute"
-msgstr ""
-
-msgid "female"
-msgstr "femme"
+msgstr "executer"
 
 msgid "log in"
 msgstr "se connecter"
 
 msgid "logout"
 msgstr "déconnexion"
-
-msgid "male"
-msgstr "homme"
 
 msgid "no student with this registration_id"
 msgstr "pas d'étudiant avec ce registration_id"

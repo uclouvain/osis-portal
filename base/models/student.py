@@ -33,6 +33,7 @@ from django.db import models
 
 from base.models import person as model_person
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from osis_common.utils.models import get_object_or_none
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -63,7 +64,6 @@ class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
     person = models.ForeignKey('Person', on_delete=models.PROTECT)
 
-
     def email(self):
         if self.person.user:
             return self.person.user.email
@@ -75,43 +75,10 @@ class Student(SerializableModel):
 
 
 def find_by_registration_id(registration_id):
-    try:
-        return Student.objects.get(registration_id=registration_id)
-    except ObjectDoesNotExist:
-        return None
-
-
-def search(registration_id=None, person_name=None, person_username=None, person_first_name=None, full_registration=None):
-    """
-    Search students by optional arguments. At least one argument should be informed
-    otherwise it returns empty.
-    """
-    has_criteria = False
-    queryset = Student.objects
-
-    if registration_id:
-        if full_registration:
-            queryset = queryset.filter(registration_id=registration_id)
-        else:
-            queryset = queryset.filter(registration_id__icontains=registration_id)
-        has_criteria = True
-
-    if person_name:
-        queryset = queryset.filter(person__last_name__icontains=person_name)
-        has_criteria = True
-
-    if person_username:
-        queryset = queryset.filter(person__user__username=person_username)
-        has_criteria = True
-
-    if person_first_name:
-        queryset = queryset.filter(person__first_name__icontains=person_first_name)
-        has_criteria = True
-
-    if has_criteria:
-        return queryset
-    else:
-        return None
+    return get_object_or_none(
+        Student,
+        registration_id=registration_id
+    )
 
 
 def find_by_person(a_person):
@@ -125,9 +92,3 @@ def find_by_person(a_person):
 def find_by_user(a_user):
     person = model_person.find_by_user(a_user)
     return find_by_person(person)
-
-
-def is_student(a_user):
-    if find_by_user(a_user):
-        return True
-    return False

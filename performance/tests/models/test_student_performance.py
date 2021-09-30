@@ -89,17 +89,6 @@ class TestModelStudentPerformance(TestCase):
         actual = mdl_perf.find_by_pk(self.student_performance.pk)
         self.assertEqual(actual, self.student_performance)
 
-    def test_find_by_student_and_offer_year(self):
-        actual_student_performance = mdl_perf.find_by_student_and_offer_year(self.student_performance.registration_id,
-                                                                             self.student_performance.academic_year,
-                                                                             self.student_performance.acronym)
-        self.assertEqual(actual_student_performance, self.student_performance)
-
-        actual_student_performance = mdl_perf.find_by_student_and_offer_year("464846",
-                                                                             self.student_performance.academic_year,
-                                                                             self.student_performance.acronym)
-        self.assertNotEqual(actual_student_performance, self.student_performance)
-
     def test_has_expired(self):
         expired_date = datetime.datetime.strptime("January 20 2000 5:30", "%B %d %Y %H:%M")
         self.student_performance.update_date = expired_date

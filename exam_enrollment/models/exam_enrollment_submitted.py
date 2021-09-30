@@ -61,8 +61,10 @@ class ExamEnrollmentSubmitted(models.Model):
         return "{}".format(self.offer_enrollment)
 
 
-def insert_or_update_document(an_offer_enrollment, document):
+def insert_or_update_document(acronym: str, year: int, document):
     exam_enrollment_object, created = ExamEnrollmentSubmitted.objects.update_or_create(
-        offer_enrollment=an_offer_enrollment, defaults={"document": document}
+        offer_enrollment__education_group_year__acronym=acronym,
+        offer_enrollment__education_group_year__academic_year__year=year,
+        defaults={"document": document}
     )
     return exam_enrollment_object

@@ -8,7 +8,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -43,13 +43,14 @@
 {% if attributions %}
     <table class="table table-striped table-hover">
         <tr>
+            <th></th>
             <th>{% trans 'Code' %}</th>
             <th>{% trans 'Title' %}</th>
             <th>{% trans 'Start' %}</th>
             <th>{% trans 'Vol.1' %}</th>
             <th>{% trans 'Vol.2' %}</th>
             <th>%</th>
-            <th>{% trans 'ECT' %}</th>
+            <th>{% trans 'Credits' %}</th>
             <th>{% trans 'Students' %}</th>
             <th>{% trans 'Schedule' %}</th>
             <th>{% trans 'Email' %}</th>
@@ -57,6 +58,18 @@
         </tr>
         {% for attribution in attributions %}
             <tr>
+                <td>
+                    {% if attribution.effective_class_repartition %}
+                        <a role="button" data-toggle="collapse"
+                           href=".collapse_classes{{ forloop.counter0 }}"
+                           aria-expanded="true" aria-controls="collapse_classes{{ forloop.counter0 }}"
+                           style="border:0;padding:0;"
+                           onclick="changeOrientation(expandButton{{ forloop.counter0 }})">
+                                        <span id="expandButton{{ forloop.counter0 }}" class="glyphicon glyphicon-expand"
+                                              aria-hidden="true"></span>
+                        </a>
+                    {% endif %}
+                </td>
                 <td>
                     {% if attribution.links.catalog %}
                         <a href="{{ attribution.links.catalog }}" target="_blank">{{ attribution.code }}</a>
@@ -71,9 +84,21 @@
                 <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.credits | default_if_none:''}}</td>
                 <td>
-                    <a href="{{ attribution.attribution_students_url }}">
-                        <span class="fa fa-group" aria-hidden="true"></span>
-                    </a>
+                    {% if attribution.effective_class_repartition %}
+                        <a title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
+                            <span class="fa fa-group" aria-hidden="true" style="color:gray"></span>
+                        </a>
+                    {% else %}
+                        <a href="{{ attribution.attribution_students_url }}">
+                            <span class="fa fa-group" aria-hidden="true"></span>
+                        </a>
+                        {% if attribution.has_peps %}
+                            <span class="label label-warning"
+                                  title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}">
+                            PEPS
+                        </span>
+                        {% endif %}
+                    {% endif %}
                 </td>
                 <td>
                     {% if attribution.links.schedule %}
@@ -83,21 +108,74 @@
                     {% else %}
                         <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                              title="{% trans 'Schedule unavailable' %}">
-                             <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
                         </div>
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ attribution.students_list_email }}">
-                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-                    </a>
+                    {% if attribution.effective_class_repartition %}
+                        <a title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
+                            <span class="glyphicon glyphicon-envelope" aria-hidden="true" style="color:gray"></span>
+                        </a>
+                    {% else %}
+                        <a href="{{ attribution.students_list_email }}">
+                            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                        </a>
+                    {% endif %}
                 </td>
                 <td>{{ attribution.function|function_text }}</td>
             </tr>
+            {% with component_number=forloop.counter0 classes_count=attribution.effective_class_repartition|length|add:"1" %}
+
+                {% for class_repartition in attribution.effective_class_repartition %}
+                    <tr class="class_year collapse collapse_classes{{ component_number }} in">
+                        <td></td>
+                        <td>
+                            {{ class_repartition.code }}
+                        </td>
+                        <td>{{ attribution.title_fr }} - {{ class_repartition.title_fr }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a href="{{ class_repartition.repartition_students_url }}">
+                                <span class="fa fa-group" aria-hidden="true"></span>
+                            </a>
+                            {% if class_repartition.has_peps %}
+                                <span class="label label-warning"
+                                      title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}">
+                            PEPS
+                        </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if class_repartition.schedule_url %}
+                                <a target="_blank" href="{{ class_repartition.schedule_url }}">
+                                    <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+                                </a>
+                            {% else %}
+                                <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                     title="{% trans 'Schedule unavailable' %}">
+                                    <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ class_repartition.students_list_email }}">
+                                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                        <td>{{ attribution.function|function_text }}</td>
+                    </tr>
+                {% endfor %}
+            {% endwith %}
         {% endfor %}
         <tr>
             <td></td>
             <td><label>{% trans 'Total' %}</label></td>
+            <td></td>
             <td></td>
             <td>{{ total_lecturing_charge }}</td>
             <td>{{ total_practical_charge }}</td>
@@ -106,5 +184,18 @@
     </table>
 {% else %}
     <br>
-    <div class="alert alert-info" role="alert">{% trans 'No teaching charge in ' %} {{ current_year_displayed|display_as_academic_year }}</div>
+    <div class="alert alert-info"
+         role="alert">{% trans 'No teaching charge in ' %} {{ current_year_displayed|display_as_academic_year }}</div>
 {% endif %}
+
+{% block script %}
+    <script>
+        function changeOrientation(button) {
+            if (button.className == "glyphicon glyphicon-collapse-down") {
+                button.className = "glyphicon glyphicon-expand"
+            } else if (button.className == "glyphicon glyphicon-expand") {
+                button.className = "glyphicon glyphicon-collapse-down"
+            }
+        }
+    </script>
+{% endblock %}

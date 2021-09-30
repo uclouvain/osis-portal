@@ -95,12 +95,6 @@ def search_order_by_acronym(academic_year_id=None):
     return search(academic_year_id).order_by('acronym')
 
 
-def find_by_acronym(acronym, academic_year):
-    return LearningUnitYear.objects.select_related("academic_year",
-                                                   "learning_unit").\
-        filter(acronym__startswith=acronym, academic_year=academic_year)
-
-
 def find_first_by_exact_acronym(academic_year_obj, acronym: 'str') -> 'LearningUnitYear':
     return LearningUnitYear.objects.filter(
         academic_year=academic_year_obj,

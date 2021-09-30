@@ -10,7 +10,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -60,25 +60,24 @@
         <div class="panel-body">
             <div class="row">
                 <!-- Search vacant -->
-                <form method="get" action="{% url 'vacant_attributions_search' %}">
+                <form method="GET" action="{% url 'search_vacant_courses' %}">
                     <div class="col-md-8">
                         <p class="text-muted">{% trans 'To find a vacant learning unit to candidate to, introduce the code and click on the button' %}</p>
                     </div>
                     <div class="col-md-2">
                         <label for="learning_container_acronym_id">{% trans 'Faculty' %}</label>
-                        {{ search_form.faculty }}
+                        {{ form.faculty }}
                     </div>
                     <div class="col-md-2">
                         <label for="learning_container_acronym_id">{% trans 'Code' %}</label>
                         <div class="input-group">
-                            {{ search_form.learning_container_acronym }}
+                            {{ form.learning_container_acronym }}
                             <div class="input-group-btn">
-                                <button type="submit" id="bt_submit_vacant_attributions_search" class="btn btn-primary"
+                                <button type="submit" id="bt_submit_search_vacant_courses" class="btn btn-primary"
                                         role="button"
                                         title="{% trans 'Please enter the code of the course to which you would like to apply' %}">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                 </button>
-
                             </div>
                         </div>
                     </div>
@@ -86,11 +85,11 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <span class="error">{{ search_form.errors.learning_container_acronym }}</span>
+                    <span class="error">{{ form.errors.learning_container_acronym }}</span>
                 </div>
             </div>
             <br>
-            {% if attributions_vacant %}
+            {% if vacant_courses %}
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
@@ -112,36 +111,36 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for attribution in attributions_vacant %}
+                    {% for vacant_course in vacant_courses %}
                         <tr>
                             <td>
                                 <a title="{% trans 'Specifications' %}"
-                                   href="{{ attribution.learning_container_year_id | get_url_learning_unit_year }}"
+                                   href="{% catalog_url_learning_unit vacant_course.code vacant_course.year %}"
                                    target="_blank">
-                                    {{ attribution.acronym }}
+                                    {{ vacant_course.code }}
                                 </a>
                             </td>
                             <td>
                                 <a title="{% trans 'Specifications' %}"
-                                   href="{{ attribution.learning_container_year_id | get_url_learning_unit_year }}"
+                                   href="{% catalog_url_learning_unit vacant_course.code vacant_course.year %}"
                                    target="_blank">
-                                    {{ attribution.title }}
+                                    {{ vacant_course.title }}
                                 </a>
                             </td>
-                            <td>{{ attribution.lecturing_vol }}</td>
-                            <td>{{ attribution.practical_exercises_vol }}</td>
-                            <td style="border-left: 1px solid;">{{ attribution.LECTURING }}</td>
-                            <td>{{ attribution.PRACTICAL_EXERCISES }}</td>
+                            <td>{{ vacant_course.lecturing_volume_total }}</td>
+                            <td>{{ vacant_course.practical_volume_total }}</td>
+                            <td style="border-left: 1px solid;">{{ vacant_course.lecturing_volume_available }}</td>
+                            <td>{{ vacant_course.practical_volume_available }}</td>
                             <td>
-                                {% if attribution.teachers %}
-                                    {% with teacher_number=forloop.counter0 %}
+                                {% if vacant_course.tutors %}
+                                    {% with tutor_number=forloop.counter0 %}
                                         <a role="button" data-toggle="collapse"
-                                           href=".collapse_teachers{{ teacher_number }}"
-                                           aria-expanded="false" aria-controls="collapse_teachers{{ teacher_number }}"
+                                           href=".collapse_teachers{{ tutor_number }}"
+                                           aria-expanded="false" aria-controls="collapse_teachers{{ tutor_number }}"
                                            style="border:0;padding:0;"
-                                           onclick="changeOrientation(expandButton{{ teacher_number }})"
+                                           onclick="changeOrientation(expandButton{{ tutor_number }})"
                                            title="{% trans 'Display teachers' %}">
-                                            <span id="expandButton{{ teacher_number }}"
+                                            <span id="expandButton{{ tutor_number }}"
                                                   class="glyphicon glyphicon-expand" aria-hidden="true"></span>
                                         </a>
                                     {% endwith %}
@@ -149,28 +148,26 @@
                             </td>
                             <td>
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
-                                     title="{% if attribution.already_applied %}
-                                                {% trans 'You already apply to this course.' %}
-                                            {% elif attribution.team %}
+                                     title="{% if vacant_course.is_in_team %}
                                                 {% trans 'This course is team-managed. The application to this activity is based on a paper transmission.' %}
                                             {% endif %}">
-                                    <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
-                                       href="{% url 'create_or_update_tutor_application' learning_container_year_id=attribution.learning_container_year_id %}"
-                                            {% if attribution.already_applied or attribution.team %}
-                                       disabled {% endif %}>
+                                    <a id="lnk_submit_application_new" class="btn btn-primary pull-right"
+                                       href="{% url 'create_application' vacant_course.code %}"
+                                       {% if vacant_course.is_in_team %} disabled {% endif %}>
+
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                        {% trans 'New application' %}
+                                       {% trans 'New application' %}
                                     </a>
                                 </div>
                             </td>
                         </tr>
 
-                        {% with teacher_number=forloop.counter0 %}
-                            {% if attribution.teachers %}
-                                <tr class="collapse collapse_teachers{{ teacher_number }}"
+                        {% with tutor_number=forloop.counter0 %}
+                            {% if vacant_course.tutors %}
+                                <tr class="collapse collapse_teachers{{ tutor_number }}"
                                     style="background-color: white;">
                                     <td colspan="11">
-                                        {% include "teachers.html" %}
+                                        {% include "tutor_attribution_list.html" with tutors=vacant_course.tutors %}
                                     </td>
                                 </tr>
                             {% endif %}
@@ -178,9 +175,9 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                {% elif request.GET.learning_container_acronym and not attributions_vacant %}
-                <div class="alert alert-info" role="alert">{% trans 'No vacant corresponding course' %}</div>
-            {% endif %}
+                {% elif form.is_valid and not vacant_courses %}
+                    <div class="alert alert-info" role="alert">{% trans 'No vacant corresponding course' %}</div>
+                {% endif %}
         </div>
     </div>
 {% endblock %}

@@ -1,5 +1,7 @@
 from collections import defaultdict
+from typing import Optional
 
+from django.contrib.auth.models import User
 from django.core.exceptions import MultipleObjectsReturned
 
 from base.models.enums import offer_enrollment_state
@@ -41,7 +43,7 @@ def _discriminate_student(students):
         return None
 
 
-def find_by_user_and_discriminate(a_user):
+def find_by_user_and_discriminate(a_user: User) -> Optional[Student]:
     """
     Try to find unique Student by user.
     If there is multiple student, offer enrollments are checked to find the valid Student.

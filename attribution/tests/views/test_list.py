@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import datetime
+from types import SimpleNamespace
 
 import mock
 from django.contrib.auth.models import Group, Permission
@@ -32,6 +33,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
 
+from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
 from base.tests.factories.education_group_year import EducationGroupYearFactory
@@ -63,7 +65,13 @@ class StudentsListTest(TestCase):
         person.global_id = "001923265"
         person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         person.save()
-
+        cls.learning_unit_year = LearningUnitYearFactory()
+        cls.enrollments = SimpleNamespace(**{
+            'results': [SimpleNamespace(**EnrollmentDictFactory()) for _ in range(2)],
+            'count': 1,
+            'enrolled_students_count': 1,
+            'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})
+        })
         cls.url = reverse('students_list')
 
     def setUp(self):
@@ -83,8 +91,10 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    def test_with_no_attributions(self):
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    def test_with_no_attributions(self, mock_get_attributions_list):
         response = self.client.get(self.url)
+        mock_get_attributions_list.return_value = []
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'list/students_exam.html')
@@ -92,7 +102,7 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertEqual(response.context['my_learning_units'], [])
 
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     def test_with_attributions(self, mock_get_attributions_list):
         an_academic_year = create_current_academic_year()
 
@@ -110,17 +120,24 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['person'], self.tutor.person)
         self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
 
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
-    def test_with_attribution_students(self, mock_get_attributions_list):
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
+    @mock.patch("attribution.views.students_list.StudentsListView.learning_unit_title", new_callable=mock.PropertyMock)
+    def test_with_attribution_students(self, mock_lu, mock_students_list_endpoint, mock_get_attributions_list):
+        mock_students_list_endpoint.return_value = self.enrollments
+        mock_lu.return_value = "TITLE"
         today = datetime.datetime.today()
-        an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
-                                               end_date=today + datetime.timedelta(days=5))
+        an_academic_year = AcademicYearFactory(
+            year=today.year, start_date=today - datetime.timedelta(days=5),
+            end_date=today + datetime.timedelta(days=5)
+        )
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
         mock_get_attributions_list.return_value = [
-            Attribution(
-                code=a_learning_unit_year.acronym,
-                year=a_learning_unit_year.academic_year.year,
-            )
+            {
+                'code': a_learning_unit_year.acronym,
+                'year': a_learning_unit_year.academic_year.year,
+                'has_peps': False
+            }
         ]
         education_group_year = EducationGroupYearFactory(academic_year=an_academic_year)
 
@@ -134,16 +151,18 @@ class StudentsListTest(TestCase):
         LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment,
                                       enrollment_state="")
 
-        url = reverse('attribution_students', kwargs={
-            'learning_unit_year_id': a_learning_unit_year.id,
-            'a_tutor': self.tutor.id
+        url = reverse('student_enrollments_by_learning_unit', kwargs={
+            'learning_unit_acronym': a_learning_unit_year.acronym,
+            'learning_unit_year': a_learning_unit_year.academic_year.year
         })
         response = self.client.get(url)
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'students_list.html')
 
         self.assertEqual(response.context['global_id'], self.tutor.person.global_id)
-        self.assertEqual(response.context['learning_unit_year'], a_learning_unit_year)
+        self.assertEqual(response.context['learning_unit_year'], str(a_learning_unit_year.academic_year.year))
+        self.assertEqual(response.context['learning_unit_acronym'], str(a_learning_unit_year.acronym))
+        self.assertEqual(response.context['learning_unit_title'], "TITLE")
         self.assertTrue(response.context['students'])
         self.assertEqual(len(response.context['students']), 2)
 
@@ -193,7 +212,7 @@ class ListBuildTest(TestCase):
         'SERVER_TO_FETCH_URL': '/server',
         'ATTRIBUTION_PATH': '/path'
     })
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self, mock_fetch, mock_get_attributions_list):
         today = datetime.datetime.today()
@@ -222,7 +241,7 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [a_learning_unit_year])
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     def test_when_trying_to_access_other_tutor_students_list(self, mock_get_attributions_list):
         an_other_tutor = TutorFactory()
         an_other_tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
@@ -247,7 +266,7 @@ class ListBuildTest(TestCase):
         'SERVER_TO_FETCH_URL': '/server',
         'ATTRIBUTION_PATH': '/path'
     })
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self, mock_fetch, mock_get_attributions_list):
         today = datetime.datetime.today()
@@ -309,7 +328,7 @@ class AdminStudentsListTest(TestCase):
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'admin/students_list.html')
 
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     def test_with_attributions(self, mock_get_attributions_list):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
@@ -374,7 +393,7 @@ class AdminListBuildTest(TestCase):
         'SERVER_TO_FETCH_URL': '/server',
         'ATTRIBUTION_PATH': '/path'
     })
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self, mock_fetch, mock_get_attributions_list):
         today = datetime.datetime.today()
@@ -405,7 +424,7 @@ class AdminListBuildTest(TestCase):
         'SERVER_TO_FETCH_URL': '/server',
         'ATTRIBUTION_PATH': '/path'
     })
-    @mock.patch("attribution.views.list.RemoteAttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self, mock_fetch, mock_get_attributions_list):
         today = datetime.datetime.today()

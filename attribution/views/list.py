@@ -37,7 +37,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
-from attribution.models.remote_attribution_service import RemoteAttributionService
+from attribution.services.attribution import AttributionService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.learning_unit_year import LearningUnitYear
@@ -50,7 +50,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 def students_list(request):
     data = get_learning_units(request.user)
     return render(request, "list/students_exam.html", data)
@@ -68,7 +68,7 @@ def get_learning_units(a_user):
 
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    attributions = RemoteAttributionService.get_attributions_list(year, person)
+    attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
     if attributions:
         filter_clause = functools.reduce(
             operator.or_,
@@ -98,7 +98,13 @@ def get_codes_parameter(request, academic_yr):
 
 def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned):
     learning_unit_years = learning_unit_years_in
-    learning_units = mdl_base.learning_unit_year.find_by_acronym(acronym, academic_yr)
+    learning_units = LearningUnitYear.objects.select_related(
+        "academic_year",
+        "learning_unit"
+    ).filter(
+        acronym__startswith=acronym,
+        academic_year=academic_yr
+    )
     if learning_units and learning_units[0] in user_learning_units_assigned:
         if learning_unit_years is None:
             learning_unit_years = "{0}".format(learning_units[0].acronym)
@@ -114,7 +120,7 @@ def get_anac_parameter(current_academic_year):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 @require_POST
 def list_build(request):
     current_academic_year = mdl_base.academic_year.current_academic_year()
@@ -166,7 +172,7 @@ def _make_xls_list(excel_list_student_enrolled):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 def lists_of_students_exams_enrollments(request):
     if request.method == "POST":
         form = GlobalIdForm(request.POST)
@@ -191,7 +197,7 @@ def get_learning_units_by_person(global_id):
 
 
 @login_required
-@permission_required('attribution.can_access_attribution', raise_exception=True)
+@permission_required('base.can_access_attribution', raise_exception=True)
 @require_POST
 def list_build_by_person(request, global_id):
     current_academic_year = mdl_base.academic_year.current_academic_year()

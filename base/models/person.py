@@ -46,21 +46,21 @@ class PersonAdmin(SerializableModelAdmin):
 
 class Person(SerializableModel):
     GENDER_CHOICES = (
-        ('F', _('female')),
-        ('M', _('male')),
-        ('U', _('unknown')))
+        ('F', _('Female')),
+        ('H', _('Male')),
+        ('X', _('Other')))
 
-    external_id = models.CharField(max_length=100, blank=True, null=True)
+    external_id = models.CharField(max_length=100, blank=True, default='')
     changed = models.DateTimeField(null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    global_id = models.CharField(max_length=10, blank=True, null=True)
-    gender = models.CharField(max_length=1, blank=True, null=True, choices=GENDER_CHOICES, default='U')
-    first_name = models.CharField(max_length=50, blank=True, null=True, db_index=True)
-    middle_name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50, blank=True, null=True, db_index=True)
+    global_id = models.CharField(max_length=10, blank=True, default='')
+    gender = models.CharField(max_length=1, blank=True, null=True, choices=GENDER_CHOICES, default='')
+    first_name = models.CharField(max_length=50, blank=True, default='', db_index=True)
+    middle_name = models.CharField(max_length=50, blank=True, default='')
+    last_name = models.CharField(max_length=50, blank=True, default='', db_index=True)
     email = models.EmailField(max_length=255, default='')
-    phone = models.CharField(max_length=30, blank=True, null=True)
-    phone_mobile = models.CharField(max_length=30, blank=True, null=True)
+    phone = models.CharField(max_length=30, blank=True, default='')
+    phone_mobile = models.CharField(max_length=30, blank=True, default='')
     language = models.CharField(max_length=30, null=True, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
 
     def username(self):
@@ -87,10 +87,6 @@ class Person(SerializableModel):
             ("is_faculty_administrator", "Is faculty administrator"),
             ("can_access_administration", "Can access administration"),
         )
-
-
-def find_by_id(person_id):
-    return Person.objects.get(id=person_id)
 
 
 def find_by_user(user):

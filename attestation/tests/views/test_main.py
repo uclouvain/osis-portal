@@ -33,8 +33,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from mock import patch
 
-
-from attestation.views import main as v_main
+import attestation.views.home
 from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
@@ -388,10 +387,10 @@ class DownloadStudentAttestation(TestCase):
 
 class TestRegistrationIdMessage(TestCase):
     def test_generate_message_with_registration_id(self):
-        given_json_message = v_main._make_registration_json_message('1111111')
+        given_json_message = attestation.views.home._make_registration_json_message('1111111')
         expected_json_message = json.loads('{"registration_id" : "1111111"}')
         self.assertJSONEqual(given_json_message, expected_json_message)
 
     def test_generate_message_without_registration_id(self):
-        given_json_message = v_main._make_registration_json_message(None)
+        given_json_message = attestation.views.home._make_registration_json_message(None)
         self.assertIsNone(given_json_message)

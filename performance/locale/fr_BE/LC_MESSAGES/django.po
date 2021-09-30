@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-11 11:44+0100\n"
+"POT-Creation-Date: 2021-08-30 14:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,9 @@ msgstr "Crédits acquis de progression"
 msgid "Acronym"
 msgstr "Sigle"
 
+msgid "Annual program administration"
+msgstr "Administration du programme annuel"
+
 msgid "Attention : From June 2009, the score is expressed to a maximum of 20."
 msgstr ""
 "Attention : à partir de juin 2009, la moyenne est exprimée sur un maximum de "
@@ -76,13 +79,13 @@ msgid "ECTS"
 msgstr "ECTS"
 
 msgid "Error"
-msgstr ""
-
-msgid "Exam marks and registration state administration"
-msgstr "Administration de l'état d'inscription aux cours et des notes d'examen"
+msgstr "Erreur"
 
 msgid "Exam marks and registration state of a student"
 msgstr "Etat d'inscription aux cours et notes d'examens d'un étudiant"
+
+msgid "Faculty administration"
+msgstr "Administration facultaire"
 
 msgid "First Name"
 msgstr "Prénom"
@@ -129,7 +132,7 @@ msgid "My exam marks and regisration state"
 msgstr "Mon état d'inscription aux cours et mes notes d'examen"
 
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 msgid "No results to show."
 msgstr "Vous n'avez aucune note."
@@ -242,7 +245,7 @@ msgid "Year"
 msgstr "Année"
 
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 msgid "distance exams"
 msgstr "examens distanciels"
@@ -251,7 +254,7 @@ msgid "oral exams with Teams, in a room at UCLouvain"
 msgstr "examens oraux avec Teams, dans une salle UCLouvain"
 
 msgid "performance"
-msgstr ""
+msgstr "performance"
 
 msgid "written exams with Gradescope, in a room at UCLouvain"
 msgstr "examens écrits sur Gradescope, dans une salle UCLouvain"

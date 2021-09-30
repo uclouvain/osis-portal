@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-11 11:44+0100\n"
+"POT-Creation-Date: 2021-08-30 14:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,6 +45,9 @@ msgstr ""
 msgid "Acronym"
 msgstr ""
 
+msgid "Annual program administration"
+msgstr ""
+
 msgid "Attention : From June 2009, the score is expressed to a maximum of 20."
 msgstr ""
 
@@ -69,10 +72,10 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-msgid "Exam marks and registration state administration"
+msgid "Exam marks and registration state of a student"
 msgstr ""
 
-msgid "Exam marks and registration state of a student"
+msgid "Faculty administration"
 msgstr ""
 
 msgid "First Name"

@@ -109,31 +109,9 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
         )
 
     if 'exam_enrollment' in settings.INSTALLED_APPS:
-        from exam_enrollment.views.exam_enrollment import insert_or_update_document_from_queue
+        from exam_enrollment.views.utils import insert_or_update_document_from_queue
 
         _listen_to_queue_with_callback(
             callback=insert_or_update_document_from_queue,
             queue_name='EXAM_ENROLLMENT_FORM_RESPONSE'
-        )
-
-    if 'attribution' in settings.INSTALLED_APPS:
-        from attribution.business.attribution_json import insert_or_update_document_from_queue
-
-        _listen_to_queue_with_callback(
-            callback=insert_or_update_document_from_queue,
-            queue_name='ATTRIBUTION_RESPONSE'
-        )
-
-        from attribution.utils.tutor_application_epc import process_message
-
-        _listen_to_queue_with_callback(
-            callback=process_message,
-            queue_name='APPLICATION_RESPONSE'
-        )
-
-        from attribution.utils.tutor_application_osis import process_message
-
-        _listen_to_queue_with_callback(
-            callback=process_message,
-            queue_name='APPLICATION_OSIS_PORTAL'
         )
