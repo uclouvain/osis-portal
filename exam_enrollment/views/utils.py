@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import json
+import logging
 import time
 import traceback
 from typing import Dict
@@ -38,7 +39,9 @@ from base import models as mdl_base
 from base.models.student import Student
 from exam_enrollment.models import exam_enrollment_request
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
-from exam_enrollment.views.exam_enrollment import queue_exception_logger, logger
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 
 
 def get_request_timeout() -> int:

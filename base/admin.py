@@ -31,9 +31,6 @@ from base.models import education_group, education_group_type, education_group_y
 admin.site.register(academic_year.AcademicYear,
                     academic_year.AcademicYearAdmin)
 
-admin.site.register(campus.Campus,
-                    campus.CampusAdmin)
-
 admin.site.register(education_group.EducationGroup,
                     education_group.EducationGroupAdmin)
 
@@ -61,9 +58,6 @@ admin.site.register(learning_container_year.LearningContainerYear,
 admin.site.register(learning_unit_year.LearningUnitYear,
                     learning_unit_year.LearningUnitYearAdmin)
 
-admin.site.register(learning_unit_enrollment.LearningUnitEnrollment,
-                    learning_unit_enrollment.LearningUnitEnrollmentAdmin)
-
 admin.site.register(offer_enrollment.OfferEnrollment,
                     offer_enrollment.OfferEnrollmentAdmin)
 
@@ -75,9 +69,6 @@ admin.site.register(person.Person,
 
 admin.site.register(student.Student,
                     student.StudentAdmin)
-
-admin.site.register(student_specific_profile.StudentSpecificProfile,
-                    student_specific_profile.StudentSpecificProfileAdmin)
 
 admin.site.register(tutor.Tutor,
                     tutor.TutorAdmin)
