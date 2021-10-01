@@ -47,29 +47,6 @@ from performance.models.student_performance import StudentPerformance
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-# Students Views
-
-# @login_required
-# @permission_required('base.is_student', raise_exception=True)
-# def view_performance_home(request):
-#     """
-#     Display the academic programs of the student.
-#     """
-#     try:
-#         stud = student_bsn.find_by_user_and_discriminate(request.user)
-#     except MultipleObjectsReturned:
-#         return dash_main_view.show_multiple_registration_id_error(request)
-#     list_student_programs = None
-#     if stud:
-#         list_student_programs = __get_student_programs(stud)
-#     data = {
-#         "student": stud,
-#         "programs": list_student_programs,
-#         "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
-#     }
-#     return layout.render(request, "performance_home_student.html", data)
-
-
 def __make_not_authorized_message(stud_perf):
     authorized = stud_perf.authorized if stud_perf else None
     session_month = stud_perf.get_session_locked_display() if stud_perf else None
@@ -190,29 +167,6 @@ def select_student(request):
     return layout.render(request, "admin/performance_administration.html", {"form": form})
 
 
-# @login_required
-# def visualize_student_programs(request, registration_id):
-#     """
-#     View to visualize a particular student list of academic programs.
-#     !!! Should only be accessible for staff having the rights.
-#     """
-#     if not _can_access_performance_administration(request):
-#         raise PermissionDenied
-#     stud = mdl_student.find_by_registration_id(registration_id)
-#     list_student_programs = None
-#     if stud:
-#         if not _can_visualize_student_programs(request, registration_id):
-#             raise PermissionDenied
-#         list_student_programs = __get_student_programs(stud)
-#
-#     data = {
-#         "student": stud,
-#         "programs": list_student_programs,
-#         "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
-#     }
-#     return layout.render(request, "admin/performance_home_admin.html", data)
-
-
 @login_required
 def visualize_student_result(request, pk):
     """
@@ -232,36 +186,6 @@ def visualize_student_result(request, pk):
     return layout.render(request,
                          "admin/performance_result_admin.html",
                          perf_data)
-
-
-# def __get_student_programs(stud):
-#     query_result = mdl_performance.student_performance.search(registration_id=stud.registration_id)
-#     list_student_programs = query_result_to_list(query_result)
-#     return list_student_programs
-
-
-# def query_result_to_list(query_result):
-#     performance_results_list = []
-#     for row in query_result:
-#         performance_dict = convert_student_performance_to_dic(row)
-#         allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
-#         if performance_dict and performance_dict.get("offer_registration_state") in allowed_registration_states:
-#             performance_results_list.append(performance_dict)
-#     return performance_results_list
-
-
-# def convert_student_performance_to_dic(student_performance_obj):
-#     d = dict()
-#     try:
-#         d["academic_year"] = student_performance_obj.academic_year_template_formated
-#         d["acronym"] = student_performance_obj.acronym
-#         d["title"] = json.loads(json.dumps(student_performance_obj.data))["monAnnee"]["monOffre"]["offre"][
-#             "intituleComplet"]
-#         d["pk"] = student_performance_obj.pk
-#         d["offer_registration_state"] = student_performance_obj.offer_registration_state
-#     except Exception:
-#         d = None
-#     return d
 
 
 def check_right_access(student_performance, student):

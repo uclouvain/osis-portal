@@ -36,11 +36,8 @@ from osis_attribution_sdk.model.attribution import Attribution
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
-from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.learning_container_year import LearningContainerYearFactory
-from base.tests.factories.learning_unit_enrollment import LearningUnitEnrollmentFactory
 from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 
@@ -93,8 +90,8 @@ class StudentsListTest(TestCase):
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     def test_with_no_attributions(self, mock_get_attributions_list):
-        response = self.client.get(self.url)
         mock_get_attributions_list.return_value = []
+        response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'list/students_exam.html')
@@ -139,18 +136,6 @@ class StudentsListTest(TestCase):
                 'has_peps': False
             }
         ]
-        education_group_year = EducationGroupYearFactory(academic_year=an_academic_year)
-
-        # Create two enrollment to exam [Enrolled]
-        off_enrollment = OfferEnrollmentFactory(education_group_year=education_group_year)
-        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment)
-        off_enrollment = OfferEnrollmentFactory(education_group_year=education_group_year)
-        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment)
-        # Create an enrollment to exam [NOT enrolled]
-        off_enrollment = OfferEnrollmentFactory(education_group_year=education_group_year)
-        LearningUnitEnrollmentFactory(learning_unit_year=a_learning_unit_year, offer_enrollment=off_enrollment,
-                                      enrollment_state="")
-
         url = reverse('student_enrollments_by_learning_unit', kwargs={
             'learning_unit_acronym': a_learning_unit_year.acronym,
             'learning_unit_year': a_learning_unit_year.academic_year.year
