@@ -92,3 +92,11 @@ span.dashboard-vpn-warning a:hover{
 tbody tr.class_year {
     background-color: #ecfcfc !important;
 }
+
+a.disabled {
+  pointer-events: auto;
+  color: grey;
+}
+a.disabled:active {
+  pointer-events: none;
+}

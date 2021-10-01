@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 10:58+0200\n"
+"POT-Creation-Date: 2021-09-30 11:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid ""
+"'Lists of students enrolled to my exams' are immediately usable for encoding "
+"scores."
+msgstr ""
+
 msgid "Acronym"
 msgstr ""
 
 msgctxt "plural"
 msgid "All"
+msgstr ""
+
+msgid ""
+"All tutors can encode scores but only the scores responsible can submit. If "
+"the scores responsible is not correct, please contact your faculty."
 msgstr ""
 
 msgid "An email with your applications have been sent"
@@ -98,6 +108,9 @@ msgstr ""
 msgid "Display teachers"
 msgstr ""
 
+msgid "Download the list (Excel or PDF)"
+msgstr ""
+
 msgid "Educational tutor"
 msgstr ""
 
@@ -105,6 +118,9 @@ msgid "Email"
 msgstr ""
 
 msgid "End"
+msgstr ""
+
+msgid "Excel File"
 msgstr ""
 
 msgid "Export list (Excel)"
@@ -171,6 +187,9 @@ msgstr ""
 msgid "Legend to help you understanding the xls file"
 msgstr ""
 
+msgid "List code"
+msgstr ""
+
 msgid "List of students enrolled to exams of "
 msgstr ""
 
@@ -190,6 +209,9 @@ msgid "My charges"
 msgstr ""
 
 msgid "My charges now vacant"
+msgstr ""
+
+msgid "My teaching charge"
 msgstr ""
 
 msgid "New application"
@@ -217,6 +239,9 @@ msgid "Non-renewable"
 msgstr ""
 
 msgid "Other educational facilities"
+msgstr ""
+
+msgid "PDF File"
 msgstr ""
 
 msgid "Pedagogy proposal"
@@ -258,10 +283,7 @@ msgstr ""
 msgid "Schedule unavailable"
 msgstr ""
 
-msgid "Scores encoding"
-msgstr ""
-
-msgid "Search"
+msgid "Scores responsible"
 msgstr ""
 
 msgid "Select/deselect all attributions to renew"
@@ -271,6 +293,9 @@ msgid "Sept."
 msgstr ""
 
 msgid "September"
+msgstr ""
+
+msgid "Session of"
 msgstr ""
 
 msgid ""
@@ -308,7 +333,7 @@ msgstr ""
 msgid "Teaching charges administration"
 msgstr ""
 
-msgid "The Excel lists for encoding scores are available in"
+msgid "The list of students enrolled to courses are available in "
 msgstr ""
 
 #, python-format
@@ -346,6 +371,10 @@ msgid ""
 "that you can be assigned to the classes you teach."
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
+msgctxt "score sheet export"
 msgid "Title"
 msgstr ""
 
@@ -391,9 +420,6 @@ msgid "Vol.2 applied"
 msgstr ""
 
 msgid "Vol.2 vacant"
-msgstr ""
-
-msgid "Warning, this is not a list for encoding scores."
 msgstr ""
 
 msgid "Yes"

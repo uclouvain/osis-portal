@@ -77,7 +77,17 @@ def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
                 for attribution in attributions
             )
         )
-        return list(LearningUnitYear.objects.filter(filter_clause))
+        # TODO :
+        #  Question: Comment faire un espèce d'annotate pour ajouter la valeur de chaque attribution ue_has_classes
+        ues = list(LearningUnitYear.objects.filter(filter_clause).order_by('acronym'))
+        for ue in ues:
+            for a in attributions:
+                if a.code == ue.acronym and a.year == ue.academic_year.year:
+                    ue.ue_has_classes = a.ue_has_classes
+                    ue.score_responsible = a.score_responsible
+                    ue.effective_class_repartition = a.effective_class_repartition
+
+        return ues
     return []
 
 
