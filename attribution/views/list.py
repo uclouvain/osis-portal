@@ -70,8 +70,8 @@ def get_learning_units(a_user):
 
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    # current_session = LearningUnitEnrollmentService.get_current_session(person)
-    # print(current_session)
+    current_session = LearningUnitEnrollmentService.get_current_session(person)
+    print(current_session)
     attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
     if attributions:
         filter_clause = functools.reduce(
