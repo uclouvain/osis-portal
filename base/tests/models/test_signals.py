@@ -32,7 +32,8 @@ from base.models.person import Person
 
 
 def get_or_create_user(user_infos):
-    a_user, created = User.objects.get_or_create(username=user_infos.get('USERNAME'), password=user_infos.get('PASSWORD'))
+    a_user, created = User.objects.get_or_create(username=user_infos.get('USERNAME'),
+                                                 password=user_infos.get('PASSWORD'))
     if created:
         if user_infos.get('USER_FIRST_NAME'):
             a_user.first_name = user_infos.get('USER_FIRST_NAME')
@@ -44,7 +45,7 @@ def get_or_create_user(user_infos):
     return a_user
 
 
-def get_or_create_person(user=None, first_name=None, global_id=None):
+def get_or_create_person(user=None, first_name='', global_id=''):
     person = None
     created = False
     if user:
@@ -64,7 +65,7 @@ def get_or_create_person(user=None, first_name=None, global_id=None):
 
 def assert_person_match_user_infos(test_case, person, user_infos):
     test_case.assertEqual(person.first_name, user_infos.get('USER_FIRST_NAME'))
-    test_case.assertEqual(person.last_name,user_infos.get('USER_LAST_NAME'))
+    test_case.assertEqual(person.last_name, user_infos.get('USER_LAST_NAME'))
     test_case.assertEqual(person.global_id, user_infos.get('USER_FGS'))
     test_case.assertEqual(person.email, user_infos.get('USER_EMAIL'))
 
@@ -91,7 +92,7 @@ class CreateUpdatePerson(TestCase):
             'USER_FGS': '7777777',
         }
         user = get_or_create_user(user_infos)
-        person = get_or_create_person(None, 'first_name_2', None)
+        person = get_or_create_person(None, 'first_name_2', '')
         person = mdl_signals._create_update_person(user, person, user_infos)
         self.assertEqual(person.user, user)
         self.assertEqual(person.global_id, user_infos.get('USER_FGS'))
@@ -99,7 +100,6 @@ class CreateUpdatePerson(TestCase):
 
 
 class UpdatePersonIfNecessary(TestCase):
-
     user_infos = {
         'USERNAME': 'user_test',
         'PASSWORD': 'pass_test',
@@ -158,9 +158,11 @@ class AddToGroupsSignalsTest(TestCase):
             'USER_LAST_NAME': 'user_last',
             'USER_EMAIL': 'user1@user.org'}
         cls.user_foo = get_or_create_user(user_infos)
-        cls.person_foo = get_or_create_person(cls.user_foo,
-                                               user_infos.get('USER_FIRST_name'),
-                                               user_infos.get('USER_FGS'))
+        cls.person_foo = get_or_create_person(
+            cls.user_foo,
+            user_infos.get('USER_FIRST_NAME'),
+            user_infos.get('USER_FGS')
+        )
         Group.objects.get_or_create(name='students')
         Group.objects.get_or_create(name='tutors')
 
