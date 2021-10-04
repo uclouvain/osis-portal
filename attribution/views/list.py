@@ -43,6 +43,7 @@ from base.forms.base_forms import GlobalIdForm
 from base.models.learning_unit_year import LearningUnitYear
 from base.models.person import Person
 from base.views import layout
+from attribution.services.enrollments import LearningUnitEnrollmentService
 
 NO_DATA_VALUE = "-"
 LEARNING_UNIT_ACRONYM_ID = "learning_unit_acronym_"
@@ -52,6 +53,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
 def students_list(request):
+    print('ici')
     data = get_learning_units(request.user)
     return render(request, "list/students_exam.html", data)
 
@@ -68,6 +70,8 @@ def get_learning_units(a_user):
 
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
+    # current_session = LearningUnitEnrollmentService.get_current_session(person)
+    # print(current_session)
     attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
     if attributions:
         filter_clause = functools.reduce(
@@ -83,7 +87,7 @@ def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
         for ue in ues:
             for a in attributions:
                 if a.code == ue.acronym and a.year == ue.academic_year.year:
-                    ue.ue_has_classes = a.ue_has_classes
+                    ue.learning_unit_has_classes = a.learning_unit_has_classes
                     ue.score_responsible = a.score_responsible
                     ue.effective_class_repartition = a.effective_class_repartition
 
