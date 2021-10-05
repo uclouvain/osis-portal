@@ -67,7 +67,7 @@ class AssessmentsService:
                 return {'error_body': e.body, 'error_status': e.status}
 
     @staticmethod
-    def get_xls_score_sheet_pdf(learning_unit_code: str, person: Person, **kwargs):
+    def get_xls_score_sheet(learning_unit_code: str, person: Person, **kwargs):
         configuration = assessments_sdk.build_configuration(person)
         with osis_assessments_sdk.ApiClient(configuration) as api_client:
             api_instance = score_encoding_api.ScoreEncodingApi(api_client)

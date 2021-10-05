@@ -55,6 +55,7 @@ from base.utils import queue_utils
 from base.views import layout
 from osis_common.decorators.ajax import ajax_required
 from osis_common.document import paper_sheet
+from rest_framework import status
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
@@ -290,7 +291,7 @@ def _check_person_and_scores_in_db(person):
 @permission_required('base.is_tutor', raise_exception=True)
 def score_sheet_xls(request, learning_unit_code: str):
     content_type = 'application/vnd.ms-excel'
-    file = AssessmentsService.get_xls_score_sheet_pdf(learning_unit_code, request.user.person)
+    file = AssessmentsService.get_xls_score_sheet(learning_unit_code, request.user.person)
     return _build_response(content_type, file, request)
 
 
@@ -315,7 +316,8 @@ def _build_response(content_type, file, request):
         return response
     elif isinstance(file, dict):
         error_messages = file.get('error_body', '')
-        if file.get('error_status', '') == 400 or file.get('error_status', '') == 401:
+        error_status = file.get('error_status')
+        if error_status == status.HTTP_400_BAD_REQUEST or error_status == status.HTTP_401_UNAUTHORIZED:
             message = error_messages
         else:
             message = _('Unexpected error')
