@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,25 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import string
+import logging
 
-import factory.fuzzy
+import osis_offer_enrollment_sdk
+from django.conf import settings
 
-from base.tests.factories.student import StudentFactory
-from base.models.enums import peps_type
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class StudentSpecificProlileFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'base.StudentSpecificProfile'
+def build_configuration(person: Person = None) -> osis_offer_enrollment_sdk.Configuration:
+    """
+    Return SDK configuration of offer enrollment
+    """
+    if not settings.OSIS_OFFER_ENROLLMENT_SDK_HOST:
+        logger.debug("'OSIS_OFFER_ENROLLMENT_SDK_HOST' setting must be set in configuration")
 
-    student = factory.SubFactory(StudentFactory)
-    type = peps_type.PepsTypes.ARTIST
-    subtype_disability = ''
-    subtype_sport= ''
-    guide = None
-    arrangement_additional_time = False
-    arrangement_appropriate_copy = False
-    arrangement_other = False
-    arrangement_specific_locale = False
-    arrangement_comment = None
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        token = utils.get_user_token(person, force_user_creation=True)
+
+    return osis_offer_enrollment_sdk.Configuration(
+        host=settings.OSIS_OFFER_ENROLLMENT_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })

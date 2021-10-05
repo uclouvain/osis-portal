@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-15 13:55+0100\n"
+"POT-Creation-Date: 2021-09-23 11:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid "A server error occured."
+msgstr ""
 
 msgid "Access denied"
 msgstr ""
@@ -92,6 +95,12 @@ msgstr ""
 msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr ""
 
+msgid "ES"
+msgstr ""
+
+msgid "ESHN"
+msgstr ""
+
 msgid "Education group year"
 msgstr ""
 
@@ -102,6 +111,9 @@ msgid "Entrepreneur"
 msgstr ""
 
 msgid "External"
+msgstr ""
+
+msgid "Female"
 msgstr ""
 
 msgid "File"
@@ -119,10 +131,10 @@ msgstr ""
 msgid "Guide"
 msgstr ""
 
-msgid "High Level Promising athlete"
+msgid "Internship"
 msgstr ""
 
-msgid "Internship"
+msgid "Male"
 msgstr ""
 
 msgid "Management entity"
@@ -134,6 +146,9 @@ msgstr ""
 msgid "Not defined"
 msgstr ""
 
+msgid "Other"
+msgstr ""
+
 msgid "Other collective"
 msgstr ""
 
@@ -143,10 +158,16 @@ msgstr ""
 msgid "Other special needs"
 msgstr ""
 
+msgid "PMR"
+msgstr ""
+
 msgid "Page not found"
 msgstr ""
 
 msgid "Person with reduced mobility"
+msgstr ""
+
+msgid "Please report this incident to the Service Desk"
 msgstr ""
 
 msgid "Promising athlete"
@@ -159,6 +180,9 @@ msgid "SQL command"
 msgstr ""
 
 msgid "SQL readonly"
+msgstr ""
+
+msgid "Search"
 msgstr ""
 
 msgid "Sport"
@@ -185,16 +209,10 @@ msgstr ""
 msgid "Type of training"
 msgstr ""
 
-msgid "Unexpected error occurred"
-msgstr ""
-
 msgid "Username or password not valid"
 msgstr ""
 
 msgid "Validity"
-msgstr ""
-
-msgid "We have been automatically informed about this problem."
 msgstr ""
 
 msgid "You are now logged out"
@@ -206,16 +224,10 @@ msgstr ""
 msgid "execute"
 msgstr ""
 
-msgid "female"
-msgstr ""
-
 msgid "log in"
 msgstr ""
 
 msgid "logout"
-msgstr ""
-
-msgid "male"
 msgstr ""
 
 msgid "no student with this registration_id"

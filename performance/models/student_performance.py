@@ -119,16 +119,6 @@ def update_or_create(registration_id, academic_year, acronym, fields):
     return obj
 
 
-def find_by_student_and_offer_year(registration_id, academic_year, acronym):
-    try:
-        result = StudentPerformance.objects.get(registration_id=registration_id,
-                                                academic_year=academic_year,
-                                                acronym=acronym)
-    except ObjectDoesNotExist:
-        result = None
-    return result
-
-
 def find_actual_by_student_and_offer_year(registration_id, academic_year, acronym):
     try:
         result = StudentPerformance.objects.get(registration_id=registration_id,

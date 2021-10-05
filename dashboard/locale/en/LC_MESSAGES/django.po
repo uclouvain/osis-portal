@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-24 13:30+0200\n"
+"POT-Creation-Date: 2021-09-21 10:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,9 +28,6 @@ msgid "Annual program"
 msgstr ""
 
 msgid "Annual program administration"
-msgstr ""
-
-msgid "Applications administration"
 msgstr ""
 
 msgid "Attestations administration"
@@ -69,9 +66,6 @@ msgstr ""
 msgid "First name"
 msgstr ""
 
-msgid "Get scores encoding papersheet and encode scores of your students."
-msgstr ""
-
 msgid "Global id"
 msgstr ""
 
@@ -91,9 +85,6 @@ msgid "Last name"
 msgstr ""
 
 msgid "List of students enrolled to my exams"
-msgstr ""
-
-msgid "Lists of students exams enrollments"
 msgstr ""
 
 msgid "Manage description fiche"
@@ -129,6 +120,9 @@ msgstr ""
 msgid "Private email"
 msgstr ""
 
+msgid "Read my teaching charge and access to lists and emails of students."
+msgstr ""
+
 msgid "Registration department"
 msgstr ""
 
@@ -138,7 +132,7 @@ msgstr ""
 msgid "Scores encoding"
 msgstr ""
 
-msgid "Scores sheets administration"
+msgid "Scores encoding of my students"
 msgstr ""
 
 msgid "Sex"
@@ -159,9 +153,6 @@ msgstr ""
 msgid "Student's dissertations management"
 msgstr ""
 
-msgid "Teaching charges administration"
-msgstr ""
-
 msgid "This process controls internships assessment."
 msgstr ""
 
@@ -174,13 +165,10 @@ msgstr ""
 msgid "This process controls students internships."
 msgstr ""
 
-msgid "This process controls the teaching charge"
-msgstr ""
-
 msgid "This process shows personal data."
 msgstr ""
 
-msgid "This requires a"
+msgid "This requires a "
 msgstr ""
 
 msgid "This requires a VPN access outside UCLouvain."

@@ -24,13 +24,16 @@
 #
 ##############################################################################
 import json
-import requests
 from functools import wraps
-from typing import Set
+from typing import Set, List, Dict
 
+import requests
 from django.conf import settings
 from django.http import HttpResponseBadRequest
+from django.utils.functional import cached_property
 from rest_framework import status
+
+DEFAULT_API_LIMIT = 25
 
 
 def get_user_token(person, force_user_creation=False):
@@ -72,6 +75,28 @@ def api_exception_handler(api_exception_cls):
     return api_exception_decorator
 
 
+def api_paginated_response(func, default_limit=DEFAULT_API_LIMIT, offset=0):
+    """A decorator that enables to retrieve paginated response given desired limit and offset"""
+    @wraps(func)
+    def wrapper(*args, **kwargs) -> PaginatedResponse:
+        response = func(*args, limit=kwargs.pop('limit', default_limit), offset=kwargs.pop('offset', offset), **kwargs)
+        return PaginatedResponse(**{key: getattr(response, key) for key in response.attribute_map.keys()})
+    return wrapper
+
+
+def gather_all_api_paginated_results(func):
+    """A decorator that enables to gather all paginated responses into a unique list of results"""
+    @wraps(func)
+    def wrapper(*args, **kwargs) -> PaginatedResponse:
+        paginated_response = api_paginated_response(func)(*args, **kwargs)
+        while len(paginated_response.results) < paginated_response.count:
+            paginated_response.extend(api_paginated_response(
+                func, offset=len(paginated_response.results)
+            )(*args, **kwargs))
+        return paginated_response
+    return wrapper
+
+
 class ApiBusinessException(Exception):
     def __init__(self, status_code: int, detail: str):
         self.status_code = status_code
@@ -101,3 +126,79 @@ class ApiExceptionHandler:
                 api_business_exceptions |= {ApiBusinessException(**exception) for exception in exceptions}
             raise MultipleApiBusinessException(exceptions=api_business_exceptions)
         raise api_exception
+
+
+class PaginatedResponse:
+    results: List
+    count: int = 0
+    extra: Dict
+
+    def __init__(self, results: List, count: int, **extra):
+        self.results = results
+        self.count = count
+        self.extra = extra
+
+    def extend(self, paginated_response: 'PaginatedResponse'):
+        self.results.extend(paginated_response.results)
+
+    def get_extra(self, key):
+        return self.extra[key]
+
+
+class ApiPaginationMixin:
+
+    request = None
+    api_call = None
+
+    @property
+    def limit(self) -> int:
+        return int(self.request.GET.get('limit', DEFAULT_API_LIMIT))
+
+    @property
+    def offset(self) -> int:
+        return int(self.request.GET.get('offset', 0))
+
+    @property
+    def search(self) -> str:
+        return self.request.GET.get('search', '')
+
+    @property
+    def ordering(self) -> str:
+        return self.request.GET.get('ordering', '')
+
+    @property
+    def count(self) -> int:
+        return self.paginated_response.count
+
+    @cached_property
+    def paginated_response(self) -> PaginatedResponse:
+        return self.api_call(**self.get_api_kwargs())
+
+    @cached_property
+    def page_objects_list(self) -> List:
+        return self.paginated_response.results
+
+    def get_context_data(self, *args, **kwargs) -> Dict:
+        inherited_context = super().get_context_data(**kwargs) if hasattr(super(), 'get_context_data') else {}
+        return {
+            **inherited_context,
+            'count': self.count,
+            'objects_list': self.page_objects_list,
+        }
+
+    def get_api_kwargs(self) -> Dict:
+        return {
+            'person': self.request.user.person,
+            'limit':  self.limit,
+            'offset': self.offset,
+            'search': self.search,
+            'ordering': self.ordering
+        }
+
+
+class ApiRetrieveAllObjectsMixin(ApiPaginationMixin):
+
+    def get_api_kwargs(self) -> Dict:
+        kwargs = super().get_api_kwargs()
+        kwargs.pop('offset')
+        return kwargs

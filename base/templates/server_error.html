@@ -9,7 +9,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -31,15 +31,8 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="center-block"><h3>{% trans 'Unexpected error occurred' %}</h3></div>
-            <div class="center-block">
-                <h3>
-                    {% trans 'We have been automatically informed about this problem.' %}
-                    {% trans 'Do not hesitate to help us to solve this problem by contacting the' %}
-                        <a href='https://uclouvain.be/ServiceDesk' target='_blank'> Service Desk </a>
-                    {% trans 'to describe what you intended to do in more details.' %}
-                </h3>
-            </div>
+            <div class="center-block"><h3>{% trans 'A server error occured.' %}</h3></div>
+            <div class="center-block"><h3>{% trans 'Please report this incident to the Service Desk' %} : <a href="mailto:{{ email_service_desk }}">{{ email_service_desk }}</a></h3></div>
         </div>
     </div>
 {% endblock %}
