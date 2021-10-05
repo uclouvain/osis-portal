@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-30 11:25+0200\n"
+"POT-Creation-Date: 2021-10-05 14:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,10 @@ msgid "Download"
 msgstr ""
 
 msgid "Download my PDF scores sheets for paper encoding."
+msgstr ""
+
+#, python-format
+msgid "Error occurred while creating the export file. %(error_message)s"
 msgstr ""
 
 msgid "Faculty administration"
@@ -63,6 +67,9 @@ msgid "This requires a "
 msgstr ""
 
 msgid "This requires a VPN access outside UCLouvain."
+msgstr ""
+
+msgid "Unexpected error"
 msgstr ""
 
 msgid "VPN access"

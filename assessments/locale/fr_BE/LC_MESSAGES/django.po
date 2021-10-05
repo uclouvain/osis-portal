@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-30 11:25+0200\n"
+"POT-Creation-Date: 2021-10-05 14:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,10 @@ msgstr "Télécharger"
 
 msgid "Download my PDF scores sheets for paper encoding."
 msgstr "Télécharger mes feuilles de notes PDF pour l'encodage papier."
+
+#, python-format
+msgid "Error occurred while creating the export file. %(error_message)s"
+msgstr "Une erreur est survenue lors de la création du fichier. %(error_message)s"
 
 msgid "Faculty administration"
 msgstr "Faculté d'administration"
@@ -64,6 +68,9 @@ msgstr "Ceci nécessite un "
 
 msgid "This requires a VPN access outside UCLouvain."
 msgstr "Ceci nécessite un accès VPN en dehors de l'UCLouvain."
+
+msgid "Unexpected error"
+msgstr "Une erreur inattendue s'est produite"
 
 msgid "VPN access"
 msgstr "Accès VPN"
