@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -436,6 +436,12 @@ OSIS_LEARNING_UNIT_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get(
     "OSIS_LEARNING_UNIT_ENROLLMENT_SDK_API_KEY_PREFIX", "Token"
 )
 
+# ASSESSMENTS-SDK-CONFIGURATION
+OSIS_ASSESSMENTS_SDK_HOST = os.environ.get("OSIS_ASSESSMENTS_SDK_HOST", "")
+OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX", "Token"
+)
+
 # BASE_API_TESTING
 MOCK_USER_ROLES_API_CALL = os.environ.get('MOCK_USER_ROLES_API_CALL', 'True').lower() == 'true'
 USER_ROLES_API_MOCKED_FUNCT = os.environ.get('USER_ROLES_API_MOCKED_FUNCT', 'base.views.api.get_user_roles')
@@ -455,5 +461,3 @@ STUDENT_ID_DATA = {
 
 REGISTRATION_ADMINISTRATION_URL = os.environ.get('REGISTRATION_SERVICE_URL', '')
 REGISTRATION_ACCOUNT_SERVICE_URL = os.environ.get('REGISTRATION_ACCOUNT_SERVICE_URL', '')
-
-OSIS_ASSESSMENTS_API = os.environ.get("OSIS_ASSESSMENTS_API", "")

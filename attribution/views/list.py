@@ -37,13 +37,13 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
+from assessments.services.assessments import AssessmentsService
 from attribution.services.attribution import AttributionService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.learning_unit_year import LearningUnitYear
 from base.models.person import Person
 from base.views import layout
-from attribution.services.enrollments import LearningUnitEnrollmentService
 
 NO_DATA_VALUE = "-"
 LEARNING_UNIT_ACRONYM_ID = "learning_unit_acronym_"
@@ -66,12 +66,14 @@ def get_learning_units(a_user):
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
             learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
-    return {'person': a_person, 'my_learning_units': learning_units}
+    return {
+        'person': a_person,
+        'my_learning_units': learning_units,
+        'current_session': AssessmentsService.get_current_session(a_person)
+    }
 
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    current_session = LearningUnitEnrollmentService.get_current_session(person)
-    print(current_session)
     attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
     if attributions:
         filter_clause = functools.reduce(
@@ -207,7 +209,11 @@ def get_learning_units_by_person(global_id):
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
             learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
-    return {'person': a_person, 'learning_units': learning_units}
+    return {
+        'person': a_person,
+        'learning_units': learning_units,
+        'current_session': AssessmentsService.get_current_session(a_person)
+    }
 
 
 @login_required

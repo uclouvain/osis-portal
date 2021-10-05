@@ -67,21 +67,3 @@ class LearningUnitEnrollmentService:
     @gather_all_api_paginated_results
     def get_all_enrollments_list(cls, **kwargs) -> PaginatedResponse:
         return cls.get_enrollments(**kwargs)
-
-    @staticmethod
-    def get_current_session(person: Person, **kwargs) -> PaginatedResponse:
-        print('get_current_session')
-        configuration = learning_unit_enrollment_sdk.build_configuration(person)
-        with osis_learning_unit_enrollment_sdk.ApiClient(configuration) as api_client:
-            api_instance = enrollment_api.EnrollmentApi(api_client)
-            print(api_instance)
-            api_instance.enrollments_list
-            try:
-                current_session = api_instance.current_session
-            except (osis_learning_unit_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
-                # Run in degraded mode in order to prevent crash all app
-                logger.error(e)
-                attrs = {'result': None}
-                current_session = SimpleNamespace(**attrs, attribute_map=attrs)
-        print('succes')
-        return current_session

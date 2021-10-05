@@ -131,3 +131,11 @@
 .ordering-label{
     cursor: pointer;
 }
+
+a.disabled {
+  pointer-events: auto;
+  color: grey;
+}
+a.disabled:active {
+  pointer-events: none;
+}

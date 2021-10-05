@@ -50,7 +50,7 @@
     {% endif %}
     <div class="panel panel-default">
         <div class="panel-body">
-           <h3>{% trans 'Session of' %} ? ?</h3>
+           <h3>{% trans 'Session of' %} {{current_session.month_session_name|lower}} {{current_session.academic_year}}</h3>
             <div class="alert alert-info">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                 {% trans "'Lists of students enrolled to my exams' are immediately usable for encoding scores." %}

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,38 +26,35 @@
 import datetime
 import json
 import logging
-import re
 import time
 import traceback
+from io import BufferedReader
 
 import pika
 import pika.exceptions
-import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _, ugettext as _
 from django.views.decorators.http import require_GET
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
-from rest_framework import status
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 from rest_framework.exceptions import PermissionDenied
 from voluptuous import error as voluptuous_error
 
 import assessments.models
+from assessments.services.assessments import AssessmentsService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.utils import queue_utils
 from base.views import layout
-from base.views.api import REQUEST_HEADER
-from continuing_education.views.api import get_personal_token
 from osis_common.decorators.ajax import ajax_required
 from osis_common.document import paper_sheet
-from base.models.learning_unit_year import LearningUnitYear
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
@@ -292,86 +289,42 @@ def _check_person_and_scores_in_db(person):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def score_sheet_xls(request, learning_unit_code: str):
-    url = "{}/{}/{}".format(settings.OSIS_ASSESSMENTS_API, learning_unit_code, "xls_export")
-    response = get_data_from_osis(request, url)
-    return _buid_response(response)
+    content_type = 'application/vnd.ms-excel'
+    file = AssessmentsService.get_xls_score_sheet_pdf(learning_unit_code, request.user.person)
+    return _build_response(content_type, file, request)
 
 
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def score_sheet_pdf(request, learning_unit_code: str):
-    url = "{}/{}/{}".format(settings.OSIS_ASSESSMENTS_API, "pdf_export", learning_unit_code)
-    response = get_data_from_osis(request, url)
-    return _buid_response(response)
+    file = AssessmentsService.get_score_sheet_pdf(learning_unit_code, request.user.person)
+    content_type = 'application/pdf'
+    return _build_response(content_type, file, request)
 
 
-def _buid_response(response):
-    if isinstance(response, str):
-        return HttpResponseRedirect(response)
-    else:
+def get_filename(temp_file_name: str) -> str:
+    filename = temp_file_name
+    pos = filename.rfind('/')
+    return filename[pos + 1:]
+
+
+def _build_response(content_type, file, request):
+    if file and isinstance(file, BufferedReader):
+        response = HttpResponse(file, content_type=content_type)
+        response['Content-Disposition'] = 'attachment; filename=%s' % get_filename(file.name)
         return response
-
-
-def get_data_from_osis(request, url):
-    token = get_personal_token(request)
-    response = requests.get(
-        url=url,
-        headers={'Authorization': 'Token ' + token} if request.user.is_authenticated
-        else REQUEST_HEADER
-    )
-    url_when_error_occurred = reverse('students_list')
-
-    if response.status_code == status.HTTP_404_NOT_FOUND:
-        raise Http404
-    elif response.status_code == 309:
-        messages.add_message(
-            request,
-            messages.INFO,
-            _("Impossible to create file, the learning unit doesn't exists"),
-            "alert-info"
-        )
-        return url_when_error_occurred
-    elif response.status_code == status.HTTP_403_FORBIDDEN:
-        raise PermissionDenied(response.json()['detail'] if response.content else '')
-    # TODO : Question est-ce nécessaire de distinguer les erreurs 500 des autres
-    elif response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
+    elif isinstance(file, dict):
+        error_messages = file.get('error_body', '')
+        if file.get('error_status', '') == 400 or file.get('error_status', '') == 401:
+            message = error_messages
+        else:
+            message = _('Unexpected error')
         messages.add_message(
             request,
             messages.INFO,
             _("Error occurred while creating the export file. %(error_message)s") % {
-                'error_message': _get_message(response.status_code)
+                'error_message': message
             },
             "alert-info"
         )
-        return url_when_error_occurred
-    # TODO :
-    #  Question est-ce nécessaire de distinguer les erreurs 500 des autres Peut-être que ceci et ce qui est juste
-    #  au-dessus est redondant
-    elif response.status_code != 200:
-        messages.add_message(
-            request,
-            messages.INFO,
-            _("Error occurred while creating the export file. %(error_message)s") % {
-                'error_message': _get_message(response.status_code)
-            },
-            "alert-info"
-        )
-        return url_when_error_occurred
-
-    filenames = re.findall("filename=(\S+)", response.headers.get('Content-Disposition'))
-    response = HttpResponse(response, content_type=response.headers.get('Content-Type'))
-    response['Content-Disposition'] = 'attachment; filename=%s' % filenames[0]
-    return response
-
-
-def _get_message(status_code):
-    if status_code == 311:
-        return _('No data')
-    elif status_code == 309:
-        return _('Learning unit does not exist')
-    elif status_code == 310:
-        return _('Unexpected error')
-    elif status_code == 500:
-        return _('File invalid')
-    else:
-        return status_code
+    return redirect(reverse('students_list'))

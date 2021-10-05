@@ -29,10 +29,11 @@ from types import SimpleNamespace
 import osis_assessments_sdk
 import urllib3
 from django.conf import settings
-from osis_assessments_sdk.api import assessments_api
+from osis_assessments_sdk.api import score_encoding_api
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import assessments as assessments_sdk
+
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -41,18 +42,38 @@ class AssessmentsService:
 
     @staticmethod
     def get_current_session(person: Person, **kwargs):
-        print('get_current_session')
         configuration = assessments_sdk.build_configuration(person)
-        with assessments_sdk.ApiClient(configuration) as api_client:
-            api_instance = assessments_api.EnrollmentApi(api_client)
-            print(api_instance)
-            api_instance.enrollments_list
+        with osis_assessments_sdk.ApiClient(configuration) as api_client:
+            api_instance = score_encoding_api.ScoreEncodingApi(api_client)
             try:
-                current_session = api_instance.current_session
-            except (assessments_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                current_session = api_instance.get_current_session()
+            except (osis_assessments_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
                 attrs = {'result': None}
                 current_session = SimpleNamespace(**attrs, attribute_map=attrs)
-        print('succes')
         return current_session
+
+    @staticmethod
+    def get_score_sheet_pdf(learning_unit_code: str, person: Person, **kwargs):
+        configuration = assessments_sdk.build_configuration(person)
+        with osis_assessments_sdk.ApiClient(configuration) as api_client:
+            api_instance = score_encoding_api.ScoreEncodingApi(api_client)
+            try:
+                return api_instance.score_sheets_pdf_export(codes=[learning_unit_code])
+            except (osis_assessments_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                return {'error_body': e.body, 'error_status': e.status}
+
+    @staticmethod
+    def get_xls_score_sheet_pdf(learning_unit_code: str, person: Person, **kwargs):
+        configuration = assessments_sdk.build_configuration(person)
+        with osis_assessments_sdk.ApiClient(configuration) as api_client:
+            api_instance = score_encoding_api.ScoreEncodingApi(api_client)
+            try:
+                return api_instance.score_sheet_xls_export(code=learning_unit_code)
+            except (osis_assessments_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                return {'error_body': e.body, 'error_status': e.status}
