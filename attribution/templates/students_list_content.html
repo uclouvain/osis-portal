@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load i18n detail_student_specific_profile %}
-{% load api_template_tags %}
+{% load api_template_tags academic_year_display %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -26,7 +26,7 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<h2>{{ learning_unit_year }} - {{ learning_unit_acronym }}
+<h2>{{ learning_unit_year|display_as_academic_year }} - {{ learning_unit_acronym }}
     - {{ learning_unit_title }}</h2>
 {% if enrolled_students_count %}
     <h4>{{ enrolled_students_count }} {% trans 'students enrolled from' %}</h4>

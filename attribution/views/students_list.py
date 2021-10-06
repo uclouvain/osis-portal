@@ -66,7 +66,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             **super().get_context_data(**kwargs),
             'global_id': self.request.user.person.global_id,
             'students': self.enrollments_list,
-            'learning_unit_year': self.kwargs['learning_unit_year'],
+            'learning_unit_year': int(self.kwargs['learning_unit_year']),
             'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
             'learning_unit_title': self.learning_unit_title,
             # TODO:  provide endpoint to check luy has_peps
@@ -126,8 +126,8 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             last_note = note_january
         return {
             'name': "{0}, {1}".format(
-                enrollment.student_first_name,
-                enrollment.student_last_name
+                enrollment.student_last_name.upper(),
+                enrollment.student_first_name
             ),
             'email': enrollment.student_email,
             'program': enrollment.program,
