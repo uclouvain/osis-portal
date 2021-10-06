@@ -140,13 +140,13 @@ class StudentsListTest(TestCase):
             'learning_unit_acronym': a_learning_unit_year.acronym,
             'learning_unit_year': a_learning_unit_year.academic_year.year
         })
-        response = self.client.get(url)
+        response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'students_list.html')
 
         self.assertEqual(response.context['global_id'], self.tutor.person.global_id)
-        self.assertEqual(response.context['learning_unit_year'], str(a_learning_unit_year.academic_year.year))
-        self.assertEqual(response.context['learning_unit_acronym'], str(a_learning_unit_year.acronym))
+        self.assertEqual(response.context['learning_unit_year'], a_learning_unit_year.academic_year.year)
+        self.assertEqual(response.context['learning_unit_acronym'], a_learning_unit_year.acronym)
         self.assertEqual(response.context['learning_unit_title'], "TITLE")
         self.assertTrue(response.context['students'])
         self.assertEqual(len(response.context['students']), 2)

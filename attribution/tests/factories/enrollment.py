@@ -32,8 +32,8 @@ fake = faker.Faker()
 class EnrollmentDictFactory(dict, factory.DictFactory):
     date_enrollment = "2020-09-16"
     enrollment_state = "ENROLLED"
-    student_last_name = fake.last_name(),
-    student_first_name = fake.first_name(),
+    student_last_name = fake.last_name()
+    student_first_name = fake.first_name()
     student_email = fake.email(),
     student_registration_id = factory.fuzzy.FuzzyText(length=10)
     type_peps = None

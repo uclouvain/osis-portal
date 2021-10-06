@@ -51,7 +51,7 @@ class StudentsListViewTest(TestCase):
         cls.person.user.user_permissions.add(perm)
         cls.current_year = datetime.date.today().year
 
-        cls.a_tutor = TutorFactory()
+        cls.a_tutor = TutorFactory(person=cls.person)
         cls.full_luy = cls.create_lu_yr_annual_data(cls.current_year)
 
         cls.url = reverse('student_enrollments_by_learning_unit', args=[
@@ -148,7 +148,7 @@ class StudentsListViewTest(TestCase):
             ],
             'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'}),
         })
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, follow=True)
         self.assertEqual(len(response.context['students']), 2)
         self.assertEqual(response.context['learning_unit_title'], "TITLE")
         self.assertEqual(response.context['has_peps'], True)
