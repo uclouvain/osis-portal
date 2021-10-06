@@ -27,6 +27,7 @@ import json
 from typing import List, Union, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -53,6 +54,12 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     permission_required = "base.can_access_attribution"
     template_name = "students_list.html"
     api_call = LearningUnitEnrollmentService.get_enrollments_paginated_list
+
+    def get(self, *args, **kwargs):
+        # default ordering by program and student_last_name if no ordering parameter (trigger filter tags)
+        if not self.request.GET.get('ordering'):
+            return redirect(self.request.get_full_path() + "?ordering=program,student_last_name")
+        return super().get(self, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {
@@ -227,6 +234,7 @@ class AdminStudentsListView(StudentsListView):
 class StudentsListXlsView(StudentsListView, ApiRetrieveAllObjectsMixin):
     permission_required = "base.can_access_attribution"
     api_call = LearningUnitEnrollmentService.get_all_enrollments_list
+    ordering = 'program,student_last_name'
 
     def get(self, *args, **kwargs):
         student_list = self.enrollments_list

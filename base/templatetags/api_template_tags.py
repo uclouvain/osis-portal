@@ -60,4 +60,5 @@ def search(context):
 def ordering(context, column_name, api_field_name):
     context['column_name'] = column_name
     context['ordering_field_name'] = api_field_name
+    context['ordering_parameters'] = context.request.GET.get('ordering', '').split(',')
     return context

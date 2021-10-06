@@ -2,16 +2,18 @@
     <span class="ordering-label" onclick="this.parentElement.submit();">
     {{ column_name }}
     <i
-        {% if request.GET.ordering == ordering_field_name %}
+        {% if ordering_field_name in ordering_parameters %}
             class="active-sort-icon glyphicon glyphicon-sort-by-attributes"
-        {% elif request.GET.ordering == "-"|add:ordering_field_name %}
+        {% elif "-"|add:ordering_field_name in ordering_parameters %}
             class="active-sort-icon glyphicon glyphicon-sort-by-attributes-alt"
         {% else %}
             class="inactive-sort-icon glyphicon glyphicon-sort"
         {% endif %}
     ></i>
-        {% if request.GET.ordering == ordering_field_name %}
+        {% if ordering_field_name in ordering_parameters %}
             <input type="hidden" name="ordering" value="-{{ ordering_field_name }}" />
+        {% elif "-"|add:ordering_field_name in ordering_parameters %}
+            <input type="hidden" name="ordering" value="no_field" />
         {% else %}
             <input type="hidden" name="ordering" value="{{ ordering_field_name }}" />
         {% endif %}
