@@ -54,13 +54,18 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     template_name = "students_list.html"
     api_call = LearningUnitEnrollmentService.get_enrollments_paginated_list
 
+    @property
+    def is_class(self):
+        return bool(self.kwargs.get('class_code'))
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             'global_id': self.request.user.person.global_id,
             'students': self.enrollments_list,
             'learning_unit_year': self.kwargs['learning_unit_year'],
-            'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
+            'learning_unit_acronym': self.effective_class.full_code
+            if self.is_class else self.kwargs['learning_unit_acronym'],
             'learning_unit_title': self.learning_unit_title,
             # TODO:  provide endpoint to check luy has_peps
             'has_peps': self.has_peps_student(),
@@ -71,7 +76,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
 
     @cached_property
     def learning_unit_title(self):
-        return self._get_learning_class_title() if 'class_code' in self.kwargs else self._get_learning_unit_title()
+        return self._get_learning_class_title() if self.is_class else self._get_learning_unit_title()
 
     def _get_learning_unit_title(self):
         return LearningUnitService.get_learning_unit_title(
@@ -80,7 +85,8 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             person=self.request.user.person
         )
 
-    def _get_learning_class_title(self):
+    @cached_property
+    def effective_class(self):
         classes = LearningUnitService.get_effective_classes(
             acronym=self.kwargs['learning_unit_acronym'],
             year=int(self.kwargs['learning_unit_year']),
@@ -88,11 +94,14 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
         )
         return next(
             (
-                effective_class.title_fr for effective_class in classes
+                effective_class for effective_class in classes
                 if effective_class.code == self.kwargs['class_code']
             ),
-            ''
+            None
         )
+
+    def _get_learning_class_title(self):
+        return self.effective_class.title_fr if self.effective_class else ''
 
     def get_api_kwargs(self):
         return {
@@ -210,6 +219,11 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             with_effective_class_repartition=True
         )
         attribution = next(a for a in attributions if a['code'] == self.kwargs['learning_unit_acronym'])
+        if self.is_class:
+            effective_class = next(
+                e for e in attribution['effective_class_repartition'] if e['code'][-1] == self.kwargs['class_code']
+            )
+            return effective_class['has_peps']
         return attribution['has_peps']
 
     def get_produce_xls_url(self):

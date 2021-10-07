@@ -49,6 +49,7 @@ class LearningUnitEnrollmentService:
                 enrollments = api_instance.enrollments_list(
                     year=year,
                     acronym=acronym,
+                    accept_language=person.language,
                     **kwargs
                 )
             except (osis_learning_unit_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:

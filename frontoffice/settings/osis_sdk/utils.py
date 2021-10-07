@@ -142,7 +142,7 @@ class PaginatedResponse:
         self.results.extend(paginated_response.results)
 
     def get_extra(self, key):
-        return self.extra[key]
+        return self.extra.get(key)
 
 
 class ApiPaginationMixin:
