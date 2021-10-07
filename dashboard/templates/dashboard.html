@@ -35,6 +35,8 @@
 
     <div class="panel panel-default">
         <div class="panel-body dashboard-grid">
+            {% include 'candidate_dashboard.html' %}
+
             {% if perms.base.is_tutor %}
                 {% include 'tutor_dashboard.html' %}
             {% endif %}
