@@ -29,7 +29,7 @@ msgstr ""
 "inscriptions</a> afin de résoudre le problème. Merci."
 
 msgid "Admission requests"
-msgstr ""
+msgstr "Demandes d'admission"
 
 msgid "Annual program"
 msgstr "Programme annuel"
@@ -53,7 +53,7 @@ msgid "Country"
 msgstr "Pays"
 
 msgid "Create and manage my admission request for UCLouvain"
-msgstr ""
+msgstr "Créer et gérer ma demande d'admission UCLouvain"
 
 msgid "Dashboard"
 msgstr "Tableau de bord"
