@@ -310,7 +310,7 @@ def get_filename(temp_file_name: str) -> str:
 
 
 def _build_response(content_type, file, request):
-    if file and isinstance(file, BufferedReader):
+    if isinstance(file, BufferedReader):
         response = HttpResponse(file, content_type=content_type)
         response['Content-Disposition'] = 'attachment; filename=%s' % get_filename(file.name)
         return response
