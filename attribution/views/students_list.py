@@ -58,14 +58,17 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     def is_class(self):
         return bool(self.kwargs.get('class_code'))
 
+    @property
+    def code(self):
+        return self.effective_class.full_code if self.is_class else self.kwargs['learning_unit_acronym']
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             'global_id': self.request.user.person.global_id,
             'students': self.enrollments_list,
             'learning_unit_year': self.kwargs['learning_unit_year'],
-            'learning_unit_acronym': self.effective_class.full_code
-            if self.is_class else self.kwargs['learning_unit_acronym'],
+            'learning_unit_acronym': self.code,
             'learning_unit_title': self.learning_unit_title,
             # TODO:  provide endpoint to check luy has_peps
             'has_peps': self.has_peps_student(),
