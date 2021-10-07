@@ -146,7 +146,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
 
 class AdminTutorChargeView(TutorChargeView):
-    permission_required = "base.can_access_attribution"
+    permission_required = "base.is_faculty_administrator"
 
     template_name = "tutor_charge_admin.html"
 
