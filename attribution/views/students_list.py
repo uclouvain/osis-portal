@@ -27,6 +27,7 @@ import json
 from typing import List, Union, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -54,6 +55,12 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     template_name = "students_list.html"
     api_call = LearningUnitEnrollmentService.get_enrollments_paginated_list
 
+    def get(self, *args, **kwargs):
+        # default ordering by program and student_last_name if no ordering parameter (trigger filter tags)
+        if not self.request.GET.get('ordering'):
+            return redirect(self.request.get_full_path() + "?ordering=program,student_last_name")
+        return super().get(self, *args, **kwargs)
+
     @property
     def is_class(self):
         return bool(self.kwargs.get('class_code'))
@@ -67,7 +74,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             **super().get_context_data(**kwargs),
             'global_id': self.request.user.person.global_id,
             'students': self.enrollments_list,
-            'learning_unit_year': self.kwargs['learning_unit_year'],
+            'learning_unit_year': int(self.kwargs['learning_unit_year']),
             'learning_unit_acronym': self.code,
             'learning_unit_title': self.learning_unit_title,
             # TODO:  provide endpoint to check luy has_peps
@@ -131,8 +138,8 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             last_note = note_january
         return {
             'name': "{0}, {1}".format(
-                enrollment.student_first_name,
-                enrollment.student_last_name
+                enrollment.student_last_name.upper(),
+                enrollment.student_first_name
             ),
             'email': enrollment.student_email,
             'program': enrollment.program,
@@ -244,6 +251,7 @@ class AdminStudentsListView(StudentsListView):
 class StudentsListXlsView(StudentsListView, ApiRetrieveAllObjectsMixin):
     permission_required = "base.can_access_attribution"
     api_call = LearningUnitEnrollmentService.get_all_enrollments_list
+    ordering = 'program,student_last_name'
 
     def get(self, *args, **kwargs):
         student_list = self.enrollments_list
