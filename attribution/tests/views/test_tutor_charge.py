@@ -66,20 +66,6 @@ class TutorChargeGetEmailStudentsTest(SimpleTestCase):
         self.assertIsNone(tutor_charge.get_email_students(None, 2017))
 
 
-class TutorComputePercentageAllocationCharge(SimpleTestCase):
-    def test_compute_percentage_allocation_charge(self):
-        expected_result = "75.0"
-        self.assertEqual(
-            tutor_charge.compute_percentage_allocation_charge(15.0, 30.0, 60.0),
-            expected_result
-        )
-
-    def test_compute_percentage_allocation_charge_case_total_is_equals_to_zero_assert_return_none(self):
-        self.assertIsNone(
-            tutor_charge.compute_percentage_allocation_charge(15.0, 30.0, 0)
-        )
-
-
 class TutorChargeViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
