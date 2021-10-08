@@ -48,7 +48,7 @@
         <tr>
             <th></th>
             <th>{% trans 'Code' %}</th>
-            <th>{% trans 'Title' %}</th>
+            <th>{% trans 'Title' context 'tutor_charge' %}</th>
             <th>{% trans 'Start' %}</th>
             <th>{% trans 'Vol.1' %}</th>
             <th>{% trans 'Vol.2' %}</th>
@@ -180,8 +180,8 @@
             <td><label>{% trans 'Total' %}</label></td>
             <td></td>
             <td></td>
-            <td>{{ total_lecturing_charge }}</td>
-            <td>{{ total_practical_charge }}</td>
+            <td>{{ total_lecturing_charge|floatformat:2 }}</td>
+            <td>{{ total_practical_charge|floatformat:2 }}</td>
             <td colspan="6"></td>
         </tr>
     </table>

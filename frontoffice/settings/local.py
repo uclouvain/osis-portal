@@ -36,7 +36,6 @@ OPTIONAL_APPS = (
     'assessments',
     'continuing_education',
     'admission',
-    'osis_signature',
     'osis_document',
 )
 
