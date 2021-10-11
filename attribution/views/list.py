@@ -23,15 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import functools
 import logging
-import operator
 import urllib
 from typing import List
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
@@ -44,6 +41,7 @@ from base.forms.base_forms import GlobalIdForm
 from base.models.learning_unit_year import LearningUnitYear
 from base.models.person import Person
 from base.views import layout
+from learning_unit.services.learning_unit import LearningUnitService
 
 NO_DATA_VALUE = "-"
 LEARNING_UNIT_ACRONYM_ID = "learning_unit_acronym_"
@@ -53,7 +51,6 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
 def students_list(request):
-    print('ici')
     data = get_learning_units(request.user)
     return render(request, "list/students_exam.html", data)
 
@@ -75,25 +72,30 @@ def get_learning_units(a_user):
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
     attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
+    year = None
     if attributions:
-        filter_clause = functools.reduce(
-            operator.or_,
-            (
-                (Q(acronym=attribution.code) & Q(academic_year__year=attribution.year))
-                for attribution in attributions
-            )
-        )
-        # TODO :
-        #  Question: Comment faire un espèce d'annotate pour ajouter la valeur de chaque attribution ue_has_classes
-        ues = list(LearningUnitYear.objects.filter(filter_clause).order_by('acronym'))
-        for ue in ues:
-            for a in attributions:
-                if a.code == ue.acronym and a.year == ue.academic_year.year:
-                    ue.learning_unit_has_classes = a.learning_unit_has_classes
-                    ue.score_responsible = a.score_responsible
-                    ue.effective_class_repartition = a.effective_class_repartition
+        year = attributions[0].year
 
-        return ues
+    ues_new = []
+    learning_unit_codes = {attribution.code for attribution in attributions}
+    score_responsable_list = AssessmentsService.get_score_responsible_list(
+        learning_unit_codes=list(learning_unit_codes),
+        year=year,
+        person=person)
+    uess = LearningUnitService.get_learning_units(learning_unit_codes=list(learning_unit_codes), year=year, person=person)
+
+    for ue in uess:
+        ue_acronym = ue.get('acronym', '')
+        ues_new.append(
+            {'acronym': ue_acronym,
+             'complete_title': ue.get('title', ''),
+             'score_responsible': _get_score_responsible(score_responsable_list, ue),
+             'learning_unit_has_classes': ue.get('has_classes', False),
+             'effective_class_repartition': _get_all_effective_class_repartition(attributions, ue_acronym)
+             }
+        )
+
+        return ues_new
     return []
 
 
@@ -244,3 +246,20 @@ def get_codes_parameter_list(request, academic_yr, data):
     if learning_unit_years:
         return learning_unit_years
     return NO_DATA_VALUE
+
+
+def _get_all_effective_class_repartition(attributions: List, ue_acronym: str) -> List:
+    effective_class_repartition = []
+    for attribution in attributions:
+        if attribution.code == ue_acronym:
+            effective_class_repartition.extend(attribution.effective_class_repartition)
+    return effective_class_repartition
+
+
+def _get_score_responsible(score_responsable_list, ue):
+    score_responsible = ''
+    for pers in score_responsable_list:
+        if pers.get('learning_unit_acronym') == ue.get('acronym'):
+            score_responsible = pers.get('full_name')
+            break
+    return score_responsible

@@ -32,7 +32,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
-
+from osis_assessments_sdk.model.current_session import CurrentSession
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
@@ -88,9 +88,11 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
 
+    @mock.patch("assessments.services.assessments.AssessmentsService.get_current_session")
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_with_no_attributions(self, mock_get_attributions_list):
+    def test_with_no_attributions(self, mock_get_attributions_list, mock_get_current_session):
         mock_get_attributions_list.return_value = []
+        mock_get_current_session = CurrentSession(academic_year="2021-22", month_session_name='January')
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, OK)

@@ -25,6 +25,7 @@
 ##############################################################################
 import logging
 from types import SimpleNamespace
+from typing import List
 
 import osis_assessments_sdk
 import urllib3
@@ -73,6 +74,18 @@ class AssessmentsService:
             api_instance = score_encoding_api.ScoreEncodingApi(api_client)
             try:
                 return api_instance.score_sheet_xls_export(code=learning_unit_code)
+            except (osis_assessments_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                return {'error_body': e.body, 'error_status': e.status}
+
+    @staticmethod
+    def get_score_responsible_list(learning_unit_codes: List[str], year: int, person: Person, **kwargs):
+        configuration = assessments_sdk.build_configuration(person)
+        with osis_assessments_sdk.ApiClient(configuration) as api_client:
+            api_instance = score_encoding_api.ScoreEncodingApi(api_client)
+            try:
+                return api_instance.get_score_responsible_list(learning_unit_codes=learning_unit_codes, year=year)
             except (osis_assessments_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
