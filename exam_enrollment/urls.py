@@ -32,7 +32,7 @@ from exam_enrollment.views.offer_choice import OfferChoice
 
 urlpatterns = [
     url(r'^$', OfferChoice.as_view(), name='exam_enrollment_offer_choice'),
-    url(r'^(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/', include([
+    url(r'^(?P<acronym>[0-9A-Za-z_/ ]+)/(?P<academic_year>[0-9]{4})/', include([
         url(r'^form/$', ExamEnrollmentForm.as_view(), name='exam_enrollment_form'),
         url(r'^check/$', CheckForm.as_view(), name='check_exam_enrollment_form'),
     ]))
