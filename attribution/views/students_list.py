@@ -231,15 +231,13 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             person=self.request.user.person,
             with_effective_class_repartition=True
         )
-
-        attribution = next((a for a in attributions if a['code'] == self.kwargs['learning_unit_acronym']), None)
-        if attribution and self.is_class:
+        attribution = next(a for a in attributions if a['code'] == self.kwargs['learning_unit_acronym'])
+        if self.is_class:
             effective_class = next(
-                (e for e in attribution['effective_class_repartition'] if e['code'][-1] == self.kwargs['class_code']),
-                None
+                e for e in attribution['effective_class_repartition'] if e['code'][-1] == self.kwargs['class_code']
             )
-            return bool(effective_class) and effective_class['has_peps']
-        return bool(attribution) and attribution['has_peps']
+            return effective_class['has_peps']
+        return attribution['has_peps']
 
     def get_produce_xls_url(self):
         if self.is_class:
