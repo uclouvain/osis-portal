@@ -90,9 +90,8 @@ def gather_all_api_paginated_results(func):
     def wrapper(*args, **kwargs) -> PaginatedResponse:
         paginated_response = api_paginated_response(func)(*args, **kwargs)
         while len(paginated_response.results) < paginated_response.count:
-            paginated_response.extend(api_paginated_response(
-                func, offset=len(paginated_response.results)
-            )(*args, **kwargs))
+            kwargs['offset'] = len(paginated_response.results)
+            paginated_response.extend(api_paginated_response(func)(*args, **kwargs))
         return paginated_response
     return wrapper
 

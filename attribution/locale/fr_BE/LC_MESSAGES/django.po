@@ -532,3 +532,6 @@ msgstr "au"
 
 msgid "without application"
 msgstr "sans candidature"
+
+msgid "Prog."
+msgstr "Form."
