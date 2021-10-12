@@ -102,7 +102,8 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [])
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_with_attributions(self, mock_get_attributions_list):
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    def test_with_attributions(self, mock_get_learning_units, mock_get_attributions_list):
         an_academic_year = create_current_academic_year()
 
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
@@ -112,12 +113,12 @@ class StudentsListTest(TestCase):
                 year=a_learning_unit_year.academic_year.year,
             )
         ]
+
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
-        self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
