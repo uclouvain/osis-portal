@@ -29,13 +29,17 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from pika.exceptions import ChannelClosed, ConnectionClosed
 
+from base.models.student import Student
 from osis_common.queue import queue_sender
 
 
 class ExamEnrollmentSubmittedAdmin(admin.ModelAdmin):
-    list_display = ('offer_enrollment',)
+    list_display = ('offer_enrollment', 'program_acronym', 'year', 'registration_id')
     fieldsets = ((None, {'fields': ('offer_enrollment', 'document')}),)
-    search_fields = ['offer_enrollment__student__registration_id', 'offer_enrollment__education_group_year__acronym']
+    search_fields = [
+        'offer_enrollment__student__registration_id', 'offer_enrollment__education_group_year__acronym',
+        'registration_id', 'program_acronym',
+    ]
     raw_id_fields = ('offer_enrollment',)
     actions = ['resend_messages_to_queue']
 
@@ -54,17 +58,23 @@ class ExamEnrollmentSubmittedAdmin(admin.ModelAdmin):
 
 
 class ExamEnrollmentSubmitted(models.Model):
+    # TODO:: Remove this FK
     offer_enrollment = models.ForeignKey('base.OfferEnrollment', on_delete=models.CASCADE)
     document = JSONField()
+    program_acronym = models.CharField(max_length=15)
+    year = models.IntegerField()
+    registration_id = models.CharField(max_length=10)
 
     def __str__(self):
         return "{}".format(self.offer_enrollment)
 
 
-def insert_or_update_document(acronym: str, year: int, document):
+def insert_or_update_document(acronym: str, year: int, student: Student, document) -> ExamEnrollmentSubmitted:
+    # FIXME : Problem ? With 11BA !?
     exam_enrollment_object, created = ExamEnrollmentSubmitted.objects.update_or_create(
-        offer_enrollment__education_group_year__acronym=acronym,
-        offer_enrollment__education_group_year__academic_year__year=year,
+        program_acronym=acronym,
+        year=year,
+        registration_id=student.registration_id,
         defaults={"document": document}
     )
     return exam_enrollment_object

@@ -108,7 +108,7 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         json_data = json.dumps(data_to_submit)
 
         if json_data and self.offer_enrollment:
-            exam_enrollment_submitted.insert_or_update_document(self.program_code, self.year, json_data)
+            exam_enrollment_submitted.insert_or_update_document(self.program_code, self.year, self.student, json_data)
         queue_sender.send_message(
             settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit
         )
