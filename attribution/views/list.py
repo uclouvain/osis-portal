@@ -76,26 +76,30 @@ def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
     if attributions:
         year = attributions[0].year
 
-    ues_new = []
+    learning_units_by_person = []
     learning_unit_codes = {attribution.code for attribution in attributions}
     score_responsable_list = AssessmentsService.get_score_responsible_list(
         learning_unit_codes=list(learning_unit_codes),
         year=year,
         person=person)
-    uess = LearningUnitService.get_learning_units(learning_unit_codes=list(learning_unit_codes), year=year, person=person)
+    learning_units = LearningUnitService.get_learning_units(
+        learning_unit_codes=list(learning_unit_codes),
+        year=year,
+        person=person
+    )
 
-    for ue in uess:
-        ue_acronym = ue.get('acronym', '')
-        ues_new.append(
+    for learning_unit in learning_units:
+        ue_acronym = learning_unit.get('acronym', '')
+        learning_units_by_person.append(
             {'acronym': ue_acronym,
-             'complete_title': ue.get('title', ''),
-             'score_responsible': _get_score_responsible(score_responsable_list, ue),
-             'learning_unit_has_classes': ue.get('has_classes', False),
+             'complete_title': learning_unit.get('title', ''),
+             'score_responsible': _get_score_responsible(score_responsable_list, learning_unit),
+             'learning_unit_has_classes': learning_unit.get('has_classes', False),
              'effective_class_repartition': _get_all_effective_class_repartition(attributions, ue_acronym)
              }
         )
 
-        return ues_new
+        return learning_units_by_person
     return []
 
 
