@@ -25,9 +25,7 @@
 ##############################################################################
 from django.contrib import admin
 
-from exam_enrollment.models import exam_enrollment_submitted, exam_enrollment_request
+from exam_enrollment.models import exam_enrollment_request
 
-admin.site.register(exam_enrollment_submitted.ExamEnrollmentSubmitted,
-                    exam_enrollment_submitted.ExamEnrollmentSubmittedAdmin)
 admin.site.register(exam_enrollment_request.ExamEnrollmentRequest,
                     exam_enrollment_request.ExamEnrollmentRequestdAdmin)
