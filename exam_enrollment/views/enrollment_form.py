@@ -125,7 +125,7 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
     def request_timeout(self) -> int:
         return get_request_timeout()
 
-    def _get_exam_enrollment_form(self):
+    def _get_exam_enrollment_form(self) -> HttpResponse:
         if not self.learning_unit_enrollments:
             messages.add_message(
                 self.request,
@@ -147,7 +147,7 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         return layout.render(self.request, self.template_name, self._get_context(data))
 
     @cached_property
-    def learning_unit_enrollments(self):
+    def learning_unit_enrollments(self) -> List[Enrollment]:
         return LearningUnitEnrollmentService.get_my_enrollments_list(
             program_code=self.program_code,
             year=self.year,
@@ -191,8 +191,12 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         if 'exam_enrollment' in settings.INSTALLED_APPS and hasattr(settings, 'QUEUES') and settings.QUEUES:
             try:
                 message_published = ask_queue_for_exam_enrollment_form(self._exam_enrollment_form_message())
-            except (RuntimeError, pika.exceptions.ConnectionClosed, pika.exceptions.ChannelClosed,
-                    pika.exceptions.AMQPError):
+            except (
+                    RuntimeError,
+                    pika.exceptions.ConnectionClosed,
+                    pika.exceptions.ChannelClosed,
+                    pika.exceptions.AMQPError
+            ):
                 return HttpResponse(status=400)
             if message_published:
                 return HttpResponse(status=200)
