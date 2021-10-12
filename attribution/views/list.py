@@ -25,7 +25,7 @@
 ##############################################################################
 import logging
 import urllib
-from typing import List
+from typing import List, Dict
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
@@ -70,7 +70,7 @@ def get_learning_units(a_user):
     }
 
 
-def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
+def __get_learning_unit_year_attributed(year: int, person: Person) -> List[Dict]:
     attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
     year = None
     if attributions:
@@ -105,12 +105,17 @@ def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
 
 def get_codes_parameter(request, academic_yr):
     learning_unit_years = None
-    user_learning_units_assigned = get_learning_units(request.user).get('my_learning_units', [])
+    learning_unit_acronyms = _get_learning_unit_acronyms(get_learning_units(request.user).get('my_learning_units', []))
+
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
-            learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
-                                                              user_learning_units_assigned)
+            learning_unit_years = build_learning_units_string(
+                academic_yr,
+                acronym,
+                learning_unit_years,
+                learning_unit_acronyms
+            )
 
     if learning_unit_years:
         return learning_unit_years
@@ -118,7 +123,7 @@ def get_codes_parameter(request, academic_yr):
     return NO_DATA_VALUE
 
 
-def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned):
+def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned: List[str]):
     learning_unit_years = learning_unit_years_in
     learning_units = LearningUnitYear.objects.select_related(
         "academic_year",
@@ -127,11 +132,13 @@ def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, us
         acronym__startswith=acronym,
         academic_year=academic_yr
     )
-    if learning_units and learning_units[0] in user_learning_units_assigned:
+
+    if learning_units and learning_units[0].acronym in user_learning_units_assigned:
         if learning_unit_years is None:
             learning_unit_years = "{0}".format(learning_units[0].acronym)
         else:
-            learning_unit_years = "{0},{1}".format(learning_unit_years, learning_units[0].acronym)
+            learning_unit_years = "{0},{1}".format(user_learning_units_assigned, learning_units[0].acronym)
+
     return learning_unit_years
 
 
@@ -207,7 +214,7 @@ def lists_of_students_exams_enrollments(request):
     return layout.render(request, "admin/students_list.html", {"form": form})
 
 
-def get_learning_units_by_person(global_id):
+def get_learning_units_by_person(global_id: str) -> Dict:
     a_person = mdl_base.person.find_by_global_id(global_id)
     learning_units = []
     if a_person:
@@ -225,7 +232,7 @@ def get_learning_units_by_person(global_id):
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
 @require_POST
-def list_build_by_person(request, global_id):
+def list_build_by_person(request, global_id: str):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
     person = mdl_base.person.find_by_global_id(global_id)
@@ -242,11 +249,13 @@ def list_build_by_person(request, global_id):
 def get_codes_parameter_list(request, academic_yr, data):
     learning_unit_years = None
     user_learning_units_assigned = data.get('learning_units', [])
+    learning_unit_acronyms = _get_learning_unit_acronyms(user_learning_units_assigned)
+
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
             learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
-                                                              user_learning_units_assigned)
+                                                              learning_unit_acronyms)
     if learning_unit_years:
         return learning_unit_years
     return NO_DATA_VALUE
@@ -267,3 +276,10 @@ def _get_score_responsible(score_responsable_list, ue):
             score_responsible = pers.get('full_name')
             break
     return score_responsible
+
+
+def _get_learning_unit_acronyms(user_learning_units_assigned) -> List[str]:
+    learning_unit_acronyms = set()
+    for u in user_learning_units_assigned:
+        learning_unit_acronyms.add(u.get('acronym'))
+    return list(learning_unit_acronyms)
