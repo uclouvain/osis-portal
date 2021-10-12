@@ -45,7 +45,6 @@ from base.models.academic_year import current_academic_year
 from base.models.student import Student
 from base.views import layout
 from dashboard.views import main as dash_main_view
-from exam_enrollment.models import exam_enrollment_submitted
 from exam_enrollment.services.learning_unit_enrollment import LearningUnitEnrollmentService
 from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
 from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request, ask_queue_for_exam_enrollment_form
@@ -105,10 +104,7 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         data_to_submit = _exam_enrollment_form_submission_message(
             self.request, self.student, self.program_code, self.year
         )
-        json_data = json.dumps(data_to_submit)
 
-        if json_data and self.offer_enrollment:
-            exam_enrollment_submitted.insert_or_update_document(self.program_code, self.year, self.student, json_data)
         queue_sender.send_message(
             settings.QUEUES.get('QUEUES_NAME').get('EXAM_ENROLLMENT_FORM_SUBMISSION'), data_to_submit
         )
