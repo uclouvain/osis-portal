@@ -77,7 +77,7 @@
                             </thead>
                             <tbody>
                             {% for attestation_statuse in attestation.attestationStatuses %}
-                                {% if attestation_statuse.attestationType == 'ECHEANCE' and current_year_echeance_attestation and current_year_echeance_attestation.available and not current_year_echeance_attestation.printed %}
+                                {% if attestation_statuse.attestationType == attestation_type_echeance and current_year_echeance_attestation and current_year_echeance_attestation.available and not current_year_echeance_attestation.printed %}
                                     <tr class="danger">
                                 {% else %}
                                     <tr>

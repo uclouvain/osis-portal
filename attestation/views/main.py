@@ -41,7 +41,7 @@ from base.views import layout
 from dashboard.views import main as dash_main_view
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
-ECHEANCE = "ECHEANCE"
+ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
 
 
 @login_required
@@ -154,6 +154,7 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict, student):
         'current_year': current_year,
         'student': student,
         'current_year_echeance_attestation': current_year_echeance_attestation,
+        'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE
     }
 
 
@@ -172,6 +173,6 @@ def _get_current_year_echeance_attestation(attestations, current_year):
     if current_year_attestations:
         return next(
             (attestation for attestation in current_year_attestations['attestationStatuses'] if
-             attestation["attestationType"] == ECHEANCE), None
+             attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
         )
     return None
