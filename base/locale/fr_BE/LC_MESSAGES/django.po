@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-23 11:48+0200\n"
+"POT-Creation-Date: 2021-10-13 09:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,18 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#, python-format
+msgid ""
+"\n"
+"            %(start_index)s to %(end_index)s of %(total_count)s "
+"%(object_name_plural)s\n"
+"        "
+msgstr ""
+"\n"
+"            %(start_index)s à %(end_index)s sur %(total_count)s "
+"%(object_name_plural)s\n"
+"        "
 
 msgid "A server error occured."
 msgstr "Une erreur inattendue s'est produite"
@@ -34,18 +46,6 @@ msgstr "Entité d'administration"
 
 msgid "Are you sure ?"
 msgstr "Êtes-vous certain ?"
-
-msgid "Arrangement additional time"
-msgstr "Aménagement Tiers-Temps"
-
-msgid "Arrangement appropriate copy"
-msgstr "Aménagement Copie adaptée"
-
-msgid "Arrangement other"
-msgstr "Autre"
-
-msgid "Arrangement specific locale"
-msgstr "Aménagement Local spécifique"
 
 msgid "Artist"
 msgstr "Artiste"
@@ -86,14 +86,8 @@ msgstr "Gestion des données par entité"
 msgid "Description"
 msgstr "Description"
 
-msgid "Details other educational facilities"
-msgstr "Détails autre aménagement"
-
 msgid "Dissertation"
 msgstr "Mémoire"
-
-msgid "Do not hesitate to help us to solve this problem by contacting the"
-msgstr "N'hésitez pas à nous aider en contactant le"
 
 msgid "ES"
 msgstr "ES"
@@ -128,9 +122,6 @@ msgstr "Mots-clés SQL interdits"
 msgid "Group"
 msgstr "Groupe"
 
-msgid "Guide"
-msgstr "Accompagnateur"
-
 msgid "Internship"
 msgstr "Stage"
 
@@ -142,6 +133,9 @@ msgstr "Gestion des données par entité"
 
 msgid "Mini-Training"
 msgstr "Mini-Formation"
+
+msgid "Next"
+msgstr "Suivant"
 
 msgid "Not defined"
 msgstr "Non défini"
@@ -167,8 +161,8 @@ msgstr "Page inexistante"
 msgid "Please report this incident to the Service Desk"
 msgstr "Merci de signaler cet incident au Service Desk"
 
-msgid "Promising athlete"
-msgstr "ES"
+msgid "Previous"
+msgstr "Précédent"
 
 msgid "Result"
 msgstr "Résultat"
@@ -184,12 +178,6 @@ msgstr "Rechercher"
 
 msgid "Sport"
 msgstr "Sport"
-
-msgid "Sub type Disability"
-msgstr "Sous-type HTM"
-
-msgid "Sub type Sport"
-msgstr "Sous-type Sport"
 
 msgid "Thesis"
 msgstr "Thèse"
@@ -221,6 +209,9 @@ msgstr "dissertation"
 msgid "execute"
 msgstr "executer"
 
+msgid "item(s)"
+msgstr "élément(s)"
+
 msgid "log in"
 msgstr "se connecter"
 
@@ -236,14 +227,11 @@ msgstr "pas de professeur avec ce global_id"
 msgid "password"
 msgstr "mot de passe"
 
+msgid "per page"
+msgstr "par page"
+
 msgid "reset"
 msgstr "réinitialiser"
-
-msgid "to describe what you intended to do in more details."
-msgstr "et en décrivant l'opération effectuée de manière plus détaillée."
-
-msgid "unknown"
-msgstr "inconnu"
 
 msgid "user"
 msgstr "utilisateur"

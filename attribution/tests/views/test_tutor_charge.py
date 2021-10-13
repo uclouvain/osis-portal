@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from copy import copy
+from functools import partial
 from types import SimpleNamespace
 
 import mock
@@ -89,18 +91,20 @@ class TutorChargeViewTest(TestCase):
             'type_text': 'Cours',
             'credits': '15.50',
             'total_learning_unit_charge': '55.5',
+            'percentage_allocation_charge': '100%',
             'start_year': 2020,
             'function': 'COORDINATOR',
             'function_text': 'Coordinateur',
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
             'links': {},
-            'is_partim': False
+            'is_partim': False,
+            'effective_class_repartition': []
         })
+        self.attribution_row.to_dict = partial(vars, self.attribution_row)
 
         self.attributions_list_patcher = mock.patch(
-            "attribution.views.tutor_charge.TutorChargeView.attributions",
-            new_callable=mock.PropertyMock,
+            "attribution.services.attribution.AttributionService.get_attributions_list",
             return_value=[self.attribution_row]
         )
         self.mocked_attributions_list = self.attributions_list_patcher.start()
@@ -134,6 +138,18 @@ class TutorChargeViewTest(TestCase):
         self.assertEqual(len(response.context["attributions"]), 1)
         self.assertEqual(response.context["total_lecturing_charge"], 15.5)
         self.assertEqual(response.context["total_practical_charge"], 40.0)
+
+    def test_should_hide_volumes_for_learning_unit_other_than_course_and_internship_and_dissertation(self):
+        other_attribution = copy(self.attribution_row)
+        other_attribution.type = learning_container_type.OTHER_COLLECTIVE
+        other_attribution.to_dict = partial(vars, other_attribution)
+
+        self.mocked_attributions_list.return_value = [other_attribution]
+
+        response = self.client.get(self.url)
+        attr = response.context["attributions"][0]
+
+        self.assertTrue(not any([attr.lecturing_charge, attr.practical_charge, attr.percentage_allocation_charge]))
 
 
 class AdminTutorChargeViewTest(TestCase):

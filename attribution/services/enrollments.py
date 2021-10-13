@@ -32,9 +32,8 @@ from django.conf import settings
 from osis_learning_unit_enrollment_sdk.api import enrollment_api
 
 from base.models.person import Person
+from base.utils.api_utils import PaginatedResponse, api_paginated_response, gather_all_api_paginated_results
 from frontoffice.settings.osis_sdk import learning_unit_enrollment as learning_unit_enrollment_sdk
-from frontoffice.settings.osis_sdk.utils import gather_all_api_paginated_results, PaginatedResponse, \
-    api_paginated_response
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 

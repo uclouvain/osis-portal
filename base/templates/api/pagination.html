@@ -1,8 +1,9 @@
-<nav aria-label="Page navigation">
+{% load i18n %}
+
   <ul class="pagination">
-    <li {% if first_offset == pagination_params.offset %} class="prev disabled" {% endif %}>
-      <a href="{{ request.path }}?limit={{ limit }}&offset={{ first_offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}" aria-label="First page">
-        <span aria-hidden="true">&laquo;</span>
+    <li class="prev {% if first_offset > previous_offset %}disabled{% endif %}">
+      <a href="{{ request.path }}?limit={{ limit }}&offset={{ previous_offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}" aria-label="Previous page">
+        <span aria-hidden="true">{% trans 'Previous' %}</span>
       </a>
     </li>
     {% for page in pages %}
@@ -12,10 +13,9 @@
             </a>
         </li>
     {% endfor %}
-    <li {% if last_offset == pagination_params.offset %} class="next disabled" {% endif %}>
-      <a href="{{ request.path }}?limit={{ limit }}&offset={{ last_offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}" aria-label="Last page">
-        <span aria-hidden="true">&raquo;</span>
+    <li class="next {% if last_offset < next_offset %}disabled{% endif %}">
+      <a href="{{ request.path }}?limit={{ limit }}&offset={{ next_offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}" aria-label="Next page">
+        <span aria-hidden="true">{% trans 'Next' %}</span>
       </a>
     </li>
   </ul>
-</nav>

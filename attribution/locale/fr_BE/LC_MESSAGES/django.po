@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-06 12:53+0200\n"
+"POT-Creation-Date: 2021-10-13 09:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -283,9 +283,6 @@ msgstr "Votre proposition d'organisation pédagogique"
 msgid "Person with reduced mobility"
 msgstr "Personnes à mobilité réduite"
 
-msgid "Pgrm"
-msgstr "Pgrm"
-
 msgid "Please enter the code of the course to which you would like to apply"
 msgstr "Veuillez introduire le code du cours pour lequel vous voulez postuler"
 
@@ -299,6 +296,9 @@ msgstr "Produire xls"
 
 msgid "Professor"
 msgstr "Professeur"
+
+msgid "Prog."
+msgstr "Form."
 
 msgid "Program"
 msgstr "Programme"
@@ -521,11 +521,14 @@ msgstr "Oui"
 msgid "You aren't teaching for any learning unit"
 msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 
+msgid "student(s)"
+msgstr "étudiant(s)"
+
 msgid "student_list"
 msgstr "Liste_etudiants"
 
 msgid "students enrolled from"
-msgstr "  étudiants inscrits au cours"
+msgstr "étudiants inscrits au cours"
 
 msgid "to"
 msgstr "au"

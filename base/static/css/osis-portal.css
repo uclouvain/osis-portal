@@ -130,4 +130,20 @@
 
 .ordering-label{
     cursor: pointer;
+    white-space: nowrap;
+}
+
+.limit-selector{
+    display: inline-block;
+    width: auto;
+}
+
+.pagination-table-header{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.pagination-table-header .pagination {
+    margin: 0 !important;
 }

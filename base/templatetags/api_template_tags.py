@@ -34,19 +34,21 @@ register = template.Library()
 
 @register.inclusion_tag('api/pagination.html', takes_context=True)
 def pagination(context):
-    pages_count = ceil(context['count']/DEFAULT_API_LIMIT)
+    pagination_limit = context.get('limit', DEFAULT_API_LIMIT)
+    pages_count = ceil(context['count']/pagination_limit)
     pages = [
         {
             'number': page+1,
-            'limit': DEFAULT_API_LIMIT,
-            'offset': str(DEFAULT_API_LIMIT*page)
+            'limit': pagination_limit,
+            'offset': str(pagination_limit*page)
         } for page in range(0, pages_count)
     ]
 
     context['pages'] = pages
-    context['limit'] = DEFAULT_API_LIMIT
     context['first_offset'] = 0
-    context['last_offset'] = (pages_count-1) * DEFAULT_API_LIMIT
+    context['last_offset'] = (pages_count-1) * pagination_limit
+    context['next_offset'] = context['offset'] + context['limit']
+    context['previous_offset'] = context['offset'] - context['limit']
 
     return context
 
@@ -61,4 +63,19 @@ def ordering(context, column_name, api_field_name):
     context['column_name'] = column_name
     context['ordering_field_name'] = api_field_name
     context['ordering_parameters'] = context.request.GET.get('ordering', '').split(',')
+    return context
+
+
+@register.inclusion_tag('api/count.html', takes_context=True)
+def count(context):
+    context['start_index'] = context['offset']
+    context['end_index'] = min(context['offset'] + context['limit'], context['count'])
+    context['total_count'] = context['count']
+    return context
+
+
+@register.inclusion_tag('api/limit_selector.html', takes_context=True)
+def limit_selector(context):
+    context['current_limit'] = context['limit']
+    context['limit_choices'] = [25, 50, 100]
     return context

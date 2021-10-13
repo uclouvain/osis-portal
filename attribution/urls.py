@@ -43,7 +43,8 @@ urlpatterns = [
         url(r'^$', StudentsListView.as_view(), name='student_enrollments_by_learning_unit'),
         url(r'^(?P<class_code>[0-9A-Za-z-]{1})$', StudentsListView.as_view(),
             name='student_enrollments_by_learning_class'),
-        url(r'^xls$', StudentsListXlsView.as_view(), name='produce_xls_students')
+        url(r'^xls$', StudentsListXlsView.as_view(), name='produce_xls_students'),
+        url(r'^(?P<class_code>[0-9A-Za-z-]{1})/xls$', StudentsListXlsView.as_view(), name='produce_xls_class_students')
     ])),
     url(r'^applications/', include([
         url(r'^$', online_application.ApplicationOverviewView.as_view(), name='applications_overview'),
