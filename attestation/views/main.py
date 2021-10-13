@@ -167,12 +167,13 @@ def _make_pdf_attestation(attestation_pdf, attestation_type):
 
 
 def _get_current_year_echeance_attestation(attestations, current_year):
-    current_year_attestations = next(
-        (attestation for attestation in attestations if attestation["academicYear"] == current_year), None
-    )
-    if current_year_attestations:
-        return next(
-            (attestation for attestation in current_year_attestations['attestationStatuses'] if
-             attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
+    if attestations:
+        current_year_attestations = next(
+            (attestation for attestation in attestations if attestation["academicYear"] == current_year), None
         )
+        if current_year_attestations:
+            return next(
+                (attestation for attestation in current_year_attestations['attestationStatuses'] if
+                 attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
+            )
     return None
