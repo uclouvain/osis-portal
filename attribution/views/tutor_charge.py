@@ -41,6 +41,7 @@ from osis_attribution_sdk.models import Attribution
 from attribution.services.attribution import AttributionService
 from base.forms.base_forms import GlobalIdForm
 from base.models.academic_year import AcademicYear, current_academic_year
+from base.models.enums.learning_container_type import COURSE, INTERNSHIP, DISSERTATION
 from base.models.person import Person
 from base.utils import string_utils
 from base.views import layout
@@ -56,6 +57,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
     raise_exception = False
 
     template_name = "tutor_charge.html"
+    show_volumes_types = [COURSE, INTERNSHIP, DISSERTATION]
 
     def get_context_data(self, **kwargs):
         return {
@@ -126,6 +128,10 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 attribution.year,
                 clean_code[-1]
             )
+
+        if attribution.type not in self.show_volumes_types:
+            self._hide_volumes(attribution)
+
         return SimpleNamespace(
             **{
                 **attribution.to_dict(),
@@ -133,6 +139,12 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 'attribution_students_url': self.get_attribution_students_url(attribution.code, attribution.year),
             }
         )
+
+    @staticmethod
+    def _hide_volumes(attribution: Attribution) -> None:
+        attribution.lecturing_charge = None
+        attribution.practical_charge = None
+        attribution.percentage_allocation_charge = None
 
     @staticmethod
     def get_attribution_students_url(code: str, year: int, class_code: str = None) -> str:
