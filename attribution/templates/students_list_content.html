@@ -39,7 +39,22 @@
     </div>
 {% endif %}
 
-    <div class="alert alert-info" style="background-color: white">
+{% if enrolled_students_count %}
+    <div class="row">
+        <div class="col-md-3 col-sm-3 col-xs-12 col-md-push-9 col-sm-push-9">
+            <form method="get" action="{{produce_xls_url}}">
+                <button class="btn btn-success pull-md-right" id="bt_produce_xls" type="submit" style="margin-bottom: 10px;"
+                        title="{% trans 'Export the students list in Excel format' %}">
+                    {% trans 'Export list (Excel)' %}
+                    <i class="fa fa-table" aria-hidden="true" style="padding-left:10px;"></i>
+                </button>
+            </form>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12 col-md-pull-3 col-sm-pull-3 col-xs-pull-0">
+            {% search %}
+        </div>
+    </div>
+     <div class="alert alert-info" style="background-color: white">
         <div class="accordion" id="accordionExample">
             <a role="button" data-toggle="collapse" data-target="#legend" aria-expanded="false"
                aria-controls="tutors_by_course"  title="{% trans 'Legend' %}">
@@ -82,22 +97,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-{% if enrolled_students_count %}
-    <div class="row">
-        <div class="col-md-3 col-sm-3 col-xs-12 col-md-push-9 col-sm-push-9">
-            <form method="get" action="{{produce_xls_url}}">
-                <button class="btn btn-success pull-md-right" id="bt_produce_xls" type="submit" style="margin-bottom: 10px;"
-                        title="{% trans 'Export the students list in Excel format' %}">
-                    {% trans 'Export list (Excel)' %}
-                    <i class="fa fa-table" aria-hidden="true" style="padding-left:10px;"></i>
-                </button>
-            </form>
-        </div>
-        <div class="col-md-6 col-sm-6 col-xs-12 col-md-pull-3 col-sm-pull-3 col-xs-pull-0">
-            {% search %}
         </div>
     </div>
     <hr/>
