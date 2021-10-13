@@ -27,7 +27,7 @@ from types import SimpleNamespace
 
 from django.test import SimpleTestCase
 
-from frontoffice.settings.osis_sdk.utils import api_paginated_response, gather_all_api_paginated_results
+from base.utils.api_utils import api_paginated_response, gather_all_api_paginated_results
 
 
 class SDKUtilsTestCase(SimpleTestCase):

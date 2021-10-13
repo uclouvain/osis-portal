@@ -30,6 +30,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from osis_learning_unit_enrollment_sdk.model.student_specific_profile import StudentSpecificProfile
 
@@ -37,7 +38,7 @@ from attribution.business import xls_students_by_learning_unit
 from attribution.services.attribution import AttributionService
 from attribution.services.enrollments import LearningUnitEnrollmentService
 from attribution.services.learning_unit import LearningUnitService
-from frontoffice.settings.osis_sdk.utils import ApiPaginationMixin, ApiRetrieveAllObjectsMixin
+from base.utils.api_utils import ApiPaginationMixin, ApiRetrieveAllObjectsMixin
 from osis_common.utils.models import get_object_or_none
 from performance.models.student_performance import StudentPerformance
 
@@ -50,15 +51,19 @@ SEPTEMBER = "septembre"
 EnrollmentDict = Dict[str, Union[str, StudentSpecificProfile]]
 
 
-class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView, ApiPaginationMixin):
+class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginationMixin, TemplateView):
     permission_required = "base.can_access_attribution"
     template_name = "students_list.html"
-    api_call = LearningUnitEnrollmentService.get_all_enrollments_list
+    api_call = LearningUnitEnrollmentService.get_enrollments_paginated_list
+    pagination_limit = 100
+    object_name_plural = _('student(s)')
 
     def get(self, *args, **kwargs):
         # default ordering by program and student_last_name if no ordering parameter (trigger filter tags)
         if not self.request.GET.get('ordering'):
-            return redirect(self.request.get_full_path() + "?ordering=program,student_last_name")
+            query_params_in_url = "?" in self.request.get_full_path()
+            url_format = "{}&{}" if query_params_in_url else "{}?{}"
+            return redirect(url_format.format(self.request.get_full_path(), "ordering=program,student_last_name"))
         return super().get(self, *args, **kwargs)
 
     @property
@@ -69,9 +74,9 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
     def code(self):
         return self.effective_class.full_code if self.is_class else self.kwargs['learning_unit_acronym']
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         return {
-            **super().get_context_data(**kwargs),
+            **super().get_context_data(*args, **kwargs),
             'global_id': self.request.user.person.global_id,
             'students': self.enrollments_list,
             'learning_unit_year': int(self.kwargs['learning_unit_year']),
@@ -80,8 +85,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView
             # TODO:  provide endpoint to check luy has_peps
             'has_peps': self.has_peps_student(),
             'produce_xls_url': self.get_produce_xls_url(),
-            'count': self.count,
-            'enrolled_students_count': self.paginated_response.get_extra('enrolled_students_count')
+            'enrolled_students_count': self.paginated_response.get_extra('enrolled_students_count'),
         }
 
     @cached_property

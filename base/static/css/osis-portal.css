@@ -130,4 +130,10 @@
 
 .ordering-label{
     cursor: pointer;
+    white-space: nowrap;
+}
+
+.limit-selector{
+    display: inline-block;
+    width: auto;
 }

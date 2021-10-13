@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-23 11:48+0200\n"
+"POT-Creation-Date: 2021-10-13 09:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#, python-format
+msgid ""
+"\n"
+"            %(start_index)s to %(end_index)s of %(total_count)s "
+"%(object_name_plural)s\n"
+"        "
+msgstr ""
 
 msgid "A server error occured."
 msgstr ""
@@ -33,18 +41,6 @@ msgid "Administration entity"
 msgstr ""
 
 msgid "Are you sure ?"
-msgstr ""
-
-msgid "Arrangement additional time"
-msgstr ""
-
-msgid "Arrangement appropriate copy"
-msgstr ""
-
-msgid "Arrangement other"
-msgstr ""
-
-msgid "Arrangement specific locale"
 msgstr ""
 
 msgid "Artist"
@@ -86,13 +82,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-msgid "Details other educational facilities"
-msgstr ""
-
 msgid "Dissertation"
-msgstr ""
-
-msgid "Do not hesitate to help us to solve this problem by contacting the"
 msgstr ""
 
 msgid "ES"
@@ -128,9 +118,6 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-msgid "Guide"
-msgstr ""
-
 msgid "Internship"
 msgstr ""
 
@@ -141,6 +128,9 @@ msgid "Management entity"
 msgstr ""
 
 msgid "Mini-Training"
+msgstr ""
+
+msgid "Next"
 msgstr ""
 
 msgid "Not defined"
@@ -164,13 +154,10 @@ msgstr ""
 msgid "Page not found"
 msgstr ""
 
-msgid "Person with reduced mobility"
-msgstr ""
-
 msgid "Please report this incident to the Service Desk"
 msgstr ""
 
-msgid "Promising athlete"
+msgid "Previous"
 msgstr ""
 
 msgid "Result"
@@ -186,12 +173,6 @@ msgid "Search"
 msgstr ""
 
 msgid "Sport"
-msgstr ""
-
-msgid "Sub type Disability"
-msgstr ""
-
-msgid "Sub type Sport"
 msgstr ""
 
 msgid "Thesis"
@@ -224,6 +205,9 @@ msgstr ""
 msgid "execute"
 msgstr ""
 
+msgid "item(s)"
+msgstr ""
+
 msgid "log in"
 msgstr ""
 
@@ -239,13 +223,10 @@ msgstr ""
 msgid "password"
 msgstr ""
 
+msgid "per page"
+msgstr ""
+
 msgid "reset"
-msgstr ""
-
-msgid "to describe what you intended to do in more details."
-msgstr ""
-
-msgid "unknown"
 msgstr ""
 
 msgid "user"
