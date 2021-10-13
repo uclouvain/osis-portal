@@ -2,7 +2,7 @@ Django==2.2.13
 django-bootstrap3==11.1.0
 django-localflavor==1.6
 django-statici18n==1.8.3
-djangorestframework==3.9.4
+djangorestframework==3.12.4
 jdcal==1.4
 mock==2.0.0
 pika==0.12.0
