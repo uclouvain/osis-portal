@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <form action="{{path}}" method="get" class="form-inline">
-    <div class="pull-right form-group">
+    <div class="form-group">
         <select onchange="this.form.submit()" name="limit" class="form-control limit-selector">
             {% for size in limit_choices %}
                 <option {% if size == current_limit|add:0 %} selected {% endif %}>

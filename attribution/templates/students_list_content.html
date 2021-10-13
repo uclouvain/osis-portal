@@ -103,8 +103,11 @@
     <table class="table table-striped table-hover" id="students_table">
         <thead>
         <tr>
-            {% count %}
-            {% limit_selector %}
+            <div class="pagination-table-header">
+                <div>{% count %}</div>
+                <div>{% pagination %}</div>
+                <div>{% limit_selector %}</div>
+            </div>
         </tr>
         <tr>
             <th>{% ordering _('Prog.') 'program' %}</th>
