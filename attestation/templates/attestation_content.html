@@ -29,6 +29,11 @@
     {% if not attestations %}
         <div class="alert alert-info" role="alert">{% trans 'No attestation available' %}</div>
     {% else %}
+        <div class="alert alert-info" role="alert">
+            attestations : <br>{{ attestations }}
+            <br>current_year : <br>{{ current_year }}
+            <br>student : <br>{{ student }}
+        </div>
         <div class="panel-heading">
             {% trans 'Attestations' %}
         </div>
