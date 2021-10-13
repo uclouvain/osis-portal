@@ -23,8 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from copy import copy
-from functools import partial
 from types import SimpleNamespace
 
 import mock
@@ -32,10 +30,15 @@ from django.contrib.auth.models import Permission
 from django.http import HttpResponse
 from django.test import TestCase, SimpleTestCase
 from django.urls import reverse
+from osis_attribution_sdk.model.attribution import Attribution
+from osis_attribution_sdk.model.attribution_function_enum import AttributionFunctionEnum
+from osis_attribution_sdk.model.attribution_links import AttributionLinks
+from osis_attribution_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
 from rest_framework import status
 
+from attribution.models.enums.function import COORDINATOR
 from attribution.views import tutor_charge
-from base.models.enums import learning_container_type
+from base.models.enums.learning_container_type import COURSE, OTHER_COLLECTIVE
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
@@ -82,26 +85,25 @@ class TutorChargeViewTest(TestCase):
         self.client.force_login(self.person.user)
 
         # Mock the OSIS Remote API Call
-        self.attribution_row = SimpleNamespace(**{
+        self.attribution_row = Attribution(**{
             'code': 'LDROI1200',
             'title_fr': 'Introduction aux droits Partie I',
             'title_en': 'Introduction to Law Part I',
             'year': self.current_academic_year.year,
-            'type': learning_container_type.COURSE,
+            'type': LearningUnitTypeEnum(value=COURSE),
             'type_text': 'Cours',
             'credits': '15.50',
             'total_learning_unit_charge': '55.5',
             'percentage_allocation_charge': '100%',
             'start_year': 2020,
-            'function': 'COORDINATOR',
+            'function': AttributionFunctionEnum(value=COORDINATOR),
             'function_text': 'Coordinateur',
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
-            'links': {},
+            'links': AttributionLinks(value={}),
             'is_partim': False,
             'effective_class_repartition': []
         })
-        self.attribution_row.to_dict = partial(vars, self.attribution_row)
 
         self.attributions_list_patcher = mock.patch(
             "attribution.services.attribution.AttributionService.get_attributions_list",
@@ -139,10 +141,14 @@ class TutorChargeViewTest(TestCase):
         self.assertEqual(response.context["total_lecturing_charge"], 15.5)
         self.assertEqual(response.context["total_practical_charge"], 40.0)
 
+    def test_should_show_volumes(self):
+        response = self.client.get(self.url)
+        attr = response.context["attributions"][0]
+        self.assertTrue(all([attr.lecturing_charge, attr.practical_charge, attr.percentage_allocation_charge]))
+
     def test_should_hide_volumes_for_learning_unit_other_than_course_and_internship_and_dissertation(self):
-        other_attribution = copy(self.attribution_row)
-        other_attribution.type = learning_container_type.OTHER_COLLECTIVE
-        other_attribution.to_dict = partial(vars, other_attribution)
+        other_attribution = self.attribution_row
+        other_attribution.type = LearningUnitTypeEnum(OTHER_COLLECTIVE)
 
         self.mocked_attributions_list.return_value = [other_attribution]
 
