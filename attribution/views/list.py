@@ -90,17 +90,12 @@ def __get_learning_unit_year_attributed(year: int, person: Person) -> List[Dict]
         learning_unit.update(
             {
                 'score_responsible': _get_score_responsible(score_responsible_list, learning_unit),
-            }
-        )
-        learning_unit.update(
-            {
                 'effective_class_repartition': _get_all_effective_class_repartition(attributions, ue_acronym),
             }
         )
         learning_units_by_person.append({'acronym': ue_acronym, 'learning_unit': learning_unit})
 
-        return learning_units_by_person
-    return []
+    return learning_units_by_person
 
 
 def get_codes_parameter(request, academic_yr):
