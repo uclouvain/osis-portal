@@ -106,12 +106,13 @@
                                             </button>
                                         </td>
                                     </tr>
-                                    {% if learning_unit_yr.learning_unit.effective_class_repartition %}
-                                        {% for classe in learning_unit_yr.learning_unit.effective_class_repartition %}
+                                    {% if learning_unit_yr.learning_unit.effective_class_detail %}
+                                        {% for obj in learning_unit_yr.learning_unit.effective_class_detail %}
+                                            {% with classe=obj.effective_class_repartition %}
                                             <tr>
                                                 <td>{{ classe.code }}</td>
                                                 <td>{{ classe.title_fr|default_if_none:"" }}</td>
-                                                <td></td>
+                                                <td>{{ obj.score_responsible|default_if_none:"" }}</td>
                                                 <td align="center">
                                                 {% with classe.code|slice:"-1:" as classe_letter_code %}
                                                     {% with learning_unit_yr.acronym|add:classe_letter_code as learning_unit_code %}
@@ -132,6 +133,7 @@
                                                 {% endwith %}
                                                 </td>
                                             </tr>
+                                            {% endwith %}
                                         {% endfor %}
                                     {% endif %}
                                 {% endfor %}
