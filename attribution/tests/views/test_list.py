@@ -315,8 +315,6 @@ class ListBuildTest(TestCase):
                               'score_responsible': ''
                               },
         }
-        print('***')
-        print(response.context['my_learning_units'][0])
         self.assertEqual(len(response.context['my_learning_units']), 1)
         self.assertEqual(response.context['my_learning_units'][0], expected_learning_unit_data)
         self.assertEqual(response.context['msg_error'], _('No data found'))
