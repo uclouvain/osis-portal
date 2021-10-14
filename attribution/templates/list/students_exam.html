@@ -79,37 +79,35 @@
                                 {% for learning_unit_yr in my_learning_units %}
                                     <tr>
                                         <td>{{ learning_unit_yr.acronym }}</td>
-                                        <td>{{ learning_unit_yr.complete_title|default_if_none:"" }}</td>
-                                        <td>{{ learning_unit_yr.score_responsible }}</td>
+                                        <td>{{ learning_unit_yr.learning_unit.title|default_if_none:"" }}</td>
+                                        <td>{{ learning_unit_yr.learning_unit.score_responsible }}</td>
                                         <td align="center">
-                                            <button style="background-color: transparent; border: transparent; color: #2e6da4"
-                                                    class="{% if learning_unit_yr.learning_unit_has_classes %}btn-disable{% endif %}"
+                                            <button class="btn-clear {% if learning_unit_yr.learning_unit_has_classes %}btn-disable{% endif %}"
                                                     id="bt_produce_xls_score_encoding_{{ learning_unit_yr.id }}"
                                                     type="button"
-                                                    {% if learning_unit_yr.learning_unit_has_classes %} disabled{% endif %}>
+                                                    {% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}>
                                                 <a href="{% url 'scores_sheet_xls' learning_unit_yr.acronym %}"
-                                                   {% if learning_unit_yr.learning_unit_has_classes %} disabled{% endif %}
-                                                    class="{% if learning_unit_yr.learning_unit_has_classes %} disabled{% endif %}"
-                                                    title="{% if learning_unit_yr.learning_unit_has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'Excel File' %}{% endif %}">
-                                                    <i class="fa fa-file-excel-o {% if learning_unit_yr.learning_unit_has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
+                                                   {% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}
+                                                    class="{% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}"
+                                                    title="{% if learning_unit_yr.learning_unit.has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'Excel File' %}{% endif %}">
+                                                    <i class="fa fa-file-excel-o {% if learning_unit_yr.learning_unit.has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
                                                 </a>
                                             </button>
-                                            <button style="background-color: transparent; border: transparent; color: #2e6da4"
-                                                    class="{% if learning_unit_yr.learning_unit_has_classes %}btn-disable{% endif %}"
+                                            <button class="btn-clear {% if learning_unit_yr.learning_unit.has_classes %}btn-disable{% endif %}"
                                                     id="bt_produce_pdf_score_encoding_{{ learning_unit_yr.id }}"
                                                     type="button"
-                                                    {% if learning_unit_yr.learning_unit_has_classes %} disabled{% endif %}>
+                                                    {% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}>
                                                 <a href="{% url 'scores_sheet_pdf' learning_unit_yr.acronym %}"
-                                                   {% if learning_unit_yr.learning_unit_has_classes %} disabled{% endif %}
-                                                   class="{% if learning_unit_yr.learning_unit_has_classes %} disabled{% endif %}"
-                                                   title="{% if learning_unit_yr.learning_unit_has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'PDF File' %}{% endif %}">
-                                                    <i class="fa fa-file-pdf-o {% if learning_unit_yr.learning_unit_has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
+                                                   {% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}
+                                                   class="{% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}"
+                                                   title="{% if learning_unit_yr.learning_unit.has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'PDF File' %}{% endif %}">
+                                                    <i class="fa fa-file-pdf-o {% if learning_unit_yr.learning_unit.has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
                                                 </a>
                                             </button>
                                         </td>
                                     </tr>
-                                    {% if learning_unit_yr.effective_class_repartition %}
-                                        {% for classe in learning_unit_yr.effective_class_repartition %}
+                                    {% if learning_unit_yr.learning_unit.effective_class_repartition %}
+                                        {% for classe in learning_unit_yr.learning_unit.effective_class_repartition %}
                                             <tr>
                                                 <td>{{ classe.code }}</td>
                                                 <td>{{ classe.title_fr|default_if_none:"" }}</td>
@@ -117,14 +115,14 @@
                                                 <td align="center">
                                                 {% with classe.code|slice:"-1:" as classe_letter_code %}
                                                     {% with learning_unit_yr.acronym|add:classe_letter_code as learning_unit_code %}
-                                                    <button style="background-color: transparent; border: transparent; color: #2e6da4"
+                                                    <button class="btn-clear"
                                                             type="button">
                                                         <a href="{% url 'scores_sheet_xls' learning_unit_code %}"
                                                             title="{% trans 'Excel File' %}">
                                                             <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 200%"></i>
                                                         </a>
                                                     </button>
-                                                    <button style="background-color: transparent; border: transparent; color: #2e6da4" type="button">
+                                                    <button  class="btn-clear" type="button">
                                                         <a href="{% url 'scores_sheet_pdf' learning_unit_code %}"
                                                            title="{% trans 'PDF File' %}">
                                                             <i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 200%"></i>

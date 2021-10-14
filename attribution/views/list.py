@@ -72,13 +72,10 @@ def get_learning_units(a_user):
 
 def __get_learning_unit_year_attributed(year: int, person: Person) -> List[Dict]:
     attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
-    year = None
-    if attributions:
-        year = attributions[0].year
 
     learning_units_by_person = []
     learning_unit_codes = {attribution.code for attribution in attributions}
-    score_responsable_list = AssessmentsService.get_score_responsible_list(
+    score_responsible_list = AssessmentsService.get_score_responsible_list(
         learning_unit_codes=list(learning_unit_codes),
         year=year,
         person=person)
@@ -90,14 +87,17 @@ def __get_learning_unit_year_attributed(year: int, person: Person) -> List[Dict]
 
     for learning_unit in learning_units:
         ue_acronym = learning_unit.get('acronym', '')
-        learning_units_by_person.append(
-            {'acronym': ue_acronym,
-             'complete_title': learning_unit.get('title', ''),
-             'score_responsible': _get_score_responsible(score_responsable_list, learning_unit),
-             'learning_unit_has_classes': learning_unit.get('has_classes', False),
-             'effective_class_repartition': _get_all_effective_class_repartition(attributions, ue_acronym)
-             }
+        learning_unit.update(
+            {
+                'score_responsible': _get_score_responsible(score_responsible_list, learning_unit),
+            }
         )
+        learning_unit.update(
+            {
+                'effective_class_repartition': _get_all_effective_class_repartition(attributions, ue_acronym),
+            }
+        )
+        learning_units_by_person.append({'acronym': ue_acronym, 'learning_unit': learning_unit})
 
         return learning_units_by_person
     return []
@@ -269,13 +269,10 @@ def _get_all_effective_class_repartition(attributions: List, ue_acronym: str) ->
     return effective_class_repartition
 
 
-def _get_score_responsible(score_responsable_list, ue):
-    score_responsible = ''
-    for pers in score_responsable_list:
-        if pers.get('learning_unit_acronym') == ue.get('acronym'):
-            score_responsible = pers.get('full_name')
-            break
-    return score_responsible
+def _get_score_responsible(score_responsibles: List, ue: Dict) -> str:
+    return next(
+        pers.get('full_name') for pers in score_responsibles if pers.get('learning_unit_acronym') == ue.get('acronym')
+    )
 
 
 def _get_learning_unit_acronyms(user_learning_units_assigned) -> List[str]:
