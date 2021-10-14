@@ -16,6 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid ""
+"'Lists of students enrolled to my exams' are immediately usable for encoding "
+"scores."
+msgstr ""
+
 msgid " in the column \"Students\""
 msgstr ""
 
@@ -24,6 +29,11 @@ msgstr ""
 
 msgctxt "plural"
 msgid "All"
+msgstr ""
+
+msgid ""
+"All tutors can encode scores but only the scores responsible can submit. If "
+"the scores responsible is not correct, please contact your faculty."
 msgstr ""
 
 msgid "An email with your applications have been sent"
@@ -107,6 +117,9 @@ msgstr ""
 msgid "Display teachers"
 msgstr ""
 
+msgid "Download the list (Excel or PDF)"
+msgstr ""
+
 msgid "ES"
 msgstr ""
 
@@ -122,10 +135,11 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#, fuzzy
-#| msgid "Registration id"
 msgid "Exam registration state"
 msgstr "Registration id"
+
+msgid "Excel File"
+msgstr ""
 
 msgid "Export list (Excel)"
 msgstr ""
@@ -212,6 +226,9 @@ msgstr ""
 msgid "Legend to help you understanding the xls file"
 msgstr ""
 
+msgid "List code"
+msgstr ""
+
 msgid "List of students enrolled to exams of "
 msgstr ""
 
@@ -270,6 +287,9 @@ msgid "P - Examen partiel"
 msgstr ""
 
 msgid "P - Partial examination"
+msgstr ""
+
+msgid "PDF File"
 msgstr ""
 
 msgid "PEPS"
@@ -335,6 +355,9 @@ msgstr ""
 msgid "Scores encoding"
 msgstr ""
 
+msgid "Scores responsible"
+msgstr ""
+
 msgid "Select/deselect all attributions to renew"
 msgstr ""
 
@@ -342,6 +365,9 @@ msgid "Sept."
 msgstr ""
 
 msgid "September"
+msgstr ""
+
+msgid "Session of"
 msgstr ""
 
 msgid ""
@@ -385,7 +411,7 @@ msgstr ""
 msgid "Teaching charges administration"
 msgstr ""
 
-msgid "The Excel lists for encoding scores are available in"
+msgid "The list of students enrolled to courses are available in "
 msgstr ""
 
 #, python-format
@@ -423,6 +449,10 @@ msgid ""
 "that you can be assigned to the classes you teach."
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
+msgctxt "score sheet export"
 msgid "Title"
 msgstr ""
 

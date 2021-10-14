@@ -32,7 +32,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
-
+from osis_assessments_sdk.model.current_session import CurrentSession
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
@@ -88,9 +88,11 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
 
+    @mock.patch("assessments.services.assessments.AssessmentsService.get_current_session")
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_with_no_attributions(self, mock_get_attributions_list):
+    def test_with_no_attributions(self, mock_get_attributions_list, mock_get_current_session):
         mock_get_attributions_list.return_value = []
+        mock_get_current_session = CurrentSession(academic_year="2021-22", month_session_name='January')
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, OK)
@@ -100,7 +102,15 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.context['my_learning_units'], [])
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_with_attributions(self, mock_get_attributions_list):
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
+    def test_with_attributions(self,
+                               mock_current_session,
+                               mock_get_score_responsible_list,
+                               mock_get_learning_units,
+                               mock_get_attributions_list
+                               ):
         an_academic_year = create_current_academic_year()
 
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
@@ -108,14 +118,23 @@ class StudentsListTest(TestCase):
             Attribution(
                 code=a_learning_unit_year.acronym,
                 year=a_learning_unit_year.academic_year.year,
+                effective_class_repartition=[],
             )
         ]
+        mock_get_learning_units.return_value = [
+            {'acronym': a_learning_unit_year.acronym},
+        ]
+        mock_get_score_responsible_list.return_value = [
+        ]
+        mock_current_session.return_value = CurrentSession(
+            academic_year=str(an_academic_year),
+            month_session_name='January'
+        )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
-        self.assertListEqual(response.context['my_learning_units'], [a_learning_unit_year])
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
@@ -183,7 +202,19 @@ class ListBuildTest(TestCase):
 
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
-    def test_with_empty_post(self):
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
+    def test_with_empty_post(self,
+                             mock_current_session,
+                             mock_get_score_responsible_list,
+                             mock_get_learning_units,
+                             mock_get_attributions_list):
+        mock_get_attributions_list.return_value = []
+        mock_get_learning_units.return_value = []
+        mock_get_score_responsible_list.return_value = []
+        mock_current_session.return_value = None
         response = self.client.post(self.url)
 
         self.assertEqual(response.status_code, OK)
@@ -198,8 +229,17 @@ class ListBuildTest(TestCase):
         'ATTRIBUTION_PATH': '/path'
     })
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
-    def test_with_post_but_webservice_unavailable(self, mock_fetch, mock_get_attributions_list):
+    def test_with_post_but_webservice_unavailable(self,
+                                                  mock_fetch,
+                                                  mock_current_session,
+                                                  mock_get_score_responsible_list,
+                                                  mock_get_learning_units,
+                                                  mock_get_attributions_list
+                                                  ):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
@@ -212,8 +252,18 @@ class ListBuildTest(TestCase):
             Attribution(
                 code=a_learning_unit_year.acronym,
                 year=a_learning_unit_year.academic_year.year,
+                effective_class_repartition=[],
             )
         ]
+        mock_get_learning_units.return_value = [
+            {'acronym': a_learning_unit_year.acronym},
+        ]
+        mock_get_score_responsible_list.return_value = [
+        ]
+        mock_current_session.return_value = CurrentSession(
+            academic_year=str(an_academic_year),
+            month_session_name='January'
+        )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
@@ -223,11 +273,17 @@ class ListBuildTest(TestCase):
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
-        self.assertEqual(response.context['my_learning_units'], [a_learning_unit_year])
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_when_trying_to_access_other_tutor_students_list(self, mock_get_attributions_list):
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
+    def test_when_trying_to_access_other_tutor_students_list(self,
+                                                             mock_current_session,
+                                                             mock_get_score_responsible_list,
+                                                             mock_get_learning_units,
+                                                             mock_get_attributions_list):
         an_other_tutor = TutorFactory()
         an_other_tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         self.client.force_login(an_other_tutor.person.user)
@@ -236,7 +292,15 @@ class ListBuildTest(TestCase):
                                                end_date=today + datetime.timedelta(days=5))
         a_learning_unit_year = LearningUnitYearFactory(academic_year=an_academic_year)
         mock_get_attributions_list.return_value = []
-
+        mock_get_score_responsible_list.return_value = [
+        ]
+        mock_get_learning_units.return_value = [
+            {'acronym': a_learning_unit_year.acronym},
+        ]
+        mock_current_session.return_value = CurrentSession(
+            academic_year=str(an_academic_year),
+            month_session_name='January'
+        )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
@@ -244,7 +308,15 @@ class ListBuildTest(TestCase):
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], an_other_tutor.person)
-        self.assertEqual(response.context['my_learning_units'], [])
+        expected_learning_unit_data = {
+            'acronym': a_learning_unit_year.acronym,
+            'learning_unit': {'acronym': a_learning_unit_year.acronym,
+                              'effective_class_detail': [],
+                              'score_responsible': ''
+                              },
+        }
+        self.assertEqual(len(response.context['my_learning_units']), 1)
+        self.assertEqual(response.context['my_learning_units'][0], expected_learning_unit_data)
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={
@@ -252,8 +324,17 @@ class ListBuildTest(TestCase):
         'ATTRIBUTION_PATH': '/path'
     })
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
-    def test_with_post_and_webservice_is_available(self, mock_fetch, mock_get_attributions_list):
+    def test_with_post_and_webservice_is_available(self,
+                                                   mock_fetch,
+                                                   mock_current_session,
+                                                   mock_get_score_responsible_list,
+                                                   mock_get_learning_units,
+                                                   mock_get_attributions_list
+                                                   ):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
@@ -266,8 +347,19 @@ class ListBuildTest(TestCase):
             Attribution(
                 code=a_learning_unit_year.acronym,
                 year=a_learning_unit_year.academic_year.year,
+                effective_class_repartition=[],
             )
         ]
+        mock_get_learning_units.return_value = [
+            {'acronym': a_learning_unit_year.acronym},
+        ]
+        mock_get_score_responsible_list.return_value = [
+        ]
+        mock_current_session.return_value = CurrentSession(
+            academic_year=str(an_academic_year),
+            month_session_name='January'
+        )
+
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
@@ -307,9 +399,11 @@ class AdminStudentsListTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    def test_with_no_attributions(self):
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    def test_with_no_attributions(self, mock_get_score_responsible_list):
         response = self.client.get(self.url)
-
+        mock_get_score_responsible_list.return_value = [
+        ]
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'admin/students_list.html')
 
@@ -323,6 +417,7 @@ class AdminStudentsListTest(TestCase):
             Attribution(
                 code=a_learning_unit_year.acronym,
                 year=a_learning_unit_year.academic_year.year,
+                effective_class_repartition=[],
             )
         ]
 
@@ -364,7 +459,19 @@ class AdminListBuildTest(TestCase):
 
         self.assertEqual(response.status_code, METHOD_NOT_ALLOWED)
 
-    def test_with_empty_post(self):
+    @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
+    def test_with_empty_post(self,
+                             mock_current_session,
+                             mock_get_score_responsible_list,
+                             mock_get_learning_units,
+                             mock_get_attributions_list):
+        mock_get_attributions_list.return_value = []
+        mock_get_learning_units.return_value = []
+        mock_get_score_responsible_list.return_value = []
+        mock_current_session.return_value = None
         response = self.client.post(self.url, )
 
         self.assertEqual(response.status_code, OK)
@@ -379,8 +486,16 @@ class AdminListBuildTest(TestCase):
         'ATTRIBUTION_PATH': '/path'
     })
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
-    def test_with_post_but_webservice_unavailable(self, mock_fetch, mock_get_attributions_list):
+    def test_with_post_but_webservice_unavailable(self,
+                                                  mock_fetch,
+                                                  mock_current_session,
+                                                  mock_get_score_responsible_list,
+                                                  mock_get_learning_units,
+                                                  mock_get_attributions_list):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
@@ -390,9 +505,18 @@ class AdminListBuildTest(TestCase):
             Attribution(
                 code=a_learning_unit_year.acronym,
                 year=a_learning_unit_year.academic_year.year,
+                effective_class_repartition=[],
             )
         ]
-
+        mock_get_learning_units.return_value = [
+            {'acronym': a_learning_unit_year.acronym},
+        ]
+        mock_get_score_responsible_list.return_value = [
+        ]
+        mock_current_session.return_value = CurrentSession(
+            academic_year=str(an_academic_year),
+            month_session_name='January'
+        )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
@@ -402,7 +526,17 @@ class AdminListBuildTest(TestCase):
         self.assertTemplateUsed(response, 'admin/students_exam_list.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
-        self.assertEqual(response.context['learning_units'], [a_learning_unit_year])
+
+        expected_learning_unit_data = {
+            'acronym': a_learning_unit_year.acronym,
+            'learning_unit': {'acronym': a_learning_unit_year.acronym,
+                              'effective_class_detail': [],
+                              'score_responsible': ''
+                              },
+        }
+
+        self.assertEqual(len(response.context['learning_units']), 1)
+        self.assertEqual(response.context['learning_units'][0], expected_learning_unit_data)
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @override_settings(ATTRIBUTION_CONFIG={
@@ -410,8 +544,16 @@ class AdminListBuildTest(TestCase):
         'ATTRIBUTION_PATH': '/path'
     })
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
-    def test_with_post_and_webservice_is_available(self, mock_fetch, mock_get_attributions_list):
+    def test_with_post_and_webservice_is_available(self,
+                                                   mock_fetch,
+                                                   mock_current_session,
+                                                   mock_get_score_responsible_list,
+                                                   mock_get_learning_units,
+                                                   mock_get_attributions_list):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
@@ -421,8 +563,18 @@ class AdminListBuildTest(TestCase):
             Attribution(
                 code=a_learning_unit_year.acronym,
                 year=a_learning_unit_year.academic_year.year,
+                effective_class_repartition=[]
             )
         ]
+        mock_get_learning_units.return_value = [
+            {'acronym': a_learning_unit_year.acronym},
+        ]
+        mock_get_score_responsible_list.return_value = [
+        ]
+        mock_current_session.return_value = CurrentSession(
+            academic_year=str(an_academic_year),
+            month_session_name='January'
+        )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 

@@ -131,3 +131,7 @@
 .ordering-label{
     cursor: pointer;
 }
+.btn-clear {
+    background: none;
+    border: none;
+}

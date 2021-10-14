@@ -23,28 +23,35 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url, include
+import logging
 
-from .views import score_encoding
+from django.conf import settings
+import osis_assessments_sdk
 
-urlpatterns = [
-    url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
-    url(r'^scores_encoding/my_scores_sheets/$', score_encoding.scores_sheets, name='my_scores_sheets'),
-    url(r'^scores_encoding/my_scores_sheets/ask/([0-9a-z-]+)/$', score_encoding.ask_papersheet, name='ask_papersheet'),
-    url(r'^scores_encoding/my_scores_sheets/check/([0-9a-z-]+)/$', score_encoding.check_papersheet,
-        name='check_papersheet'),
-    url(r'^scores_encoding/my_scores_sheets/download/([0-9a-z-]+)/$', score_encoding.download_papersheet,
-        name='scores_download'),
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
 
-    url(r'^administration/', include([
-        url(r'^scores_sheets/$', score_encoding.scores_sheets_admin, name='scores_sheets_admin'),
-    ])),
-    url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z-]+)/',
-        score_encoding.score_sheet_xls,
-        name='scores_sheet_xls',
-        ),
-    url(r'^scores_encoding/pdf/(?P<learning_unit_code>[0-9A-Za-z-]+)/$',
-        score_encoding.score_sheet_pdf,
-        name='scores_sheet_pdf',
-        ),
-]
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+def build_configuration(person: Person = None) -> osis_assessments_sdk.Configuration:
+    """
+    Return SDK configuration of attribution based on person provided in kwargs
+    If no person provided, it will use generic token to make request
+    """
+    if not settings.OSIS_ASSESSMENTS_SDK_HOST:
+        logger.debug("'OSIS_ASSESSMENTS_SDK_HOST' setting must be set in configuration")
+
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        token = utils.get_user_token(person, force_user_creation=True)
+
+    return osis_assessments_sdk.Configuration(
+        host=settings.OSIS_ASSESSMENTS_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })

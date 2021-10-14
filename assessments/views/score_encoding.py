@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,27 +28,34 @@ import json
 import logging
 import time
 import traceback
+from io import BufferedReader
 
 import pika
 import pika.exceptions
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
 from django.http import HttpResponse, Http404
-from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _, ugettext as _
 from django.views.decorators.http import require_GET
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
+from rest_framework.exceptions import PermissionDenied
 from voluptuous import error as voluptuous_error
 
 import assessments.models
+from assessments.services.assessments import AssessmentsService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.utils import queue_utils
 from base.views import layout
 from osis_common.decorators.ajax import ajax_required
 from osis_common.document import paper_sheet
+from rest_framework import status
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
@@ -278,3 +285,48 @@ def _check_person_and_scores_in_db(person):
         scores_in_db_and_uptodate = False
         logger.warning("This person doesn't exist")
     return scores_in_db_and_uptodate
+
+
+@login_required
+@permission_required('base.is_tutor', raise_exception=True)
+def score_sheet_xls(request, learning_unit_code: str):
+    content_type = 'application/vnd.ms-excel'
+    file = AssessmentsService.get_xls_score_sheet(learning_unit_code, request.user.person)
+    return _build_response(content_type, file, request)
+
+
+@login_required
+@permission_required('base.is_tutor', raise_exception=True)
+def score_sheet_pdf(request, learning_unit_code: str):
+    file = AssessmentsService.get_score_sheet_pdf(learning_unit_code, request.user.person)
+    content_type = 'application/pdf'
+    return _build_response(content_type, file, request)
+
+
+def get_filename(temp_file_name: str) -> str:
+    filename = temp_file_name
+    pos = filename.rfind('/')
+    return filename[pos + 1:]
+
+
+def _build_response(content_type, file, request):
+    if isinstance(file, BufferedReader):
+        response = HttpResponse(file, content_type=content_type)
+        response['Content-Disposition'] = 'attachment; filename=%s' % get_filename(file.name)
+        return response
+    elif isinstance(file, dict):
+        error_messages = file.get('error_body', '')
+        error_status = file.get('error_status')
+        if error_status == status.HTTP_400_BAD_REQUEST or error_status == status.HTTP_401_UNAUTHORIZED:
+            message = error_messages
+        else:
+            message = _('Unexpected error')
+        messages.add_message(
+            request,
+            messages.INFO,
+            _("Error occurred while creating the export file. %(error_message)s") % {
+                'error_message': message
+            },
+            "alert-info"
+        )
+    return redirect(reverse('students_list'))

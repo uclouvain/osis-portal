@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-30 15:07+0200\n"
+"POT-Creation-Date: 2021-09-15 10:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid ""
+"'Lists of students enrolled to my exams' are immediately usable for encoding "
+"scores."
+msgstr ""
+"Les 'Listes des étudiants inscrits à mes examens' sont immédiatement "
+"utilisables pour l'encodage des notes."
 
 msgid " in the column \"Students\""
 msgstr " repris dans la colonne \"Etudiants\""
@@ -25,6 +32,14 @@ msgstr "Sigle"
 msgctxt "plural"
 msgid "All"
 msgstr "Tous"
+
+msgid ""
+"All tutors can encode scores but only the scores responsible can submit. If "
+"the scores responsible is not correct, please contact your faculty."
+msgstr ""
+"Tous les enseignants peuvent encoder des notes mais seul le responsable de "
+"notes peut soumettre. Si le responsable de notes n'est pas correct, merci de "
+"contacter votre faculté."
 
 msgid "An email with your applications have been sent"
 msgstr "Un email contenant vos candidatures vous a été envoyé"
@@ -109,6 +124,9 @@ msgstr "Personnes porteuses de handicap, trouble ou maladie"
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
+msgid "Download the list (Excel or PDF)"
+msgstr "Télécharger la liste (PDF ou Excel)"
+
 msgid "ES"
 msgstr "ES"
 
@@ -126,6 +144,9 @@ msgstr "Fin"
 
 msgid "Exam registration state"
 msgstr "Etat d'inscription aux examens"
+
+msgid "Excel File"
+msgstr "Fichier Excel"
 
 msgid "Export list (Excel)"
 msgstr "Exporter liste (Excel)"
@@ -211,6 +232,9 @@ msgstr "Légende"
 msgid "Legend to help you understanding the xls file"
 msgstr "Légende pour mieux comprendre le fichier xls"
 
+msgid "List code"
+msgstr "Code liste"
+
 msgid "List of students enrolled to exams of "
 msgstr "Listes des étudiants inscrits aux examens de "
 
@@ -270,6 +294,9 @@ msgstr "P - Examen partiel"
 
 msgid "P - Partial examination"
 msgstr "P - Examen partiel"
+
+msgid "PDF File"
+msgstr "Fichier PDF"
 
 msgid "PEPS"
 msgstr "PEPS"
@@ -336,6 +363,9 @@ msgstr "Horaire non disponible"
 msgid "Scores encoding"
 msgstr "Encodage des notes"
 
+msgid "Scores responsible"
+msgstr "Responsable de notes"
+
 msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
 
@@ -344,6 +374,9 @@ msgstr "Sept."
 
 msgid "September"
 msgstr "Septembre"
+
+msgid "Session of"
+msgstr "Session de"
 
 msgid ""
 "Some of the students enrolled to this course have a PEPS status (Program for "
@@ -388,9 +421,9 @@ msgstr "Charge d'enseignement"
 msgid "Teaching charges administration"
 msgstr "Administration des charges d'enseignements"
 
-msgid "The Excel lists for encoding scores are available in"
+msgid "The list of students enrolled to courses are available in "
 msgstr ""
-"Les listes Excel destinées à l'encodage des notes sont disponibles dans"
+"La liste des étudiants inscrits aux cours est disponible dans "
 
 #, python-format
 msgid ""
@@ -439,6 +472,10 @@ msgstr ""
 "contacter votre faculté afin qu'on vous affecte aux classes auxquelles vous "
 "enseignez."
 
+msgid "Title"
+msgstr "Intitulé"
+
+msgctxt "score sheet export"
 msgid "Title"
 msgstr "Intitulé"
 
