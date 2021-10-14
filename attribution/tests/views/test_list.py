@@ -310,11 +310,13 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['person'], an_other_tutor.person)
         expected_learning_unit_data = {
             'acronym': a_learning_unit_year.acronym,
-            'complete_title': '',
-            'effective_class_repartition': [],
-            'learning_unit_has_classes': False,
-            'score_responsible': '',
+            'learning_unit': {'acronym': a_learning_unit_year.acronym,
+                              'effective_class_detail': [],
+                              'score_responsible': ''
+                              },
         }
+        print('***')
+        print(response.context['my_learning_units'][0])
         self.assertEqual(len(response.context['my_learning_units']), 1)
         self.assertEqual(response.context['my_learning_units'][0], expected_learning_unit_data)
         self.assertEqual(response.context['msg_error'], _('No data found'))
@@ -529,10 +531,10 @@ class AdminListBuildTest(TestCase):
 
         expected_learning_unit_data = {
             'acronym': a_learning_unit_year.acronym,
-            'complete_title': '',
-            'effective_class_repartition': [],
-            'learning_unit_has_classes': False,
-            'score_responsible': '',
+            'learning_unit': {'acronym': a_learning_unit_year.acronym,
+                              'effective_class_detail': [],
+                              'score_responsible': ''
+                              },
         }
 
         self.assertEqual(len(response.context['learning_units']), 1)
