@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-15 10:58+0200\n"
+"POT-Creation-Date: 2021-10-15 13:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,15 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid " in the column \"Students\""
+msgstr " repris dans la colonne \"Etudiants\""
+
 msgid ""
 "'Lists of students enrolled to my exams' are immediately usable for encoding "
 "scores."
 msgstr ""
 "Les 'Listes des étudiants inscrits à mes examens' sont immédiatement "
 "utilisables pour l'encodage des notes."
-
-msgid " in the column \"Students\""
-msgstr " repris dans la colonne \"Etudiants\""
 
 msgid "Acronym"
 msgstr "Sigle"
@@ -154,6 +154,8 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+#, fuzzy, python-format
+#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -262,6 +264,9 @@ msgstr "Mes charges échues"
 msgid "My teaching charge"
 msgstr "Ma charge d'enseignement"
 
+msgid "NEW"
+msgstr "NOUVEAU"
+
 msgid "New application"
 msgstr "Nouvelle candidature"
 
@@ -360,9 +365,6 @@ msgstr "Horaire"
 msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
-msgid "Scores encoding"
-msgstr "Encodage des notes"
-
 msgid "Scores responsible"
 msgstr "Responsable de notes"
 
@@ -421,9 +423,8 @@ msgstr "Charge d'enseignement"
 msgid "Teaching charges administration"
 msgstr "Administration des charges d'enseignements"
 
-msgid "The list of students enrolled to courses are available in "
-msgstr ""
-"La liste des étudiants inscrits aux cours est disponible dans "
+msgid "The lists of students enrolled to courses are available in "
+msgstr "Les listes des étudiants inscrits aux cours sont disponibles dans "
 
 #, python-format
 msgid ""
@@ -538,9 +539,6 @@ msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
 
 msgid "W - Unsatisfactory assessment (mark does not count)"
 msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
-
-msgid "Warning, this is not a list for encoding scores."
-msgstr "Attention, ceci n'est pas une liste destinée à l'encodage des notes."
 
 msgid "Y - Deuxième inscription"
 msgstr "Y - Deuxième inscription"

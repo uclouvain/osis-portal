@@ -53,7 +53,7 @@
            <h3>{% trans 'Session of' %} {{current_session.month_session_name|lower}} {{current_session.academic_year}}</h3>
             <div class="alert alert-info">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
-                {% trans "'Lists of students enrolled to my exams' are immediately usable for encoding scores." %}
+                <strong>{% trans "NEW" %}</strong> {% trans "'Lists of students enrolled to my exams' are immediately usable for encoding scores." %}
             </div>
             <br>
             <form method="post" name="form_students_list">
@@ -63,7 +63,7 @@
                         {% if my_learning_units %}
                             <table class="table">
                                 <thead>
-                                <th>{% trans 'List code' %}</th>
+                                <th>{% trans 'Code' %}</th>
                                 <th>{% trans 'Title' context 'score sheet export'%}</th>
                                 <th>
                                     {% trans 'Scores responsible' %}
@@ -111,7 +111,7 @@
                                             {% with classe=obj.effective_class_repartition %}
                                             <tr>
                                                 <td>{{ classe.code }}</td>
-                                                <td>{{ classe.title_fr|default_if_none:"" }}</td>
+                                                <td>{{ learning_unit_yr.learning_unit.title|default_if_none:"" }} - {{ classe.title_fr|default_if_none:"" }}</td>
                                                 <td>{{ obj.score_responsible|default_if_none:"" }}</td>
                                                 <td align="center">
                                                 {% with classe.code|slice:"-1:" as classe_letter_code %}
@@ -147,8 +147,9 @@
                 <br>
             </form>
             <div class="alert alert-info">
-                {% trans 'The list of students enrolled to courses are available in ' %}
-                <a href="{% url 'attribution_home' %}">{% trans 'My teaching charge' %}.</a>
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                {% trans 'The lists of students enrolled to courses are available in ' %}
+                <a href="{% url 'attribution_home' %}" style="color: #1e347b"><u>{% trans 'My teaching charge' %}.</u></a>
             </div>
         </div>
     </div>

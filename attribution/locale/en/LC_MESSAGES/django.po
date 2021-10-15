@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-30 15:07+0200\n"
+"POT-Creation-Date: 2021-10-15 13:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid " in the column \"Students\""
+msgstr ""
+
 msgid ""
 "'Lists of students enrolled to my exams' are immediately usable for encoding "
 "scores."
-msgstr ""
-
-msgid " in the column \"Students\""
 msgstr ""
 
 msgid "Acronym"
@@ -256,6 +256,9 @@ msgstr ""
 msgid "My teaching charge"
 msgstr ""
 
+msgid "NEW"
+msgstr ""
+
 msgid "New application"
 msgstr ""
 
@@ -352,9 +355,6 @@ msgstr ""
 msgid "Schedule unavailable"
 msgstr ""
 
-msgid "Scores encoding"
-msgstr ""
-
 msgid "Scores responsible"
 msgstr ""
 
@@ -411,7 +411,7 @@ msgstr ""
 msgid "Teaching charges administration"
 msgstr ""
 
-msgid "The list of students enrolled to courses are available in "
+msgid "The lists of students enrolled to courses are available in "
 msgstr ""
 
 #, python-format
@@ -510,9 +510,6 @@ msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr ""
 
 msgid "W - Unsatisfactory assessment (mark does not count)"
-msgstr ""
-
-msgid "Warning, this is not a list for encoding scores."
 msgstr ""
 
 msgid "Y - Deuxième inscription"
