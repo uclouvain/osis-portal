@@ -60,7 +60,7 @@ msgid "DE"
 msgstr "Certificate of provisional registration"
 
 msgid "ECHEANCE"
-msgstr "Notice of maturity"
+msgstr "Due date notice"
 
 msgid "Faculty administration"
 msgstr ""
