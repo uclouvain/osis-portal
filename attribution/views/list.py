@@ -283,7 +283,8 @@ def _get_all_effective_class_repartition(attributions: List, ue_acronym: str, sc
 def _get_score_responsible(score_responsibles: List, lu_acronym: str) -> str:
     if score_responsibles:
         return next(
-            pers.get('full_name') for pers in score_responsibles if pers.get('learning_unit_acronym') == lu_acronym
+            (pers.get('full_name') for pers in score_responsibles if pers.get('learning_unit_acronym') == lu_acronym),
+            ''
         )
     return ''
 
