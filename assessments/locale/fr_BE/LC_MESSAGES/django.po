@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-05 14:34+0200\n"
+"POT-Creation-Date: 2021-10-18 15:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#, python-format
+msgid "%(error_message)s"
+msgstr "%(error_message)s"
 
 msgid "Ask scores sheets"
 msgstr "Demander les feuilles de notes"
@@ -25,10 +29,6 @@ msgstr "Télécharger"
 
 msgid "Download my PDF scores sheets for paper encoding."
 msgstr "Télécharger mes feuilles de notes PDF pour l'encodage papier."
-
-#, python-format
-msgid "Error occurred while creating the export file. %(error_message)s"
-msgstr "Une erreur est survenue lors de la création du fichier. %(error_message)s"
 
 msgid "Faculty administration"
 msgstr "Faculté d'administration"

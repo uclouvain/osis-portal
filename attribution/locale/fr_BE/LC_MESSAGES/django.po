@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-15 13:28+0200\n"
+"POT-Creation-Date: 2021-10-18 15:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -233,9 +233,6 @@ msgstr "Légende"
 
 msgid "Legend to help you understanding the xls file"
 msgstr "Légende pour mieux comprendre le fichier xls"
-
-msgid "List code"
-msgstr "Code liste"
 
 msgid "List of students enrolled to exams of "
 msgstr "Listes des étudiants inscrits aux examens de "
