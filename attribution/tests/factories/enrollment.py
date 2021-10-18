@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,25 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import string
-
 import factory.fuzzy
+from factory.faker import faker
 
-from base.tests.factories.student import StudentFactory
-from base.models.enums import peps_type
+fake = faker.Faker()
 
 
-class StudentSpecificProlileFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = 'base.StudentSpecificProfile'
-
-    student = factory.SubFactory(StudentFactory)
-    type = peps_type.PepsTypes.ARTIST
-    subtype_disability = ''
-    subtype_sport= ''
-    guide = None
-    arrangement_additional_time = False
-    arrangement_appropriate_copy = False
-    arrangement_other = False
-    arrangement_specific_locale = False
-    arrangement_comment = None
+class EnrollmentDictFactory(dict, factory.DictFactory):
+    date_enrollment = "2020-09-16"
+    enrollment_state = "ENROLLED"
+    student_last_name = fake.last_name()
+    student_first_name = fake.first_name()
+    student_email = fake.email(),
+    student_registration_id = factory.fuzzy.FuzzyText(length=10)
+    type_peps = None
+    sport_subtype_peps = None
+    disability_subtype_peps = None
+    program = factory.fuzzy.FuzzyText(length=7)
+    learning_unit_year = 2020
+    learning_unit_acronym = "{}{}".format(
+        factory.fuzzy.FuzzyText(length=5),
+        factory.fuzzy.FuzzyInteger(low=1000, high=2000)
+    )
+    specific_profile = None

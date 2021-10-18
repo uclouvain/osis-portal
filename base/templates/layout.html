@@ -41,7 +41,6 @@
     <link rel="icon" href="{% static 'img/favicon.ico' %}"/>
     <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
@@ -163,7 +162,9 @@
     <script src="{% static 'js/osis-portal.js' %}"></script>
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
-     <script src="{% statici18n LANGUAGE_CODE %}"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue@2"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue-i18n@8"></script>
+    <script src="{% statici18n LANGUAGE_CODE %}"></script>
     <script type="text/javascript" src="{% static "js/modal_form_submit.js" %}"></script>
     {% block script %}
         <script type="text/javascript">

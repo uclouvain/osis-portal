@@ -107,3 +107,43 @@
     line-height: 15px !important;
     padding-left: 0 !important;
 }
+
+.no-padding{
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+@media (min-width: 992px) {
+    .pull-md-right{
+        float: right;
+    }
+}
+.active-sort-icon{
+    opacity: 0.6;
+    font-weight: bolder;
+}
+
+.inactive-sort-icon{
+    opacity: 0.2;
+    font-weight: bolder;
+}
+
+.ordering-label{
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.limit-selector{
+    display: inline-block;
+    width: auto;
+}
+
+.pagination-table-header{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.pagination-table-header .pagination {
+    margin: 0 !important;
+}

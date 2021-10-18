@@ -88,3 +88,7 @@ span.dashboard-vpn-warning a:hover{
 .tooltip-wrapper [disabled] {
   pointer-events: none;
 }
+
+tbody tr.class_year {
+    background-color: #ecfcfc !important;
+}

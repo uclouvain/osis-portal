@@ -23,7 +23,7 @@
     * at the root of the source code of this program.  If not,
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block modal_id %}modalConfirmExamEnrollment{{ program.id }}{% endblock %}
+{% block modal_id %}modalConfirmExamEnrollment_{{ program.acronym|slugify }}_{{ program.year }}{% endblock %}
 
 {% block modal_header %}
     <h3>{% blocktrans %}Which action do you want to perform ?{% endblocktrans %}</h3>
@@ -36,9 +36,10 @@
         </a>
         <br><br>
         {% if program %}
-            <a type="button" class="btn btn-primary" href="{% url 'exam_enrollment_form' program.id %}">
+            <a type="button" class="btn btn-primary"
+               href="{% url 'exam_enrollment_form' program.acronym program.year %}">
         {% else %}
-            <a type="button" class="btn btn-primary" href="{% url 'exam_enrollment_form_direct' %}">
+            <a type="button" class="btn btn-primary" href="{% url 'exam_enrollment_offer_choice' %}">
         {% endif %}
         {% trans "Register to exams or update my exam enrollments" %}
         </a>

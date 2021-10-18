@@ -1,0 +1,13 @@
+[
+    {
+        "model": "waffle.switch",
+        "pk": 1,
+        "fields": {
+            "name": "admission",
+            "active": false,
+            "note": "Module Admission",
+            "created": "2021-10-13T11:25:22",
+            "modified": "2021-10-13T11:34:40.995"
+        }
+    }
+]

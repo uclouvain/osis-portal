@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<form method="get" id="search_form">
+    <div class="col-md-6 col-sm-6 col-xs-10 no-padding">
+        <input type="text" name="search" class="form-control" maxlength="100" id="id_search" placeholder="{% trans 'Search' %}" value="{{ request.GET.search }}">
+    </div>
+    <div class="col-xs-1">
+        <button type="submit" class="btn btn-primary" >
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+    </div>
+    {% if request.GET.ordering %}
+        <input type="hidden" name="ordering" value="{{ request.GET.ordering }}" />
+    {% endif %}
+</form>

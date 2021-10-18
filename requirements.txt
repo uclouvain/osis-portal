@@ -2,7 +2,7 @@ Django==2.2.13
 django-bootstrap3==11.1.0
 django-localflavor==1.6
 django-statici18n==1.8.3
-djangorestframework==3.9.4
+djangorestframework==3.12.4
 jdcal==1.4
 mock==2.0.0
 pika==0.12.0
@@ -30,6 +30,15 @@ pycodestyle==2.4.0
 pylint==2.4.4
 diff-cover==3.0.1
 tblib==1.7.0
-git+https://github.com/uclouvain/osis-attribution-sdk.git@build-1.13.0
+django-waffle==0.14.0
+git+https://github.com/uclouvain/osis-attribution-sdk.git@build-1.17.0
+git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@build-1.0.0
+git+https://github.com/uclouvain/osis-learning-unit-sdk.git@build-1.9.0
+git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@build-1.0.0
+git+https://github.com/uclouvain/osis-education-group-sdk.git@build-1.8.0
+git+https://github.com/uclouvain/osis-reference-sdk.git@build-1.0.1
+git+https://github.com/uclouvain/osis-admission-sdk.git@build-0.0.3
+git+https://github.com/uclouvain/osis-document.git@dev#egg=osis_document
+git+https://github.com/uclouvain/osis-signature.git@dev#egg=osis_signature
 
 -r ./osis_common/requirements.txt

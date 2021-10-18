@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,24 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
+import logging
 
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+import osis_learning_unit_sdk
+from django.conf import settings
+
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class CampusAdmin(SerializableModelAdmin):
-    list_display = ('name', 'organization')
-    list_filter = ('organization',)
-    fieldsets = ((None, {'fields': ('name', 'organization', 'code', 'is_administration')}),)
-    search_fields = ['name', 'organization__name']
+def build_configuration(person: Person = None) -> osis_learning_unit_sdk.Configuration:
+    """
+    Return SDK configuration of learning unit
+    """
+    if not settings.OSIS_LEARNING_UNIT_SDK_HOST:
+        logger.debug("'OSIS_LEARNING_UNIT_SDK_HOST' setting must be set in configuration")
 
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        token = utils.get_user_token(person, force_user_creation=True)
 
-class Campus(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    name = models.CharField(max_length=100, blank=True, null=True)
-    organization = models.ForeignKey('Organization', on_delete=models.PROTECT)
-    code = models.CharField(max_length=1, blank=True, null=True)
-    is_administration = models.BooleanField(default=False)
-
-    def __str__(self):
-        return u"%s" % self.name
+    return osis_learning_unit_sdk.Configuration(
+        host=settings.OSIS_LEARNING_UNIT_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_LEARNING_UNIT_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })

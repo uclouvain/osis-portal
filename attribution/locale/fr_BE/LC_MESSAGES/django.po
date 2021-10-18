@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-30 14:30+0200\n"
+"POT-Creation-Date: 2021-10-13 09:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+msgid " in the column \"Students\""
+msgstr " repris dans la colonne \"Etudiants\""
 
 msgid "Acronym"
 msgstr "Sigle"
@@ -70,6 +73,12 @@ msgstr "Sigle"
 msgid "Coordinator"
 msgstr "Coordinateur(trice)"
 
+msgid "Credits"
+msgstr "Crédits"
+
+msgid "DDI"
+msgstr "DDI"
+
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -94,11 +103,17 @@ msgstr "Suppléant temporaire"
 msgid "Details other educational facilities"
 msgstr "Détails autre aménagement"
 
+msgid "Disability, Disorder or Illness Students"
+msgstr "Personnes porteuses de handicap, trouble ou maladie"
+
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
-msgid "ECT"
-msgstr "ECT"
+msgid "ES"
+msgstr "ES"
+
+msgid "ESHN"
+msgstr "ESHN"
 
 msgid "Educational tutor"
 msgstr "Accompagnateur"
@@ -108,6 +123,9 @@ msgstr "Email"
 
 msgid "End"
 msgstr "Fin"
+
+msgid "Exam registration state"
+msgstr "Etat d'inscription aux examens"
 
 msgid "Export list (Excel)"
 msgstr "Exporter liste (Excel)"
@@ -136,14 +154,29 @@ msgstr "Matricule fgs"
 msgid "Guide"
 msgstr "Guide"
 
+msgid "High Level Promising athlete"
+msgstr "Sportifs de haut niveau"
+
 msgid "Holder"
 msgstr "Titulaire"
+
+msgid "I - First registration"
+msgstr "I - Première inscription"
+
+msgid "I - Première inscription"
+msgstr "I - Première inscription"
 
 msgid "Internship co-supervisor"
 msgstr "Co-directeur de stage"
 
 msgid "Internship supervisor"
 msgstr "Directeur de stage"
+
+msgid "J - Carry-over from January to September"
+msgstr "J - Report de note de janvier vers septembre"
+
+msgid "J - Report de note de janvier vers septembre"
+msgstr "J - Report de note de janvier vers septembre"
 
 msgid "Jan."
 msgstr "Jan."
@@ -160,6 +193,9 @@ msgstr "Copie adaptée"
 msgid "Last name"
 msgstr "Nom"
 
+msgid "Last score"
+msgstr "Dernière note"
+
 msgid "Learning unit"
 msgstr "Unité d'enseignement"
 
@@ -169,6 +205,9 @@ msgstr "Volumes unité d'enseignement"
 msgid "Lecturing charge or practical charge must be filled"
 msgstr "Le vol.1 postulé ou le vol.2 postulé doit être rempli"
 
+msgid "Legend"
+msgstr "Légende"
+
 msgid "Legend to help you understanding the xls file"
 msgstr "Légende pour mieux comprendre le fichier xls"
 
@@ -177,6 +216,9 @@ msgstr "Listes des étudiants inscrits aux examens de "
 
 msgid "List of students enrolled to my exams"
 msgstr "Listes des étudiants inscrits à mes examens"
+
+msgid "Lists of students are available by clicking on the symbol"
+msgstr "Les listes des étudiants sont disponibles en cliquant sur le symbole"
 
 msgid "Lists of students enrollments to exams"
 msgstr "Administration des listes des inscriptions des étudiants aux examens"
@@ -192,6 +234,9 @@ msgstr "Mes charges"
 
 msgid "My charges now vacant"
 msgstr "Mes charges échues"
+
+msgid "My teaching charge"
+msgstr "Ma charge d'enseignement"
 
 msgid "New application"
 msgstr "Nouvelle candidature"
@@ -220,11 +265,23 @@ msgstr "Non-reconductible"
 msgid "Other educational facilities"
 msgstr "Autre aménagement"
 
+msgid "P - Examen partiel"
+msgstr "P - Examen partiel"
+
+msgid "P - Partial examination"
+msgstr "P - Examen partiel"
+
+msgid "PEPS"
+msgstr "PEPS"
+
+msgid "PMR"
+msgstr "PMR"
+
 msgid "Pedagogy proposal"
 msgstr "Votre proposition d'organisation pédagogique"
 
-msgid "Pgrm"
-msgstr "Pgrm"
+msgid "Person with reduced mobility"
+msgstr "Personnes à mobilité réduite"
 
 msgid "Please enter the code of the course to which you would like to apply"
 msgstr "Veuillez introduire le code du cours pour lequel vous voulez postuler"
@@ -240,8 +297,23 @@ msgstr "Produire xls"
 msgid "Professor"
 msgstr "Professeur"
 
+msgid "Prog."
+msgstr "Form."
+
 msgid "Program"
 msgstr "Programme"
+
+msgid "Program for Students with a Specific Profile"
+msgstr "Projet pour étudiant.e à profil spécifique"
+
+msgid "Promising athlete"
+msgstr "Espoirs sportifs"
+
+msgid "R - Carry-over from previous session"
+msgstr "R - Report de note de la session précédente"
+
+msgid "R - Report de note de la session précédente"
+msgstr "R - Report de note de la session précédente"
 
 msgid "Registration id"
 msgstr "Noma"
@@ -263,9 +335,6 @@ msgstr "Horaire non disponible"
 
 msgid "Scores encoding"
 msgstr "Encodage des notes"
-
-msgid "Search"
-msgstr "Rechercher"
 
 msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
@@ -304,6 +373,12 @@ msgstr "Etudiants"
 msgid "Submit"
 msgstr "Soumettre"
 
+msgid "T - Note résultant d’un test"
+msgstr "T - Note résultant d’un test"
+
+msgid "T - Test grade"
+msgstr "T - Note résultant d’un test"
+
 msgid "Teachers"
 msgstr "Enseignants"
 
@@ -311,7 +386,7 @@ msgid "Teaching charge"
 msgstr "Charge d'enseignement"
 
 msgid "Teaching charges administration"
-msgstr "Administration des charges d'enseignement"
+msgstr "Administration des charges d'enseignements"
 
 msgid "The Excel lists for encoding scores are available in"
 msgstr ""
@@ -354,6 +429,20 @@ msgid ""
 msgstr ""
 "Ce cours sera supprimé en %(academic_year)s suite à une réforme de programme."
 
+msgid ""
+"This learning unit has classes. Students are enrolled at the class level "
+"(see below). If you do not see any classes, please contact your faculty so "
+"that you can be assigned to the classes you teach."
+msgstr ""
+"Cette unité d'enseignement possède des classes. Les étudiants sont inscrits "
+"au niveau des classes (ci-dessous). Si vous ne voyez aucune classe, merci de "
+"contacter votre faculté afin qu'on vous affecte aux classes auxquelles vous "
+"enseignez."
+
+msgid "Title"
+msgstr "Intitulé"
+
+msgctxt "tutor_charge"
 msgid "Title"
 msgstr "Intitulé"
 
@@ -377,6 +466,12 @@ msgstr "Total"
 
 msgid "Type of specific profile"
 msgstr "Type PEPS"
+
+msgid "V - Evaluation satisfaisante (la note ne compte pas)"
+msgstr "V - Evaluation satisfaisante (la note ne compte pas)"
+
+msgid "V - Satisfactory assessment (mark does not count)"
+msgstr "V - Evaluation satisfaisante (la note ne compte pas)"
 
 msgid "Vacant"
 msgstr "Vacant"
@@ -405,8 +500,20 @@ msgstr "Vol.2 postulé"
 msgid "Vol.2 vacant"
 msgstr "Vol.2 vacant"
 
+msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
+msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
+
+msgid "W - Unsatisfactory assessment (mark does not count)"
+msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
+
 msgid "Warning, this is not a list for encoding scores."
 msgstr "Attention, ceci n'est pas une liste destinée à l'encodage des notes."
+
+msgid "Y - Deuxième inscription"
+msgstr "Y - Deuxième inscription"
+
+msgid "Y - Second registration"
+msgstr "Y - Deuxième inscription"
 
 msgid "Yes"
 msgstr "Oui"
@@ -414,11 +521,14 @@ msgstr "Oui"
 msgid "You aren't teaching for any learning unit"
 msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 
+msgid "student(s)"
+msgstr "étudiant(s)"
+
 msgid "student_list"
 msgstr "Liste_etudiants"
 
 msgid "students enrolled from"
-msgstr "  étudiants inscrits au cours"
+msgstr "étudiants inscrits au cours"
 
 msgid "to"
 msgstr "au"

@@ -24,13 +24,15 @@
 #
 ##############################################################################
 import json
-import requests
 from functools import wraps
 from typing import Set
 
+import requests
 from django.conf import settings
 from django.http import HttpResponseBadRequest
 from rest_framework import status
+
+DEFAULT_API_LIMIT = 25
 
 
 def get_user_token(person, force_user_creation=False):

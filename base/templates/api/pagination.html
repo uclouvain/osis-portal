@@ -1,0 +1,21 @@
+{% load i18n %}
+
+  <ul class="pagination">
+    <li class="prev {% if first_offset > previous_offset %}disabled{% endif %}">
+      <a href="{{ request.path }}?limit={{ limit }}&offset={{ previous_offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}" aria-label="Previous page">
+        <span aria-hidden="true">{% trans 'Previous' %}</span>
+      </a>
+    </li>
+    {% for page in pages %}
+        <li {% if not request.GET.offset and page.number == 1 or page.offset|add:0 == request.GET.offset|add:0 %} class="active" {% endif %}>
+            <a href="{{ request.path }}?limit={{ page.limit }}&offset={{ page.offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}">
+                {{ page.number }}
+            </a>
+        </li>
+    {% endfor %}
+    <li class="next {% if last_offset < next_offset %}disabled{% endif %}">
+      <a href="{{ request.path }}?limit={{ limit }}&offset={{ next_offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}" aria-label="Next page">
+        <span aria-hidden="true">{% trans 'Next' %}</span>
+      </a>
+    </li>
+  </ul>

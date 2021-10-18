@@ -30,10 +30,15 @@ from django.contrib.auth.models import Permission
 from django.http import HttpResponse
 from django.test import TestCase, SimpleTestCase
 from django.urls import reverse
+from osis_attribution_sdk.model.attribution import Attribution
+from osis_attribution_sdk.model.attribution_function_enum import AttributionFunctionEnum
+from osis_attribution_sdk.model.attribution_links import AttributionLinks
+from osis_attribution_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
 from rest_framework import status
 
+from attribution.models.enums.function import COORDINATOR
 from attribution.views import tutor_charge
-from base.models.enums import learning_container_type
+from base.models.enums.learning_container_type import COURSE, OTHER_COLLECTIVE
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
@@ -66,20 +71,6 @@ class TutorChargeGetEmailStudentsTest(SimpleTestCase):
         self.assertIsNone(tutor_charge.get_email_students(None, 2017))
 
 
-class TutorComputePercentageAllocationCharge(SimpleTestCase):
-    def test_compute_percentage_allocation_charge(self):
-        expected_result = "75.0"
-        self.assertEqual(
-            tutor_charge.compute_percentage_allocation_charge(15.0, 30.0, 60.0),
-            expected_result
-        )
-
-    def test_compute_percentage_allocation_charge_case_total_is_equals_to_zero_assert_return_none(self):
-        self.assertIsNone(
-            tutor_charge.compute_percentage_allocation_charge(15.0, 30.0, 0)
-        )
-
-
 class TutorChargeViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -94,26 +85,28 @@ class TutorChargeViewTest(TestCase):
         self.client.force_login(self.person.user)
 
         # Mock the OSIS Remote API Call
-        self.attribution_row = SimpleNamespace(**{
+        self.attribution_row = Attribution(**{
             'code': 'LDROI1200',
             'title_fr': 'Introduction aux droits Partie I',
             'title_en': 'Introduction to Law Part I',
             'year': self.current_academic_year.year,
-            'type': learning_container_type.COURSE,
+            'type': LearningUnitTypeEnum(value=COURSE),
             'type_text': 'Cours',
             'credits': '15.50',
             'total_learning_unit_charge': '55.5',
+            'percentage_allocation_charge': '100%',
             'start_year': 2020,
-            'function': 'COORDINATOR',
+            'function': AttributionFunctionEnum(value=COORDINATOR),
             'function_text': 'Coordinateur',
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
-            'links': {},
+            'links': AttributionLinks(value={}),
+            'is_partim': False,
+            'effective_class_repartition': []
         })
 
         self.attributions_list_patcher = mock.patch(
-            "attribution.views.tutor_charge.TutorChargeView.attributions",
-            new_callable=mock.PropertyMock,
+            "attribution.services.attribution.AttributionService.get_attributions_list",
             return_value=[self.attribution_row]
         )
         self.mocked_attributions_list = self.attributions_list_patcher.start()
@@ -148,6 +141,22 @@ class TutorChargeViewTest(TestCase):
         self.assertEqual(response.context["total_lecturing_charge"], 15.5)
         self.assertEqual(response.context["total_practical_charge"], 40.0)
 
+    def test_should_show_volumes(self):
+        response = self.client.get(self.url)
+        attr = response.context["attributions"][0]
+        self.assertTrue(all([attr.lecturing_charge, attr.practical_charge, attr.percentage_allocation_charge]))
+
+    def test_should_hide_volumes_for_learning_unit_other_than_course_and_internship_and_dissertation(self):
+        other_attribution = self.attribution_row
+        other_attribution.type = LearningUnitTypeEnum(OTHER_COLLECTIVE)
+
+        self.mocked_attributions_list.return_value = [other_attribution]
+
+        response = self.client.get(self.url)
+        attr = response.context["attributions"][0]
+
+        self.assertTrue(not any([attr.lecturing_charge, attr.practical_charge, attr.percentage_allocation_charge]))
+
 
 class AdminTutorChargeViewTest(TestCase):
     @classmethod
@@ -179,6 +188,7 @@ class AdminTutorChargeViewTest(TestCase):
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
             'links': {},
+            'is_partim': False
         })
 
         self.attributions_list_patcher = mock.patch(

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,25 +23,34 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-import string
+import logging
 
-import factory.fuzzy
+import osis_education_group_sdk
+from django.conf import settings
 
-from base.models.enums import learning_unit_enrollment_state
-from base.tests.factories.learning_unit_year import LearningUnitYearFactory
-from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
-from osis_common.utils.datetime import get_tzinfo
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class LearningUnitEnrollmentFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = "base.LearningUnitEnrollment"
+def build_configuration(person: Person = None) -> osis_education_group_sdk.Configuration:
+    """
+    Return SDK configuration of education group
+    """
+    if not settings.OSIS_EDUCATION_GROUP_SDK_HOST:
+        logger.debug("'OSIS_EDUCATION_GROUP_SDK_HOST' setting must be set in configuration")
 
-    external_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    changed = factory.fuzzy.FuzzyDateTime(datetime.datetime(2016, 1, 1, tzinfo=get_tzinfo()),
-                                          datetime.datetime(2017, 3, 1, tzinfo=get_tzinfo()))
-    date_enrollment = datetime.datetime.now(tz=get_tzinfo())
-    learning_unit_year = factory.SubFactory(LearningUnitYearFactory)
-    offer_enrollment = factory.SubFactory(OfferEnrollmentFactory)
-    enrollment_state = learning_unit_enrollment_state.ENROLLED
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        token = utils.get_user_token(person, force_user_creation=True)
+
+    return osis_education_group_sdk.Configuration(
+        host=settings.OSIS_EDUCATION_GROUP_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
+        })
