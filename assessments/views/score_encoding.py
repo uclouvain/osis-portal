@@ -316,7 +316,6 @@ def _build_response(content_type, file, request):
         return response
     elif isinstance(file, dict):
         error_status = file.get('error_status')
-        print(error_status)
 
         if error_status == status.HTTP_400_BAD_REQUEST or error_status == status.HTTP_401_UNAUTHORIZED:
             if file.get('error_body'):
