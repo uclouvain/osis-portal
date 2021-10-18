@@ -56,7 +56,8 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
 
     @cached_property
     def offer_enrollments_list(self) -> List[SimpleNamespace]:
-        offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(self.student.person).results
+        offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(self.student.person).results \
+            if self.student else []
         allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
         offer_enrollments_to_display = []
         for offer_enrollment in offer_enrollments:

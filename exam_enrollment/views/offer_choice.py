@@ -79,7 +79,7 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         return OfferEnrollmentService.get_my_enrollments_year_list(
             person=self.student.person,
             year=self.current_academic_year.year
-        ).results
+        ).results if self.student else []
 
     @cached_property
     def current_academic_year(self) -> AcademicYear:
