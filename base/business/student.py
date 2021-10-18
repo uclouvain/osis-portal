@@ -34,7 +34,7 @@ def _discriminate_student(students: List[Student]) -> Optional[Student]:
     return None
 
 
-def _get_student_offer_enrollments(students: List[Student]) -> Dict[Set]:
+def _get_student_offer_enrollments(students: List[Student]) -> Dict[int, Set]:
     student_offer_enrollments = defaultdict(set)
     for stud in students:
         offer_enrolls = OfferEnrollmentService.get_enrollments_list(
