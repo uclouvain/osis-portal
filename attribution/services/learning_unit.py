@@ -33,7 +33,7 @@ from osis_learning_unit_sdk.api import learning_units_api
 from osis_learning_unit_sdk.model.effective_class import EffectiveClass
 
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk
+from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk, utils
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -41,11 +41,15 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 class LearningUnitService:
     @staticmethod
     def get_learning_unit_title(year: int, acronym: str, person: Person) -> List:
-        configuration = learning_unit_sdk.build_configuration(person)
+        configuration = learning_unit_sdk.build_configuration()
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
             api_instance = learning_units_api.LearningUnitsApi(api_client)
             try:
-                learning_unit_title = api_instance.learningunitstitle_read(year=year, acronym=acronym)['title']
+                learning_unit_title = api_instance.learningunitstitle_read(
+                    year=year,
+                    acronym=acronym,
+                    **utils.build_mandatory_auth_headers(person),
+                )['title']
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
@@ -54,11 +58,15 @@ class LearningUnitService:
 
     @staticmethod
     def get_effective_classes(year: int, acronym: str, person: Person) -> List[EffectiveClass]:
-        configuration = learning_unit_sdk.build_configuration(person)
+        configuration = learning_unit_sdk.build_configuration()
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
             api_instance = learning_units_api.LearningUnitsApi(api_client)
             try:
-                effective_classes = api_instance.get_learning_unit_classes(year=year, acronym=acronym)
+                effective_classes = api_instance.get_learning_unit_classes(
+                    year=year,
+                    acronym=acronym,
+                    **utils.build_mandatory_auth_headers(person),
+                )
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
