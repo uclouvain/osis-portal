@@ -29,6 +29,7 @@ from types import SimpleNamespace
 import mock
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
+from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -38,7 +39,6 @@ import base.tests.models.test_student
 import performance.tests.models.test_student_performance
 from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from performance.models.enums import offer_registration_state
@@ -95,6 +95,13 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.url = reverse('performance_student_result', args=[self.student_performance.pk])
         self.client.force_login(self.student.person.user)
 
+        self.discriminate_user_patcher = mock.patch(
+            "base.business.student.find_by_user_and_discriminate",
+            return_value=self.student
+        )
+        self.mocked_discriminate_user = self.discriminate_user_patcher.start()
+        self.addCleanup(self.discriminate_user_patcher.stop)
+
     def test_user_not_logged(self):
         self.client.logout()
         response = self.client.get(self.url, follow=True)
@@ -111,10 +118,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
-        student2 = StudentFactory(person=self.student.person)
-        education_group_year = EducationGroupYearFactory()
-        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
-        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
+        self.mocked_discriminate_user.side_effect = MultipleObjectsReturned
 
         response = self.client.get(self.url)
 
@@ -137,6 +141,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
     def test_when_trying_to_access_other_student_performance(self):
         an_other_student = StudentFactory()
         self.client.force_login(an_other_student.person.user)
+        self.mocked_discriminate_user.return_value = an_other_student
 
         response = self.client.get(self.url)
 

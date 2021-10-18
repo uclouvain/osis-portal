@@ -238,8 +238,7 @@ class ExamEnrollmentFormTest(TestCase):
 
     if hasattr(settings, 'QUEUES') and settings.QUEUES:
         @mock.patch("osis_common.queue.queue_sender.send_message")
-        @mock.patch("exam_enrollment.models.exam_enrollment_submitted.insert_or_update_document")
-        def test_exam_enrollment_form_submission_message(self, mock_doc, send_message):
+        def test_exam_enrollment_form_submission_message(self, send_message):
             warnings.warn(
                 "The field named 'etat_to_inscr' is only used to call EPC services. It should be deleted when the exam "
                 "enrollment business will be implemented in Osis (not in EPC anymore). "
@@ -263,8 +262,8 @@ class ExamEnrollmentFormTest(TestCase):
             result = _exam_enrollment_form_submission_message(
                 response.wsgi_request,
                 self.student,
-                self.educ_group_year.acronym,
-                self.educ_group_year.academic_year.year
+                self.program_code,
+                self.academic_year.year
             )
             self.assert_correct_data_structure(result)
             self.assert_none_etat_to_inscr_not_in_submitted_form(result.get('exam_enrollments'))
@@ -277,8 +276,8 @@ class ExamEnrollmentFormTest(TestCase):
         }
         expected_result = {
             "registration_id": self.student.registration_id,
-            "offer_year_acronym": self.educ_group_year.acronym,
-            "year": self.educ_group_year.academic_year.year,
+            "offer_year_acronym": self.program_code,
+            "year": self.academic_year.year,
             "exam_enrollments": [exam_enrollment_expected],
             "testwe_exam": CovidExamChoice.PAS_SUR_SITE,
             "teams_exam": CovidExamChoice.SUR_SITE,

@@ -27,12 +27,11 @@ from types import SimpleNamespace
 
 import mock
 from django.contrib.auth.models import Group, Permission
+from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
 
-from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from performance.models.enums import offer_registration_state
@@ -69,6 +68,12 @@ class ViewPerformanceHomeStudentTest(TestCase):
         self.mocked_attributions_list = self.enrollments_list_patcher.start()
         self.addCleanup(self.enrollments_list_patcher.stop)
 
+        self.discriminate_user_patcher = mock.patch(
+            "base.business.student.find_by_user_and_discriminate",
+        )
+        self.mocked_discriminate_user = self.discriminate_user_patcher.start()
+        self.addCleanup(self.discriminate_user_patcher.stop)
+
     def test_user_not_logged(self):
         self.client.logout()
         response = self.client.get(self.url, follow=True)
@@ -85,11 +90,7 @@ class ViewPerformanceHomeStudentTest(TestCase):
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
-        student2 = StudentFactory(person=self.student.person)
-        education_group_year = EducationGroupYearFactory()
-        OfferEnrollmentFactory(education_group_year=education_group_year, student=self.student)
-        OfferEnrollmentFactory(education_group_year=education_group_year, student=student2)
-
+        self.mocked_discriminate_user.side_effect = MultipleObjectsReturned
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'dashboard.html')
@@ -101,6 +102,7 @@ class ViewPerformanceHomeStudentTest(TestCase):
         self.assertEqual(messages[0].message, MULTIPLE_STUDENT_ERROR)
 
     def test_assert_context_keys(self):
+        self.mocked_discriminate_user.return_value = self.student
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'performance_home_student.html')

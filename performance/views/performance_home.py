@@ -89,6 +89,12 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
             ).only('academic_year', "acronym", "offer_registration_state", "pk")
         return []
 
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
+            return dash_main_view.show_multiple_registration_id_error(self.request)
+
 
 class PerformanceHomeAdmin(PerformanceHomeMixin, UserPassesTestMixin):
     template_name = "admin/performance_home_admin.html"
@@ -111,10 +117,7 @@ class PerformanceHomeStudent(PerformanceHomeMixin, PermissionRequiredMixin):
 
     @cached_property
     def student(self) -> Student:
-        try:
-            return student_business.find_by_user_and_discriminate(self.request.user)
-        except MultipleObjectsReturned:
-            return dash_main_view.show_multiple_registration_id_error(self.request)
+        return student_business.find_by_user_and_discriminate(self.request.user)
 
 
 def _can_visualize_student_programs(request: HttpRequest, registration_id: str) -> bool:

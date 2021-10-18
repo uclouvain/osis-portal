@@ -50,15 +50,18 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
+            'student': self.student,
             'programs': self.offer_enrollments_list,
-            'student': self.student
         }
 
     @cached_property
     def student(self) -> Student:
+        return student_business.find_by_user_and_discriminate(self.request.user)
+
+    def dispatch(self, request, *args, **kwargs):
         try:
-            return student_business.find_by_user_and_discriminate(self.request.user)
-        except MultipleObjectsReturned:
+            return super().dispatch(request, *args, **kwargs)
+        except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
             return dash_main_view.show_multiple_registration_id_error(self.request)
 
     def get(self, *args, **kwargs):
