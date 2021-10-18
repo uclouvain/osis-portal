@@ -28,13 +28,10 @@ import logging
 import osis_internship_sdk
 from django.conf import settings
 
-from base.models.person import Person
-from frontoffice.settings.osis_sdk import utils
-
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def build_configuration(person: Person = None) -> osis_internship_sdk.Configuration:
+def build_configuration() -> osis_internship_sdk.Configuration:
     """
     Return SDK configuration of internship based on person provided in kwargs
     If no person provided, it will use generic token to make request
@@ -42,10 +39,8 @@ def build_configuration(person: Person = None) -> osis_internship_sdk.Configurat
     if not settings.OSIS_INTERNSHIP_SDK_HOST:
         logger.debug("'OSIS_INTERNSHIP_SDK_HOST' setting must be set in configuration")
 
-    if person is None:
-        token = settings.OSIS_PORTAL_TOKEN
-    else:
-        token = utils.get_user_token(person, force_user_creation=True)
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
 
     return osis_internship_sdk.Configuration(
         host=settings.OSIS_INTERNSHIP_SDK_HOST,
@@ -53,5 +48,5 @@ def build_configuration(person: Person = None) -> osis_internship_sdk.Configurat
             'Token': settings.OSIS_INTERNSHIP_SDK_API_KEY_PREFIX
         },
         api_key={
-            'Token': token
+            'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
         })
