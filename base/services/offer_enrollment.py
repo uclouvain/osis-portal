@@ -47,6 +47,7 @@ class OfferEnrollmentService:
             try:
                 enrollments = api_instance.enrollments_list(
                     registration_id=registration_id,
+                    #  FIXME: use mandatory headers !
                     **kwargs
                 )
             except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
