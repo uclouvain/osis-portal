@@ -1,6 +1,6 @@
 {% extends "dashboard_layout.html" %}
 {% load staticfiles %}
-{% load i18n %}
+{% load i18n waffle_tags %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -35,7 +35,9 @@
 
     <div class="panel panel-default">
         <div class="panel-body dashboard-grid">
-            {% include 'candidate_dashboard.html' %}
+            {% switch 'admission' %}
+                {% include 'candidate_dashboard.html' %}
+            {% endswitch %}
 
             {% if perms.base.is_tutor %}
                 {% include 'tutor_dashboard.html' %}

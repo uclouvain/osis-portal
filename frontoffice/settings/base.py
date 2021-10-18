@@ -72,6 +72,7 @@ INSTALLED_APPS = (
     'hijack',
     'compat',
     'hijack_admin',
+    'waffle'
 )
 
 # Tests settings
@@ -103,6 +104,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'waffle.middleware.WaffleMiddleware',
 )
 
 # Logging config

@@ -129,7 +129,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 clean_code[-1]
             )
 
-        if attribution.type not in self.show_volumes_types:
+        if str(attribution.type) not in self.show_volumes_types:
             self._hide_volumes(attribution)
 
         return SimpleNamespace(
