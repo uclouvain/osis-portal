@@ -315,16 +315,21 @@ def _build_response(content_type, file, request):
         response['Content-Disposition'] = 'attachment; filename=%s' % get_filename(file.name)
         return response
     elif isinstance(file, dict):
-        error_messages = file.get('error_body', '')
         error_status = file.get('error_status')
+        print(error_status)
+
         if error_status == status.HTTP_400_BAD_REQUEST or error_status == status.HTTP_401_UNAUTHORIZED:
-            message = error_messages
+            if file.get('error_body'):
+                message_list = json.loads(file.get('error_body'))
+            else:
+                message_list = []
+            message = ". ".join((message_list))
         else:
             message = _('Unexpected error')
         messages.add_message(
             request,
             messages.INFO,
-            _("Error occurred while creating the export file. %(error_message)s") % {
+            _("%(error_message)s") % {
                 'error_message': message
             },
             "alert-info"
