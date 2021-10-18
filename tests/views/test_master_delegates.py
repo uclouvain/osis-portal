@@ -42,7 +42,7 @@ from internship.tests.services.test_api_client import MockAPI
 class TestScoreEncoding(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = UserFactory()
+        cls.user = PersonFactory().user
         cls.api_patcher = mock.patch("internship.services.internship.InternshipAPIClient.__new__", return_value=MockAPI)
 
     def setUp(self):
