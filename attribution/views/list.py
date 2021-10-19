@@ -58,26 +58,33 @@ def students_list(request):
 def get_learning_units(a_user):
     a_person = mdl_base.person.find_by_user(a_user)
     learning_units = []
+    current_session_dict = {}
     if a_person:
+        current_session_dict = AssessmentsService.get_current_session(a_person)
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
-            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
+            learning_units = __get_learning_unit_year_attributed(
+                current_academic_year.year,
+                a_person,
+                current_session_dict
+            )
+
     return {
         'person': a_person,
         'my_learning_units': learning_units,
-        'current_session': AssessmentsService.get_current_session(a_person)
+        'current_session': current_session_dict
     }
 
 
-def __get_learning_unit_year_attributed(year: int, person: Person) -> List[Dict]:
+def __get_learning_unit_year_attributed(year: int, person: Person, current_session: Dict) -> List[Dict]:
     attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
 
     learning_units_by_person = []
     learning_unit_codes = {attribution.code for attribution in attributions}
     score_responsible_list = AssessmentsService.get_score_responsible_list(
         learning_unit_codes=list(learning_unit_codes),
-        year=year,
+        year=current_session.year,
         person=person)
     learning_units = LearningUnitService.get_learning_units(
         learning_unit_codes=list(learning_unit_codes),
@@ -216,15 +223,22 @@ def lists_of_students_exams_enrollments(request):
 def get_learning_units_by_person(global_id: str) -> Dict:
     a_person = mdl_base.person.find_by_global_id(global_id)
     learning_units = []
+    current_session_dict = {}
     if a_person:
+        current_session_dict = AssessmentsService.get_current_session(a_person)
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
-            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
+            learning_units = __get_learning_unit_year_attributed(
+                current_academic_year.year,
+                a_person,
+                current_session_dict
+            )
+
     return {
         'person': a_person,
         'learning_units': learning_units,
-        'current_session': AssessmentsService.get_current_session(a_person)
+        'current_session': current_session_dict
     }
 
 
@@ -283,7 +297,8 @@ def _get_all_effective_class_repartition(attributions: List, ue_acronym: str, sc
 def _get_score_responsible(score_responsibles: List, lu_acronym: str) -> str:
     if score_responsibles:
         return next(
-            pers.get('full_name') for pers in score_responsibles if pers.get('learning_unit_acronym') == lu_acronym
+            (pers.get('full_name') for pers in score_responsibles if pers.get('learning_unit_acronym') == lu_acronym),
+            ''
         )
     return ''
 

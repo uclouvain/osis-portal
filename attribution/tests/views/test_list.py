@@ -25,6 +25,7 @@
 ##############################################################################
 import datetime
 from types import SimpleNamespace
+from unittest.mock import patch
 
 import mock
 from django.contrib.auth.models import Group, Permission
@@ -32,7 +33,6 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
-from osis_assessments_sdk.model.current_session import CurrentSession
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
@@ -73,6 +73,12 @@ class StudentsListTest(TestCase):
 
     def setUp(self):
         self.client.force_login(self.tutor.person.user)
+        self.patcher = patch(
+            "attribution.views.list.AssessmentsService.get_current_session"
+        )
+        self.mock_current_session = self.patcher.start()
+
+        self.addCleanup(self.patcher.stop)
 
     def test_without_being_logged(self):
         self.client.logout()
@@ -88,11 +94,9 @@ class StudentsListTest(TestCase):
         self.assertEqual(response.status_code, ACCESS_DENIED)
         self.assertTemplateUsed(response, 'access_denied.html')
 
-    @mock.patch("assessments.services.assessments.AssessmentsService.get_current_session")
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_with_no_attributions(self, mock_get_attributions_list, mock_get_current_session):
+    def test_with_no_attributions(self, mock_get_attributions_list):
         mock_get_attributions_list.return_value = []
-        mock_get_current_session = CurrentSession(academic_year="2021-22", month_session_name='January')
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, OK)
@@ -104,9 +108,7 @@ class StudentsListTest(TestCase):
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
-    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     def test_with_attributions(self,
-                               mock_current_session,
                                mock_get_score_responsible_list,
                                mock_get_learning_units,
                                mock_get_attributions_list
@@ -126,10 +128,7 @@ class StudentsListTest(TestCase):
         ]
         mock_get_score_responsible_list.return_value = [
         ]
-        mock_current_session.return_value = CurrentSession(
-            academic_year=str(an_academic_year),
-            month_session_name='January'
-        )
+
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, OK)
         self.assertTemplateUsed(response, 'list/students_exam.html')
@@ -182,6 +181,12 @@ class ListBuildTest(TestCase):
 
     def setUp(self):
         self.client.force_login(self.tutor.person.user)
+        self.patcher = patch(
+            "attribution.views.list.AssessmentsService.get_current_session"
+        )
+        self.mock_current_session = self.patcher.start()
+
+        self.addCleanup(self.patcher.stop)
 
     def test_without_being_logged(self):
         self.client.logout()
@@ -231,11 +236,9 @@ class ListBuildTest(TestCase):
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
-    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self,
                                                   mock_fetch,
-                                                  mock_current_session,
                                                   mock_get_score_responsible_list,
                                                   mock_get_learning_units,
                                                   mock_get_attributions_list
@@ -260,10 +263,7 @@ class ListBuildTest(TestCase):
         ]
         mock_get_score_responsible_list.return_value = [
         ]
-        mock_current_session.return_value = CurrentSession(
-            academic_year=str(an_academic_year),
-            month_session_name='January'
-        )
+
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
@@ -278,9 +278,7 @@ class ListBuildTest(TestCase):
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
-    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     def test_when_trying_to_access_other_tutor_students_list(self,
-                                                             mock_current_session,
                                                              mock_get_score_responsible_list,
                                                              mock_get_learning_units,
                                                              mock_get_attributions_list):
@@ -297,10 +295,6 @@ class ListBuildTest(TestCase):
         mock_get_learning_units.return_value = [
             {'acronym': a_learning_unit_year.acronym},
         ]
-        mock_current_session.return_value = CurrentSession(
-            academic_year=str(an_academic_year),
-            month_session_name='January'
-        )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
@@ -326,11 +320,9 @@ class ListBuildTest(TestCase):
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
-    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self,
                                                    mock_fetch,
-                                                   mock_current_session,
                                                    mock_get_score_responsible_list,
                                                    mock_get_learning_units,
                                                    mock_get_attributions_list
@@ -355,10 +347,6 @@ class ListBuildTest(TestCase):
         ]
         mock_get_score_responsible_list.return_value = [
         ]
-        mock_current_session.return_value = CurrentSession(
-            academic_year=str(an_academic_year),
-            month_session_name='January'
-        )
 
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
@@ -439,6 +427,12 @@ class AdminListBuildTest(TestCase):
 
     def setUp(self):
         self.client.force_login(self.tutor.person.user)
+        self.patcher = patch(
+            "attribution.views.list.AssessmentsService.get_current_session"
+        )
+        self.mock_current_session = self.patcher.start()
+
+        self.addCleanup(self.patcher.stop)
 
     def test_without_being_logged(self):
         self.client.logout()
@@ -488,11 +482,9 @@ class AdminListBuildTest(TestCase):
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
-    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self,
                                                   mock_fetch,
-                                                  mock_current_session,
                                                   mock_get_score_responsible_list,
                                                   mock_get_learning_units,
                                                   mock_get_attributions_list):
@@ -513,10 +505,6 @@ class AdminListBuildTest(TestCase):
         ]
         mock_get_score_responsible_list.return_value = [
         ]
-        mock_current_session.return_value = CurrentSession(
-            academic_year=str(an_academic_year),
-            month_session_name='January'
-        )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
@@ -546,11 +534,9 @@ class AdminListBuildTest(TestCase):
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
-    @mock.patch("attribution.views.list.AssessmentsService.get_current_session")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self,
                                                    mock_fetch,
-                                                   mock_current_session,
                                                    mock_get_score_responsible_list,
                                                    mock_get_learning_units,
                                                    mock_get_attributions_list):
@@ -571,10 +557,6 @@ class AdminListBuildTest(TestCase):
         ]
         mock_get_score_responsible_list.return_value = [
         ]
-        mock_current_session.return_value = CurrentSession(
-            academic_year=str(an_academic_year),
-            month_session_name='January'
-        )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
 
