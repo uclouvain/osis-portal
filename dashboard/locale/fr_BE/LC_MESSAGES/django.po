@@ -93,7 +93,7 @@ msgid "Last name"
 msgstr "Nom"
 
 msgid "Lists of students enrolled to my exams"
-msgstr "\tListes des étudiants inscrits à mes examens"
+msgstr "Listes des étudiants inscrits à mes examens"
 
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
