@@ -316,21 +316,10 @@ def _build_response(content_type, file, request):
         return response
     elif isinstance(file, dict):
         error_status = file.get('error_status')
-
+        message = _('Unexpected error')
         if error_status == status.HTTP_400_BAD_REQUEST or error_status == status.HTTP_401_UNAUTHORIZED:
             if file.get('error_body'):
                 message_list = json.loads(file.get('error_body'))
-            else:
-                message_list = []
-            message = ". ".join((message_list))
-        else:
-            message = _('Unexpected error')
-        messages.add_message(
-            request,
-            messages.INFO,
-            _("%(error_message)s") % {
-                'error_message': message
-            },
-            "alert-info"
-        )
+                message = ". ".join((message_list))
+        messages.add_message(request, messages.INFO, message, "alert-info")
     return redirect(reverse('students_list'))
