@@ -128,7 +128,8 @@ class StudentsListTest(TestCase):
         ]
         mock_current_session.return_value = CurrentSession(
             academic_year=str(an_academic_year),
-            month_session_name='January'
+            month_session_name='January',
+            year=an_academic_year.year,
         )
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, OK)
@@ -262,7 +263,8 @@ class ListBuildTest(TestCase):
         ]
         mock_current_session.return_value = CurrentSession(
             academic_year=str(an_academic_year),
-            month_session_name='January'
+            month_session_name='January',
+            year=an_academic_year.year,
         )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
@@ -299,7 +301,8 @@ class ListBuildTest(TestCase):
         ]
         mock_current_session.return_value = CurrentSession(
             academic_year=str(an_academic_year),
-            month_session_name='January'
+            month_session_name='January',
+            year=an_academic_year.year,
         )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
@@ -357,7 +360,8 @@ class ListBuildTest(TestCase):
         ]
         mock_current_session.return_value = CurrentSession(
             academic_year=str(an_academic_year),
-            month_session_name='January'
+            month_session_name='January',
+            year=an_academic_year.year,
         )
 
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
@@ -515,7 +519,8 @@ class AdminListBuildTest(TestCase):
         ]
         mock_current_session.return_value = CurrentSession(
             academic_year=str(an_academic_year),
-            month_session_name='January'
+            month_session_name='January',
+            year=an_academic_year.year,
         )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
@@ -573,7 +578,8 @@ class AdminListBuildTest(TestCase):
         ]
         mock_current_session.return_value = CurrentSession(
             academic_year=str(an_academic_year),
-            month_session_name='January'
+            month_session_name='January',
+            year=an_academic_year.year,
         )
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, a_learning_unit_year.acronym)
         response = self.client.post(self.url, data={key: ""})
