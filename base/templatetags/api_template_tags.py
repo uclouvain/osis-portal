@@ -72,7 +72,7 @@ def compute_visible_indices(pages, active_page, delta):
         if i+1 <= len(visible_indices) - 1 and visible_indices[i+1] - visible_indices[i] == 2:
             visible_indices.insert(i+1, visible_indices[i]+1)
     return visible_indices
-    
+
 
 @register.inclusion_tag('api/search.html', takes_context=True)
 def search(context):
