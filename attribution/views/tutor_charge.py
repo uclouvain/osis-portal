@@ -128,7 +128,6 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 attribution.year,
                 clean_code[-1]
             )
-            class_repartition.schedule_url = attribution.links.schedule
 
         if str(attribution.type) not in self.show_volumes_types:
             self._hide_volumes(attribution)
