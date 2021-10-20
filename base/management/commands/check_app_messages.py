@@ -21,8 +21,8 @@
 #  at the root of the source code of this program.  If not,
 #  see http://www.gnu.org/licenses/.
 # ############################################################################
+import os
 import subprocess
-import sys
 
 from base.management.commands import makemessages
 
@@ -32,13 +32,21 @@ class MessagesNotTranslatedException(Exception):
 
 
 class Command(makemessages.Command):
+    def add_arguments(self, parser):
+        super().add_arguments(parser)
+        parser.add_argument('directory')
+
     def handle(self, *args, **options):
         options['keep_pot'] = True
         options['verbosity'] = 0
 
+        # Change dir for makemessage execution
+        previous_dir = os.getcwd()
+        os.chdir(options['directory'])
         super().handle(*args, **options)
 
         self.check_all_messages_are_translated()
+        os.chdir(previous_dir)
 
     def check_all_messages_are_translated(self):
         fr_po_file_location = "locale/fr_BE/LC_MESSAGES/django.po"
