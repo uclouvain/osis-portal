@@ -7,11 +7,16 @@
       </a>
     </li>
     {% for page in pages %}
+        {% if page.number in visible_indices %}
         <li {% if not request.GET.offset and page.number == 1 or page.offset|add:0 == request.GET.offset|add:0 %} class="active" {% endif %}>
             <a href="{{ request.path }}?limit={{ page.limit }}&offset={{ page.offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}">
                 {{ page.number }}
             </a>
         </li>
+        {% elif page.number == pages.0.number|add:1 or page.number == pages|length|add:-1 %}
+            {# show ellipsis only once for each side #}
+            <li><a>...</a></li>
+        {% endif %}
     {% endfor %}
     <li class="next {% if last_offset < next_offset %}disabled{% endif %}">
       <a href="{{ request.path }}?limit={{ limit }}&offset={{ next_offset }}&search={{ request.GET.search }}&ordering={{ request.GET.ordering }}" aria-label="Next page">
