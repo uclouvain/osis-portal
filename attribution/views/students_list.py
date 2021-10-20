@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import json
+from operator import itemgetter
 from typing import List, Union, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -39,7 +40,6 @@ from attribution.services.attribution import AttributionService
 from attribution.services.enrollments import LearningUnitEnrollmentService
 from attribution.services.learning_unit import LearningUnitService
 from base.utils.api_utils import ApiPaginationMixin, ApiRetrieveAllObjectsMixin
-from osis_common.utils.models import get_object_or_none
 from performance.models.student_performance import StudentPerformance
 
 JSON_LEARNING_UNIT_NOTE = 'note'
@@ -170,11 +170,10 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         academic_year = self.kwargs['learning_unit_year']
 
         results = {}
-        a_student_performance = get_object_or_none(
-            StudentPerformance,
-            registration_id=a_registration_id,
-            academic_year=academic_year,
-            acronym=offer_acronym
+
+        a_student_performance = next(
+            (perf for perf in self.sessions_results_for_mapping if a_registration_id == perf['registration_id']),
+            None
         )
 
         if a_student_performance:
@@ -188,10 +187,18 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
                     self.manage_cours_list(cours_list, results)
         return results
 
+    @cached_property
+    def sessions_results_for_mapping(self):
+        return StudentPerformance.objects.filter(
+            registration_id__in=list(map(itemgetter('student_registration_id'), self.page_objects_list)),
+            acronym__in=set(map(itemgetter('program'), self.page_objects_list)),
+            academic_year=self.kwargs['learning_unit_year']
+        ).values()
+
     @staticmethod
     def get_student_data_dict(a_student_performance):
         try:
-            data_input = json.dumps(a_student_performance.data)
+            data_input = json.dumps(a_student_performance['data'])
             return json.loads(data_input)
         except (AttributeError, ValueError):
             return None
