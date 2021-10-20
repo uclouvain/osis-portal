@@ -154,8 +154,8 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if class_repartition.schedule_url %}
-                                <a target="_blank" href="{{ class_repartition.schedule_url }}">
+                            {% if class_repartition.links.schedule %}
+                                <a target="_blank" href="{{ class_repartition.links.schedule }}">
                                     <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
                                 </a>
                             {% else %}
