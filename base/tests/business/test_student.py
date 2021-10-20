@@ -23,19 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
+import mock
 from django.contrib.auth.models import Group
 from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
 
-from base.models.enums import offer_enrollment_state
-from base.models.offer_enrollment import OfferEnrollment
+from base.business import student as student_bsn
 from base.models.student import Student
 from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.education_group_year import EducationGroupYearFactory
-from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
-from base.business import student as student_bsn
 from base.tests.factories.user import UserFactory
 
 
@@ -66,6 +64,18 @@ class TestFindAndDiscriminate(TestCase):
         self.user = UserFactory()
         self.person = PersonFactory(user=self.user)
         self.student = StudentFactory(person=self.person)
+        self.current_academic_year = AcademicYearFactory(current=True)
+        self.client.force_login(self.person.user)
+
+        self.students_by_year = {
+            self.current_academic_year.year: {self.student}
+        }
+        self.student_enrolls_patcher = mock.patch(
+            "base.business.student._get_student_offer_enrollments",
+            return_value=self.students_by_year
+        )
+        self.mocked_enrolls_list = self.student_enrolls_patcher.start()
+        self.addCleanup(self.student_enrolls_patcher.stop)
 
     def test_one_student(self):
         self.assertEqual(self.student, student_bsn.find_by_user_and_discriminate(self.user))
@@ -75,62 +85,34 @@ class TestFindAndDiscriminate(TestCase):
         PersonFactory(user=another_user)
         self.assertIsNone(student_bsn.find_by_user_and_discriminate(another_user))
 
-    def test_one_offer_enrollment_valid(self):
-        valid_student = StudentFactory(person=self.person)
-        current_academic_year = AcademicYearFactory(year=2020)
-        current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
-        OfferEnrollmentFactory(student=valid_student, enrollment_state=offer_enrollment_state.PROVISORY,
-                               education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=self.student, enrollment_state=None,
-                               education_group_year=current_education_group_year)
-        self.assertEqual(student_bsn.find_by_user_and_discriminate(self.user), valid_student)
-
     def test_last_offer_enrollment_valid(self):
         current_student = StudentFactory(person=self.person)
-        current_academic_year = AcademicYearFactory(year=2020)
-        previous_academic_year = AcademicYearFactory(year=2019)
-        current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
-        previous_education_group_year = EducationGroupYearFactory(academic_year=previous_academic_year)
-        OfferEnrollmentFactory(student=current_student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                               education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=self.student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                               education_group_year=previous_education_group_year)
+        self.mocked_enrolls_list.return_value = {
+            self.current_academic_year.year: {current_student},
+            self.current_academic_year.year - 1: {self.student}
+        }
         self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
         self.assertEqual(current_student, student_bsn.find_by_user_and_discriminate(self.user))
 
     def test_no_offer_enrollment_valid(self):
-        current_student = StudentFactory(person=self.person)
-        OfferEnrollmentFactory(student=current_student,
-                               enrollment_state=offer_enrollment_state.PENDING)
-        OfferEnrollmentFactory(student=current_student, enrollment_state=None)
+        StudentFactory(person=self.person)
+        self.mocked_enrolls_list.return_value = {}
         self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
         self.assertIsNone(student_bsn.find_by_user_and_discriminate(self.user))
 
     def test_cannot_discriminate(self):
         current_student = StudentFactory(person=self.person)
-        current_academic_year = AcademicYearFactory(year=2020)
-        current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
-        OfferEnrollmentFactory(student=current_student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                               education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=self.student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                               education_group_year=current_education_group_year)
+        self.mocked_enrolls_list.return_value = {
+            self.current_academic_year.year: {current_student, self.student},
+        }
         self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
         self.assertRaises(MultipleObjectsReturned, student_bsn.find_by_user_and_discriminate, self.user)
 
     def test_several_valid_enrollment_same_student(self):
         previous_student = StudentFactory(person=self.person)
-        previous_academic_year = AcademicYearFactory(year=2019)
-        previous_education_group = EducationGroupYearFactory(academic_year=previous_academic_year)
-        current_academic_year = AcademicYearFactory(year=2020)
-        current_education_group_year = EducationGroupYearFactory(academic_year=current_academic_year)
-        OfferEnrollmentFactory(student=self.student, enrollment_state=offer_enrollment_state.SUBSCRIBED,
-                               education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=self.student, enrollment_state=offer_enrollment_state.PROVISORY,
-                               education_group_year=current_education_group_year)
-        OfferEnrollmentFactory(student=previous_student, enrollment_state=offer_enrollment_state.PROVISORY,
-                               education_group_year=previous_education_group)
+        self.mocked_enrolls_list.return_value = {
+            self.current_academic_year.year: {self.student},
+            self.current_academic_year.year - 1: {previous_student, self.student}
+        }
         self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
-        self.assertTrue(OfferEnrollment.objects
-                        .filter(student=self.student,
-                                education_group_year__academic_year=current_academic_year).count() > 1)
         self.assertEqual(self.student, student_bsn.find_by_user_and_discriminate(self.user))

@@ -48,11 +48,14 @@ class Home(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     @cached_property
     def student(self) -> Student:
+        return student_business.find_by_user_and_discriminate(self.request.user)
+
+    def dispatch(self, request, *args, **kwargs):
         try:
-            return student_business.find_by_user_and_discriminate(self.request.user)
-        except MultipleObjectsReturned:
+            return super().dispatch(request, *args, **kwargs)
+        except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
             logger.exception('User {} returned multiple students.'.format(self.request.user.username))
-            dash_main_view.show_multiple_registration_id_error(self.request)
+            return dash_main_view.show_multiple_registration_id_error(self.request)
 
     def get_attestation_data(self) -> Dict:
         if self.student:
