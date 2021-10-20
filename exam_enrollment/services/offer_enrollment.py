@@ -32,7 +32,7 @@ from osis_offer_enrollment_sdk.api import enrollment_api
 from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk
+from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk, utils
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -40,11 +40,14 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 class OfferEnrollmentService:
     @staticmethod
     def get_my_enrollments_list(person: Person, **kwargs) -> EnrollmentList:
-        configuration = offer_enrollment_sdk.build_configuration(person)
+        configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
             try:
-                enrollments = api_instance.my_enrollments_list(**kwargs)
+                enrollments = api_instance.my_enrollments_list(
+                    **utils.build_mandatory_auth_headers(person),
+                    **kwargs
+                )
             except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
@@ -53,12 +56,13 @@ class OfferEnrollmentService:
 
     @staticmethod
     def get_my_enrollments_year_list(person: Person, year: int, **kwargs) -> EnrollmentList:
-        configuration = offer_enrollment_sdk.build_configuration(person)
+        configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
             try:
                 enrollments = api_instance.my_enrollments_year_list(
                     year=year,
+                    **utils.build_mandatory_auth_headers(person),
                     **kwargs
                 )
             except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:

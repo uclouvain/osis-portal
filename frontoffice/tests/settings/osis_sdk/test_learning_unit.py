@@ -23,38 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import mock
 import osis_learning_unit_sdk
 from django.test import SimpleTestCase, override_settings
 
-from base.tests.factories.person import PersonFactory
 from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk
 
 
 @override_settings(
     OSIS_LEARNING_UNIT_SDK_HOST="http://dummy-api.com/api/learning_unit",
-    OSIS_PORTAL_TOKEN="generic-token",
+    REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY="esb-authentication-token",
 )
 class BuildConfigurationLearningUnitTestCase(SimpleTestCase):
 
-    def test_build_configuration_case_anonymous_call(self):
+    def test_build_configuration(self):
         configuration = learning_unit_sdk.build_configuration()
 
         self.assertIsInstance(configuration, osis_learning_unit_sdk.Configuration)
         self.assertEqual(configuration.host, "http://dummy-api.com/api/learning_unit")
         self.assertDictEqual(
             configuration.api_key,
-            {"Token": "generic-token"}
-        )
-
-    @mock.patch('frontoffice.settings.osis_sdk.utils.get_user_token', return_value="personal-token")
-    def test_build_configuration_case_call_with_person_provided(self, mock_get_token_from_osis):
-        person = PersonFactory.build()
-
-        configuration = learning_unit_sdk.build_configuration(person=person)
-        self.assertIsInstance(configuration, osis_learning_unit_sdk.Configuration)
-        self.assertEqual(configuration.host, "http://dummy-api.com/api/learning_unit")
-        self.assertDictEqual(
-            configuration.api_key,
-            {"Token": "personal-token"}
+            {"Token": "esb-authentication-token"}
         )

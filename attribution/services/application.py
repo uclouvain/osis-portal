@@ -37,7 +37,7 @@ from osis_attribution_sdk.model.application_update_command import ApplicationUpd
 from osis_attribution_sdk.model.renew_attribution_about_to_expire_command import RenewAttributionAboutToExpireCommand
 
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import attribution as attribution_sdk
+from frontoffice.settings.osis_sdk import attribution as attribution_sdk, utils
 
 from osis_attribution_sdk.api import application_api
 
@@ -50,13 +50,13 @@ class ApplicationService:
     @staticmethod
     def search_vacant_courses(code: str, allocation_faculty: str, person: Person):
         # TODO: Support pagination
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
             api_response = api_instance.vacantcourses_list(
                 code=code,
                 allocation_faculty=allocation_faculty,
-                accept_language=person.language
+                **utils.build_mandatory_auth_headers(person)
             )
             return getattr(api_response, 'results', [])
 
@@ -69,10 +69,10 @@ class ApplicationService:
 
     @staticmethod
     def get_applications(person: Person):
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_response = api_instance.application_list(accept_language=person.language)
+            api_response = api_instance.application_list(**utils.build_mandatory_auth_headers(person))
             return getattr(api_response, 'results', [])
 
     @staticmethod
@@ -85,18 +85,18 @@ class ApplicationService:
 
     @staticmethod
     def get_attribution_about_to_expires(person: Person):
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_response = api_instance.attributionsabouttoexpire_list(accept_language=person.language)
+            api_response = api_instance.attributionsabouttoexpire_list(**utils.build_mandatory_auth_headers(person))
             return getattr(api_response, 'results', [])
 
     @staticmethod
     def get_my_charge_summary(person: Person):
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_response = api_instance.my_charge_summary(accept_language=person.language)
+            api_response = api_instance.my_charge_summary(**utils.build_mandatory_auth_headers(person))
             return getattr(api_response, 'results', [])
 
     @staticmethod
@@ -109,7 +109,7 @@ class ApplicationService:
         course_summary: str,
         person: Person
     ):
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
             command = ApplicationCreateCommand(
@@ -119,7 +119,10 @@ class ApplicationService:
                 remark=remark,
                 course_summary=course_summary,
             )
-            return api_instance.application_create(application_create_command=command, accept_language=person.language)
+            return api_instance.application_create(
+                application_create_command=command,
+                **utils.build_mandatory_auth_headers(person),
+            )
 
     @staticmethod
     @api_exception_handler(api_exception_cls=ApiException)
@@ -131,7 +134,7 @@ class ApplicationService:
         course_summary: str,
         person: Person
     ):
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
             command = ApplicationUpdateCommand(
@@ -143,34 +146,37 @@ class ApplicationService:
             return api_instance.application_update(
                 application_uuid=application_uuid,
                 application_update_command=command,
-                accept_language=person.language
+                **utils.build_mandatory_auth_headers(person)
             )
 
     @staticmethod
     def renew_attributions_about_to_expire(vacant_courses_code: List[str], person: Person):
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
             cmd = RenewAttributionAboutToExpireCommand(codes=vacant_courses_code)
             return api_instance.attributionsabouttoexpire_renew(
                 renew_attribution_about_to_expire_command=cmd,
-                accept_language=person.language
+                **utils.build_mandatory_auth_headers(person)
             )
 
     @staticmethod
     @api_exception_handler(api_exception_cls=ApiException)
     def delete_application(application_uuid: str, person: Person):
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_instance.application_delete(application_uuid=application_uuid, accept_language=person.language)
+            api_instance.application_delete(
+                application_uuid=application_uuid,
+                **utils.build_mandatory_auth_headers(person)
+            )
 
     @staticmethod
     def send_applications_summary(person: Person):
-        configuration = attribution_sdk.build_configuration(person)
+        configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_instance.applications_summary_send(accept_language=person.language)
+            api_instance.applications_summary_send(**utils.build_mandatory_auth_headers(person))
 
 
 class ApplicationBusinessException(Enum):

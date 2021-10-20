@@ -30,7 +30,7 @@ from typing import List
 import urllib3
 from django.conf import settings
 
-from frontoffice.settings.osis_sdk import attribution as attribution_sdk
+from frontoffice.settings.osis_sdk import attribution as attribution_sdk, utils
 
 import osis_attribution_sdk
 from osis_attribution_sdk.models import ApplicationCourseCalendar
@@ -43,14 +43,18 @@ LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
 class ApplicationCoursesRemoteCalendar(object):
     _calendars = []  # type: List[ApplicationCourseCalendar]
 
-    def __init__(self):
+    def __init__(self, person):
         configuration = attribution_sdk.build_configuration()
 
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
             try:
-                self._calendars = sorted(api_instance.applicationcoursescalendars_list(),
-                                         key=lambda academic_event: academic_event.start_date)
+                self._calendars = sorted(
+                    api_instance.applicationcoursescalendars_list(
+                        **utils.build_mandatory_auth_headers(person)
+                    ),
+                    key=lambda academic_event: academic_event.start_date
+                )
             except (osis_attribution_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 LOGGER.error(e)

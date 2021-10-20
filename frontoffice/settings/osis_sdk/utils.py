@@ -62,6 +62,19 @@ def build_custom_headers(person):
     }
 
 
+def build_mandatory_auth_headers(person):
+    """
+    Return mandatory headers used for ESBAuthentification
+    """
+    return {
+        'accept_language': person.language,
+        'x_user_first_name': person.first_name or '',
+        'x_user_last_name':  person.last_name or '',
+        'x_user_email': person.email or '',
+        'x_user_global_id': person.global_id,
+    }
+
+
 def api_exception_handler(api_exception_cls):
     def api_exception_decorator(func):
         @wraps(func)
