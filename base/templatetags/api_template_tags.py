@@ -31,26 +31,47 @@ from frontoffice.settings.osis_sdk.utils import DEFAULT_API_LIMIT
 
 register = template.Library()
 
+DEFAULT_SELECTABLE_LIMITS = [10, 25, 50, 100]
+DEFAULT_CONDENSED_PAGINATION_DELTA = 2
+
 
 @register.inclusion_tag('api/pagination.html', takes_context=True)
-def pagination(context):
+def pagination(context, condensed=True, delta=DEFAULT_CONDENSED_PAGINATION_DELTA):
     pagination_limit = context.get('limit', DEFAULT_API_LIMIT)
     pages_count = ceil(context['count']/pagination_limit)
+    requested_offset = int(context['request'].GET.get('offset', 0))
     pages = [
         {
             'number': page+1,
             'limit': pagination_limit,
-            'offset': str(pagination_limit*page)
+            'offset': str(pagination_limit*page),
+            'active_page': pagination_limit*page == requested_offset,
         } for page in range(0, pages_count)
     ]
-
     context['pages'] = pages
     context['first_offset'] = 0
     context['last_offset'] = (pages_count-1) * pagination_limit
     context['next_offset'] = context['offset'] + context['limit']
     context['previous_offset'] = context['offset'] - context['limit']
 
+    context['active_page_number'] = next(page['number'] for page in pages if page['active_page'])
+
+    context['visible_indices'] = compute_visible_indices(
+        pages,
+        context['active_page_number'],
+        delta=delta if condensed else len(pages)
+    )
+
     return context
+
+
+def compute_visible_indices(pages, active_page, delta):
+    visible_indices = [pages[0]['number'], *range(active_page-delta, active_page+delta+1), pages[-1]['number']]
+    # show page indices when the gap is only 1 e.g. (1, 3, 5) -> (1, 2, 3, 4, 5)
+    for i, index in enumerate(visible_indices):
+        if i+1 <= len(visible_indices) - 1 and visible_indices[i+1] - visible_indices[i] == 2:
+            visible_indices.insert(i+1, visible_indices[i]+1)
+    return visible_indices
 
 
 @register.inclusion_tag('api/search.html', takes_context=True)
@@ -68,7 +89,7 @@ def ordering(context, column_name, api_field_name):
 
 @register.inclusion_tag('api/count.html', takes_context=True)
 def count(context):
-    context['start_index'] = context['offset']
+    context['start_index'] = min(context['count'], context['offset'] + 1)
     context['end_index'] = min(context['offset'] + context['limit'], context['count'])
     context['total_count'] = context['count']
     return context
@@ -77,5 +98,5 @@ def count(context):
 @register.inclusion_tag('api/limit_selector.html', takes_context=True)
 def limit_selector(context):
     context['current_limit'] = context['limit']
-    context['limit_choices'] = [25, 50, 100]
+    context['limit_choices'] = DEFAULT_SELECTABLE_LIMITS
     return context

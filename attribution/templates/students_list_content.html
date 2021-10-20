@@ -106,9 +106,9 @@
         <thead>
         <tr>
             <div class="pagination-table-header">
-                <div>{% count %}</div>
-                <div>{% pagination %}</div>
-                <div>{% limit_selector %}</div>
+                <div class="count">{% count %}</div>
+                <div class="pagination hidden-xs hidden-sm">{% pagination True 1 %}</div>
+                <div class="selector">{% limit_selector %}</div>
             </div>
         </tr>
         <tr>
