@@ -72,5 +72,5 @@ class TestResumeUrl(TestCase):
         UuidObj = namedtuple('Object', ['uuid'])
 
         affectation = StudentAffectation(speciality=UuidObj(uuid=uuid.uuid4()), organization=UuidObj(uuid=uuid.uuid4()))
-        repr = _get_internship_masters_repr(affectation)
+        repr = _get_internship_masters_repr(self.user.person, affectation)
         self.assertEqual(repr, "Prof. TEST")

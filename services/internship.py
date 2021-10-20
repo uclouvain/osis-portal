@@ -31,7 +31,7 @@ from osis_internship_sdk import ApiException, ApiClient
 from osis_internship_sdk.api import internship_api
 from osis_internship_sdk.model.organization_get import OrganizationGet
 
-from frontoffice.settings.osis_sdk import internship as internship_sdk
+from frontoffice.settings.osis_sdk import internship as internship_sdk, utils
 from internship.models.enums.role_choice import ChoiceRole
 from internship.models.score_encoding_utils import DEFAULT_PERIODS
 from internship.services.utils import get_first_paginated_result, get_paginated_results
@@ -50,54 +50,66 @@ class InternshipServiceException(Exception):
 
 class InternshipAPIService:
     @classmethod
-    def get_master_by_email(cls, email):
+    def get_master(cls, person):
         return get_first_paginated_result(
-            InternshipAPIClient().masters_get(search=email)
-        )
-
-    @classmethod
-    def activate_master_account(cls, master_uuid):
-        return InternshipAPIClient().masters_uuid_activate_account_post(uuid=master_uuid)
-
-    @classmethod
-    def get_master_allocations(cls, master_uuid=None):
-        return get_paginated_results(
-            InternshipAPIClient().masters_uuid_allocations_get(uuid=master_uuid, current=True)
-        )
-
-    @classmethod
-    def get_mastered_allocations(cls, specialty_uuid, organization_uuid):
-        return get_paginated_results(
-            InternshipAPIClient().masters_allocations_get(
-                specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.MASTER.name
+            InternshipAPIClient().masters_get(
+                search=person.email, **utils.build_mandatory_auth_headers(person)
             )
         )
 
     @classmethod
-    def get_delegated_allocations(cls, specialty_uuid, organization_uuid):
+    def activate_master_account(cls, person, master_uuid):
+        return InternshipAPIClient().masters_uuid_activate_account_post(
+            uuid=master_uuid, **utils.build_mandatory_auth_headers(person)
+        )
+
+    @classmethod
+    def get_master_allocations(cls, person, master_uuid=None):
         return get_paginated_results(
-            InternshipAPIClient().masters_allocations_get(
-                specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.DELEGATE.name
+            InternshipAPIClient().masters_uuid_allocations_get(
+                uuid=master_uuid, current=True, **utils.build_mandatory_auth_headers(person)
             )
         )
 
     @classmethod
-    def get_specialty(cls, specialty_uuid):
-        return InternshipAPIClient().specialties_uuid_get(uuid=specialty_uuid)
+    def get_mastered_allocations(cls, person, specialty_uuid, organization_uuid):
+        return get_paginated_results(
+            InternshipAPIClient().masters_allocations_get(
+                specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.MASTER.name,
+                **utils.build_mandatory_auth_headers(person)
+            )
+        )
 
     @classmethod
-    def get_organization(cls, organization_uuid) -> OrganizationGet:
-        return InternshipAPIClient().organizations_uuid_get(uuid=organization_uuid)
+    def get_delegated_allocations(cls, person, specialty_uuid, organization_uuid):
+        return get_paginated_results(
+            InternshipAPIClient().masters_allocations_get(
+                specialty=specialty_uuid, organization=organization_uuid, role=ChoiceRole.DELEGATE.name,
+                **utils.build_mandatory_auth_headers(person)
+            )
+        )
 
     @classmethod
-    def get_students_affectations_count(cls, specialty_uuid, organization_uuid):
+    def get_specialty(cls, person, specialty_uuid):
+        return InternshipAPIClient().specialties_uuid_get(
+            uuid=specialty_uuid, **utils.build_mandatory_auth_headers(person)
+        )
+
+    @classmethod
+    def get_organization(cls, person, organization_uuid) -> OrganizationGet:
+        return InternshipAPIClient().organizations_uuid_get(
+            uuid=organization_uuid, **utils.build_mandatory_auth_headers(person)
+        )
+
+    @classmethod
+    def get_students_affectations_count(cls, person, specialty_uuid, organization_uuid):
         return InternshipAPIClient().students_affectations_specialty_organization_stats_get(
-            specialty=specialty_uuid, organization=organization_uuid
+            specialty=specialty_uuid, organization=organization_uuid, **utils.build_mandatory_auth_headers(person)
         )
 
     @classmethod
-    def get_paginated_students_affectations(cls, specialty_uuid, organization_uuid, period, **kwargs):
-        response = cls.get_students_affectations(specialty_uuid, organization_uuid, period, **kwargs)
+    def get_paginated_students_affectations(cls, person, specialty_uuid, organization_uuid, period, **kwargs):
+        response = cls.get_students_affectations(person, specialty_uuid, organization_uuid, period, **kwargs)
         next = urlparse(response['next']).query if response['next'] else ''
         previous = urlparse(response['previous']).query if response['previous'] else ''
         results = get_paginated_results(response)
@@ -105,71 +117,77 @@ class InternshipAPIService:
         return results, previous, next, count
 
     @classmethod
-    def get_students_affectations(cls, specialty_uuid, organization_uuid, period=DEFAULT_PERIODS, **kwargs):
+    def get_students_affectations(cls, person, specialty_uuid, organization_uuid, period=DEFAULT_PERIODS, **kwargs):
         return InternshipAPIClient().students_affectations_specialty_organization_get(
             specialty=specialty_uuid,
             organization=organization_uuid,
             period=period,
+            **utils.build_mandatory_auth_headers(person),
             **kwargs
         )
 
     @classmethod
-    def get_affectation(cls, affectation_uuid):
-        return InternshipAPIClient().students_affectations_uuid_get(uuid=affectation_uuid)
-
-    @classmethod
-    def get_period(cls, period_uuid):
-        return InternshipAPIClient().periods_uuid_get(uuid=period_uuid)
-
-    @classmethod
-    def get_active_period(cls):
-        return get_first_paginated_result(
-            InternshipAPIClient().periods_get(active=True)
+    def get_affectation(cls, person, affectation_uuid):
+        return InternshipAPIClient().students_affectations_uuid_get(
+            uuid=affectation_uuid, **utils.build_mandatory_auth_headers(person)
         )
 
     @classmethod
-    def get_score(cls, affectation_uuid):
+    def get_active_period(cls, person):
+        return get_first_paginated_result(
+            InternshipAPIClient().periods_get(
+                active=True, **utils.build_mandatory_auth_headers(person)
+            )
+        )
+
+    @classmethod
+    def get_score(cls, person, affectation_uuid):
         try:
-            return InternshipAPIClient().scores_affectation_uuid_get(affectation_uuid)
+            return InternshipAPIClient().scores_affectation_uuid_get(
+                affectation_uuid, **utils.build_mandatory_auth_headers(person)
+            )
         except ApiException:
             return None
 
     @classmethod
-    def update_score(cls, affectation_uuid, score):
+    def update_score(cls, person, affectation_uuid, score):
         data, status, headers = InternshipAPIClient().scores_affectation_uuid_put(
             affectation_uuid,
             score_get=score,
-            _return_http_data_only=False
+            _return_http_data_only=False,
+            **utils.build_mandatory_auth_headers(person)
         )
         return status == 200
 
     @classmethod
-    def post_master(cls, master):
+    def post_master(cls, person, master):
         try:
-            return InternshipAPIClient().masters_post(master_get=master)
+            return InternshipAPIClient().masters_post(master_get=master, **utils.build_mandatory_auth_headers(person))
         except ApiException:
             raise InternshipServiceException
 
     @classmethod
-    def post_master_allocation(cls, allocation):
+    def post_master_allocation(cls, person, allocation):
         return InternshipAPIClient().masters_allocations_post(
-            allocation_get=allocation,
+            allocation_get=allocation, **utils.build_mandatory_auth_headers(person)
         )
 
     @classmethod
-    def delete_master_allocation(cls, allocation_uuid):
+    def delete_master_allocation(cls, person, allocation_uuid):
         data, status, headers = InternshipAPIClient().masters_allocations_uuid_delete(
             uuid=allocation_uuid,
-            _return_http_data_only=False
+            _return_http_data_only=False,
+            **utils.build_mandatory_auth_headers(person)
         )
         return status == 204
 
     @classmethod
-    def validate_internship_score(cls, affectation_uuid):
+    def validate_internship_score(cls, person, affectation_uuid):
         try:
             return InternshipAPIClient().scores_affectation_uuid_validate_post(
                 affectation_uuid=affectation_uuid,
-                _return_http_data_only=False
+                _return_http_data_only=False,
+                **utils.build_mandatory_auth_headers(person)
             )
         except ApiException as e:
             return e.body, e.status, e.headers
