@@ -31,7 +31,7 @@ from frontoffice.settings.osis_sdk.utils import DEFAULT_API_LIMIT
 
 register = template.Library()
 
-DEFAULT_SELECTABLE_LIMITS = [25, 50, 100]
+DEFAULT_SELECTABLE_LIMITS = [10, 25, 50, 100]
 DEFAULT_CONDENSED_PAGINATION_DELTA = 2
 
 
