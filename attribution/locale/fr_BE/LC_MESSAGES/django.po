@@ -125,7 +125,7 @@ msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
 msgid "Download the list (Excel or PDF)"
-msgstr "Télécharger la liste (PDF ou Excel)"
+msgstr "Télécharger la liste (Excel ou PDF)"
 
 msgid "ES"
 msgstr "ES"
