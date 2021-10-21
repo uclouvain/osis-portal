@@ -28,8 +28,9 @@ from types import SimpleNamespace
 from unittest import mock
 
 from django.contrib.auth.models import Permission
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
+from osis_learning_unit_enrollment_sdk.model.enrollment import Enrollment
 
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views import students_list
@@ -50,7 +51,12 @@ class StudentsListViewTest(TestCase):
         perm = Permission.objects.get(codename="can_access_attribution")
         cls.person.user.user_permissions.add(perm)
         cls.current_year = datetime.date.today().year
-
+        cls.enrollments = SimpleNamespace(**{
+            'results': [Enrollment(**EnrollmentDictFactory()) for _ in range(2)],
+            'count': 1,
+            'enrolled_students_count': 1,
+            'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})
+        })
         cls.a_tutor = TutorFactory(person=cls.person)
         cls.full_luy = cls.create_lu_yr_annual_data(cls.current_year)
 
@@ -85,7 +91,8 @@ class StudentsListViewTest(TestCase):
             'learning_unit_year': a_learning_unit_year,
         }
 
-    def test_find_january_note(self):
+    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
+    def test_find_january_note(self, mock_enrollments):
         student_performance = test_student_performance.create_student_performance()
         an_academic_yr = test_academic_year.create_academic_year_with_year(student_performance.academic_year)
         a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
@@ -94,16 +101,22 @@ class StudentsListViewTest(TestCase):
             'academic_year': an_academic_yr,
             'weight': 5
         })
-        enrollment = SimpleNamespace(**EnrollmentDictFactory(
+        enrollment = Enrollment(**EnrollmentDictFactory(
             student_registration_id=student_performance.registration_id,
             learning_unit_year=a_learning_unit_year.academic_year.year,
             learning_unit_acronym=a_learning_unit_year.acronym,
             program=student_performance.acronym
         ))
+        self.enrollments.results.append(enrollment)
+        mock_enrollments.return_value = self.enrollments
         students_list_view = StudentsListView(kwargs={
             'learning_unit_year': str(a_learning_unit_year.academic_year.year),
             'learning_unit_acronym': a_learning_unit_year.acronym
         })
+        request = RequestFactory().get('/')
+        request.user = PersonFactory().user
+        students_list_view.request = request
+
         self.assertEqual(
             students_list_view.get_sessions_results(enrollment), {
                     students_list.JANUARY: {
@@ -139,7 +152,7 @@ class StudentsListViewTest(TestCase):
             'count': 2,
             'enrolled_students_count': 2,
             'results': [
-                SimpleNamespace(
+                Enrollment(
                     **EnrollmentDictFactory(
                         learning_unit_acronym=self.full_luy['learning_unit_year'].acronym,
                         program=program,

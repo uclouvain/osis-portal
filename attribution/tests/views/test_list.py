@@ -32,6 +32,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
+from osis_learning_unit_enrollment_sdk.model.enrollment import Enrollment
 
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
@@ -64,7 +65,7 @@ class StudentsListTest(TestCase):
         person.save()
         cls.learning_unit_year = LearningUnitYearFactory()
         cls.enrollments = SimpleNamespace(**{
-            'results': [SimpleNamespace(**EnrollmentDictFactory()) for _ in range(2)],
+            'results': [Enrollment(**EnrollmentDictFactory()) for _ in range(2)],
             'count': 1,
             'enrolled_students_count': 1,
             'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})

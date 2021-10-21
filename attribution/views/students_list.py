@@ -172,7 +172,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         results = {}
 
         a_student_performance = next(
-            (perf for perf in self.sessions_results_for_mapping if a_registration_id == perf['registration_id']),
+            (perf for perf in self.sessions_results_for_mapping if a_registration_id == perf.registration_id),
             None
         )
 
@@ -193,12 +193,12 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
             registration_id__in=list(map(itemgetter('student_registration_id'), self.page_objects_list)),
             acronym__in=set(map(itemgetter('program'), self.page_objects_list)),
             academic_year=self.kwargs['learning_unit_year']
-        ).values()
+        )
 
     @staticmethod
     def get_student_data_dict(a_student_performance):
         try:
-            data_input = json.dumps(a_student_performance['data'])
+            data_input = json.dumps(a_student_performance.data)
             return json.loads(data_input)
         except (AttributeError, ValueError):
             return None
