@@ -51,16 +51,19 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
 def students_list(request):
-    data = get_learning_units(request.user)
+    current_session_dict = AssessmentsService.get_current_session(request.user.person)
+    if current_session_dict:
+        data = get_learning_units(request.user, current_session_dict)
+    else:
+        data = _get_warning_concerning_sessions(request.user.person)
     return render(request, "list/students_exam.html", data)
 
 
-def get_learning_units(a_user):
+def get_learning_units(a_user, current_session_dict: Dict):
     a_person = mdl_base.person.find_by_user(a_user)
     learning_units = []
-    current_session_dict = {}
+
     if a_person:
-        current_session_dict = AssessmentsService.get_current_session(a_person)
         current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
         if current_academic_year and tutor:
@@ -111,7 +114,9 @@ def __get_learning_unit_year_attributed(year: int, person: Person, current_sessi
 
 def get_codes_parameter(request, academic_yr):
     learning_unit_years = None
-    learning_unit_acronyms = _get_learning_unit_acronyms(get_learning_units(request.user).get('my_learning_units', []))
+    current_session_dict = AssessmentsService.get_current_session(request.user.person)
+    learning_unit_acronyms = _get_learning_unit_acronyms(
+        get_learning_units(request.user, current_session_dict).get('my_learning_units', []))
 
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
@@ -165,7 +170,8 @@ def list_build(request):
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
     else:
-        data = get_learning_units(request.user)
+        current_session_dict = AssessmentsService.get_current_session(request.user.person)
+        data = get_learning_units(request.user, current_session_dict)
         data.update({'msg_error': _('No data found')})
         return render(request, "list/students_exam.html", data)
 
@@ -282,8 +288,12 @@ def _get_all_effective_class_repartition(attributions: List, ue_acronym: str, sc
             effective_class_repartition.extend(attribution.effective_class_repartition)
 
     effective_class_detail = []
-    for effective_class in effective_class_repartition:
+
+    list_of_unique_dicts_effective_class_repartition = {x['code']: x for x in effective_class_repartition}.values()
+
+    for effective_class in list_of_unique_dicts_effective_class_repartition:
         score_responsible = _get_score_responsible(score_responsible_list, effective_class.code)
+
         effective_class_detail.append(
             {
                 'effective_class_repartition': effective_class,
@@ -308,3 +318,27 @@ def _get_learning_unit_acronyms(user_learning_units_assigned: List) -> List[str]
     for u in user_learning_units_assigned:
         learning_unit_acronyms.add(u.get('acronym'))
     return list(learning_unit_acronyms)
+
+
+def _get_warning_concerning_sessions(a_person: Person):
+    date_format = str(_('date_format'))
+
+    previous_session_dict = AssessmentsService.get_previous_session(a_person)
+    str_date = previous_session_dict.get('end_date').strftime(date_format)
+    previous_session_msg = \
+        _("The period of scores' encoding for %(month_session)s session is closed since %(str_date)s") \
+        % {
+            'month_session': previous_session_dict.get('month_session_name').lower(),
+            'str_date': str_date
+        }
+
+    next_session_dict = AssessmentsService.get_next_session(a_person)
+    str_date = next_session_dict.get('start_date').strftime(date_format)
+    next_session_msg = \
+        _("The period of scores' encoding for %(month_session)s session will be open %(str_date)s") \
+        % {
+            'month_session': next_session_dict.get('month_session_name').lower(),
+            'str_date': str_date
+        }
+    data = {'messages_error': {previous_session_msg, next_session_msg}}
+    return data

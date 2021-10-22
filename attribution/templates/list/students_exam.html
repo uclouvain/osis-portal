@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% load staticfiles %}
-{% load i18n %}
+{% load i18n academic_year_display %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -48,9 +48,11 @@
         <div class="alert alert-info">{{ msg_error }}</div>
         <br>
     {% endif %}
+
     <div class="panel panel-default">
         <div class="panel-body">
-           <h3>{{current_session.academic_year}} - {% trans 'Session of' %} {{current_session.month_session_name|lower}}</h3>
+           {% if not messages_error %}
+           <h3>{{current_session.year|display_as_academic_year}} - {% trans 'Session of' %} {{current_session.month_session_name|lower}}</h3>
             <div class="alert alert-info">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                 <strong>{% trans "NEW" %}</strong> {% trans "'Lists of students enrolled to my exams' are immediately usable for encoding scores." %}
@@ -146,6 +148,15 @@
                 </div>
                 <br>
             </form>
+           {% else %}
+                <div class="alert alert-warning">
+                    {% for message in messages_error %}
+                        <li>
+                            {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+                        </li>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div class="alert alert-info">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                 {% trans 'The lists of students enrolled to courses are available in ' %}
