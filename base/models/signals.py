@@ -111,7 +111,7 @@ def _add_person_to_group(person):
             _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
         # check master exists through api client
         from internship.services.internship import InternshipAPIService
-        if InternshipAPIService.get_master_by_email(person.user.email):
+        if InternshipAPIService.get_master(person):
             _assign_group(person, GROUP_MASTERS_INTERNSHIP)
 
 

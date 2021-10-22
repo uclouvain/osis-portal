@@ -28,6 +28,7 @@ from django.test import TestCase
 
 from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 from attribution.utils import permission
+from base.tests.factories.person import PersonFactory
 from base.tests.factories.user import UserFactory
 
 
@@ -35,6 +36,7 @@ class TestIsOnlineApplicationOpened(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.a_user = UserFactory()
+        cls.a_person = PersonFactory(user=cls.a_user)
 
     @mock.patch.object(ApplicationCoursesRemoteCalendar, '__init__', return_value=None)
     @mock.patch.object(ApplicationCoursesRemoteCalendar, 'get_target_years_opened', return_value=[])

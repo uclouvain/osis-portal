@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,24 +23,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import osis_attribution_sdk
-from django.test import SimpleTestCase, override_settings
 
-from frontoffice.settings.osis_sdk import attribution as attribution_sdk
+from django.test import SimpleTestCase
+
+from base.templatetags.api_template_tags import compute_visible_indices, DEFAULT_CONDENSED_PAGINATION_DELTA
 
 
-@override_settings(
-    OSIS_ATTRIBUTION_SDK_HOST="http://dummy-api.com/api/attribution",
-    REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY="esb-authentication-token",
-)
-class BuildConfigurationAttributionTestCase(SimpleTestCase):
+class ApiTemplateTagsTestCase(SimpleTestCase):
 
-    def test_build_configuration(self):
-        configuration = attribution_sdk.build_configuration()
+    def test_should_compute_visible_indices_in_pagination(self):
+        pages_count = 20
+        pages = [{'number': page+1} for page in range(0, pages_count)]
 
-        self.assertIsInstance(configuration, osis_attribution_sdk.Configuration)
-        self.assertEqual(configuration.host, "http://dummy-api.com/api/attribution")
-        self.assertDictEqual(
-            configuration.api_key,
-            {"Token": "esb-authentication-token"}
-        )
+        visible_indices = compute_visible_indices(pages, int(pages_count/2), DEFAULT_CONDENSED_PAGINATION_DELTA)
+        expected_pagination_indices = [1, 8, 9, 10, 11, 12, 20]
+
+        self.assertEqual(visible_indices, expected_pagination_indices)

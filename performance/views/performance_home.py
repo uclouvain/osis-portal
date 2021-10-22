@@ -56,7 +56,8 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
 
     @cached_property
     def offer_enrollments_list(self) -> List[SimpleNamespace]:
-        offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(self.student.person).results
+        offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(self.student.person).results \
+            if self.student else []
         allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
         offer_enrollments_to_display = []
         for offer_enrollment in offer_enrollments:
@@ -89,6 +90,12 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
             ).only('academic_year', "acronym", "offer_registration_state", "pk")
         return []
 
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
+            return dash_main_view.show_multiple_registration_id_error(self.request)
+
 
 class PerformanceHomeAdmin(PerformanceHomeMixin, UserPassesTestMixin):
     template_name = "admin/performance_home_admin.html"
@@ -111,10 +118,7 @@ class PerformanceHomeStudent(PerformanceHomeMixin, PermissionRequiredMixin):
 
     @cached_property
     def student(self) -> Student:
-        try:
-            return student_business.find_by_user_and_discriminate(self.request.user)
-        except MultipleObjectsReturned:
-            return dash_main_view.show_multiple_registration_id_error(self.request)
+        return student_business.find_by_user_and_discriminate(self.request.user)
 
 
 def _can_visualize_student_programs(request: HttpRequest, registration_id: str) -> bool:

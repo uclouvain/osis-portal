@@ -30,10 +30,12 @@ from django.test import SimpleTestCase
 from osis_attribution_sdk.models import ApplicationCourseCalendar
 
 from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
+from base.tests.factories.person import PersonFactory
 
 
 class ApplicationCoursesRemoteCalendarTestCase(SimpleTestCase):
     def setUp(self):
+        self.person = PersonFactory.build()
         self.event_closed = ApplicationCourseCalendar(
             title="Candidature aux cours vacants [2020]",
             start_date=datetime.date.today() - datetime.timedelta(days=360),
@@ -61,12 +63,12 @@ class ApplicationCoursesRemoteCalendarTestCase(SimpleTestCase):
         self.addCleanup(self.api_call_patcher.stop)
 
     def test__init__assert_call_remote_api(self):
-        calendar = ApplicationCoursesRemoteCalendar()
+        calendar = ApplicationCoursesRemoteCalendar(self.person)
 
         self.assertTrue(self.api_call_mocked.called)
 
     def test_get_target_years_opened(self):
-        calendar = ApplicationCoursesRemoteCalendar()
+        calendar = ApplicationCoursesRemoteCalendar(self.person)
 
         self.assertListEqual(
             calendar.get_target_years_opened(),
@@ -74,7 +76,7 @@ class ApplicationCoursesRemoteCalendarTestCase(SimpleTestCase):
         )
 
     def test_get_opened_academic_events(self):
-        calendar = ApplicationCoursesRemoteCalendar()
+        calendar = ApplicationCoursesRemoteCalendar(self.person)
 
         self.assertListEqual(
             calendar.get_opened_academic_events(),

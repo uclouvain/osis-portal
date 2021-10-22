@@ -67,6 +67,8 @@ for module, git_url in modules.items():
     else:
         print('')
         print('Module {} not exists in project directory'.format(module))
+        if module in modules_branches:
+            specific_module_branch = modules_branches.get(module)
         print('Cloning module {} from branch {} in directory {}'.format(module, specific_module_branch, module_dir))
         command = 'git clone {git_url} -b {branch} {directory}'.format(branch=specific_module_branch,
                                                                        git_url=git_url,

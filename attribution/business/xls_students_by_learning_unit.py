@@ -30,6 +30,7 @@ from openpyxl import Workbook
 from openpyxl.styles import Color
 from openpyxl.styles import Style
 from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
+from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import save_virtual_workbook
 
 from attribution.business.student_specific_profile import get_type_peps
@@ -44,7 +45,6 @@ BORDER_LEFT = Border(
               ),
 )
 FIRST_COL_PEPS = 'M'
-
 
 def get_xls(student_list, acronym, academic_year):
     xls = _make_xls_list(student_list)
@@ -120,6 +120,7 @@ def _make_xls_list(student_list):
     _columns_resizing(worksheet1)
     _columns_registration_id_to_text(worksheet1)
     _set_peps_border(worksheet1, len(student_list) + 1)
+    _add_filters_on_headers(worksheet1)
     workbook.create_sheet(str(_("Legend")))
     workbook.worksheets[1].append([str(_("Legend"))])
     workbook.worksheets[1].append([str(_("Exam registration state"))])
@@ -212,3 +213,8 @@ def _update_border_for_first_peps_column(cell):
 
     c.border = BORDER_LEFT
     cell.style = c
+
+
+def _add_filters_on_headers(a_worksheet):
+    full_range = "A1:" + get_column_letter(a_worksheet.max_column) + str(a_worksheet.max_row)
+    a_worksheet.auto_filter.ref = full_range

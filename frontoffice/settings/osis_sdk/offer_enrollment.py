@@ -28,23 +28,18 @@ import logging
 import osis_offer_enrollment_sdk
 from django.conf import settings
 
-from base.models.person import Person
-from frontoffice.settings.osis_sdk import utils
-
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def build_configuration(person: Person = None) -> osis_offer_enrollment_sdk.Configuration:
+def build_configuration() -> osis_offer_enrollment_sdk.Configuration:
     """
     Return SDK configuration of offer enrollment
     """
     if not settings.OSIS_OFFER_ENROLLMENT_SDK_HOST:
         logger.debug("'OSIS_OFFER_ENROLLMENT_SDK_HOST' setting must be set in configuration")
 
-    if person is None:
-        token = settings.OSIS_PORTAL_TOKEN
-    else:
-        token = utils.get_user_token(person, force_user_creation=True)
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
 
     return osis_offer_enrollment_sdk.Configuration(
         host=settings.OSIS_OFFER_ENROLLMENT_SDK_HOST,
@@ -52,5 +47,5 @@ def build_configuration(person: Person = None) -> osis_offer_enrollment_sdk.Conf
             'Token': settings.OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX
         },
         api_key={
-            'Token': token
+            'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
         })

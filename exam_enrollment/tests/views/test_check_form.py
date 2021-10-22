@@ -26,6 +26,7 @@
 from types import SimpleNamespace
 
 import mock
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.test import TestCase
@@ -35,7 +36,6 @@ from django.utils import timezone
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.offer_enrollment import OfferEnrollmentFactory
 from base.tests.models import test_student, test_person, test_academic_year
-from base.utils import queue_utils
 from exam_enrollment.models.exam_enrollment_request import ExamEnrollmentRequest
 from exam_enrollment.tests.factories.exam_enrollment_request import ExamEnrollmentRequestFactory
 from exam_enrollment.tests.views.test_enrollment_form import HTTP_RESPONSE_NOTFOUND
@@ -112,7 +112,7 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertEqual(response.status_code, HTTP_RESPONSE_NOTFOUND)
 
     def test_check_exam_enrollment_form_outdated_in_db(self):
-        request_timeout = queue_utils.get_timeout_or_default('EXAM_ENROLLMENT_FORM_RESPONSE')
+        request_timeout = settings.DEFAULT_QUEUE_TIMEOUT
         outdated_time = timezone.now() - timezone.timedelta(seconds=request_timeout + 1)
         educ_group_year = self.off_enrol.education_group_year
         ExamEnrollmentRequestFactory(

@@ -24,29 +24,37 @@
 #
 ##############################################################################
 import logging
+from types import SimpleNamespace
 
-import osis_internship_sdk
+import osis_offer_enrollment_sdk
+import urllib3
 from django.conf import settings
+from osis_offer_enrollment_sdk.api import enrollment_api
+from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
+
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def build_configuration() -> osis_internship_sdk.Configuration:
-    """
-    Return SDK configuration of internship based on person provided in kwargs
-    If no person provided, it will use generic token to make request
-    """
-    if not settings.OSIS_INTERNSHIP_SDK_HOST:
-        logger.debug("'OSIS_INTERNSHIP_SDK_HOST' setting must be set in configuration")
-
-    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
-        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
-
-    return osis_internship_sdk.Configuration(
-        host=settings.OSIS_INTERNSHIP_SDK_HOST,
-        api_key_prefix={
-            'Token': settings.OSIS_INTERNSHIP_SDK_API_KEY_PREFIX
-        },
-        api_key={
-            'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
-        })
+class OfferEnrollmentService:
+    @staticmethod
+    def get_enrollments_list(person: Person, registration_id: str, **kwargs) -> EnrollmentList:
+        configuration = offer_enrollment_sdk.build_configuration(person)
+        with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
+            api_instance = enrollment_api.EnrollmentApi(api_client)
+            try:
+                enrollments = api_instance.enrollments_list(
+                    registration_id=registration_id,
+                    #  FIXME: use mandatory headers !
+                    **kwargs
+                )
+            except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                enrollments = SimpleNamespace(
+                    results=[],
+                    count=0
+                )
+        return enrollments

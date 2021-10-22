@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import json
+from operator import itemgetter
 from typing import List, Union, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -39,7 +40,6 @@ from attribution.services.attribution import AttributionService
 from attribution.services.enrollments import LearningUnitEnrollmentService
 from attribution.services.learning_unit import LearningUnitService
 from base.utils.api_utils import ApiPaginationMixin, ApiRetrieveAllObjectsMixin
-from osis_common.utils.models import get_object_or_none
 from performance.models.student_performance import StudentPerformance
 
 JSON_LEARNING_UNIT_NOTE = 'note'
@@ -59,11 +59,13 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
     object_name_plural = _('student(s)')
 
     def get(self, *args, **kwargs):
-        # default ordering by program and student_last_name if no ordering parameter (trigger filter tags)
+        # default ordering by program and name if no ordering parameter (trigger filter tags)
         if not self.request.GET.get('ordering'):
             query_params_in_url = "?" in self.request.get_full_path()
             url_format = "{}&{}" if query_params_in_url else "{}?{}"
-            return redirect(url_format.format(self.request.get_full_path(), "ordering=program,student_last_name"))
+            return redirect(
+                url_format.format(self.request.get_full_path(), "ordering=program,student_last_name,student_first_name")
+            )
         return super().get(self, *args, **kwargs)
 
     @property
@@ -168,11 +170,10 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         academic_year = self.kwargs['learning_unit_year']
 
         results = {}
-        a_student_performance = get_object_or_none(
-            StudentPerformance,
-            registration_id=a_registration_id,
-            academic_year=academic_year,
-            acronym=offer_acronym
+
+        a_student_performance = next(
+            (perf for perf in self.sessions_results_for_mapping if a_registration_id == perf.registration_id),
+            None
         )
 
         if a_student_performance:
@@ -185,6 +186,14 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
                     cours_list = monOffre['cours']
                     self.manage_cours_list(cours_list, results)
         return results
+
+    @cached_property
+    def sessions_results_for_mapping(self):
+        return StudentPerformance.objects.filter(
+            registration_id__in=list(map(itemgetter('student_registration_id'), self.page_objects_list)),
+            acronym__in=set(map(itemgetter('program'), self.page_objects_list)),
+            academic_year=self.kwargs['learning_unit_year']
+        )
 
     @staticmethod
     def get_student_data_dict(a_student_performance):
@@ -265,7 +274,7 @@ class AdminStudentsListView(StudentsListView):
 class StudentsListXlsView(StudentsListView, ApiRetrieveAllObjectsMixin):
     permission_required = "base.can_access_attribution"
     api_call = LearningUnitEnrollmentService.get_all_enrollments_list
-    ordering = 'program,student_last_name'
+    ordering = 'program,student_last_name,student_first_name'
 
     def get(self, *args, **kwargs):
         student_list = self.enrollments_list
