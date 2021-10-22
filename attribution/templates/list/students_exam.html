@@ -37,9 +37,10 @@
     {% if messages %}
         <div class="alert alert-warning">
             {% for message in messages %}
-                <li>
-                    {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
-                </li>
+                <i class="fa fa-exclamation-triangle"></i> {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+                {% if not forloop.last %}
+                    <br>
+                {% endif %}
             {% endfor %}
         </div>
     {% endif %}
