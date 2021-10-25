@@ -13,7 +13,7 @@
         {% if ordering_field_name in ordering_parameters %}
             <input type="hidden" name="ordering" value="-{{ ordering_field_name }}" />
         {% elif "-"|add:ordering_field_name in ordering_parameters %}
-            <input type="hidden" name="ordering" value="no_field" />
+            <input type="hidden" name="ordering" value="" />
         {% else %}
             <input type="hidden" name="ordering" value="{{ ordering_field_name }}" />
         {% endif %}
