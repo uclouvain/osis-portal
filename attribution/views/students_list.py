@@ -60,11 +60,11 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
 
     def get(self, *args, **kwargs):
         # default ordering by program and name if no ordering parameter (trigger filter tags)
-        if not self.request.GET.get('ordering'):
+        if self.request.GET.get('ordering') is None:
             query_params_in_url = "?" in self.request.get_full_path()
             url_format = "{}&{}" if query_params_in_url else "{}?{}"
             return redirect(
-                url_format.format(self.request.get_full_path(), "ordering=program,student_last_name,student_first_name")
+                url_format.format(self.request.get_full_path(), "ordering=program,student_full_name")
             )
         return super().get(self, *args, **kwargs)
 
@@ -274,7 +274,7 @@ class AdminStudentsListView(StudentsListView):
 class StudentsListXlsView(StudentsListView, ApiRetrieveAllObjectsMixin):
     permission_required = "base.can_access_attribution"
     api_call = LearningUnitEnrollmentService.get_all_enrollments_list
-    ordering = 'program,student_last_name,student_first_name'
+    ordering = 'program,student_full_name'
 
     def get(self, *args, **kwargs):
         student_list = self.enrollments_list
