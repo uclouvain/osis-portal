@@ -23,18 +23,32 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+import logging
 
-from .views import score_encoding
+from django.conf import settings
+import osis_assessments_sdk
 
-urlpatterns = [
-    url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
-    url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z-]+)/(?P<year>[0-9]+)/',
-        score_encoding.score_sheet_xls,
-        name='scores_sheet_xls',
-        ),
-    url(r'^scores_encoding/pdf/(?P<learning_unit_code>[0-9A-Za-z-]+)/$',
-        score_encoding.score_sheet_pdf,
-        name='scores_sheet_pdf',
-        ),
-]
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+def build_configuration() -> osis_assessments_sdk.Configuration:
+    """
+    Return SDK configuration of assessments
+    """
+    if not settings.OSIS_ASSESSMENTS_SDK_HOST:
+        logger.debug("'OSIS_ASSESSMENTS_SDK_HOST' setting must be set in configuration")
+
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
+
+    return osis_assessments_sdk.Configuration(
+        host=settings.OSIS_ASSESSMENTS_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
+        })

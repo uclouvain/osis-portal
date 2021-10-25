@@ -27,7 +27,7 @@ import functools
 import logging
 import operator
 import urllib
-from typing import List
+from typing import List, Dict
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
@@ -37,12 +37,14 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
+from assessments.services.assessments import AssessmentsService
 from attribution.services.attribution import AttributionService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.learning_unit_year import LearningUnitYear
 from base.models.person import Person
 from base.views import layout
+from learning_unit.services.learning_unit import LearningUnitService
 
 NO_DATA_VALUE = "-"
 LEARNING_UNIT_ACRONYM_ID = "learning_unit_acronym_"
@@ -52,43 +54,77 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
 def students_list(request):
-    data = get_learning_units(request.user)
+    current_session_dict = AssessmentsService.get_current_session(request.user.person)
+    if current_session_dict:
+        data = get_learning_units(request.user, current_session_dict)
+    else:
+        data = _get_warning_concerning_sessions(request.user.person)
     return render(request, "list/students_exam.html", data)
 
 
-def get_learning_units(a_user):
+def get_learning_units(a_user, current_session_dict: Dict):
     a_person = mdl_base.person.find_by_user(a_user)
     learning_units = []
     if a_person:
-        current_academic_year = mdl_base.academic_year.current_academic_year()
         tutor = mdl_base.tutor.find_by_person(a_person)
-        if current_academic_year and tutor:
-            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
-    return {'person': a_person, 'my_learning_units': learning_units}
+        if tutor:
+            learning_units = __get_learning_unit_year_attributed(a_person, current_session_dict)
+    return {
+        'person': a_person,
+        'my_learning_units': learning_units,
+        'current_session': current_session_dict
+    }
 
 
-def __get_learning_unit_year_attributed(year: int, person: Person) -> List:
-    attributions = AttributionService.get_attributions_list(year, person, with_effective_class_repartition=True)
-    if attributions:
-        filter_clause = functools.reduce(
-            operator.or_,
-            (
-                (Q(acronym=attribution.code) & Q(academic_year__year=attribution.year))
-                for attribution in attributions
-            )
+def __get_learning_unit_year_attributed(person: Person, current_session: Dict) -> List[Dict]:
+    attributions = AttributionService.get_attributions_list(
+        current_session.year, person,
+        with_effective_class_repartition=True
+    )
+    learning_units_by_person = []
+    learning_unit_codes = {attribution.code for attribution in attributions}
+    score_responsible_list = AssessmentsService.get_score_responsible_list(
+        learning_unit_codes=list(learning_unit_codes),
+        year=current_session.year,
+        person=person)
+    learning_units = LearningUnitService.get_learning_units(
+        learning_unit_codes=list(learning_unit_codes),
+        year=current_session.year,
+        person=person
+    )
+
+    for learning_unit in learning_units:
+        ue_acronym = learning_unit.get('acronym', '')
+        learning_unit.update(
+            {
+                'score_responsible': _get_score_responsible(score_responsible_list, ue_acronym),
+                'effective_class_detail': _get_all_effective_class_repartition(
+                    attributions,
+                    ue_acronym,
+                    score_responsible_list
+                ),
+            }
         )
-        return list(LearningUnitYear.objects.filter(filter_clause))
-    return []
+        learning_units_by_person.append({'acronym': ue_acronym, 'learning_unit': learning_unit})
+
+    return learning_units_by_person
 
 
 def get_codes_parameter(request, academic_yr):
     learning_unit_years = None
-    user_learning_units_assigned = get_learning_units(request.user).get('my_learning_units', [])
+    current_session_dict = AssessmentsService.get_current_session(request.user.person)
+    learning_unit_acronyms = _get_learning_unit_acronyms(
+        get_learning_units(request.user, current_session_dict).get('my_learning_units', []))
+
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
-            learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
-                                                              user_learning_units_assigned)
+            learning_unit_years = build_learning_units_string(
+                academic_yr,
+                acronym,
+                learning_unit_years,
+                learning_unit_acronyms
+            )
 
     if learning_unit_years:
         return learning_unit_years
@@ -96,7 +132,7 @@ def get_codes_parameter(request, academic_yr):
     return NO_DATA_VALUE
 
 
-def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned):
+def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned: List[str]):
     learning_unit_years = learning_unit_years_in
     learning_units = LearningUnitYear.objects.select_related(
         "academic_year",
@@ -105,11 +141,13 @@ def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, us
         acronym__startswith=acronym,
         academic_year=academic_yr
     )
-    if learning_units and learning_units[0] in user_learning_units_assigned:
+
+    if learning_units and learning_units[0].acronym in user_learning_units_assigned:
         if learning_unit_years is None:
             learning_unit_years = "{0}".format(learning_units[0].acronym)
         else:
-            learning_unit_years = "{0},{1}".format(learning_unit_years, learning_units[0].acronym)
+            learning_unit_years = "{0},{1}".format(user_learning_units_assigned, learning_units[0].acronym)
+
     return learning_unit_years
 
 
@@ -130,7 +168,8 @@ def list_build(request):
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
     else:
-        data = get_learning_units(request.user)
+        current_session_dict = AssessmentsService.get_current_session(request.user.person)
+        data = get_learning_units(request.user, current_session_dict)
         data.update({'msg_error': _('No data found')})
         return render(request, "list/students_exam.html", data)
 
@@ -185,21 +224,30 @@ def lists_of_students_exams_enrollments(request):
     return layout.render(request, "admin/students_list.html", {"form": form})
 
 
-def get_learning_units_by_person(global_id):
+def get_learning_units_by_person(global_id: str) -> Dict:
     a_person = mdl_base.person.find_by_global_id(global_id)
     learning_units = []
+    current_session_dict = {}
     if a_person:
-        current_academic_year = mdl_base.academic_year.current_academic_year()
+        current_session_dict = AssessmentsService.get_current_session(a_person)
         tutor = mdl_base.tutor.find_by_person(a_person)
-        if current_academic_year and tutor:
-            learning_units = __get_learning_unit_year_attributed(current_academic_year.year, a_person)
-    return {'person': a_person, 'learning_units': learning_units}
+        if tutor:
+            learning_units = __get_learning_unit_year_attributed(
+                a_person,
+                current_session_dict
+            )
+
+    return {
+        'person': a_person,
+        'learning_units': learning_units,
+        'current_session': current_session_dict
+    }
 
 
 @login_required
 @permission_required('base.can_access_attribution', raise_exception=True)
 @require_POST
-def list_build_by_person(request, global_id):
+def list_build_by_person(request, global_id: str):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
     person = mdl_base.person.find_by_global_id(global_id)
@@ -216,11 +264,77 @@ def list_build_by_person(request, global_id):
 def get_codes_parameter_list(request, academic_yr, data):
     learning_unit_years = None
     user_learning_units_assigned = data.get('learning_units', [])
+    learning_unit_acronyms = _get_learning_unit_acronyms(user_learning_units_assigned)
+
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
             learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
-                                                              user_learning_units_assigned)
+                                                              learning_unit_acronyms)
     if learning_unit_years:
         return learning_unit_years
     return NO_DATA_VALUE
+
+
+def _get_all_effective_class_repartition(attributions: List, ue_acronym: str, score_responsible_list: List) -> List:
+    effective_class_repartition = []
+
+    for attribution in attributions:
+        if attribution.code == ue_acronym:
+            effective_class_repartition.extend(attribution.effective_class_repartition)
+
+    effective_class_detail = []
+
+    list_of_unique_dicts_effective_class_repartition = {x['code']: x for x in effective_class_repartition}.values()
+
+    for effective_class in list_of_unique_dicts_effective_class_repartition:
+        score_responsible = _get_score_responsible(score_responsible_list, effective_class.code)
+
+        effective_class_detail.append(
+            {
+                'effective_class_repartition': effective_class,
+                'score_responsible': score_responsible
+            }
+        )
+
+    return effective_class_detail
+
+
+def _get_score_responsible(score_responsibles: List, lu_acronym: str) -> str:
+    if score_responsibles:
+        return next(
+            (pers.get('full_name') for pers in score_responsibles if pers.get('learning_unit_acronym') == lu_acronym),
+            ''
+        )
+    return ''
+
+
+def _get_learning_unit_acronyms(user_learning_units_assigned: List) -> List[str]:
+    learning_unit_acronyms = set()
+    for u in user_learning_units_assigned:
+        learning_unit_acronyms.add(u.get('acronym'))
+    return list(learning_unit_acronyms)
+
+
+def _get_warning_concerning_sessions(a_person: Person):
+    date_format = str(_('date_format'))
+
+    previous_session_dict = AssessmentsService.get_previous_session(a_person)
+    str_date = previous_session_dict.get('end_date').strftime(date_format)
+    previous_session_msg = \
+        _("The period of scores' encoding for %(month_session)s session is closed since %(str_date)s") \
+        % {
+            'month_session': previous_session_dict.get('month_session_name').lower(),
+            'str_date': str_date
+        }
+
+    next_session_dict = AssessmentsService.get_next_session(a_person)
+    str_date = next_session_dict.get('start_date').strftime(date_format)
+    next_session_msg = \
+        _("The period of scores' encoding for %(month_session)s session will be open %(str_date)s") \
+        % {
+            'month_session': next_session_dict.get('month_session_name').lower(),
+            'str_date': str_date
+        }
+    data = {'messages_error': {previous_session_msg, next_session_msg}}
+    return data
