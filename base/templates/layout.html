@@ -29,7 +29,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
 
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     {% analytical_head_top %}
     <meta charset="utf-8">
