@@ -27,12 +27,9 @@ from datetime import datetime
 
 import factory
 
-from base.tests.factories.organization import OrganizationFactory
-
 
 class EntityFactory(factory.DjangoModelFactory):
     class Meta:
         model = 'base.Entity'
 
-    organization = factory.SubFactory(OrganizationFactory)
     changed = factory.LazyFunction(datetime.now)
