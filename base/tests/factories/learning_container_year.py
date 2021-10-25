@@ -29,7 +29,6 @@ import factory.fuzzy
 
 from base.models.enums import vacant_declaration_type, learning_container_type
 from base.tests.factories.academic_year import AcademicYearFactory
-from base.tests.factories.learning_container import LearningContainerFactory
 from osis_common.utils.datetime import get_tzinfo
 
 
@@ -46,7 +45,6 @@ class LearningContainerYearFactory(factory.django.DjangoModelFactory):
     common_title = factory.Sequence(lambda n: 'Learning container year - %d' % n)
     common_title_english = factory.Sequence(lambda n: 'Learning container year - %d' % n)
     type_declaration_vacant = vacant_declaration_type.RESERVED_FOR_INTERNS
-    learning_container = factory.SubFactory(LearningContainerFactory)
 
 
 class LearningContainerYearInChargeFactory(LearningContainerYearFactory):
