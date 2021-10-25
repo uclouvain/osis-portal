@@ -36,7 +36,6 @@ from osis_attribution_sdk.model.attribution_links import AttributionLinks
 from osis_attribution_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
 from rest_framework import status
 
-from attribution.models.enums.function import COORDINATOR
 from attribution.views import tutor_charge
 from base.models.enums.learning_container_type import COURSE, OTHER_COLLECTIVE
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -96,7 +95,7 @@ class TutorChargeViewTest(TestCase):
             'total_learning_unit_charge': '55.5',
             'percentage_allocation_charge': '100%',
             'start_year': 2020,
-            'function': AttributionFunctionEnum(value=COORDINATOR),
+            'function': AttributionFunctionEnum(value='COORDINATOR'),
             'function_text': 'Coordinateur',
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
