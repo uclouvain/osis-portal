@@ -34,6 +34,6 @@ class BaseConfig(AppConfig):
             ## DO NOT REMOVE ! these imports are used to manage signals !!
             from .models.signals import update_person_after_user_creation, \
                 update_person_after_user_update, add_to_students_group, remove_from_student_group, \
-                add_to_tutors_group, remove_from_tutor_group
+                add_to_tutors_group, remove_from_tutor_group, post_login
         except ImportError:
             pass

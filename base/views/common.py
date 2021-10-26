@@ -27,7 +27,6 @@ from django.conf import settings
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
-from django.utils import translation
 
 from base.models import person as person_mdl
 from base.views import layout, api
@@ -92,14 +91,7 @@ def login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        person = person_mdl.find_by_user(user)
-        # ./manage.py createsuperuser (in local) doesn't create automatically a Person associated to User
-        if person:
-            if person.language:
-                user_language = person.language
-                translation.activate(user_language)
-                request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+        authenticate(username=username, password=password)
     elif settings.OVERRIDED_LOGIN_URL:
         return redirect(settings.OVERRIDED_LOGIN_URL)
     return LoginView.as_view()(request)
