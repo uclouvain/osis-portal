@@ -68,7 +68,7 @@ def get_learning_units(a_user, current_session_dict: Dict):
     if a_person:
         tutor = mdl_base.tutor.find_by_person(a_person)
         if tutor:
-            learning_units = __get_learning_unit_year_attributed(a_person, current_session_dict)
+            learning_units = __get_learning_unit_year_attributed(a_person, current_session_dict.year)
     return {
         'person': a_person,
         'my_learning_units': learning_units,
@@ -76,36 +76,37 @@ def get_learning_units(a_user, current_session_dict: Dict):
     }
 
 
-def __get_learning_unit_year_attributed(person: Person, current_session: Dict) -> List[Dict]:
+def __get_learning_unit_year_attributed(person: Person, year: int) -> List[Dict]:
+    learning_units_by_person = []
     attributions = AttributionService.get_attributions_list(
-        current_session.year, person,
+        year, person,
         with_effective_class_repartition=True
     )
-    learning_units_by_person = []
-    learning_unit_codes = {attribution.code for attribution in attributions}
-    score_responsible_list = AssessmentsService.get_score_responsible_list(
-        learning_unit_codes=list(learning_unit_codes),
-        year=current_session.year,
-        person=person)
-    learning_units = LearningUnitService.get_learning_units(
-        learning_unit_codes=list(learning_unit_codes),
-        year=current_session.year,
-        person=person
-    )
-
-    for learning_unit in learning_units:
-        ue_acronym = learning_unit.get('acronym', '')
-        learning_unit.update(
-            {
-                'score_responsible': _get_score_responsible(score_responsible_list, ue_acronym),
-                'effective_class_detail': _get_all_effective_class_repartition(
-                    attributions,
-                    ue_acronym,
-                    score_responsible_list
-                ),
-            }
+    if attributions:
+        learning_unit_codes = {attribution.code for attribution in attributions}
+        score_responsible_list = AssessmentsService.get_score_responsible_list(
+            learning_unit_codes=list(learning_unit_codes),
+            year=year,
+            person=person)
+        learning_units = LearningUnitService.get_learning_units(
+            learning_unit_codes=list(learning_unit_codes),
+            year=year,
+            person=person
         )
-        learning_units_by_person.append({'acronym': ue_acronym, 'learning_unit': learning_unit})
+
+        for learning_unit in learning_units:
+            ue_acronym = learning_unit.get('acronym', '')
+            learning_unit.update(
+                {
+                    'score_responsible': _get_score_responsible(score_responsible_list, ue_acronym),
+                    'effective_class_detail': _get_all_effective_class_repartition(
+                        attributions,
+                        ue_acronym,
+                        score_responsible_list
+                    ),
+                }
+            )
+            learning_units_by_person.append({'acronym': ue_acronym, 'learning_unit': learning_unit})
 
     return learning_units_by_person
 
@@ -231,10 +232,10 @@ def get_learning_units_by_person(global_id: str) -> Dict:
     if a_person:
         current_session_dict = AssessmentsService.get_current_session(a_person)
         tutor = mdl_base.tutor.find_by_person(a_person)
-        if tutor:
+        if tutor and current_session_dict:
             learning_units = __get_learning_unit_year_attributed(
                 a_person,
-                current_session_dict
+                current_session_dict.year
             )
 
     return {
