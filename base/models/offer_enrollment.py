@@ -46,18 +46,3 @@ class OfferEnrollment(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.student, self.education_group_year)
-
-
-def find_by_student(a_student):
-    return OfferEnrollment.objects.filter(student=a_student)
-
-
-def find_by_student_academic_year(a_student, an_academic_year):
-    return OfferEnrollment.objects.filter(
-        student=a_student,
-        education_group_year__academic_year=an_academic_year,
-        enrollment_state__in=[
-            offer_enrollment_state.SUBSCRIBED,
-            offer_enrollment_state.PROVISORY
-        ]
-    )
