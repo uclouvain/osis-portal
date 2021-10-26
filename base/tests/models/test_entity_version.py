@@ -29,10 +29,8 @@ from django.test import TestCase
 
 from base.models import entity_version
 from base.models.enums import entity_type
-from base.models.enums import organization_type
 from base.tests.factories.entity import EntityFactory
 from base.tests.factories.entity_version import EntityVersionFactory
-from base.tests.factories.organization import OrganizationFactory
 
 now = datetime.datetime.now()
 
@@ -40,9 +38,7 @@ now = datetime.datetime.now()
 class EntityVersionTest(TestCase):
 
     def setUp(self):
-
-        organization = OrganizationFactory(type=organization_type.MAIN)
-        self.entities = [EntityFactory( organization=organization) for x in range(2)]
+        self.entities = [EntityFactory() for x in range(2)]
 
         self.entity_c_older_version = EntityVersionFactory(
             entity=self.entities[0],

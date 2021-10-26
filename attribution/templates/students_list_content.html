@@ -115,7 +115,7 @@
             <th>{% ordering _('Prog.') 'program' %}</th>
             <th>{% trans 'Learning unit' %}</th>
             <th><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></th>
-            <th>{% ordering _('Last name') 'student_last_name' %}</th>
+            <th>{% ordering _('Last name') 'student_full_name' %}</th>
             <th>{% ordering _('Registration id') 'student_registration_id' %}</th>
             <th>{% ordering _('Type of specific profile') 'specific_profile' %}</th>
             <th>{% trans 'State' %}</th>
@@ -163,7 +163,7 @@
             {% endfor %}
         {% else %}
             <tr>
-                <td colspan="12" class="text-center">
+                <td colspan="13" class="text-center">
                     {% trans 'No data found' %}
                 </td>
             </tr>

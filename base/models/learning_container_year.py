@@ -30,11 +30,10 @@ from osis_common.models.serializable_model import SerializableModel, Serializabl
 
 
 class LearningContainerYearAdmin(SerializableModelAdmin):
-    list_display = ('learning_container', 'academic_year', 'acronym', 'container_type', 'common_title')
-    fieldsets = ((None, {'fields': ('learning_container', 'academic_year', 'acronym', 'container_type', 'common_title',
+    list_display = ('academic_year', 'acronym', 'container_type', 'common_title')
+    fieldsets = ((None, {'fields': ('academic_year', 'acronym', 'container_type', 'common_title',
                                     'team', 'is_vacant', 'type_declaration_vacant', 'common_title_english')}),)
     search_fields = ['acronym']
-    raw_id_fields = ('learning_container', )
     list_filter = ('academic_year', 'is_vacant',)
 
 
@@ -43,7 +42,6 @@ class LearningContainerYear(SerializableModel):
     changed = models.DateTimeField(null=True, auto_now=True)
     acronym = models.CharField(max_length=10)
     academic_year = models.ForeignKey('AcademicYear', on_delete=models.PROTECT)
-    learning_container = models.ForeignKey('LearningContainer', null=True, on_delete=models.PROTECT)
     container_type = models.CharField(max_length=20, choices=learning_container_type.CONTAINER_TYPE, null=True)
     common_title = models.CharField(max_length=255, blank=True, null=True)
     common_title_english = models.CharField(max_length=250, blank=True, null=True)
@@ -83,20 +81,6 @@ class LearningContainerYear(SerializableModel):
 
     def __str__(self):
         return u"%s - %s" % (self.acronym, self.common_title)
-
-
-def find_by_id(id):
-    try:
-        return LearningContainerYear.objects.get(id=id)
-    except LearningContainerYear.DoesNotExist:
-        return None
-
-
-def find_by_acronym(acronym, academic_year=None):
-    qs = LearningContainerYear.objects.filter(acronym=acronym)
-    if academic_year:
-        qs = qs.filter(academic_year=academic_year)
-    return qs.select_related('academic_year')
 
 
 # TODO :: remove this function and use querysets in Class based views
