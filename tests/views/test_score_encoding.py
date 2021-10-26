@@ -32,7 +32,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from base.tests.factories.user import UserFactory
+from base.tests.factories.person import PersonFactory
 from internship.models.score_encoding_utils import APDS, MIN_APDS, MAX_APDS
 from internship.tests.services.test_api_client import MockAPI
 
@@ -41,7 +41,7 @@ from internship.tests.services.test_api_client import MockAPI
 class TestScoreEncoding(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = UserFactory()
+        cls.user = PersonFactory().user
         cls.api_patcher = mock.patch("internship.services.internship.InternshipAPIClient.__new__", return_value=MockAPI)
 
     def setUp(self):
