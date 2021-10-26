@@ -277,16 +277,12 @@ def get_codes_parameter_list(request, academic_yr, data):
 
 
 def _get_all_effective_class_repartition(attributions: List, ue_acronym: str, score_responsible_list: List) -> List:
-    effective_class_repartition = []
+    classes = [
+        _class for attr in attributions for _class in attr.effective_class_repartition if attr.code == ue_acronym
+    ]
 
-    for attribution in attributions:
-        if attribution.code == ue_acronym:
-            effective_class_repartition.extend(attribution.effective_class_repartition)
-
+    list_of_unique_dicts_effective_class_repartition = {x['code']: x for x in classes}.values()
     effective_class_detail = []
-
-    list_of_unique_dicts_effective_class_repartition = {x['code']: x for x in effective_class_repartition}.values()
-
     for effective_class in list_of_unique_dicts_effective_class_repartition:
         score_responsible = _get_score_responsible(score_responsible_list, effective_class.code)
 

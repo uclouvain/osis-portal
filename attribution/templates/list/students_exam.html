@@ -80,6 +80,7 @@
                                 </thead>
                                 <tbody>
                                 {% for learning_unit_yr in my_learning_units %}
+                                    {% with has_classes=learning_unit_yr.learning_unit.has_classes %}
                                     <tr>
                                         <td>{{ learning_unit_yr.acronym }}</td>
                                         <td>{{ learning_unit_yr.learning_unit.title|default_if_none:"" }}</td>
@@ -88,23 +89,23 @@
                                             <button class="btn-clear {% if learning_unit_yr.learning_unit_has_classes %}btn-disable{% endif %}"
                                                     id="bt_produce_xls_score_encoding_{{ learning_unit_yr.id }}"
                                                     type="button"
-                                                    {% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}>
+                                                    {% if has_classes %} disabled{% endif %}>
                                                 <a href="{% url 'scores_sheet_xls' learning_unit_yr.acronym %}"
-                                                   {% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}
-                                                    class="{% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}"
-                                                    title="{% if learning_unit_yr.learning_unit.has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'Excel File' %}{% endif %}">
-                                                    <i class="fa fa-file-excel-o {% if learning_unit_yr.learning_unit.has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
+                                                   {% if has_classes %} disabled{% endif %}
+                                                    class="{% if has_classes %} disabled{% endif %}"
+                                                    title="{% if has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'Excel File' %}{% endif %}">
+                                                    <i class="fa fa-file-excel-o {% if has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
                                                 </a>
                                             </button>
-                                            <button class="btn-clear {% if learning_unit_yr.learning_unit.has_classes %}btn-disable{% endif %}"
+                                            <button class="btn-clear {% if has_classes %}btn-disable{% endif %}"
                                                     id="bt_produce_pdf_score_encoding_{{ learning_unit_yr.id }}"
                                                     type="button"
-                                                    {% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}>
+                                                    {% if has_classes %} disabled{% endif %}>
                                                 <a href="{% url 'scores_sheet_pdf' learning_unit_yr.acronym %}"
-                                                   {% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}
-                                                   class="{% if learning_unit_yr.learning_unit.has_classes %} disabled{% endif %}"
-                                                   title="{% if learning_unit_yr.learning_unit.has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'PDF File' %}{% endif %}">
-                                                    <i class="fa fa-file-pdf-o {% if learning_unit_yr.learning_unit.has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
+                                                   {% if has_classes %} disabled{% endif %}
+                                                   class="{% if has_classes %} disabled{% endif %}"
+                                                   title="{% if has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'PDF File' %}{% endif %}">
+                                                    <i class="fa fa-file-pdf-o {% if has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
                                                 </a>
                                             </button>
                                         </td>
@@ -139,6 +140,7 @@
                                             {% endwith %}
                                         {% endfor %}
                                     {% endif %}
+                                    {% endwith %}
                                 {% endfor %}
                                 </tbody>
                             </table>

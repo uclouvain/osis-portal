@@ -43,15 +43,15 @@ class AssessmentsService:
 
     @staticmethod
     def get_current_session(person: Person, **kwargs):
-        return get_session(person, "get_current_session")
+        return _score_encoding_api_call(person, "get_current_session")
 
     @staticmethod
     def get_next_session(person: Person, **kwargs):
-        return get_session(person, "get_next_session")
+        return _score_encoding_api_call(person, "get_next_session")
 
     @staticmethod
     def get_previous_session(person: Person, **kwargs):
-        return get_session(person, "get_previous_session")
+        return _score_encoding_api_call(person, "get_previous_session")
 
     @staticmethod
     def get_score_sheet_pdf(learning_unit_code: str, person: Person, **kwargs):
@@ -100,14 +100,14 @@ class AssessmentsService:
                 return {'error_body': e.body, 'error_status': e.status}
 
 
-def get_session(person, method_to_call):
+def _score_encoding_api_call(person: Person, method_to_call: str):
     configuration = assessments_sdk.build_configuration()
     with osis_assessments_sdk.ApiClient(configuration) as api_client:
         api_instance = score_encoding_api.ScoreEncodingApi(api_client)
         try:
             class_method = getattr(api_instance, method_to_call)
-            session = class_method(**build_mandatory_auth_headers(person),)
+            result = class_method(**build_mandatory_auth_headers(person),)
         except (osis_assessments_sdk.ApiException, urllib3.exceptions.HTTPError, Http404,) as e:
-            print('error {}'.format(e))
+            logger.error(e)
             return None
-    return session
+    return result

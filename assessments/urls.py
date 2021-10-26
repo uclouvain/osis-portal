@@ -29,7 +29,7 @@ from .views import score_encoding
 
 urlpatterns = [
     url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
-    url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z-]+)/(?P<year>[0-9]+)/',
+    url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z-]+)/',
         score_encoding.score_sheet_xls,
         name='scores_sheet_xls',
         ),
