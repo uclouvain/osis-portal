@@ -39,5 +39,6 @@ git+https://github.com/uclouvain/osis-education-group-sdk.git@build-1.8.0
 git+https://github.com/uclouvain/osis-reference-sdk.git@build-1.13.0
 git+https://github.com/uclouvain/osis-document.git@dev#egg=osis_document
 git+https://github.com/uclouvain/osis-signature.git@dev#egg=osis_signature
+git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.0.0
 
 -r ./osis_common/requirements.txt
