@@ -33,7 +33,7 @@ from osis_offer_enrollment_sdk.api import enrollment_api
 from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk
+from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk, utils
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -41,13 +41,13 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 class OfferEnrollmentService:
     @staticmethod
     def get_enrollments_list(person: Person, registration_id: str, **kwargs) -> EnrollmentList:
-        configuration = offer_enrollment_sdk.build_configuration(person)
+        configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
             try:
                 enrollments = api_instance.enrollments_list(
                     registration_id=registration_id,
-                    #  FIXME: use mandatory headers !
+                    **utils.build_mandatory_auth_headers(person),
                     **kwargs
                 )
             except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:

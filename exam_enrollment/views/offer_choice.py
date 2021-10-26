@@ -38,6 +38,7 @@ from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 from base.business import student as student_business
 from base.models import academic_year
 from base.models.academic_year import AcademicYear
+from base.models.enums import offer_enrollment_state
 from base.models.student import Student
 from dashboard.views import main as dash_main_view
 from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
@@ -78,7 +79,11 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     def offer_enrollments_list(self) -> List[Enrollment]:
         return OfferEnrollmentService.get_my_enrollments_year_list(
             person=self.student.person,
-            year=self.current_academic_year.year
+            year=self.current_academic_year.year,
+            enrollment_state=[
+                offer_enrollment_state.SUBSCRIBED,
+                offer_enrollment_state.PROVISORY
+            ]
         ).results if self.student else []
 
     @cached_property
