@@ -43,10 +43,10 @@ from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 from base.business import student as student_business
 from base.models.academic_year import current_academic_year
 from base.models.student import Student
+from base.services.offer_enrollment import OfferEnrollmentService
 from base.views import layout
 from dashboard.views import main as dash_main_view
 from exam_enrollment.services.learning_unit_enrollment import LearningUnitEnrollmentService
-from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
 from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request, ask_queue_for_exam_enrollment_form
 from osis_common.queue import queue_sender
 
@@ -79,7 +79,9 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
 
     @cached_property
     def offer_enrollment(self) -> Enrollment:
-        offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(person=self.student.person).results
+        offer_enrollments = OfferEnrollmentService.get_enrollments_list(
+            registration_id=self.student.registration_id, person=self.student.person
+        ).results
         return next(
             (offer_enrollment for offer_enrollment in offer_enrollments
              if offer_enrollment.acronym == self.program_code and offer_enrollment.year == self.year),

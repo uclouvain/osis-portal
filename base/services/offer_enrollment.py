@@ -40,7 +40,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class OfferEnrollmentService:
     @staticmethod
-    def get_enrollments_list(person: Person, registration_id: str, **kwargs) -> EnrollmentList:
+    def get_enrollments_list(registration_id: str, person: Person, **kwargs) -> EnrollmentList:
         configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
@@ -53,8 +53,9 @@ class OfferEnrollmentService:
             except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
-                enrollments = SimpleNamespace(
-                    results=[],
-                    count=0
-                )
+                enrollments = SimpleNamespace(**{'results': [], 'count': 0})
         return enrollments
+
+    @classmethod
+    def get_enrollments_year_list(cls, registration_id: str, person: Person, year: int, **kwargs) -> EnrollmentList:
+        return cls.get_enrollments_list(registration_id=registration_id, person=person, year=year, **kwargs)

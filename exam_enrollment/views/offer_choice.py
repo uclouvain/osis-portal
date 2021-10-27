@@ -40,8 +40,8 @@ from base.models import academic_year
 from base.models.academic_year import AcademicYear
 from base.models.enums import offer_enrollment_state
 from base.models.student import Student
+from base.services.offer_enrollment import OfferEnrollmentService
 from dashboard.views import main as dash_main_view
-from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
 
 
 class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -77,7 +77,8 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     @cached_property
     def offer_enrollments_list(self) -> List[Enrollment]:
-        return OfferEnrollmentService.get_my_enrollments_year_list(
+        return OfferEnrollmentService.get_enrollments_year_list(
+            registration_id=self.student.registration_id,
             person=self.student.person,
             year=self.current_academic_year.year,
             enrollment_state=[

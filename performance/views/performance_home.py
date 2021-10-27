@@ -36,9 +36,9 @@ from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 from base.business import student as student_business
 from base.models import student as student_model
 from base.models.student import Student
+from base.services.offer_enrollment import OfferEnrollmentService
 from base.views import common
 from dashboard.views import main as dash_main_view
-from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
 from performance.models.student_performance import StudentPerformance
@@ -56,8 +56,10 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
 
     @cached_property
     def offer_enrollments_list(self) -> List[SimpleNamespace]:
-        offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(self.student.person).results \
-            if self.student else []
+        offer_enrollments = OfferEnrollmentService.get_enrollments_list(
+            registration_id=self.student.registration_id,
+            person=self.student.person
+        ).results if self.student else []
         allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
         offer_enrollments_to_display = []
         for offer_enrollment in offer_enrollments:
