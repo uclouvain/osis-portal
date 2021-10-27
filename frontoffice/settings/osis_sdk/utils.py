@@ -70,7 +70,7 @@ def build_mandatory_auth_headers(person):
         'accept_language': person.language or settings.LANGUAGE_CODE,
         'x_user_first_name': person.first_name or '',
         'x_user_last_name':  person.last_name or '',
-        'x_user_email': person.email or '',
+        'x_user_email': person.user.email or '',
         'x_user_global_id': person.global_id,
     }
 
