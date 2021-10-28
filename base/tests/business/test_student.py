@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from types import SimpleNamespace
 
 import mock
 from django.contrib.auth.models import Group
@@ -31,10 +32,12 @@ from django.test import TestCase
 
 from base.business import student as student_bsn
 from base.models.student import Student
+from base.services.offer_enrollment import OfferEnrollmentBusinessException
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from base.tests.factories.user import UserFactory
+from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException, ApiBusinessException
 
 
 class TestPersonIsStudent(TestCase):
@@ -67,12 +70,19 @@ class TestFindAndDiscriminate(TestCase):
         self.current_academic_year = AcademicYearFactory(current=True)
         self.client.force_login(self.person.user)
 
-        self.students_by_year = {
-            self.current_academic_year.year: {self.student}
-        }
+        self.offer_enrollment = SimpleNamespace(
+            results=SimpleNamespace(**{
+                'acronym': "DROI1BA",
+                'title': "TITLE",
+                'year': self.current_academic_year.year,
+                'student_registration_id': self.student.registration_id
+            }),
+            count=1
+        )
+
         self.student_enrolls_patcher = mock.patch(
-            "base.business.student._get_student_offer_enrollments",
-            return_value=self.students_by_year
+            "base.services.offer_enrollment.OfferEnrollmentService.get_enrollments_list",
+            return_value=self.offer_enrollment
         )
         self.mocked_enrolls_list = self.student_enrolls_patcher.start()
         self.addCleanup(self.student_enrolls_patcher.stop)
@@ -85,34 +95,19 @@ class TestFindAndDiscriminate(TestCase):
         PersonFactory(user=another_user)
         self.assertIsNone(student_bsn.find_by_user_and_discriminate(another_user))
 
-    def test_last_offer_enrollment_valid(self):
-        current_student = StudentFactory(person=self.person)
-        self.mocked_enrolls_list.return_value = {
-            self.current_academic_year.year: {current_student},
-            self.current_academic_year.year - 1: {self.student}
-        }
-        self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
-        self.assertEqual(current_student, student_bsn.find_by_user_and_discriminate(self.user))
-
     def test_no_offer_enrollment_valid(self):
         StudentFactory(person=self.person)
-        self.mocked_enrolls_list.return_value = {}
+        self.mocked_enrolls_list.return_value = SimpleNamespace(
+            results=[],
+            count=0
+        )
         self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
         self.assertIsNone(student_bsn.find_by_user_and_discriminate(self.user))
 
     def test_cannot_discriminate(self):
-        current_student = StudentFactory(person=self.person)
-        self.mocked_enrolls_list.return_value = {
-            self.current_academic_year.year: {current_student, self.student},
-        }
-        self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
+        StudentFactory(person=self.person)
+        self.mocked_enrolls_list.side_effect = MultipleApiBusinessException(
+            exceptions={
+                ApiBusinessException(status_code=OfferEnrollmentBusinessException.DoubleNOMA.value, detail=''), }
+        )
         self.assertRaises(MultipleObjectsReturned, student_bsn.find_by_user_and_discriminate, self.user)
-
-    def test_several_valid_enrollment_same_student(self):
-        previous_student = StudentFactory(person=self.person)
-        self.mocked_enrolls_list.return_value = {
-            self.current_academic_year.year: {self.student},
-            self.current_academic_year.year - 1: {previous_student, self.student}
-        }
-        self.assertTrue(Student.objects.filter(person=self.person).count() > 1)
-        self.assertEqual(self.student, student_bsn.find_by_user_and_discriminate(self.user))

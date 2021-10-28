@@ -94,6 +94,7 @@ class ExamEnrollmentFormTest(TestCase):
             'acronym': self.program_code,
             'title': "TITLE",
             'year': self.academic_year.year,
+            'student_registration_id': self.student.registration_id
         })
 
         self.offer_enrollment_patcher = mock.patch(

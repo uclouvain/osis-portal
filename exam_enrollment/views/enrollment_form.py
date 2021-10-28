@@ -32,7 +32,6 @@ import pika
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -40,14 +39,15 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
-from base.business import student as student_business
 from base.models.academic_year import current_academic_year
+from base.models.person import Person
 from base.models.student import Student
-from base.services.offer_enrollment import OfferEnrollmentService
+from base.services.offer_enrollment import OfferEnrollmentService, OfferEnrollmentBusinessException
 from base.views import layout
 from dashboard.views import main as dash_main_view
 from exam_enrollment.services.learning_unit_enrollment import LearningUnitEnrollmentService
 from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request, ask_queue_for_exam_enrollment_form
+from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException
 from osis_common.queue import queue_sender
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -71,20 +71,31 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         return int(self.kwargs['academic_year'])
 
     @cached_property
+    def person(self) -> Person:
+        return Person.objects.get(user=self.request.user)
+
+    @cached_property
     def student(self) -> Student:
+        if self.offer_enrollment:
+            registration_id = self.offer_enrollment.student_registration_id
+            return Student.objects.get(registration_id=registration_id)
+
+    def dispatch(self, request, *args, **kwargs):
         try:
-            return student_business.find_by_user_and_discriminate(self.request.user)
-        except MultipleObjectsReturned:
-            return dash_main_view.show_multiple_registration_id_error(self.request)
+            return super().dispatch(request, *args, **kwargs)
+        except MultipleApiBusinessException as e:
+            for exception in e.exceptions:
+                if exception.status_code == OfferEnrollmentBusinessException.DoubleNOMA.value:
+                    return dash_main_view.show_multiple_registration_id_error(self.request)
 
     @cached_property
     def offer_enrollment(self) -> Enrollment:
-        offer_enrollments = OfferEnrollmentService.get_enrollments_list(
-            registration_id=self.student.registration_id, person=self.student.person
+        offer_enrollments = OfferEnrollmentService.get_my_enrollments_year_list(
+            person=self.person, year=self.year
         ).results
         return next(
             (offer_enrollment for offer_enrollment in offer_enrollments
-             if offer_enrollment.acronym == self.program_code and offer_enrollment.year == self.year),
+             if offer_enrollment.acronym == self.program_code),
             None
         )
 
@@ -149,7 +160,7 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         return LearningUnitEnrollmentService.get_my_enrollments_list(
             program_code=self.program_code,
             year=self.year,
-            person=self.student.person
+            person=self.person
         ).results
 
     def _get_context(self, data: Dict) -> Dict:

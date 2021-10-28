@@ -24,38 +24,57 @@
 #
 ##############################################################################
 import logging
-from types import SimpleNamespace
+from enum import Enum
 
 import osis_offer_enrollment_sdk
-import urllib3
 from django.conf import settings
+from osis_offer_enrollment_sdk import ApiException
 from osis_offer_enrollment_sdk.api import enrollment_api
 from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk, utils
+from frontoffice.settings.osis_sdk.utils import api_exception_handler
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class OfferEnrollmentService:
     @staticmethod
-    def get_enrollments_list(registration_id: str, person: Person, **kwargs) -> EnrollmentList:
+    @api_exception_handler(api_exception_cls=ApiException)
+    def get_enrollments_list(global_id: str, person: Person, **kwargs) -> EnrollmentList:
         configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
-            try:
-                enrollments = api_instance.enrollments_list(
-                    registration_id=registration_id,
-                    **utils.build_mandatory_auth_headers(person),
-                    **kwargs
-                )
-            except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
-                # Run in degraded mode in order to prevent crash all app
-                logger.error(e)
-                enrollments = SimpleNamespace(**{'results': [], 'count': 0})
+            enrollments = api_instance.enrollments_list(
+                global_id=global_id,
+                **utils.build_mandatory_auth_headers(person),
+                **kwargs
+            )
         return enrollments
 
     @classmethod
-    def get_enrollments_year_list(cls, registration_id: str, person: Person, year: int, **kwargs) -> EnrollmentList:
-        return cls.get_enrollments_list(registration_id=registration_id, person=person, year=year, **kwargs)
+    @api_exception_handler(api_exception_cls=ApiException)
+    def get_enrollments_year_list(cls, global_id: str, person: Person, year: int, **kwargs) -> EnrollmentList:
+        return cls.get_enrollments_list(global_id=global_id, person=person, year=year, **kwargs)
+
+    @staticmethod
+    @api_exception_handler(api_exception_cls=ApiException)
+    def get_my_enrollments_list(person: Person, **kwargs) -> EnrollmentList:
+        configuration = offer_enrollment_sdk.build_configuration()
+        with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
+            api_instance = enrollment_api.EnrollmentApi(api_client)
+            enrollments = api_instance.my_enrollments_list(
+                **utils.build_mandatory_auth_headers(person),
+                **kwargs
+            )
+        return enrollments
+
+    @classmethod
+    @api_exception_handler(api_exception_cls=ApiException)
+    def get_my_enrollments_year_list(cls, person: Person, year: int, **kwargs) -> EnrollmentList:
+        return cls.get_my_enrollments_list(person=person, year=year, **kwargs)
+
+
+class OfferEnrollmentBusinessException(Enum):
+    DoubleNOMA = "OFFER_ENROLLMENT-1"

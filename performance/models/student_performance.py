@@ -60,7 +60,7 @@ class StudentPerformance(models.Model):
 
     offer_registration_state = models.CharField(
         max_length=50,
-        choices=offer_registration_state.OFFER_REGISTRAION_STATES,
+        choices=offer_registration_state.OFFER_REGISTRATION_STATES,
         null=True
     )
 
