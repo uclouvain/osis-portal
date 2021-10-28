@@ -23,15 +23,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import functools
 import logging
-import operator
 import urllib
 from typing import List, Dict
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import Q
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
@@ -56,19 +54,20 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 def students_list(request):
     current_session_dict = AssessmentsService.get_current_session(request.user.person)
     if current_session_dict:
-        data = get_learning_units(request.user, current_session_dict)
+        data = get_learning_units(request, current_session_dict)
     else:
         data = _get_warning_concerning_sessions(request.user.person)
     return render(request, "list/students_exam.html", data)
 
 
-def get_learning_units(a_user, current_session_dict: Dict):
+def get_learning_units(request, current_session_dict: Dict):
+    a_user = request.user
     a_person = mdl_base.person.find_by_user(a_user)
     learning_units = []
     if a_person:
         tutor = mdl_base.tutor.find_by_person(a_person)
         if tutor:
-            learning_units = __get_learning_unit_year_attributed(a_person, current_session_dict.year)
+            learning_units = __get_learning_unit_year_attributed(request, a_person, current_session_dict.year)
     return {
         'person': a_person,
         'my_learning_units': learning_units,
@@ -76,7 +75,7 @@ def get_learning_units(a_user, current_session_dict: Dict):
     }
 
 
-def __get_learning_unit_year_attributed(person: Person, year: int) -> List[Dict]:
+def __get_learning_unit_year_attributed(request, person: Person, year: int) -> List[Dict]:
     learning_units_by_person = []
     attributions = AttributionService.get_attributions_list(
         year, person,
@@ -94,20 +93,26 @@ def __get_learning_unit_year_attributed(person: Person, year: int) -> List[Dict]
             person=person
         )
 
-        for learning_unit in learning_units:
-            ue_acronym = learning_unit.get('acronym', '')
-            learning_unit.update(
-                {
-                    'score_responsible': _get_score_responsible(score_responsible_list, ue_acronym),
-                    'effective_class_detail': _get_all_effective_class_repartition(
-                        attributions,
-                        ue_acronym,
-                        score_responsible_list
-                    ),
-                }
+        if isinstance(learning_units, List):
+            for learning_unit in learning_units:
+                ue_acronym = learning_unit.get('acronym', '')
+                learning_unit.update(
+                    {
+                        'score_responsible': _get_score_responsible(score_responsible_list, ue_acronym),
+                        'effective_class_detail': _get_all_effective_class_repartition(
+                            attributions,
+                            ue_acronym,
+                            score_responsible_list
+                        ),
+                    }
+                )
+                learning_units_by_person.append({'acronym': ue_acronym, 'learning_unit': learning_unit})
+        else:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                learning_units.error if learning_units.error else _('Unexpected error')
             )
-            learning_units_by_person.append({'acronym': ue_acronym, 'learning_unit': learning_unit})
-
     return learning_units_by_person
 
 
@@ -115,7 +120,7 @@ def get_codes_parameter(request, academic_yr):
     learning_unit_years = None
     current_session_dict = AssessmentsService.get_current_session(request.user.person)
     learning_unit_acronyms = _get_learning_unit_acronyms(
-        get_learning_units(request.user, current_session_dict).get('my_learning_units', []))
+        get_learning_units(request, current_session_dict).get('my_learning_units', []))
 
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
@@ -170,7 +175,7 @@ def list_build(request):
         return _make_xls_list(list_exam_enrollments_xls)
     else:
         current_session_dict = AssessmentsService.get_current_session(request.user.person)
-        data = get_learning_units(request.user, current_session_dict)
+        data = get_learning_units(request, current_session_dict)
         data.update({'msg_error': _('No data found')})
         return render(request, "list/students_exam.html", data)
 
@@ -218,14 +223,14 @@ def lists_of_students_exams_enrollments(request):
         form = GlobalIdForm(request.POST)
         if form.is_valid():
             global_id = form.cleaned_data['global_id']
-            data = get_learning_units_by_person(global_id)
+            data = get_learning_units_by_person(request, global_id)
             return render(request, "admin/students_exam_list.html", data)
     else:
         form = GlobalIdForm()
     return layout.render(request, "admin/students_list.html", {"form": form})
 
 
-def get_learning_units_by_person(global_id: str) -> Dict:
+def get_learning_units_by_person(request, global_id: str) -> Dict:
     a_person = mdl_base.person.find_by_global_id(global_id)
     learning_units = []
     current_session_dict = {}
@@ -234,6 +239,7 @@ def get_learning_units_by_person(global_id: str) -> Dict:
         tutor = mdl_base.tutor.find_by_person(a_person)
         if tutor and current_session_dict:
             learning_units = __get_learning_unit_year_attributed(
+                request,
                 a_person,
                 current_session_dict.year
             )
@@ -252,7 +258,7 @@ def list_build_by_person(request, global_id: str):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
     person = mdl_base.person.find_by_global_id(global_id)
-    data = get_learning_units_by_person(person.global_id)
+    data = get_learning_units_by_person(request, person.global_id)
     codes = get_codes_parameter_list(request, current_academic_year, data)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
     if list_exam_enrollments_xls:

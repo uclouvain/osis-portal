@@ -33,8 +33,7 @@ from django.conf import settings
 from osis_learning_unit_sdk.api import learning_units_api
 
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk
-from frontoffice.settings.osis_sdk import attribution as attribution_sdk, utils
+from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk, utils
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -56,6 +55,6 @@ class LearningUnitService:
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
-                attrs = {'result': None}
+                attrs = {'result': None, 'error': e}
                 learning_units = SimpleNamespace(**attrs, attribute_map=attrs)
         return learning_units
