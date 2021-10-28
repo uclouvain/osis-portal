@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-13 09:34+0200\n"
+"POT-Creation-Date: 2021-10-25 13:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,21 @@ msgstr ""
 msgid " in the column \"Students\""
 msgstr ""
 
+msgid ""
+"'Lists of students enrolled to my exams' are immediately usable for encoding "
+"scores."
+msgstr ""
+
 msgid "Acronym"
 msgstr ""
 
 msgctxt "plural"
 msgid "All"
+msgstr ""
+
+msgid ""
+"All tutors can encode scores but only the scores responsible can submit. If "
+"the scores responsible is not correct, please contact your faculty."
 msgstr ""
 
 msgid "An email with your applications have been sent"
@@ -107,6 +117,9 @@ msgstr ""
 msgid "Display teachers"
 msgstr ""
 
+msgid "Download the list (Excel or PDF)"
+msgstr ""
+
 msgid "ES"
 msgstr ""
 
@@ -126,6 +139,9 @@ msgstr ""
 #| msgid "Registration id"
 msgid "Exam registration state"
 msgstr "Registration id"
+
+msgid "Excel File"
+msgstr ""
 
 msgid "Export list (Excel)"
 msgstr ""
@@ -239,6 +255,9 @@ msgstr ""
 msgid "My teaching charge"
 msgstr ""
 
+msgid "NEW"
+msgstr ""
+
 msgid "New application"
 msgstr ""
 
@@ -270,6 +289,9 @@ msgid "P - Examen partiel"
 msgstr ""
 
 msgid "P - Partial examination"
+msgstr ""
+
+msgid "PDF File"
 msgstr ""
 
 msgid "PEPS"
@@ -332,7 +354,7 @@ msgstr ""
 msgid "Schedule unavailable"
 msgstr ""
 
-msgid "Scores encoding"
+msgid "Scores responsible"
 msgstr ""
 
 msgid "Select/deselect all attributions to renew"
@@ -342,6 +364,9 @@ msgid "Sept."
 msgstr ""
 
 msgid "September"
+msgstr ""
+
+msgid "Session of"
 msgstr ""
 
 msgid ""
@@ -385,7 +410,7 @@ msgstr ""
 msgid "Teaching charges administration"
 msgstr ""
 
-msgid "The Excel lists for encoding scores are available in"
+msgid "The lists of students enrolled to courses are available in "
 msgstr ""
 
 #, python-format
@@ -401,6 +426,19 @@ msgid ""
 msgstr ""
 
 msgid "The period of online application is closed"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of scores' encoding for %(month_session)s session is closed since "
+"%(str_date)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of scores' encoding for %(month_session)s session will be open "
+"%(str_date)s. The 'Lists of students enrolled to my exams' will be available "
+"at that date"
 msgstr ""
 
 msgid "This action will delete the application."
@@ -423,6 +461,10 @@ msgid ""
 "that you can be assigned to the classes you teach."
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
+msgctxt "score sheet export"
 msgid "Title"
 msgstr ""
 
@@ -486,9 +528,6 @@ msgstr ""
 msgid "W - Unsatisfactory assessment (mark does not count)"
 msgstr ""
 
-msgid "Warning, this is not a list for encoding scores."
-msgstr ""
-
 msgid "Y - Deuxième inscription"
 msgstr ""
 
@@ -500,6 +539,9 @@ msgstr ""
 
 msgid "You aren't teaching for any learning unit"
 msgstr ""
+
+msgid "date_format"
+msgstr "%d %b %Y"
 
 msgid "student(s)"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:52+0200\n"
+"POT-Creation-Date: 2021-10-25 11:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,20 +17,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Ask scores sheets"
-msgstr "Demander les feuilles de notes"
-
-msgid "Download"
-msgstr "Télécharger"
-
 msgid "Download my PDF scores sheets for paper encoding."
 msgstr "Télécharger mes feuilles de notes PDF pour l'encodage papier."
-
-msgid "Faculty administration"
-msgstr "Faculté d'administration"
-
-msgid "Global id"
-msgstr "Id global"
 
 msgid "My scores sheets"
 msgstr "Mes feuilles de notes"
@@ -41,29 +29,14 @@ msgstr "Encodage de notes en ligne"
 msgid "Scores Encoding"
 msgstr "Encodage de Notes"
 
-msgid "Scores sheet"
-msgstr "Feuille de notes"
-
-msgid "Scores sheets"
-msgstr "Feuilles de notes"
-
-msgid "Scores sheets administration"
-msgstr "Feuilles de notes administratives"
-
-msgid "Scores sheets are loading."
-msgstr "Feuilles de notes en cours de chargement."
-
-msgid "Scores sheets are not available for now."
-msgstr "Feuilles de notes indisponibles pour le moment."
-
-msgid "Scores sheets are ready!"
-msgstr "Feuilles de notes prêtes!"
-
 msgid "This requires a "
 msgstr "Ceci nécessite un "
 
 msgid "This requires a VPN access outside UCLouvain."
 msgstr "Ceci nécessite un accès VPN en dehors de l'UCLouvain."
+
+msgid "Unexpected error"
+msgstr "Erreur innatendue"
 
 msgid "VPN access"
 msgstr "Accès VPN"
