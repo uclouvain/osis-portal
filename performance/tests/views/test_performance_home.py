@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
 from types import SimpleNamespace
 
 import mock
@@ -47,27 +48,16 @@ class ViewPerformanceHomeStudentTest(TestCase):
         students_group.permissions.add(permission)
 
         cls.student = StudentFactory()
-
         cls.url = reverse('performance_home')
 
     def setUp(self):
         self.client.force_login(self.student.person.user)
-        # Mock the OSIS Remote API Call
-        self.offer_enrollment_row = SimpleNamespace(**{
-            'acronym': 'FSA1BA',
-            'year': 2021,
-            'title': "Bachelier en sciences de l'ingénieur",
-            'pk': 123456,
-            'offer_registration_state': offer_registration_state.REGISTERED,
-        })
-        self.enrollments_list_patcher = mock.patch(
-            "performance.views.performance_home.PerformanceHomeMixin.offer_enrollments_list",
-            new_callable=mock.PropertyMock,
-            return_value=[self.offer_enrollment_row]
+        self.student_performance = StudentPerformanceFactory(
+            registration_id=self.student.registration_id,
+            academic_year=2021
         )
-        self.mocked_attributions_list = self.enrollments_list_patcher.start()
-        self.addCleanup(self.enrollments_list_patcher.stop)
 
+        # Mock the OSIS Remote API Call
         self.discriminate_user_patcher = mock.patch(
             "base.business.student.find_by_user_and_discriminate",
         )
@@ -109,7 +99,16 @@ class ViewPerformanceHomeStudentTest(TestCase):
         self.assertEqual(response.status_code, OK)
 
         self.assertEqual(response.context['student'], self.student)
-        self.assertEqual(response.context['programs'], [self.offer_enrollment_row])
+        expected_row = {
+            'academic_year': self.student_performance.academic_year_template_formated,
+            'acronym': self.student_performance.acronym,
+            'title': json.loads(
+                json.dumps(self.student_performance.data)
+            )["monAnnee"]["monOffre"]["offre"]["intituleComplet"],
+            'pk': self.student_performance.pk,
+            'offer_registration_state': self.student_performance.offer_registration_state
+        }
+        self.assertEqual(response.context['programs'], [expected_row])
         self.assertEqual(
             response.context['registration_states_to_show'],
             offer_registration_state.STATES_TO_SHOW_ON_PAGE
@@ -149,13 +148,6 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
             'pk': 123456,
             'offer_registration_state': offer_registration_state.REGISTERED,
         })
-        self.enrollments_list_patcher = mock.patch(
-            "performance.views.performance_home.PerformanceHomeMixin.offer_enrollments_list",
-            new_callable=mock.PropertyMock,
-            return_value=[self.offer_enrollment_row]
-        )
-        self.mocked_attributions_list = self.enrollments_list_patcher.start()
-        self.addCleanup(self.enrollments_list_patcher.stop)
 
     def test_user_not_logged(self):
         self.client.logout()
@@ -192,7 +184,6 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
 
     def test_when_empty_programs_list(self):
         self.student_performance.delete()
-        self.mocked_attributions_list.return_value = []
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, OK)
@@ -212,7 +203,16 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
         self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
 
         self.assertEqual(response.context['student'], self.student)
-        self.assertEqual(response.context['programs'], [self.offer_enrollment_row])
+        expected_row = {
+            'academic_year': self.student_performance.academic_year_template_formated,
+            'acronym': self.student_performance.acronym,
+            'title': json.loads(
+                json.dumps(self.student_performance.data)
+            )["monAnnee"]["monOffre"]["offre"]["intituleComplet"],
+            'pk': self.student_performance.pk,
+            'offer_registration_state': self.student_performance.offer_registration_state
+        }
+        self.assertEqual(response.context['programs'], [expected_row])
         self.assertEqual(
             response.context['registration_states_to_show'],
             offer_registration_state.STATES_TO_SHOW_ON_PAGE
