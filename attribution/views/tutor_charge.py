@@ -45,6 +45,7 @@ from base.models.enums.learning_container_type import COURSE, INTERNSHIP, DISSER
 from base.models.person import Person
 from base.utils import string_utils
 from base.views import layout
+from learning_unit.services.learning_unit import LearningUnitService
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
 MAIL_TO = 'mailto:'
@@ -60,6 +61,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
     show_volumes_types = [COURSE, INTERNSHIP, DISSERTATION]
 
     def get_context_data(self, **kwargs):
+        self.map_attributions_with_learning_units()
         return {
             **super().get_context_data(**kwargs),
             'display_years_tab': self.get_display_years_tab(),
@@ -100,6 +102,14 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
     def attributions(self) -> List[SimpleNamespace]:
         attributions = AttributionService.get_attributions_list(self.get_current_year_displayed(), self.person, True)
         return [self._format_attribution_row(attribution) for attribution in attributions]
+
+    @cached_property
+    def learning_units(self) -> List[SimpleNamespace]:
+        return LearningUnitService.get_learning_units(
+            learning_unit_codes=[attr.code for attr in self.attributions],
+            year=self.get_current_year_displayed(),
+            person=self.person
+        )
 
     def get_total_lecturing_charge(self) -> float:
         return sum(
@@ -155,6 +165,11 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
         return reverse('student_enrollments_by_learning_unit', kwargs={
             'learning_unit_acronym': code, 'learning_unit_year': year
         })
+
+    def map_attributions_with_learning_units(self):
+        for attribution in self.attributions:
+            learning_unit = next((lu for lu in self.learning_units if attribution.code == lu['acronym']), None)
+            attribution.has_classes = learning_unit['has_classes']
 
 
 class AdminTutorChargeView(TutorChargeView):
