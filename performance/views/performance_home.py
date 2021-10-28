@@ -39,6 +39,7 @@ from base.views import common
 from dashboard.views import main as dash_main_view
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
+from performance.models.enums.offer_registration_state import OFFER_REGISTRATION_STATES
 from performance.models.student_performance import StudentPerformance
 from performance.views.main import _can_access_performance_administration
 
@@ -64,7 +65,7 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
         performance_results_list = []
         for row in query_result:
             performance_dict = self.convert_student_performance_to_dict(row)
-            allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
+            allowed_registration_states = [value for key, value in OFFER_REGISTRATION_STATES]
             if performance_dict and performance_dict.get("offer_registration_state") in allowed_registration_states:
                 performance_results_list.append(performance_dict)
         return performance_results_list
