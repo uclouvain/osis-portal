@@ -23,26 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from types import SimpleNamespace
-from typing import List
+import json
+from typing import List, Dict, Optional
 
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpRequest
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
-from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
 from base.business import student as student_business
 from base.models import student as student_model
 from base.models.student import Student
 from base.views import common
 from dashboard.views import main as dash_main_view
-from exam_enrollment.services.offer_enrollment import OfferEnrollmentService
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
+from performance.models.enums.offer_registration_state import OFFER_REGISTRATION_STATES
 from performance.models.student_performance import StudentPerformance
 from performance.views.main import _can_access_performance_administration
+
+StudentPerformanceDict = Dict[str, str]
 
 
 class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
@@ -50,45 +51,41 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
         return {
             **super().get_context_data(**kwargs),
             "student": self.student,
-            "programs": self.offer_enrollments_list,
+            "programs": self.student_programs if self.student else [],
             "registration_states_to_show": offer_registration_state.STATES_TO_SHOW_ON_PAGE
         }
 
     @cached_property
-    def offer_enrollments_list(self) -> List[SimpleNamespace]:
-        offer_enrollments = OfferEnrollmentService.get_my_enrollments_list(self.student.person).results \
-            if self.student else []
-        allowed_registration_states = [value for key, value in offer_registration_state.OFFER_REGISTRAION_STATES]
-        offer_enrollments_to_display = []
-        for offer_enrollment in offer_enrollments:
-            student_performance = self._get_correspondant_student_performance(offer_enrollment)
-            registration_state = student_performance and student_performance.offer_registration_state
-            if registration_state in allowed_registration_states:
-                offer_enrollments_to_display.append(
-                    SimpleNamespace(
-                        **offer_enrollment.to_dict(),
-                        offer_registration_state=registration_state,
-                        pk=student_performance.pk
-                    )
-                )
-        return offer_enrollments_to_display
+    def student_programs(self) -> List[StudentPerformanceDict]:
+        query_result = mdl_performance.student_performance.search(registration_id=self.student.registration_id)
+        list_student_programs = self.query_result_to_list(query_result)
+        return list_student_programs
 
-    def _get_correspondant_student_performance(self, offer_enrollment: Enrollment) -> StudentPerformance:
-        return next(
-            (student_performance
-             for student_performance in self.student_performances
-             if student_performance.acronym == offer_enrollment.acronym
-             and student_performance.academic_year == offer_enrollment.year),
-            None
-        )
+    def query_result_to_list(self, query_result: List[StudentPerformance]) -> List[StudentPerformanceDict]:
+        performance_results_list = []
+        for row in query_result:
+            performance_dict = self.convert_student_performance_to_dict(row)
+            allowed_registration_states = [value for key, value in OFFER_REGISTRATION_STATES]
+            if performance_dict and performance_dict.get("offer_registration_state") in allowed_registration_states:
+                performance_results_list.append(performance_dict)
+        return performance_results_list
 
-    @cached_property
-    def student_performances(self) -> List[StudentPerformance]:
-        if self.student:
-            return StudentPerformance.objects.filter(
-                registration_id=self.student.registration_id
-            ).only('academic_year', "acronym", "offer_registration_state", "pk")
-        return []
+    @staticmethod
+    def convert_student_performance_to_dict(
+            student_performance_obj: StudentPerformance
+    ) -> Optional[StudentPerformanceDict]:
+        try:
+            return {
+                'academic_year': student_performance_obj.academic_year_template_formated,
+                'acronym': student_performance_obj.acronym,
+                'title': json.loads(
+                    json.dumps(student_performance_obj.data)
+                )["monAnnee"]["monOffre"]["offre"]["intituleComplet"],
+                'pk': student_performance_obj.pk,
+                'offer_registration_state': student_performance_obj.offer_registration_state
+            }
+        except Exception:
+            return None
 
     def dispatch(self, request, *args, **kwargs):
         try:
