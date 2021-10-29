@@ -47,7 +47,7 @@ class LearningUnitService:
             api_instance = learning_units_api.LearningUnitsApi(api_client)
             try:
                 learning_units = api_instance.learningunits_list(
-                    learning_unit_codes=','.join([str(elem) for elem in learning_unit_codes]),
+                    learning_unit_codes=','.join({str(elem) for elem in learning_unit_codes}),
                     year=year,
                     ** utils.build_mandatory_auth_headers(person),
                 )

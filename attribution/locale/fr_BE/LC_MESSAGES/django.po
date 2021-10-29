@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-25 13:24+0200\n"
+"POT-Creation-Date: 2021-10-29 09:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,14 +79,8 @@ msgstr ""
 "Choisissez dans vos cours ceux que vous voulez considérer dans la liste "
 "produite"
 
-msgid "Co-holder"
-msgstr "Co-titulaire"
-
 msgid "Code"
 msgstr "Sigle"
-
-msgid "Coordinator"
-msgstr "Coordinateur(trice)"
 
 msgid "Credits"
 msgstr "Crédits"
@@ -99,21 +93,6 @@ msgstr "Supprimer"
 
 msgid "Delete the application"
 msgstr "Supprimer la candidature"
-
-msgid "Deputy"
-msgstr "Suppléant"
-
-msgid "Deputy authority"
-msgstr "Suppléant d'autorité"
-
-msgid "Deputy disease or maternity"
-msgstr "Suppléant maladie/maternité"
-
-msgid "Deputy sabbatical"
-msgstr "Suppléant sabbatique"
-
-msgid "Deputy temporary"
-msgstr "Suppléant temporaire"
 
 msgid "Details other educational facilities"
 msgstr "Détails autre aménagement"
@@ -173,25 +152,16 @@ msgid "Global id"
 msgstr "Matricule fgs"
 
 msgid "Guide"
-msgstr "Guide"
+msgstr "Accompagnateur"
 
 msgid "High Level Promising athlete"
 msgstr "Sportifs de haut niveau"
-
-msgid "Holder"
-msgstr "Titulaire"
 
 msgid "I - First registration"
 msgstr "I - Première inscription"
 
 msgid "I - Première inscription"
 msgstr "I - Première inscription"
-
-msgid "Internship co-supervisor"
-msgstr "Co-directeur de stage"
-
-msgid "Internship supervisor"
-msgstr "Directeur de stage"
 
 msgid "J - Carry-over from January to September"
 msgstr "J - Report de note de janvier vers septembre"
@@ -321,9 +291,6 @@ msgstr ""
 msgid "Produce xls"
 msgstr "Produire xls"
 
-msgid "Professor"
-msgstr "Professeur"
-
 msgid "Prog."
 msgstr "Form."
 
@@ -449,13 +416,15 @@ msgstr ""
 "La période d'encodage des notes de la session de %(month_session)s est "
 "fermée depuis le %(str_date)s"
 
+#, python-format
 msgid ""
 "The period of scores' encoding for %(month_session)s session will be open "
 "%(str_date)s. The 'Lists of students enrolled to my exams' will be available "
 "at that date"
 msgstr ""
 "La période d'encodage des notes de la session de %(month_session)s sera "
-"ouverte le %(str_date)s. Les 'Listes des étudiants inscrits à mes examens' seront disponibles à cette date"
+"ouverte le %(str_date)s. Les 'Listes des étudiants inscrits à mes examens' "
+"seront disponibles à cette date"
 
 msgid "This action will delete the application."
 msgstr "Cette action supprimera la candidature."
@@ -515,6 +484,9 @@ msgstr "Total"
 
 msgid "Type of specific profile"
 msgstr "Type PEPS"
+
+msgid "Unexpected error"
+msgstr "Erreur inattendue"
 
 msgid "V - Evaluation satisfaisante (la note ne compte pas)"
 msgstr "V - Evaluation satisfaisante (la note ne compte pas)"
