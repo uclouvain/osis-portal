@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-25 13:24+0200\n"
+"POT-Creation-Date: 2021-10-29 09:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,13 +72,7 @@ msgstr ""
 msgid "Choose the learning units you want to consider in the list"
 msgstr ""
 
-msgid "Co-holder"
-msgstr ""
-
 msgid "Code"
-msgstr ""
-
-msgid "Coordinator"
 msgstr ""
 
 msgid "Credits"
@@ -91,21 +85,6 @@ msgid "Delete"
 msgstr ""
 
 msgid "Delete the application"
-msgstr ""
-
-msgid "Deputy"
-msgstr ""
-
-msgid "Deputy authority"
-msgstr ""
-
-msgid "Deputy disease or maternity"
-msgstr ""
-
-msgid "Deputy sabbatical"
-msgstr ""
-
-msgid "Deputy temporary"
 msgstr ""
 
 msgid "Details other educational facilities"
@@ -174,19 +153,10 @@ msgstr ""
 msgid "High Level Promising athlete"
 msgstr ""
 
-msgid "Holder"
-msgstr ""
-
 msgid "I - First registration"
 msgstr ""
 
 msgid "I - Première inscription"
-msgstr ""
-
-msgid "Internship co-supervisor"
-msgstr ""
-
-msgid "Internship supervisor"
 msgstr ""
 
 msgid "J - Carry-over from January to September"
@@ -313,9 +283,6 @@ msgid "Please precise at least a faculty or a code (or a part of a code)"
 msgstr ""
 
 msgid "Produce xls"
-msgstr ""
-
-msgid "Professor"
 msgstr ""
 
 msgid "Prog."
@@ -487,6 +454,9 @@ msgid "Total"
 msgstr ""
 
 msgid "Type of specific profile"
+msgstr ""
+
+msgid "Unexpected error"
 msgstr ""
 
 msgid "V - Evaluation satisfaisante (la note ne compte pas)"
