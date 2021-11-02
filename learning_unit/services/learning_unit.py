@@ -25,36 +25,36 @@
 ##############################################################################
 import logging
 from types import SimpleNamespace
+from typing import List
 
-import osis_offer_enrollment_sdk
+import osis_learning_unit_sdk
 import urllib3
 from django.conf import settings
-from osis_offer_enrollment_sdk.api import enrollment_api
-from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
+from osis_learning_unit_sdk.api import learning_units_api
 
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk, utils
+from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk, utils
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class OfferEnrollmentService:
+class LearningUnitService:
+
     @staticmethod
-    def get_enrollments_list(person: Person, registration_id: str, **kwargs) -> EnrollmentList:
-        configuration = offer_enrollment_sdk.build_configuration()
-        with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
-            api_instance = enrollment_api.EnrollmentApi(api_client)
+    def get_learning_units(learning_unit_codes: List[str], year: int, person: Person, **kwargs):
+        configuration = learning_unit_sdk.build_configuration()
+        with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
+            api_instance = learning_units_api.LearningUnitsApi(api_client)
             try:
-                enrollments = api_instance.enrollments_list(
-                    registration_id=registration_id,
-                    **utils.build_mandatory_auth_headers(person),
-                    **kwargs
+                learning_units = api_instance.learningunits_list(
+                    learning_unit_codes=','.join({str(elem) for elem in learning_unit_codes}),
+                    year=year,
+                    ** utils.build_mandatory_auth_headers(person),
                 )
-            except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                return learning_units.get('results', {})
+            except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
-                enrollments = SimpleNamespace(
-                    results=[],
-                    count=0
-                )
-        return enrollments
+                attrs = {'result': None, 'error': e}
+                learning_units = SimpleNamespace(**attrs, attribute_map=attrs)
+        return learning_units

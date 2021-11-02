@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-13 09:34+0200\n"
+"POT-Creation-Date: 2021-10-29 09:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,12 +19,27 @@ msgstr ""
 msgid " in the column \"Students\""
 msgstr " repris dans la colonne \"Etudiants\""
 
+msgid ""
+"'Lists of students enrolled to my exams' are immediately usable for encoding "
+"scores."
+msgstr ""
+"Les 'Listes des étudiants inscrits à mes examens' sont immédiatement "
+"utilisables pour l'encodage des notes"
+
 msgid "Acronym"
 msgstr "Sigle"
 
 msgctxt "plural"
 msgid "All"
 msgstr "Tous"
+
+msgid ""
+"All tutors can encode scores but only the scores responsible can submit. If "
+"the scores responsible is not correct, please contact your faculty."
+msgstr ""
+"Tous les enseignants peuvent encoder des notes mais seul le responsable de "
+"notes peut soumettre. Si le responsable de notes n'est pas correct, merci de "
+"contacter votre faculté"
 
 msgid "An email with your applications have been sent"
 msgstr "Un email contenant vos candidatures vous a été envoyé"
@@ -64,14 +79,8 @@ msgstr ""
 "Choisissez dans vos cours ceux que vous voulez considérer dans la liste "
 "produite"
 
-msgid "Co-holder"
-msgstr "Co-titulaire"
-
 msgid "Code"
 msgstr "Sigle"
-
-msgid "Coordinator"
-msgstr "Coordinateur(trice)"
 
 msgid "Credits"
 msgstr "Crédits"
@@ -85,21 +94,6 @@ msgstr "Supprimer"
 msgid "Delete the application"
 msgstr "Supprimer la candidature"
 
-msgid "Deputy"
-msgstr "Suppléant"
-
-msgid "Deputy authority"
-msgstr "Suppléant d'autorité"
-
-msgid "Deputy disease or maternity"
-msgstr "Suppléant maladie/maternité"
-
-msgid "Deputy sabbatical"
-msgstr "Suppléant sabbatique"
-
-msgid "Deputy temporary"
-msgstr "Suppléant temporaire"
-
 msgid "Details other educational facilities"
 msgstr "Détails autre aménagement"
 
@@ -108,6 +102,9 @@ msgstr "Personnes porteuses de handicap, trouble ou maladie"
 
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
+
+msgid "Download the list (Excel or PDF)"
+msgstr "Télécharger la liste (Excel ou PDF)"
 
 msgid "ES"
 msgstr "ES"
@@ -126,6 +123,9 @@ msgstr "Fin"
 
 msgid "Exam registration state"
 msgstr "Etat d'inscription aux examens"
+
+msgid "Excel File"
+msgstr "Fichier Excel"
 
 msgid "Export list (Excel)"
 msgstr "Exporter liste (Excel)"
@@ -152,25 +152,16 @@ msgid "Global id"
 msgstr "Matricule fgs"
 
 msgid "Guide"
-msgstr "Guide"
+msgstr "Accompagnateur"
 
 msgid "High Level Promising athlete"
 msgstr "Sportifs de haut niveau"
-
-msgid "Holder"
-msgstr "Titulaire"
 
 msgid "I - First registration"
 msgstr "I - Première inscription"
 
 msgid "I - Première inscription"
 msgstr "I - Première inscription"
-
-msgid "Internship co-supervisor"
-msgstr "Co-directeur de stage"
-
-msgid "Internship supervisor"
-msgstr "Directeur de stage"
 
 msgid "J - Carry-over from January to September"
 msgstr "J - Report de note de janvier vers septembre"
@@ -238,6 +229,9 @@ msgstr "Mes charges échues"
 msgid "My teaching charge"
 msgstr "Ma charge d'enseignement"
 
+msgid "NEW"
+msgstr "NOUVEAU"
+
 msgid "New application"
 msgstr "Nouvelle candidature"
 
@@ -271,6 +265,9 @@ msgstr "P - Examen partiel"
 msgid "P - Partial examination"
 msgstr "P - Examen partiel"
 
+msgid "PDF File"
+msgstr "Fichier PDF"
+
 msgid "PEPS"
 msgstr "PEPS"
 
@@ -293,9 +290,6 @@ msgstr ""
 
 msgid "Produce xls"
 msgstr "Produire xls"
-
-msgid "Professor"
-msgstr "Professeur"
 
 msgid "Prog."
 msgstr "Form."
@@ -333,8 +327,8 @@ msgstr "Horaire"
 msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
-msgid "Scores encoding"
-msgstr "Encodage des notes"
+msgid "Scores responsible"
+msgstr "Responsable de notes"
 
 msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
@@ -344,6 +338,9 @@ msgstr "Sept."
 
 msgid "September"
 msgstr "Septembre"
+
+msgid "Session of"
+msgstr "Session de"
 
 msgid ""
 "Some of the students enrolled to this course have a PEPS status (Program for "
@@ -388,9 +385,8 @@ msgstr "Charge d'enseignement"
 msgid "Teaching charges administration"
 msgstr "Administration des charges d'enseignements"
 
-msgid "The Excel lists for encoding scores are available in"
-msgstr ""
-"Les listes Excel destinées à l'encodage des notes sont disponibles dans"
+msgid "The lists of students enrolled to courses are available in "
+msgstr "Les listes des étudiants inscrits aux cours sont disponibles dans "
 
 #, python-format
 msgid ""
@@ -411,6 +407,24 @@ msgstr ""
 msgid "The period of online application is closed"
 msgstr ""
 "La période d'encodage des candidatures en ligne est fermée pour le moment"
+
+#, python-format
+msgid ""
+"The period of scores' encoding for %(month_session)s session is closed since "
+"%(str_date)s"
+msgstr ""
+"La période d'encodage des notes de la session de %(month_session)s est "
+"fermée depuis le %(str_date)s"
+
+#, python-format
+msgid ""
+"The period of scores' encoding for %(month_session)s session will be open "
+"%(str_date)s. The 'Lists of students enrolled to my exams' will be available "
+"at that date"
+msgstr ""
+"La période d'encodage des notes de la session de %(month_session)s sera "
+"ouverte le %(str_date)s. Les 'Listes des étudiants inscrits à mes examens' "
+"seront disponibles à cette date"
 
 msgid "This action will delete the application."
 msgstr "Cette action supprimera la candidature."
@@ -442,6 +456,10 @@ msgstr ""
 msgid "Title"
 msgstr "Intitulé"
 
+msgctxt "score sheet export"
+msgid "Title"
+msgstr "Intitulé"
+
 msgctxt "tutor_charge"
 msgid "Title"
 msgstr "Intitulé"
@@ -466,6 +484,9 @@ msgstr "Total"
 
 msgid "Type of specific profile"
 msgstr "Type PEPS"
+
+msgid "Unexpected error"
+msgstr "Erreur inattendue"
 
 msgid "V - Evaluation satisfaisante (la note ne compte pas)"
 msgstr "V - Evaluation satisfaisante (la note ne compte pas)"
@@ -506,9 +527,6 @@ msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgid "W - Unsatisfactory assessment (mark does not count)"
 msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
 
-msgid "Warning, this is not a list for encoding scores."
-msgstr "Attention, ceci n'est pas une liste destinée à l'encodage des notes."
-
 msgid "Y - Deuxième inscription"
 msgstr "Y - Deuxième inscription"
 
@@ -520,6 +538,9 @@ msgstr "Oui"
 
 msgid "You aren't teaching for any learning unit"
 msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
+
+msgid "date_format"
+msgstr "%d/%m/%Y"
 
 msgid "student(s)"
 msgstr "étudiant(s)"

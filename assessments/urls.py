@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,10 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url, include
+from django.conf.urls import url
 
 from .views import score_encoding
 
 urlpatterns = [
     url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
+    url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z-]+)/',
+        score_encoding.score_sheet_xls,
+        name='scores_sheet_xls',
+        ),
+    url(r'^scores_encoding/pdf/(?P<learning_unit_code>[0-9A-Za-z-]+)/$',
+        score_encoding.score_sheet_pdf,
+        name='scores_sheet_pdf',
+        ),
 ]

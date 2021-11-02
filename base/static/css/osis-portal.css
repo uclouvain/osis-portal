@@ -166,3 +166,17 @@
 .pagination-table-header .pagination {
     margin: 0 !important;
 }
+
+a.disabled {
+  pointer-events: auto;
+  color: grey;
+}
+
+a.disabled:active {
+  pointer-events: none;
+}
+
+.btn-clear {
+    background: none;
+    border: none;
+}

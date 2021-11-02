@@ -34,9 +34,9 @@ from osis_attribution_sdk.model.attribution import Attribution
 from osis_attribution_sdk.model.attribution_function_enum import AttributionFunctionEnum
 from osis_attribution_sdk.model.attribution_links import AttributionLinks
 from osis_attribution_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
+from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 from rest_framework import status
 
-from attribution.models.enums.function import COORDINATOR
 from attribution.views import tutor_charge
 from base.models.enums.learning_container_type import COURSE, OTHER_COLLECTIVE
 from base.tests.factories.academic_year import AcademicYearFactory
@@ -96,7 +96,7 @@ class TutorChargeViewTest(TestCase):
             'total_learning_unit_charge': '55.5',
             'percentage_allocation_charge': '100%',
             'start_year': 2020,
-            'function': AttributionFunctionEnum(value=COORDINATOR),
+            'function': AttributionFunctionEnum(value='COORDINATOR'),
             'function_text': 'Coordinateur',
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
@@ -105,12 +105,24 @@ class TutorChargeViewTest(TestCase):
             'effective_class_repartition': []
         })
 
+        self.learning_unit_row = LearningUnit(**{
+            'acronym': 'LDROI1200',
+            'has_classes': True
+        })
+
         self.attributions_list_patcher = mock.patch(
             "attribution.services.attribution.AttributionService.get_attributions_list",
             return_value=[self.attribution_row]
         )
+        self.learning_units_list_patcher = mock.patch(
+            "learning_unit.services.learning_unit.LearningUnitService.get_learning_units",
+            return_value=[self.learning_unit_row]
+        )
         self.mocked_attributions_list = self.attributions_list_patcher.start()
+        self.mocked_learning_units_list = self.learning_units_list_patcher.start()
+
         self.addCleanup(self.attributions_list_patcher.stop)
+        self.addCleanup(self.learning_units_list_patcher.stop)
 
     def test_case_user_not_logged(self):
         self.client.logout()
@@ -157,6 +169,12 @@ class TutorChargeViewTest(TestCase):
 
         self.assertTrue(not any([attr.lecturing_charge, attr.practical_charge, attr.percentage_allocation_charge]))
 
+    def test_should_map_attributions_with_learning_units_to_assess_has_classes(self):
+        response = self.client.get(self.url)
+        attr = response.context["attributions"][0]
+
+        self.assertEqual(attr.has_classes, self.learning_unit_row.has_classes)
+
 
 class AdminTutorChargeViewTest(TestCase):
     @classmethod
@@ -191,6 +209,11 @@ class AdminTutorChargeViewTest(TestCase):
             'is_partim': False
         })
 
+        self.learning_unit_row = LearningUnit(**{
+            'acronym': 'LDROI1200',
+            'has_classes': True
+        })
+
         self.attributions_list_patcher = mock.patch(
             "attribution.views.tutor_charge.TutorChargeView.attributions",
             new_callable=mock.PropertyMock,
@@ -198,6 +221,13 @@ class AdminTutorChargeViewTest(TestCase):
         )
         self.mocked_attributions_list = self.attributions_list_patcher.start()
         self.addCleanup(self.attributions_list_patcher.stop)
+
+        self.learning_units_list_patcher = mock.patch(
+            "learning_unit.services.learning_unit.LearningUnitService.get_learning_units",
+            return_value=[self.learning_unit_row]
+        )
+        self.mocked_learning_units_list = self.learning_units_list_patcher.start()
+        self.addCleanup(self.learning_units_list_patcher.stop)
 
     def test_case_user_not_logged(self):
         self.client.logout()

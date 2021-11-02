@@ -54,13 +54,14 @@ def pagination(context, condensed=True, delta=DEFAULT_CONDENSED_PAGINATION_DELTA
     context['next_offset'] = context['offset'] + context['limit']
     context['previous_offset'] = context['offset'] - context['limit']
 
-    context['active_page_number'] = next(page['number'] for page in pages if page['active_page'])
+    context['active_page_number'] = next((page['number'] for page in pages if page['active_page']), 1)
 
-    context['visible_indices'] = compute_visible_indices(
-        pages,
-        context['active_page_number'],
-        delta=delta if condensed else len(pages)
-    )
+    if pages:
+        context['visible_indices'] = compute_visible_indices(
+            pages,
+            context['active_page_number'],
+            delta=delta if condensed else len(pages)
+        )
 
     return context
 

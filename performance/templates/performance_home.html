@@ -71,7 +71,7 @@
                     </tr>
                     {% for row in programs %}
                         <tr>
-                            <td>{{ row.year|display_as_academic_year }}</td>
+                            <td>{{ row.academic_year }}</td>
                             <td>
                                 <a href="{% block student_result_url %}{% endblock %}" id="lnk_perf_{{ row.pk }}">
                                     {{ row.acronym }}

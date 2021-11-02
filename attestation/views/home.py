@@ -40,6 +40,7 @@ from base.models.student import Student
 from dashboard.views import main as dash_main_view
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
 
 
 class Home(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -85,13 +86,30 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         attestations = attestation_statuses_all_years_json_dict.get('attestationStatusesAllYears')
         current_year = attestation_statuses_all_years_json_dict.get('current_year')
         returned_registration_id = attestation_statuses_all_years_json_dict.get('registration_id')
+        current_year_echeance_attestation = _get_current_year_echeance_attestation(attestations, current_year)
         if returned_registration_id != student.registration_id:
             raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
     else:
         attestations = None
         current_year = None
+        current_year_echeance_attestation = None
     return {
         'attestations': attestations,
         'current_year': current_year,
-        'student': student
+        'student': student,
+        'current_year_echeance_attestation': current_year_echeance_attestation,
+        'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE
     }
+
+
+def _get_current_year_echeance_attestation(attestations, current_year):
+    if attestations:
+        current_year_attestations = next(
+            (attestation for attestation in attestations if attestation["academicYear"] == current_year), None
+        )
+        if current_year_attestations:
+            return next(
+                (attestation for attestation in current_year_attestations['attestationStatuses'] if
+                 attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
+            )
+    return None

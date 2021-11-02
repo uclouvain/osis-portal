@@ -82,3 +82,34 @@ class TestFetchSutentAttestationStatuses(TestCase):
                 }
             ]
         }
+
+    def test_get_current_year_echeance_attestation(self):
+        attestations = [
+            {
+                'attestationStatuses':
+                    [
+                        {'attestationType': 'AVIS', 'printed': True, 'available': True},
+                        {'attestationType': 'DE', 'printed': True, 'available': True},
+                        {'attestationType': 'ABC', 'printed': True, 'available': True},
+                        {'attestationType': 'ECHEANCE', 'printed': False, 'available': False}
+                    ],
+                'academicYear': 2020,
+                'available': True
+            },
+            {
+                'attestationStatuses':
+                    [
+                        {'attestationType': 'AVIS', 'printed': True, 'available': True},
+                        {'attestationType': 'DE', 'printed': True, 'available': True},
+                        {'attestationType': 'ABC', 'printed': True, 'available': True},
+                        {'attestationType': 'ECHEANCE', 'printed': True, 'available': True}
+                    ],
+                'academicYear': 2021,
+                'available': True
+            },
+        ]
+        current_year = 2021
+        self.assertDictEqual(
+            attestation.views.home._get_current_year_echeance_attestation(attestations, current_year),
+            {'attestationType': 'ECHEANCE', 'printed': True, 'available': True}
+        )

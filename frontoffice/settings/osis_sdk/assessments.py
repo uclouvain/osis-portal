@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,16 +23,32 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import logging
 
-from django import template
+from django.conf import settings
+import osis_assessments_sdk
 
-from attribution.models.enums.function import FUNCTIONS
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
 
-register = template.Library()
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-@register.filter
-def function_text(function):
-    if function:
-        return dict(FUNCTIONS).get(function)
-    return ''
+def build_configuration() -> osis_assessments_sdk.Configuration:
+    """
+    Return SDK configuration of assessments
+    """
+    if not settings.OSIS_ASSESSMENTS_SDK_HOST:
+        logger.debug("'OSIS_ASSESSMENTS_SDK_HOST' setting must be set in configuration")
+
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
+
+    return osis_assessments_sdk.Configuration(
+        host=settings.OSIS_ASSESSMENTS_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
+        })

@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% load i18n function academic_year_display %}
+{% load i18n academic_year_display %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -87,7 +87,7 @@
                 <td>{{ attribution.percentage_allocation_charge | default_if_none:''}}</td>
                 <td>{{ attribution.credits | default_if_none:''}}</td>
                 <td>
-                    {% if attribution.effective_class_repartition %}
+                    {% if attribution.has_classes %}
                         <a title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
                             <span class="fa fa-group" aria-hidden="true" style="color:gray"></span>
                         </a>
@@ -116,7 +116,7 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if attribution.effective_class_repartition %}
+                    {% if attribution.has_classes %}
                         <a title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
                             <span class="glyphicon glyphicon-envelope" aria-hidden="true" style="color:gray"></span>
                         </a>
@@ -126,7 +126,7 @@
                         </a>
                     {% endif %}
                 </td>
-                <td>{{ attribution.function|function_text }}</td>
+                <td>{{ attribution.function_text }}</td>
             </tr>
             {% with component_number=forloop.counter0 classes_count=attribution.effective_class_repartition|length|add:"1" %}
 
@@ -170,7 +170,7 @@
                                 <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
                             </a>
                         </td>
-                        <td>{{ attribution.function|function_text }}</td>
+                        <td>{{ attribution.function_text }}</td>
                     </tr>
                 {% endfor %}
             {% endwith %}
