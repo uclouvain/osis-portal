@@ -289,8 +289,13 @@ def _get_all_effective_class_repartition(attributions: List, ue_acronym: str, sc
     ]
 
     list_of_unique_dicts_effective_class_repartition = {x['code']: x for x in classes}.values()
+    sorted_list_of_unique_dicts_effective_class_repartition = sorted(
+        list_of_unique_dicts_effective_class_repartition,
+        key=lambda d: d['code']
+    )
+
     effective_class_detail = []
-    for effective_class in list_of_unique_dicts_effective_class_repartition:
+    for effective_class in sorted_list_of_unique_dicts_effective_class_repartition:
         score_responsible = _get_score_responsible(score_responsible_list, effective_class.code)
 
         effective_class_detail.append(
