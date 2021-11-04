@@ -122,13 +122,13 @@
                                                     {% with learning_unit_yr.acronym|add:classe_letter_code as learning_unit_code %}
                                                     <button class="btn-clear"
                                                             type="button">
-                                                        <a href="{% url 'scores_sheet_xls' learning_unit_code %}"
+                                                        <a href="{% url 'scores_sheet_xls' classe.code %}"
                                                             title="{% trans 'Excel File' %}">
                                                             <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 200%"></i>
                                                         </a>
                                                     </button>
                                                     <button  class="btn-clear" type="button">
-                                                        <a href="{% url 'scores_sheet_pdf' learning_unit_code %}"
+                                                        <a href="{% url 'scores_sheet_pdf' classe.code %}"
                                                            title="{% trans 'PDF File' %}">
                                                             <i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 200%"></i>
                                                         </a>
