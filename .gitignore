@@ -104,8 +104,9 @@ fabric.properties
 .idea/preferred-vcs.xml
 .idea/encodings.xml
 
-# Ne jamais ajouter les ous-modules au dépôt
+# Ne jamais ajouter les sous-modules au dépôt
 continuing_education
 dissertation
 internship
 osis_common
+admission
