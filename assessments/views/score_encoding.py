@@ -55,7 +55,7 @@ def score_encoding(request):
 @login_required
 @permission_required('base.is_tutor', raise_exception=True)
 def score_sheet_xls(request, learning_unit_code: str):
-    content_type = 'application/vnd.ms-excel'
+    content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary'
     file = AssessmentsService.get_xls_score_sheet(learning_unit_code, request.user.person)
     return _build_response(content_type, file, request)
 
