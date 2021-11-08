@@ -30,9 +30,9 @@ class Migration(migrations.Migration):
             name='LearningContainerYear',
         ),
         migrations.DeleteModel(
-            name='LearningUnit',
+            name='LearningUnitYear',
         ),
         migrations.DeleteModel(
-            name='LearningUnitYear',
+            name='LearningUnit',
         ),
     ]
