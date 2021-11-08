@@ -130,7 +130,7 @@ def build_learning_units_string(
         person=person
     )
 
-    if isinstance(learning_units, List) and len(learning_units) > 0:
+    if learning_units:
         ue_acronym = learning_units[0].get('acronym')
         if ue_acronym in user_learning_units_assigned:
             if learning_unit_years is None:
