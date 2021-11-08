@@ -289,8 +289,13 @@ def _get_all_effective_class_repartition(attributions: List, ue_acronym: str, sc
     ]
 
     list_of_unique_dicts_effective_class_repartition = {x['code']: x for x in classes}.values()
+    sorted_list_of_unique_dicts_effective_class_repartition = sorted(
+        list_of_unique_dicts_effective_class_repartition,
+        key=lambda d: d['code']
+    )
+
     effective_class_detail = []
-    for effective_class in list_of_unique_dicts_effective_class_repartition:
+    for effective_class in sorted_list_of_unique_dicts_effective_class_repartition:
         score_responsible = _get_score_responsible(score_responsible_list, effective_class.code)
 
         effective_class_detail.append(
@@ -323,22 +328,29 @@ def _get_warning_concerning_sessions(a_person: Person):
     date_format = str(_('date_format'))
 
     previous_session_dict = AssessmentsService.get_previous_session(a_person)
-    str_date = previous_session_dict.get('end_date').strftime(date_format)
-    previous_session_msg = \
-        _("The period of scores' encoding for %(month_session)s session is closed since %(str_date)s") \
-        % {
-            'month_session': previous_session_dict.get('month_session_name').lower(),
-            'str_date': str_date
-        }
+    if previous_session_dict:
+        str_date = previous_session_dict.get('end_date').strftime(date_format)
+        previous_session_msg = \
+            _("The period of scores' encoding for %(month_session)s session is closed since %(str_date)s") \
+            % {
+                'month_session': previous_session_dict.get('month_session_name').lower(),
+                'str_date': str_date
+            }
+    else:
+        previous_session_msg = _('Unexpected error')
 
     next_session_dict = AssessmentsService.get_next_session(a_person)
-    str_date = next_session_dict.get('start_date').strftime(date_format)
-    next_session_msg = \
-        _("The period of scores' encoding for %(month_session)s session will be open %(str_date)s. "
-          "The 'Lists of students enrolled to my exams' will be available at that date") \
-        % {
-            'month_session': next_session_dict.get('month_session_name').lower(),
-            'str_date': str_date
-        }
+    if next_session_dict:
+        str_date = next_session_dict.get('start_date').strftime(date_format)
+        next_session_msg = \
+            _("The period of scores' encoding for %(month_session)s session will be open %(str_date)s. "
+              "The 'Lists of students enrolled to my exams' will be available at that date") \
+            % {
+                'month_session': next_session_dict.get('month_session_name').lower(),
+                'str_date': str_date
+            }
+    else:
+        next_session_msg = _('Unexpected error')
+
     data = {'messages_error': {previous_session_msg, next_session_msg}}
     return data

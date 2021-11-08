@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-29 09:40+0200\n"
+"POT-Creation-Date: 2021-11-02 11:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -283,9 +283,6 @@ msgid "Please precise at least a faculty or a code (or a part of a code)"
 msgstr ""
 
 msgid "Produce xls"
-msgstr ""
-
-msgid "Prog."
 msgstr ""
 
 msgid "Program"
