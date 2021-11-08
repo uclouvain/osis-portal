@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-13 09:34+0200\n"
+"POT-Creation-Date: 2021-11-08 13:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,11 +19,21 @@ msgstr ""
 msgid " in the column \"Students\""
 msgstr ""
 
+msgid ""
+"'Lists of students enrolled to my exams' are immediately usable for encoding "
+"scores."
+msgstr ""
+
 msgid "Acronym"
 msgstr ""
 
 msgctxt "plural"
 msgid "All"
+msgstr ""
+
+msgid ""
+"All tutors can encode scores but only the scores responsible can submit. If "
+"the scores responsible is not correct, please contact your faculty."
 msgstr ""
 
 msgid "An email with your applications have been sent"
@@ -62,13 +72,7 @@ msgstr ""
 msgid "Choose the learning units you want to consider in the list"
 msgstr ""
 
-msgid "Co-holder"
-msgstr ""
-
 msgid "Code"
-msgstr ""
-
-msgid "Coordinator"
 msgstr ""
 
 msgid "Credits"
@@ -83,21 +87,6 @@ msgstr ""
 msgid "Delete the application"
 msgstr ""
 
-msgid "Deputy"
-msgstr ""
-
-msgid "Deputy authority"
-msgstr ""
-
-msgid "Deputy disease or maternity"
-msgstr ""
-
-msgid "Deputy sabbatical"
-msgstr ""
-
-msgid "Deputy temporary"
-msgstr ""
-
 msgid "Details other educational facilities"
 msgstr ""
 
@@ -105,6 +94,9 @@ msgid "Disability, Disorder or Illness Students"
 msgstr ""
 
 msgid "Display teachers"
+msgstr ""
+
+msgid "Download the list (Excel or PDF)"
 msgstr ""
 
 msgid "ES"
@@ -126,6 +118,9 @@ msgstr ""
 #| msgid "Registration id"
 msgid "Exam registration state"
 msgstr "Registration id"
+
+msgid "Excel File"
+msgstr ""
 
 msgid "Export list (Excel)"
 msgstr ""
@@ -158,19 +153,10 @@ msgstr ""
 msgid "High Level Promising athlete"
 msgstr ""
 
-msgid "Holder"
-msgstr ""
-
 msgid "I - First registration"
 msgstr ""
 
 msgid "I - Première inscription"
-msgstr ""
-
-msgid "Internship co-supervisor"
-msgstr ""
-
-msgid "Internship supervisor"
 msgstr ""
 
 msgid "J - Carry-over from January to September"
@@ -239,6 +225,9 @@ msgstr ""
 msgid "My teaching charge"
 msgstr ""
 
+msgid "NEW"
+msgstr ""
+
 msgid "New application"
 msgstr ""
 
@@ -272,6 +261,9 @@ msgstr ""
 msgid "P - Partial examination"
 msgstr ""
 
+msgid "PDF File"
+msgstr ""
+
 msgid "PEPS"
 msgstr ""
 
@@ -293,12 +285,10 @@ msgstr ""
 msgid "Produce xls"
 msgstr ""
 
-msgid "Professor"
+msgid "Program"
 msgstr ""
 
-msgid "Prog."
-msgstr ""
-
+msgctxt "attribution"
 msgid "Program"
 msgstr ""
 
@@ -332,7 +322,7 @@ msgstr ""
 msgid "Schedule unavailable"
 msgstr ""
 
-msgid "Scores encoding"
+msgid "Scores responsible"
 msgstr ""
 
 msgid "Select/deselect all attributions to renew"
@@ -342,6 +332,9 @@ msgid "Sept."
 msgstr ""
 
 msgid "September"
+msgstr ""
+
+msgid "Session of"
 msgstr ""
 
 msgid ""
@@ -385,7 +378,7 @@ msgstr ""
 msgid "Teaching charges administration"
 msgstr ""
 
-msgid "The Excel lists for encoding scores are available in"
+msgid "The lists of students enrolled to courses are available in "
 msgstr ""
 
 #, python-format
@@ -401,6 +394,19 @@ msgid ""
 msgstr ""
 
 msgid "The period of online application is closed"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of scores' encoding for %(month_session)s session is closed since "
+"%(str_date)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of scores' encoding for %(month_session)s session will be open "
+"%(str_date)s. The 'Lists of students enrolled to my exams' will be available "
+"at that date"
 msgstr ""
 
 msgid "This action will delete the application."
@@ -426,6 +432,10 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+msgctxt "score sheet export"
+msgid "Title"
+msgstr ""
+
 msgctxt "tutor_charge"
 msgid "Title"
 msgstr ""
@@ -445,6 +455,9 @@ msgid "Total"
 msgstr ""
 
 msgid "Type of specific profile"
+msgstr ""
+
+msgid "Unexpected error"
 msgstr ""
 
 msgid "V - Evaluation satisfaisante (la note ne compte pas)"
@@ -486,9 +499,6 @@ msgstr ""
 msgid "W - Unsatisfactory assessment (mark does not count)"
 msgstr ""
 
-msgid "Warning, this is not a list for encoding scores."
-msgstr ""
-
 msgid "Y - Deuxième inscription"
 msgstr ""
 
@@ -500,6 +510,9 @@ msgstr ""
 
 msgid "You aren't teaching for any learning unit"
 msgstr ""
+
+msgid "date_format"
+msgstr "%d %b %Y"
 
 msgid "student(s)"
 msgstr ""
