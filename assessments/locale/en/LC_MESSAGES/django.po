@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-21 15:52+0200\n"
+"POT-Creation-Date: 2021-10-25 11:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Ask scores sheets"
-msgstr ""
-
-msgid "Download"
-msgstr ""
-
 msgid "Download my PDF scores sheets for paper encoding."
-msgstr ""
-
-msgid "Faculty administration"
-msgstr ""
-
-msgid "Global id"
 msgstr ""
 
 msgid "My scores sheets"
@@ -41,28 +29,13 @@ msgstr ""
 msgid "Scores Encoding"
 msgstr ""
 
-msgid "Scores sheet"
-msgstr ""
-
-msgid "Scores sheets"
-msgstr ""
-
-msgid "Scores sheets administration"
-msgstr ""
-
-msgid "Scores sheets are loading."
-msgstr ""
-
-msgid "Scores sheets are not available for now."
-msgstr ""
-
-msgid "Scores sheets are ready!"
-msgstr ""
-
 msgid "This requires a "
 msgstr ""
 
 msgid "This requires a VPN access outside UCLouvain."
+msgstr ""
+
+msgid "Unexpected error"
 msgstr ""
 
 msgid "VPN access"

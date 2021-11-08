@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import json
-from types import SimpleNamespace
 
 import mock
 from django.conf import settings
@@ -41,7 +40,6 @@ from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
-from performance.models.enums import offer_registration_state
 from performance.tests.factories.student_performance import StudentPerformanceFactory
 from performance.views import main
 
@@ -281,27 +279,10 @@ class SelectStudentTest(TestCase):
         self.assertEqual(len(response.context['form'].errors), 1)
 
     def test_valid_post_request(self):
-        # Mock the OSIS Remote API Call
-        offer_enrollment_row = SimpleNamespace(**{
-            'acronym': 'FSA1BA',
-            'year': 2021,
-            'title': "Bachelier en sciences de l'ingénieur",
-            'pk': 123456,
-            'offer_registration_state': offer_registration_state.REGISTERED,
-        })
-        enrollments_list_patcher = mock.patch(
-            "performance.views.performance_home.PerformanceHomeMixin.offer_enrollments_list",
-            new_callable=mock.PropertyMock,
-            return_value=[offer_enrollment_row]
-        )
-        enrollments_list_patcher.start()
-
         response = self.client.post(self.url, data={'registration_id': self.student.registration_id})
 
         expected_url = reverse('performance_student_programs_admin', args=[self.student.registration_id])
         self.assertRedirects(response, expected_url)
-
-        enrollments_list_patcher.stop()
 
     def test_user_is_a_student(self):
         self.client.logout()
