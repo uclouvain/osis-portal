@@ -10,29 +10,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(
-            name='learningunityear',
-            unique_together=None,
-        ),
-        migrations.RemoveField(
-            model_name='learningunityear',
-            name='academic_year',
-        ),
-        migrations.RemoveField(
-            model_name='learningunityear',
-            name='learning_container_year',
-        ),
-        migrations.RemoveField(
-            model_name='learningunityear',
-            name='learning_unit',
-        ),
         migrations.DeleteModel(
             name='LearningContainerYear',
         ),
         migrations.DeleteModel(
-            name='LearningUnit',
+            name='LearningUnitYear',
         ),
         migrations.DeleteModel(
-            name='LearningUnitYear',
+            name='LearningUnit',
         ),
     ]
