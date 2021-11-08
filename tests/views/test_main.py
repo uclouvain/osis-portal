@@ -70,7 +70,7 @@ class TestMain(TestCase):
         response = self.client.get(selection_url)
         self.assertEqual(response.status_code, 200)
 
-    @mock.patch('internship.services.internship.InternshipAPIService.get_master_by_email')
+    @mock.patch('internship.services.internship.InternshipAPIService.get_master')
     @mock.patch('internship.services.internship.InternshipAPIService.activate_master_account')
     def test_first_master_access_activate_user_account(self, mock_activate, mock_get_master_email):
         mock_get_master_email.return_value = {'uuid': uuid.uuid4(), 'user_account_status': UserAccountStatus.INACTIVE}

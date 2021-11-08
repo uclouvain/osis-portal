@@ -69,7 +69,10 @@ def view_student_resume(request, cohort_id):
     publication_allowed = cohort.publication_start_date <= datetime.date.today()
     offers = {}
     for affectation in student_affectations:
-        score = InternshipAPIService.get_affectation(str(affectation.uuid)).score
+        score = InternshipAPIService.get_affectation(
+            person=request.user.person,
+            affectation_uuid=str(affectation.uuid)
+        ).score
         if score and score.validated:
             score.comments = _replace_comments_keys_with_translations(score.comments)
             setattr(affectation, 'score', score)
@@ -78,7 +81,7 @@ def view_student_resume(request, cohort_id):
             speciality=affectation.speciality,
             organization=affectation.organization
         ).first()
-        offer.master = _get_internship_masters_repr(affectation)
+        offer.master = _get_internship_masters_repr(request.user.person, affectation)
         try:
             offers[affectation.organization].update({affectation.speciality: offer})
         except KeyError:
@@ -97,8 +100,9 @@ def view_student_resume(request, cohort_id):
     })
 
 
-def _get_internship_masters_repr(affectation):
+def _get_internship_masters_repr(person, affectation):
     allocations = InternshipAPIService.get_mastered_allocations(
+        person=person,
         specialty_uuid=str(affectation.speciality.uuid),
         organization_uuid=str(affectation.organization.uuid)
     )

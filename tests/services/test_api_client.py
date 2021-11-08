@@ -135,4 +135,3 @@ class MockAPI(InternshipApi):
             specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym=''),
             role=ChoiceRole.MASTER.name,
         )]}
-
