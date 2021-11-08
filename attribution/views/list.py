@@ -332,4 +332,3 @@ def _get_warning_concerning_sessions(a_person: Person) -> Dict:
             'str_date': str_date
         }
     return {'messages_error': {previous_session_msg, next_session_msg}}
-
