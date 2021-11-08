@@ -46,12 +46,6 @@ admin.site.register(entity.Entity,
 admin.site.register(entity_version.EntityVersion,
                     entity_version.EntityVersionAdmin)
 
-admin.site.register(learning_unit.LearningUnit,
-                    learning_unit.LearningUnitAdmin)
-
-admin.site.register(learning_container_year.LearningContainerYear,
-                    learning_container_year.LearningContainerYearAdmin)
-
 admin.site.register(offer_enrollment.OfferEnrollment,
                     offer_enrollment.OfferEnrollmentAdmin)
 

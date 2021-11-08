@@ -38,7 +38,6 @@ from osis_learning_unit_enrollment_sdk.model.enrollment import Enrollment
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
 from base.tests.factories.academic_year import AcademicYearFactory, create_current_academic_year
-from base.tests.factories.learning_container_year import LearningContainerYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 
@@ -236,7 +235,6 @@ class ListBuildTest(TestCase):
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
-        LearningContainerYearFactory(academic_year=an_academic_year)
         mock_get_attributions_list.return_value = [
             Attribution(
                 code=LU_ACRONYM,
