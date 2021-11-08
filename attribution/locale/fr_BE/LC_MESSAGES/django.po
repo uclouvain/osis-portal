@@ -292,7 +292,7 @@ msgid "Produce xls"
 msgstr "Produire xls"
 
 msgid "Program"
-msgstr "Programme"
+msgstr "Formation"
 
 msgid "Program for Students with a Specific Profile"
 msgstr "Projet pour étudiant.e à profil spécifique"
