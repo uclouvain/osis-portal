@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterUniqueTogether(
             name='learningunityear',
-            unique_together=set([('acronym', 'academic_year'), ('learning_unit', 'academic_year')]),
+            unique_together=set([('acronym', 'academic_year')]),
         ),
     ]
