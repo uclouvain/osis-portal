@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 10:42+0200\n"
+"POT-Creation-Date: 2021-09-02 17:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,12 +36,12 @@ msgstr ""
 msgid "All periods"
 msgstr ""
 
+msgid "An error occured during validation"
+msgstr ""
+
 msgid ""
 "An error occurred during delegate creation, please contact internships "
 "administration (STAC)"
-msgstr ""
-
-msgid "An error occured during validation"
 msgstr ""
 
 msgid "An error occurred during score update"
@@ -151,6 +151,9 @@ msgstr ""
 msgid "Generalist"
 msgstr ""
 
+msgid "Good performance example"
+msgstr ""
+
 msgid "Good performance examples"
 msgstr ""
 
@@ -170,6 +173,9 @@ msgid "Hospitals"
 msgstr ""
 
 msgid "Improvement areas"
+msgstr ""
+
+msgid "Intermediary evaluation"
 msgstr ""
 
 msgid "Intermediary evaluation (optional)"
@@ -334,6 +340,9 @@ msgid "Succesfull logout"
 msgstr ""
 
 msgid "Suggested learning methods"
+msgstr ""
+
+msgid "Suggestions"
 msgstr ""
 
 msgid "Sum up of your choices and your affectations"

@@ -28,6 +28,7 @@ import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.datetime_safe import date
+from django.utils.translation import gettext as _
 
 from base.models import student as mdl_student
 from base.views import layout
@@ -73,6 +74,7 @@ def view_student_resume(request, cohort_id):
             affectation_uuid=str(affectation.uuid)
         ).score
         if score and score.validated:
+            score.comments = _replace_comments_keys_with_translations(score.comments)
             setattr(affectation, 'score', score)
         offer = mdl_internship_offer.find_offer(
             cohort=cohort,
@@ -125,3 +127,13 @@ def save_from_form(form, person, cohort):
 
     mdl_student_information.InternshipStudentInformation.objects.update_or_create(person=person, cohort=cohort,
                                                                                   defaults=defaults)
+
+
+def _replace_comments_keys_with_translations(comments):
+    comments_keys_mapping = {
+        'impr_areas': _('Improvement areas'),
+        'suggestions': _('Suggested learning methods'),
+        'good_perf_ex': _('Good performance examples'),
+        'intermediary_evaluation': _('Intermediary evaluation')
+    }
+    return {comments_keys_mapping[k]: v for k, v in comments.items()}
