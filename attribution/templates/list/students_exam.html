@@ -33,6 +33,7 @@
     </ol>
 {% endblock %}
 {% block content %}
+    {% get_current_language as LANGUAGE_CODE %}
     <h1>{% trans 'List of students enrolled to my exams' %}</h1>
     {% if messages %}
         <div class="alert alert-warning">
@@ -115,7 +116,7 @@
                                             {% with classe=obj.effective_class_repartition %}
                                             <tr>
                                                 <td>{{ classe.code }}</td>
-                                                <td>{{ learning_unit_yr.learning_unit.title|default_if_none:"" }} - {{ classe.title_fr|default_if_none:"" }}</td>
+                                                <td>{{ learning_unit_yr.learning_unit.title|default_if_none:"" }} - {% if LANGUAGE_CODE == "en" and classe.title_en %}{{ classe.title_en }}{% else %}{{ classe.title_fr|default_if_none:"" }}{%endif%}</td>
                                                 <td>{{ obj.score_responsible|default_if_none:"" }}</td>
                                                 <td align="center">
                                                 {% with classe.code|slice:"-1:" as classe_letter_code %}
