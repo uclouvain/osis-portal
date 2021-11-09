@@ -37,15 +37,7 @@ from internship.models.enums.role_choice import ChoiceRole
 from internship.services.internship import InternshipAPIClient
 
 
-def is_builtin(func):
-    return func.startswith('__')
-
-
 class TestAPIClient(TestCase):
-
-    @staticmethod
-    def is_builtin(func):
-        return func.startswith('__')
 
     @override_settings(OSIS_INTERNSHIP_SDK_HOST='test_url')
     def test_new_internship_api_client(self):
@@ -143,3 +135,4 @@ class MockAPI(InternshipApi):
             specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym=''),
             role=ChoiceRole.MASTER.name,
         )]}
+
