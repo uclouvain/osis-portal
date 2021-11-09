@@ -57,8 +57,7 @@ class CheckForm(View):
 
     @cached_property
     def offer_enrollment(self) -> Enrollment:
-        offer_enrollments = OfferEnrollmentService.get_enrollments_year_list(
-            registration_id=self.student.registration_id,
+        offer_enrollments = OfferEnrollmentService.get_my_enrollments_year_list(
             person=self.student.person,
             year=self.year
         ).results

@@ -27,7 +27,6 @@ from typing import List
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.exceptions import MultipleObjectsReturned
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -35,13 +34,14 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
-from base.business import student as student_business
 from base.models import academic_year
 from base.models.academic_year import AcademicYear
 from base.models.enums import offer_enrollment_state
+from base.models.person import Person
 from base.models.student import Student
-from base.services.offer_enrollment import OfferEnrollmentService
+from base.services.offer_enrollment import OfferEnrollmentService, OfferEnrollmentBusinessException
 from dashboard.views import main as dash_main_view
+from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException
 
 
 class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -57,13 +57,21 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     @cached_property
     def student(self) -> Student:
-        return student_business.find_by_user_and_discriminate(self.request.user)
+        if self.offer_enrollments_list:
+            registration_id = self.offer_enrollments_list[0].student_registration_id
+            return Student.objects.get(registration_id=registration_id)
+
+    @cached_property
+    def person(self) -> Person:
+        return Person.objects.get(user=self.request.user)
 
     def dispatch(self, request, *args, **kwargs):
         try:
             return super().dispatch(request, *args, **kwargs)
-        except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
-            return dash_main_view.show_multiple_registration_id_error(self.request)
+        except MultipleApiBusinessException as e:
+            for exception in e.exceptions:
+                if exception.status_code == OfferEnrollmentBusinessException.DoubleNOMA.value:
+                    return dash_main_view.show_multiple_registration_id_error(self.request)
 
     def get(self, *args, **kwargs):
         if not self.offer_enrollments_list:
@@ -77,15 +85,14 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     @cached_property
     def offer_enrollments_list(self) -> List[Enrollment]:
-        return OfferEnrollmentService.get_enrollments_year_list(
-            registration_id=self.student.registration_id,
-            person=self.student.person,
+        return OfferEnrollmentService.get_my_enrollments_year_list(
+            person=self.person,
             year=self.current_academic_year.year,
             enrollment_state=[
                 offer_enrollment_state.SUBSCRIBED,
                 offer_enrollment_state.PROVISORY
             ]
-        ).results if self.student else []
+        ).results if self.person else []
 
     @cached_property
     def current_academic_year(self) -> AcademicYear:
