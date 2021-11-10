@@ -483,6 +483,9 @@ msgstr "Trop élevé"
 msgid "Total"
 msgstr "Total"
 
+msgid "Type"
+msgstr "Type"
+
 msgid "Type of specific profile"
 msgstr "Type PEPS"
 
