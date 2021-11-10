@@ -68,13 +68,15 @@
                             <table class="table">
                                 <thead>
                                 <th>{% trans 'Code' %}</th>
-                                <th>{% trans 'Title' context 'score sheet export'%}</th>
+                                <th>{% trans 'Title' context 'score sheet export' %}</th>
                                 <th>
                                     {% trans 'Scores responsible' %}
-                                    <span class="glyphicon glyphicon-question-sign "
-                                          title="{% trans 'All tutors can encode scores but only the scores responsible can submit. If the scores responsible is not correct, please contact your faculty.' %}"
-                                          style="font-size: 14pt; display: inline">
-                                    </span>
+                                    <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                         title="{% trans 'All tutors can encode scores but only the scores responsible can submit. If the scores responsible is not correct, please contact your faculty.' %}">
+                                        <span class="glyphicon glyphicon-question-sign "
+                                              style="font-size: 14pt; display: inline">
+                                        </span>
+                                    </div>
                                     </abbr>
                                 </th>
                                 <th>{% trans 'Download the list (Excel or PDF)' %}</th>
@@ -82,9 +84,9 @@
                                 <tbody>
                                 {% for learning_unit_yr in my_learning_units %}
                                     {% with has_classes=learning_unit_yr.learning_unit.has_classes %}
-                                    <tr>
-                                        <td>{{ learning_unit_yr.acronym }}</td>
-                                        <td>{{ learning_unit_yr.learning_unit.title|default_if_none:"" }}</td>
+                                        <tr>
+                                            <td>{{ learning_unit_yr.acronym }}</td>
+                                            <td>{{ learning_unit_yr.learning_unit.title|default_if_none:"" }}</td>
                                         <td>{{ learning_unit_yr.learning_unit.score_responsible }}</td>
                                         <td align="center">
                                             <button class="btn-clear {% if learning_unit_yr.learning_unit_has_classes %}btn-disable{% endif %}"
@@ -93,7 +95,8 @@
                                                     {% if has_classes %} disabled{% endif %}>
                                                 <a href="{% url 'scores_sheet_xls' learning_unit_yr.acronym %}"
                                                    {% if has_classes %} disabled{% endif %}
-                                                    class="{% if has_classes %} disabled{% endif %}"
+                                                   data-toggle="tooltip"
+                                                   class="{% if has_classes %} disabled{% endif %}"
                                                     title="{% if has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'Excel File' %}{% endif %}">
                                                     <i class="fa fa-file-excel-o {% if has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
                                                 </a>
@@ -104,6 +107,7 @@
                                                     {% if has_classes %} disabled{% endif %}>
                                                 <a href="{% url 'scores_sheet_pdf' learning_unit_yr.acronym %}"
                                                    {% if has_classes %} disabled{% endif %}
+                                                   data-toggle="tooltip"
                                                    class="{% if has_classes %} disabled{% endif %}"
                                                    title="{% if has_classes %}{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}{% else %}{% trans 'PDF File' %}{% endif %}">
                                                     <i class="fa fa-file-pdf-o {% if has_classes %}i-disabled{% endif %}" aria-hidden="true" style="font-size: 200%"></i>
@@ -124,12 +128,14 @@
                                                     <button class="btn-clear"
                                                             type="button">
                                                         <a href="{% url 'scores_sheet_xls' classe.code %}"
+                                                           data-toggle="tooltip"
                                                             title="{% trans 'Excel File' %}">
                                                             <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 200%"></i>
                                                         </a>
                                                     </button>
                                                     <button  class="btn-clear" type="button">
                                                         <a href="{% url 'scores_sheet_pdf' classe.code %}"
+                                                           data-toggle="tooltip"
                                                            title="{% trans 'PDF File' %}">
                                                             <i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 200%"></i>
                                                         </a>

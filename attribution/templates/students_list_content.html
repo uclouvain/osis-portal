@@ -35,62 +35,63 @@
 {% endif %}
 
 <div class="alert alert-info" style="background-color: white">
-        <div class="accordion" id="accordionExample">
-            <a role="button" data-toggle="collapse" data-target="#legend" aria-expanded="false"
-               aria-controls="tutors_by_course"  title="{% trans 'Legend' %}">
-              <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> {% trans 'Legend' %}
-            </a>
-            <div class="collapse" id="legend">
-                <div class="row">
-                    <div class="col-md-3">
-                        <br><br>
-                        <p><strong>{% trans 'Exam registration state' %}</strong></p>
-                    </div>
-                    <div class="col-md-4">
-                        <p>{% trans 'P - Partial examination' %}</p>
-                        <p>{% trans 'I - First registration' %}</p>
-                        <p>{% trans 'Y - Second registration' %}</p>
-                        <p>{% trans 'J - Carry-over from January to September' %}</p>
-                    </div>
-                    <div class="col-md-5">
-                        <p>{% trans 'R - Carry-over from previous session' %}</p>
-                        <p>{% trans 'T - Test grade' %}</p>
-                        <p>{% trans 'V - Satisfactory assessment (mark does not count)' %}</p>
-                        <p>{% trans 'W - Unsatisfactory assessment (mark does not count)' %}</p>
-                    </div>
+    <div class="accordion" id="accordionExample">
+        <a role="button" data-toggle="collapse" data-target="#legend" aria-expanded="false"
+           aria-controls="tutors_by_course" title="{% trans 'Legend' %}">
+            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> {% trans 'Legend' %}
+        </a>
+        <div class="collapse" id="legend">
+            <div class="row">
+                <div class="col-md-3">
+                    <br><br>
+                    <p><strong>{% trans 'Exam registration state' %}</strong></p>
                 </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-3">
-                        <p><strong>{% trans 'PEPS' %}</strong></p>
-                        <p><strong>{% trans 'DDI' %}</strong></p>
-                        <p><strong>{% trans 'PMR' %}</strong></p>
-                        <p><strong>{% trans 'ESHN' %}</strong></p>
-                        <p><strong>{% trans 'ES' %}</strong></p>
-                    </div>
-                    <div class="col-md-9">
-                        <p>{% trans 'Program for Students with a Specific Profile' %}</p>
-                        <p>{% trans 'Disability, Disorder or Illness Students' %}</p>
-                        <p>{% trans 'Person with reduced mobility' %}</p>
-                        <p>{% trans 'High Level Promising athlete' %}</p>
-                        <p>{% trans 'Promising athlete' %}</p>
-                    </div>
+                <div class="col-md-4">
+                    <p>{% trans 'P - Partial examination' %}</p>
+                    <p>{% trans 'I - First registration' %}</p>
+                    <p>{% trans 'Y - Second registration' %}</p>
+                    <p>{% trans 'J - Carry-over from January to September' %}</p>
+                </div>
+                <div class="col-md-5">
+                    <p>{% trans 'R - Carry-over from previous session' %}</p>
+                    <p>{% trans 'T - Test grade' %}</p>
+                    <p>{% trans 'V - Satisfactory assessment (mark does not count)' %}</p>
+                    <p>{% trans 'W - Unsatisfactory assessment (mark does not count)' %}</p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-3">
+                    <p><strong>{% trans 'PEPS' %}</strong></p>
+                    <p><strong>{% trans 'DDI' %}</strong></p>
+                    <p><strong>{% trans 'PMR' %}</strong></p>
+                    <p><strong>{% trans 'ESHN' %}</strong></p>
+                    <p><strong>{% trans 'ES' %}</strong></p>
+                </div>
+                <div class="col-md-9">
+                    <p>{% trans 'Program for Students with a Specific Profile' %}</p>
+                    <p>{% trans 'Disability, Disorder or Illness Students' %}</p>
+                    <p>{% trans 'Person with reduced mobility' %}</p>
+                    <p>{% trans 'High Level Promising athlete' %}</p>
+                    <p>{% trans 'Promising athlete' %}</p>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 {% if has_peps %}
     <div class="alert alert-warning">
-        <i class="fa fa-exclamation-triangle"></i>  {% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}
+        <i class="fa fa-exclamation-triangle"></i> {% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}
     </div>
 {% endif %}
 
 {% if enrolled_students_count %}
     <div class="row">
         <div class="col-md-3 col-sm-3 col-xs-12 col-md-push-9 col-sm-push-9">
-            <form method="get" action="{{produce_xls_url}}">
-                <button class="btn btn-success pull-md-right" id="bt_produce_xls" type="submit" style="margin-bottom: 10px;"
+            <form method="get" action="{{ produce_xls_url }}">
+                <button class="btn btn-success pull-md-right" id="bt_produce_xls" type="submit"
+                        style="margin-bottom: 10px;"
                         title="{% trans 'Export the students list in Excel format' %}">
                     {% trans 'Export list (Excel)' %}
                     <i class="fa fa-table" aria-hidden="true" style="padding-left:10px;"></i>
@@ -118,7 +119,12 @@
             <th><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></th>
             <th>{% ordering _('Last name') 'student_full_name' %}</th>
             <th>{% ordering _('Registration id') 'student_registration_id' %}</th>
-            <th>{% ordering _('Type of specific profile') 'specific_profile' %}</th>
+            <th>
+                {% trans "Type" as type_trans %}
+                {% with type_trans|add:' <span class="label label-warning">PEPS</span>' as label %}
+                    {% ordering label 'specific_profile' %}
+                {% endwith %}
+            </th>
             <th>{% trans 'State' %}</th>
             <th>{% trans 'Jan.' %}</th>
             <th>{% trans 'State' %}</th>
@@ -136,7 +142,8 @@
                     <td>{{ student.acronym }}</td>
                     <td>{% if student.email %}
                         <a href="mailto:{{ student.email }}" data-toggle="tooltip" data-placement="right"
-                           title="{{ student.email }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a>
+                           title="{{ student.email }}"><span class="glyphicon glyphicon-envelope"
+                                                             aria-hidden="true"></span></a>
                     {% else %}
                         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
                     {% endif %}</td>
@@ -148,9 +155,9 @@
                                 <span id="arrangements" data-toggle="tooltip" data-placement="right"
                                       title="{{ student_specific_profile_detail }}"
                                       data-html="true">
-                                    <i class="fa fa-list-ul" style="color: #6699FF;" ></i>
+                                    <i class="fa fa-list-ul" style="color: #6699FF;"></i>
                                 </span>
-                            {% endif%}
+                            {% endif %}
                         {% endwith %}
                     </td>
                     <td>{{ student.january_status| default_if_none:''}}</td>

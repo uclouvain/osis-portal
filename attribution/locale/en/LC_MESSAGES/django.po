@@ -454,6 +454,9 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
+msgid "Type"
+msgstr ""
+
 msgid "Type of specific profile"
 msgstr ""
 
