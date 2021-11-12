@@ -58,6 +58,7 @@ class OfferChoiceTest(TestCase):
             'title': "Bachelier en sciences de l'ingénieur",
             'pk': 123456,
             'offer_registration_state': offer_registration_state.REGISTERED,
+            'student_registration_id': self.student.registration_id
         })
         self.enrollments_list_patcher = mock.patch(
             "exam_enrollment.views.offer_choice.OfferChoice.offer_enrollments_list",
