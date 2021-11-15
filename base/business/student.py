@@ -20,9 +20,9 @@ def check_if_person_is_student(person: Person) -> bool:
 def _discriminate_student(students, person: Person) -> Optional[Student]:
     """
     Discriminate between several student objects that belong to the same person.
-    Offer enrollments with valid state enrollment are checked.
-    If the most recent enrollment year has only one student, this student is returned.
-    If there are more than one student for the most recent offer enrollment year, an exception is raised.
+    It's done by OSIS API
+    If there are more than one student for the most recent offer enrollment year, a DoubleNOMA status_code is sent by
+    OSIS and an exception is raised.
     """
 
     try:

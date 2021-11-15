@@ -80,7 +80,7 @@ def api_exception_handler(api_exception_cls):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
             try:
-                func(*args, **kwargs)
+                return func(*args, **kwargs)
             except api_exception_cls as api_exception:
                 ApiExceptionHandler().handle(api_exception)
         return wrapped_function
