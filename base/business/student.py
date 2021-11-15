@@ -3,7 +3,6 @@ from typing import Optional
 from django.contrib.auth.models import User
 from django.core.exceptions import MultipleObjectsReturned
 
-from base.models.enums import offer_enrollment_state
 from base.models.person import Person
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService, OfferEnrollmentBusinessException
@@ -29,7 +28,6 @@ def _discriminate_student(students, person: Person) -> Optional[Student]:
         student_offer_enrollments = OfferEnrollmentService.get_enrollments_list(
             person=person,
             global_id=str(person.global_id),
-            enrollment_state=list(offer_enrollment_state.VALID_ENROLLMENT_STATES)
         ).results
         if student_offer_enrollments:
             registration_id = student_offer_enrollments[0].student_registration_id
