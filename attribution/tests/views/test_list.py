@@ -272,9 +272,7 @@ class ListBuildTest(TestCase):
         )
 
         mock_get_attributions_list.return_value = []
-        mock_get_learning_units.return_value = [
-            {'acronym': "LECON2020"},
-        ]
+        mock_get_learning_units.return_value = []
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, "LECON2020")
         response = self.client.post(self.url, data={key: ""})
 
