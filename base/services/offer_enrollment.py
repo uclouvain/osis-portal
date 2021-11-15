@@ -46,17 +46,11 @@ class OfferEnrollmentService:
         configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
-            enrollments = api_instance.enrollments_list(
+            return api_instance.enrollments_list(
                 global_id=global_id,
                 **utils.build_mandatory_auth_headers(person),
                 **kwargs
             )
-        return enrollments
-
-    @classmethod
-    @api_exception_handler(api_exception_cls=ApiException)
-    def get_enrollments_year_list(cls, global_id: str, person: Person, year: int, **kwargs) -> EnrollmentList:
-        return cls.get_enrollments_list(global_id=global_id, person=person, year=year, **kwargs)
 
     @staticmethod
     @api_exception_handler(api_exception_cls=ApiException)
@@ -64,11 +58,10 @@ class OfferEnrollmentService:
         configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
-            enrollments = api_instance.my_enrollments_list(
+            return api_instance.my_enrollments_list(
                 **utils.build_mandatory_auth_headers(person),
                 **kwargs
             )
-        return enrollments
 
     @classmethod
     @api_exception_handler(api_exception_cls=ApiException)
