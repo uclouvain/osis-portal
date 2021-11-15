@@ -36,7 +36,7 @@
     {% get_current_language as LANGUAGE_CODE %}
     <h1>{% trans 'List of students enrolled to my exams' %}</h1>
     {% if messages %}
-        <div class="alert alert-warning">
+        <div class="alert alert-warning" id="div_messages">
             {% for message in messages %}
                 <i class="fa fa-exclamation-triangle"></i> {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
                 {% if not forloop.last %}
@@ -126,14 +126,15 @@
                                                 {% with classe.code|slice:"-1:" as classe_letter_code %}
                                                     {% with learning_unit_yr.acronym|add:classe_letter_code as learning_unit_code %}
                                                     <button class="btn-clear"
-                                                            type="button">
+                                                            type="button"
+                                                            id="bt_produce_xls_{{ classe.code }}" >
                                                         <a href="{% url 'scores_sheet_xls' classe.code %}"
                                                            data-toggle="tooltip"
                                                             title="{% trans 'Excel File' %}">
                                                             <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 200%"></i>
                                                         </a>
                                                     </button>
-                                                    <button  class="btn-clear" type="button">
+                                                  <button  class="btn-clear" type="button" id="bt_produce_pdf_{{ classe.code }}">
                                                         <a href="{% url 'scores_sheet_pdf' classe.code %}"
                                                            data-toggle="tooltip"
                                                            title="{% trans 'PDF File' %}">
@@ -174,4 +175,12 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $("button[id^='bt_produce_']").click(function (e) {
+            $("#div_messages").remove();
+        });
+    </script>
 {% endblock %}
