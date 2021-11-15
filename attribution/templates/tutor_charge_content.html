@@ -30,7 +30,9 @@
 </h2>
 
 <div class="alert alert-warning">
-    <i class="fa fa-exclamation-triangle"></i>  {% trans 'Lists of students are available by clicking on the symbol' %} <span class="fa fa-group" aria-hidden="true" style="color: #367FB9"></span>{% trans ' in the column "Students"' %}</span>
+    <i class="fa fa-exclamation-triangle"></i> {% trans 'Lists of students are available by clicking on the symbol' %}
+    <span class="fa fa-group" aria-hidden="true"
+          style="color: #367FB9"></span>{% trans ' in the column "Students"' %}</span>
 </div>
 
 <ul class="nav nav-tabs">
@@ -88,18 +90,21 @@
                 <td>{{ attribution.credits | default_if_none:''}}</td>
                 <td>
                     {% if attribution.has_classes %}
-                        <a title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
+                        <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                             title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
                             <span class="fa fa-group" aria-hidden="true" style="color:gray"></span>
-                        </a>
+                        </div>
                     {% else %}
                         <a href="{{ attribution.attribution_students_url }}">
                             <span class="fa fa-group" aria-hidden="true"></span>
                         </a>
                         {% if attribution.has_peps %}
-                            <span class="label label-warning"
-                                  title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}">
-                            PEPS
-                        </span>
+                            <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                 title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}">
+                                <span class="label label-warning">
+                                      PEPS
+                                </span>
+                            </div>
                         {% endif %}
                     {% endif %}
                 </td>
@@ -117,9 +122,10 @@
                 </td>
                 <td>
                     {% if attribution.has_classes %}
-                        <a title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
+                        <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                             title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
                             <span class="glyphicon glyphicon-envelope" aria-hidden="true" style="color:gray"></span>
-                        </a>
+                        </div>
                     {% else %}
                         <a href="{{ attribution.students_list_email }}">
                             <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
@@ -147,8 +153,9 @@
                                 <span class="fa fa-group" aria-hidden="true"></span>
                             </a>
                             {% if class_repartition.has_peps %}
-                                <span class="label label-warning"
-                                      title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}">
+                                <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                     title="{% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}">
+                                <span class="label label-warning">
                             PEPS
                         </span>
                             {% endif %}

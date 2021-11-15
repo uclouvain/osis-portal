@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-02 11:43+0100\n"
+"POT-Creation-Date: 2021-11-08 13:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,6 +294,10 @@ msgstr "Produire xls"
 msgid "Program"
 msgstr "Programme"
 
+msgctxt "attribution"
+msgid "Program"
+msgstr "Formation"
+
 msgid "Program for Students with a Specific Profile"
 msgstr "Projet pour étudiant.e à profil spécifique"
 
@@ -478,6 +482,9 @@ msgstr "Trop élevé"
 
 msgid "Total"
 msgstr "Total"
+
+msgid "Type"
+msgstr "Type"
 
 msgid "Type of specific profile"
 msgstr "Type PEPS"

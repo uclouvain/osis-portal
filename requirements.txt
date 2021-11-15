@@ -1,4 +1,4 @@
-Django==2.2.13
+Django==2.2.24
 django-bootstrap3==11.1.0
 django-localflavor==1.6
 django-statici18n==1.8.3
@@ -6,7 +6,7 @@ djangorestframework==3.12.4
 jdcal==1.4
 mock==2.0.0
 pika==0.12.0
-Pillow==6.2.2
+Pillow==8.3.2
 psycopg2-binary==2.7.5
 PyPDF2==1.26.0
 pypdftk==0.4
@@ -22,7 +22,7 @@ openpyxl==2.3.2
 coverage==4.5.1
 pytz==2018.5
 pyvirtualdisplay==0.2.1
-django-registration==3.0
+django-registration==3.1.2
 django-autocomplete-light==3.5.1
 django-hijack==2.1.10
 django-hijack-admin==2.1.10
@@ -34,7 +34,7 @@ django-waffle==0.14.0
 git+https://github.com/uclouvain/osis-attribution-sdk.git@build-1.17.0
 git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@build-1.0.0
 git+https://github.com/uclouvain/osis-learning-unit-sdk.git@build-1.9.0
-git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@build-1.0.0
+git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@build-1.2.0
 git+https://github.com/uclouvain/osis-education-group-sdk.git@build-1.8.0
 git+https://github.com/uclouvain/osis-reference-sdk.git@build-1.14.0
 git+https://github.com/uclouvain/osis-document.git@dev#egg=osis_document
