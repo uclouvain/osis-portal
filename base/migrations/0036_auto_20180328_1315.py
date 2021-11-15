@@ -29,9 +29,8 @@ class Migration(migrations.Migration):
                     SELECT base_learningunitcomponent.id
                     FROM base_learningunitcomponent
                     JOIN base_learningunityear on (base_learningunityear.id = base_learningunitcomponent.learning_unit_year_id)
-                    JOIN base_learningunit on (base_learningunit.id = base_learningunityear.learning_unit_id)
                      WHERE base_learningunitcomponent.deleted is null AND
-                        ( base_learningunityear is not null OR base_learningunit.deleted is not null)
+                        ( base_learningunityear is not null)
                 )
         """),
         migrations.RunSQL("""
@@ -77,8 +76,7 @@ class Migration(migrations.Migration):
                   id in (
                     SELECT base_learningunityear.id
                     FROM base_learningunityear
-                    JOIN base_learningunit on (base_learningunit.id = base_learningunityear.learning_unit_id)
-                     WHERE base_learningunityear.deleted is null AND base_learningunit.deleted is not null
+                     WHERE base_learningunityear.deleted is null
                   )
         """),
         migrations.RunSQL("DELETE FROM base_learningunit WHERE deleted is not null"),

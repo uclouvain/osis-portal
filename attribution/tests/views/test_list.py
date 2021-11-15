@@ -259,7 +259,8 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @mock.patch("attribution.views.list.AttributionService.get_attributions_list")
-    def test_when_trying_to_access_other_tutor_students_list(self, mock_get_attributions_list):
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    def test_when_trying_to_access_other_tutor_students_list(self, mock_get_learning_units, mock_get_attributions_list):
         an_other_tutor = TutorFactory()
         an_other_tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         self.client.force_login(an_other_tutor.person.user)
@@ -271,7 +272,7 @@ class ListBuildTest(TestCase):
         )
 
         mock_get_attributions_list.return_value = []
-
+        mock_get_learning_units.return_value = []
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, "LECON2020")
         response = self.client.post(self.url, data={key: ""})
 
