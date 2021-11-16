@@ -28,10 +28,6 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='learningcontaineryear',
-            name='learning_container',
-        ),
-        migrations.RemoveField(
-            model_name='learningcontaineryear',
             name='requirement_entity',
         ),
         migrations.DeleteModel(
@@ -48,9 +44,6 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name='learningunityear',
             name='learning_container_year',
-        ),
-        migrations.DeleteModel(
-            name='LearningContainer',
         ),
         migrations.DeleteModel(
             name='LearningContainerYear',
