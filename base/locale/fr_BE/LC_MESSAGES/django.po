@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-13 09:34+0200\n"
+"POT-Creation-Date: 2021-11-16 13:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,12 +88,6 @@ msgstr "Description"
 msgid "Dissertation"
 msgstr "Mémoire"
 
-msgid "ES"
-msgstr "ES"
-
-msgid "ESHN"
-msgstr "ESHN"
-
 msgid "Education group year"
 msgstr "Organisation de formations annualisée"
 
@@ -148,12 +141,6 @@ msgstr "Autre collectif"
 
 msgid "Other individual"
 msgstr "Autre individuel"
-
-msgid "Other special needs"
-msgstr "Autre HTM"
-
-msgid "PMR"
-msgstr "PMR"
 
 msgid "Page not found"
 msgstr "Page inexistante"
