@@ -194,3 +194,9 @@ table.dataTable thead th.sorting:after {
     color: #337ab7 !important;
     opacity: 1 !important;
 }
+table thead .glyphicon-sort,
+table thead .glyphicon-sort-by-attributes,
+table thead .glyphicon-sort-by-attributes-alt{
+    color: #337ab7 !important;
+    opacity: 1 !important;
+}
