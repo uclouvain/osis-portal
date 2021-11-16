@@ -39,7 +39,7 @@ from assessments.services.assessments import AssessmentsService
 from assessments.services.progress_overview import ProgressOverviewService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
-from base.models.learning_unit_year import LearningUnitYear
+from base.models.academic_year import AcademicYear
 from base.models.person import Person
 from base.views import layout
 
@@ -82,51 +82,33 @@ def _get_progression_overview_learning_units(request, person):
     return progress_overview.by_learning_unit
 
 
-def get_codes_parameter(request, academic_yr):
-    learning_unit_years = None
-    current_session_dict = AssessmentsService.get_current_session(request.user.person)
-    learning_unit_acronyms = _get_learning_unit_acronyms(
-        get_learning_units(request, current_session_dict).get('my_learning_units', []))
-
-    for key, value in request.POST.items():
-        if key.startswith(LEARNING_UNIT_ACRONYM_ID):
-            acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
-            learning_unit_years = build_learning_units_string(
-                academic_yr,
-                acronym,
-                learning_unit_years,
-                learning_unit_acronyms
-            )
-
-    if learning_unit_years:
-        return learning_unit_years
-
-    return NO_DATA_VALUE
-
-
-def build_learning_units_string(academic_yr, acronym, learning_unit_years_in, user_learning_units_assigned: List[str]):
+def build_learning_units_string(
+        academic_yr: int,
+        acronym: str,
+        learning_unit_years_in: List,
+        user_learning_units_assigned: List[str],
+        person: Person
+) -> List:
     learning_unit_years = learning_unit_years_in
-    learning_units = LearningUnitYear.objects.select_related(
-        "academic_year",
-        "learning_unit"
-    ).filter(
-        acronym__startswith=acronym,
-        academic_year=academic_yr
+    learning_units = LearningUnitService.get_learning_units(
+        learning_unit_codes=[acronym],
+        year=academic_yr,
+        person=person
     )
 
-    if learning_units and learning_units[0].acronym in user_learning_units_assigned:
-        if learning_unit_years is None:
-            learning_unit_years = "{0}".format(learning_units[0].acronym)
-        else:
-            learning_unit_years = "{0},{1}".format(user_learning_units_assigned, learning_units[0].acronym)
+    if learning_units:
+        ue_acronym = learning_units[0].get('acronym')
+        if ue_acronym in user_learning_units_assigned:
+            if learning_unit_years is None:
+                learning_unit_years = "{0}".format(ue_acronym)
+            else:
+                learning_unit_years = "{0},{1}".format(user_learning_units_assigned, ue_acronym)
 
     return learning_unit_years
 
 
-def get_anac_parameter(current_academic_year):
-    if current_academic_year:
-        return str(current_academic_year.year)
-    return NO_DATA_VALUE
+def get_anac_parameter(current_academic_year: AcademicYear):
+    return str(current_academic_year.year) if current_academic_year else NO_DATA_VALUE
 
 
 @login_required
@@ -135,7 +117,10 @@ def get_anac_parameter(current_academic_year):
 def list_build(request):
     current_academic_year = mdl_base.academic_year.current_academic_year()
     anac = get_anac_parameter(current_academic_year)
-    codes = get_codes_parameter(request, current_academic_year)
+    current_session_dict = AssessmentsService.get_current_session(request.user.person)
+    learning_unit_acronyms = _get_learning_unit_acronyms(
+        get_learning_units(request, current_session_dict).get('my_learning_units', []))
+    codes = get_codes_parameter_list(request, current_academic_year, learning_unit_acronyms)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
@@ -220,7 +205,9 @@ def list_build_by_person(request, global_id: str):
     anac = get_anac_parameter(current_academic_year)
     person = mdl_base.person.find_by_global_id(global_id)
     data = get_learning_units_by_person(request, person.global_id)
-    codes = get_codes_parameter_list(request, current_academic_year, data)
+    user_learning_units_assigned = data.get('learning_units', [])
+    learning_unit_acronyms = _get_learning_unit_acronyms(user_learning_units_assigned)
+    codes = get_codes_parameter_list(request, current_academic_year, learning_unit_acronyms)
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
@@ -229,16 +216,15 @@ def list_build_by_person(request, global_id: str):
         return render(request, "admin/students_exam_list.html", data)
 
 
-def get_codes_parameter_list(request, academic_yr, data):
+def get_codes_parameter_list(request, current_academic_year: AcademicYear, learning_unit_acronyms: List[str]):
+    academic_yr = current_academic_year.year if current_academic_year else None
     learning_unit_years = None
-    user_learning_units_assigned = data.get('learning_units', [])
-    learning_unit_acronyms = _get_learning_unit_acronyms(user_learning_units_assigned)
 
     for key, value in request.POST.items():
         if key.startswith(LEARNING_UNIT_ACRONYM_ID):
             acronym = key.replace(LEARNING_UNIT_ACRONYM_ID, '')
             learning_unit_years = build_learning_units_string(academic_yr, acronym, learning_unit_years,
-                                                              learning_unit_acronyms)
+                                                              learning_unit_acronyms, request.user.person)
     if learning_unit_years:
         return learning_unit_years
     return NO_DATA_VALUE
@@ -246,12 +232,12 @@ def get_codes_parameter_list(request, academic_yr, data):
 
 def _get_learning_unit_acronyms(user_learning_units_assigned: List) -> List[str]:
     learning_unit_acronyms = set()
-    for u in user_learning_units_assigned:
-        learning_unit_acronyms.add(u.get('acronym'))
+    for learning_unit in user_learning_units_assigned:
+        learning_unit_acronyms.add(learning_unit.get('acronym'))
     return list(learning_unit_acronyms)
 
 
-def _get_warning_concerning_sessions(a_person: Person):
+def _get_warning_concerning_sessions(a_person: Person) -> Dict:
     date_format = str(_('date_format'))
 
     previous_session_dict = AssessmentsService.get_previous_session(a_person)
@@ -279,5 +265,4 @@ def _get_warning_concerning_sessions(a_person: Person):
     else:
         next_session_msg = _('Unexpected error')
 
-    data = {'messages_error': {previous_session_msg, next_session_msg}}
-    return data
+    return {'messages_error': {previous_session_msg, next_session_msg}}

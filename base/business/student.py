@@ -3,7 +3,6 @@ from typing import Optional
 from django.contrib.auth.models import User
 from django.core.exceptions import MultipleObjectsReturned
 
-from base.models.enums import offer_enrollment_state
 from base.models.person import Person
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService, OfferEnrollmentBusinessException
@@ -20,16 +19,15 @@ def check_if_person_is_student(person: Person) -> bool:
 def _discriminate_student(students, person: Person) -> Optional[Student]:
     """
     Discriminate between several student objects that belong to the same person.
-    Offer enrollments with valid state enrollment are checked.
-    If the most recent enrollment year has only one student, this student is returned.
-    If there are more than one student for the most recent offer enrollment year, an exception is raised.
+    It's done by OSIS API
+    If there are more than one student for the most recent offer enrollment year, a DoubleNOMA status_code is sent by
+    OSIS and an exception is raised.
     """
 
     try:
         student_offer_enrollments = OfferEnrollmentService.get_enrollments_list(
             person=person,
             global_id=str(person.global_id),
-            enrollment_state=list(offer_enrollment_state.VALID_ENROLLMENT_STATES)
         ).results
         if student_offer_enrollments:
             registration_id = student_offer_enrollments[0].student_registration_id
