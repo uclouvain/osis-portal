@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 import uuid
 
-import django.db.models.deletion
 from django.db import migrations, models
 
 
@@ -38,10 +37,5 @@ class Migration(migrations.Migration):
             model_name='learningunityear',
             name='vacant',
             field=models.BooleanField(default=False),
-        ),
-        migrations.AddField(
-            model_name='learningunityear',
-            name='learning_unit',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='base.LearningUnit'),
         ),
     ]
