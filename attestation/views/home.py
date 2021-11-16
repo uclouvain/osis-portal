@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
 import json
 import logging
 from typing import Dict
@@ -37,10 +38,12 @@ from django.views.generic import TemplateView
 from attestation.queues import student_attestation_status
 from base.business import student as student_business
 from base.models.student import Student
+from base.utils.api_utils import get_academic_calendar_list_from_osis
 from dashboard.views import main as dash_main_view
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
+PAYMENT_NOTICE_1_WARNING_REFERENCE = "PAYMENT_NOTICE_1_WARNING"
 
 
 class Home(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -87,18 +90,23 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         current_year = attestation_statuses_all_years_json_dict.get('current_year')
         returned_registration_id = attestation_statuses_all_years_json_dict.get('registration_id')
         current_year_echeance_attestation = _get_current_year_echeance_attestation(attestations, current_year)
+        display_warning_echeance_attestation_1 = _check_display_warning_echeance_attestation_1(
+            data_year=current_year_echeance_attestation
+        )
         if returned_registration_id != student.registration_id:
             raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
     else:
         attestations = None
         current_year = None
         current_year_echeance_attestation = None
+        display_warning_echeance_attestation_1 = False
     return {
         'attestations': attestations,
         'current_year': current_year,
         'student': student,
         'current_year_echeance_attestation': current_year_echeance_attestation,
-        'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE
+        'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE,
+        'display_warning_echeance_attestation_1': display_warning_echeance_attestation_1
     }
 
 
@@ -113,3 +121,23 @@ def _get_current_year_echeance_attestation(attestations, current_year):
                  attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
             )
     return None
+
+
+def _check_display_warning_echeance_attestation_1(data_year):
+    acad_calendars_payment_notice_1_warning_api_response = get_academic_calendar_list_from_osis(
+        data_year=data_year,
+        reference=PAYMENT_NOTICE_1_WARNING_REFERENCE
+    )
+    academic_calendars_payment_notice_1_warning = acad_calendars_payment_notice_1_warning_api_response.get('results')
+    if academic_calendars_payment_notice_1_warning:
+        today = datetime.date.today()
+        for calendar in academic_calendars_payment_notice_1_warning:
+            if _fetch_date(calendar.get('start_date')) <= today and (
+                    _fetch_date(calendar.get('end_date')) is None or _fetch_date(calendar.get('end_date')) >= today
+            ):
+                return True
+    return False
+
+
+def _fetch_date(date_str):
+    return datetime.datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None

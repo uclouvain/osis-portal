@@ -392,6 +392,11 @@ URL_TRAINING_API = os.environ.get(
     ""
 )
 
+URL_ACADEMIC_CALENDAR_API = os.environ.get(
+    "URL_ACADEMIC_CALENDAR_API",
+    ""
+)
+
 # BASE_API
 URL_API_BASE_PERSON_ROLES = os.environ.get("URL_API_BASE_PERSON_ROLES", "")
 
