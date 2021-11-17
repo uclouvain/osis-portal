@@ -215,9 +215,11 @@ class ListBuildTest(TestCase):
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.ProgressOverviewService.get_progress_overview")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self,
                                                   mock_fetch,
+                                                  mock_get_learning_units,
                                                   mock_get_score_responsible_list,
                                                   mock_get_progress_overview,
                                                   mock_get_attributions_list
@@ -232,9 +234,8 @@ class ListBuildTest(TestCase):
                 effective_class_repartition=[],
             )
         ]
-        mock_get_progress_overview.return_value = SimpleNamespace(**{
-            'by_learning_unit': [{'code': LU_ACRONYM.acronym}]
-        })
+        mock_get_progress_overview.return_value = SimpleNamespace(by_learning_unit=[{'code': LU_ACRONYM}])
+        mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, LU_ACRONYM)
@@ -249,7 +250,8 @@ class ListBuildTest(TestCase):
         self.assertEqual(response.context['msg_error'], _('No data found'))
 
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
-    def test_when_trying_to_access_other_tutor_students_list(self, mock_get_attributions_list):
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
+    def test_when_trying_to_access_other_tutor_students_list(self, mock_get_learning_units, mock_get_attributions_list):
         an_other_tutor = TutorFactory()
         an_other_tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         self.client.force_login(an_other_tutor.person.user)
@@ -261,6 +263,7 @@ class ListBuildTest(TestCase):
         )
 
         mock_get_attributions_list.return_value = []
+        mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
 
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, "LECON2020")
         response = self.client.post(self.url, data={key: ""})
@@ -277,6 +280,7 @@ class ListBuildTest(TestCase):
         'ATTRIBUTION_PATH': '/path'
     })
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch("attribution.views.list.ProgressOverviewService.get_progress_overview")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
@@ -284,6 +288,7 @@ class ListBuildTest(TestCase):
                                                    mock_fetch,
                                                    mock_get_score_responsible_list,
                                                    mock_get_progress_overview,
+                                                   mock_get_learning_units,
                                                    mock_get_attributions_list
                                                    ):
         today = datetime.datetime.today()
@@ -300,6 +305,7 @@ class ListBuildTest(TestCase):
         mock_get_progress_overview.return_value = SimpleNamespace(**{
             'by_learning_unit': [{'code': LU_ACRONYM}]
         })
+        mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, LU_ACRONYM)
@@ -426,9 +432,11 @@ class AdminListBuildTest(TestCase):
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.ProgressOverviewService.get_progress_overview")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
     def test_with_post_but_webservice_unavailable(self,
                                                   mock_fetch,
+                                                  mock_get_learning_units,
                                                   mock_get_score_responsible_list,
                                                   mock_get_progress_overview,
                                                   mock_get_attributions_list):
@@ -443,9 +451,8 @@ class AdminListBuildTest(TestCase):
                 effective_class_repartition=[],
             )
         ]
-        mock_get_progress_overview.return_value = SimpleNamespace(**{
-            'by_learning_unit': [{'code': LU_ACRONYM}]
-        })
+        mock_get_progress_overview.return_value = SimpleNamespace(by_learning_unit=[{'code': LU_ACRONYM}])
+        mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, LU_ACRONYM)
@@ -472,9 +479,11 @@ class AdminListBuildTest(TestCase):
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.ProgressOverviewService.get_progress_overview")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
+    @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self,
                                                    mock_fetch,
+                                                   mock_get_learning_units,
                                                    mock_get_score_responsible_list,
                                                    mock_get_progress_overview,
                                                    mock_get_attributions_list):
@@ -489,9 +498,8 @@ class AdminListBuildTest(TestCase):
                 effective_class_repartition=[]
             )
         ]
-        mock_get_progress_overview.return_value = SimpleNamespace(**{
-            'by_learning_unit': [{'code': LU_ACRONYM}]
-        })
+        mock_get_progress_overview.return_value = SimpleNamespace(by_learning_unit=[{'code': LU_ACRONYM}])
+        mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
         key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, LU_ACRONYM)

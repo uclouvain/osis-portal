@@ -96,9 +96,8 @@ def build_learning_units_string(
         year=academic_yr,
         person=person
     )
-
     if learning_units:
-        ue_acronym = learning_units[0].get('acronym')
+        ue_acronym = learning_units[0].code
         if ue_acronym in user_learning_units_assigned:
             if learning_unit_years is None:
                 learning_unit_years = "{0}".format(ue_acronym)

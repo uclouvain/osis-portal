@@ -59,59 +59,65 @@
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                 <strong>{% trans "NEW" %}</strong> {% trans "'Lists of students enrolled to my exams' are immediately usable for encoding scores." %}
             </div>
+           <div class="alert alert-warning">
+                <i class="fa fa-warning" aria-hidden="true"></i>
+                <strong>{% trans "MSG TBD: Classes may not appear in this list." %}
+            </div>
             <br>
             <form method="post" name="form_students_list">
                 <div class="row">
                     {% csrf_token %}
                     <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                            <th>{% trans 'Code' %}</th>
+                            <th>{% trans 'Title' context 'score sheet export' %}</th>
+                            <th>
+                                {% trans 'Scores responsible' %}
+                                <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                     title="{% trans 'All tutors can encode scores but only the scores responsible can submit. If the scores responsible is not correct, please contact your faculty.' %}">
+                                    <span class="glyphicon glyphicon-question-sign "
+                                          style="font-size: 14pt; display: inline">
+                                    </span>
+                                </div>
+                                </abbr>
+                            </th>
+                            <tbody>
                         {% if my_learning_units %}
-                            <table class="table">
-                                <thead>
-                                <th>{% trans 'Code' %}</th>
-                                <th>{% trans 'Title' context 'score sheet export' %}</th>
-                                <th>
-                                    {% trans 'Scores responsible' %}
-                                    <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
-                                         title="{% trans 'All tutors can encode scores but only the scores responsible can submit. If the scores responsible is not correct, please contact your faculty.' %}">
-                                        <span class="glyphicon glyphicon-question-sign "
-                                              style="font-size: 14pt; display: inline">
-                                        </span>
-                                    </div>
-                                    </abbr>
-                                </th>
-                                <th>{% trans 'Download the list (Excel or PDF)' %}</th>
-                                </thead>
-                                <tbody>
-                                {% for learning_unit in my_learning_units %}
-                                        <tr>
-                                            <td>{{ learning_unit.code }}</td>
-                                            <td>{{ learning_unit.full_title|default_if_none:"" }}</td>
-                                        <td>{{ learning_unit.score_responsible|default_if_none:""}}</td>
-                                        <td align="center">
-                                            <button class="btn-clear"
-                                                    id="bt_produce_xls_score_encoding_{{ learning_unit.code }}"
-                                                    type="button">
-                                                <a href="{% url 'scores_sheet_xls' learning_unit.code %}"
-                                                   data-toggle="tooltip">
-                                                    <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 200%"></i>
-                                                </a>
-                                            </button>
-                                            <button class="btn-clear"
-                                                    id="bt_produce_pdf_score_encoding_{{ learning_unit.code }}"
-                                                    type="button">
-                                                <a href="{% url 'scores_sheet_pdf' learning_unit.code %}"
-                                                   data-toggle="tooltip">
-                                                    <i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 200%"></i>
-                                                </a>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                            {% for learning_unit in my_learning_units %}
+                                <tr>
+                                    <td>{{ learning_unit.code }}</td>
+                                    <td>{{ learning_unit.full_title|default_if_none:"" }}</td>
+                                <td>{{ learning_unit.score_responsible|default_if_none:""}}</td>
+                                <td align="center">
+                                    <button class="btn-clear"
+                                            id="bt_produce_xls_score_encoding_{{ learning_unit.code }}"
+                                            type="button">
+                                        <a href="{% url 'scores_sheet_xls' learning_unit.code %}"
+                                           data-toggle="tooltip">
+                                            <i class="fa fa-file-excel-o" aria-hidden="true" style="font-size: 200%"></i>
+                                        </a>
+                                    </button>
+                                    <button class="btn-clear"
+                                            id="bt_produce_pdf_score_encoding_{{ learning_unit.code }}"
+                                            type="button">
+                                        <a href="{% url 'scores_sheet_pdf' learning_unit.code %}"
+                                           data-toggle="tooltip">
+                                            <i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 200%"></i>
+                                        </a>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
                         {% else %}
-                            <div class="alert alert-info">{% trans "You aren't teaching for any learning unit" %}</div>
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    {% trans "No learning unit with students registered for exams is available" %}
+                                </td>
+                            </tr>
                         {% endif %}
+                        </tbody>
+                    </table>
                     </div>
                 </div>
                 <br>
