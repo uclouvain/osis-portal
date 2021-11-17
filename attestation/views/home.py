@@ -39,7 +39,6 @@ from attestation.queues import student_attestation_status
 from base.business import student as student_business
 from base.models.person import Person
 from base.models.student import Student
-from base.utils.api_utils import get_academic_calendar_list_from_osis
 from dashboard.views import main as dash_main_view
 from reference.services.academic_calendar import AcademicCalendarService
 
@@ -140,12 +139,8 @@ def _check_display_warning_echeance_attestation_1(data_year: int, person: Person
     if academic_calendars_payment_notice_1_warning:
         today = datetime.date.today()
         for calendar in academic_calendars_payment_notice_1_warning:
-            start_date = str(calendar.get('start_date'))
-            end_date = str(calendar.get('end_date'))
-            if _fetch_date(start_date) <= today and (_fetch_date(end_date) is None or _fetch_date(end_date) >= today):
+            start_date = calendar.get('start_date')
+            end_date = calendar.get('end_date')
+            if start_date <= today and (end_date is None or end_date >= today):
                 return True
     return False
-
-
-def _fetch_date(date_str: str):
-    return datetime.datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None
