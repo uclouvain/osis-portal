@@ -34,7 +34,9 @@ OPTIONAL_APPS = (
     'exam_enrollment',
     'attestation',
     'assessments',
-    'continuing_education'
+    'continuing_education',
+    'admission',
+    'osis_document',
 )
 
 OPTIONAL_MIDDLEWARES = ()

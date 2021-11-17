@@ -2,14 +2,35 @@
 {% load i18n %}
 
 
-<div class="grid-item">
-    <i class="fa fa-hashtag"></i>
-    <div class="description">
-        <h4 class="media-heading"><a href="{% url 'scores_encoding' %}"
-                                     id="lnk_score_encoding">{% trans 'Scores encoding' %}</a></h4>
-        <p>{% trans 'Get scores encoding papersheet and encode scores of your students.' %}</p>
+{% if score_encoding_url %}
+    <div class="grid-item">
+        <i class="fa fa-hashtag"></i>
+        <div class="description">
+            <h4 class="media-heading">
+                <a href="{{ score_encoding_url }}" id="lnk_scores_download_2">
+                    {% trans 'Scores encoding' %}
+                </a>
+            </h4>
+            <p>{%  trans 'Scores encoding of my students' %}.</p>
+            <p>
+                <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
+                {% if score_encoding_vpn_help_url %}
+                    <span class="dashboard-vpn-warning">
+                    {% trans "This requires a " %}
+                        <a href="{{ score_encoding_vpn_help_url }}" target="_blank\">
+                            {% trans 'VPN access' %}
+                        </a>
+                    {% trans 'outside UCLouvain.' %}
+                </span>
+                {% else %}
+                    <span class="dashboard-vpn-warning">
+                    {% trans 'This requires a VPN access outside UCLouvain.' %}
+                </span>
+                {% endif %}
+            </p>
+        </div>
     </div>
-</div>
+{% endif %}
 
 {% if 'attribution' in installed_apps %}
     <div class="grid-item">
@@ -26,17 +47,19 @@
     <div class="grid-item">
         <i class="fa fa-list-alt"></i>
         <div class="description">
-            <h4 class="media-heading"><a href="{% url 'attribution_home' %}"
-                                         id="lnk_my_teaching_charge">{% trans 'My teaching charge' %}</a></h4>
-            <p>{% trans 'This process controls the teaching charge' %}.</p>
+            <h4 class="media-heading">
+                <a href="{% url 'attribution_home' %}"
+                id="lnk_my_teaching_charge">{% trans 'My teaching charge' %}</a>
+            </h4>
+            <p>{% trans 'Read my teaching charge and access to lists and emails of students.' %}</p>
         </div>
     </div>
     <div class="grid-item">
-        <i class="fa fa-file-excel-o"></i>
+        <i class="fa fa-users"></i>
         <div class="description">
             <h4 class="media-heading"><a href="{% url 'students_list' %}"
-                                         id="lnk_my_students_list">{% trans 'Exam student list' %}</a></h4>
-            <p>{% trans 'List of students enrolled to my exams' %}.</p>
+                                         id="lnk_my_students_list">{% trans 'Lists of students enrolled to my exams' %}</a></h4>
+            <p>{% trans 'Download lists of students enrolled to exams for online scores encoding (Excel and PDF).' %}</p>
         </div>
     </div>
 
@@ -52,7 +75,7 @@
                 <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
                 {% if osis_vpn_help_url %}
                     <span class="dashboard-vpn-warning">
-                    {% trans 'This requires a' %} <a href="{{ osis_vpn_help_url }}"
+                    {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}"
                                                      target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain.' %}
                </span>
                 {% else %}
@@ -78,7 +101,7 @@
                 <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
                 {% if osis_vpn_help_url %}
                     <span class="dashboard-vpn-warning">
-                    {% trans 'This requires a' %} <a href="{{ osis_vpn_help_url }}"
+                    {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}"
                                                      target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain.' %}
                </span>
                 {% else %}

@@ -1,6 +1,6 @@
 {% extends "dashboard_layout.html" %}
 {% load staticfiles %}
-{% load i18n %}
+{% load i18n academic_year_display %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -74,10 +74,11 @@
                         {% for program in programs %}
                             <tr>
 
-                                <td>{{ program.academic_year }}</td>
+                                <td>{{ program.year|display_as_academic_year }}</td>
                                 <td>
                                     <a href="#"
-                                       data-toggle="modal" data-target="#modalConfirmExamEnrollment{{ program.id }}">
+                                       data-toggle="modal"
+                                       data-target="#modalConfirmExamEnrollment_{{ program.acronym|slugify }}_{{ program.year }}">
                                         {{ program.acronym }}
                                     </a>
                                 </td>

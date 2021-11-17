@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ def home(request):
         'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
         'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL,
         'dissertation_url': settings.OSIS_DISSERTATION_URL,
+        'score_encoding_url': settings.OSIS_SCORE_ENCODING_URL,
+        'score_encoding_vpn_help_url': settings.OSIS_VPN_HELP_URL
     })
 
 
@@ -51,7 +53,7 @@ def faculty_administration(request):
 def show_multiple_registration_id_error(request):
     msg = _("A problem was detected with your registration : 2 registration id's are linked to your user.</br> Please "
             "contact <a href=\"{registration_department_url}\" "
-            "target=\"_blank\">the Registration department</a>. Thank you.")\
+            "target=\"_blank\">the Registration department</a>. Thank you.") \
         .format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
     messages.add_message(request, messages.ERROR, msg)
     return home(request)
@@ -63,5 +65,5 @@ def _can_access_administration(request):
     can_access = False
     if 'performance' in settings.INSTALLED_APPS:
         from performance.views import main as perf_main_view
-        can_access = perf_main_view.__can_access_performance_administration(request)
+        can_access = perf_main_view._can_access_performance_administration(request)
     return can_access
