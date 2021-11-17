@@ -37,9 +37,10 @@ from django.views.generic import TemplateView
 
 from attestation.queues import student_attestation_status
 from base.business import student as student_business
+from base.models.person import Person
 from base.models.student import Student
-from base.utils.api_utils import get_academic_calendar_list_from_osis
 from dashboard.views import main as dash_main_view
+from reference.services.academic_calendar import AcademicCalendarService
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
@@ -49,6 +50,10 @@ PAYMENT_NOTICE_1_WARNING_REFERENCE = "PAYMENT_NOTICE_1_WARNING"
 class Home(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     permission_required = 'base.is_student'
     template_name = 'attestation_home_student.html'
+
+    @cached_property
+    def person(self) -> Person:
+        return self.request.user.person
 
     @cached_property
     def student(self) -> Student:
@@ -67,7 +72,7 @@ class Home(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             attestation_statuses_json_dict = student_attestation_status.fetch_json_attestation_statuses(json_message)
         else:
             attestation_statuses_json_dict = None
-        return _make_attestation_data(attestation_statuses_json_dict, self.student)
+        return _make_attestation_data(attestation_statuses_json_dict, self.student, self.person)
 
     def get_context_data(self, **kwargs) -> Dict:
         return {
@@ -84,14 +89,15 @@ def _make_registration_json_message(registration_id: str):
     return json_message
 
 
-def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, student: Student) -> Dict:
+def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, student: Student, person: Person) -> Dict:
     if attestation_statuses_all_years_json_dict:
         attestations = attestation_statuses_all_years_json_dict.get('attestationStatusesAllYears')
         current_year = attestation_statuses_all_years_json_dict.get('current_year')
         returned_registration_id = attestation_statuses_all_years_json_dict.get('registration_id')
         current_year_echeance_attestation = _get_current_year_echeance_attestation(attestations, current_year)
         display_warning_echeance_attestation_1 = _check_display_warning_echeance_attestation_1(
-            data_year=current_year_echeance_attestation
+            data_year=current_year_echeance_attestation,
+            person=person
         )
         if returned_registration_id != student.registration_id:
             raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
@@ -123,8 +129,9 @@ def _get_current_year_echeance_attestation(attestations, current_year):
     return None
 
 
-def _check_display_warning_echeance_attestation_1(data_year):
-    acad_calendars_payment_notice_1_warning_api_response = get_academic_calendar_list_from_osis(
+def _check_display_warning_echeance_attestation_1(data_year: int, person: Person) -> bool:
+    acad_calendars_payment_notice_1_warning_api_response = AcademicCalendarService.get_academic_calendar_list(
+        person=person,
         data_year=data_year,
         reference=PAYMENT_NOTICE_1_WARNING_REFERENCE
     )
@@ -132,12 +139,8 @@ def _check_display_warning_echeance_attestation_1(data_year):
     if academic_calendars_payment_notice_1_warning:
         today = datetime.date.today()
         for calendar in academic_calendars_payment_notice_1_warning:
-            if _fetch_date(calendar.get('start_date')) <= today and (
-                    _fetch_date(calendar.get('end_date')) is None or _fetch_date(calendar.get('end_date')) >= today
-            ):
+            start_date = calendar.get('start_date')
+            end_date = calendar.get('end_date')
+            if start_date <= today and (end_date is None or end_date >= today):
                 return True
     return False
-
-
-def _fetch_date(date_str):
-    return datetime.datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None
