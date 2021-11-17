@@ -204,7 +204,7 @@ def get_learning_units_by_person(request, global_id: str) -> Dict:
         current_session_dict = AssessmentsService.get_current_session(a_person)
         tutor = mdl_base.tutor.find_by_person(a_person)
         if tutor and current_session_dict:
-            learning_units = _get_progression_overview_learning_units(request, person)
+            learning_units = _get_progression_overview_learning_units(request, a_person)
     return {
         'person': a_person,
         'learning_units': learning_units,
@@ -247,7 +247,7 @@ def get_codes_parameter_list(request, academic_yr, data):
 def _get_learning_unit_acronyms(user_learning_units_assigned: List) -> List[str]:
     learning_unit_acronyms = set()
     for u in user_learning_units_assigned:
-        learning_unit_acronyms.add(u.get('acronym'))
+        learning_unit_acronyms.add(u.get('code'))
     return list(learning_unit_acronyms)
 
 
