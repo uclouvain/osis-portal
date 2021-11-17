@@ -39,6 +39,7 @@ from attestation.queues import student_attestation_status
 from base.business import student as student_business
 from base.models.person import Person
 from base.models.student import Student
+from base.utils.api_utils import get_academic_calendar_list_from_osis
 from dashboard.views import main as dash_main_view
 from reference.services.academic_calendar import AcademicCalendarService
 
