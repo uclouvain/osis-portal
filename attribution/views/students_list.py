@@ -38,8 +38,8 @@ from osis_learning_unit_enrollment_sdk.model.student_specific_profile import Stu
 from attribution.business import xls_students_by_learning_unit
 from attribution.services.attribution import AttributionService
 from attribution.services.enrollments import LearningUnitEnrollmentService
-from attribution.services.learning_unit import LearningUnitService
 from base.utils.api_utils import ApiPaginationMixin, ApiRetrieveAllObjectsMixin
+from learning_unit.services.learning_unit import LearningUnitService
 from performance.models.student_performance import StudentPerformance
 
 JSON_LEARNING_UNIT_NOTE = 'note'
