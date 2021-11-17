@@ -28,10 +28,6 @@ def get_training_list_from_osis(**kwargs):
     return get_list_from_osis(settings.URL_TRAINING_API, **kwargs)
 
 
-def get_academic_calendar_list_from_osis(**kwargs):
-    return get_list_from_osis(settings.URL_ACADEMIC_CALENDAR_API, **kwargs)
-
-
 class PaginatedResponse:
     results: List
     count: int = 0
