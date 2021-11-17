@@ -27,7 +27,7 @@ from django.conf.urls import url
 
 from attestation.views import download as attestation_main
 from attestation.views.administration import Administration, AdministrationSelectStudent, \
-    AdministratioViewStudentAttestation
+    AdministrationViewStudentAttestation
 from attestation.views.home import Home
 
 urlpatterns = [
@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^administration/select_student/$', AdministrationSelectStudent.as_view(),
         name='attestation_admin_select_student'),
     url(r'^administration/attestations/(?P<global_id>[0-9]+)/$',
-        AdministratioViewStudentAttestation.as_view(), name='attestation_admin_view'),
+        AdministrationViewStudentAttestation.as_view(), name='attestation_admin_view'),
     url(r'^administration/attestations/(?P<global_id>[0-9]+)/(?P<academic_year>[0-9]+)/(?P<attestation_type>.+)/$',
         attestation_main.download_student_attestation, name='attestation_admin_download'),
     url(r'^attestations/(?P<academic_year>[0-9]+)/(?P<attestation_type>.+)/$', attestation_main.download_attestation,
