@@ -96,7 +96,7 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         returned_registration_id = attestation_statuses_all_years_json_dict.get('registration_id')
         current_year_echeance_attestation = _get_current_year_echeance_attestation(attestations, current_year)
         display_warning_echeance_attestation_1 = _check_display_warning_echeance_attestation_1(
-            data_year=current_year_echeance_attestation,
+            data_year=current_year,
             person=person
         )
         if returned_registration_id != student.registration_id:
