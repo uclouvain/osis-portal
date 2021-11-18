@@ -36,7 +36,6 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
 from assessments.services.assessments import AssessmentsService
-from assessments.services.progress_overview import ProgressOverviewService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.academic_year import AcademicYear
@@ -76,11 +75,11 @@ def get_learning_units(request, current_session_dict: Dict):
 
 
 def _get_progression_overview_learning_units(request, person):
-    progress_overview = ProgressOverviewService.get_progress_overview(person)
+    progress_overview = AssessmentsService.get_overview(person)
     if not progress_overview:
         messages.add_message(request, messages.ERROR, _('Unexpected error'))
         return []
-    return progress_overview.by_learning_unit
+    return progress_overview.learning_units_progress
 
 
 def build_learning_units_string(

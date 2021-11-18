@@ -213,7 +213,7 @@ class ListBuildTest(TestCase):
         'ATTRIBUTION_PATH': '/path'
     })
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
-    @mock.patch("attribution.views.list.ProgressOverviewService.get_progress_overview")
+    @mock.patch("attribution.views.list.AssessmentsService.get_overview")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
@@ -234,7 +234,7 @@ class ListBuildTest(TestCase):
                 effective_class_repartition=[],
             )
         ]
-        mock_get_progress_overview.return_value = SimpleNamespace(by_learning_unit=[{'code': LU_ACRONYM}])
+        mock_get_progress_overview.return_value = SimpleNamespace(learning_units_progress=[{'code': LU_ACRONYM}])
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
@@ -281,7 +281,7 @@ class ListBuildTest(TestCase):
     })
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
-    @mock.patch("attribution.views.list.ProgressOverviewService.get_progress_overview")
+    @mock.patch("attribution.views.list.AssessmentsService.get_overview")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
     def test_with_post_and_webservice_is_available(self,
@@ -302,9 +302,7 @@ class ListBuildTest(TestCase):
                 effective_class_repartition=[],
             )
         ]
-        mock_get_progress_overview.return_value = SimpleNamespace(**{
-            'by_learning_unit': [{'code': LU_ACRONYM}]
-        })
+        mock_get_progress_overview.return_value = SimpleNamespace(learning_units_progress=[{'code': LU_ACRONYM}])
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
@@ -430,7 +428,7 @@ class AdminListBuildTest(TestCase):
         'ATTRIBUTION_PATH': '/path'
     })
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
-    @mock.patch("attribution.views.list.ProgressOverviewService.get_progress_overview")
+    @mock.patch("attribution.views.list.AssessmentsService.get_overview")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=Exception)
@@ -451,7 +449,7 @@ class AdminListBuildTest(TestCase):
                 effective_class_repartition=[],
             )
         ]
-        mock_get_progress_overview.return_value = SimpleNamespace(by_learning_unit=[{'code': LU_ACRONYM}])
+        mock_get_progress_overview.return_value = SimpleNamespace(learning_units_progress=[{'code': LU_ACRONYM}])
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
@@ -477,7 +475,7 @@ class AdminListBuildTest(TestCase):
         'ATTRIBUTION_PATH': '/path'
     })
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
-    @mock.patch("attribution.views.list.ProgressOverviewService.get_progress_overview")
+    @mock.patch("attribution.views.list.AssessmentsService.get_overview")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
     @mock.patch("attribution.views.list.LearningUnitService.get_learning_units")
     @mock.patch('attribution.views.list._fetch_with_basic_auth', side_effect=return_sample_xls)
@@ -498,7 +496,7 @@ class AdminListBuildTest(TestCase):
                 effective_class_repartition=[]
             )
         ]
-        mock_get_progress_overview.return_value = SimpleNamespace(by_learning_unit=[{'code': LU_ACRONYM}])
+        mock_get_progress_overview.return_value = SimpleNamespace(learning_units_progress=[{'code': LU_ACRONYM}])
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
