@@ -49,7 +49,7 @@ class LearningUnitService:
                 learning_units = api_instance.learningunits_list(
                     learning_unit_codes=','.join({str(elem) for elem in learning_unit_codes}),
                     year=year,
-                    ** utils.build_mandatory_auth_headers(person),
+                    **utils.build_mandatory_auth_headers(person),
                 )
                 return learning_units.get('results', {})
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
