@@ -34,6 +34,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from mock import patch
+from osis_reference_sdk.model.academic_calendar import AcademicCalendar
+from osis_reference_sdk.model.paginated_academic_calendars import PaginatedAcademicCalendars
 
 import attestation.views.home
 from base.forms.base_forms import RegistrationIdForm
@@ -77,6 +79,20 @@ class HomeTest(TestCase):
         )
         self.mocked_discriminate_user = self.discriminate_user_patcher.start()
         self.addCleanup(self.discriminate_user_patcher.stop)
+
+        self.academic_calendar_row = AcademicCalendar(**{
+            'reference': 'REFERENCE',
+            'title': 'TITLE',
+            'data_year': 2021,
+            'start_date': datetime.date.today(),
+            'end_date': datetime.date.today()
+        })
+        self.academic_calendar_list_patcher = mock.patch(
+            "reference.services.academic_calendar.AcademicCalendarService.get_academic_calendar_list",
+            return_value=PaginatedAcademicCalendars(**{'results': [self.academic_calendar_row]})
+        )
+        self.mocked_academic_calendar_list = self.academic_calendar_list_patcher.start()
+        self.addCleanup(self.academic_calendar_list_patcher.stop)
 
     def test_without_being_logged(self):
         self.client.logout()
@@ -273,6 +289,20 @@ class SelectStudentAttestationTest(TestCase):
 
     def setUp(self):
         self.client.force_login(self.person.user)
+
+        self.academic_calendar_row = AcademicCalendar(**{
+            'reference': 'REFERENCE',
+            'title': 'TITLE',
+            'data_year': 2021,
+            'start_date': datetime.date.today(),
+            'end_date': datetime.date.today()
+        })
+        self.academic_calendar_list_patcher = mock.patch(
+            "reference.services.academic_calendar.AcademicCalendarService.get_academic_calendar_list",
+            return_value=PaginatedAcademicCalendars(**{'results': [self.academic_calendar_row]})
+        )
+        self.mocked_academic_calendar_list = self.academic_calendar_list_patcher.start()
+        self.addCleanup(self.academic_calendar_list_patcher.stop)
 
     def test_without_being_logged(self):
         self.client.logout()
