@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-17 12:04+0100\n"
+"POT-Creation-Date: 2021-11-22 09:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -103,6 +103,9 @@ msgstr "Personnes porteuses de handicap, trouble ou maladie"
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
+msgid "Download the list (Excel or PDF)"
+msgstr "Télécharger la liste (Excel ou PDF)"
+
 msgid "ES"
 msgstr "ES"
 
@@ -120,6 +123,9 @@ msgstr "Fin"
 
 msgid "Exam registration state"
 msgstr "Etat d'inscription aux examens"
+
+msgid "Excel File"
+msgstr "Fichier Excel"
 
 msgid "Export list (Excel)"
 msgstr "Exporter liste (Excel)"
@@ -209,7 +215,8 @@ msgid "Lists of students enrollments to exams"
 msgstr "Administration des listes des inscriptions des étudiants aux examens"
 
 msgid "MSG TBD: Classes may not appear in this list."
-msgstr "Message à déterminer: les classes peuvent ne pas apparaître dans la liste"
+msgstr ""
+"Message à déterminer: les classes peuvent ne pas apparaître dans la liste"
 
 msgid "My application"
 msgstr "Ma candidature"
@@ -264,6 +271,9 @@ msgstr "P - Examen partiel"
 
 msgid "P - Partial examination"
 msgstr "P - Examen partiel"
+
+msgid "PDF File"
+msgstr "Fichier PDF"
 
 msgid "PEPS"
 msgstr "PEPS"
