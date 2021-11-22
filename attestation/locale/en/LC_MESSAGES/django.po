@@ -36,6 +36,11 @@ msgstr ""
 msgid "AVIS"
 msgstr "Notice of registration and invoice"
 
+msgid ""
+"As of today, you do not have a payment reminder, which means that your "
+"registration is in order or still being processed (recent registration)."
+msgstr ""
+
 msgid "Attestation"
 msgstr ""
 
@@ -55,7 +60,7 @@ msgid "DE"
 msgstr "Certificate of provisional registration"
 
 msgid "ECHEANCE"
-msgstr "Notice of maturity"
+msgstr "Due date notice"
 
 msgid "Faculty administration"
 msgstr ""

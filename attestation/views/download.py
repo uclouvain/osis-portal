@@ -40,6 +40,7 @@ from base.models import student as student_mdl, person as person_mdl
 from dashboard.views import main as dash_main_view
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
 
 
 @login_required
