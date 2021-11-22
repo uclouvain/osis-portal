@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-17 12:04+0100\n"
+"POT-Creation-Date: 2021-11-22 09:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,6 +96,9 @@ msgstr ""
 msgid "Display teachers"
 msgstr ""
 
+msgid "Download the list (Excel or PDF)"
+msgstr ""
+
 msgid "ES"
 msgstr ""
 
@@ -115,6 +118,9 @@ msgstr ""
 #| msgid "Registration id"
 msgid "Exam registration state"
 msgstr "Registration id"
+
+msgid "Excel File"
+msgstr ""
 
 msgid "Export list (Excel)"
 msgstr ""
@@ -259,6 +265,9 @@ msgid "P - Examen partiel"
 msgstr ""
 
 msgid "P - Partial examination"
+msgstr ""
+
+msgid "PDF File"
 msgstr ""
 
 msgid "PEPS"
