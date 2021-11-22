@@ -58,10 +58,10 @@ class Person(SerializableModel):
     first_name = models.CharField(max_length=50, blank=True, default='', db_index=True)
     middle_name = models.CharField(max_length=50, blank=True, default='')
     last_name = models.CharField(max_length=50, blank=True, default='', db_index=True)
-    email = models.EmailField(max_length=255, blank=True, null=True)
+    email = models.EmailField(max_length=255, default='')
     phone = models.CharField(max_length=30, blank=True, default='')
     phone_mobile = models.CharField(max_length=30, blank=True, default='')
-    language = models.CharField(max_length=30, null=True, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
+    language = models.CharField(max_length=30, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
 
     def username(self):
         if self.user is None:

@@ -25,3 +25,8 @@ $.ajaxSetup({
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
+
+// disable pagination page links when out of bound
+document.querySelectorAll('.disabled a').forEach(
+    (el) => el.removeAttribute("href")
+);

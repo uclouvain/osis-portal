@@ -84,11 +84,6 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='base.LearningContainerYear'),
         ),
         migrations.AlterField(
-            model_name='learningunityear',
-            name='learning_unit',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='base.LearningUnit'),
-        ),
-        migrations.AlterField(
             model_name='offerenrollment',
             name='offer_year',
             field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='base.OfferYear'),

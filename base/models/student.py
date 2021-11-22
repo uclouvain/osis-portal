@@ -33,6 +33,7 @@ from django.db import models
 
 from base.models import person as model_person
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from osis_common.utils.models import get_object_or_none
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -63,7 +64,6 @@ class Student(SerializableModel):
     registration_id = models.CharField(max_length=10, unique=True)
     person = models.ForeignKey('Person', on_delete=models.PROTECT)
 
-
     def email(self):
         if self.person.user:
             return self.person.user.email
@@ -75,10 +75,10 @@ class Student(SerializableModel):
 
 
 def find_by_registration_id(registration_id):
-    try:
-        return Student.objects.get(registration_id=registration_id)
-    except ObjectDoesNotExist:
-        return None
+    return get_object_or_none(
+        Student,
+        registration_id=registration_id
+    )
 
 
 def find_by_person(a_person):

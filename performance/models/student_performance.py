@@ -60,7 +60,7 @@ class StudentPerformance(models.Model):
 
     offer_registration_state = models.CharField(
         max_length=50,
-        choices=offer_registration_state.OFFER_REGISTRAION_STATES,
+        choices=offer_registration_state.OFFER_REGISTRATION_STATES,
         null=True
     )
 
@@ -117,16 +117,6 @@ def update_or_create(registration_id, academic_year, acronym, fields):
                                                                acronym=acronym,
                                                                defaults=fields)
     return obj
-
-
-def find_by_student_and_offer_year(registration_id, academic_year, acronym):
-    try:
-        result = StudentPerformance.objects.get(registration_id=registration_id,
-                                                academic_year=academic_year,
-                                                acronym=acronym)
-    except ObjectDoesNotExist:
-        result = None
-    return result
 
 
 def find_actual_by_student_and_offer_year(registration_id, academic_year, acronym):

@@ -48,7 +48,7 @@ class PersonFactory(factory.DjangoModelFactory):
     last_name = factory.Faker('last_name')
     email = factory.LazyAttribute(generate_person_email)
     phone = factory.Faker('phone_number')
-    language = factory.Iterator(settings.LANGUAGES, getter=operator.itemgetter(0))
+    language = settings.LANGUAGE_CODE
     gender = factory.Iterator(mdl.person.Person.GENDER_CHOICES, getter=operator.itemgetter(0))
     user = factory.SubFactory(UserFactory)
     global_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)

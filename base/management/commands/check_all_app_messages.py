@@ -54,11 +54,10 @@ class Command(BaseCommand):
 
 def check_messages_for_app(app_name: str) -> Tuple[OUTPUT_MESSAGE, RETURN_CODE]:
     completed_process = subprocess.run(
-        ["../manage.py", "check_app_messages"],
+        ["./manage.py", "check_app_messages", app_name],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         universal_newlines=True,
-        cwd=app_name
     )
     return completed_process.stderr, completed_process.returncode
 
