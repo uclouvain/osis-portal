@@ -51,11 +51,11 @@ def view_internship_role_selection(request):
     except MultipleObjectsReturned:
         return dash_main_view.show_multiple_registration_id_error(request)
 
-    master = InternshipAPIService.get_master_by_email(email=request.user.email)
+    master = InternshipAPIService.get_master(person=request.user.person)
 
     if master:
         if master['user_account_status'] != UserAccountStatus.ACTIVE:
-            InternshipAPIService.activate_master_account(master['uuid'])
+            InternshipAPIService.activate_master_account(person=request.user.person, master_uuid=master['uuid'])
         return redirect(reverse('internship_master_home'))
     elif student:
         return redirect(reverse('internship_cohort_selection'))
@@ -78,8 +78,8 @@ def view_internship_student_home(request, cohort_id):
 @login_required
 @redirect_if_not_master
 def view_internship_master_home(request):
-    master = InternshipAPIService.get_master_by_email(email=request.user.email)
-    allocations = InternshipAPIService.get_master_allocations(master.uuid)
+    master = InternshipAPIService.get_master(person=request.user.person)
+    allocations = InternshipAPIService.get_master_allocations(person=request.user.person, master_uuid=master.uuid)
     is_master = any(allocation.role in ChoiceRole.MASTER.name for allocation in allocations)
     is_delegate = any(allocation.role in ChoiceRole.DELEGATE.name for allocation in allocations)
     return layout.render(request, "internship_master_home.html", locals())

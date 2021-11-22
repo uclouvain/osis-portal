@@ -28,6 +28,7 @@ import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.datetime_safe import date
+from django.utils.translation import gettext as _
 
 from base.models import student as mdl_student
 from base.views import layout
@@ -68,15 +69,19 @@ def view_student_resume(request, cohort_id):
     publication_allowed = cohort.publication_start_date <= datetime.date.today()
     offers = {}
     for affectation in student_affectations:
-        score = InternshipAPIService.get_affectation(str(affectation.uuid)).score
+        score = InternshipAPIService.get_affectation(
+            person=request.user.person,
+            affectation_uuid=str(affectation.uuid)
+        ).score
         if score and score.validated:
+            score.comments = _replace_comments_keys_with_translations(score.comments)
             setattr(affectation, 'score', score)
         offer = mdl_internship_offer.find_offer(
             cohort=cohort,
             speciality=affectation.speciality,
             organization=affectation.organization
         ).first()
-        offer.master = _get_internship_masters_repr(affectation)
+        offer.master = _get_internship_masters_repr(request.user.person, affectation)
         try:
             offers[affectation.organization].update({affectation.speciality: offer})
         except KeyError:
@@ -95,8 +100,9 @@ def view_student_resume(request, cohort_id):
     })
 
 
-def _get_internship_masters_repr(affectation):
+def _get_internship_masters_repr(person, affectation):
     allocations = InternshipAPIService.get_mastered_allocations(
+        person=person,
         specialty_uuid=str(affectation.speciality.uuid),
         organization_uuid=str(affectation.organization.uuid)
     )
@@ -121,3 +127,13 @@ def save_from_form(form, person, cohort):
 
     mdl_student_information.InternshipStudentInformation.objects.update_or_create(person=person, cohort=cohort,
                                                                                   defaults=defaults)
+
+
+def _replace_comments_keys_with_translations(comments):
+    comments_keys_mapping = {
+        'impr_areas': _('Improvement areas'),
+        'suggestions': _('Suggested learning methods'),
+        'good_perf_ex': _('Good performance examples'),
+        'intermediary_evaluation': _('Intermediary evaluation')
+    }
+    return {comments_keys_mapping[k]: v for k, v in comments.items()}

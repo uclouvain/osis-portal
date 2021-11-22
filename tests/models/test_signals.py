@@ -43,7 +43,7 @@ class UpdatePersonIfNecessary(TestCase):
         'USER_EMAIL': 'user1@user.org'
     }
 
-    @mock.patch('internship.services.internship.InternshipAPIService.get_master_by_email', return_value={'count': 0})
+    @mock.patch('internship.services.internship.InternshipAPIService.get_master', return_value={'count': 0})
     def test_when_internship_installed(self, mock_get_master_by_email):
         user = get_or_create_user(self.user_infos)
         person = PersonFactory(
