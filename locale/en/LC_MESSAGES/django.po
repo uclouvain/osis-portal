@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-02 17:21+0200\n"
+"POT-Creation-Date: 2021-11-19 16:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,9 +149,6 @@ msgid "Fourth choice"
 msgstr ""
 
 msgid "Generalist"
-msgstr ""
-
-msgid "Good performance example"
 msgstr ""
 
 msgid "Good performance examples"
@@ -342,9 +339,6 @@ msgstr ""
 msgid "Suggested learning methods"
 msgstr ""
 
-msgid "Suggestions"
-msgstr ""
-
 msgid "Sum up of your choices and your affectations"
 msgstr ""
 
@@ -355,6 +349,9 @@ msgid "Targeted APD"
 msgstr ""
 
 msgid "The activation failed"
+msgstr ""
+
+msgid "The requested scores sheet does not match your internship's allocations"
 msgstr ""
 
 msgid "The two password fields didn't match."
@@ -420,7 +417,7 @@ msgstr ""
 
 msgid ""
 "You will find hereunder internships that have been assigned to you and for "
-"which score encoding is open "
+"which score encoding is open"
 msgstr ""
 
 msgid ""
