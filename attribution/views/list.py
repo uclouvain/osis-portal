@@ -28,15 +28,14 @@ import urllib
 from typing import List, Dict
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
 from assessments.services.assessments import AssessmentsService
-from attribution.services.attribution import AttributionService
 from base import models as mdl_base
 from base.forms.base_forms import GlobalIdForm
 from base.models.academic_year import AcademicYear
@@ -67,7 +66,7 @@ def get_learning_units(request, current_session_dict: Dict):
     if a_person:
         tutor = mdl_base.tutor.find_by_person(a_person)
         if tutor:
-            learning_units = __get_learning_unit_year_attributed(request, a_person, current_session_dict.year)
+            learning_units = _get_progression_overview_learning_units(request, a_person)
     return {
         'person': a_person,
         'my_learning_units': learning_units,
@@ -75,45 +74,12 @@ def get_learning_units(request, current_session_dict: Dict):
     }
 
 
-def __get_learning_unit_year_attributed(request, person: Person, year: int) -> List[Dict]:
-    learning_units_by_person = []
-    attributions = AttributionService.get_attributions_list(
-        year, person,
-        with_effective_class_repartition=True
-    )
-    if attributions:
-        learning_unit_codes = {attribution.code for attribution in attributions}
-        score_responsible_list = AssessmentsService.get_score_responsible_list(
-            learning_unit_codes=list(learning_unit_codes),
-            year=year,
-            person=person)
-        learning_units = LearningUnitService.get_learning_units(
-            learning_unit_codes=list(learning_unit_codes),
-            year=year,
-            person=person
-        )
-
-        if isinstance(learning_units, List):
-            for learning_unit in learning_units:
-                ue_acronym = learning_unit.get('acronym', '')
-                learning_unit.update(
-                    {
-                        'score_responsible': _get_score_responsible(score_responsible_list, ue_acronym),
-                        'effective_class_detail': _get_all_effective_class_repartition(
-                            attributions,
-                            ue_acronym,
-                            score_responsible_list
-                        ),
-                    }
-                )
-                learning_units_by_person.append({'acronym': ue_acronym, 'learning_unit': learning_unit})
-        else:
-            messages.add_message(
-                request,
-                messages.ERROR,
-                learning_units.error if learning_units.error else _('Unexpected error')
-            )
-    return learning_units_by_person
+def _get_progression_overview_learning_units(request, person):
+    progress_overview = AssessmentsService.get_overview(person)
+    if not progress_overview:
+        messages.add_message(request, messages.ERROR, _('Unexpected error'))
+        return []
+    return progress_overview.learning_units_progress
 
 
 def build_learning_units_string(
@@ -129,9 +95,8 @@ def build_learning_units_string(
         year=academic_yr,
         person=person
     )
-
     if learning_units:
-        ue_acronym = learning_units[0].get('acronym')
+        ue_acronym = learning_units[0].code
         if ue_acronym in user_learning_units_assigned:
             if learning_unit_years is None:
                 learning_unit_years = "{0}".format(ue_acronym)
@@ -223,12 +188,7 @@ def get_learning_units_by_person(request, global_id: str) -> Dict:
         current_session_dict = AssessmentsService.get_current_session(a_person)
         tutor = mdl_base.tutor.find_by_person(a_person)
         if tutor and current_session_dict:
-            learning_units = __get_learning_unit_year_attributed(
-                request,
-                a_person,
-                current_session_dict.year
-            )
-
+            learning_units = _get_progression_overview_learning_units(request, a_person)
     return {
         'person': a_person,
         'learning_units': learning_units,
@@ -269,44 +229,10 @@ def get_codes_parameter_list(request, current_academic_year: AcademicYear, learn
     return NO_DATA_VALUE
 
 
-def _get_all_effective_class_repartition(attributions: List, ue_acronym: str, score_responsible_list: List) -> List:
-    classes = [
-        _class for attr in attributions for _class in attr.effective_class_repartition if attr.code == ue_acronym
-    ]
-
-    list_of_unique_dicts_effective_class_repartition = {x['code']: x for x in classes}.values()
-    sorted_list_of_unique_dicts_effective_class_repartition = sorted(
-        list_of_unique_dicts_effective_class_repartition,
-        key=lambda d: d['code']
-    )
-
-    effective_class_detail = []
-    for effective_class in sorted_list_of_unique_dicts_effective_class_repartition:
-        score_responsible = _get_score_responsible(score_responsible_list, effective_class.code)
-
-        effective_class_detail.append(
-            {
-                'effective_class_repartition': effective_class,
-                'score_responsible': score_responsible
-            }
-        )
-
-    return effective_class_detail
-
-
-def _get_score_responsible(score_responsibles: List, lu_acronym: str) -> str:
-    if score_responsibles:
-        return next(
-            (pers.get('full_name') for pers in score_responsibles if pers.get('learning_unit_acronym') == lu_acronym),
-            ''
-        )
-    return ''
-
-
-def _get_learning_unit_acronyms(user_learning_units_assigned: List[Dict]) -> List[str]:
+def _get_learning_unit_acronyms(user_learning_units_assigned: List) -> List[str]:
     learning_unit_acronyms = set()
     for learning_unit in user_learning_units_assigned:
-        learning_unit_acronyms.add(learning_unit.get('acronym'))
+        learning_unit_acronyms.add(learning_unit.get('code'))
     return list(learning_unit_acronyms)
 
 
