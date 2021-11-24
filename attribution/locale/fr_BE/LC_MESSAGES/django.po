@@ -445,10 +445,11 @@ msgstr ""
 
 #, python-format
 msgid ""
-"This course will be discontinued in %(academic_year)s following a program "
-"reform."
+"This course will be discontinued in %(application_academic_year)s following "
+"a program reform."
 msgstr ""
-"Ce cours sera supprimé en %(academic_year)s suite à une réforme de programme."
+"Ce cours sera supprimé en %(application_academic_year)s suite à une réforme "
+"de programme."
 
 msgid ""
 "This learning unit has classes. Students are enrolled at the class level "
