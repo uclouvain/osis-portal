@@ -180,3 +180,23 @@ a.disabled:active {
     background: none;
     border: none;
 }
+/* dataTables CSS modification */
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+    color: #337ab7 !important;
+    opacity: 1 !important;
+}
+
+table.dataTable thead th.sorting:after {
+    color: #337ab7 !important;
+    opacity: 1 !important;
+}
+table thead .glyphicon-sort,
+table thead .glyphicon-sort-by-attributes,
+table thead .glyphicon-sort-by-attributes-alt{
+    color: #337ab7 !important;
+    opacity: 1 !important;
+}

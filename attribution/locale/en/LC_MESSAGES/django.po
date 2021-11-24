@@ -423,8 +423,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"This course will be discontinued in %(academic_year)s following a program "
-"reform."
+"This course will be discontinued in %(application_academic_year)s following "
+"a program reform."
 msgstr ""
 
 msgid ""
