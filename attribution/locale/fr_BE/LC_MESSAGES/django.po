@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-22 09:50+0100\n"
+"POT-Creation-Date: 2021-11-24 11:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,6 +96,9 @@ msgstr "Supprimer la candidature"
 
 msgid "Details other educational facilities"
 msgstr "Détails autre aménagement"
+
+msgid "Different explanations are possible:"
+msgstr "Différentes explications sont possibles :"
 
 msgid "Disability, Disorder or Illness Students"
 msgstr "Personnes porteuses de handicap, trouble ou maladie"
@@ -214,10 +217,6 @@ msgstr "Les listes des étudiants sont disponibles en cliquant sur le symbole"
 msgid "Lists of students enrollments to exams"
 msgstr "Administration des listes des inscriptions des étudiants aux examens"
 
-msgid "MSG TBD: Classes may not appear in this list."
-msgstr ""
-"Message à déterminer: les classes peuvent ne pas apparaître dans la liste"
-
 msgid "My application"
 msgstr "Ma candidature"
 
@@ -262,6 +261,9 @@ msgstr "Pas d'activité vacante correspondante"
 
 msgid "Non-renewable"
 msgstr "Non-reconductible"
+
+msgid "One of your courses is not visible in the list?"
+msgstr "Un de vos cours n’est pas visible dans la liste ?"
 
 msgid "Other educational facilities"
 msgstr "Autre aménagement"
@@ -392,9 +394,6 @@ msgstr "Charge d'enseignement"
 
 msgid "Teaching charges administration"
 msgstr "Administration des charges d'enseignements"
-
-msgid "The lists of students enrolled to courses are available in "
-msgstr "Les listes des étudiants inscrits aux cours sont disponibles dans "
 
 #, python-format
 msgid ""
@@ -553,6 +552,14 @@ msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 msgid "date_format"
 msgstr "%d/%m/%Y"
 
+msgid ""
+"no student is enrolled to the exam for this session. The list of students "
+"enrolled to courses is available in"
+msgstr "aucun·e étudiant·e n’est inscrit·e à l’examen pour cette session. La liste des étudiant·es inscrit·es aux cours sont disponibles dans"
+
+msgid "no student is enrolled to this course."
+msgstr "aucun·e étudiant·e n’est inscrit·e à ce cours."
+
 msgid "student(s)"
 msgstr "étudiant(s)"
 
@@ -567,3 +574,8 @@ msgstr "au"
 
 msgid "without application"
 msgstr "sans candidature"
+
+msgid ""
+"you are not encoded as teacher on this course or on the class. Please check "
+"in"
+msgstr "vous n’êtes pas encodé·e comme enseignant·es sur ce cours ou sur la classe. Veuillez vérifier via"

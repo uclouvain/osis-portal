@@ -59,10 +59,6 @@
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                 <strong>{% trans "NEW" %}</strong> {% trans "'Lists of students enrolled to my exams' are immediately usable for encoding scores." %}
             </div>
-           <div class="alert alert-warning">
-                <i class="fa fa-warning" aria-hidden="true"></i>
-               <strong>{% trans "MSG TBD: Classes may not appear in this list." %}</strong>
-            </div>
             <br>
             <form method="post" name="form_students_list">
                 <div class="row">
@@ -133,9 +129,22 @@
                 </div>
             {% endif %}
             <div class="alert alert-info">
-                <i class="fa fa-info-circle" aria-hidden="true"></i>
-                {% trans 'The lists of students enrolled to courses are available in ' %}
-                <a href="{% url 'attribution_home' %}" style="color: #1e347b"><u>{% trans 'My teaching charge' %}.</u></a>
+                <p>
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    <b>{% trans "One of your courses is not visible in the list?" %}</b>
+                </p>
+                <p>{% trans "Different explanations are possible:" %}</p>
+                <ul>
+                    <li>
+                        {% trans "no student is enrolled to the exam for this session. The list of students enrolled to courses is available in" %}
+                        <a href="{% url 'attribution_home' %}" style="color: #1e347b; white-space: nowrap;"><u>{% trans 'My teaching charge' %}.</u></a>
+                    </li>
+                    <li>
+                        {% trans "you are not encoded as teacher on this course or on the class. Please check in" %}
+                            <a href="{% url 'attribution_home' %}" style="color: #1e347b; white-space: nowrap;"><u>{% trans 'My teaching charge' %}.</u></a>
+                    </li>
+                    <li>{% trans "no student is enrolled to this course." %}</li>
+                </ul>
             </div>
         </div>
     </div>
