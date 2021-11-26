@@ -67,7 +67,8 @@ class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             messages.add_message(
                 self.request,
                 messages.WARNING,
-                _('The period of online application for courses %(year)s will open on %(start_date)s to %(end_date)s') % {
+                _('The period of online application for courses %(year)s will open on %(start_date)s to %(end_date)s') %
+                {
                     'year': display_as_academic_year(next_academic_event.authorized_target_year),
                     'start_date': next_academic_event.start_date.strftime('%d/%m/%Y'),
                     'end_date': next_academic_event.end_date.strftime(
@@ -81,7 +82,8 @@ class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             messages.add_message(
                 self.request,
                 messages.WARNING,
-                _('The period of online application for courses %(year)s opened on %(start_date)s to %(end_date)s') % {
+                _('The period of online application for courses %(year)s opened on %(start_date)s to %(end_date)s') %
+                {
                     'year': display_as_academic_year(previous_academic_event.authorized_target_year),
                     'start_date': previous_academic_event.start_date.strftime('%d/%m/%Y'),
                     'end_date': previous_academic_event.end_date.strftime('%d/%m/%Y')
