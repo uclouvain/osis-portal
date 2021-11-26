@@ -94,7 +94,7 @@ class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, Templ
 
     def get_context_data(self, **kwargs):
         return {
-            **super().get_context_data(),
+            **super().get_context_data(**kwargs),
             'application_course_calendar': self.application_course_calendar,
             'attributions_about_to_expire': self.attributions_about_to_expire,
             'attributions': self.charge_summary,
@@ -118,4 +118,4 @@ class ApplicationOverviewAdminView(ApplicationOverviewView):
 
     @cached_property
     def tutor(self):
-        return Tutor.objects.filter(person__global_id=self.kwargs['global_id'])
+        return Tutor.objects.get(person__global_id=self.kwargs['global_id'])
