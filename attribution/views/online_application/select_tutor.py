@@ -43,8 +43,8 @@ class SelectTutor(LoginRequiredMixin, PermissionRequiredMixin, FormView):
     form_class = GlobalIdForm
 
     def form_valid(self, form):
-        self.registration_id = form.cleaned_data['registration_id']
+        self.global_id = form.cleaned_data['global_id']
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('visualize_tutor_applications', args=[self.registration_id])
+        return reverse('visualize_tutor_applications', args=[self.global_id])
