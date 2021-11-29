@@ -119,7 +119,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         self.mocked_discriminate_user.side_effect = MultipleObjectsReturned
 
         response = self.client.get(self.url)
-
+        print(response)
         self.assertTemplateUsed(response, 'dashboard.html')
 
         messages = list(response.context['messages'])

@@ -25,29 +25,31 @@
 ##############################################################################
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-
-from base.views import layout
-
-
-@login_required
-def home(request):
-    return layout.render(request, "dashboard.html", {
-        'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
-        'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL,
-        'dissertation_url': settings.OSIS_DISSERTATION_URL,
-        'score_encoding_url': settings.OSIS_SCORE_ENCODING_URL,
-        'score_encoding_vpn_help_url': settings.OSIS_VPN_HELP_URL
-    })
+from django.views.generic import TemplateView
 
 
-@login_required
-def faculty_administration(request):
-    if not _can_access_administration(request):
-        raise PermissionDenied
-    return layout.render(request, "faculty_administrator_dashboard.html", {})
+class Home(LoginRequiredMixin, TemplateView):
+    template_name = "dashboard.html"
+
+    @staticmethod
+    def get_settings_url_context():
+        return {
+            'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
+            'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL,
+            'dissertation_url': settings.OSIS_DISSERTATION_URL,
+            'score_encoding_url': settings.OSIS_SCORE_ENCODING_URL,
+            'score_encoding_vpn_help_url': settings.OSIS_VPN_HELP_URL
+        }
+
+    def get_context_data(self, **kwargs):
+        return {
+            **super().get_context_data(**kwargs),
+            **self.get_settings_url_context()
+        }
 
 
 def show_multiple_registration_id_error(request):
@@ -56,14 +58,4 @@ def show_multiple_registration_id_error(request):
             "target=\"_blank\">the Registration department</a>. Thank you.") \
         .format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
     messages.add_message(request, messages.ERROR, msg)
-    return home(request)
-
-
-def _can_access_administration(request):
-    if request.user.has_perm('base.is_faculty_administrator'):
-        return True
-    can_access = False
-    if 'performance' in settings.INSTALLED_APPS:
-        from performance.views import main as perf_main_view
-        can_access = perf_main_view._can_access_performance_administration(request)
-    return can_access
+    return redirect(reverse('dashboard_home'))

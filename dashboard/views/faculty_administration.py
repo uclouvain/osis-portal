@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,16 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import TemplateView
 
-from dashboard.views.faculty_administration import FacultyAdministration
-from dashboard.views.home import Home
-from dashboard.views.student import id_data as std_id_data
 
-urlpatterns = [
-    url(r'^$', Home.as_view(), name='dashboard_home'),
-    url('^faculty_administration/$', FacultyAdministration.as_view(), name='faculty_administration'),
-    url('^faculty_administration/student/data/select_student/$', std_id_data.faculty_administration,
-        name='student_id_data_administration'),
-    url('^student/data/$', std_id_data.home, name='student_id_data_home'),
-]
+class FacultyAdministration(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "faculty_administrator_dashboard.html"
+
+    def test_func(self):
+        return self._can_access_administration()
+
+    def _can_access_administration(self):
+        if self.request.user.has_perm('base.is_faculty_administrator'):
+            return True
+        can_access = False
+        if 'performance' in settings.INSTALLED_APPS:
+            from performance.views import main as perf_main_view
+            can_access = perf_main_view._can_access_performance_administration(self.request)
+        return can_access
