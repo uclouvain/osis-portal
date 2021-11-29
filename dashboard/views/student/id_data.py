@@ -29,10 +29,10 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import MultipleObjectsReturned
 
+import dashboard.views.home
 from base.forms.base_forms import RegistrationIdForm
 from base.views import layout
 from dashboard.business import id_data as id_data_bus
-from dashboard.views import main as dash_main_view
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -44,7 +44,7 @@ def home(request):
         data = id_data_bus.get_student_id_data(user=request.user)
     except MultipleObjectsReturned:
         logger.exception('User {} returned multiple students.'.format(request.user.username))
-        return dash_main_view.show_multiple_registration_id_error(request)
+        return dashboard.views.home.show_multiple_registration_id_error(request)
     return layout.render(request, "student/id_data_home.html", data)
 
 
