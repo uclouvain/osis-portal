@@ -28,23 +28,19 @@ from types import SimpleNamespace
 from typing import List
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.db.models import Case, When, BooleanField, Value, F, CharField
 from django.db.models.functions import Concat
-from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic.base import TemplateView
 from osis_attribution_sdk.models import Attribution
 
 from attribution.services.attribution import AttributionService
-from base.forms.base_forms import GlobalIdForm
 from base.models.academic_year import AcademicYear, current_academic_year
 from base.models.enums.learning_container_type import COURSE, INTERNSHIP, DISSERTATION
 from base.models.person import Person
 from base.utils import string_utils
-from base.views import layout
 from learning_unit.services.learning_unit import LearningUnitService
 
 YEAR_NEW_MANAGEMENT_OF_EMAIL_LIST = 2017
@@ -183,27 +179,6 @@ class AdminTutorChargeView(TutorChargeView):
 
     def get_tutor_charge_url(self) -> str:
         return reverse('tutor_charge_admin', kwargs={'global_id': self.person.global_id}) + "?displayYear="
-
-
-@login_required
-@permission_required('base.is_faculty_administrator', raise_exception=True)
-def attribution_administration(request):
-    return layout.render(request, 'admin/attribution_administration.html', {})
-
-
-@login_required
-@permission_required('base.is_faculty_administrator', raise_exception=True)
-def select_tutor_attributions(request):
-    if request.method == "POST":
-        form = GlobalIdForm(request.POST)
-        if form.is_valid():
-            global_id = form.cleaned_data['global_id']
-            return HttpResponseRedirect(
-                reverse("tutor_charge_admin", kwargs={'global_id': global_id})
-            )
-    else:
-        form = GlobalIdForm()
-    return layout.render(request, "admin/attribution_administration.html", {"form": form})
 
 
 def get_email_students(an_acronym, year):
