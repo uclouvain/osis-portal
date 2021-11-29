@@ -26,15 +26,18 @@
 import json
 import logging
 import traceback
+from typing import Dict, Optional
 from urllib import error, request
-from base.models import student as student_mdl
-from base.business import student as student_bsn
+
 from django.conf import settings
+
+from base.models import student as student_mdl
+from base.models.student import Student
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def _fetch_student_id_data(student):
+def _fetch_student_id_data(student: Student) -> Dict:
     data = {
         'registration_service_url': settings.REGISTRATION_ADMINISTRATION_URL
     }
@@ -51,7 +54,7 @@ def _fetch_student_id_data(student):
     return data
 
 
-def _get_main_data(student):
+def _get_main_data(student: Student) -> Dict:
     server_top_url = settings.ESB_URL
     main_data_path = settings.STUDENT_ID_DATA.get('MAIN_DATA_PATH')
     main_data_url = server_top_url + main_data_path.format(student.person.global_id)
@@ -60,7 +63,7 @@ def _get_main_data(student):
     return main_data
 
 
-def _get_personal_data(student):
+def _get_personal_data(student: Student) -> Dict:
     server_top_url = settings.ESB_URL
     personal_data_path = settings.STUDENT_ID_DATA.get('PERSONAL_DATA_PATH')
     personal_data_url = server_top_url + personal_data_path.format(student.person.global_id)
@@ -68,7 +71,7 @@ def _get_personal_data(student):
     return personal_data
 
 
-def _get_birth_data(student):
+def _get_birth_data(student: Student) -> Dict:
     server_top_url = settings.ESB_URL
     birth_data_path = settings.STUDENT_ID_DATA.get('BIRTH_DATA_PATH')
     birth_data_url = server_top_url + birth_data_path.format(student.person.global_id)
@@ -76,21 +79,17 @@ def _get_birth_data(student):
     return birth_data
 
 
-def get_student_id_data(user=None, registration_id=None):
-    data = None
+def get_student_id_data(registration_id: str = None) -> Optional[Dict]:
+    data, student = None, None
     if registration_id:
         student = student_mdl.find_by_registration_id(registration_id)
-    elif user:
-        student = student_bsn.find_by_user_and_discriminate(user)
-    else:
-        student = None
     if student:
         data = _fetch_student_id_data(student)
     return data
 
 
-def _get_data_from_esb(url):
-    logger.info('URL ESB : '+url)
+def _get_data_from_esb(url: str) -> Dict:
+    logger.info('URL ESB : ' + url)
     esb_headers = {"Authorization": settings.ESB_AUTHORIZATION, "Accept": settings.ESB_CONTENT_TYPE}
     esb_request = request.Request(url, headers=esb_headers)
     esb_connection = request.urlopen(esb_request, timeout=settings.ESB_TIMEOUT)

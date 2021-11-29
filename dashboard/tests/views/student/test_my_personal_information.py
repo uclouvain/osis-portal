@@ -34,7 +34,7 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 
 
-class TestHome(TestCase):
+class TestMyPersonalInformation(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.url = reverse("student_id_data_home")
@@ -66,7 +66,7 @@ class TestHome(TestCase):
         self.assertTemplateUsed(response, 'student/id_data_home.html')
 
 
-class TestAdmin(TestCase):
+class TestMyPersonalInformationAdmin(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.url = reverse("student_id_data_administration")
