@@ -69,12 +69,10 @@ class StudentsListViewTest(TestCase):
     def setUp(self):
         self.client.force_login(self.person.user)
 
-    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
-    def test_find_january_note(self, mock_enrollments):
+    def _get_enrollment_for_acronym(self, acronym, mock_enrollments):
         student_performance = test_student_performance.create_student_performance()
         an_academic_yr = test_academic_year.create_academic_year_with_year(student_performance.academic_year)
         year = an_academic_yr.year
-        acronym = 'LINGI2145'
         enrollment = Enrollment(**EnrollmentDictFactory(
             student_registration_id=student_performance.registration_id,
             learning_unit_year=year,
@@ -83,9 +81,15 @@ class StudentsListViewTest(TestCase):
         ))
         self.enrollments.results.append(enrollment)
         mock_enrollments.return_value = self.enrollments
+        return enrollment
+
+    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
+    def test_find_january_note(self, mock_enrollments, acronym='LINGI2145', class_code=None):
+        enrollment = self._get_enrollment_for_acronym(acronym, mock_enrollments)
         students_list_view = StudentsListView(kwargs={
-            'learning_unit_year': str(year),
-            'learning_unit_acronym': acronym
+            'learning_unit_year': str(enrollment.learning_unit_year),
+            'learning_unit_acronym': acronym,
+            'class_code': class_code,
         })
         request = RequestFactory().get('/')
         request.user = PersonFactory().user
@@ -107,6 +111,14 @@ class StudentsListViewTest(TestCase):
                     }
             }
         )
+
+    def test_find_january_note_partim(self):
+        acronym = 'LINGI2145B'
+        self.test_find_january_note(acronym=acronym)
+
+    def test_find_january_note_class(self):
+        acronym = 'LINGI2145-A'
+        self.test_find_january_note(acronym=acronym, class_code='A')
 
     def test_get_student_performance_data_dict(self):
         student_performance = test_student_performance.create_student_performance()
