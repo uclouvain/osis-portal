@@ -32,14 +32,14 @@ diff-cover==3.0.1
 tblib==1.7.0
 django-waffle==0.14.0
 git+https://github.com/uclouvain/osis-attribution-sdk.git@wip-build-1.18
-git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@wip-build-1.0.0
-git+https://github.com/uclouvain/osis-learning-unit-sdk.git@wip-build-1.9.0
-git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@wip-build-1.2.0
-git+https://github.com/uclouvain/osis-education-group-sdk.git@wip-build-1.8.0
+git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@wip-build-1.0
+git+https://github.com/uclouvain/osis-learning-unit-sdk.git@wip-build-1.09
+git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@wip-build-1.2
+git+https://github.com/uclouvain/osis-education-group-sdk.git@wip-build-1.08
 git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.17
 git+https://github.com/uclouvain/osis-document.git@dev#egg=osis_document
 git+https://github.com/uclouvain/osis-signature.git@dev#egg=osis_signature
-git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.0.0
+git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.0
 git+https://github.com/uclouvain/osis-assessments-sdk.git@wip-build-1.1.2
 
 -r ./osis_common/requirements.txt
