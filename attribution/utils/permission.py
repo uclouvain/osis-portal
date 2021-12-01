@@ -27,5 +27,5 @@ from attribution.calendar.application_courses_calendar import ApplicationCourses
 
 
 def is_online_application_opened(user) -> bool:
-    calendar = ApplicationCoursesRemoteCalendar()
+    calendar = ApplicationCoursesRemoteCalendar(user.person)
     return bool(calendar.get_target_years_opened())

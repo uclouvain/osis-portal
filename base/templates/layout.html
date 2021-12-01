@@ -29,7 +29,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
 
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     {% analytical_head_top %}
     <meta charset="utf-8">
@@ -41,7 +41,6 @@
     <link rel="icon" href="{% static 'img/favicon.ico' %}"/>
     <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
@@ -163,7 +162,9 @@
     <script src="{% static 'js/osis-portal.js' %}"></script>
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
-     <script src="{% statici18n LANGUAGE_CODE %}"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue@2/dist/vue.runtime.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/vue-i18n@8/dist/vue-i18n.min.js"></script>
+    <script src="{% statici18n LANGUAGE_CODE %}"></script>
     <script type="text/javascript" src="{% static "js/modal_form_submit.js" %}"></script>
     {% block script %}
         <script type="text/javascript">

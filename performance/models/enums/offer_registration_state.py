@@ -29,9 +29,9 @@ CYCLE = 'CYCLE'
 CONDITIONAL = 'CONDITION'
 CESSATION = 'CESSATION'
 
-OFFER_REGISTRAION_STATES = ((REGISTERED, REGISTERED),
-                            (CYCLE, CYCLE),
-                            (CONDITIONAL, CONDITIONAL),
-                            (CESSATION, CESSATION))
+OFFER_REGISTRATION_STATES = ((REGISTERED, REGISTERED),
+                             (CYCLE, CYCLE),
+                             (CONDITIONAL, CONDITIONAL),
+                             (CESSATION, CESSATION))
 
 STATES_TO_SHOW_ON_PAGE = [CESSATION]

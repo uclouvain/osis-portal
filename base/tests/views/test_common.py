@@ -162,8 +162,8 @@ class CommonContextProcessorTest(TestCase):
             'environment': 'env',
             'installed_apps': settings.INSTALLED_APPS,
             'debug': settings.DEBUG,
-            'logout_button': settings.LOGOUT_BUTTON
-
+            'logout_button': settings.LOGOUT_BUTTON,
+            'email_service_desk': settings.EMAIL_SERVICE_DESK,
         }
         self.assertDictEqual(return_value, expected)
 
@@ -175,7 +175,8 @@ class CommonContextProcessorTest(TestCase):
             'environment': 'DEV',
             'installed_apps': settings.INSTALLED_APPS,
             'debug': settings.DEBUG,
-            'logout_button': settings.LOGOUT_BUTTON
+            'logout_button': settings.LOGOUT_BUTTON,
+            'email_service_desk': settings.EMAIL_SERVICE_DESK,
         }
         self.assertDictEqual(return_value, expected)
 

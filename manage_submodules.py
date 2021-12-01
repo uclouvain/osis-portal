@@ -3,9 +3,9 @@
 
 
 import os.path
-from os import path
 import subprocess
 import sys
+from os import path
 
 project_dir = os.getcwd()
 project_branch = subprocess.check_output('git branch --show-current', shell=True).decode(sys.stdout.encoding)
@@ -16,6 +16,7 @@ modules = {
     "dissertation": "https://github.com/uclouvain/osis-portal-dissertation.git",
     "internship": "https://github.com/uclouvain/osis-portal-internship.git",
     "osis_common": "git@github.com:uclouvain/osis-common.git",
+    "admission": "git@github.com:uclouvain/osis-portal-admission.git",
 }
 arguments = len(sys.argv) - 1
 if arguments > 0:
@@ -66,6 +67,8 @@ for module, git_url in modules.items():
     else:
         print('')
         print('Module {} not exists in project directory'.format(module))
+        if module in modules_branches:
+            specific_module_branch = modules_branches.get(module)
         print('Cloning module {} from branch {} in directory {}'.format(module, specific_module_branch, module_dir))
         command = 'git clone {git_url} -b {branch} {directory}'.format(branch=specific_module_branch,
                                                                        git_url=git_url,

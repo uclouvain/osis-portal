@@ -33,6 +33,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # SECURITY Settings
 # Those settings are mandatory and have to be defined in your .env file
 SECRET_KEY = os.environ['SECRET_KEY']
+REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY = os.environ.get('REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY')
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split()
 ADMIN_URL = os.environ['ADMIN_URL']
@@ -43,6 +44,7 @@ CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'False').lower() == 't
 ROOT_URLCONF = os.environ.get('ROOT_URLCONF', 'frontoffice.urls')
 WSGI_APPLICATION = os.environ.get('WSGI_APPLICATION', 'frontoffice.wsgi.application')
 MESSAGE_STORAGE = os.environ.get('MESSAGE_STORAGE', 'django.contrib.messages.storage.cookie.CookieStorage')
+EMAIL_SERVICE_DESK = os.environ.get('EMAIL_SERVICE_DESK', '')
 
 # Application definition
 # Common apps for all environments
@@ -70,6 +72,7 @@ INSTALLED_APPS = (
     'hijack',
     'compat',
     'hijack_admin',
+    'waffle'
 )
 
 # Tests settings
@@ -101,6 +104,7 @@ MIDDLEWARE = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'waffle.middleware.WaffleMiddleware',
 )
 
 # Logging config
@@ -223,6 +227,7 @@ TIME_ZONE = os.environ.get('TIME_ZONE', 'Europe/Brussels')
 USE_I18N = os.environ.get('USE_I18N', 'True').lower() == 'true'
 USE_L10N = os.environ.get('USE_L10N', 'True').lower() == 'true'
 USE_TZ = os.environ.get('USE_TZ', 'True').lower() == 'true'
+FORMAT_MODULE_PATH = "frontoffice.formats"
 
 # Static files (CSS, JavaScript, Images) and Media
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -399,11 +404,53 @@ URL_AUTH_API = os.environ.get(
 )
 # ATTRIBUTION-SDK-CONFIGURATION
 OSIS_ATTRIBUTION_SDK_HOST = os.environ.get("OSIS_ATTRIBUTION_SDK_HOST", "")
-OSIS_ATTRIBUTION_SDK_API_KEY_PREFIX = os.environ.get("OSIS_ATTRIBUTION_SDK_API_KEY_PREFIX", "Token")
+OSIS_ATTRIBUTION_SDK_API_KEY_PREFIX = os.environ.get("OSIS_ATTRIBUTION_SDK_API_KEY_PREFIX", "ESB")
+
+# LEARNING-UNIT-ENROLLMENT-SDK-CONFIGURATION
+OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST = os.environ.get("OSIS_LEARNING_UNIT_ENROLLMENT_SDK_HOST", "")
+OSIS_LEARNING_UNIT_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_LEARNING_UNIT_ENROLLMENT_SDK_API_KEY_PREFIX", "ESB"
+)
+
+# LEARNING-UNIT-SDK-CONFIGURATION
+OSIS_LEARNING_UNIT_SDK_HOST = os.environ.get("OSIS_LEARNING_UNIT_SDK_HOST", "")
+OSIS_LEARNING_UNIT_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_LEARNING_UNIT_SDK_API_KEY_PREFIX", "ESB"
+)
+
+# REFERENCE-SDK-CONFIGURATION
+OSIS_REFERENCE_SDK_HOST = os.environ.get("OSIS_REFERENCE_SDK_HOST", "")
+OSIS_REFERENCE_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_REFERENCE_SDK_API_KEY_PREFIX", "ESB"
+)
 
 # INTERNSHIP-SDK-CONFIGURATION
 OSIS_INTERNSHIP_SDK_HOST = os.environ.get('OSIS_INTERNSHIP_SDK_HOST', '')
-OSIS_INTERNSHIP_SDK_API_KEY_PREFIX = os.environ.get("OSIS_INTERNSHIP_SDK_API_KEY_PREFIX", "Token")
+OSIS_INTERNSHIP_SDK_API_KEY_PREFIX = os.environ.get("OSIS_INTERNSHIP_SDK_API_KEY_PREFIX", "ESB")
+
+# OFFER-ENROLLMENT-SDK-CONFIGURATION
+OSIS_OFFER_ENROLLMENT_SDK_HOST = os.environ.get("OSIS_OFFER_ENROLLMENT_SDK_HOST", "")
+OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX", "ESB"
+)
+
+# EDUCATION-GROUP-SDK-CONFIGURATION
+OSIS_EDUCATION_GROUP_SDK_HOST = os.environ.get("OSIS_EDUCATION_GROUP_SDK_HOST", "")
+OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX", "ESB"
+)
+
+# ASSESSMENTS-SDK-CONFIGURATION
+OSIS_ASSESSMENTS_SDK_HOST = os.environ.get("OSIS_ASSESSMENTS_SDK_HOST", "")
+OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX", "ESB"
+)
+
+# ORGANISATION-SDK-CONFIGURATION
+OSIS_ORGANISATION_SDK_HOST = os.environ.get("OSIS_ORGANISATION_SDK_HOST", "")
+OSIS_ORGANISATION_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_ORGANISATION_SDK_API_KEY_PREFIX", "ESB"
+)
 
 # BASE_API_TESTING
 MOCK_USER_ROLES_API_CALL = os.environ.get('MOCK_USER_ROLES_API_CALL', 'True').lower() == 'true'
@@ -424,3 +471,13 @@ STUDENT_ID_DATA = {
 
 REGISTRATION_ADMINISTRATION_URL = os.environ.get('REGISTRATION_SERVICE_URL', '')
 REGISTRATION_ACCOUNT_SERVICE_URL = os.environ.get('REGISTRATION_ACCOUNT_SERVICE_URL', '')
+
+# ADMISSION-SDK-CONFIGURATION
+OSIS_ADMISSION_SDK_HOST = os.environ.get('OSIS_ADMISSION_SDK_HOST', '')
+OSIS_ADMISSION_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_ADMISSION_SDK_API_KEY_PREFIX", "ESB"
+)
+
+# OSIS-DOCUMENT-CONFIGURATION
+OSIS_DOCUMENT_BASE_URL = os.environ.get('OSIS_DOCUMENT_BASE_URL', '')
+OSIS_DOCUMENT_API_SHARED_SECRET = os.environ.get('OSIS_DOCUMENT_API_SHARED_SECRET', '')

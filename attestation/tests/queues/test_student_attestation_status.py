@@ -27,16 +27,15 @@ from django.conf import settings
 from django.test import TestCase
 from mock import patch
 
+import attestation.views.home
 from attestation.queues import student_attestation_status as std_att_stat
-from attestation.views import main as v_main
-from attestation.views.main import _get_current_year_echeance_attestation
 
 
 class TestFetchSutentAttestationStatuses(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.json_message = v_main._make_registration_json_message('1111111')
+        cls.json_message = attestation.views.home._make_registration_json_message('1111111')
 
     def test_fetch_with_message_none(self):
         attestation_statuses = std_att_stat.fetch_json_attestation_statuses(None)
@@ -111,6 +110,6 @@ class TestFetchSutentAttestationStatuses(TestCase):
         ]
         current_year = 2021
         self.assertDictEqual(
-            _get_current_year_echeance_attestation(attestations, current_year),
+            attestation.views.home._get_current_year_echeance_attestation(attestations, current_year),
             {'attestationType': 'ECHEANCE', 'printed': True, 'available': True}
         )

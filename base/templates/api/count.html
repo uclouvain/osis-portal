@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<span>
+    <strong style="color:grey; line-height: 2.5;">
+        {% blocktrans %}
+            {{ start_index }} to {{ end_index }} of {{ total_count }} {{ object_name_plural }}
+        {% endblocktrans %}
+    </strong>
+</span>

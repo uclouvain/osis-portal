@@ -24,13 +24,15 @@
 #
 ##############################################################################
 import json
-import requests
 from functools import wraps
 from typing import Set
 
+import requests
 from django.conf import settings
 from django.http import HttpResponseBadRequest
 from rest_framework import status
+
+DEFAULT_API_LIMIT = 25
 
 
 def get_user_token(person, force_user_creation=False):
@@ -60,12 +62,25 @@ def build_custom_headers(person):
     }
 
 
+def build_mandatory_auth_headers(person):
+    """
+    Return mandatory headers used for ESBAuthentification
+    """
+    return {
+        'accept_language': person.language or settings.LANGUAGE_CODE,
+        'x_user_first_name': person.first_name or '',
+        'x_user_last_name':  person.last_name or '',
+        'x_user_email': person.user.email or '',
+        'x_user_global_id': person.global_id,
+    }
+
+
 def api_exception_handler(api_exception_cls):
     def api_exception_decorator(func):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
             try:
-                func(*args, **kwargs)
+                return func(*args, **kwargs)
             except api_exception_cls as api_exception:
                 ApiExceptionHandler().handle(api_exception)
         return wrapped_function

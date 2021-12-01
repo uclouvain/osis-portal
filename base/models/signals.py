@@ -24,13 +24,17 @@
 #
 ##############################################################################
 from django.conf import settings
+from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
+from django.utils import translation
+
 
 from base import models as mdl
 from base.business import student as student_bsn
+from base.models.person import Person
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
 
@@ -40,6 +44,14 @@ GROUP_STUDENTS = "students"
 GROUP_STUDENTS_INTERNSHIP = "internship_students"
 GROUP_MASTERS_INTERNSHIP = "internship_masters"
 GROUP_TUTORS = "tutors"
+
+
+@receiver(user_logged_in)
+def post_login(sender, user, request, **kwargs):
+    person = Person.objects.filter(user=user).only('language').first()
+    if person and person.language:
+        translation.activate(person.language)
+        request.session[translation.LANGUAGE_SESSION_KEY] = person.language
 
 
 @receiver(user_created_signal)
@@ -111,7 +123,7 @@ def _add_person_to_group(person):
             _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
         # check master exists through api client
         from internship.services.internship import InternshipAPIService
-        if InternshipAPIService.get_master_by_email(person.user.email):
+        if InternshipAPIService.get_master(person):
             _assign_group(person, GROUP_MASTERS_INTERNSHIP)
 
 

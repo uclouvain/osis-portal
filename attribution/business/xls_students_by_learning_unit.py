@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,11 +25,12 @@
 ##############################################################################
 
 from django.http import HttpResponse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext_lazy as _
 from openpyxl import Workbook
 from openpyxl.styles import Color
 from openpyxl.styles import Style
 from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
+from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import save_virtual_workbook
 
 from attribution.business.student_specific_profile import get_type_peps
@@ -43,14 +44,15 @@ BORDER_LEFT = Border(
               color=Color('FF000000'),
               ),
 )
-FIRST_COL_PEPS = 'L'
+FIRST_COL_PEPS = 'M'
 
-
-def get_xls(student_list, a_learning_unit_year):
+def get_xls(student_list, acronym, academic_year):
     xls = _make_xls_list(student_list)
-    filename = '{}_{}_{}.xlsx'.format(_('student_list'),
-                                      a_learning_unit_year.acronym,
-                                      a_learning_unit_year.academic_year.year)
+    filename = '{}_{}_{}.xlsx'.format(
+        _('student_list'),
+        acronym,
+        academic_year
+    )
     response = HttpResponse(xls, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = "%s%s" % ("attachment; filename=", filename)
     return response
@@ -59,26 +61,27 @@ def get_xls(student_list, a_learning_unit_year):
 def _make_xls_list(student_list):
     workbook = Workbook()
     worksheet1 = workbook.active
-    worksheet1.title = _("Students")
+    worksheet1.title = str(_("Students"))
     columns = [
-        _('Program'),
-        _('Learning unit'),
-        _('Email'),
-        _('Student'),
-        _('Registration id'),
-        _('State'),
-        _('January'),
-        _('State'),
-        _('June'),
-        _('State'),
-        _('September'),
-        _('Type of specific profile'),
-        _('Extra time (33% generally)'),
-        _('Large print'),
-        _('Specific room of examination'),
-        _('Other educational facilities'),
-        _('Details other educational facilities'),
-        _('Educational tutor'),
+        str(_('Program')),
+        str(_('Learning unit')),
+        str(_('Email')),
+        str(_('Student')),
+        str(_('Registration id')),
+        str(_('State')),
+        str(_('January')),
+        str(_('State')),
+        str(_('June')),
+        str(_('State')),
+        str(_('September')),
+        str(_('Last score')),
+        str(_('Type of specific profile')),
+        str(_('Extra time (33% generally)')),
+        str(_('Large print')),
+        str(_('Specific room of examination')),
+        str(_('Other educational facilities')),
+        str(_('Details other educational facilities')),
+        str(_('Educational tutor')),
     ]
     worksheet1.append(col for col in columns)
     for student in student_list:
@@ -94,6 +97,7 @@ def _make_xls_list(student_list):
             student.get('june_note'),
             student.get('september_status'),
             student.get('september_note'),
+            student.get('last_note')
         ]
 
         student_specific_profile = student.get('student_specific_profile')
@@ -116,6 +120,27 @@ def _make_xls_list(student_list):
     _columns_resizing(worksheet1)
     _columns_registration_id_to_text(worksheet1)
     _set_peps_border(worksheet1, len(student_list) + 1)
+    _add_filters_on_headers(worksheet1)
+    workbook.create_sheet(str(_("Legend")))
+    workbook.worksheets[1].append([str(_("Legend"))])
+    workbook.worksheets[1].append([str(_("Exam registration state"))])
+    workbook.worksheets[1].append(
+        [str(_("P - Examen partiel")), "", str(_("PEPS")), str(_("Program for Students with a Specific Profile"))])
+    workbook.worksheets[1].append(
+        [str(_("I - Première inscription")), "", str(_("DDI")), str(_("Disability, Disorder or Illness Students"))])
+    workbook.worksheets[1].append(
+        [str(_("Y - Deuxième inscription")), "", str(_("PMR")), str(_("Person with reduced mobility"))])
+    workbook.worksheets[1].append(
+        [str(_("J - Report de note de janvier vers septembre")), "", str(_("ESHN")),
+         str(_("High Level Promising athlete"))])
+    workbook.worksheets[1].append(
+        [str(_("R - Report de note de la session précédente")), "", str(_("ES")), str(_("Promising athlete"))])
+    workbook.worksheets[1].append([str(_("T - Note résultant d’un test"))])
+    workbook.worksheets[1].append([str(_("V - Evaluation satisfaisante (la note ne compte pas)"))])
+    workbook.worksheets[1].append([str(_("W - Evaluation non satisfaisante (la note ne compte pas)"))])
+    workbook.worksheets[1].column_dimensions['A'].width = 50
+    workbook.worksheets[1].column_dimensions['C'].width = 6
+    workbook.worksheets[1].column_dimensions['D'].width = 50
     return save_virtual_workbook(workbook)
 
 
@@ -145,19 +170,21 @@ def _columns_resizing(ws):
     col_september_status.width = STATUS_COL_WIDTH
     col_september_note = ws.column_dimensions['K']
     col_september_note.width = NOTE_COL_WIDTH
-    col_type_of_specific_profile = ws.column_dimensions['L']
+    col_last_note = ws.column_dimensions['L']
+    col_last_note.width = 15
+    col_type_of_specific_profile = ws.column_dimensions['M']
     col_type_of_specific_profile.width = 20
-    col_extra_time = ws.column_dimensions['M']
+    col_extra_time = ws.column_dimensions['N']
     col_extra_time.width = 25
-    col_large_print = ws.column_dimensions['N']
+    col_large_print = ws.column_dimensions['O']
     col_large_print.width = 15
-    col_specific_room_of_examination = ws.column_dimensions['O']
+    col_specific_room_of_examination = ws.column_dimensions['P']
     col_specific_room_of_examination.width = 25
-    col_other_educational_facilities = ws.column_dimensions['P']
+    col_other_educational_facilities = ws.column_dimensions['Q']
     col_other_educational_facilities.width = 25
-    col_educational_tutor = ws.column_dimensions['Q']
-    col_educational_tutor.width = 30
     col_educational_tutor = ws.column_dimensions['R']
+    col_educational_tutor.width = 30
+    col_educational_tutor = ws.column_dimensions['S']
     col_educational_tutor.width = 30
 
 
@@ -186,3 +213,8 @@ def _update_border_for_first_peps_column(cell):
 
     c.border = BORDER_LEFT
     cell.style = c
+
+
+def _add_filters_on_headers(a_worksheet):
+    full_range = "A1:" + get_column_letter(a_worksheet.max_column) + str(a_worksheet.max_row)
+    a_worksheet.auto_filter.ref = full_range
