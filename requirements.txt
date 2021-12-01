@@ -1,1 +1,1 @@
-git+https://github.com/uclouvain/osis-internship-sdk.git@build-1.1.6
+git+https://github.com/uclouvain/osis-internship-sdk.git@wip-build-1.1.6
