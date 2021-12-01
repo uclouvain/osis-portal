@@ -38,7 +38,6 @@ class EnrollmentDictFactory(dict, factory.DictFactory):
     student_first_name = fake.first_name()
     student_email = fake.email()
     student_registration_id = factory.fuzzy.FuzzyText(length=10)
-    type_peps = None
     sport_subtype_peps = None
     disability_subtype_peps = None
     program = factory.fuzzy.FuzzyText(length=7)

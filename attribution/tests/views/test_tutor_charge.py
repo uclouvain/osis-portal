@@ -100,7 +100,7 @@ class TutorChargeViewTest(TestCase):
             'function_text': 'Coordinateur',
             'lecturing_charge': '15.5',
             'practical_charge': '40.0',
-            'links': AttributionLinks(value={}),
+            'links': AttributionLinks(catalog="", schedule=""),
             'is_partim': False,
             'effective_class_repartition': []
         })
