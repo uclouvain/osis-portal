@@ -37,7 +37,7 @@ from internship.services.internship import InternshipAPIService
 def redirect_if_not_master(function):
     @wraps(function)
     def wrapper(request, *args, **kwargs):
-        if not InternshipAPIService.get_master_by_email(email=request.user.email):
+        if not InternshipAPIService.get_master(person=request.user.person):
             messages.add_message(
                 request, messages.ERROR, _("Score encoding is only accessible to internship's masters")
             )

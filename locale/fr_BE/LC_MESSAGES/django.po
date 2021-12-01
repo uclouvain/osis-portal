@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 10:42+0200\n"
+"POT-Creation-Date: 2021-09-02 17:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,13 +37,15 @@ msgstr "Les affections sont disponibles depuis"
 msgid "All periods"
 msgstr "Toutes les périodes"
 
+msgid "An error occured during validation"
+msgstr "Une erreur est survenue durant la validation"
+
 msgid ""
 "An error occurred during delegate creation, please contact internships "
 "administration (STAC)"
-msgstr "Une erreur est survenue à la création du délégué de stage, veuillez contacter l'administration des stages (STAC)"
-
-msgid "An error occured during validation"
-msgstr "Une erreur est survenue durant la validation"
+msgstr ""
+"Une erreur est survenue à la création du délégué de stage, veuillez "
+"contacter l'administration des stages (STAC)"
 
 msgid "An error occurred during score update"
 msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
@@ -159,10 +161,11 @@ msgid "Good performance examples"
 msgstr "Exemples de bonne performance"
 
 msgid "Grade"
-msgstr "Cote"
+msgstr "Évaluation"
 
 msgid "Grades modifications will no longer be allowed after validation."
-msgstr "Les modifications de cotes ne seront plus permises après validation."
+msgstr ""
+"Les modifications d'une évaluation ne seront plus permises après validation."
 
 msgid "Hospital"
 msgstr "Hôpital"
@@ -175,6 +178,9 @@ msgstr "Hôpitaux"
 
 msgid "Improvement areas"
 msgstr "Points à améliorer"
+
+msgid "Intermediary evaluation"
+msgstr "Evaluation intermédiaire"
 
 msgid "Intermediary evaluation (optional)"
 msgstr "Evaluation intermédiaire (facultative)"
@@ -198,7 +204,7 @@ msgid "Internship master"
 msgstr "Maître de stage"
 
 msgid "Internship score encoding"
-msgstr "Encodage des cotes de stage"
+msgstr "Encodage des évaluations de stage"
 
 msgid "Internship student was present during evaluation process"
 msgstr "Le stagiaire était présent pendant le processus d'évaluation"
@@ -207,7 +213,7 @@ msgid "Internships"
 msgstr "Stages"
 
 msgid "Internships scores"
-msgstr "Cotes de stages"
+msgstr "Évaluations de stages"
 
 msgid ""
 "It seems you are not subscribed to internships, you may want to check with "
@@ -217,7 +223,7 @@ msgstr ""
 "recommandons de contacter votre secrétariat."
 
 msgid "Known to student"
-msgstr "Connu de l'étudiant"
+msgstr "Évaluation en ma présence"
 
 msgid "Last name"
 msgstr "Nom"
@@ -293,16 +299,18 @@ msgid "Save"
 msgstr "Enregistrer"
 
 msgid "Score encoding"
-msgstr "Encodage des cotes"
+msgstr "Encodage des évaluations"
 
 msgid "Score encoding is only accessible to internship's masters"
-msgstr "L'encodage des cotes est uniquement accessible aux maîtres de stage"
+msgstr ""
+"L'encodage des évaluations de stages est uniquement accessible aux maîtres "
+"de stage"
 
 msgid "Score encoding sheet"
 msgstr "Feuille récapitulative des encodages"
 
 msgid "Score updated successfully for {}'s internship during {}"
-msgstr "Cotes mises à jour avec succès pour le stage de {} en {}"
+msgstr "Évaluation mise à jour avec succès pour le stage de {} en {}"
 
 msgid "Second choice"
 msgstr "Second choix"
@@ -318,7 +326,8 @@ msgstr "Stages au choix"
 
 msgid ""
 "Some grades have not been validated yet, please do not forget to validate"
-msgstr "Il existe encore des cotes non validées, n'oubliez pas de les valider"
+msgstr ""
+"Il existe encore des évaluations non soumises, n'oubliez pas de les envoyer"
 
 msgid "Specialist"
 msgstr "Spécialiste"
@@ -366,7 +375,7 @@ msgid "This action will delete "
 msgstr "Cette action supprimera "
 
 msgid "This action will validate the grades submitted for"
-msgstr "Cette action validera les cotes soumises pour"
+msgstr "Cette action validera les évaluations soumises pour"
 
 msgid ""
 "This screen enables you to manage delegates only. Any substitution of an "
@@ -455,7 +464,7 @@ msgid "email"
 msgstr "email"
 
 msgid "encoded grade(s)"
-msgstr "cote(s) encodée(s)"
+msgstr "évaluation(s) encodée(s)"
 
 msgid "gender"
 msgstr "sexe"

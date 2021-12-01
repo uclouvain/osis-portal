@@ -24,6 +24,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+import json
 import re
 
 from django import template
@@ -60,3 +61,9 @@ def get_attr(object, name):
 @reg.filter
 def only_number(text):
     return re.findall(r'\d+', text)[0]
+
+
+@reg.filter
+def to_json(dict):
+    print(dict)
+    return json.dumps(dict)
