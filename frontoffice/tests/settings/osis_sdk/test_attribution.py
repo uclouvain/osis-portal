@@ -23,38 +23,24 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import mock
 import osis_attribution_sdk
 from django.test import SimpleTestCase, override_settings
 
-from base.tests.factories.person import PersonFactory
 from frontoffice.settings.osis_sdk import attribution as attribution_sdk
 
 
 @override_settings(
     OSIS_ATTRIBUTION_SDK_HOST="http://dummy-api.com/api/attribution",
-    OSIS_PORTAL_TOKEN="generic-token",
+    REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY="esb-authentication-token",
 )
 class BuildConfigurationAttributionTestCase(SimpleTestCase):
 
-    def test_build_configuration_case_anonymous_call(self):
+    def test_build_configuration(self):
         configuration = attribution_sdk.build_configuration()
 
         self.assertIsInstance(configuration, osis_attribution_sdk.Configuration)
         self.assertEqual(configuration.host, "http://dummy-api.com/api/attribution")
         self.assertDictEqual(
             configuration.api_key,
-            {"Token": "generic-token"}
-        )
-
-    @mock.patch('continuing_education.views.api.get_token_from_osis', return_value="personal-token")
-    def test_build_configuration_case_call_with_person_provided(self, mock_get_token_from_osis):
-        person = PersonFactory.build()
-
-        configuration = attribution_sdk.build_configuration(person=person)
-        self.assertIsInstance(configuration, osis_attribution_sdk.Configuration)
-        self.assertEqual(configuration.host, "http://dummy-api.com/api/attribution")
-        self.assertDictEqual(
-            configuration.api_key,
-            {"Token": "personal-token"}
+            {"Token": "esb-authentication-token"}
         )

@@ -54,7 +54,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 @login_required
 @permission_required('base.can_access_attribution_application', raise_exception=True)
 def outside_period(request):
-    calendar = ApplicationCoursesRemoteCalendar()
+    calendar = ApplicationCoursesRemoteCalendar(request.user.person)
     if calendar.get_opened_academic_events():
         return HttpResponseRedirect(reverse('applications_overview'))
 
@@ -118,7 +118,7 @@ class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, Templ
 
     @cached_property
     def application_course_calendar(self):
-        calendars = ApplicationCoursesRemoteCalendar().get_opened_academic_events()
+        calendars = ApplicationCoursesRemoteCalendar(self.tutor.person).get_opened_academic_events()
         if len(calendars) > 1:
             logger.warning("Multiple application courses calendars opened at same time")
         return calendars[0]

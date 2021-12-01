@@ -27,7 +27,52 @@ import json
 from functools import wraps
 from typing import Set
 
+import requests
+from django.conf import settings
 from django.http import HttpResponseBadRequest
+from rest_framework import status
+
+DEFAULT_API_LIMIT = 25
+
+
+def get_user_token(person, force_user_creation=False):
+    response = requests.post(
+        url=settings.URL_AUTH_API,
+        headers={
+            'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN,
+            **build_custom_headers(person)
+        },
+        json={
+            'username': person.user.username,
+            'force_user_creation': force_user_creation,
+        }
+    )
+    if response.status_code == status.HTTP_200_OK:
+        return response.json()['token']
+    return ""
+
+
+def build_custom_headers(person):
+    return {
+        'X-User-FirstName': person.first_name or '',
+        'X-User-LastName': person.last_name or '',
+        'X-User-Email': person.email or '',
+        'X-User-GlobalID': person.global_id,
+        'Accept-Language': person.language
+    }
+
+
+def build_mandatory_auth_headers(person):
+    """
+    Return mandatory headers used for ESBAuthentification
+    """
+    return {
+        'accept_language': person.language or settings.LANGUAGE_CODE,
+        'x_user_first_name': person.first_name or '',
+        'x_user_last_name':  person.last_name or '',
+        'x_user_email': person.user.email or '',
+        'x_user_global_id': person.global_id,
+    }
 
 
 def api_exception_handler(api_exception_cls):
@@ -35,7 +80,7 @@ def api_exception_handler(api_exception_cls):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
             try:
-                func(*args, **kwargs)
+                return func(*args, **kwargs)
             except api_exception_cls as api_exception:
                 ApiExceptionHandler().handle(api_exception)
         return wrapped_function

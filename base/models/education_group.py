@@ -24,9 +24,8 @@
 #
 ##############################################################################
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
-from base.models import offer_enrollment
+from base.models.offer_enrollment import OfferEnrollment
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
@@ -51,6 +50,8 @@ class EducationGroup(SerializableModel):
 
 
 def find_by_student_and_enrollment_states(student, offer_enrollment_states):
-    educ_goup_ids = offer_enrollment.find_by_student(student).filter(
-        enrollment_state__in=offer_enrollment_states).values('education_group_year__education_group_id')
+    educ_goup_ids = OfferEnrollment.objects.filter(
+        student=student,
+        enrollment_state__in=offer_enrollment_states
+    ).values('education_group_year__education_group_id')
     return EducationGroup.objects.filter(pk__in=educ_goup_ids)

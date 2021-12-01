@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-17 17:12+0200\n"
+"POT-Creation-Date: 2021-10-26 11:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#, python-brace-format
 msgid ""
 "A problem was detected with your registration : 2 registration id's are "
-"linked to your user. Please contact the registration departement (SIC). "
-"Thank you."
+"linked to your user.</br> Please contact <a href="
+"\"{registration_department_url}\" target=\"_blank\">the Registration "
+"department</a>. Thank you."
 msgstr ""
 
 msgid "ABC"
@@ -33,6 +35,11 @@ msgstr ""
 
 msgid "AVIS"
 msgstr "Notice of registration and invoice"
+
+msgid ""
+"As of today, you do not have a payment reminder, which means that your "
+"registration is in order or still being processed (recent registration)."
+msgstr ""
 
 msgid "Attestation"
 msgstr ""
@@ -53,12 +60,19 @@ msgid "DE"
 msgstr "Certificate of provisional registration"
 
 msgid "ECHEANCE"
-msgstr "Notice of maturity"
+msgstr "Due date notice"
 
 msgid "Faculty administration"
 msgstr ""
 
 msgid "No attestation available"
+msgstr ""
+
+msgid ""
+"Please take note of your payment notice to ensure that you are in order to "
+"pay by 31 October at the latest, in order to avoid being disenrolled. If you "
+"have regularised your situation in the meantime, please disregard this "
+"message."
 msgstr ""
 
 msgid "Printed"

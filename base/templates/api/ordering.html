@@ -1,0 +1,28 @@
+<form method="get" style="display: inline;">
+    <span class="ordering-label" onclick="this.parentElement.submit();">
+    {{ column_name }}
+    <i
+        {% if ordering_field_name in ordering_parameters %}
+            class="active-sort-icon glyphicon glyphicon-sort-by-attributes"
+        {% elif "-"|add:ordering_field_name in ordering_parameters %}
+            class="active-sort-icon glyphicon glyphicon-sort-by-attributes-alt"
+        {% else %}
+            class="inactive-sort-icon glyphicon glyphicon-sort"
+        {% endif %}
+    ></i>
+        {% if ordering_field_name in ordering_parameters %}
+            <input type="hidden" name="ordering" value="-{{ ordering_field_name }}" />
+        {% elif "-"|add:ordering_field_name in ordering_parameters %}
+            <input type="hidden" name="ordering" value="" />
+        {% else %}
+            <input type="hidden" name="ordering" value="{{ ordering_field_name }}" />
+        {% endif %}
+    {% if request.GET.limit and request.GET.offset %}
+        <input type="hidden" name="limit" value="{{ request.GET.limit }}" />
+        <input type="hidden" name="offset" value="{{ request.GET.offset }}" />
+    {% endif %}
+    {% if request.GET.search %}
+        <input type="hidden" name="search" value="{{ request.GET.search }}" />
+    {% endif %}
+    </span>
+</form>

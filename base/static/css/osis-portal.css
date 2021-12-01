@@ -107,3 +107,96 @@
     line-height: 15px !important;
     padding-left: 0 !important;
 }
+
+.no-padding{
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+@media (min-width: 992px) {
+    .pull-md-right{
+        float: right;
+    }
+}
+.active-sort-icon{
+    opacity: 0.6;
+    font-weight: bolder;
+}
+
+.inactive-sort-icon{
+    opacity: 0.2;
+    font-weight: bolder;
+}
+
+.ordering-label{
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.limit-selector{
+    display: inline-block;
+    width: auto;
+}
+
+.pagination-table-header{
+    display: flex;
+    width: 100%;
+}
+
+.pagination-table-header > .count {
+    flex: 1;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.pagination-table-header > .pagination {
+    flex: 2;
+    justify-content: center;
+    text-align: center;
+}
+
+.pagination-table-header > .selector {
+    flex: 1;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+
+
+.pagination-table-header .pagination {
+    margin: 0 !important;
+}
+
+a.disabled {
+  pointer-events: auto;
+  color: grey;
+}
+
+a.disabled:active {
+  pointer-events: none;
+}
+
+.btn-clear {
+    background: none;
+    border: none;
+}
+/* dataTables CSS modification */
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+    color: #337ab7 !important;
+    opacity: 1 !important;
+}
+
+table.dataTable thead th.sorting:after {
+    color: #337ab7 !important;
+    opacity: 1 !important;
+}
+table thead .glyphicon-sort,
+table thead .glyphicon-sort-by-attributes,
+table thead .glyphicon-sort-by-attributes-alt{
+    color: #337ab7 !important;
+    opacity: 1 !important;
+}
