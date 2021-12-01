@@ -29,11 +29,8 @@ def get_training_list_from_osis(**kwargs):
 
 
 class PaginatedResponse:
-    results: List
-    count: int = 0
-    extra: Dict
 
-    def __init__(self, results: List, count: int, **extra):
+    def __init__(self, results: List, count: int = 0, **extra):
         self.results = results
         self.count = count
         self.extra = extra
