@@ -33,7 +33,8 @@ from django.utils.translation import gettext as _
 from osis_internship_sdk.models import ScoreGet
 
 from base.views import layout
-from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
+from internship.decorators.score_encoding_view_decorators import redirect_if_not_master, \
+    redirect_if_not_master_with_matching_allocation
 from internship.models.period import Period
 from internship.models.score_encoding_utils import DEFAULT_PERIODS, APDS, COMMENTS_FIELDS, MIN_APDS, MAX_APDS, \
     AVAILABLE_GRADES, APDS_DESCRIPTIONS
@@ -58,7 +59,7 @@ def view_score_encoding(request):
 
 
 @login_required
-@redirect_if_not_master
+@redirect_if_not_master_with_matching_allocation
 def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
     if request.GET.get('period'):
         selected_period = request.GET.get('period', "")
@@ -91,7 +92,7 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
 
 
 @login_required
-@redirect_if_not_master
+@redirect_if_not_master_with_matching_allocation
 def view_score_encoding_form(request, specialty_uuid, organization_uuid, affectation_uuid):
 
     affectation = InternshipAPIService.get_affectation(request.user.person, affectation_uuid)
