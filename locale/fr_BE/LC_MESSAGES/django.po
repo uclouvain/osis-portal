@@ -435,7 +435,7 @@ msgid ""
 "You will find hereunder internships that have been assigned to you and for "
 "which score encoding is open "
 msgstr ""
-"Vous trouverez ci-dessous les stages avec période encodage ouverte pour "
+"Vous trouverez ci-dessous les stages avec période d'encodage ouverte pour "
 "lesquels vous avez été assignés"
 
 msgid ""
