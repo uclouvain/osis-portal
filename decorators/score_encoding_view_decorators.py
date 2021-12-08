@@ -34,14 +34,42 @@ from django.utils.translation import gettext as _
 from internship.services.internship import InternshipAPIService
 
 
+def _check_is_master(request):
+    master = InternshipAPIService.get_master(person=request.user.person)
+    if not master:
+        messages.add_message(
+            request, messages.ERROR, _("Score encoding is only accessible to internship's masters")
+        )
+        return redirect(reverse('home'))
+    return master
+
+
+def _check_match_allocations(request, master, specialty_uuid, organization_uuid):
+    allocations = InternshipAPIService.get_master_allocations(person=request.user.person, master_uuid=master.uuid)
+    allocations_details = [(allocation.specialty.uuid, allocation.organization.uuid) for allocation in allocations]
+    return (specialty_uuid, organization_uuid) in allocations_details
+
+
 def redirect_if_not_master(function):
     @wraps(function)
     def wrapper(request, *args, **kwargs):
-        if not InternshipAPIService.get_master(person=request.user.person):
-            messages.add_message(
-                request, messages.ERROR, _("Score encoding is only accessible to internship's masters")
-            )
-            return redirect(reverse('home'))
+        _check_is_master(request)
         response = function(request, *args, **kwargs)
         return response
+    return wrapper
+
+
+def redirect_if_not_master_with_matching_allocation(function):
+    @wraps(function)
+    def wrapper(request, *args, **kwargs):
+        master = _check_is_master(request)
+        if _check_match_allocations(request, master, kwargs['specialty_uuid'], kwargs['organization_uuid']):
+            response = function(request, *args, **kwargs)
+            return response
+        else:
+            messages.add_message(
+                request, messages.ERROR,
+                _("The requested scores sheet does not match your internship's allocations")
+            )
+        return redirect(reverse('internship_score_encoding'))
     return wrapper

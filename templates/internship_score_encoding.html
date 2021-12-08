@@ -1,6 +1,6 @@
 {% extends "dashboard_layout.html" %}
 
-{% load i18n %}
+{% load i18n messages %}
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -37,9 +37,21 @@
         <h2>{% trans 'Score encoding' %}</h2>
     </div>
 
+    {% as_messages_error as messages_error %}
+    {% if messages_error %}
+        <div class="alert alert-danger">
+            <span class="fa fa-exclamation-circle" style="margin-right: 5px;"></span>
+            {% for message in messages %}
+                    {% if 'error' in message.tags %}
+                        {{ message | safe}}
+                    {%endif%}
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="alert alert-info">
         <span class="glyphicon glyphicon-info-sign" style="margin-right: 5px;"></span>
-        {% trans 'You will find hereunder internships that have been assigned to you and for which score encoding is open ' %}
+        {% trans 'You will find hereunder internships that have been assigned to you and for which score encoding is open' %}
     </div>
 
 
