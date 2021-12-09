@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-09 14:41+0100\n"
+"POT-Creation-Date: 2021-12-09 15:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,6 +127,9 @@ msgstr "Fin"
 msgid "Exam registration state"
 msgstr "Etat d'inscription aux examens"
 
+msgid "Exam score"
+msgstr "Note de l’examen"
+
 msgid "Excel File"
 msgstr "Fichier Excel"
 
@@ -136,8 +139,6 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
-#, fuzzy, python-format
-#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -268,9 +269,6 @@ msgstr "Pas d'activité vacante correspondante"
 msgid "Non-renewable"
 msgstr "Non-reconductible"
 
-msgid "Note"
-msgstr ""
-
 msgid "One of your courses is not visible in the list?"
 msgstr "Un de vos cours n’est pas visible dans la liste ?"
 
@@ -346,6 +344,9 @@ msgstr "Horaire"
 msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
+msgid "Score"
+msgstr "Note"
+
 msgid "Scores responsible"
 msgstr "Responsable de notes"
 
@@ -379,6 +380,9 @@ msgstr "Début"
 
 msgid "State"
 msgstr "Etat"
+
+msgid "State of exam enrollment"
+msgstr "Etat d’inscription à l’examen"
 
 msgid "Student"
 msgstr "Etudiant"

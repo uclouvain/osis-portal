@@ -133,13 +133,13 @@
                     {% ordering label 'specific_profile' %}
                 {% endwith %}
             </th>
-            <th>{% trans 'State' %}</th>
-            <th>{% trans 'Note' %}</th>
-            <th>{% trans 'State' %}</th>
-            <th>{% trans 'Note' %}</th>
-            <th>{% trans 'State' %}</th>
-            <th>{% trans 'Note' %}</th>
-            <th>{% trans 'Last score' %}</th>
+            <th style="text-align: center;" title={% trans  'State of exam enrollment' %}>{% trans 'State' %}</th>
+            <th style="text-align: center;" title={% trans  'Exam score' %}>{% trans 'Score' %}</th>
+            <th style="text-align: center;" title={% trans  'State of exam enrollment' %}>{% trans 'State' %}</th>
+            <th style="text-align: center;" title={% trans  'Exam score' %}>{% trans 'Score' %}</th>
+            <th style="text-align: center;" title={% trans  'State of exam enrollment' %}>{% trans 'State' %}</th>
+            <th style="text-align: center;" title={% trans  'Exam score' %}>{% trans 'Score' %}</th>
+            <th style="text-align: center;" title={% trans  'Exam score' %}>{% trans 'Last score' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -168,13 +168,13 @@
                             {% endif %}
                         {% endwith %}
                     </td>
-                    <td>{{ student.january_status| default_if_none:''}}</td>
-                    <td>{{ student.january_note | default_if_none:''}}</td>
-                    <td>{{ student.june_status| default_if_none:''}}</td>
-                    <td>{{ student.june_note | default_if_none:''}}</td>
-                    <td>{{ student.september_status| default_if_none:''}}</td>
-                    <td>{{ student.september_note | default_if_none:''}}</td>
-                    <td>{{ student.last_note | default_if_none:'-'}}</td>
+                    <td style="border-left: 1px solid lightgrey;text-align: center;">{{ student.january_status| default_if_none:''}}</td>
+                    <td style="text-align: center;">{{ student.january_note | default_if_none:''}}</td>
+                    <td style="border-left: 1px solid lightgrey;text-align: center;">{{ student.june_status| default_if_none:''}}</td>
+                    <td style="text-align: center;">{{ student.june_note | default_if_none:''}}</td>
+                    <td style="border-left: 1px solid lightgrey;text-align: center;">{{ student.september_status| default_if_none:''}}</td>
+                    <td style="border-right: 1px solid lightgrey;text-align: center;">{{ student.september_note | default_if_none:''}}</td>
+                    <td style="text-align: center;">{{ student.last_note | default_if_none:'-'}}</td>
                 </tr>
             {% endfor %}
         {% else %}
