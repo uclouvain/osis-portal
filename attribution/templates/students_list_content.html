@@ -113,9 +113,17 @@
             </div>
         </tr>
         <tr>
+            <th colspan="6"></th>
+            <th colspan="2" style="text-align: center;">{% trans 'Jan.' %}</th>
+            <th colspan="2" style="text-align: center;">{% trans 'June' %}</th>
+            <th colspan="2" style="text-align: center;">{% trans 'Sept.' %}</th>
+            <th></th>
+
+        </tr>
+        <tr>
             {% trans "Program" context "attribution" as program_translated_string %}
             <th>{% ordering program_translated_string 'program' %}</th>
-            <th>{% trans 'Learning unit' %}</th>
+            <th title="{% trans 'Learning unit' %}">{% trans 'Learning unit' context "students_list" %}</th>
             <th><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></th>
             <th>{% ordering _('Last name') 'student_full_name' %}</th>
             <th>{% ordering _('Registration id') 'student_registration_id' %}</th>
@@ -126,11 +134,11 @@
                 {% endwith %}
             </th>
             <th>{% trans 'State' %}</th>
-            <th>{% trans 'Jan.' %}</th>
+            <th>{% trans 'Note' %}</th>
             <th>{% trans 'State' %}</th>
-            <th>{% trans 'June' %}</th>
+            <th>{% trans 'Note' %}</th>
             <th>{% trans 'State' %}</th>
-            <th>{% trans 'Sept.' %}</th>
+            <th>{% trans 'Note' %}</th>
             <th>{% trans 'Last score' %}</th>
         </tr>
         </thead>
