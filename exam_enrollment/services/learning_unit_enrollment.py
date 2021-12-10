@@ -30,7 +30,6 @@ import osis_learning_unit_enrollment_sdk
 import urllib3
 from django.conf import settings
 from osis_learning_unit_enrollment_sdk.api import enrollment_api
-from osis_learning_unit_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import learning_unit_enrollment as learning_unit_enrollment_sdk, utils
@@ -40,7 +39,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class LearningUnitEnrollmentService:
     @staticmethod
-    def get_my_enrollments_list(program_code: str, year: int, person: Person, **kwargs) -> EnrollmentList:
+    def get_my_enrollments_list(program_code: str, year: int, person: Person, **kwargs):
         configuration = learning_unit_enrollment_sdk.build_configuration()
         with osis_learning_unit_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)

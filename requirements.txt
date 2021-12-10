@@ -7,7 +7,7 @@ jdcal==1.4
 mock==2.0.0
 pika==0.12.0
 Pillow==8.3.2
-psycopg2-binary==2.7.5
+psycopg2-binary==2.8.6
 PyPDF2==1.26.0
 pypdftk==0.4
 reportlab==3.5.34
@@ -36,7 +36,7 @@ git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@build-1.0
 git+https://github.com/uclouvain/osis-learning-unit-sdk.git@build-1.9.0
 git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@build-1.2.0
 git+https://github.com/uclouvain/osis-education-group-sdk.git@build-1.8.0
-git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.17
+git+https://github.com/uclouvain/osis-reference-sdk.git@build-1.17
 git+https://github.com/uclouvain/osis-document.git@dev#egg=osis_document
 git+https://github.com/uclouvain/osis-signature.git@dev#egg=osis_signature
 git+https://github.com/uclouvain/osis-organisation-sdk.git@build-1.0.0
