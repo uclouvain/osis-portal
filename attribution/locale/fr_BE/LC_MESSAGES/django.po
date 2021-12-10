@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-24 11:12+0100\n"
+"POT-Creation-Date: 2021-12-09 15:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,6 +127,9 @@ msgstr "Fin"
 msgid "Exam registration state"
 msgstr "Etat d'inscription aux examens"
 
+msgid "Exam score"
+msgstr "Note de l’examen"
+
 msgid "Excel File"
 msgstr "Fichier Excel"
 
@@ -192,6 +195,10 @@ msgstr "Dernière note"
 
 msgid "Learning unit"
 msgstr "Unité d'enseignement"
+
+msgctxt "students_list"
+msgid "Learning unit"
+msgstr "UE"
 
 msgid "Learning unit volumes"
 msgstr "Volumes unité d'enseignement"
@@ -337,6 +344,9 @@ msgstr "Horaire"
 msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
+msgid "Score"
+msgstr "Note"
+
 msgid "Scores responsible"
 msgstr "Responsable de notes"
 
@@ -370,6 +380,9 @@ msgstr "Début"
 
 msgid "State"
 msgstr "Etat"
+
+msgid "State of exam enrollment"
+msgstr "Etat d’inscription à l’examen"
 
 msgid "Student"
 msgstr "Etudiant"
@@ -556,7 +569,9 @@ msgstr "%d/%m/%Y"
 msgid ""
 "no student is enrolled to the exam for this session. The list of students "
 "enrolled to courses is available in"
-msgstr "aucun·e étudiant·e n’est inscrit·e à l’examen pour cette session. Les listes des étudiant·es inscrit·es aux cours sont disponibles dans"
+msgstr ""
+"aucun·e étudiant·e n’est inscrit·e à l’examen pour cette session. Les listes "
+"des étudiant·es inscrit·es aux cours sont disponibles dans"
 
 msgid "no student is enrolled to this course."
 msgstr "aucun·e étudiant·e n’est inscrit·e à ce cours."
@@ -579,4 +594,6 @@ msgstr "sans candidature"
 msgid ""
 "you are not encoded as teacher on this course or on the class. Please check "
 "in"
-msgstr "vous n’êtes pas encodé·e comme enseignant·es sur ce cours ou sur la classe. Veuillez vérifier via"
+msgstr ""
+"vous n’êtes pas encodé·e comme enseignant·es sur ce cours ou sur la classe. "
+"Veuillez vérifier via"
