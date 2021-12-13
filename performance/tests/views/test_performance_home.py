@@ -81,7 +81,7 @@ class ViewPerformanceHomeStudentTest(TestCase):
 
     def test_multiple_students_objects_for_one_user(self):
         self.mocked_discriminate_user.side_effect = MultipleObjectsReturned
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, 'dashboard.html')
 

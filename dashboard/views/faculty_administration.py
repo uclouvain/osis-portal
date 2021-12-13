@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,27 +24,21 @@
 #
 ##############################################################################
 from django.conf import settings
-from django.conf.urls import url
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import TemplateView
 
-from base.views import administration, my_osis
-from base.views.autocomplete.country import CountryAutocomplete
-from base.views.autocomplete.education_group_year import TrainingAutocomplete
-from dashboard.views.home import Home
 
-urlpatterns = [
-    url(r'^' + settings.ADMIN_URL + 'data/$', administration.data, name='data'),
-    url(r'^' + settings.ADMIN_URL + 'data/maintenance$', administration.data_maintenance, name='data_maintenance'),
-    url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
-    url(r'^$', Home.as_view(), name='home'),
-    # TODO :: to remove shibboleth
-    url(
-        r'^continuing_education/country-autocomplete/$',
-        CountryAutocomplete.as_view(),
-        name='country-autocomplete',
-    ),
-    url(
-        r'^training-autocomplete/$',
-        TrainingAutocomplete.as_view(),
-        name='training-autocomplete',
-    ),
-]
+class FacultyAdministration(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "faculty_administrator_dashboard.html"
+
+    def test_func(self):
+        return self._can_access_administration()
+
+    def _can_access_administration(self):
+        if self.request.user.has_perm('base.is_faculty_administrator'):
+            return True
+        can_access = False
+        if 'performance' in settings.INSTALLED_APPS:
+            from performance.views import main as perf_main_view
+            can_access = perf_main_view._can_access_performance_administration(self.request)
+        return can_access
