@@ -60,7 +60,7 @@ class MyPersonalInformation(LoginRequiredMixin, PermissionRequiredMixin, Templat
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'data': id_data_bus.get_student_id_data(registration_id=self.student.registration_id)
+            **id_data_bus.get_student_id_data(registration_id=self.student.registration_id)
         }
 
 
