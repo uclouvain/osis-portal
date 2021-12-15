@@ -25,9 +25,18 @@
 ##############################################################################
 from django.conf.urls import url, include
 
-from attribution.views import list
-from attribution.views import online_application
+from attribution.views import tutor_charge, list
 from attribution.views.home import HomeAttribution
+from attribution.views.online_application.create import CreateApplicationView
+from attribution.views.online_application.delete import DeleteApplicationView
+from attribution.views.online_application.outside_period import OutsidePeriod
+from attribution.views.online_application.overview import ApplicationOverviewView, ApplicationOverviewAdminView
+from attribution.views.online_application.renew_multiple_application_about_to_expire import \
+    RenewMultipleAttributionsAboutToExpireView
+from attribution.views.online_application.search_vacant_courses import SearchVacantCoursesView
+from attribution.views.online_application.select_tutor import SelectTutor
+from attribution.views.online_application.send_summary import SendApplicationsSummaryView
+from attribution.views.online_application.update import UpdateApplicationView
 from attribution.views.select_tutor_for_attribution import SelectTutorForAttribution
 from attribution.views.students_list import StudentsListView, AdminStudentsListView, StudentsListXlsView
 from attribution.views.tutor_charge import TutorChargeView, AdminTutorChargeView
@@ -48,31 +57,23 @@ urlpatterns = [
         url(r'^(?P<class_code>[0-9A-Za-z-]{1})/xls$', StudentsListXlsView.as_view(), name='produce_xls_class_students')
     ])),
     url(r'^applications/', include([
-        url(r'^$', online_application.ApplicationOverviewView.as_view(), name='applications_overview'),
-        url(r'^outside_period/$', online_application.outside_period, name='outside_applications_period'),
-        url(
-            r'^search_vacant_courses$',
-            online_application.SearchVacantCoursesView.as_view(),
-            name='search_vacant_courses'
-        ),
-        url(
-            r'^send_summary$',
-            online_application.SendApplicationsSummaryView.as_view(),
-            name='email_tutor_application_confirmation'
-        ),
+        url(r'^$', ApplicationOverviewView.as_view(), name='applications_overview'),
+        url(r'^outside_period/$', OutsidePeriod.as_view(), name='outside_applications_period'),
+        url(r'^search_vacant_courses$', SearchVacantCoursesView.as_view(), name='search_vacant_courses'),
+        url(r'^send_summary$', SendApplicationsSummaryView.as_view(), name='email_tutor_application_confirmation'),
         url(
             r'^(?P<vacant_course_code>[0-9A-Za-z-]+)/create$',
-            online_application.CreateApplicationView.as_view(),
+            CreateApplicationView.as_view(),
             name='create_application'
         ),
         url(
             r'^renew/$',
-            online_application.RenewMultipleAttributionsAboutToExpireView.as_view(),
+            RenewMultipleAttributionsAboutToExpireView.as_view(),
             name='renew_applications',
         ),
         url(r'^(?P<application_uuid>[0-9A-Za-z-]+)/', include([
-            url(r'^delete$', online_application.DeleteApplicationView.as_view(), name='delete_application'),
-            url(r'^update$', online_application.UpdateApplicationView.as_view(), name='update_application'),
+            url(r'^delete$', DeleteApplicationView.as_view(), name='delete_application'),
+            url(r'^update$', UpdateApplicationView.as_view(), name='update_application'),
         ]))
     ])),
 
@@ -88,11 +89,11 @@ urlpatterns = [
             name='lists_of_students_exams_enrollments_create'),
 
         url(r'^applications/', include([
-            url(r'^$', online_application.administration_applications,
+            url(r'^$', SelectTutor.as_view(),
                 name='attribution_applications'),
             url(
                 r'^(?P<global_id>[0-9]+)/$',
-                online_application.ApplicationOverviewAdminView.as_view(),
+                ApplicationOverviewAdminView.as_view(),
                 name="visualize_tutor_applications"
             )
         ])),
