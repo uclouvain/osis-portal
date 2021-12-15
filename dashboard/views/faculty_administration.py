@@ -23,25 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
-
-import factory.fuzzy
-from factory.faker import faker
-
-fake = faker.Faker()
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import TemplateView
 
 
-class EnrollmentDictFactory(dict, factory.DictFactory):
-    date_enrollment = datetime.date.today()
-    enrollment_state = "ENROLLED"
-    student_last_name = fake.last_name()
-    student_first_name = fake.first_name()
-    student_email = fake.email()
-    student_registration_id = factory.fuzzy.FuzzyText(length=10)
-    program = factory.fuzzy.FuzzyText(length=7)
-    learning_unit_year = 2020
-    learning_unit_acronym = "{}{}".format(
-        factory.fuzzy.FuzzyText(length=5),
-        factory.fuzzy.FuzzyInteger(low=1000, high=2000)
-    )
-    specific_profile = None
+class FacultyAdministration(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "faculty_administrator_dashboard.html"
+
+    def test_func(self):
+        return self._can_access_administration()
+
+    def _can_access_administration(self):
+        if self.request.user.has_perm('base.is_faculty_administrator'):
+            return True
+        can_access = False
+        if 'performance' in settings.INSTALLED_APPS:
+            from performance.views import main as perf_main_view
+            can_access = perf_main_view._can_access_performance_administration(self.request)
+        return can_access

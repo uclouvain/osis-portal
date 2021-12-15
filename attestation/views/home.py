@@ -35,11 +35,11 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
+import dashboard.views.home
 from attestation.queues import student_attestation_status
 from base.business import student as student_business
 from base.models.person import Person
 from base.models.student import Student
-from dashboard.views import main as dash_main_view
 from reference.services.academic_calendar import AcademicCalendarService
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -64,7 +64,7 @@ class Home(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
             return super().dispatch(request, *args, **kwargs)
         except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
             logger.exception('User {} returned multiple students.'.format(self.request.user.username))
-            return dash_main_view.show_multiple_registration_id_error(self.request)
+            return dashboard.views.home.show_multiple_registration_id_error(self.request)
 
     def get_attestation_data(self) -> Dict:
         if self.student:

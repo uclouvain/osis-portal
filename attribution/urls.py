@@ -37,6 +37,7 @@ from attribution.views.online_application.search_vacant_courses import SearchVac
 from attribution.views.online_application.select_tutor import SelectTutor
 from attribution.views.online_application.send_summary import SendApplicationsSummaryView
 from attribution.views.online_application.update import UpdateApplicationView
+from attribution.views.select_tutor_for_attribution import SelectTutorForAttribution
 from attribution.views.students_list import StudentsListView, AdminStudentsListView, StudentsListXlsView
 from attribution.views.tutor_charge import TutorChargeView, AdminTutorChargeView
 
@@ -80,8 +81,7 @@ urlpatterns = [
         url(r'^charge/(?P<global_id>[0-9a-z-]+)/$', AdminTutorChargeView.as_view(), name='tutor_charge_admin'),
         url(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/$',
             AdminStudentsListView.as_view(), name='attribution_students_admin'),
-        url(r'^attributions/$', tutor_charge.attribution_administration, name='attribution_administration'),
-        url(r'^select_tutor/$', tutor_charge.select_tutor_attributions,
+        url(r'^select_tutor/$', SelectTutorForAttribution.as_view(),
             name='attribution_admin_select_tutor'),
         url(r'^students_list/$', list.lists_of_students_exams_enrollments,
             name='lists_of_students_exams_enrollments'),

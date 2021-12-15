@@ -227,6 +227,7 @@ TIME_ZONE = os.environ.get('TIME_ZONE', 'Europe/Brussels')
 USE_I18N = os.environ.get('USE_I18N', 'True').lower() == 'true'
 USE_L10N = os.environ.get('USE_L10N', 'True').lower() == 'true'
 USE_TZ = os.environ.get('USE_TZ', 'True').lower() == 'true'
+FORMAT_MODULE_PATH = "frontoffice.formats"
 
 # Static files (CSS, JavaScript, Images) and Media
 # https://docs.djangoproject.com/en/1.9/howto/static-files/

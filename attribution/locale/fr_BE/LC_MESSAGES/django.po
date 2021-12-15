@@ -127,6 +127,9 @@ msgstr "Fin"
 msgid "Exam registration state"
 msgstr "Etat d'inscription aux examens"
 
+msgid "Exam score"
+msgstr "Note de l’examen"
+
 msgid "Excel File"
 msgstr "Fichier Excel"
 
@@ -192,6 +195,10 @@ msgstr "Dernière note"
 
 msgid "Learning unit"
 msgstr "Unité d'enseignement"
+
+msgctxt "students_list"
+msgid "Learning unit"
+msgstr "UE"
 
 msgid "Learning unit volumes"
 msgstr "Volumes unité d'enseignement"
@@ -337,6 +344,9 @@ msgstr "Horaire"
 msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
+msgid "Score"
+msgstr "Note"
+
 msgid "Scores responsible"
 msgstr "Responsable de notes"
 
@@ -370,6 +380,9 @@ msgstr "Début"
 
 msgid "State"
 msgstr "Etat"
+
+msgid "State of exam enrollment"
+msgstr "Etat d’inscription à l’examen"
 
 msgid "Student"
 msgstr "Etudiant"

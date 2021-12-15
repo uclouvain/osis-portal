@@ -23,25 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import datetime
+import logging
 
-import factory.fuzzy
-from factory.faker import faker
+from django.conf import settings
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.urls import reverse
+from django.views.generic import FormView
 
-fake = faker.Faker()
+from base.forms.base_forms import GlobalIdForm
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class EnrollmentDictFactory(dict, factory.DictFactory):
-    date_enrollment = datetime.date.today()
-    enrollment_state = "ENROLLED"
-    student_last_name = fake.last_name()
-    student_first_name = fake.first_name()
-    student_email = fake.email()
-    student_registration_id = factory.fuzzy.FuzzyText(length=10)
-    program = factory.fuzzy.FuzzyText(length=7)
-    learning_unit_year = 2020
-    learning_unit_acronym = "{}{}".format(
-        factory.fuzzy.FuzzyText(length=5),
-        factory.fuzzy.FuzzyInteger(low=1000, high=2000)
-    )
-    specific_profile = None
+class SelectTutorForAttribution(LoginRequiredMixin, PermissionRequiredMixin, FormView):
+    template_name = "admin/attribution_administration.html"
+    permission_required = 'base.is_faculty_administrator'
+    raise_exception = True
+    form_class = GlobalIdForm
+
+    def form_valid(self, form):
+        self.global_id = form.cleaned_data['global_id']
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('tutor_charge_admin', kwargs={'global_id': self.global_id})

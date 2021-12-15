@@ -120,6 +120,9 @@ msgstr ""
 msgid "Exam registration state"
 msgstr ""
 
+msgid "Exam score"
+msgstr ""
+
 msgid "Excel File"
 msgstr ""
 
@@ -184,6 +187,10 @@ msgstr ""
 msgid "Last score"
 msgstr ""
 
+msgid "Learning unit"
+msgstr ""
+
+msgctxt "students_list"
 msgid "Learning unit"
 msgstr ""
 
@@ -329,6 +336,9 @@ msgstr ""
 msgid "Schedule unavailable"
 msgstr ""
 
+msgid "Score"
+msgstr ""
+
 msgid "Scores responsible"
 msgstr ""
 
@@ -359,6 +369,9 @@ msgid "Start"
 msgstr ""
 
 msgid "State"
+msgstr ""
+
+msgid "State of exam enrollment"
 msgstr ""
 
 msgid "Student"
