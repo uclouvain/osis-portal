@@ -264,7 +264,7 @@ msgid "No teaching charge in "
 msgstr "Pas de charge d'enseignement en "
 
 msgid "No vacant corresponding course"
-msgstr "Pas d'activité vacante correspondante"
+msgstr "Pas de cours vacant correspondant"
 
 msgid "Non-renewable"
 msgstr "Non-reconductible"
