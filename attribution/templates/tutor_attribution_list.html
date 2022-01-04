@@ -37,8 +37,8 @@
     {% for tutor in tutors %}
         <tr>
             <td>{{ tutor.last_name|upper }} {{ tutor.first_name }}</td>
-            <td>{{ tutor.lecturing_volume }}</td>
-            <td>{{ tutor.practical_volume }}</td>
+            <td>{{ tutor.lecturing_volume | default_if_none:'' }}</td>
+            <td>{{ tutor.practical_volume | default_if_none:'' }}</td>
             <td>{{ tutor.function_text }}</td>
         </tr>
     {% endfor %}
