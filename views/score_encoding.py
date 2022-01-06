@@ -48,6 +48,11 @@ def view_score_encoding(request):
     master = InternshipAPIService.get_master(person=request.user.person)
     allocations = InternshipAPIService.get_master_allocations(person=request.user.person, master_uuid=master['uuid'])
     for allocation in allocations:
+
+        # get parent specialty details if subspecialty
+        if allocation.specialty.parent:
+            allocation.specialty = allocation.specialty.parent
+
         stats = InternshipAPIService.get_students_affectations_count(
             person=request.user.person,
             specialty_uuid=allocation['specialty']['uuid'],
