@@ -33,9 +33,9 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 import base.models as mdl_base
-import dashboard.views.home
 import internship.models as mdl_internship
 from base.views import layout
+from dashboard.views import main as dash_main_view
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
@@ -49,7 +49,7 @@ def view_internship_role_selection(request):
     try:
         student = mdl_base.student.find_by_user(request.user)
     except MultipleObjectsReturned:
-        return dashboard.views.home.show_multiple_registration_id_error(request)
+        return dash_main_view.show_multiple_registration_id_error(request)
 
     master = InternshipAPIService.get_master(person=request.user.person)
 
@@ -101,11 +101,11 @@ def view_cohort_selection(request):
                 messages.ERROR,
                 _('It seems you are not subscribed to internships, you may want to check with your administration.')
             )
-            return redirect(reverse("dashboard_home"))
+            return redirect(dash_main_view.home)
     else:
         messages.add_message(
             request,
             messages.ERROR,
             _('It seems you are not subscribed to internships, you may want to check with your administration.')
         )
-        return redirect(reverse("dashboard_home"))
+        return redirect(dash_main_view.home)

@@ -32,7 +32,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 
 import base.models as mdl_base
-import dashboard.views.home
+from dashboard.views import main as dash_main_view
 from internship.models import internship_student_information
 from internship.models.cohort import Cohort
 
@@ -43,7 +43,7 @@ def redirect_if_not_in_cohort(function):
         try:
             student = mdl_base.student.find_by_user(request.user)
         except MultipleObjectsReturned:
-            return dashboard.views.home.show_multiple_registration_id_error(request)
+            return dash_main_view.show_multiple_registration_id_error(request)
 
         if student and internship_student_information.find_by_person_in_cohort(cohort_id,
                                                                                student.person_id).count() > 0:
@@ -60,7 +60,7 @@ def redirect_if_subscription_not_allowed(function):
         try:
             mdl_base.student.find_by_user(request.user)
         except MultipleObjectsReturned:
-            return dashboard.views.home.show_multiple_registration_id_error(request)
+            return dash_main_view.show_multiple_registration_id_error(request)
 
         cohort = Cohort.objects.get(pk=cohort_id)
 

@@ -29,7 +29,7 @@ from functools import wraps
 from django.core.exceptions import MultipleObjectsReturned
 
 import base.models as mdl_base
-import dashboard.views.home
+from dashboard.views import main as dash_main_view
 
 
 def redirect_if_multiple_registrations(function):
@@ -38,7 +38,7 @@ def redirect_if_multiple_registrations(function):
         try:
             mdl_base.student.find_by_user(request.user)
         except MultipleObjectsReturned:
-            return dashboard.views.home.show_multiple_registration_id_error(request)
+            return dash_main_view.show_multiple_registration_id_error(request)
         response = function(request, *args, **kwargs)
         return response
 
