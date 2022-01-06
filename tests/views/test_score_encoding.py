@@ -61,7 +61,21 @@ class TestScoreEncoding(TestCase):
         response = self.client.get(url)
         self.assertRedirects(response, reverse('login')+"?next={}".format(url))
 
-    def test_access_score_encoding_sheet(self):
+    def test_access_score_encoding_sheet_redirects_if_not_matching_masters_allocations(self):
+        url = reverse('internship_score_encoding_sheet', kwargs={
+            'specialty_uuid': str(uuid.uuid4()),
+            'organization_uuid': str(uuid.uuid4())
+        })
+        response = self.client.get(url)
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
+        self.assertIn(
+            _("The requested scores sheet does not match your internship's allocations"),
+            messages_list[0]
+        )
+        self.assertRedirects(response, reverse('internship_score_encoding'))
+
+    @mock.patch('internship.decorators.score_encoding_view_decorators._check_match_allocations', return_value=True)
+    def test_access_score_encoding_sheet_matching_masters_allocations(self, mock_match_allocations):
         url = reverse('internship_score_encoding_sheet', kwargs={
             'specialty_uuid': str(uuid.uuid4()),
             'organization_uuid': str(uuid.uuid4())
@@ -70,7 +84,22 @@ class TestScoreEncoding(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'internship_score_encoding_sheet.html')
 
-    def test_access_score_encoding_sheet_detail(self):
+    def test_access_score_encoding_sheet_detail_redirects_if_not_matching_masters_allocations(self):
+        url = reverse('internship_score_encoding_form', kwargs={
+            'specialty_uuid': str(uuid.uuid4()),
+            'organization_uuid': str(uuid.uuid4()),
+            'affectation_uuid': str(uuid.uuid4())
+        })
+        response = self.client.get(url)
+        messages_list = [item.message for item in messages.get_messages(response.wsgi_request)]
+        self.assertIn(
+            _("The requested scores sheet does not match your internship's allocations"),
+            messages_list[0]
+        )
+        self.assertRedirects(response, reverse('internship_score_encoding'))
+
+    @mock.patch('internship.decorators.score_encoding_view_decorators._check_match_allocations', return_value=True)
+    def test_access_score_encoding_sheet_detail_matching_masters_allocations(self, mock_match_allocations):
         url = reverse('internship_score_encoding_form', kwargs={
             'specialty_uuid': str(uuid.uuid4()),
             'organization_uuid': str(uuid.uuid4()),
@@ -80,7 +109,8 @@ class TestScoreEncoding(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'internship_score_encoding_form.html')
 
-    def test_post_score_encoding_form_not_valid_too_many_apds(self):
+    @mock.patch('internship.decorators.score_encoding_view_decorators._check_match_allocations', return_value=True)
+    def test_post_score_encoding_form_not_valid_too_many_apds(self, mock_check_allocation):
         apds_data = {apd: 'A' for apd in APDS}
         url = reverse('internship_score_encoding_form', kwargs={
             'specialty_uuid': str(uuid.uuid4()),
@@ -93,7 +123,8 @@ class TestScoreEncoding(TestCase):
         self.assertIn(str(MIN_APDS), messages_list[0])
         self.assertIn(str(MAX_APDS), messages_list[0])
 
-    def test_post_score_encoding_form_not_valid_too_few_apds(self):
+    @mock.patch('internship.decorators.score_encoding_view_decorators._check_match_allocations', return_value=True)
+    def test_post_score_encoding_form_not_valid_too_few_apds(self, mock_check_allocation):
         url = reverse('internship_score_encoding_form', kwargs={
             'specialty_uuid': str(uuid.uuid4()),
             'organization_uuid': str(uuid.uuid4()),
@@ -105,7 +136,8 @@ class TestScoreEncoding(TestCase):
         self.assertIn(str(MIN_APDS), messages_list[0])
         self.assertIn(str(MAX_APDS), messages_list[0])
 
-    def test_post_score_encoding_form_not_valid_no_required_question(self):
+    @mock.patch('internship.decorators.score_encoding_view_decorators._check_match_allocations', return_value=True)
+    def test_post_score_encoding_form_not_valid_no_required_question(self, mock_check_allocation):
         apds_data = {'apd_{}'.format(apd): 'A' for apd in range(1, MAX_APDS - 1)}
         url = reverse('internship_score_encoding_form', kwargs={
             'specialty_uuid': str(uuid.uuid4()),
@@ -120,7 +152,8 @@ class TestScoreEncoding(TestCase):
             messages_list[0]
         )
 
-    def test_post_score_encoding_form_valid(self):
+    @mock.patch('internship.decorators.score_encoding_view_decorators._check_match_allocations', return_value=True)
+    def test_post_score_encoding_form_valid(self, mock_check_allocation):
         apds_data = {'apd_{}'.format(apd): 'A' for apd in range(1, MAX_APDS - 1)}
         url = reverse('internship_score_encoding_form', kwargs={
             'specialty_uuid': str(uuid.uuid4()),
