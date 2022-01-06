@@ -35,11 +35,11 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext as _
 
+import dashboard.views.home
 from base.business import student as student_bsn
 from base.forms.base_forms import RegistrationIdForm
 from base.models.student import Student
 from base.views import layout, common
-from dashboard.views import main as dash_main_view
 from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request
 from performance import models as mdl_performance
 from performance.models.student_performance import StudentPerformance
@@ -106,7 +106,7 @@ def display_result_for_specific_student_performance(request, pk):
     try:
         stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
+        return dashboard.views.home.show_multiple_registration_id_error(request)
     stud_perf = mdl_performance.student_performance.find_actual_by_pk(pk)
     if not check_right_access(stud_perf, stud):
         raise PermissionDenied
@@ -133,7 +133,7 @@ def display_results_by_acronym_and_year(request, acronym, academic_year):
     try:
         stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
+        return dashboard.views.home.show_multiple_registration_id_error(request)
     cleaned_acronym = _clean_acronym(acronym)
     stud_perf = mdl_performance.student_performance.find_actual_by_student_and_offer_year(stud.registration_id,
                                                                                           academic_year,
@@ -181,7 +181,7 @@ def visualize_student_result(request, pk):
     try:
         stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
-        return dash_main_view.show_multiple_registration_id_error(request)
+        return dashboard.views.home.show_multiple_registration_id_error(request)
     perf_data = __get_performance_data(stud_perf, stud)
     return layout.render(request,
                          "admin/performance_result_admin.html",

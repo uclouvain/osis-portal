@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-09 15:02+0100\n"
+"POT-Creation-Date: 2022-01-04 16:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,6 +139,7 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+# python-format
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -264,10 +265,7 @@ msgid "No teaching charge in "
 msgstr "Pas de charge d'enseignement en "
 
 msgid "No vacant corresponding course"
-msgstr "Pas d'activité vacante correspondante"
-
-msgid "Non-renewable"
-msgstr "Non-reconductible"
+msgstr "Pas de cours vacant correspondant"
 
 msgid "One of your courses is not visible in the list?"
 msgstr "Un de vos cours n’est pas visible dans la liste ?"
@@ -410,7 +408,7 @@ msgstr "Administration des charges d'enseignements"
 
 #, python-format
 msgid ""
-"The period of online application for courses %(year)s opened on "
+"The period of online application for courses %(year)s was opened from "
 "%(start_date)s to %(end_date)s"
 msgstr ""
 "La période de candidatures en ligne pour les cours %(year)s était ouverte du "
@@ -420,6 +418,14 @@ msgstr ""
 msgid ""
 "The period of online application for courses %(year)s will open on "
 "%(start_date)s to %(end_date)s"
+msgstr ""
+"La période de candidatures en ligne pour les cours %(year)s sera ouverte du "
+"%(start_date)s au %(end_date)s"
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s until %(end_date)s"
 msgstr ""
 "La période de candidatures en ligne pour les cours %(year)s sera ouverte du "
 "%(start_date)s au %(end_date)s"
