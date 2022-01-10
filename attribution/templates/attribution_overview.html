@@ -75,19 +75,19 @@
             </div>
         </div>
         <div class="panel-body">
-            <div class="clearfix">
-                <a id="lnk_submit_attribution_new" class="btn btn-primary pull-right"
-                   href="{% url 'search_vacant_courses' %}">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                    {% trans 'New application' %}
-                </a>
-            </div>
-            <br>
             {% if applications %}
                 {% include "applications_list.html" with applications=applications %}
             {% else %}
                 <div class="alert alert-info" style="margin-top:10px;">{% trans 'No application' %}</div>
             {% endif %}
+            <br>
+            <div class="clearfix">
+                <a id="lnk_submit_attribution_new" class="btn btn-primary pull-left"
+                   href="{% url 'search_vacant_courses' %}">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    {% trans 'Add a new application' %}
+                </a>
+            </div>
         </div>
     </div>
     {% if attributions_about_to_expire %}
