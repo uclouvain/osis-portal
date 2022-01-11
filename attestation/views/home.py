@@ -45,6 +45,7 @@ from reference.services.academic_calendar import AcademicCalendarService
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
 PAYMENT_NOTICE_1_WARNING_REFERENCE = "PAYMENT_NOTICE_1_WARNING"
+PAYMENT_NOTICE_2_WARNING_REFERENCE = "PAYMENT_NOTICE_2_WARNING"
 
 
 class Home(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -99,6 +100,10 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
             data_year=current_year,
             person=person
         )
+        display_warning_echeance_attestation_2 = _check_display_warning_echeance_attestation_2(
+            data_year=current_year,
+            person=person
+        )
         if returned_registration_id != student.registration_id:
             raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
     else:
@@ -112,7 +117,8 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         'student': student,
         'current_year_echeance_attestation': current_year_echeance_attestation,
         'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE,
-        'display_warning_echeance_attestation_1': display_warning_echeance_attestation_1
+        'display_warning_echeance_attestation_1': display_warning_echeance_attestation_1,
+        'display_warning_echeance_attestation_2': display_warning_echeance_attestation_2
     }
 
 
@@ -139,6 +145,23 @@ def _check_display_warning_echeance_attestation_1(data_year: int, person: Person
     if academic_calendars_payment_notice_1_warning:
         today = datetime.date.today()
         for calendar in academic_calendars_payment_notice_1_warning:
+            start_date = calendar.get('start_date')
+            end_date = calendar.get('end_date')
+            if start_date <= today and (end_date is None or end_date >= today):
+                return True
+    return False
+
+
+def _check_display_warning_echeance_attestation_2(data_year: int, person: Person) -> bool:
+    acad_calendars_payment_notice_2_warning_api_response = AcademicCalendarService.get_academic_calendar_list(
+        person=person,
+        data_year=data_year,
+        reference=PAYMENT_NOTICE_2_WARNING_REFERENCE
+    )
+    academic_calendars_payment_notice_2_warning = acad_calendars_payment_notice_2_warning_api_response.get('results')
+    if academic_calendars_payment_notice_2_warning:
+        today = datetime.date.today()
+        for calendar in academic_calendars_payment_notice_2_warning:
             start_date = calendar.get('start_date')
             end_date = calendar.get('end_date')
             if start_date <= today and (end_date is None or end_date >= today):
