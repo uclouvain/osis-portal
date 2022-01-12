@@ -34,6 +34,7 @@ from django.core.exceptions import MultipleObjectsReturned
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
+from osis_reference_sdk.model.paginated_academic_calendars import PaginatedAcademicCalendars
 
 import dashboard.views.home
 from attestation.queues import student_attestation_status
@@ -97,13 +98,15 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         current_year = attestation_statuses_all_years_json_dict.get('current_year')
         returned_registration_id = attestation_statuses_all_years_json_dict.get('registration_id')
         current_year_echeance_attestation = _get_current_year_echeance_attestation(attestations, current_year)
-        display_warning_echeance_attestation_1 = _check_display_warning_echeance_attestation_1(
+        display_warning_first_payment_maturity_tolerance = _check_display_warning_echeance_attestation(
             data_year=current_year,
-            person=person
+            person=person,
+            reference=PAYMENT_NOTICE_1_WARNING_REFERENCE
         )
-        display_warning_echeance_attestation_2 = _check_display_warning_echeance_attestation_2(
+        display_warning_last_payment_deadline_tolerance = _check_display_warning_echeance_attestation(
             data_year=current_year,
-            person=person
+            person=person,
+            reference=PAYMENT_NOTICE_2_WARNING_REFERENCE
         )
         if returned_registration_id != student.registration_id:
             raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
@@ -111,16 +114,16 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         attestations = None
         current_year = None
         current_year_echeance_attestation = None
-        display_warning_echeance_attestation_1 = False
-        display_warning_echeance_attestation_2 = False
+        display_warning_first_payment_maturity_tolerance = False
+        display_warning_last_payment_deadline_tolerance = False
     return {
         'attestations': attestations,
         'current_year': current_year,
         'student': student,
         'current_year_echeance_attestation': current_year_echeance_attestation,
         'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE,
-        'display_warning_echeance_attestation_1': display_warning_echeance_attestation_1,
-        'display_warning_echeance_attestation_2': display_warning_echeance_attestation_2
+        'display_warning_echeance_attestation_1': display_warning_first_payment_maturity_tolerance,
+        'display_warning_last_payment_deadline_tolerance': display_warning_last_payment_deadline_tolerance
     }
 
 
@@ -143,35 +146,20 @@ def _get_current_year_echeance_attestation(attestations, current_year):
     return None
 
 
-def _check_display_warning_echeance_attestation_1(data_year: int, person: Person) -> bool:
-    acad_calendars_payment_notice_1_warning_api_response = AcademicCalendarService.get_academic_calendar_list(
+def _check_display_warning_echeance_attestation(data_year: int, person: Person, reference: str) -> bool:
+    acad_calendars_payment_notice_warning_api_response = AcademicCalendarService.get_academic_calendar_list(
         person=person,
         data_year=data_year,
-        reference=PAYMENT_NOTICE_1_WARNING_REFERENCE
+        reference=reference
     )
-    academic_calendars_payment_notice_1_warning = acad_calendars_payment_notice_1_warning_api_response.get('results')
-    if academic_calendars_payment_notice_1_warning:
-        today = datetime.date.today()
-        for calendar in academic_calendars_payment_notice_1_warning:
-            start_date = calendar.get('start_date')
-            end_date = calendar.get('end_date')
-            if start_date <= today and (end_date is None or end_date >= today):
-                return True
+    academic_calendars_payment_notice_warning = acad_calendars_payment_notice_warning_api_response.get('results')
+    if academic_calendars_payment_notice_warning:
+        return _is_open(academic_calendars_payment_notice_warning[0])
     return False
 
 
-def _check_display_warning_echeance_attestation_2(data_year: int, person: Person) -> bool:
-    acad_calendars_payment_notice_2_warning_api_response = AcademicCalendarService.get_academic_calendar_list(
-        person=person,
-        data_year=data_year,
-        reference=PAYMENT_NOTICE_2_WARNING_REFERENCE
-    )
-    academic_calendars_payment_notice_2_warning = acad_calendars_payment_notice_2_warning_api_response.get('results')
-    if academic_calendars_payment_notice_2_warning:
-        today = datetime.date.today()
-        for calendar in academic_calendars_payment_notice_2_warning:
-            start_date = calendar.get('start_date')
-            end_date = calendar.get('end_date')
-            if start_date <= today and (end_date is None or end_date >= today):
-                return True
-    return False
+def _is_open(academic_calendar: Dict) -> bool:
+    today = datetime.date.today()
+    start_date = academic_calendar.get('start_date')
+    end_date = academic_calendar.get('end_date')
+    return start_date <= today and (end_date is None or end_date >= today)
