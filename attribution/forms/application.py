@@ -40,16 +40,16 @@ class ApplicationForm(BootstrapForm):
     code = forms.CharField(disabled=True, required=False)
     title = forms.CharField(disabled=True, required=False)
     charge_lecturing_asked = forms.DecimalField(
-        max_digits=5,
-        decimal_places=1,
+        max_digits=6,
+        decimal_places=2,
         initial=Decimal('0.0'),
         required=False,
         localize=True,
         validators=[MinValueValidator(0)]
     )
     charge_practical_asked = forms.DecimalField(
-        max_digits=5,
-        decimal_places=1,
+        max_digits=6,
+        decimal_places=2,
         initial=Decimal('0.0'),
         required=False,
         localize=True,
