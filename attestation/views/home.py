@@ -122,6 +122,7 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         'student': student,
         'current_year_echeance_attestation': current_year_echeance_attestation,
         'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE,
+        'attestation_type_prolonge': REGULAR_REGISTRATION_EXTENDED,
         'display_warning_first_payment_maturity_tolerance': display_warning_first_payment_maturity_tolerance,
         'display_warning_last_payment_deadline_tolerance': display_warning_last_payment_deadline_tolerance
     }
