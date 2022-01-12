@@ -44,6 +44,7 @@ from reference.services.academic_calendar import AcademicCalendarService
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
+REGULAR_REGISTRATION_EXTENDED = "ABC_PROLONGE"
 PAYMENT_NOTICE_1_WARNING_REFERENCE = "PAYMENT_NOTICE_1_WARNING"
 PAYMENT_NOTICE_2_WARNING_REFERENCE = "PAYMENT_NOTICE_2_WARNING"
 
@@ -111,6 +112,7 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         current_year = None
         current_year_echeance_attestation = None
         display_warning_echeance_attestation_1 = False
+        display_warning_echeance_attestation_2 = False
     return {
         'attestations': attestations,
         'current_year': current_year,
@@ -128,10 +130,16 @@ def _get_current_year_echeance_attestation(attestations, current_year):
             (attestation for attestation in attestations if attestation["academicYear"] == current_year), None
         )
         if current_year_attestations:
-            return next(
+            attestation = next(
                 (attestation for attestation in current_year_attestations['attestationStatuses'] if
                  attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
             )
+            if not attestation:
+                attestation = next(
+                    (attestation for attestation in current_year_attestations['attestationStatuses'] if
+                     attestation["attestationType"] == REGULAR_REGISTRATION_EXTENDED), None
+                )
+            return attestation
     return None
 
 
