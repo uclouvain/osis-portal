@@ -97,10 +97,13 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         attestations = attestation_statuses_all_years_json_dict.get('attestationStatusesAllYears')
         current_year = attestation_statuses_all_years_json_dict.get('current_year')
         returned_registration_id = attestation_statuses_all_years_json_dict.get('registration_id')
-        current_year_echeance_attestation = _get_current_year_echeance_attestation(attestations, current_year)
+        current_year_echeance_attestation = _get_current_year_echeance_attestation(
+            attestations,
+            current_year
+        )if attestations else None
         past_year_echeance_attestation = _get_past_year_regular_registration_extended_attestation(
             attestations, current_year-1
-        )
+        ) if attestations else None
         display_warning_first_payment_maturity_tolerance = _check_display_warning_echeance_attestation(
             data_year=current_year,
             person=person,
@@ -134,29 +137,25 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
 
 
 def _get_current_year_echeance_attestation(attestations, current_year):
-    if attestations:
-        current_year_attestations = next(
-            (attestation for attestation in attestations if attestation["academicYear"] == current_year), None
+    current_year_attestations = next(
+        (attestation for attestation in attestations if attestation["academicYear"] == current_year), None
+    )
+    if current_year_attestations:
+        return next(
+            (attestation for attestation in current_year_attestations['attestationStatuses'] if
+             attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
         )
-        if current_year_attestations:
-            return next(
-                (attestation for attestation in current_year_attestations['attestationStatuses'] if
-                 attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
-            )
-    return None
 
 
 def _get_past_year_regular_registration_extended_attestation(attestations, year):
-    if attestations:
-        current_year_attestations = next(
-            (attestation for attestation in attestations if attestation["academicYear"] == year), None
+    current_year_attestations = next(
+        (attestation for attestation in attestations if attestation["academicYear"] == year), None
+    )
+    if current_year_attestations:
+        return next(
+            (attestation for attestation in current_year_attestations['attestationStatuses'] if
+             attestation["attestationType"] == REGULAR_REGISTRATION_EXTENDED), None
         )
-        if current_year_attestations:
-            return next(
-                (attestation for attestation in current_year_attestations['attestationStatuses'] if
-                 attestation["attestationType"] == REGULAR_REGISTRATION_EXTENDED), None
-            )
-    return None
 
 
 def _check_display_warning_echeance_attestation(data_year: int, person: Person, reference: str) -> bool:
