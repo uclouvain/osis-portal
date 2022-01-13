@@ -37,7 +37,7 @@
                 {% trans 'Please take note of your payment notice to ensure that you are in order to pay by 31 October at the latest, in order to avoid being disenrolled. If you have regularised your situation in the meantime, please disregard this message.' %}
             </div>
         {% endif %}
-        {% if display_warning_last_payment_deadline_tolerance and past_year_echeance_attestation.attestationType == attestation_type_prolonge and past_year_echeance_attestation.available %}
+        {% if display_warning_last_payment_deadline_tolerance and past_year_echeance_attestation.attestationType == attestation_type_prolonge and current_year_echeance_attestation.available %}
             <div class="alert alert-danger" role="alert">
                 {% trans 'Please take note of your payment notice to ensure that you are in order to pay by 15 February at the latest, in order to avoid being disenrolled. If you have regularised your situation in the meantime, please disregard this message.' %}
             </div>
