@@ -145,6 +145,7 @@ def _get_current_year_echeance_attestation(attestations, current_year):
             (attestation for attestation in current_year_attestations['attestationStatuses'] if
              attestation["attestationType"] == ATTESTATION_TYPE_ECHEANCE), None
         )
+    return None
 
 
 def _get_past_year_regular_registration_extended_attestation(attestations, year):
@@ -156,6 +157,7 @@ def _get_past_year_regular_registration_extended_attestation(attestations, year)
             (attestation for attestation in current_year_attestations['attestationStatuses'] if
              attestation["attestationType"] == REGULAR_REGISTRATION_EXTENDED), None
         )
+    return None
 
 
 def _check_display_warning_echeance_attestation(data_year: int, person: Person, reference: str) -> bool:
