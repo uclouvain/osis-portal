@@ -37,16 +37,18 @@
                 {% trans 'Please take note of your payment notice to ensure that you are in order to pay by 31 October at the latest, in order to avoid being disenrolled. If you have regularised your situation in the meantime, please disregard this message.' %}
             </div>
         {% endif %}
-        {% if display_warning_last_payment_deadline_tolerance and current_year_echeance_attestation == attestation_type_prolonge and current_year_echeance_attestation.available %}
+        {% if display_warning_last_payment_deadline_tolerance and past_year_echeance_attestation == attestation_type_prolonge and current_year_echeance_attestation.available %}
             <div class="alert alert-danger" role="alert">
                 {% trans 'Please take note of your payment notice to ensure that you are in order to pay by 15 February at the latest, in order to avoid being disenrolled. If you have regularised your situation in the meantime, please disregard this message.' %}
-                <br>
+            </div>
+            <div class="alert alert-danger" role="alert">
                 {% trans "Warning, so that a future enrolment can be taken into consideration, the student will have to have discharged all his debts towards any higher education establishment in the French Community of Belgium on the day of his enrolment (article 10 du RGEE)." %}
             </div>
         {% elif display_warning_last_payment_deadline_tolerance and current_year_echeance_attestation.available %}
             <div class="alert alert-danger" role="alert">
                 {% trans 'Please take note of your payment notice to ensure that you are in order to pay by 1st February at the latest, in order to avoid being disenrolled. If you have regularised your situation in the meantime, please disregard this message.' %}
-                <br>
+            </div>
+            <div class="alert alert-danger" role="alert">
                 {% trans "Warning, so that a future enrolment can be taken into consideration, the student will have to have discharged all his debts towards any higher education establishment in the French Community of Belgium on the day of his enrolment (article 10 du RGEE)." %}
             </div>
         {% endif %}
