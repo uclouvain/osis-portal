@@ -165,7 +165,7 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
     def map_attributions_with_learning_units(self):
         for attribution in self.attributions:
             learning_unit = next((lu for lu in self.learning_units if attribution.code == lu['acronym']), None)
-            attribution.has_classes = learning_unit['has_classes']
+            attribution.has_classes = learning_unit and learning_unit['has_classes']
 
 
 class AdminTutorChargeView(TutorChargeView):

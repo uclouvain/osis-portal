@@ -34,7 +34,6 @@ from django.core.exceptions import MultipleObjectsReturned
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
-from osis_reference_sdk.model.paginated_academic_calendars import PaginatedAcademicCalendars
 
 import dashboard.views.home
 from attestation.queues import student_attestation_status
