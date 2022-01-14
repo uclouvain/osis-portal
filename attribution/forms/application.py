@@ -74,7 +74,7 @@ class ApplicationForm(BootstrapForm):
             max_value = getattr(self.vacant_course, 'lecturing_volume_available', '0.0')
             if data_cleaned > Decimal(max_value):
                 self.add_error('charge_lecturing_asked', "{0} (max: {1})".format(_('Too much'), max_value))
-            return Decimal('{:.1f}'.format(data_cleaned))
+            return Decimal('{:.2f}'.format(data_cleaned))
         return Decimal('0.0')
 
     def clean_charge_practical_asked(self):
@@ -83,7 +83,7 @@ class ApplicationForm(BootstrapForm):
             max_value = getattr(self.vacant_course, 'practical_volume_available', '0.0')
             if data_cleaned > Decimal(max_value):
                 self.add_error('charge_practical_asked', "{0} (max: {1})".format(_('Too much'), max_value))
-            return Decimal('{:.1f}'.format(data_cleaned))
+            return Decimal('{:.2f}'.format(data_cleaned))
         return Decimal('0.0')
 
     def clean_course_summary(self):
