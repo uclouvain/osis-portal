@@ -61,10 +61,10 @@
                     {{ application.course_title }}
                 </a>
             </td>
-            <td style="border-left: 1px solid black;">{{ application.lecturing_volume_available }}</td>
-            <td>{{ application.practical_volume_available }}</td>
-            <td style="border-left: 1px solid black;"> {{ application.lecturing_volume }}</td>
-            <td>{{ application.practical_volume }}</td>
+            <td style="border-left: 1px solid black;">{{ application.lecturing_volume_available|default_if_none:'' }}</td>
+            <td>{{ application.practical_volume_available|default_if_none:'' }}</td>
+            <td style="border-left: 1px solid black;"> {{ application.lecturing_volume|default_if_none:'' }}</td>
+            <td>{{ application.practical_volume|default_if_none:'' }}</td>
             <td colspan="2" style="width:130px;">
                 <a class="btn btn-primary" id="lnk_application_edit_{{ application.code }}_{{ application.year }}"
                    href="{% url 'update_application' application.uuid %}">
