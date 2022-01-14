@@ -34,13 +34,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
+import dashboard.views.home
 from base.models import academic_year
 from base.models.academic_year import AcademicYear
 from base.models.enums import offer_enrollment_state
 from base.models.person import Person
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService, OfferEnrollmentBusinessException
-from dashboard.views import main as dash_main_view
 from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException
 
 
@@ -71,7 +71,7 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         except MultipleApiBusinessException as e:
             for exception in e.exceptions:
                 if exception.status_code == OfferEnrollmentBusinessException.DoubleNOMA.value:
-                    return dash_main_view.show_multiple_registration_id_error(self.request)
+                    return dashboard.views.home.show_multiple_registration_id_error(self.request)
 
     def get(self, *args, **kwargs):
         if not self.offer_enrollments_list:

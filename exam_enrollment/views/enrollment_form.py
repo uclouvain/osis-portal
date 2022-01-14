@@ -39,12 +39,12 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
+import dashboard.views.home
 from base.models.academic_year import current_academic_year
 from base.models.person import Person
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService, OfferEnrollmentBusinessException
 from base.views import layout
-from dashboard.views import main as dash_main_view
 from exam_enrollment.services.learning_unit_enrollment import LearningUnitEnrollmentService
 from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request, ask_queue_for_exam_enrollment_form
 from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException
@@ -86,7 +86,7 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
         except MultipleApiBusinessException as e:
             for exception in e.exceptions:
                 if exception.status_code == OfferEnrollmentBusinessException.DoubleNOMA.value:
-                    return dash_main_view.show_multiple_registration_id_error(self.request)
+                    return dashboard.views.home.show_multiple_registration_id_error(self.request)
 
     @cached_property
     def offer_enrollment(self) -> Enrollment:

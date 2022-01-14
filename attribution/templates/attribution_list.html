@@ -63,12 +63,12 @@
                 {% endif %}
             </td>
             <td>{{ attribution.title }}</td>
-            <td>{{ attribution.total_lecturing_volume_course }}</td>
-            <td>{{ attribution.total_practical_volume_course }}</td>
-            <td style="border-left: 1px solid;">{{ attribution.lecturing_volume_available }}</td>
-            <td>{{ attribution.practical_volume_available }}</td>
-            <td style="border-left: 1px solid;">{{ attribution.lecturing_volume}}</td>
-            <td>{{ attribution.practical_volume}}</td>
+            <td>{{ attribution.total_lecturing_volume_course|default_if_none:'' }}</td>
+            <td>{{ attribution.total_practical_volume_course|default_if_none:'' }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.lecturing_volume_available|default_if_none:'' }}</td>
+            <td>{{ attribution.practical_volume_available|default_if_none:'' }}</td>
+            <td style="border-left: 1px solid;">{{ attribution.lecturing_volume|default_if_none:''}}</td>
+            <td>{{ attribution.practical_volume|default_if_none:''}}</td>
             <td>{{ attribution.function_text }}</td>
             <td>{{ attribution.start_year|display_as_academic_year }}</td>
             <td>{{ attribution.end_year|display_as_academic_year }}</td>
