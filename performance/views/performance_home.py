@@ -32,11 +32,11 @@ from django.http import HttpRequest
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 
+import dashboard.views.home
 from base.business import student as student_business
 from base.models import student as student_model
 from base.models.student import Student
 from base.views import common
-from dashboard.views import main as dash_main_view
 from performance import models as mdl_performance
 from performance.models.enums import offer_registration_state
 from performance.models.enums.offer_registration_state import OFFER_REGISTRATION_STATES
@@ -91,7 +91,7 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
         try:
             return super().dispatch(request, *args, **kwargs)
         except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
-            return dash_main_view.show_multiple_registration_id_error(self.request)
+            return dashboard.views.home.show_multiple_registration_id_error(self.request)
 
 
 class PerformanceHomeAdmin(PerformanceHomeMixin, UserPassesTestMixin):
