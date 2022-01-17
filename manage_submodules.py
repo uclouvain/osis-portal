@@ -33,6 +33,7 @@ if arguments > 0:
             idx = idx + 1
             module_branch = sys.argv[idx]
             modules_branches[module_name] = module_branch
+            idx = idx + 1
 
 elif project_branch in ['dev', 'test', 'qa', 'master']:
     default_module_branch = project_branch
