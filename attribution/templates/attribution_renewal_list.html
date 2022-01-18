@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% load i18n %}
+{% load i18n academic_year_display %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -32,8 +32,8 @@
         <tr>
             <th colspan="3"></th>
             <th colspan="2" style="border-left: 1px solid;"></th>
-            <th class="text-center" colspan="2">{{ application_year }}</th>
-            <th class="text-center" colspan="5" style="border-left: 1px solid;">{{ current_academic_year }}</th>
+            <th class="text-center" colspan="2">{{ application_academic_year }}</th>
+            <th class="text-center" colspan="5" style="border-left: 1px solid;">{{ previous_academic_year }}</th>
         </tr>
         <tr>
             <th colspan="3"></th>
@@ -79,8 +79,7 @@
                                    id="chb_attribution_renew_{{ forloop.counter }}"
                                    name="vacant_course_{{ attribution_about_to_expire.code }}"/>
                         {% else %}
-                            <span class="fa fa-exclamation-triangle" aria-hidden="true"
-                                  title="{% trans 'Non-renewable' %}"></span>
+                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
                         {% endif %}
                     </div>
                 </td>
@@ -90,8 +89,8 @@
                 <td>{{ attribution_about_to_expire.total_practical_volume_course|default_if_none:''}}</td>
                 <td>{{ attribution_about_to_expire.lecturing_volume_available|default_if_none:'' }}</td>
                 <td>{{ attribution_about_to_expire.practical_volume_available|default_if_none:''}}</td>
-                <td style="border-left: 1px solid;">{{ attribution_about_to_expire.start_year}}</td>
-                <td>{{ attribution_about_to_expire.end_year}}</td>
+                <td style="border-left: 1px solid;">{{ attribution_about_to_expire.start_year|display_as_academic_year}}</td>
+                <td>{{ attribution_about_to_expire.end_year|display_as_academic_year}}</td>
                 <td>{{ attribution_about_to_expire.lecturing_volume }}</td>
                 <td>{{ attribution_about_to_expire.practical_volume }}</td>
                 <td>{{ attribution_about_to_expire.function_text }}</td>

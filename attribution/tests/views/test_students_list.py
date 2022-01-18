@@ -35,11 +35,9 @@ from osis_learning_unit_enrollment_sdk.model.enrollment import Enrollment
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views import students_list
 from attribution.views.students_list import StudentsListView
-from base.models.enums import learning_unit_year_subtypes
-from base.tests.factories.learning_container_year import LearningContainerYearInChargeFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
-from base.tests.models import test_academic_year, test_learning_unit_year
+from base.tests.models import test_academic_year
 from performance.tests.models import test_student_performance
 
 
@@ -58,60 +56,40 @@ class StudentsListViewTest(TestCase):
             'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})
         })
         cls.a_tutor = TutorFactory(person=cls.person)
-        cls.full_luy = cls.create_lu_yr_annual_data(cls.current_year)
-
+        cls.acronym = 'LELEC1530'
+        cls.year = cls.current_year
         cls.url = reverse('student_enrollments_by_learning_unit', args=[
-            cls.full_luy['learning_unit_year'].acronym, cls.full_luy['learning_unit_year'].academic_year.year
+            cls.acronym, cls.year
         ])
-        luy_full = cls.full_luy['learning_unit_year']
         cls.students_list_view = StudentsListView(kwargs={
-            'learning_unit_acronym': luy_full.acronym,
-            'learning_unit_year': luy_full.academic_year.year
+            'learning_unit_acronym': cls.acronym,
+            'learning_unit_year': cls.year
         })
 
     def setUp(self):
         self.client.force_login(self.person.user)
 
-    @staticmethod
-    def create_lu_yr_annual_data(a_year):
-        an_academic_yr = test_academic_year.create_academic_year_with_year(a_year)
-        an_academic_yr.year = a_year
-        a_container_year = LearningContainerYearInChargeFactory()
-        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': 'LELEC1530',
-            'specific_title': 'Circ. Electro. Analog. & Digit. Fondam.',
-            'academic_year': an_academic_yr,
-            'weight': 5,
-            'subtype': learning_unit_year_subtypes.FULL,
-        })
-        a_learning_unit_year.learning_container_year = a_container_year
-        a_learning_unit_year.save()
-        return {
-            'academic_year': an_academic_yr,
-            'learning_unit_year': a_learning_unit_year,
-        }
-
-    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
-    def test_find_january_note(self, mock_enrollments):
+    def _get_enrollment_for_acronym(self, acronym, mock_enrollments):
         student_performance = test_student_performance.create_student_performance()
         an_academic_yr = test_academic_year.create_academic_year_with_year(student_performance.academic_year)
-        a_learning_unit_year = test_learning_unit_year.create_learning_unit_year({
-            'acronym': 'LINGI2145',
-            'specific_title': 'DummyTitle',
-            'academic_year': an_academic_yr,
-            'weight': 5
-        })
+        year = an_academic_yr.year
         enrollment = Enrollment(**EnrollmentDictFactory(
             student_registration_id=student_performance.registration_id,
-            learning_unit_year=a_learning_unit_year.academic_year.year,
-            learning_unit_acronym=a_learning_unit_year.acronym,
+            learning_unit_year=year,
+            learning_unit_acronym=acronym,
             program=student_performance.acronym
         ))
         self.enrollments.results.append(enrollment)
         mock_enrollments.return_value = self.enrollments
+        return enrollment
+
+    @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
+    def test_find_january_note(self, mock_enrollments, acronym='LINGI2145', class_code=None):
+        enrollment = self._get_enrollment_for_acronym(acronym, mock_enrollments)
         students_list_view = StudentsListView(kwargs={
-            'learning_unit_year': str(a_learning_unit_year.academic_year.year),
-            'learning_unit_acronym': a_learning_unit_year.acronym
+            'learning_unit_year': str(enrollment.learning_unit_year),
+            'learning_unit_acronym': acronym,
+            'class_code': class_code,
         })
         request = RequestFactory().get('/')
         request.user = PersonFactory().user
@@ -134,6 +112,14 @@ class StudentsListViewTest(TestCase):
             }
         )
 
+    def test_find_january_note_partim(self):
+        acronym = 'LINGI2145B'
+        self.test_find_january_note(acronym=acronym)
+
+    def test_find_january_note_class(self):
+        acronym = 'LINGI2145-A'
+        self.test_find_january_note(acronym=acronym, class_code='A')
+
     def test_get_student_performance_data_dict(self):
         student_performance = test_student_performance.create_student_performance()
         self.assertEqual(self.students_list_view.get_student_data_dict(student_performance), student_performance.data)
@@ -154,7 +140,7 @@ class StudentsListViewTest(TestCase):
             'results': [
                 Enrollment(
                     **EnrollmentDictFactory(
-                        learning_unit_acronym=self.full_luy['learning_unit_year'].acronym,
+                        learning_unit_acronym=self.acronym,
                         program=program,
                     )
                 ) for program in ['PROG2', 'PROG1']

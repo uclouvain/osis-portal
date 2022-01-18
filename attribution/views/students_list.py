@@ -38,8 +38,8 @@ from osis_learning_unit_enrollment_sdk.model.student_specific_profile import Stu
 from attribution.business import xls_students_by_learning_unit
 from attribution.services.attribution import AttributionService
 from attribution.services.enrollments import LearningUnitEnrollmentService
-from attribution.services.learning_unit import LearningUnitService
 from base.utils.api_utils import ApiPaginationMixin, ApiRetrieveAllObjectsMixin
+from learning_unit.services.learning_unit import LearningUnitService
 from performance.models.student_performance import StudentPerformance
 
 JSON_LEARNING_UNIT_NOTE = 'note'
@@ -167,6 +167,10 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
     def get_sessions_results(self, enrollment):
         a_registration_id = enrollment.student_registration_id
         offer_acronym = enrollment.program
+        learning_unit_acronym = enrollment.learning_unit_acronym
+        if self.is_class:
+            learning_unit_acronym = learning_unit_acronym.replace('-', '').replace('_', '')
+
         academic_year = self.kwargs['learning_unit_year']
 
         results = {}
@@ -184,7 +188,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
                 offre = monOffre['offre']
                 if offre['sigleComplet'] == offer_acronym:
                     cours_list = monOffre['cours']
-                    self.manage_cours_list(cours_list, results)
+                    self.manage_cours_list(cours_list, learning_unit_acronym, results)
         return results
 
     @cached_property
@@ -203,12 +207,12 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         except (AttributeError, ValueError):
             return None
 
-    def manage_cours_list(self, cours_list, results):
+    def manage_cours_list(self, cours_list, acronym, results):
         if cours_list:
             nb_cours = 0
             while nb_cours < len(cours_list):
                 cours = cours_list[nb_cours]
-                if cours['sigleComplet'] == self.kwargs['learning_unit_acronym']:
+                if cours['sigleComplet'] == acronym:
                     self.get_student_results(cours, results)
                 nb_cours = nb_cours + 1
 

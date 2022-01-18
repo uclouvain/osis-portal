@@ -227,6 +227,7 @@ TIME_ZONE = os.environ.get('TIME_ZONE', 'Europe/Brussels')
 USE_I18N = os.environ.get('USE_I18N', 'True').lower() == 'true'
 USE_L10N = os.environ.get('USE_L10N', 'True').lower() == 'true'
 USE_TZ = os.environ.get('USE_TZ', 'True').lower() == 'true'
+FORMAT_MODULE_PATH = "frontoffice.formats"
 
 # Static files (CSS, JavaScript, Images) and Media
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -443,6 +444,12 @@ OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX = os.environ.get(
 OSIS_ASSESSMENTS_SDK_HOST = os.environ.get("OSIS_ASSESSMENTS_SDK_HOST", "")
 OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX = os.environ.get(
     "OSIS_ASSESSMENTS_SDK_API_KEY_PREFIX", "ESB"
+)
+
+# ORGANISATION-SDK-CONFIGURATION
+OSIS_ORGANISATION_SDK_HOST = os.environ.get("OSIS_ORGANISATION_SDK_HOST", "")
+OSIS_ORGANISATION_SDK_API_KEY_PREFIX = os.environ.get(
+    "OSIS_ORGANISATION_SDK_API_KEY_PREFIX", "ESB"
 )
 
 # BASE_API_TESTING

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 13:45+0100\n"
+"POT-Creation-Date: 2022-01-06 10:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,9 @@ msgid ""
 msgstr ""
 
 msgid "Acronym"
+msgstr ""
+
+msgid "Add a new application"
 msgstr ""
 
 msgctxt "plural"
@@ -90,6 +93,9 @@ msgstr ""
 msgid "Details other educational facilities"
 msgstr ""
 
+msgid "Different explanations are possible:"
+msgstr ""
+
 msgid "Disability, Disorder or Illness Students"
 msgstr ""
 
@@ -114,10 +120,11 @@ msgstr ""
 msgid "End"
 msgstr ""
 
-#, fuzzy
-#| msgid "Registration id"
 msgid "Exam registration state"
-msgstr "Registration id"
+msgstr ""
+
+msgid "Exam score"
+msgstr ""
 
 msgid "Excel File"
 msgstr ""
@@ -186,6 +193,10 @@ msgstr ""
 msgid "Learning unit"
 msgstr ""
 
+msgctxt "students_list"
+msgid "Learning unit"
+msgstr ""
+
 msgid "Learning unit volumes"
 msgstr ""
 
@@ -240,6 +251,9 @@ msgstr ""
 msgid "No data found"
 msgstr ""
 
+msgid "No learning unit with students registered for exams is available"
+msgstr ""
+
 msgid "No students enrolled"
 msgstr "No students enrolled"
 
@@ -249,7 +263,7 @@ msgstr ""
 msgid "No vacant corresponding course"
 msgstr ""
 
-msgid "Non-renewable"
+msgid "One of your courses is not visible in the list?"
 msgstr ""
 
 msgid "Other educational facilities"
@@ -322,6 +336,9 @@ msgstr ""
 msgid "Schedule unavailable"
 msgstr ""
 
+msgid "Score"
+msgstr ""
+
 msgid "Scores responsible"
 msgstr ""
 
@@ -354,6 +371,9 @@ msgstr ""
 msgid "State"
 msgstr ""
 
+msgid "State of exam enrollment"
+msgstr ""
+
 msgid "Student"
 msgstr ""
 
@@ -378,12 +398,9 @@ msgstr ""
 msgid "Teaching charges administration"
 msgstr ""
 
-msgid "The lists of students enrolled to courses are available in "
-msgstr ""
-
 #, python-format
 msgid ""
-"The period of online application for courses %(year)s opened on "
+"The period of online application for courses %(year)s was opened from "
 "%(start_date)s to %(end_date)s"
 msgstr ""
 
@@ -391,6 +408,12 @@ msgstr ""
 msgid ""
 "The period of online application for courses %(year)s will open on "
 "%(start_date)s to %(end_date)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s until %(end_date)s"
 msgstr ""
 
 msgid "The period of online application is closed"
@@ -419,8 +442,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"This course will be discontinued in %(academic_year)s following a program "
-"reform."
+"This course will be discontinued in %(application_academic_year)s following "
+"a program reform."
 msgstr ""
 
 msgid ""
@@ -517,6 +540,14 @@ msgstr ""
 msgid "date_format"
 msgstr "%d %b %Y"
 
+msgid ""
+"no student is enrolled to the exam for this session. The list of students "
+"enrolled to courses is available in"
+msgstr ""
+
+msgid "no student is enrolled to this course."
+msgstr ""
+
 msgid "student(s)"
 msgstr ""
 
@@ -530,4 +561,9 @@ msgid "to"
 msgstr ""
 
 msgid "without application"
+msgstr ""
+
+msgid ""
+"you are not encoded as teacher on this course or on the class. Please check "
+"in"
 msgstr ""

@@ -30,8 +30,6 @@ import osis_offer_enrollment_sdk
 from django.conf import settings
 from osis_offer_enrollment_sdk import ApiException
 from osis_offer_enrollment_sdk.api import enrollment_api
-from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
-
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk, utils
 from frontoffice.settings.osis_sdk.utils import api_exception_handler
@@ -42,37 +40,30 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 class OfferEnrollmentService:
     @staticmethod
     @api_exception_handler(api_exception_cls=ApiException)
-    def get_enrollments_list(global_id: str, person: Person, **kwargs) -> EnrollmentList:
+    def get_enrollments_list(global_id: str, person: Person, **kwargs):
         configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
-            enrollments = api_instance.enrollments_list(
+            return api_instance.enrollments_list(
                 global_id=global_id,
                 **utils.build_mandatory_auth_headers(person),
                 **kwargs
             )
-        return enrollments
-
-    @classmethod
-    @api_exception_handler(api_exception_cls=ApiException)
-    def get_enrollments_year_list(cls, global_id: str, person: Person, year: int, **kwargs) -> EnrollmentList:
-        return cls.get_enrollments_list(global_id=global_id, person=person, year=year, **kwargs)
 
     @staticmethod
     @api_exception_handler(api_exception_cls=ApiException)
-    def get_my_enrollments_list(person: Person, **kwargs) -> EnrollmentList:
+    def get_my_enrollments_list(person: Person, **kwargs):
         configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
-            enrollments = api_instance.my_enrollments_list(
+            return api_instance.my_enrollments_list(
                 **utils.build_mandatory_auth_headers(person),
                 **kwargs
             )
-        return enrollments
 
     @classmethod
     @api_exception_handler(api_exception_cls=ApiException)
-    def get_my_enrollments_year_list(cls, person: Person, year: int, **kwargs) -> EnrollmentList:
+    def get_my_enrollments_year_list(cls, person: Person, year: int, **kwargs):
         return cls.get_my_enrollments_list(person=person, year=year, **kwargs)
 
 

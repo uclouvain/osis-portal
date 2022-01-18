@@ -34,6 +34,7 @@ from attestation.queues import student_attestation_status
 from attestation.views.home import _make_registration_json_message, _make_attestation_data
 from base.forms.base_forms import RegistrationIdForm
 from base.models import student as student_mdl
+from base.models.person import Person
 from base.models.student import Student
 
 
@@ -53,19 +54,23 @@ class AdministrationSelectStudent(Administration, FormView):
         return reverse('attestation_admin_view', args=[self.registration_id])
 
 
-class AdministratioViewStudentAttestation(Administration, TemplateView):
+class AdministrationViewStudentAttestation(Administration, TemplateView):
     template_name = 'attestation_home_admin.html'
 
     @cached_property
     def student(self) -> Student:
         return student_mdl.find_by_registration_id(self.kwargs['global_id'])
 
+    @cached_property
+    def person(self) -> Person:
+        return self.request.user.person
+
     def get_attestations_data(self) -> Dict:
         json_message = _make_registration_json_message(self.student.registration_id)
         attestation_statuses_all_years_json_dict = student_attestation_status.fetch_json_attestation_statuses(
             json_message
         )
-        return _make_attestation_data(attestation_statuses_all_years_json_dict, self.student)
+        return _make_attestation_data(attestation_statuses_all_years_json_dict, self.student, self.person)
 
     def get_context_data(self, **kwargs) -> Dict:
         return {

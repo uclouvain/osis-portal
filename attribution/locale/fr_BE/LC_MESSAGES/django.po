@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-08 13:45+0100\n"
+"POT-Creation-Date: 2022-01-06 10:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,9 @@ msgstr ""
 
 msgid "Acronym"
 msgstr "Sigle"
+
+msgid "Add a new application"
+msgstr "Ajouter une nouvelle candidature"
 
 msgctxt "plural"
 msgid "All"
@@ -97,6 +100,9 @@ msgstr "Supprimer la candidature"
 msgid "Details other educational facilities"
 msgstr "Détails autre aménagement"
 
+msgid "Different explanations are possible:"
+msgstr "Différentes explications sont possibles :"
+
 msgid "Disability, Disorder or Illness Students"
 msgstr "Personnes porteuses de handicap, trouble ou maladie"
 
@@ -124,6 +130,9 @@ msgstr "Fin"
 msgid "Exam registration state"
 msgstr "Etat d'inscription aux examens"
 
+msgid "Exam score"
+msgstr "Note de l’examen"
+
 msgid "Excel File"
 msgstr "Fichier Excel"
 
@@ -133,6 +142,7 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
+# python-format
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -190,6 +200,10 @@ msgstr "Dernière note"
 msgid "Learning unit"
 msgstr "Unité d'enseignement"
 
+msgctxt "students_list"
+msgid "Learning unit"
+msgstr "UE"
+
 msgid "Learning unit volumes"
 msgstr "Volumes unité d'enseignement"
 
@@ -244,6 +258,9 @@ msgstr "Pas d'attribution renouvelée"
 msgid "No data found"
 msgstr "Aucune donnée trouvée"
 
+msgid "No learning unit with students registered for exams is available"
+msgstr "Pas d'unité d'enseignement avec étudiants inscrits aux examens"
+
 msgid "No students enrolled"
 msgstr "Aucun étudiant inscrit au cours"
 
@@ -251,10 +268,10 @@ msgid "No teaching charge in "
 msgstr "Pas de charge d'enseignement en "
 
 msgid "No vacant corresponding course"
-msgstr "Pas d'activité vacante correspondante"
+msgstr "Pas de cours vacant correspondant"
 
-msgid "Non-renewable"
-msgstr "Non-reconductible"
+msgid "One of your courses is not visible in the list?"
+msgstr "Un de vos cours n’est pas visible dans la liste ?"
 
 msgid "Other educational facilities"
 msgstr "Autre aménagement"
@@ -328,6 +345,9 @@ msgstr "Horaire"
 msgid "Schedule unavailable"
 msgstr "Horaire non disponible"
 
+msgid "Score"
+msgstr "Note"
+
 msgid "Scores responsible"
 msgstr "Responsable de notes"
 
@@ -362,6 +382,9 @@ msgstr "Début"
 msgid "State"
 msgstr "Etat"
 
+msgid "State of exam enrollment"
+msgstr "Etat d’inscription à l’examen"
+
 msgid "Student"
 msgstr "Etudiant"
 
@@ -386,12 +409,9 @@ msgstr "Charge d'enseignement"
 msgid "Teaching charges administration"
 msgstr "Administration des charges d'enseignements"
 
-msgid "The lists of students enrolled to courses are available in "
-msgstr "Les listes des étudiants inscrits aux cours sont disponibles dans "
-
 #, python-format
 msgid ""
-"The period of online application for courses %(year)s opened on "
+"The period of online application for courses %(year)s was opened from "
 "%(start_date)s to %(end_date)s"
 msgstr ""
 "La période de candidatures en ligne pour les cours %(year)s était ouverte du "
@@ -401,6 +421,14 @@ msgstr ""
 msgid ""
 "The period of online application for courses %(year)s will open on "
 "%(start_date)s to %(end_date)s"
+msgstr ""
+"La période de candidatures en ligne pour les cours %(year)s sera ouverte du "
+"%(start_date)s au %(end_date)s"
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s until %(end_date)s"
 msgstr ""
 "La période de candidatures en ligne pour les cours %(year)s sera ouverte du "
 "%(start_date)s au %(end_date)s"
@@ -439,10 +467,11 @@ msgstr ""
 
 #, python-format
 msgid ""
-"This course will be discontinued in %(academic_year)s following a program "
-"reform."
+"This course will be discontinued in %(application_academic_year)s following "
+"a program reform."
 msgstr ""
-"Ce cours sera supprimé en %(academic_year)s suite à une réforme de programme."
+"Ce cours sera supprimé en %(application_academic_year)s suite à une réforme "
+"de programme."
 
 msgid ""
 "This learning unit has classes. Students are enrolled at the class level "
@@ -546,6 +575,16 @@ msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 msgid "date_format"
 msgstr "%d/%m/%Y"
 
+msgid ""
+"no student is enrolled to the exam for this session. The list of students "
+"enrolled to courses is available in"
+msgstr ""
+"aucun·e étudiant·e n’est inscrit·e à l’examen pour cette session. Les listes "
+"des étudiant·es inscrit·es aux cours sont disponibles dans"
+
+msgid "no student is enrolled to this course."
+msgstr "aucun·e étudiant·e n’est inscrit·e à ce cours."
+
 msgid "student(s)"
 msgstr "étudiant(s)"
 
@@ -560,3 +599,10 @@ msgstr "au"
 
 msgid "without application"
 msgstr "sans candidature"
+
+msgid ""
+"you are not encoded as teacher on this course or on the class. Please check "
+"in"
+msgstr ""
+"vous n’êtes pas encodé·e comme enseignant·es sur ce cours ou sur la classe. "
+"Veuillez vérifier via"

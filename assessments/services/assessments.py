@@ -31,6 +31,7 @@ import urllib3
 from django.conf import settings
 from django.http import Http404
 from osis_assessments_sdk.api import score_encoding_api
+from osis_assessments_sdk.model.progress_overview import ProgressOverview
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import assessments as assessments_sdk
@@ -98,6 +99,22 @@ class AssessmentsService:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
                 return {'error_body': e.body, 'error_status': e.status}
+
+    @staticmethod
+    def get_overview(person: Person, **kwargs) -> ProgressOverview:
+        configuration = assessments_sdk.build_configuration()
+        with osis_assessments_sdk.ApiClient(configuration) as api_client:
+            api_instance = score_encoding_api.ScoreEncodingApi(api_client)
+            try:
+                progress_overview = api_instance.get_overview(
+                    **build_mandatory_auth_headers(person),
+                    **kwargs
+                )
+            except (osis_assessments_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                progress_overview = None
+        return progress_overview
 
 
 def _score_encoding_api_call(person: Person, method_to_call: str):

@@ -34,12 +34,13 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+import dashboard.views.home
 from attestation.queues import student_attestation
 from base.business import student as student_bsn
 from base.models import student as student_mdl, person as person_mdl
-from dashboard.views import main as dash_main_view
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
 
 
 @login_required
@@ -49,7 +50,7 @@ def download_attestation(request, academic_year, attestation_type):
         student = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         logger.exception('User {} returned multiple students.'.format(request.user.username))
-        return dash_main_view.show_multiple_registration_id_error(request)
+        return dashboard.views.home.show_multiple_registration_id_error(request)
 
     attestation_pdf = student_attestation.fetch_student_attestation(student.person.global_id,
                                                                     academic_year,
