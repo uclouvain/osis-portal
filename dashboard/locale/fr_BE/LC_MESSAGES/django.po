@@ -28,9 +28,6 @@ msgstr ""
 "\"{registration_department_url}\" target=\"_blank\">Service des "
 "inscriptions</a> afin de résoudre le problème. Merci."
 
-msgid "Admission requests"
-msgstr "Demandes d'admission"
-
 msgid "Annual program"
 msgstr "Programme annuel"
 
@@ -52,8 +49,8 @@ msgstr "Ville"
 msgid "Country"
 msgstr "Pays"
 
-msgid "Create and manage my admission request for UCLouvain"
-msgstr "Créer et gérer ma demande d'admission UCLouvain"
+msgid "Create and manage my enrolment request for UCLouvain"
+msgstr "Créer et gérer ma demande d'inscription UCLouvain"
 
 msgid "Dashboard"
 msgstr "Tableau de bord"
@@ -70,6 +67,9 @@ msgstr ""
 
 msgid "Email"
 msgstr "Email"
+
+msgid "Enrolment requests"
+msgstr "Demandes d'inscription"
 
 msgid "Exams enrollment"
 msgstr "Inscriptions aux examens"
