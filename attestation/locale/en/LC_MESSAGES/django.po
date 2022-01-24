@@ -95,3 +95,10 @@ msgstr ""
 
 msgid "Student attestations"
 msgstr ""
+
+msgid ""
+"Warning, so that a future enrolment can be taken into consideration, the "
+"student will have to have discharged all his debts towards any higher "
+"education establishment in the French Community of Belgium on the day of his "
+"enrolment (article 10 du RGEE)."
+msgstr ""

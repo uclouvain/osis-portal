@@ -93,8 +93,6 @@ class TestStudentData(TestCase):
                 'birthcountry': 'France'
             }
         }
-        given_data = bsn_id_data.get_student_id_data(user=student.person.user)
-        self.assertDictEqual(given_data, expected_data)
         given_data = bsn_id_data.get_student_id_data(registration_id=student.registration_id)
         self.assertDictEqual(given_data, expected_data)
 

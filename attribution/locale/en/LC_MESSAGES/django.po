@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-09 15:02+0100\n"
+"POT-Creation-Date: 2022-01-06 10:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,9 @@ msgid ""
 msgstr ""
 
 msgid "Acronym"
+msgstr ""
+
+msgid "Add a new application"
 msgstr ""
 
 msgctxt "plural"
@@ -260,9 +263,6 @@ msgstr ""
 msgid "No vacant corresponding course"
 msgstr ""
 
-msgid "Non-renewable"
-msgstr ""
-
 msgid "One of your courses is not visible in the list?"
 msgstr ""
 
@@ -400,7 +400,7 @@ msgstr ""
 
 #, python-format
 msgid ""
-"The period of online application for courses %(year)s opened on "
+"The period of online application for courses %(year)s was opened from "
 "%(start_date)s to %(end_date)s"
 msgstr ""
 
@@ -408,6 +408,12 @@ msgstr ""
 msgid ""
 "The period of online application for courses %(year)s will open on "
 "%(start_date)s to %(end_date)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The period of online application for courses %(year)s will open on "
+"%(start_date)s until %(end_date)s"
 msgstr ""
 
 msgid "The period of online application is closed"
