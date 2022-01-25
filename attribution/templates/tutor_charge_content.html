@@ -31,7 +31,7 @@
 
 <div class="alert alert-warning">
     <i class="fa fa-exclamation-triangle"></i> {% trans 'Lists of students are available by clicking on the symbol' %}
-    <span class="fa fa-group" aria-hidden="true"
+    <span class="fa fa-users" aria-hidden="true"
           style="color: #367FB9"></span>{% trans ' in the column "Students"' %}</span>
 </div>
 
@@ -92,11 +92,11 @@
                     {% if attribution.has_classes %}
                         <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
                              title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
-                            <span class="fa fa-group" aria-hidden="true" style="color:gray"></span>
+                            <span class="fa fa-users" aria-hidden="true" style="color:gray"></span>
                         </div>
                     {% else %}
                         <a href="{{ attribution.attribution_students_url }}">
-                            <span class="fa fa-group" aria-hidden="true"></span>
+                            <span class="fa fa-users" aria-hidden="true"></span>
                         </a>
                         {% if attribution.has_peps %}
                             <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
@@ -150,7 +150,7 @@
                         <td></td>
                         <td>
                             <a href="{{ class_repartition.repartition_students_url }}">
-                                <span class="fa fa-group" aria-hidden="true"></span>
+                                <span class="fa fa-users" aria-hidden="true"></span>
                             </a>
                             {% if class_repartition.has_peps %}
                                 <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
