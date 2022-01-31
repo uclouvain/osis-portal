@@ -44,7 +44,7 @@ class Country(SerializableModel):
     name = models.CharField(max_length=80, unique=True)
     nationality = models.CharField(max_length=80, blank=True, null=True)
     european_union = models.BooleanField(default=False)
-    dialing_code = models.CharField(max_length=3, blank=True, null=True)
+    dialing_code = models.CharField(max_length=6, blank=True, null=True)
     cref_code = models.CharField(max_length=3, blank=True, null=True)
 
     def __str__(self):
