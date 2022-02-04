@@ -36,6 +36,7 @@ from base.business import student as student_business
 from base.forms.base_forms import RegistrationIdForm
 from base.models.student import Student
 from base.views import layout
+from base.views.common import get_managed_program_as_dict
 from dashboard.business import id_data as id_data_bus
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
@@ -74,3 +75,8 @@ class MyPersonalInformationAdmin(LoginRequiredMixin, PermissionRequiredMixin, Fo
         registration_id = form.cleaned_data['registration_id']
         data = id_data_bus.get_student_id_data(registration_id=registration_id)
         return layout.render(self.request, "admin/student_id_data.html", data)
+
+    def has_permission(self):
+        return self.request.user.has_perm('base.is_faculty_administrator') or (
+            not self.request.user.has_perm('base.is_student') and bool(get_managed_program_as_dict(self.request.user))
+        )
