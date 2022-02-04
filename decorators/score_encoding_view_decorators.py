@@ -47,6 +47,13 @@ def _check_is_master(request):
 def _check_match_allocations(request, master, specialty_uuid, organization_uuid):
     allocations = InternshipAPIService.get_master_allocations(person=request.user.person, master_uuid=master.uuid)
     allocations_details = [(allocation.specialty.uuid, allocation.organization.uuid) for allocation in allocations]
+
+    # get parent allocation details if subspecialty
+    allocations_details += [
+        (allocation.specialty.parend.uuid, allocation.organization.uuid) for allocation in allocations
+        if allocation.specialty.parent
+    ]
+
     return (specialty_uuid, organization_uuid) in allocations_details
 
 
