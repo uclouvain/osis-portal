@@ -49,9 +49,10 @@ def _check_match_allocations(request, master, specialty_uuid, organization_uuid)
     allocations_details = [(allocation.specialty.uuid, allocation.organization.uuid) for allocation in allocations]
 
     # get parent allocation details if subspecialty
-    for allocation in allocations:
-        if allocation.specialty.parent:
-            allocations_details.append((allocation.specialty.parent.uuid, allocation.organization.uuid))
+    allocations_details += [
+        (allocation.specialty.parent.uuid, allocation.organization.uuid) for allocation in allocations
+        if allocation.specialty.parent
+    ]
 
     return (specialty_uuid, organization_uuid) in allocations_details
 
