@@ -33,15 +33,17 @@ from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
-REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+from frontoffice.settings.osis_sdk.utils import get_user_token, build_mandatory_auth_headers
+
 API_URL = settings.URL_API_BASE_PERSON_ROLES
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def get_user_roles(global_id):
+def get_user_roles(person):
+    auth_header = {'Authorization': 'Token ' + get_user_token(person)}
     response = requests.get(
-        url=API_URL % {'global_id': global_id},
-        headers=REQUEST_HEADER
+        url=API_URL % {'global_id': person.global_id},
+        headers={**auth_header, **build_mandatory_auth_headers(person)}
     )
     if response.status_code == status.HTTP_404_NOT_FOUND:
         return None
@@ -50,10 +52,10 @@ def get_user_roles(global_id):
     return transform_response_to_data(response)
 
 
-def get_managed_programs_as_dict(global_id):
+def get_managed_programs_as_dict(person):
     programs = dict()
     try:
-        user_roles = get_user_roles(global_id).get('roles')
+        user_roles = get_user_roles(person).get('roles')
         if user_roles and user_roles.get('program_manager'):
             for program in user_roles.get('program_manager').get('scope'):
                 acronym = program.get('acronym')
