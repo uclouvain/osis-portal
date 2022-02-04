@@ -83,7 +83,7 @@ def get_managed_program_as_dict(user):
     managed_programs_as_dict = None
     person = person_mdl.find_by_user(user)
     if person:
-        managed_programs_as_dict = api.get_managed_programs_as_dict(person.global_id)
+        managed_programs_as_dict = api.get_managed_programs_as_dict(person)
     return managed_programs_as_dict
 
 
