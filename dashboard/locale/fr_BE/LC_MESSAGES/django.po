@@ -49,9 +49,6 @@ msgstr "Ville"
 msgid "Country"
 msgstr "Pays"
 
-msgid "Create and manage my enrolment request for UCLouvain"
-msgstr "Créer et gérer ma demande d'inscription UCLouvain"
-
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
@@ -67,9 +64,6 @@ msgstr ""
 
 msgid "Email"
 msgstr "Email"
-
-msgid "Enrolment requests"
-msgstr "Demandes d'inscription"
 
 msgid "Exams enrollment"
 msgstr "Inscriptions aux examens"

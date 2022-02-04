@@ -36,7 +36,9 @@
     <div class="panel panel-default">
         <div class="panel-body dashboard-grid">
             {% switch 'admission' %}
-                {% include 'candidate_dashboard.html' %}
+                {% if 'admission' in installed_apps %}
+                    {% include 'admission_dashboard.html' %}
+                {% endif %}
             {% endswitch %}
 
             {% if perms.base.is_tutor %}
