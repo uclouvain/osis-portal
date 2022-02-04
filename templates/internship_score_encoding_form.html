@@ -9,7 +9,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -29,14 +29,47 @@
 {% block style %}
     {# Move to static #}
     <style>
-        @media screen and (max-width: 768px) {
-          .apd-label-text {
-            padding-left: 10px;
-          }
-        }
         .form-group-lg.required .control-label:after {
            content:"*";
            color:red;
+        }
+
+        #apd-container {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+
+        @media screen and (min-width: 992px) {
+            #apd-container {
+                height: 200px;
+            }
+
+            #apd-container > .raw-item {
+                width: 300px;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            #apd-container {
+                height: 350px;
+            }
+
+            #apd-container > .raw-item {
+                width: 250px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .apd-label-text {
+                padding-left: 10px;
+            }
+            #apd-container {
+                height: 100%;
+            }
+            #apd-container > .raw-item {
+                width: 100%;
+            }
         }
     </style>
 {% endblock %}
@@ -76,37 +109,47 @@
             </a>
         </h3>
         <hr/>
-        <div class="col-xs-12">
-            <label>{% trans 'Targeted APD' %}</label>
-            <div class="form-group">
-                {% for apd in apds %}
-                <div class="checkbox">
-                {% with apd|only_number as apd_number %}
-                  <label for="{{ apd }}" style="text-align: right; width: 30px;">
-                      <span data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" class="apd-label-text">{{ apd | only_number}}</span>
-                  </label>
-                {% endwith %}
-                  <input class="apd-checkbox" type="checkbox" id="{{ apd }}" name="obj-{{ apd }}" value="obj-{{ apd }}" {% if score and apd|only_number in score.objectives.apds %}checked{% endif %}>
+        <div class="row">
+            <div class="col-xs-12">
+                <label>{% trans 'Targeted APD' %}</label>
+                <div class="form-group">
+                    {% for apd in apds %}
+                    <div class="checkbox">
+                    {% with apd|only_number as apd_number %}
+                      <label for="{{ apd }}" style="text-align: right; width: 30px;">
+                          <span data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" class="apd-label-text">{{ apd | only_number}}</span>
+                      </label>
+                    {% endwith %}
+                      <input class="apd-checkbox" type="checkbox" id="{{ apd }}" name="obj-{{ apd }}" value="obj-{{ apd }}" {% if score and apd|only_number in score.objectives.apds %}checked{% endif %}>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
-        {% for apd in apds %}
-            <div class="col-md-4 form-group" style="margin-top: 20px; margin-bottom: 20px;">
-                {% with apd|only_number as apd_number %}
-                <label data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" for="{{ apd }}" class="col-md-4 text-center" style="text-decoration: underline; text-decoration-style: dotted;
- line-height:2.5; cursor: help;">APD {{ apd_number }}</label>
-                {% endwith %}
-                <div class="col-md-8">
-                <select style="width: 100%;" class="form-control" name="{{ apd }}" id="input-{{ apd }}" disabled>
-                    <option value="">-</option>
-                    {% for grade in available_grades %}
-                        <option value="{{ grade }}" {% if score and score|get_attr:apd == grade %} selected {% endif %}>{{ grade }}</option>
-                    {% endfor %}
-                </select>
+
+        <hr/>
+
+        <div class="row">
+            <div id="apd-container">
+            {% for apd in apds %}
+                <div class="raw-item" id="raw">
+                    {% with apd|only_number as apd_number %}
+                    <label data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" for="{{ apd }}" class="col-xs-2 col-sm-4 text-center" style="text-decoration: underline; text-decoration-style: dotted;
+     line-height:2.5; cursor: help;">APD {{ apd_number }}</label>
+                    {% endwith %}
+                    <div class="col-xs-8">
+                    <select style="width: 100%;" class="form-control" name="{{ apd }}" id="input-{{ apd }}" disabled>
+                        <option value="">-</option>
+                        {% for grade in available_grades %}
+                            <option value="{{ grade }}" {% if score and score|get_attr:apd == grade %} selected {% endif %}>{{ grade }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
                 </div>
+            {% endfor %}
             </div>
-        {% endfor %}
+        </div>
+
         <div class="row">
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px;">
                 <table class="table">

@@ -50,7 +50,7 @@ def _check_match_allocations(request, master, specialty_uuid, organization_uuid)
 
     # get parent allocation details if subspecialty
     allocations_details += [
-        (allocation.specialty.parend.uuid, allocation.organization.uuid) for allocation in allocations
+        (allocation.specialty.parent.uuid, allocation.organization.uuid) for allocation in allocations
         if allocation.specialty.parent
     ]
 
