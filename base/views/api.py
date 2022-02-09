@@ -26,7 +26,7 @@
 import io
 import logging
 import traceback
-from typing import List
+from typing import Set
 
 import requests
 from django.conf import settings
@@ -51,14 +51,14 @@ def get_user_roles(global_id):
     return transform_response_to_data(response)
 
 
-def get_managed_programs(global_id) -> List[str]:
-    programs = []
+def get_managed_programs(global_id) -> Set[str]:
+    programs = set()
     try:
         user_roles = get_user_roles(global_id).get('roles')
         if user_roles and user_roles.get('program_manager'):
             for program in user_roles.get('program_manager').get('scope'):
                 acronym = program.get('acronym')
-                programs.append(acronym)
+                programs.add(acronym)
     except Exception:
         trace = traceback.format_exc()
         logger.error(trace)
