@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from typing import List
+
 from django.conf import settings
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import LoginView
@@ -79,7 +81,7 @@ def _check_notice(request, context):
         context['notice'] = request.session['notice']
 
 
-def get_managed_programs(user):
+def get_managed_programs(user) -> List[str]:
     managed_programs = []
     person = person_mdl.find_by_user(user)
     if person:

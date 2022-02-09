@@ -26,6 +26,7 @@
 import io
 import logging
 import traceback
+from typing import List
 
 import requests
 from django.conf import settings
@@ -50,7 +51,7 @@ def get_user_roles(global_id):
     return transform_response_to_data(response)
 
 
-def get_managed_programs(global_id):
+def get_managed_programs(global_id) -> List[str]:
     programs = []
     try:
         user_roles = get_user_roles(global_id).get('roles')
