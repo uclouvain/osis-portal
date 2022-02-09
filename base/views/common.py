@@ -79,12 +79,12 @@ def _check_notice(request, context):
         context['notice'] = request.session['notice']
 
 
-def get_managed_program_as_dict(user):
-    managed_programs_as_dict = None
+def get_managed_programs(user):
+    managed_programs = []
     person = person_mdl.find_by_user(user)
     if person:
-        managed_programs_as_dict = api.get_managed_programs_as_dict(person.global_id)
-    return managed_programs_as_dict
+        managed_programs = api.get_managed_programs(person.global_id)
+    return managed_programs
 
 
 def login(request):

@@ -50,18 +50,14 @@ def get_user_roles(global_id):
     return transform_response_to_data(response)
 
 
-def get_managed_programs_as_dict(global_id):
-    programs = dict()
+def get_managed_programs(global_id):
+    programs = []
     try:
         user_roles = get_user_roles(global_id).get('roles')
         if user_roles and user_roles.get('program_manager'):
             for program in user_roles.get('program_manager').get('scope'):
                 acronym = program.get('acronym')
-                year = program.get('year')
-                if programs.get(year):
-                    programs.get(year).append(acronym)
-                else:
-                    programs[year] = [acronym]
+                programs.append(acronym)
     except Exception:
         trace = traceback.format_exc()
         logger.error(trace)
