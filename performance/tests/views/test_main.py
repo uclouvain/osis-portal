@@ -247,7 +247,7 @@ class SelectStudentTest(TestCase):
         self.assertRedirects(response, "/login/?next={}".format(self.url))
 
     def test_user_has_not_permission(self):
-        patcher = patch('base.views.api.get_managed_programs_as_dict')
+        patcher = patch('base.views.api.get_managed_programs')
         mock_api_call = patcher.start()
         mock_api_call.return_value = {}
         self.client.logout()
