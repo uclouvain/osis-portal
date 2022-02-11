@@ -24,9 +24,9 @@
 #
 ##############################################################################
 from django.contrib import admin
-from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models import JSONField
 from django.utils import timezone
 
 from performance.models.enums import offer_registration_state, session_month
@@ -70,8 +70,8 @@ class StudentPerformance(models.Model):
         null=True
     )
 
-    courses_registration_validated = models.NullBooleanField(null=True)
-    learning_units_outside_catalog = models.NullBooleanField(null=True)
+    courses_registration_validated = models.BooleanField(null=True)
+    learning_units_outside_catalog = models.BooleanField(null=True)
     fetch_timed_out = False
     course_registration_message = models.CharField(max_length=255, blank=True, default='')
     on_site_exams_info = JSONField(null=True)
