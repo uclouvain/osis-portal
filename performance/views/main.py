@@ -205,8 +205,8 @@ def __can_visualize_student_result(request, performance_result_pk):
         return False
     student_performance = mdl_performance.student_performance.find_actual_by_pk(performance_result_pk)
     if student_performance:
-        managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
-        return student_performance.acronym in managed_programs_as_dict.get(student_performance.academic_year, [])
+        managed_programs = common.get_managed_programs(request.user)
+        return student_performance.acronym in managed_programs
     return False
 
 
@@ -218,7 +218,7 @@ def _can_access_performance_administration(request: HttpRequest) -> bool:
         - The user is program manager of at least one program
     """
     return request.user.has_perm('base.is_faculty_administrator') or (
-            not request.user.has_perm('base.is_student') and bool(common.get_managed_program_as_dict(request.user))
+            not request.user.has_perm('base.is_student') and bool(common.get_managed_programs(request.user))
     )
 
 
