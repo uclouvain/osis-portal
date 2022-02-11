@@ -30,12 +30,12 @@ from django.contrib.auth.models import User, Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
 from base.tests.models import test_academic_year, test_student, test_person
 from exam_enrollment.tests.views.test_enrollment_form import _create_group
 from performance.models.enums import offer_registration_state
-from performance.tests.views.test_main import ACCESS_DENIED, OK
 
 
 class OfferChoiceTest(TestCase):
@@ -80,7 +80,7 @@ class OfferChoiceTest(TestCase):
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_choose_offer_no_offer_redirect_to_dashboard(self):
@@ -98,7 +98,7 @@ class OfferChoiceTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'offer_choice.html')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'], [self.offer_enrollment_row])

@@ -44,7 +44,7 @@ def page_not_found(request, *args, **kwargs):
 
 
 def access_denied(request, *args, **kwargs):
-    return return_error_response(request, 'access_denied.html', 401)
+    return return_error_response(request, 'access_denied.html', 403)
 
 
 def server_error(request, *args, **kwargs):

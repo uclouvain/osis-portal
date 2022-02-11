@@ -33,6 +33,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from mock import patch
+from rest_framework import status
 
 import base.tests.models.test_student
 import performance.tests.models.test_student_performance
@@ -43,8 +44,6 @@ from base.tests.factories.student import StudentFactory
 from performance.tests.factories.student_performance import StudentPerformanceFactory
 from performance.views import main
 
-OK = 200
-ACCESS_DENIED = 401
 
 MULTIPLE_STUDENT_ERROR = _(
     "A problem was detected with your registration : 2 registration id's are "
@@ -112,7 +111,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
@@ -133,7 +132,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'access_denied.html')
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_when_trying_to_access_other_student_performance(self):
         an_other_student = StudentFactory()
@@ -143,13 +142,13 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'access_denied.html')
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_with_performance_present(self):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'performance_result_student.html')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
@@ -164,7 +163,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'performance_result_student.html')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
@@ -185,7 +184,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'performance_result_student.html')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
@@ -214,7 +213,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'performance_result_student.html')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
@@ -256,14 +255,14 @@ class SelectStudentTest(TestCase):
 
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
         patcher.stop()
 
     def test_get_request(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_administration.html')
 
         self.assertIsInstance(response.context['form'], RegistrationIdForm)
@@ -271,7 +270,7 @@ class SelectStudentTest(TestCase):
     def test_invalid_registration_id_post_request(self):
         response = self.client.post(self.url, data={'registration_id': str(int(self.student.registration_id) - 1)})
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_administration.html')
         self.assertIsInstance(response.context['form'], RegistrationIdForm)
         # Message valided in base test
@@ -288,7 +287,7 @@ class SelectStudentTest(TestCase):
         self.client.force_login(self.student.person.user)
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_user_is_pgm_manager(self):
@@ -297,7 +296,7 @@ class SelectStudentTest(TestCase):
         self.client.force_login(a_person.user)
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_administration.html')
 
 
@@ -324,7 +323,7 @@ class VisualizeStudentResult(TestCase):
     def test_user_has_not_permission(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_user_is_manager_wrong_program(self):
@@ -333,7 +332,7 @@ class VisualizeStudentResult(TestCase):
         url = reverse('performance_student_result_admin', args=[a_student_performance.pk])
         self.client.force_login(a_person.user)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_user_is_manager_program_ok(self):
@@ -342,7 +341,7 @@ class VisualizeStudentResult(TestCase):
         url = reverse('performance_student_result_admin', args=[a_student_performance.pk])
         self.client.force_login(a_person.user)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_result_admin.html')
 
     def test_no_corresponding_student_performance(self):
@@ -350,7 +349,7 @@ class VisualizeStudentResult(TestCase):
         self.client.force_login(self.person.user)
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_result_admin.html')
 
         self.assertEqual(response.context['results'], None)
@@ -365,14 +364,14 @@ class VisualizeStudentResult(TestCase):
         self.client.force_login(a_student.person.user)
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_when_found_student_performance(self):
         self.client.force_login(self.person.user)
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_result_admin.html')
 
         self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
@@ -388,7 +387,7 @@ class VisualizeStudentResult(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'admin/performance_result_admin.html')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertJSONEqual(response.context['results'], json.dumps(self.student_performance.data))
         self.assertEqual(response.context['creation_date'], self.student_performance.creation_date)
@@ -404,12 +403,12 @@ class VisualizeStudentResult(TestCase):
 class ViewPerformanceByAcronymAndYear(TestCase):
     def __test_access_denied(self, url):
         response = self.client.get(url)
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def __test_access_ok(self, url):
         response = self.client.get(url)
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'performance_result_student.html')
 
     @classmethod
