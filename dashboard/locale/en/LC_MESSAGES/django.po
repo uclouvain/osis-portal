@@ -24,9 +24,6 @@ msgid ""
 "department</a>. Thank you."
 msgstr ""
 
-msgid "Admission requests"
-msgstr ""
-
 msgid "Annual program"
 msgstr ""
 
@@ -46,9 +43,6 @@ msgid "City"
 msgstr ""
 
 msgid "Country"
-msgstr ""
-
-msgid "Create and manage my admission request for UCLouvain"
 msgstr ""
 
 msgid "Dashboard"
