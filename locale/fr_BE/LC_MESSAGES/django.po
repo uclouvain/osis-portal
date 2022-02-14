@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-19 16:12+0100\n"
+"POT-Creation-Date: 2022-02-14 17:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,9 @@ msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
 
 msgid "Appreciate medical emergency"
 msgstr "Reconnaitre l’urgence médicale"
+
+msgid "Assign delegates on your allocations"
+msgstr "Attribuer des délégués sur vos affectations"
 
 #, python-format
 msgid "Autonomy level (%% of students according to periods)"
@@ -208,6 +211,9 @@ msgstr "Encodage des évaluations de stage"
 
 msgid "Internship student was present during evaluation process"
 msgstr "Le stagiaire était présent pendant le processus d'évaluation"
+
+msgid "Internship students evaluation"
+msgstr "Evaluation des stages"
 
 msgid "Internships"
 msgstr "Stages"
@@ -366,7 +372,8 @@ msgid "The activation failed"
 msgstr "L'activation a échoué"
 
 msgid "The requested scores sheet does not match your internship's allocations"
-msgstr "La feuille de notes demandée ne correspond pas à vos affectations de stages"
+msgstr ""
+"La feuille de notes demandée ne correspond pas à vos affectations de stages"
 
 msgid "The two password fields didn't match."
 msgstr "Les mots de passes sont différents"

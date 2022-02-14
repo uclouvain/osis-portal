@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-19 16:12+0100\n"
+"POT-Creation-Date: 2022-02-14 17:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,6 +48,9 @@ msgid "An error occurred during score update"
 msgstr ""
 
 msgid "Appreciate medical emergency"
+msgstr ""
+
+msgid "Assign delegates on your affectations"
 msgstr ""
 
 #, python-format
@@ -200,6 +203,9 @@ msgid "Internship score encoding"
 msgstr ""
 
 msgid "Internship student was present during evaluation process"
+msgstr ""
+
+msgid "Internship students evaluation"
 msgstr ""
 
 msgid "Internships"
