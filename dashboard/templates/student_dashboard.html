@@ -46,6 +46,20 @@
     </div>
 {% endif %}
 
+{% if 'assessments' in installed_apps %}
+    <div class="grid-item">
+        <i class="fa fa-user-slash"></i>
+        <div class="description">
+            <h4 class="media-heading">
+                <a href="#" id="lnk_exam_enrollment_offer_choice">
+                    {% trans 'My attendance marks' %}
+                </a>
+            </h4>
+            <p>{% trans 'Request an attendance mark' %}.</p>
+        </div>
+    </div>
+{% endif %}
+
 {% if 'internship' in installed_apps %}
     {% if perms.internship.can_access_internship %}
         <div class="grid-item">
