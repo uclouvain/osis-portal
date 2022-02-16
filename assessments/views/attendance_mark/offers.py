@@ -26,16 +26,20 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
+from assessments.business.attendance_mark import permission
+
 
 class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     name = 'select-offer'
     permission_required = "base.is_student"
 
     # TemplateView
-    template_name = "assessments/attendance_marks/select_offer.html"
+    template_name = "assessments/attendance_mark/select_offer.html"
 
-    def get(self, request, *args, **kwargs):
-        return redirect("assessments:outside-attendance-marks-period")
+    def dispatch(self, request, *args, **kwargs):
+        if not permission.is_attendance_mark_period_opened(request.user):
+            return redirect('assessments:outside-attendance-marks-period')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {

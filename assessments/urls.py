@@ -27,8 +27,8 @@ from django.conf.urls import url
 from django.urls import path, include
 
 from .views import score_encoding
-from .views.attendance_marks.offers import SelectOffer
-from .views.attendance_marks.outside_period import OutsidePeriod
+from .views.attendance_mark.offers import SelectOffer
+from .views.attendance_mark.outside_period import OutsidePeriod
 
 app_name = "assessments"
 urlpatterns = [

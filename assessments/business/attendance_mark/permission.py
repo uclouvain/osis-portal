@@ -22,21 +22,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.views.generic import TemplateView
+from django.contrib.auth.models import User
+
+from assessments.calendar.attendance_mark_calendar import AttendanceMarkRemoteCalendar
 
 
-class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    permission_required = "base.is_student"
-
-    name = 'outside-attendance-marks-period'
-
-    # TemplateView
-    template_name = "assessments/attendance_marks/outside_period.html"
-
-    def get_context_data(self, **kwargs):
-        return {
-            **super().get_context_data(**kwargs),
-            "attendance_marks_request_start": "15/05/2022",
-            "session_name": "June"
-        }
+def is_attendance_mark_period_opened(user: 'User') -> bool:
+    calendar = AttendanceMarkRemoteCalendar(user.person)
+    return bool(calendar.get_target_years_opened())
