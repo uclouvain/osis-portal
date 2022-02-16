@@ -88,7 +88,10 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
     )
 
     not_validated_count = len(
-        [_ for affectation in students_affectations if affectation.score and not affectation.score.validated]
+        [
+            _ for affectation in students_affectations
+            if affectation.score and not affectation.score.validated or not affectation.score
+        ]
     )
 
     periods = Period.objects.filter(cohort__uuid=specialty.cohort.uuid).order_by('date_start')

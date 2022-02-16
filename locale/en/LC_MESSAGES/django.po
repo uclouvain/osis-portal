@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 17:57+0100\n"
+"POT-Creation-Date: 2022-02-15 09:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Appreciate medical emergency"
 msgstr ""
 
-msgid "Assign delegates on your affectations"
+msgid "Assign delegates on your allocations"
 msgstr ""
 
 #, python-format
@@ -205,7 +205,7 @@ msgstr ""
 msgid "Internship student was present during evaluation process"
 msgstr ""
 
-msgid "Internship students evaluation"
+msgid "Internship students evaluations"
 msgstr ""
 
 msgid "Internships"
