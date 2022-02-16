@@ -23,21 +23,20 @@
 #
 ##############################################################################
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 
-class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    name = 'select-offer'
+class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     permission_required = "base.is_student"
 
-    # TemplateView
-    template_name = "assessments/attendance_marks/select_offer.html"
+    name = 'outside-attendance-marks-period'
 
-    def get(self, request, *args, **kwargs):
-        return redirect("assessments:outside-attendance-marks-period")
+    # TemplateView
+    template_name = "assessments/attendance_marks/outside_period.html"
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
+            "attendance_marks_request_start": "15/05/2022",
+            "session_name": "June"
         }
