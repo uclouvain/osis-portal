@@ -36,10 +36,10 @@ class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     # TemplateView
     template_name = "assessments/attendance_mark/select_offer.html"
 
-    def dispatch(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if not permission.is_attendance_mark_period_opened(request.user):
             return redirect('assessments:outside-attendance-marks-period')
-        return super().dispatch(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {

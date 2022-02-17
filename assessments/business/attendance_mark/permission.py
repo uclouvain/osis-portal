@@ -24,7 +24,7 @@
 ##############################################################################
 from django.contrib.auth.models import User
 
-from assessments.calendar.attendance_mark_calendar import AttendanceMarkRemoteCalendar
+from assessments.services.assessments import AttendanceMarkRemoteCalendar
 
 
 def is_attendance_mark_period_opened(user: 'User') -> bool:

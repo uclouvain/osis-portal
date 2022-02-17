@@ -28,7 +28,7 @@ from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_assessments_sdk.model.attendance_mark_calendar import AttendanceMarkCalendar
 
-from assessments.calendar.attendance_mark_calendar import AttendanceMarkRemoteCalendar
+from assessments.services.assessments import AttendanceMarkRemoteCalendar
 
 
 class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -46,10 +46,10 @@ class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     def get_next_attendance_mark_period(self) -> 'AttendanceMarkCalendar':
         return self.calendar.get_next_academic_event()
 
-    def dispatch(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if self.calendar.get_opened_academic_events():
             return redirect('assessments:select-offer')
-        return super().dispatch(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {
