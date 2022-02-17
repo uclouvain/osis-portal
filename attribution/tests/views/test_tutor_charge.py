@@ -134,13 +134,13 @@ class TutorChargeViewTest(TestCase):
         self.client.force_login(UserFactory())
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     def test_assert_template_used(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "tutor_charge.html")
 
     def test_assert_context_keys(self):
@@ -239,13 +239,13 @@ class AdminTutorChargeViewTest(TestCase):
         self.client.force_login(self.tutor.person.user)
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     def test_assert_template_used(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "tutor_charge_admin.html")
 
     def test_assert_context_keys(self):

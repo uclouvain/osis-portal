@@ -27,6 +27,7 @@ import mock
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
@@ -47,7 +48,7 @@ class TestSelectTutor(TestCase):
         self.client.force_login(PersonFactory().user)
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_is_faculty_manager(self):

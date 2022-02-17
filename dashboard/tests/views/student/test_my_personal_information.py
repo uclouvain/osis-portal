@@ -29,6 +29,7 @@ from unittest.mock import patch
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
@@ -46,7 +47,7 @@ class TestMyPersonalInformation(TestCase):
 
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     @patch('dashboard.business.id_data.get_student_id_data')
@@ -62,7 +63,7 @@ class TestMyPersonalInformation(TestCase):
 
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'student/id_data_home.html')
 
 
@@ -80,7 +81,7 @@ class TestMyPersonalInformationAdmin(TestCase):
 
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_is_faculty_manager(self):
@@ -91,7 +92,7 @@ class TestMyPersonalInformationAdmin(TestCase):
 
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/student_id_data_administration.html')
 
     @patch('dashboard.business.id_data.get_student_id_data')
@@ -104,7 +105,7 @@ class TestMyPersonalInformationAdmin(TestCase):
         self.client.force_login(self.person.user)
         student = StudentFactory()
         response = self.client.post(self.url, data={'registration_id': student.registration_id})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/student_id_data.html')
 
 
