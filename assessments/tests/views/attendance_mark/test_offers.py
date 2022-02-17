@@ -64,7 +64,8 @@ class SelectOfferTestCase(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('assessments:outside-attendance-marks-period')
+            reverse('assessments:outside-attendance-marks-period'),
+            fetch_redirect_response=False
         )
 
     def test_student_should_access_page_when_during_attendance_mark_period(self):
