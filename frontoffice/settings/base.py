@@ -70,6 +70,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'django_registration',
     'hijack',
+    'hijack.contrib.admin',
     'waffle'
 )
 

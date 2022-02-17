@@ -1,6 +1,6 @@
 <!doctype html>
-{% load staticfiles i18n %}
- {% load statici18n analytical hijack_tags %}
+{% load static i18n %}
+ {% load statici18n analytical hijack %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -44,14 +44,13 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
     <link rel="stylesheet" href="{% static 'fontawesome-free-5.7.2-web/css/all.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'hijack/hijack-styles.css' %}"/>
 
     {% block style %}
     {% endblock %}
     {% analytical_head_bottom %}
 </head>
 <body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %} class="localmode" {% elif environment == 'QA' %} class="qamode" {% endif %}>
-    {% hijack_notification %}
+{#    {% include "hijack/notifications.html" %}#}
     {% analytical_body_top %}
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
