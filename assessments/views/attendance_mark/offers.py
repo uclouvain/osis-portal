@@ -30,7 +30,7 @@ from assessments.business.attendance_mark import permission
 
 
 class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    name = 'select-offer'
+    name = 'attendance-mark-select-offer'
     permission_required = "base.is_student"
 
     # TemplateView
@@ -38,7 +38,7 @@ class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         if not permission.is_attendance_mark_period_opened(request.user):
-            return redirect('assessments:outside-attendance-marks-period')
+            return redirect('outside-attendance-marks-period')
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

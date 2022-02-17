@@ -35,7 +35,7 @@ class SelectOfferTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.student = StudentFactory()
-        cls.url = reverse("assessments:select-offer")
+        cls.url = reverse("attendance-mark-select-offer")
 
     def setUp(self):
         self.client.force_login(self.student.person.user)
@@ -64,7 +64,7 @@ class SelectOfferTestCase(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('assessments:outside-attendance-marks-period'),
+            reverse('outside-attendance-marks-period'),
             fetch_redirect_response=False
         )
 

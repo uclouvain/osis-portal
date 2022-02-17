@@ -30,7 +30,6 @@ from .views import score_encoding
 from .views.attendance_mark.offers import SelectOffer
 from .views.attendance_mark.outside_period import OutsidePeriod
 
-app_name = "assessments"
 urlpatterns = [
     url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
     url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z_-]+)/',

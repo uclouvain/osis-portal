@@ -48,7 +48,7 @@ class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         if self.calendar.get_opened_academic_events():
-            return redirect('assessments:select-offer')
+            return redirect('attendance-mark-select-offer')
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

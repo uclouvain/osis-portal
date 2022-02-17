@@ -35,7 +35,7 @@ class OutsidePeriodTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.student = StudentFactory()
-        cls.url = reverse("assessments:outside-attendance-marks-period")
+        cls.url = reverse("outside-attendance-marks-period")
 
     def setUp(self):
         self.client.force_login(self.student.person.user)
