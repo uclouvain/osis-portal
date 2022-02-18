@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-25 11:37+0200\n"
+"POT-Creation-Date: 2022-02-16 13:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,9 @@ msgstr ""
 msgid "Download my PDF scores sheets for paper encoding."
 msgstr "Télécharger mes feuilles de notes PDF pour l'encodage papier."
 
+msgid "My attendance marks"
+msgstr "Mes notes de présense"
+
 msgid "My scores sheets"
 msgstr "Mes feuilles de notes"
 
@@ -28,6 +31,13 @@ msgstr "Encodage de notes en ligne"
 
 msgid "Scores Encoding"
 msgstr "Encodage de Notes"
+
+#, python-format
+msgid ""
+"The access to the form for requesting attendance marks will be enabled from "
+"%(attendance_marks_request_start)s for the session of %(session_name)s."
+msgstr "L'accès au formulaire de demande de note de présence sera disponible à partir "
+"du %(attendance_marks_request_start)s pour la session de %(session_name)s."
 
 msgid "This requires a "
 msgstr "Ceci nécessite un "
