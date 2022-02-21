@@ -36,7 +36,11 @@
     </div>
 
     <div class="alert alert-warning" role="alert">
-        <p><strong>{% blocktrans %}The access to the form for requesting attendance marks will be enabled from {{ attendance_marks_request_start }} for the session of {{ session_name }}.{% endblocktrans %}</strong></p>
+    {% if next_period %}
+        <p><strong>{% blocktrans with attendance_marks_request_start=next_period.start_date session_name=next_period.month_session_name %}The access to the form for requesting attendance marks will be enabled from {{ attendance_marks_request_start }} for the session of {{ session_name }}.{% endblocktrans %}</strong></p>
+    {% else %}
+        <p><strong>{% trans "The access to the form for requesting attendance marks is currently unavailable." %}</strong></p>
+    {% endif %}
     </div>
 
 {% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 13:59+0100\n"
+"POT-Creation-Date: 2022-02-22 09:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Acronym"
+msgstr ""
+
 msgid "Download my PDF scores sheets for paper encoding."
+msgstr ""
+
+msgid "First Name"
+msgstr ""
+
+msgid "Last Name"
 msgstr ""
 
 msgid "My attendance marks"
@@ -29,7 +38,23 @@ msgstr ""
 msgid "Online Scores Encoding"
 msgstr ""
 
+msgid "Program"
+msgstr ""
+
+msgid "Registration Number"
+msgstr ""
+
 msgid "Scores Encoding"
+msgstr ""
+
+msgid ""
+"Select a program for wich you would like to request an attendance mark "
+"(0/20) for an exam."
+msgstr ""
+
+msgid ""
+"The access to the form for requesting attendance marks is currently "
+"unavailable."
 msgstr ""
 
 #, python-format
@@ -48,6 +73,12 @@ msgid "Unexpected error"
 msgstr ""
 
 msgid "VPN access"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "You are not enrolled to any program for this academic year."
 msgstr ""
 
 msgid "outside UCL"

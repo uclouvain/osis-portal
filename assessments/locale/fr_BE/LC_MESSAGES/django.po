@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 13:59+0100\n"
+"POT-Creation-Date: 2022-02-22 09:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Acronym"
+msgstr "Sigle"
+
 msgid "Download my PDF scores sheets for paper encoding."
 msgstr "Télécharger mes feuilles de notes PDF pour l'encodage papier."
+
+msgid "First Name"
+msgstr "Prénom"
+
+msgid "Last Name"
+msgstr "Nom"
 
 msgid "My attendance marks"
 msgstr "Mes notes de présense"
@@ -29,15 +38,35 @@ msgstr "Mes feuilles de notes"
 msgid "Online Scores Encoding"
 msgstr "Encodage de notes en ligne"
 
+msgid "Program"
+msgstr "Formation"
+
+msgid "Registration Number"
+msgstr "Noma"
+
 msgid "Scores Encoding"
 msgstr "Encodage de Notes"
+
+msgid ""
+"Select a program for wich you would like to request an attendance mark "
+"(0/20) for an exam."
+msgstr ""
+"Sélectionnez la formation dans laquelle vous désirez faire une demande de "
+"note de présence (0/20) pour un examen."
+
+msgid ""
+"The access to the form for requesting attendance marks is currently "
+"unavailable."
+msgstr "L'accès au formulaire de demande de note de présence est indisponible."
 
 #, python-format
 msgid ""
 "The access to the form for requesting attendance marks will be enabled from "
 "%(attendance_marks_request_start)s for the session of %(session_name)s."
-msgstr "L'accès au formulaire de demande de note de présence sera disponible à partir "
-"du %(attendance_marks_request_start)s pour la session de %(session_name)s."
+msgstr ""
+"L'accès au formulaire de demande de note de présence sera disponible à "
+"partir du %(attendance_marks_request_start)s pour la session de "
+"%(session_name)s."
 
 msgid "This requires a "
 msgstr "Ceci nécessite un "
@@ -50,6 +79,12 @@ msgstr "Erreur innatendue"
 
 msgid "VPN access"
 msgstr "Accès VPN"
+
+msgid "Year"
+msgstr "Année"
+
+msgid "You are not enrolled to any program for this academic year."
+msgstr "Vous n'êtes inscrit à aucune formation pour cette année académique."
 
 msgid "outside UCL"
 msgstr "en dehors de l'UCLouvain"

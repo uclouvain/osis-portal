@@ -22,11 +22,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from typing import List
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
+from django.utils.functional import cached_property
 from django.views.generic import TemplateView
+from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from assessments.business.attendance_mark import permission
+from assessments.services.assessments import AttendanceMarkRemoteCalendar
+from base.models.student import Student
+from base.services.offer_enrollment import OfferEnrollmentService
 
 
 class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -36,6 +43,21 @@ class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     # TemplateView
     template_name = "assessments/attendance_mark/select_offer.html"
 
+    @cached_property
+    def student(self) -> 'Student':
+        return get_object_or_404(
+            Student.objects.select_related('person'),
+            person__user=self.request.user
+        )
+
+    @cached_property
+    def year(self):
+        return AttendanceMarkRemoteCalendar(self.student.person).get_target_years_opened()[0]
+
+    @cached_property
+    def programs(self) -> List['EnrollmentList']:
+        return OfferEnrollmentService.get_my_enrollments_year_list(self.student.person, self.year)
+
     def get(self, request, *args, **kwargs):
         if not permission.is_attendance_mark_period_opened(request.user):
             return redirect('outside-attendance-marks-period')
@@ -44,4 +66,6 @@ class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
+            "student": self.student,
+            "programs": self.programs
         }

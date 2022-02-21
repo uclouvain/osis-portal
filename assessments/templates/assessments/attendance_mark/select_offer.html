@@ -35,5 +35,56 @@
         <h2>{% trans 'My attendance marks' %}</h2>
     </div>
 
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <!-- Student info -->
+            <div class="row">
+                <div class="col-md-6">
+                    <label>{% trans 'Last Name' %}, {% trans 'First Name' %}</label>
+                    <br>
+                    {{ student.person.last_name }}, {{ student.person.first_name }}
+                </div>
+                <div class="col-md-6">
+                    <label>{% trans 'Registration Number' %}</label>
+                    <br>
+                    {{ student.registration_id }}
+                </div>
+            </div>
+        </div>
+
+        {%  if programs %}
+            <div class="alert alert-info" role="alert">
+                <i class="fa fa-info-circle"></i> {% trans "Select a program for wich you would like to request an attendance mark (0/20) for an exam." %}
+            </div>
+
+            <!-- Student list of programs -->
+            <table id="table_academic_years" class="table table-hover">
+                <tr>
+                    <th>{% trans 'Year' %}</th>
+                    <th>{% trans 'Acronym' %}</th>
+                    <th>{% trans 'Program' %}</th>
+                </tr>
+                {% for row in programs %}
+                    <tr>
+                        <td>
+                            {{ row.year }}
+                        </td>
+                        <td>
+                            <a href="#">{{ row.acronym }}</a>
+                        </td>
+                        <td>
+                            {{ row.title }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <i class="fa fa-exclamation-circle"></i> {% trans "You are not enrolled to any program for this academic year." %}
+            </div>
+        {% endif %}
+
+    </div>
+
 {% endblock %}
 
