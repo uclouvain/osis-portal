@@ -24,8 +24,11 @@
 #
 ##############################################################################
 from django.conf.urls import url
+from django.urls import path, include
 
 from .views import score_encoding
+from .views.attendance_mark.offers import SelectOffer
+from .views.attendance_mark.outside_period import OutsidePeriod
 
 urlpatterns = [
     url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
@@ -37,4 +40,8 @@ urlpatterns = [
         score_encoding.score_sheet_pdf,
         name='scores_sheet_pdf',
         ),
+    path('attendance_marks/', include([
+        path('select_offer/', SelectOffer.as_view(), name=SelectOffer.name),
+        path('outside_period/', OutsidePeriod.as_view(), name=OutsidePeriod.name),
+    ]))
 ]
