@@ -24,9 +24,9 @@
 ##############################################################################
 from django.contrib.auth.models import User
 
-from assessments.services.assessments import AttendanceMarkRemoteCalendar
+from assessments.services import assessments as assessments_services
 
 
 def is_attendance_mark_period_opened(user: 'User') -> bool:
-    calendar = AttendanceMarkRemoteCalendar(user.person)
+    calendar = assessments_services.AttendanceMarkRemoteCalendar(user.person)
     return bool(calendar.get_target_years_opened())

@@ -31,7 +31,7 @@ from django.views.generic import TemplateView
 from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from assessments.business.attendance_mark import permission
-from assessments.services.assessments import AttendanceMarkRemoteCalendar
+from assessments.services import assessments as assessments_services
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService
 
@@ -52,7 +52,7 @@ class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     @cached_property
     def year(self):
-        return AttendanceMarkRemoteCalendar(self.student.person).get_target_years_opened()[0]
+        return assessments_services.AttendanceMarkRemoteCalendar(self.student.person).get_target_years_opened()[0]
 
     @cached_property
     def programs(self) -> List['EnrollmentList']:
