@@ -1,6 +1,6 @@
 {% extends "dashboard_layout.html" %}
-{% load staticfiles %}
-{% load i18n %}
+{% load staticfiles i18n %}
+{% load academic_year_display %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -28,7 +28,8 @@
 {% block title %}{% trans 'My attendance marks' %}{% endblock %}
 
 {% block breadcrumb %}
-    <li class="active">{% trans 'My attendance marks' %}</li>
+    <li>{% trans 'My attendance marks' %}</li>
+    <li class="active">{% trans "Request an attendance mark (0/20)" %}</li>
 {% endblock %}
 
 {% block content %}
@@ -36,52 +37,73 @@
         <h2>{% trans 'My attendance marks' %}</h2>
     </div>
 
+    <div class="alert alert-warning" role="alert">
+        <p>
+            <i class="fa fa-exclamation-circle"></i>
+            {% trans "Requesting an attendance mark means obtaining a mark of 0/20 for your exam." %}
+        </p>
+        <p>
+            {% blocktrans %}Only the learning units for which you are enrolled for the exam are listed below. You can see the state of all your exam enrollments in your <a href="{{ scoresheet_url }}">scoresheet.</a>{% endblocktrans %}
+        </p>
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-body">
-            <!-- Student info -->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label>{% trans 'Last Name' %}, {% trans 'First Name' %}</label>
                     <br>
                     {{ student.person.last_name }}, {{ student.person.first_name }}
                 </div>
-                <div class="col-md-6">
-                    <label>{% trans 'Registration Number' %}</label>
+                <div class="col-md-2">
+                    <label>{% trans 'Academic Year' %}</label>
                     <br>
-                    {{ student.registration_id }}
+                    {{ year|display_as_academic_year }}
+                </div>
+                <div class="col-md-2">
+                    <label>{% trans 'Session' %}</label>
+                    <br>
+                    {{ session }}
+                </div>
+                <div class="col-md-5">
+                    <label>{% trans 'Program' %}</label>
+                    <br>
+                    {{ program_title }}
                 </div>
             </div>
         </div>
 
-        {%  if programs %}
+        {%  if exam_enrollments %}
             <div class="alert alert-info" role="alert">
                 <i class="fa fa-info-circle"></i> {% trans "Select a program for wich you would like to request an attendance mark (0/20) for an exam." %}
             </div>
 
-            <!-- Student list of programs -->
-            <table id="table_academic_years" class="table table-hover">
+            <table class="table table-hover">
                 <tr>
-                    <th>{% trans 'Year' %}</th>
-                    <th>{% trans 'Acronym' %}</th>
-                    <th>{% trans 'Program' %}</th>
+                    <th>{% trans 'Code' %}</th>
+                    <th>{% trans 'Title' %}</th>
+                    <th></th>
                 </tr>
-                {% for row in programs %}
+                {% for row in exam_enrollments %}
                     <tr>
                         <td>
-                            {{ row.year }}
+                            {{ row.learning_unit_code }}
                         </td>
                         <td>
-                            <a href="{% url "attendance-mark-list-exam-enrollments" row.acronym %}">{{ row.acronym }}</a>
+                            {{ row.learning_unit_title }}
                         </td>
                         <td>
-                            {{ row.title }}
+                            <a class="btn btn-primary" href="#">
+                                {% trans 'Request a mark of 0/20 for this exam' %}
+                            </a>
+
                         </td>
                     </tr>
                 {% endfor %}
             </table>
         {% else %}
             <div class="alert alert-warning" role="alert">
-                <i class="fa fa-exclamation-circle"></i> {% trans "You are not enrolled to any program for this academic year." %}
+                <i class="fa fa-exclamation-circle"></i> {% blocktrans %}You are not enrolled for the session in {{ session }}{% endblocktrans %}
             </div>
         {% endif %}
 

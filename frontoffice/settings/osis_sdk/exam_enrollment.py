@@ -23,30 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
-from django.urls import path, include, register_converter
+import logging
 
-from base.utils.converters import AcronymConverter
-from .views import score_encoding
-from .views.attendance_mark.learning_units import ListExamEnrollments
-from .views.attendance_mark.offers import SelectOffer
-from .views.attendance_mark.outside_period import OutsidePeriod
+import osis_exam_enrollment_sdk
+from django.conf import settings
 
-register_converter(AcronymConverter, 'acronym')
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
-urlpatterns = [
-    url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
-    url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z_-]+)/',
-        score_encoding.score_sheet_xls,
-        name='scores_sheet_xls',
-        ),
-    url(r'^scores_encoding/pdf/(?P<learning_unit_code>[0-9A-Za-z-_]+)/$',
-        score_encoding.score_sheet_pdf,
-        name='scores_sheet_pdf',
-        ),
-    path('attendance_marks/', include([
-        path('select_offer/', SelectOffer.as_view(), name=SelectOffer.name),
-        path('exam_enrollments/<acronym:program_acronym>', ListExamEnrollments.as_view(), name=ListExamEnrollments.name),
-        path('outside_period/', OutsidePeriod.as_view(), name=OutsidePeriod.name),
-    ]))
-]
+
+def build_configuration() -> osis_exam_enrollment_sdk.Configuration:
+    """
+    Return SDK configuration of exam_enrollment
+    """
+    if not settings.OSIS_EXAM_ENROLLMENT_SDK_HOST:
+        logger.debug("'OSIS_EXAM_ENROLLMENT_SDK_HOST' setting must be set in configuration")
+
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
+
+    return osis_exam_enrollment_sdk.Configuration(
+        host=settings.OSIS_EXAM_ENROLLMENT_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
+        })
