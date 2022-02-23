@@ -93,9 +93,9 @@
                             {{ row.learning_unit_title }}
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="#">
+                            <btn class="btn btn-primary trigger_modal" data-url="{% url 'request-attendance-mark' program_acronym row.learning_unit_code %}">
                                 {% trans 'Request a mark of 0/20 for this exam' %}
-                            </a>
+                            </btn>
 
                         </td>
                     </tr>

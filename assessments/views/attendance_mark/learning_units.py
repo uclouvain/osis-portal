@@ -31,14 +31,11 @@ from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_assessments_sdk.model.attendance_mark_calendar import AttendanceMarkCalendar
 from osis_exam_enrollment_sdk.model.exam_enrollment import ExamEnrollment
-from osis_learning_unit_enrollment_sdk.model.enrollment import Enrollment
 
-from assessments.business.attendance_mark import permission
 from assessments.services.assessments import AttendanceMarkRemoteCalendar
 from base.models.student import Student
 from education_group.services import education_group as education_group_service
 from exam_enrollment.services.exam_enrollment import ExamEnrollmentService
-from exam_enrollment.services.learning_unit_enrollment import LearningUnitEnrollmentService
 
 
 class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -101,6 +98,7 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
             **super().get_context_data(**kwargs),
             "student": self.student,
             "program_title": self.program_title,
+            "program_acronym": self.program_acronym,
             "session": self.current_attendance_mark_event.month_session_name,
             "year": self.year,
             "scoresheet_url": reverse("performance_home"),
