@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-22 09:38+0100\n"
+"POT-Creation-Date: 2022-02-23 13:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,31 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Academic Year"
+msgstr ""
+
 msgid "Acronym"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Code"
 msgstr ""
 
 msgid "Download my PDF scores sheets for paper encoding."
 msgstr ""
 
 msgid "First Name"
+msgstr ""
+
+#, python-format
+msgid ""
+"I would like to obtain an attendance mark for the \"%(learning_unit_title)s"
+"\" exam. I acknowledge having understood the consequences that this decision "
+"implies, namely obtaining a 0/20 for this exam, which will be counted in the "
+"average. This exam can only be rescheduled at a later session. This request "
+"will be irreversible."
 msgstr ""
 
 msgid "Last Name"
@@ -38,10 +56,30 @@ msgstr ""
 msgid "Online Scores Encoding"
 msgstr ""
 
+#, python-format
+msgid ""
+"Only the learning units for which you are enrolled for the exam are listed "
+"below. You can see the state of all your exam enrollments in your <a href="
+"\"%(scoresheet_url)s\">scoresheet.</a>"
+msgstr ""
+
 msgid "Program"
 msgstr ""
 
 msgid "Registration Number"
+msgstr ""
+
+msgid "Request a mark of 0/20 for this exam"
+msgstr ""
+
+msgid "Request an attendance mark (0/20)"
+msgstr ""
+
+msgid "Request attendance mark"
+msgstr ""
+
+msgid ""
+"Requesting an attendance mark means obtaining a mark of 0/20 for your exam."
 msgstr ""
 
 msgid "Scores Encoding"
@@ -50,6 +88,9 @@ msgstr ""
 msgid ""
 "Select a program for wich you would like to request an attendance mark "
 "(0/20) for an exam."
+msgstr ""
+
+msgid "Session"
 msgstr ""
 
 msgid ""
@@ -69,6 +110,9 @@ msgstr ""
 msgid "This requires a VPN access outside UCLouvain."
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
 msgid "Unexpected error"
 msgstr ""
 
@@ -76,6 +120,10 @@ msgid "VPN access"
 msgstr ""
 
 msgid "Year"
+msgstr ""
+
+#, python-format
+msgid "You are not enrolled for the session in %(session)s"
 msgstr ""
 
 msgid "You are not enrolled to any program for this academic year."
