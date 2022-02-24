@@ -31,6 +31,7 @@ from django.views.generic import FormView
 from assessments.business.attendance_mark import permission
 from assessments.services import assessments as assessments_services
 from assessments.forms.attendance_mark.request_attendance_mark_form import RequestAttendanceMarkForm
+from base.models.person import Person
 from base.views.mixin import AjaxTemplateMixin
 from learning_unit.services.learning_unit import LearningUnitService
 
@@ -49,9 +50,13 @@ class RequestAttendanceMarkFormView(AjaxTemplateMixin, LoginRequiredMixin, Permi
             return redirect('outside-attendance-marks-period')
         return super().dispatch(request, *args, **kwargs)
 
+    @property
+    def person(self) -> 'Person':
+        return self.request.user.person
+
     @cached_property
     def year(self):
-        return assessments_services.AttendanceMarkRemoteCalendar(self.request.user.person).get_target_years_opened()[0]
+        return assessments_services.AttendanceMarkRemoteCalendar(self.person).get_target_years_opened()[0]
 
     @cached_property
     def learning_unit_code(self) -> str:
@@ -68,6 +73,13 @@ class RequestAttendanceMarkFormView(AjaxTemplateMixin, LoginRequiredMixin, Permi
             acronym=self.learning_unit_code,
             person=self.request.user.person
         )
+
+    def form_valid(self, form):
+        assessments_services.AttendanceMarkService.request_attendance_mark(
+            learning_unit_code=self.learning_unit_code,
+            person=self.person
+        )
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse("attendance-mark-list-exam-enrollments", kwargs={"program_acronym": self.program_acronym})
