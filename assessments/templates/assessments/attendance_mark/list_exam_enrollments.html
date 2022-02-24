@@ -1,6 +1,6 @@
 {% extends "dashboard_layout.html" %}
 {% load staticfiles i18n %}
-{% load academic_year_display %}
+{% load academic_year_display dictionnary %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -93,9 +93,17 @@
                             {{ row.learning_unit_title }}
                         </td>
                         <td>
-                            <btn class="btn btn-primary trigger_modal" data-url="{% url 'request-attendance-mark' program_acronym row.learning_unit_code %}">
-                                {% trans 'Request a mark of 0/20 for this exam' %}
-                            </btn>
+                            {% with requested_attendance_mark=requested_attendance_marks_by_code|get_item:row.learning_unit_code %}
+                                {% if requested_attendance_mark %}
+                                    <button class="btn btn-primary" disabled>
+                                        {% blocktrans with date_requested=requested_attendance_mark.time_requested|date:'d-m-y' time_requested=requested_attendance_mark.time_requested|date:'H:i'%}Score of 0/20 requested on {{ date_requested }} at {{ time_requested }}{% endblocktrans %}
+                                    </button>
+                                {% else %}
+                                    <btn class="btn btn-primary trigger_modal" data-url="{% url 'request-attendance-mark' program_acronym row.learning_unit_code %}">
+                                        {% trans 'Request a mark of 0/20 for this exam' %}
+                                    </btn>
+                                {% endif %}
+                            {% endwith %}
 
                         </td>
                     </tr>
