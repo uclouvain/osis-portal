@@ -54,6 +54,5 @@ class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            "attendance_marks_request_start": self.get_next_attendance_mark_period().start_date.strftime('%d/%m/%Y'),
-            "session_name": self.get_next_attendance_mark_period().month_session_name
+            "next_period": self.get_next_attendance_mark_period()
         }

@@ -27,6 +27,8 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.test import TestCase
 from django.urls import reverse
 
+from assessments.tests.factories.services.assessments import InMemoryAttendanceMarkRemoteCalendar, \
+    AttendanceMarkSession1CalendarFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 
@@ -40,12 +42,21 @@ class SelectOfferTestCase(TestCase):
     def setUp(self):
         self.client.force_login(self.student.person.user)
 
-        self.is_period_opened_patcher = mock.patch(
-            "assessments.business.attendance_mark.permission.is_attendance_mark_period_opened",
+        self.remote_calendar = InMemoryAttendanceMarkRemoteCalendar(self.student.person)
+
+        self.get_enrollments_list_patcher = mock.patch(
+            "base.services.offer_enrollment.OfferEnrollmentService.get_my_enrollments_year_list"
         )
-        self.mocked_is_period_opened = self.is_period_opened_patcher.start()
-        self.mocked_is_period_opened.return_value = True
-        self.addCleanup(self.is_period_opened_patcher.stop)
+        self.mocked_get_enrollments_list = self.get_enrollments_list_patcher.start()
+        self.mocked_get_enrollments_list.return_value = []
+        self.addCleanup(self.get_enrollments_list_patcher.stop)
+
+        self.attendance_mark_remote_calendar_patcher = mock.patch(
+            "assessments.services.assessments.AttendanceMarkRemoteCalendar",
+        )
+        self.mocked_attendance_mark_remote_calendar = self.attendance_mark_remote_calendar_patcher.start()
+        self.mocked_attendance_mark_remote_calendar.return_value = self.remote_calendar
+        self.addCleanup(self.attendance_mark_remote_calendar_patcher.stop)
 
     def test_non_student_should_have_permission_denied(self):
         non_student = PersonFactory()
@@ -58,8 +69,6 @@ class SelectOfferTestCase(TestCase):
         )
 
     def test_should_be_redirected_to_outside_period_page_when_outside_of_attendance_mark_period(self):
-        self.mocked_is_period_opened.return_value = False
-
         response = self.client.get(self.url)
 
         self.assertRedirects(
@@ -69,6 +78,9 @@ class SelectOfferTestCase(TestCase):
         )
 
     def test_student_should_access_page_when_during_attendance_mark_period(self):
+        self.remote_calendar._calendars.append(
+            AttendanceMarkSession1CalendarFactory(is_open=True)
+        )
         response = self.client.get(self.url)
 
         self.assertEqual(

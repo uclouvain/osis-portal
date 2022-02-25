@@ -25,11 +25,15 @@
 ##############################################################################
 import logging
 from enum import Enum
+from typing import List
 
 import osis_offer_enrollment_sdk
+import urllib3
 from django.conf import settings
 from osis_offer_enrollment_sdk import ApiException
 from osis_offer_enrollment_sdk.api import enrollment_api
+from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
+
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk, utils
 from frontoffice.settings.osis_sdk.utils import api_exception_handler
@@ -56,15 +60,21 @@ class OfferEnrollmentService:
         configuration = offer_enrollment_sdk.build_configuration()
         with osis_offer_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
-            return api_instance.my_enrollments_list(
-                **utils.build_mandatory_auth_headers(person),
-                **kwargs
-            )
+            try:
+                return api_instance.enrollments_list(
+                    global_id=person.global_id,
+                    **utils.build_mandatory_auth_headers(person),
+                    **kwargs
+                )
+            except (osis_offer_enrollment_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+                return {'error_body': e.body, 'error_status': e.status, 'results': []}
 
     @classmethod
     @api_exception_handler(api_exception_cls=ApiException)
-    def get_my_enrollments_year_list(cls, person: Person, year: int, **kwargs):
-        return cls.get_my_enrollments_list(person=person, year=year, **kwargs)
+    def get_my_enrollments_year_list(cls, person: Person, year: int, **kwargs) -> List['EnrollmentList']:
+        return cls.get_my_enrollments_list(person=person, year=year, **kwargs).get("results", [])
 
 
 class OfferEnrollmentBusinessException(Enum):
