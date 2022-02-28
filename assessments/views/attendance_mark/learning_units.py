@@ -104,4 +104,3 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
             "scoresheet_url": reverse("performance_home"),
             "exam_enrollments": self.exam_enrollments
         }
-
