@@ -40,7 +40,13 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class ExamEnrollmentService:
     @staticmethod
-    def get_enrollments(program_acronym: str, year: int, session: int, person: Person, **kwargs) -> List['ExamEnrollment']:
+    def get_enrollments(
+            program_acronym: str,
+            year: int,
+            session: int,
+            person: Person,
+            **kwargs
+    ) -> List['ExamEnrollment']:
         configuration = exam_enrollment_sdk.build_configuration()
         with osis_exam_enrollment_sdk.ApiClient(configuration) as api_client:
             api_instance = enrollment_api.EnrollmentApi(api_client)
