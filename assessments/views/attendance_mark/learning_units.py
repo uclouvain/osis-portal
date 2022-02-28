@@ -36,7 +36,7 @@ from osis_exam_enrollment_sdk.model.exam_enrollment import ExamEnrollment
 from assessments.services import assessments as assessments_service
 from base.models.student import Student
 from education_group.services import education_group as education_group_service
-from exam_enrollment.services.exam_enrollment import ExamEnrollmentService
+from exam_enrollment.services import exam_enrollment as exam_enrollment_service
 
 
 class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -82,7 +82,7 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
 
     @cached_property
     def exam_enrollments(self) -> List['ExamEnrollment']:
-        return ExamEnrollmentService.get_enrollments(
+        return exam_enrollment_service.ExamEnrollmentService.get_enrollments(
             program_acronym=self.program_acronym,
             year=self.year,
             session=self.session_number,

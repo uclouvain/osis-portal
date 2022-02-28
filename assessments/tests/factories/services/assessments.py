@@ -23,11 +23,13 @@
 #
 ##############################################################################
 import datetime
+from typing import List
 
 import factory
 from osis_assessments_sdk.model.attendance_mark_calendar import AttendanceMarkCalendar
+from osis_assessments_sdk.model.attendance_mark_requested import AttendanceMarkRequested
 
-from assessments.services.assessments import AttendanceMarkRemoteCalendar
+from assessments.services.assessments import AttendanceMarkRemoteCalendar, AssessmentsService, AttendanceMarkService
 from base.models.person import Person
 
 
@@ -41,6 +43,7 @@ class AttendanceMarkSession1CalendarFactory(factory.Factory):
     end_date = factory.LazyAttribute(lambda o: datetime.date(o.authorized_target_year + 1, 2, 28))
     authorized_target_year = 2021
     month_session_name = "Janvier"
+    session_number = 1
     is_open = False
 
 
@@ -53,6 +56,7 @@ class AttendanceMarkSession2CalendarFactory(AttendanceMarkSession1CalendarFactor
     start_date = factory.LazyAttribute(lambda o: datetime.date(o.authorized_target_year + 1, 6, 20))
     end_date = factory.LazyAttribute(lambda o: datetime.date(o.authorized_target_year + 1, 7, 10))
     month_session_name = "Juin"
+    session_number = 2
     is_open = False
 
 
@@ -65,9 +69,26 @@ class AttendanceMarkSession3CalendarFactory(AttendanceMarkSession1CalendarFactor
     start_date = factory.LazyAttribute(lambda o: datetime.date(o.authorized_target_year + 1, 8, 5))
     end_date = factory.LazyAttribute(lambda o: datetime.date(o.authorized_target_year + 1, 9, 15))
     month_session_name = "Septembre"
+    session_number = 3
     is_open = False
 
 
 class InMemoryAttendanceMarkRemoteCalendar(AttendanceMarkRemoteCalendar):
     def __init__(self, person: Person):
         self._calendars = []
+
+
+class AttendanceMarkRequestedFactory(factory.Factory):
+    class Meta:
+        model = AttendanceMarkRequested
+        abstract = False
+
+    code = "LSFIN1101"
+    time_requested = factory.LazyFunction(lambda: datetime.datetime.now())
+
+
+class InMemoryAttendanceMarkService(AttendanceMarkService):
+
+    @staticmethod
+    def get_requested_attendance_marks(person: Person) -> List['AttendanceMarkRequested']:
+        return [AttendanceMarkRequestedFactory()]
