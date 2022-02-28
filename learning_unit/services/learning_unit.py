@@ -61,7 +61,7 @@ class LearningUnitService:
         return learning_units
 
     @staticmethod
-    def get_learning_unit_title(year: int, acronym: str, person: Person) -> List:
+    def get_learning_unit_title(year: int, acronym: str, person: Person) -> str:
         configuration = learning_unit_sdk.build_configuration()
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
             api_instance = learning_units_api.LearningUnitsApi(api_client)

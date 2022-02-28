@@ -1,0 +1,91 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block title %}{% trans 'My attendance marks' %}{% endblock %}
+
+{% block breadcrumb %}
+    <li class="active">{% trans 'My attendance marks' %}</li>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h2>{% trans 'My attendance marks' %}</h2>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <!-- Student info -->
+            <div class="row">
+                <div class="col-md-6">
+                    <label>{% trans 'Last Name' %}, {% trans 'First Name' %}</label>
+                    <br>
+                    {{ student.person.last_name }}, {{ student.person.first_name }}
+                </div>
+                <div class="col-md-6">
+                    <label>{% trans 'Registration Number' %}</label>
+                    <br>
+                    {{ student.registration_id }}
+                </div>
+            </div>
+        </div>
+
+        {%  if programs %}
+            <div class="alert alert-info" role="alert">
+                <i class="fa fa-info-circle"></i> {% trans "Select a program for wich you would like to request an attendance mark (0/20) for an exam." %}
+            </div>
+
+            <!-- Student list of programs -->
+            <table id="table_academic_years" class="table table-hover">
+                <tr>
+                    <th>{% trans 'Year' %}</th>
+                    <th>{% trans 'Acronym' %}</th>
+                    <th>{% trans 'Program' %}</th>
+                </tr>
+                {% for row in programs %}
+                    <tr>
+                        <td>
+                            {{ row.year }}
+                        </td>
+                        <td>
+                            <a href="{% url "attendance-mark-list-exam-enrollments" row.acronym %}">{{ row.acronym }}</a>
+                        </td>
+                        <td>
+                            {{ row.title }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <i class="fa fa-exclamation-circle"></i> {% trans "You are not enrolled to any program for this academic year." %}
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+

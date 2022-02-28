@@ -124,7 +124,7 @@ msgstr "Sigle"
 
 msgid "choose_offer_for_exams_enrollment"
 msgstr ""
-"Sélectionnez le programme dans lequel vous désirez vous inscrire aux examens."
+"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux examens."
 
 msgid "course"
 msgstr "Cours"
@@ -227,24 +227,24 @@ msgid "message_exam_enrolment_state_link_label"
 msgstr "'Mon état d'inscription aux cours et mes notes d'examen'"
 
 msgid "no_learning_unit_enrollment_found"
-msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
+msgstr "Vous n'êtes inscrit à aucun cours dans le cadre de la formation {}."
 
 msgid "no_offer_enrollment_found"
 msgstr ""
-"Vous n'êtes inscrit à aucun programme d'étude pour l'année académique en "
+"Vous n'êtes inscrit à aucune formation pour l'année académique en "
 "cours ({})."
 
 msgid "offer_choice"
 msgstr "Choix de l'offre"
 
 msgid "program"
-msgstr "Programme"
+msgstr "Formation"
 
 msgid "program_choice"
-msgstr "Choix du programme"
+msgstr "Choix de la formation"
 
 msgid "registration_id"
-msgstr "Matricule"
+msgstr "Noma"
 
 msgid "sept"
 msgstr "Sept"

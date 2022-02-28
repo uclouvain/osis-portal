@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2019 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,28 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-from django.contrib.auth.models import Permission
+import logging
+
+import osis_exam_enrollment_sdk
+from django.conf import settings
+
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class GroupFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = 'auth.Group'
-        django_get_or_create = ('name',)
+def build_configuration() -> osis_exam_enrollment_sdk.Configuration:
+    """
+    Return SDK configuration of exam_enrollment
+    """
+    if not settings.OSIS_EXAM_ENROLLMENT_SDK_HOST:
+        logger.debug("'OSIS_EXAM_ENROLLMENT_SDK_HOST' setting must be set in configuration")
 
-    name = ""
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
 
-
-class TutorGroupFactory(GroupFactory):
-    name = "tutors"
-
-
-class StudentGroupFactory(GroupFactory):
-    name = "students"
-
-    @factory.post_generation
-    def add_permissions(obj, *args, **kwargs):
-        is_student_permission, created = Permission.objects.get_or_create(
-            codename="is_student",
-        )
-        obj.permissions.add(is_student_permission)
+    return osis_exam_enrollment_sdk.Configuration(
+        host=settings.OSIS_EXAM_ENROLLMENT_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
+        })
