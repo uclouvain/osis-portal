@@ -30,12 +30,13 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_assessments_sdk.model.attendance_mark_calendar import AttendanceMarkCalendar
+from osis_assessments_sdk.model.attendance_mark_requested import AttendanceMarkRequested
 from osis_exam_enrollment_sdk.model.exam_enrollment import ExamEnrollment
 
-from assessments.services.assessments import AttendanceMarkRemoteCalendar
+from assessments.services import assessments as assessments_service
 from base.models.student import Student
 from education_group.services import education_group as education_group_service
-from exam_enrollment.services.exam_enrollment import ExamEnrollmentService
+from exam_enrollment.services import exam_enrollment as exam_enrollment_service
 
 
 class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -75,18 +76,22 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
     @cached_property
     def current_attendance_mark_event(self) -> Optional['AttendanceMarkCalendar']:
         return next(
-            iter(AttendanceMarkRemoteCalendar(self.request.user.person).get_opened_academic_events()),
+            iter(assessments_service.AttendanceMarkRemoteCalendar(self.student.person).get_opened_academic_events()),
             None
         )
 
     @cached_property
     def exam_enrollments(self) -> List['ExamEnrollment']:
-        return ExamEnrollmentService.get_enrollments(
+        return exam_enrollment_service.ExamEnrollmentService.get_enrollments(
             program_acronym=self.program_acronym,
             year=self.year,
             session=self.session_number,
             person=self.student.person
         )
+
+    @cached_property
+    def requested_attendance_marks(self) -> List['AttendanceMarkRequested']:
+        return assessments_service.AttendanceMarkService.get_requested_attendance_marks(self.student.person)
 
     def get(self, request, *args, **kwargs):
         if not self.current_attendance_mark_event:
@@ -94,6 +99,10 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        requested_attendance_marks_by_code = {
+            requested_attendance_mark['code']: requested_attendance_mark
+            for requested_attendance_mark in self.requested_attendance_marks
+        }
         return {
             **super().get_context_data(**kwargs),
             "student": self.student,
@@ -102,5 +111,6 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
             "session": self.current_attendance_mark_event.month_session_name,
             "year": self.year,
             "scoresheet_url": reverse("performance_home"),
-            "exam_enrollments": self.exam_enrollments
+            "exam_enrollments": self.exam_enrollments,
+            "requested_attendance_marks_by_code": requested_attendance_marks_by_code
         }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-23 13:38+0100\n"
+"POT-Creation-Date: 2022-02-28 15:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,6 +80,10 @@ msgstr ""
 
 msgid ""
 "Requesting an attendance mark means obtaining a mark of 0/20 for your exam."
+msgstr ""
+
+#, python-format
+msgid "Score of 0/20 requested on %(date_requested)s at %(time_requested)s"
 msgstr ""
 
 msgid "Scores Encoding"
