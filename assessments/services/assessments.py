@@ -25,7 +25,7 @@
 ##############################################################################
 import datetime
 import logging
-from typing import List
+from typing import List, Optional
 
 import osis_assessments_sdk
 import urllib3
@@ -137,7 +137,7 @@ class AttendanceMarkRemoteCalendar(object):
         """
         return [academic_event for academic_event in self._calendars if academic_event.is_open]
 
-    def get_previous_academic_event(self) -> AttendanceMarkCalendar:
+    def get_previous_academic_event(self) -> Optional[AttendanceMarkCalendar]:
         """
         Return previous academic event based on today
         """
@@ -147,7 +147,7 @@ class AttendanceMarkRemoteCalendar(object):
         ]
         return events_filtered[-1] if events_filtered else None
 
-    def get_next_academic_event(self, date=None) -> AttendanceMarkCalendar:
+    def get_next_academic_event(self, date=None) -> Optional[AttendanceMarkCalendar]:
         """
         Return next academic event based on today
         """
