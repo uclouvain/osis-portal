@@ -120,10 +120,12 @@ class AssessmentsService:
 
 
 class AttendanceMarkRemoteCalendar(object):
-    _calendars = []  # type: List[AttendanceMarkCalendar]
 
     def __init__(self, person: Person):
-        self._calendars = _assessment_api_call(person, 'attendancemarkscalendars_list') or []
+        self._calendars = _assessment_api_call(
+            person,
+            'attendancemarkscalendars_list'
+        ) or []  # type: List[AttendanceMarkCalendar]
 
     def get_target_years_opened(self) -> List[int]:
         """
