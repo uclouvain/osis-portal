@@ -31,7 +31,7 @@ import osis_assessments_sdk
 import urllib3
 from django.conf import settings
 from django.http import Http404
-from osis_assessments_sdk.api import score_encoding_api, application_api
+from osis_assessments_sdk.api import score_encoding_api, attendance_mark_api
 from osis_assessments_sdk.model.attendance_mark_calendar import AttendanceMarkCalendar
 from osis_assessments_sdk.model.progress_overview import ProgressOverview
 
@@ -173,7 +173,7 @@ def _score_encoding_api_call(person: Person, method_to_call: str):
 def _assessment_api_call(person: Person, method_to_call: str):
     configuration = assessments_sdk.build_configuration()
     with osis_assessments_sdk.ApiClient(configuration) as api_client:
-        api_instance = application_api.ApplicationApi(api_client)
+        api_instance = attendance_mark_api.AttendanceMarkApi(api_client)
         try:
             class_method = getattr(api_instance, method_to_call)
             result = class_method(**build_mandatory_auth_headers(person),)
