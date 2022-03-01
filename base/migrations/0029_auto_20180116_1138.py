@@ -24,5 +24,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(set_deleted_new_field),
+        migrations.RunPython(set_deleted_new_field, migrations.RunPython.noop),
     ]
