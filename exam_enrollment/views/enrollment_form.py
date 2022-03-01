@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -166,9 +166,34 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
     def _get_context(self, data: Dict) -> Dict:
         return {
             'error_message': self._get_error_message(data),
-            'exam_enrollments': data.get('exam_enrollments', ""),
+            'exam_enrollments': data.get('exam_enrollments', [
+                {
+                    'credits': 5,
+                    'learning_unit_year': {
+                        'title': 'TITRE',
+                        'acronym': 'ACRO',
+                        'enrollment_state': 'SUBSRIBED'
+                    },
+                    'can_enrol_to_exam': True,
+                    'enrolled_by_default': False,
+                },
+                {
+                    'credits': 5,
+                    'learning_unit_year': {
+                        'title': 'TITRE3',
+                        'acronym': 'ACRO3',
+                        'enrollment_state': 'SUBSRIBED'
+                    },
+                    'can_enrol_to_exam': True,
+                    'enrolled_by_default': True,
+                    'session_1': {
+                        'score': 20,
+                        'enrollment_state': 'I'
+                    }
+                },
+            ]),
             'student': self.student,
-            'current_number_session': data.get('current_number_session', ""),
+            'current_number_session': data.get('current_number_session', 2),
             'academic_year': current_academic_year(),
             'program_code': self.program_code,
             'title': self.title,
@@ -242,6 +267,7 @@ def _build_enrollments_by_learning_unit(request) -> List[Dict]:
     enrollments_by_learn_unit = []
     is_enrolled_by_acronym = _build_dicts_is_enrolled_by_acronym(request)
     etat_to_inscr_by_acronym = _build_dicts_etat_to_inscr_by_acronym(request)
+
     for acronym, etat_to_inscr in etat_to_inscr_by_acronym.items():
         etat_to_inscr = None if not etat_to_inscr or etat_to_inscr == 'None' else etat_to_inscr
         if etat_to_inscr:
