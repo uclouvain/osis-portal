@@ -96,7 +96,7 @@
                             {% with requested_attendance_mark=requested_attendance_marks_by_code|get_item:row.learning_unit_code %}
                                 {% if requested_attendance_mark %}
                                     <button class="btn btn-primary" disabled>
-                                        {% blocktrans with date_requested=requested_attendance_mark.time_requested|date:'d-m-y' time_requested=requested_attendance_mark.time_requested|date:'H:i'%}Score of 0/20 requested on {{ date_requested }} at {{ time_requested }}{% endblocktrans %}
+                                        {% blocktrans with date_requested=requested_attendance_mark.request_datetime|date:'d-m-y' time_requested=requested_attendance_mark.request_datetime|date:'H:i'%}Score of 0/20 requested on {{ date_requested }} at {{ time_requested }}{% endblocktrans %}
                                     </button>
                                 {% else %}
                                     <btn class="btn btn-primary trigger_modal" data-url="{% url 'request-attendance-mark' program_acronym row.learning_unit_code %}">

@@ -84,7 +84,7 @@ class AttendanceMarkRequestedFactory(factory.Factory):
         abstract = False
 
     code = "LSFIN1101"
-    time_requested = factory.LazyFunction(lambda: datetime.datetime.now())
+    request_datetime = factory.LazyFunction(lambda: datetime.datetime.now())
 
 
 class InMemoryAttendanceMarkService(AttendanceMarkService):
