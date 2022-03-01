@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,28 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import factory
-from django.contrib.auth.models import Permission
+from django import template
+
+register = template.Library()
 
 
-class GroupFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = 'auth.Group'
-        django_get_or_create = ('name',)
-
-    name = ""
-
-
-class TutorGroupFactory(GroupFactory):
-    name = "tutors"
-
-
-class StudentGroupFactory(GroupFactory):
-    name = "students"
-
-    @factory.post_generation
-    def add_permissions(obj, *args, **kwargs):
-        is_student_permission, created = Permission.objects.get_or_create(
-            codename="is_student",
-        )
-        obj.permissions.add(is_student_permission)
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
