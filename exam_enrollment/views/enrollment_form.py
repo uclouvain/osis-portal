@@ -166,34 +166,9 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
     def _get_context(self, data: Dict) -> Dict:
         return {
             'error_message': self._get_error_message(data),
-            'exam_enrollments': data.get('exam_enrollments', [
-                {
-                    'credits': 5,
-                    'learning_unit_year': {
-                        'title': 'TITRE',
-                        'acronym': 'ACRO',
-                        'enrollment_state': 'SUBSRIBED'
-                    },
-                    'can_enrol_to_exam': True,
-                    'enrolled_by_default': False,
-                },
-                {
-                    'credits': 5,
-                    'learning_unit_year': {
-                        'title': 'TITRE3',
-                        'acronym': 'ACRO3',
-                        'enrollment_state': 'SUBSRIBED'
-                    },
-                    'can_enrol_to_exam': True,
-                    'enrolled_by_default': True,
-                    'session_1': {
-                        'score': 20,
-                        'enrollment_state': 'I'
-                    }
-                },
-            ]),
+            'exam_enrollments': data.get('exam_enrollments', ''),
             'student': self.student,
-            'current_number_session': data.get('current_number_session', 2),
+            'current_number_session': data.get('current_number_session', ''),
             'academic_year': current_academic_year(),
             'program_code': self.program_code,
             'title': self.title,
