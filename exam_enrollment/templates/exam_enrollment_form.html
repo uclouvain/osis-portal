@@ -457,10 +457,7 @@
         save_button.onclick = function (e){
             e.preventDefault();
             const no_input_checked = inputs.every(isNotChecked);
-            console.log(no_input_checked);
             if (no_input_checked === true) {
-                {#const modale = document.querySelector('[id=modalConfirmNoExamEnrollment]')#}
-                {#modale.show();#}
                 const modale = $('#modalConfirmNoExamEnrollment');
                 modale.modal('show');
             }
