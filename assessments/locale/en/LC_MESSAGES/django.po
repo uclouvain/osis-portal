@@ -120,9 +120,6 @@ msgstr ""
 msgid "Unexpected error"
 msgstr ""
 
-msgid "Unexpected error."
-msgstr ""
-
 msgid "VPN access"
 msgstr ""
 
