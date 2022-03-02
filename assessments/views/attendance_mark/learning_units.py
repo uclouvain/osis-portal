@@ -64,12 +64,15 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
         return get_object_or_404(Student.objects.select_related('person'), person__user=self.request.user)
 
     @cached_property
-    def programs(self) -> List['Enrollment']:
+    def offer_enrollments(self) -> List['Enrollment']:
         return OfferEnrollmentService.get_my_enrollments_year_list(self.student.person, self.year)
 
     @cached_property
     def program_title(self) -> str:
-        return next((program.title for program in self.programs if program.acronym == self.program_acronym), "")
+        return next(
+            (program.title for program in self.offer_enrollments if program.acronym == self.program_acronym),
+            ""
+        )
 
     @cached_property
     def current_attendance_mark_event(self) -> Optional['AttendanceMarkCalendar']:
