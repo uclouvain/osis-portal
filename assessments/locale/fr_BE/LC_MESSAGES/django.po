@@ -96,7 +96,7 @@ msgstr ""
 
 #, python-format
 msgid "Score of 0/20 requested on %(date_requested)s at %(time_requested)s"
-msgstr "Node de 0/20 demandée le %(date_requested)s à %(time_requested)s"
+msgstr "Note de 0/20 demandée le %(date_requested)s à %(time_requested)s"
 
 msgid "Scores Encoding"
 msgstr "Encodage de Notes"

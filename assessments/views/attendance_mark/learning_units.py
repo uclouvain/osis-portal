@@ -32,10 +32,11 @@ from django.views.generic import TemplateView
 from osis_assessments_sdk.model.attendance_mark_calendar import AttendanceMarkCalendar
 from osis_assessments_sdk.model.attendance_mark_requested import AttendanceMarkRequested
 from osis_exam_enrollment_sdk.model.exam_enrollment import ExamEnrollment
+from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
 from assessments.services import assessments as assessments_service
 from base.models.student import Student
-from education_group.services import education_group as education_group_service
+from base.services.offer_enrollment import OfferEnrollmentService
 from exam_enrollment.services import exam_enrollment as exam_enrollment_service
 
 
@@ -60,18 +61,15 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
 
     @cached_property
     def student(self) -> 'Student':
-        return get_object_or_404(
-            Student.objects.select_related('person'),
-            person__user=self.request.user
-        )
+        return get_object_or_404(Student.objects.select_related('person'), person__user=self.request.user)
+
+    @cached_property
+    def programs(self) -> List['Enrollment']:
+        return OfferEnrollmentService.get_my_enrollments_year_list(self.student.person, self.year)
 
     @cached_property
     def program_title(self) -> str:
-        return education_group_service.EducationGroupService().get_program_title(
-            acronym=self.program_acronym,
-            year=self.year,
-            person=self.student.person
-        )
+        return next((program.title for program in self.programs if program.acronym == self.program_acronym), "")
 
     @cached_property
     def current_attendance_mark_event(self) -> Optional['AttendanceMarkCalendar']:
