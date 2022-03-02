@@ -32,6 +32,7 @@ import urllib3
 from django.conf import settings
 from osis_offer_enrollment_sdk import ApiException
 from osis_offer_enrollment_sdk.api import enrollment_api
+from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from base.models.person import Person
@@ -73,7 +74,7 @@ class OfferEnrollmentService:
 
     @classmethod
     @api_exception_handler(api_exception_cls=ApiException)
-    def get_my_enrollments_year_list(cls, person: Person, year: int, **kwargs) -> List['EnrollmentList']:
+    def get_my_enrollments_year_list(cls, person: Person, year: int, **kwargs) -> List['Enrollment']:
         return cls.get_my_enrollments_list(person=person, year=year, **kwargs).get("results", [])
 
 

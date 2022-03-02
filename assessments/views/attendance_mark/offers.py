@@ -28,6 +28,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import redirect, get_object_or_404
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
+from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from assessments.business.attendance_mark import permission
@@ -55,7 +56,7 @@ class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         return assessments_services.AttendanceMarkRemoteCalendar(self.student.person).get_target_years_opened()[0]
 
     @cached_property
-    def programs(self) -> List['EnrollmentList']:
+    def programs(self) -> List['Enrollment']:
         return OfferEnrollmentService.get_my_enrollments_year_list(self.student.person, self.year)
 
     def get(self, request, *args, **kwargs):
