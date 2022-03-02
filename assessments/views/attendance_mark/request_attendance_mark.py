@@ -22,15 +22,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 
 from assessments.business.attendance_mark import permission
-from assessments.services import assessments as assessments_services
 from assessments.forms.attendance_mark.request_attendance_mark_form import RequestAttendanceMarkForm
+from assessments.services import assessments as assessments_services
 from base.models.person import Person
 from base.views.mixin import AjaxTemplateMixin
 from learning_unit.services.learning_unit import LearningUnitService
@@ -75,10 +77,14 @@ class RequestAttendanceMarkFormView(AjaxTemplateMixin, LoginRequiredMixin, Permi
         )
 
     def form_valid(self, form):
-        assessments_services.AttendanceMarkService.request_attendance_mark(
+        response = assessments_services.AttendanceMarkService.request_attendance_mark(
             learning_unit_code=self.learning_unit_code,
             person=self.person
         )
+        if not response:
+            error_message = _('Unexpected error')
+            messages.add_message(self.request, messages.ERROR, error_message, "alert-danger")
+
         return super().form_valid(form)
 
     def get_success_url(self):
