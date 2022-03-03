@@ -28,7 +28,7 @@
 {% block title %}{% trans 'My attendance marks' %}{% endblock %}
 
 {% block breadcrumb %}
-    <li>{% trans 'My attendance marks' %}</li>
+    <li><a href="{% url 'attendance-mark-select-offer' %}">{% trans 'My attendance marks' %}</a></li>
     <li class="active">{% trans "Request an attendance mark (0/20)" %}</li>
 {% endblock %}
 
@@ -36,7 +36,7 @@
     {% include "template_messages.html" %}
 
     <div class="page-header">
-        <h2>{% trans 'My attendance marks' %}</h2>
+        <h2>{% trans "Request an attendance mark (0/20)" %}</h2>
     </div>
 
     <div class="alert alert-warning" role="alert">

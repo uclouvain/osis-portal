@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-02 11:21+0100\n"
+"POT-Creation-Date: 2022-03-03 13:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,6 +125,12 @@ msgstr ""
 "partir du %(attendance_marks_request_start)s pour la session de "
 "%(session_name)s."
 
+#, python-format
+msgid ""
+"The attendance mark request has been received. A confirmation email is sent "
+"to %(email)s."
+msgstr "La demande de note de présence a bien été reçue. Un mail de confirmation est envoyé à l'adresse %(email)s."
+
 msgid "This requires a "
 msgstr "Ceci nécessite un "
 
@@ -148,7 +154,7 @@ msgid "You are not enrolled for the session in %(session)s"
 msgstr "Vous n'êtes pas inscrit.e aux examens pour la session de %(session)s"
 
 msgid "You are not enrolled to any program for this academic year."
-msgstr "Vous n'êtes inscrit à aucune formation pour cette année académique."
+msgstr "Vous n'êtes inscrit.e à aucune formation pour cette année académique."
 
 msgid "outside UCL"
 msgstr "en dehors de l'UCLouvain"

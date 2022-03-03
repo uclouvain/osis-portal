@@ -33,6 +33,7 @@ from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from assessments.business.attendance_mark import permission
 from assessments.services import assessments as assessments_services
+from base.models.enums import offer_enrollment_state
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService
 
@@ -57,7 +58,11 @@ class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     @cached_property
     def programs(self) -> List['Enrollment']:
-        return OfferEnrollmentService.get_my_enrollments_year_list(self.student.person, self.year)
+        return OfferEnrollmentService.get_my_enrollments_year_list(
+            self.student.person,
+            self.year,
+            enrollment_state=[offer_enrollment_state.SUBSCRIBED, offer_enrollment_state.PROVISORY]
+        )
 
     def get(self, request, *args, **kwargs):
         if not permission.is_attendance_mark_period_opened(request.user):

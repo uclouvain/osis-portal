@@ -22,6 +22,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from typing import Optional
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
@@ -29,12 +31,14 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
+from osis_assessments_sdk.model.attendance_mark_calendar import AttendanceMarkCalendar
 
 from assessments.business.attendance_mark import permission
 from assessments.forms.attendance_mark.request_attendance_mark_form import RequestAttendanceMarkForm
 from assessments.services import assessments as assessments_services
 from base.models.person import Person
 from base.views.mixin import AjaxTemplateMixin
+from exam_enrollment.services import exam_enrollment as exam_enrollment_service
 from learning_unit.services.learning_unit import LearningUnitService
 
 
@@ -57,8 +61,16 @@ class RequestAttendanceMarkFormView(AjaxTemplateMixin, LoginRequiredMixin, Permi
         return self.request.user.person
 
     @cached_property
+    def current_attendance_mark_event(self) -> Optional['AttendanceMarkCalendar']:
+        return assessments_services.AttendanceMarkRemoteCalendar(self.person).get_opened_academic_events()[0]
+
+    @cached_property
     def year(self):
-        return assessments_services.AttendanceMarkRemoteCalendar(self.person).get_target_years_opened()[0]
+        return self.current_attendance_mark_event.authorized_target_year
+
+    @cached_property
+    def session_number(self):
+        return self.current_attendance_mark_event.session_number
 
     @cached_property
     def learning_unit_code(self) -> str:
@@ -70,10 +82,19 @@ class RequestAttendanceMarkFormView(AjaxTemplateMixin, LoginRequiredMixin, Permi
 
     @cached_property
     def learning_unit_title(self) -> str:
-        return LearningUnitService.get_learning_unit_title(
+        enrollments = exam_enrollment_service.ExamEnrollmentService.get_enrollments(
+            program_acronym=self.program_acronym,
             year=self.year,
-            acronym=self.learning_unit_code,
-            person=self.request.user.person
+            session=self.session_number,
+            person=self.person
+        )
+        return next(
+            (
+                enrollment.learning_unit_title
+                for enrollment in enrollments
+                if enrollment.learning_unit_code == self.learning_unit_code
+            ),
+            ''
         )
 
     def form_valid(self, form):
@@ -84,6 +105,12 @@ class RequestAttendanceMarkFormView(AjaxTemplateMixin, LoginRequiredMixin, Permi
         if not response:
             error_message = _('Unexpected error')
             messages.add_message(self.request, messages.ERROR, error_message, "alert-danger")
+        else:
+            success_message = _(
+                'The attendance mark request has been received. '
+                'A confirmation email is sent to %(email)s.'
+            ) % {'email': self.person.email}
+            messages.add_message(self.request, messages.SUCCESS, success_message)
 
         return super().form_valid(form)
 
