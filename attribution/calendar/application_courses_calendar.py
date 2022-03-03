@@ -27,20 +27,18 @@ import datetime
 import logging
 from typing import List
 
+import osis_attribution_sdk
 import urllib3
 from django.conf import settings
+from osis_attribution_sdk.api import application_api
+from osis_attribution_sdk.models import ApplicationCourseCalendar
 
 from frontoffice.settings.osis_sdk import attribution as attribution_sdk, utils
-
-import osis_attribution_sdk
-from osis_attribution_sdk.models import ApplicationCourseCalendar
-from osis_attribution_sdk.api import application_api
-
 
 LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class ApplicationCoursesRemoteCalendar(object):
+class ApplicationCoursesRemoteCalendar:
     _calendars = []  # type: List[ApplicationCourseCalendar]
 
     def __init__(self, person):

@@ -20,5 +20,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(edit_gender_values),
+        migrations.RunPython(edit_gender_values, migrations.RunPython.noop),
     ]

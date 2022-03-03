@@ -34,5 +34,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(populate_or_delete_offer_enrollment_education_group_year_id),
+        migrations.RunPython(populate_or_delete_offer_enrollment_education_group_year_id, migrations.RunPython.noop),
     ]
