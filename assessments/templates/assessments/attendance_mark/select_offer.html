@@ -1,6 +1,6 @@
 {% extends "dashboard_layout.html" %}
-{% load staticfiles %}
-{% load i18n %}
+{% load staticfiles i18n %}
+{% load academic_year_display %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -68,7 +68,7 @@
                 {% for row in programs %}
                     <tr>
                         <td>
-                            {{ row.year }}
+                            {{ row.year|display_as_academic_year }}
                         </td>
                         <td>
                             <a href="{% url "attendance-mark-list-exam-enrollments" row.acronym %}">{{ row.acronym }}</a>

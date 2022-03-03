@@ -84,6 +84,12 @@ class RequestAttendanceMarkFormView(AjaxTemplateMixin, LoginRequiredMixin, Permi
         if not response:
             error_message = _('Unexpected error')
             messages.add_message(self.request, messages.ERROR, error_message, "alert-danger")
+        else:
+            success_message = _(
+                'The attendance mark request has been received. '
+                'A confirmation email is sent to %(email)s.'
+            ) % {'email': self.person.email}
+            messages.add_message(self.request, messages.SUCCESS, success_message)
 
         return super().form_valid(form)
 

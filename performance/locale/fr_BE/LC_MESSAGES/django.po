@@ -236,7 +236,7 @@ msgstr ""
 "officiel."
 
 msgid "Title"
-msgstr "Titre"
+msgstr "Intitulé"
 
 msgid "Total ECTS / Enrollment"
 msgstr "Total ECTS / Inscription"
