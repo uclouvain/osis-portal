@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 09:51+0200\n"
+"POT-Creation-Date: 2022-03-01 16:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,6 +75,9 @@ msgstr ""
 msgid "Not concerned"
 msgstr ""
 
+msgid "Not registered for any exams"
+msgstr ""
+
 msgid "Please complete <b>IMPERATIVELY</b> the questionnaire."
 msgstr ""
 
@@ -94,7 +97,16 @@ msgstr ""
 msgid "Which action do you want to perform ?"
 msgstr ""
 
+msgid "Y - Second registration"
+msgstr "Y - Second registration"
+
 msgid "Yes"
+msgstr ""
+
+msgid "Yes, I confirm"
+msgstr ""
+
+msgid "You are not registered for any exams. Do you want to continue?"
 msgstr ""
 
 msgid "You are outside the exams enrollment period"
@@ -193,9 +205,6 @@ msgstr "W - Unsatisfactory evaluation (score doesn't matter)"
 
 msgid "legend_exam_enrol_x"
 msgstr "X - Law and administrative penalty"
-
-msgid "Y - Second registration"
-msgstr "Y - Second registration"
 
 msgid "message_exam_enrolment_state"
 msgstr "You can see the state of all your exam enrollments in your "
