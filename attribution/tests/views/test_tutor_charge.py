@@ -27,7 +27,6 @@ from types import SimpleNamespace
 
 import mock
 from django.contrib.auth.models import Permission
-from django.http import HttpResponse
 from django.test import TestCase, SimpleTestCase
 from django.urls import reverse
 from osis_attribution_sdk.model.attribution import Attribution
@@ -134,19 +133,19 @@ class TutorChargeViewTest(TestCase):
         self.client.force_login(UserFactory())
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     def test_assert_template_used(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "tutor_charge.html")
 
     def test_assert_context_keys(self):
         response = self.client.get(self.url)
 
-        self.assertTrue("display_years_tab" in response.context)
+        self.assertIn("display_years_tab", response.context)
         self.assertEqual(response.context["person"], self.person)
         self.assertEqual(response.context["current_year_displayed"], self.current_academic_year.year)
         self.assertEqual(len(response.context["attributions"]), 1)
@@ -239,19 +238,19 @@ class AdminTutorChargeViewTest(TestCase):
         self.client.force_login(self.tutor.person.user)
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     def test_assert_template_used(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, HttpResponse.status_code)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "tutor_charge_admin.html")
 
     def test_assert_context_keys(self):
         response = self.client.get(self.url)
 
-        self.assertTrue("display_years_tab" in response.context)
+        self.assertIn("display_years_tab", response.context)
         self.assertEqual(response.context["person"], self.tutor.person)
         self.assertEqual(response.context["current_year_displayed"], self.current_academic_year.year)
         self.assertEqual(len(response.context["attributions"]), 1)

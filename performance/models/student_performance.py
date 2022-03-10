@@ -70,8 +70,8 @@ class StudentPerformance(models.Model):
         null=True
     )
 
-    courses_registration_validated = models.NullBooleanField(null=True)
-    learning_units_outside_catalog = models.NullBooleanField(null=True)
+    courses_registration_validated = models.BooleanField(null=True)
+    learning_units_outside_catalog = models.BooleanField(null=True)
     fetch_timed_out = False
     course_registration_message = models.CharField(max_length=255, blank=True, default='')
     on_site_exams_info = JSONField(null=True)
