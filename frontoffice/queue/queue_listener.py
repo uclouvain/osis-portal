@@ -35,7 +35,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 DEFAULT_TIMEOUT = 30
 
 
-class Client(object):
+class Client:
 
     def __init__(self, queue_name, call_timeout=DEFAULT_TIMEOUT):
         self.paper_sheet_queue = queue_name
@@ -208,7 +208,7 @@ class ConsumerThread(threading.Thread):
         example.run()
 
 
-class ExampleConsumer(object):
+class ExampleConsumer:
     """
     This is an example consumer that will handle unexpected interactions
     with RabbitMQ such as channel and connection closures.

@@ -27,7 +27,6 @@ from types import SimpleNamespace
 
 import mock
 from django.contrib.auth.models import Permission
-from django.http import HttpResponse
 from django.test import TestCase, SimpleTestCase
 from django.urls import reverse
 from osis_attribution_sdk.model.attribution import Attribution
@@ -146,7 +145,7 @@ class TutorChargeViewTest(TestCase):
     def test_assert_context_keys(self):
         response = self.client.get(self.url)
 
-        self.assertTrue("display_years_tab" in response.context)
+        self.assertIn("display_years_tab", response.context)
         self.assertEqual(response.context["person"], self.person)
         self.assertEqual(response.context["current_year_displayed"], self.current_academic_year.year)
         self.assertEqual(len(response.context["attributions"]), 1)
@@ -251,7 +250,7 @@ class AdminTutorChargeViewTest(TestCase):
     def test_assert_context_keys(self):
         response = self.client.get(self.url)
 
-        self.assertTrue("display_years_tab" in response.context)
+        self.assertIn("display_years_tab", response.context)
         self.assertEqual(response.context["person"], self.tutor.person)
         self.assertEqual(response.context["current_year_displayed"], self.current_academic_year.year)
         self.assertEqual(len(response.context["attributions"]), 1)

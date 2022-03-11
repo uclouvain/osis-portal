@@ -111,11 +111,11 @@ class TestApplicationOverviewView(OnlineApplicationContextTestMixin, TestCase):
         self.assertEqual(response.context['help_button_url'], "https://dummy-url.com")
         self.assertEqual(response.context['catalog_url'], "https://catalogue_url.com")
 
-        self.assertTrue("attributions_about_to_expire" in response.context)
-        self.assertTrue("attributions" in response.context)
-        self.assertTrue("tot_lecturing" in response.context)
-        self.assertTrue("tot_practical" in response.context)
-        self.assertTrue("applications" in response.context)
+        self.assertIn("attributions_about_to_expire", response.context)
+        self.assertIn("attributions", response.context)
+        self.assertIn("tot_lecturing", response.context)
+        self.assertIn("tot_practical", response.context)
+        self.assertIn("applications", response.context)
 
     def test_get_method_called_multiple_service_to_fetch_data(self):
         self.client.get(self.url, follow=False)
