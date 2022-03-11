@@ -92,7 +92,7 @@ class OfferChoice(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
                 offer_enrollment_state.SUBSCRIBED,
                 offer_enrollment_state.PROVISORY
             ]
-        ).results if self.person else []
+        ) if self.person else []
 
     @cached_property
     def current_academic_year(self) -> AcademicYear:

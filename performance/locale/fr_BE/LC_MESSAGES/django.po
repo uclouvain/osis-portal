@@ -144,13 +144,13 @@ msgid "Not defined"
 msgstr "Non défini"
 
 msgid "Program"
-msgstr "Programme"
+msgstr "Formation"
 
 msgid "Registration Id"
 msgstr "Noma"
 
 msgid "Registration Number"
-msgstr "Matricule"
+msgstr "Noma"
 
 msgid "Results"
 msgstr "Résultats"
@@ -236,7 +236,7 @@ msgstr ""
 "officiel."
 
 msgid "Title"
-msgstr "Titre"
+msgstr "Intitulé"
 
 msgid "Total ECTS / Enrollment"
 msgstr "Total ECTS / Inscription"
