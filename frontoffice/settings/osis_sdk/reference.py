@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ import logging
 import osis_reference_sdk
 from django.conf import settings
 
+from base.models.person import Person
+from frontoffice.settings.osis_sdk import utils
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -49,4 +51,26 @@ def build_configuration() -> osis_reference_sdk.Configuration:
         },
         api_key={
             'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
+        })
+
+
+def build_configuration_for_continuing_education(person: Person = None) -> osis_reference_sdk.Configuration:
+    """
+    Return SDK configuration of reference tables
+    """
+    if not settings.OSIS_REFERENCE_SDK_HOST:
+        logger.debug("'OSIS_REFERENCE_SDK_HOST' setting must be set in configuration")
+
+    if person is None:
+        token = settings.OSIS_PORTAL_TOKEN
+    else:
+        token = utils.get_user_token(person, force_user_creation=True)
+
+    return osis_reference_sdk.Configuration(
+        host=settings.OSIS_REFERENCE_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.CONTINUING_EDUCATION_OSIS_REFERENCE_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': token
         })
