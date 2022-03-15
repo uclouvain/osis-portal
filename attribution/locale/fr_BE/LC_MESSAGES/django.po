@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-06 10:45+0100\n"
+"POT-Creation-Date: 2022-03-15 13:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,8 +109,8 @@ msgstr "Personnes porteuses de handicap, trouble ou maladie"
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
-msgid "Download the list (Excel or PDF)"
-msgstr "Télécharger la liste (Excel ou PDF)"
+msgid "Download the list (Excel)"
+msgstr "Télécharger la liste (Excel)"
 
 msgid "ES"
 msgstr "ES"
@@ -142,7 +142,6 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
-# python-format
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -281,9 +280,6 @@ msgstr "P - Examen partiel"
 
 msgid "P - Partial examination"
 msgstr "P - Examen partiel"
-
-msgid "PDF File"
-msgstr "Fichier PDF"
 
 msgid "PEPS"
 msgstr "PEPS"
