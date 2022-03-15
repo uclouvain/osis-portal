@@ -30,10 +30,9 @@ from django.contrib.auth.models import Permission
 from django.http.response import HttpResponse
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
-
-HTTP_ACCESS_DENIED = 401
 
 
 class TestData(TestCase):
@@ -60,14 +59,14 @@ class TestData(TestCase):
         self.person.user.save()
 
         response = self.client.get(self.url, follow=True)
-        self.assertEqual(response.status_code, HTTP_ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     def test_user_is_not_administrator(self):
         self.person.user.user_permissions.remove(self.admin_perm)
 
         response = self.client.get(self.url, follow=True)
-        self.assertEqual(response.status_code, HTTP_ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     @override_settings(ENABLE_SQL_DATA_MANAGEMENT=False)
@@ -118,34 +117,34 @@ class TestDataMaintenance(TestCase):
         self.person.user.save()
 
         response = self.client.post(self.url, follow=True)
-        self.assertEqual(response.status_code, HTTP_ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     def test_user_is_not_administrator(self):
         self.person.user.user_permissions.remove(self.admin_perm)
 
         response = self.client.post(self.url, follow=True)
-        self.assertEqual(response.status_code, HTTP_ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     @override_settings(ENABLE_SQL_DATA_MANAGEMENT=False)
     def test_with_sql_data_management_disabled(self):
         response = self.client.post(self.url)
-        self.assertEqual(response.status_code, HTTP_ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     @override_settings()
     def test_with_sql_data_management_setting_non_existent(self):
         del settings.ENABLE_SQL_DATA_MANAGEMENT
         response = self.client.post(self.url)
-        self.assertEqual(response.status_code, HTTP_ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     @override_settings(ENABLE_SQL_DATA_MANAGEMENT=True)
     @override_settings(FORBIDDEN_SQL_KEYWORDS=['alter',  'create'])
     def test_with_forbidden_keyword(self):
         response = self.client.post(self.url, data={"sql_command": "CREATE TABLE TEMP;"})
-        self.assertEqual(response.status_code, HTTP_ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, "access_denied.html")
 
     @override_settings(ENABLE_SQL_DATA_MANAGEMENT=True)

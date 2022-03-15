@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-29 11:29+0100\n"
+"POT-Creation-Date: 2022-02-16 14:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,9 +22,6 @@ msgid ""
 "linked to your user.</br> Please contact <a href="
 "\"{registration_department_url}\" target=\"_blank\">the Registration "
 "department</a>. Thank you."
-msgstr ""
-
-msgid "Admission requests"
 msgstr ""
 
 msgid "Annual program"
@@ -46,9 +43,6 @@ msgid "City"
 msgstr ""
 
 msgid "Country"
-msgstr ""
-
-msgid "Create and manage my admission request for UCLouvain"
 msgstr ""
 
 msgid "Dashboard"
@@ -110,6 +104,9 @@ msgstr ""
 msgid "My applications"
 msgstr ""
 
+msgid "My attendance marks"
+msgstr ""
+
 msgid "My attestations"
 msgstr ""
 
@@ -135,6 +132,9 @@ msgid "Registration department"
 msgstr ""
 
 msgid "Registration id"
+msgstr ""
+
+msgid "Request an attendance mark (0/20)"
 msgstr ""
 
 msgid "Scores encoding"

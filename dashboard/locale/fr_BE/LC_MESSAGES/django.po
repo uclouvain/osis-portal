@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-29 11:29+0100\n"
+"POT-Creation-Date: 2022-02-16 14:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,9 +27,6 @@ msgstr ""
 "affectés à votre utilisateur.</br> Veuillez prendre contact le <a href="
 "\"{registration_department_url}\" target=\"_blank\">Service des "
 "inscriptions</a> afin de résoudre le problème. Merci."
-
-msgid "Admission requests"
-msgstr "Demandes d'admission"
 
 msgid "Annual program"
 msgstr "Programme annuel"
@@ -51,9 +48,6 @@ msgstr "Ville"
 
 msgid "Country"
 msgstr "Pays"
-
-msgid "Create and manage my admission request for UCLouvain"
-msgstr "Créer et gérer ma demande d'admission UCLouvain"
 
 msgid "Dashboard"
 msgstr "Tableau de bord"
@@ -116,6 +110,9 @@ msgstr "Numéro de GSM"
 msgid "My applications"
 msgstr "Mes candidatures"
 
+msgid "My attendance marks"
+msgstr "Mes notes de présence"
+
 msgid "My attestations"
 msgstr "Mes attestations"
 
@@ -144,6 +141,9 @@ msgstr "Service des inscriptions"
 
 msgid "Registration id"
 msgstr "Noma"
+
+msgid "Request an attendance mark (0/20)"
+msgstr "Demander une note de présence (0/20)"
 
 msgid "Scores encoding"
 msgstr "Encodage des notes"

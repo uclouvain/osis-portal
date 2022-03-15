@@ -107,13 +107,10 @@ class TestManagedPrograms(TestCase):
     def setUp(self):
         self.person = PersonFactory()
 
-    def test_get_program_managed_as_dict(self):
-        managed_programs = common.get_managed_program_as_dict(self.person.user)
-        expected_managed_programs = {
-            2017: ['PHYS1BA', 'BIOL1BA'],
-            2018: ['PHYS1BA', 'BIOL1BA']
-        }
-        self.assertDictEqual(expected_managed_programs, managed_programs)
+    def test_get_program_managed(self):
+        managed_programs = common.get_managed_programs(self.person.user)
+        expected_managed_programs = {'PHYS1BA', 'BIOL1BA'}
+        self.assertEqual(expected_managed_programs, managed_programs)
 
 
 class NoticeTestCase(TestCase):

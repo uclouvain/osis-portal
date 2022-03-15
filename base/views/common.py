@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from typing import Set
+
 from django.conf import settings
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.views import LoginView
@@ -44,7 +46,7 @@ def page_not_found(request, *args, **kwargs):
 
 
 def access_denied(request, *args, **kwargs):
-    return return_error_response(request, 'access_denied.html', 401)
+    return return_error_response(request, 'access_denied.html', 403)
 
 
 def server_error(request, *args, **kwargs):
@@ -79,12 +81,12 @@ def _check_notice(request, context):
         context['notice'] = request.session['notice']
 
 
-def get_managed_program_as_dict(user):
-    managed_programs_as_dict = None
+def get_managed_programs(user) -> Set[str]:
+    managed_programs = set()
     person = person_mdl.find_by_user(user)
     if person:
-        managed_programs_as_dict = api.get_managed_programs_as_dict(person.global_id)
-    return managed_programs_as_dict
+        managed_programs = api.get_managed_programs(person.global_id)
+    return managed_programs
 
 
 def login(request):

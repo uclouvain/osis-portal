@@ -29,7 +29,8 @@ from typing import Set
 
 import requests
 from django.conf import settings
-from django.http import HttpResponseBadRequest
+from django.core.exceptions import PermissionDenied
+from django.http import Http404, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from rest_framework import status
 
 DEFAULT_API_LIMIT = 25
@@ -115,4 +116,18 @@ class ApiExceptionHandler:
             for key, exceptions in body_json.items():
                 api_business_exceptions |= {ApiBusinessException(**exception) for exception in exceptions}
             raise MultipleApiBusinessException(exceptions=api_business_exceptions)
+        elif api_exception.status == HttpResponseForbidden.status_code:
+            try:
+                body_json = json.loads(api_exception.body)
+                detail = body_json.get('detail')
+            except (TypeError, json.JSONDecodeError):
+                detail = ""
+            raise PermissionDenied(detail)
+        elif api_exception.status == HttpResponseNotFound.status_code:
+            try:
+                body_json = json.loads(api_exception.body)
+                detail = body_json.get('detail')
+            except (TypeError, json.JSONDecodeError):
+                detail = ""
+            raise Http404(detail)
         raise api_exception

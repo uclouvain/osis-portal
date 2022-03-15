@@ -129,8 +129,8 @@ def _can_visualize_student_programs(request: HttpRequest, registration_id: str) 
         return True
     if request.user.has_perm('base.is_student'):
         return False
-    managed_programs_as_dict = common.get_managed_program_as_dict(request.user)
+    managed_programs = common.get_managed_programs(request.user)
     for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id):
-        if stud_perfs.acronym in managed_programs_as_dict.get(stud_perfs.academic_year, []):
+        if stud_perfs.acronym in managed_programs:
             return True
     return False

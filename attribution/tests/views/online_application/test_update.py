@@ -33,6 +33,7 @@ from django.urls import reverse
 from osis_attribution_sdk.model.application import Application
 from osis_attribution_sdk.model.vacant_course import VacantCourse
 from osis_attribution_sdk.model.vacant_declaration_type_enum import VacantDeclarationTypeEnum
+from rest_framework import status
 
 from attribution.tests.views.online_application.common import OnlineApplicationContextTestMixin
 from base.tests.factories.tutor import TutorFactory
@@ -94,13 +95,13 @@ class TestUpdateApplicationView(OnlineApplicationContextTestMixin, TestCase):
         self.client.logout()
 
         response = self.client.get(self.url, follow=False)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_case_user_without_permission(self):
         self.client.force_login(UserFactory())
 
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
         self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
