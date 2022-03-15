@@ -602,6 +602,3 @@ msgid ""
 msgstr ""
 "vous n’êtes pas encodé·e comme enseignant·es sur ce cours ou sur la classe. "
 "Veuillez vérifier via"
-
-#~ msgid "PDF File"
-#~ msgstr "Fichier PDF"
