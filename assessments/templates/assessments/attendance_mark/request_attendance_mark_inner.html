@@ -35,7 +35,8 @@
                 <div class="checkbox">
                     <label for="{{ form.confirm_check.id_for_label }}">
                         <input type="checkbox" id="{{ form.confirm_check.auto_id }}" name="{{ form.confirm_check.html_name }}" required>
-                        {% blocktrans %}I would like to obtain an attendance mark for the "{{ learning_unit_title }}" exam. I acknowledge having understood the consequences that this decision implies, namely obtaining a 0/20 for this exam, which will be counted in the average. This exam can only be rescheduled at a later session. This request will be irreversible.{% endblocktrans %}
+                        <p>{% blocktrans %}I would like to obtain an attendance mark for the "{{ learning_unit_title }}" exam.{% endblocktrans %}</p>
+                        <p>{% blocktrans %}I acknowledge having understood the consequences that this decision implies, namely obtaining a 0/20 for this exam, which will be counted in the average. This exam can only be rescheduled at a later session. This request will be irreversible.{% endblocktrans %}</p>
                     </label>
                 </div>
             </div>
