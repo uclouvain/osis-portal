@@ -5,6 +5,8 @@ import sys
 
 import dotenv
 
+# So that we can launch test via jetbrains IDE
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if 'test' in sys.argv:
     os.environ.setdefault('TESTING', 'True')
