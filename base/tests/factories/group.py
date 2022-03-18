@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import factory
+from django.contrib.auth.models import Permission
 
 
 class GroupFactory(factory.django.DjangoModelFactory):
@@ -36,3 +37,14 @@ class GroupFactory(factory.django.DjangoModelFactory):
 
 class TutorGroupFactory(GroupFactory):
     name = "tutors"
+
+
+class StudentGroupFactory(GroupFactory):
+    name = "students"
+
+    @factory.post_generation
+    def add_permissions(obj, *args, **kwargs):
+        is_student_permission, created = Permission.objects.get_or_create(
+            codename="is_student",
+        )
+        obj.permissions.add(is_student_permission)

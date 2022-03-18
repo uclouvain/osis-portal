@@ -309,7 +309,7 @@ msgid "Produce xls"
 msgstr "Produire xls"
 
 msgid "Program"
-msgstr "Programme"
+msgstr "Formation"
 
 msgctxt "attribution"
 msgid "Program"

@@ -25,6 +25,7 @@
 {% load messages %}
 
 {% block messages %}
+    {% if messages %}
     <div class="panel-body">
 
         {% as_messages_error as messages_error %}
@@ -108,4 +109,5 @@
         {% endif %}
 
     </div>
+    {% endif %}
 {% endblock %}

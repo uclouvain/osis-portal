@@ -36,14 +36,13 @@ from django.utils.translation import ugettext_lazy as _
 from mock import patch
 from osis_reference_sdk.model.academic_calendar import AcademicCalendar
 from osis_reference_sdk.model.paginated_academic_calendars import PaginatedAcademicCalendars
+from rest_framework import status
 
 import attestation.views.home
 from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 
-OK = 200
-ACCESS_DENIED = 401
 
 STUDENT_REGISTRATION_ID = "70531800"
 STUDENT_GLOBAL_ID = "78961314"
@@ -103,7 +102,7 @@ class HomeTest(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "access_denied.html")
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_with_multiple_students_assigned_same_person(self):
         StudentFactory(person=self.person)
@@ -125,7 +124,7 @@ class HomeTest(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'attestation_home_student.html')
 
         self.assertEqual(response.context['student'], a_student)
@@ -141,7 +140,7 @@ class HomeTest(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'attestation_home_student.html')
 
         self.assertEqual(response.context['student'], a_student)
@@ -164,7 +163,7 @@ class HomeTest(TestCase):
         self.mocked_discriminate_user.return_value = None
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'attestation_home_student.html')
 
         self.assertFalse(response.context['attestations'])
@@ -202,7 +201,7 @@ class DownloadAttestationTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.mocked_discriminate_user.return_value = None
         self.assertTemplateUsed(response, "access_denied.html")
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_with_multiple_students_assigned_same_person(self):
         StudentFactory(person=self.person)
@@ -267,12 +266,12 @@ class AttestationAdministrationTest(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "access_denied.html")
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_when_faculty_administrator(self):
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "admin/attestation_administration.html")
 
 
@@ -315,12 +314,12 @@ class SelectStudentAttestationTest(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "access_denied.html")
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_request(self):
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "admin/attestation_administration.html")
 
         self.assertIsInstance(response.context['form'], RegistrationIdForm)
@@ -328,7 +327,7 @@ class SelectStudentAttestationTest(TestCase):
     def test_invalid_post_request(self):
         response = self.client.post(self.url, data={'registration_id': STUDENT_REGISTRATION_ID}, follow=True)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "admin/attestation_administration.html")
         # Message valided in base test
         self.assertEqual(len(response.context['form'].errors), 1)
@@ -340,7 +339,7 @@ class SelectStudentAttestationTest(TestCase):
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "attestation_home_admin.html")
 
         self.assertEqual(response.context['student'], a_student)
@@ -357,7 +356,7 @@ class SelectStudentAttestationTest(TestCase):
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, "attestation_home_admin.html")
 
         self.assertEqual(response.context['student'], a_student)
@@ -393,7 +392,7 @@ class DownloadStudentAttestation(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "access_denied.html")
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
            side_effect=lambda global_id, year, attestation_type, username: None)

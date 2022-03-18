@@ -32,12 +32,13 @@ from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponse
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from performance.models.enums import offer_registration_state
 from performance.tests.factories.student_performance import StudentPerformanceFactory
-from performance.tests.views.test_main import ACCESS_DENIED, MULTIPLE_STUDENT_ERROR, OK
+from performance.tests.views.test_main import MULTIPLE_STUDENT_ERROR
 
 
 class ViewPerformanceHomeStudentTest(TestCase):
@@ -76,7 +77,7 @@ class ViewPerformanceHomeStudentTest(TestCase):
 
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_multiple_students_objects_for_one_user(self):
@@ -96,7 +97,7 @@ class ViewPerformanceHomeStudentTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'performance_home_student.html')
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(response.context['student'], self.student)
         expected_row = {
@@ -156,7 +157,7 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
 
     def test_user_has_not_permission(self):
         self.client.logout()
-        patcher = mock.patch('base.views.api.get_managed_programs_as_dict')
+        patcher = mock.patch('base.views.api.get_managed_programs')
         mock_api_call = patcher.start()
         mock_api_call.return_value = {}
         a_person = PersonFactory()
@@ -164,7 +165,7 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
         patcher.stop()
 
@@ -173,7 +174,7 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
 
         self.assertIsNone(response.context['student'])
@@ -186,7 +187,7 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
         self.student_performance.delete()
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
 
         self.assertEqual(response.context['student'], self.student)
@@ -199,7 +200,7 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
     def test_when_program(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
 
         self.assertEqual(response.context['student'], self.student)
@@ -228,7 +229,7 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
         )
         self.client.force_login(pgm_manager.user)
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTemplateUsed(response, 'admin/performance_home_admin.html')
 
     def test_pgm_manager_wrong_program(self):
@@ -243,7 +244,7 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
         self.url = reverse('performance_student_programs_admin', args=[new_student.registration_id])
         self.client.force_login(pgm_manager.user)
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_user_is_a_student(self):
@@ -251,5 +252,5 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
         self.client.force_login(self.student.person.user)
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, ACCESS_DENIED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTemplateUsed(response, 'access_denied.html')
