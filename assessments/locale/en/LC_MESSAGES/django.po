@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-03 13:51+0100\n"
+"POT-Creation-Date: 2022-03-17 15:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,13 +35,17 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
+msgid ""
+"I acknowledge having understood the consequences that this decision implies, "
+"namely obtaining a 0/20 for this exam, which will be counted in the average. "
+"This exam can only be rescheduled at a later session. This request will be "
+"irreversible."
+msgstr ""
+
 #, python-format
 msgid ""
 "I would like to obtain an attendance mark for the \"%(learning_unit_title)s"
-"\" exam. I acknowledge having understood the consequences that this decision "
-"implies, namely obtaining a 0/20 for this exam, which will be counted in the "
-"average. This exam can only be rescheduled at a later session. This request "
-"will be irreversible."
+"\" exam."
 msgstr ""
 
 msgid "Last Name"
@@ -54,6 +58,11 @@ msgid "My scores sheets"
 msgstr ""
 
 msgid "Online Scores Encoding"
+msgstr ""
+
+msgid ""
+"Only requests made before the start of the examination can be taken into "
+"account."
 msgstr ""
 
 #, python-format
@@ -90,8 +99,8 @@ msgid "Scores Encoding"
 msgstr ""
 
 msgid ""
-"Select a program for wich you would like to request an attendance mark "
-"(0/20) for an exam."
+"Select the program concerned by an attendance mark request (0/20) for an "
+"exam."
 msgstr ""
 
 msgid "Session"
