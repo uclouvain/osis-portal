@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -134,10 +134,10 @@ class ExamEnrollmentFormTest(TestCase):
         self.assertTrue(exam_enrollments)
         random_exam_enrol_position = random.randrange(len(exam_enrollments))
         random_exam_enrol = exam_enrollments[random_exam_enrol_position]
-        self.assertTrue('credits' in random_exam_enrol.keys())
-        self.assertTrue('credited' in random_exam_enrol.keys())
-        self.assertTrue('enrolled_by_default' in random_exam_enrol.keys())
-        self.assertTrue('can_enrol_to_exam' in random_exam_enrol.keys())
+        self.assertIn('credits', random_exam_enrol.keys())
+        self.assertIn('credited', random_exam_enrol.keys())
+        self.assertIn('enrolled_by_default', random_exam_enrol.keys())
+        self.assertIn('can_enrol_to_exam', random_exam_enrol.keys())
         self.assertTrue('session_1' in random_exam_enrol.keys()
                         or 'session_2' in random_exam_enrol.keys()
                         or 'session_3' in random_exam_enrol.keys())
