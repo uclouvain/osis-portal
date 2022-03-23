@@ -39,24 +39,24 @@ def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
     return student_specific_profile.type_text or "-"
 
 
-def get_arrangements(specific_profile: StudentSpecificProfile) -> List[str]:
+def get_arrangements(spec_profile: StudentSpecificProfile) -> List[str]:
     arrangements = []
-    if specific_profile.arrangement_additional_time:
+    if spec_profile.arrangement_additional_time:
         arrangements.append(_('Extra time (33% generally)'))
-    if specific_profile.arrangement_appropriate_copy:
+    if spec_profile.arrangement_appropriate_copy:
         arrangements.append(_('Large print'))
-    if specific_profile.arrangement_specific_locale:
+    if spec_profile.arrangement_specific_locale:
         arrangements.append(_('Specific room of examination'))
-    if _has_other_facility_comment(specific_profile):
+    if _has_other_facility_comment(spec_profile):
         arrangements.append(_('Other educational facilities'))
-        if specific_profile.arrangement_exam_comment:
-            arrangements.append("{} : {}".format(_('For exam'), specific_profile.arrangement_exam_comment))
-        if specific_profile.arrangement_exam_comment:
-            arrangements.append("{} : {}".format(_('For course'), specific_profile.arrangement_exam_comment))
-        if specific_profile.arrangement_exam_comment:
-            arrangements.append("{} : {}".format(_('For internship'), specific_profile.arrangement_exam_comment))
-        if specific_profile.arrangement_exam_comment:
-            arrangements.append("{} : {}".format(_('For dissertation'), specific_profile.arrangement_exam_comment))
+        if spec_profile.arrangement_exam_comment:
+            arrangements.append("{} : {}".format(_('For exam'), spec_profile.arrangement_exam_comment))
+        if spec_profile.arrangement_course_comment:
+            arrangements.append("{} : {}".format(_('For course'), spec_profile.arrangement_course_comment))
+        if spec_profile.arrangement_internship_comment:
+            arrangements.append("{} : {}".format(_('For internship'), spec_profile.arrangement_internship_comment))
+        if spec_profile.arrangement_dissertation_comment:
+            arrangements.append("{} : {}".format(_('For dissertation'), spec_profile.arrangement_dissertation_comment))
 
     return arrangements
 
