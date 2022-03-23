@@ -39,21 +39,38 @@ def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
     return student_specific_profile.type_text or "-"
 
 
-def get_arrangements(student_specific_profile: StudentSpecificProfile) -> List[str]:
+def get_arrangements(specific_profile: StudentSpecificProfile) -> List[str]:
     arrangements = []
-    if student_specific_profile.arrangement_additional_time:
+    if specific_profile.arrangement_additional_time:
         arrangements.append(_('Extra time (33% generally)'))
-    if student_specific_profile.arrangement_appropriate_copy:
+    if specific_profile.arrangement_appropriate_copy:
         arrangements.append(_('Large print'))
-    if student_specific_profile.arrangement_specific_locale:
+    if specific_profile.arrangement_specific_locale:
         arrangements.append(_('Specific room of examination'))
-    if student_specific_profile.arrangement_other:
+    if _has_other_facility_comment(specific_profile):
         arrangements.append(_('Other educational facilities'))
-        if student_specific_profile.arrangement_comment:
-            arrangements.append("{} : {}".format(_('Details other educational facilities'),
-                                                 student_specific_profile.arrangement_comment))
+        if specific_profile.arrangement_exam_comment:
+            arrangements.append("{} : {}".format(_('For exam'), specific_profile.arrangement_exam_comment))
+        if specific_profile.arrangement_exam_comment:
+            arrangements.append("{} : {}".format(_('For course'), specific_profile.arrangement_exam_comment))
+        if specific_profile.arrangement_exam_comment:
+            arrangements.append("{} : {}".format(_('For internship'), specific_profile.arrangement_exam_comment))
+        if specific_profile.arrangement_exam_comment:
+            arrangements.append("{} : {}".format(_('For dissertation'), specific_profile.arrangement_exam_comment))
+
     return arrangements
 
 
 def get_guide(student_specific_profile) -> str:
     return str(student_specific_profile.guide) if student_specific_profile.guide else None
+
+
+def _has_other_facility_comment(student_specific_profile):
+    return any(
+        [
+            student_specific_profile.arrangement_exam_comment,
+            student_specific_profile.arrangement_course_comment,
+            student_specific_profile.arrangement_internship_comment,
+            student_specific_profile.arrangement_dissertation_comment,
+        ]
+    )
