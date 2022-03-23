@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-23 14:24+0100\n"
+"POT-Creation-Date: 2022-03-23 14:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,13 @@ msgid ""
 msgstr ""
 "Les 'Listes des étudiants inscrits à mes examens' sont immédiatement "
 "utilisables pour l'encodage des notes"
+
+msgid ""
+"A4 single-sided, 1.5 line spacing and Arial 14 font, can be replaced by A3 "
+"single-sided"
+msgstr ""
+"A4 recto, interligne 1.5 et police Arial 14, peut être remplacée par une A3 "
+"recto"
 
 msgid "Acronym"
 msgstr "Sigle"
@@ -93,6 +100,9 @@ msgstr ""
 
 msgid "Code"
 msgstr "Sigle"
+
+msgid "Copy PEPS"
+msgstr "Copie PEPS"
 
 msgid "Credits"
 msgstr "Crédits"
@@ -291,11 +301,6 @@ msgstr "Pas de cours vacant correspondant"
 msgid "One of your courses is not visible in the list?"
 msgstr "Un de vos cours n’est pas visible dans la liste ?"
 
-msgid ""
-"One-sided A4, 1.5 line spacing and Arial 14 font, can be replaced by one-"
-"sided A3"
-msgstr "A4 recto, interligne 1.5 et police Arial 14, peut être remplacée par une A3 recto"
-
 msgid "Other educational facilities"
 msgstr "Autre aménagement"
 
@@ -307,9 +312,6 @@ msgstr "Fichier PDF"
 
 msgid "PEPS"
 msgstr "PEPS"
-
-msgid "PEPS copy"
-msgstr "Copie PEPS"
 
 msgid "PMR"
 msgstr "PMR"
@@ -598,6 +600,9 @@ msgstr "Oui"
 msgid "You aren't teaching for any learning unit"
 msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
 
+msgid "concerns writings and/or oral preparations"
+msgstr "concerne les écrits et/ou préparations des oraux"
+
 msgid "date_format"
 msgstr "%d/%m/%Y"
 
@@ -610,9 +615,6 @@ msgstr ""
 
 msgid "no student is enrolled to this course."
 msgstr "aucun·e étudiant·e n’est inscrit·e à ce cours."
-
-msgid "related to written exam and/or oral exam preparation"
-msgstr "concerne les écrits et/ou préparations des oraux"
 
 msgid "student(s)"
 msgstr "étudiant(s)"
@@ -635,3 +637,4 @@ msgid ""
 msgstr ""
 "vous n’êtes pas encodé·e comme enseignant·es sur ce cours ou sur la classe. "
 "Veuillez vérifier via"
+
