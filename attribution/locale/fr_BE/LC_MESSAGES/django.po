@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-23 14:43+0100\n"
+"POT-Creation-Date: 2022-03-25 11:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,6 +101,9 @@ msgstr ""
 msgid "Code"
 msgstr "Sigle"
 
+msgid "Copy"
+msgstr "Copie"
+
 msgid "Copy PEPS"
 msgstr "Copie PEPS"
 
@@ -162,6 +165,8 @@ msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
 # python-format
+#, fuzzy, python-format
+#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -196,7 +201,7 @@ msgid "Global id"
 msgstr "Matricule fgs"
 
 msgid "Guide"
-msgstr "Accompagnateur"
+msgstr "Accompagnateur.trice"
 
 msgid "High Level Promising athlete"
 msgstr "Sportifs de haut niveau"
@@ -303,6 +308,9 @@ msgstr "Un de vos cours n’est pas visible dans la liste ?"
 
 msgid "Other educational facilities"
 msgstr "Autre aménagement"
+
+msgid "Other educational facilities : see Excel"
+msgstr "Autres aménagements : Voir Excel"
 
 msgid "P - Examen partiel"
 msgstr "P - Examen partiel"
@@ -637,4 +645,3 @@ msgid ""
 msgstr ""
 "vous n’êtes pas encodé·e comme enseignant·es sur ce cours ou sur la classe. "
 "Veuillez vérifier via"
-
