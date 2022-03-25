@@ -42,21 +42,13 @@ def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
 def get_arrangements(spec_profile: StudentSpecificProfile) -> List[str]:
     arrangements = []
     if spec_profile.arrangement_additional_time:
-        arrangements.append(_('Extra time (33% generally)'))
+        arrangements.append(spec_profile.arrangement_additional_time_text)
     if spec_profile.arrangement_appropriate_copy:
-        arrangements.append(_('Large print'))
+        arrangements.append('{} : {}'.format(_('Copy'), spec_profile.arrangement_appropriate_copy_text))
     if spec_profile.arrangement_specific_locale:
         arrangements.append(_('Specific room of examination'))
     if _has_other_facility_comment(spec_profile):
-        arrangements.append(_('Other educational facilities'))
-        if spec_profile.arrangement_exam_comment:
-            arrangements.append("{} : {}".format(_('For exam'), spec_profile.arrangement_exam_comment))
-        if spec_profile.arrangement_course_comment:
-            arrangements.append("{} : {}".format(_('For course'), spec_profile.arrangement_course_comment))
-        if spec_profile.arrangement_internship_comment:
-            arrangements.append("{} : {}".format(_('For internship'), spec_profile.arrangement_internship_comment))
-        if spec_profile.arrangement_dissertation_comment:
-            arrangements.append("{} : {}".format(_('For dissertation'), spec_profile.arrangement_dissertation_comment))
+        arrangements.append(_('Other educational facilities : see Excel'))
 
     return arrangements
 

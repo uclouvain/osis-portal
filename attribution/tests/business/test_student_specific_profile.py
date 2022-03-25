@@ -26,6 +26,8 @@
 
 from django.test import TestCase
 from django.utils.translation import gettext as _
+from osis_learning_unit_enrollment_sdk.model.additional_time_types_enum import AdditionalTimeTypesEnum
+from osis_learning_unit_enrollment_sdk.model.appropriate_copy_types_enum import AppropriateCopyTypesEnum
 from osis_learning_unit_enrollment_sdk.model.student_specific_profile import StudentSpecificProfile
 from osis_learning_unit_enrollment_sdk.model.subtype_enum import SubtypeEnum
 from osis_learning_unit_enrollment_sdk.model.type_peps_enum import TypePepsEnum
@@ -42,8 +44,10 @@ class StudentSpecificProfileTest(TestCase):
             'subtype': SubtypeEnum("PROMISING_ATHLETE_HL"),
             'subtype_text': "Subtype ATHLETE",
             'guide': self.guide,
-            'arrangement_additional_time': "time",
-            'arrangement_appropriate_copy': "copy",
+            'arrangement_additional_time': AdditionalTimeTypesEnum("PRC_33"),
+            'arrangement_additional_time_text': "time",
+            'arrangement_appropriate_copy': AppropriateCopyTypesEnum("RECTO"),
+            'arrangement_appropriate_copy_text': "copy",
             'arrangement_specific_locale': True,
             'arrangement_exam_comment': "exam",
             'arrangement_course_comment': "course",
@@ -84,13 +88,9 @@ class StudentSpecificProfileTest(TestCase):
     def test_get_arrangements(self):
         arrangements = get_arrangements(spec_profile=self.student_specific_profile)
         expected_result = [
-            _('Extra time (33% generally)'),
-            _('Large print'),
+            "time",
+            "{} : {}".format(_('Copy'), "copy"),
             _('Specific room of examination'),
-            _('Other educational facilities'),
-            "{} : {}".format(_('For exam'), 'exam'),
-            "{} : {}".format(_('For course'), 'course'),
-            "{} : {}".format(_('For internship'), 'internship'),
-            "{} : {}".format(_('For dissertation'), 'dissertation'),
+            _('Other educational facilities : see Excel'),
         ]
         self.assertEqual(arrangements, expected_result)
