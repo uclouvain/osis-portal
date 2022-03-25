@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 11:59+0100\n"
+"POT-Creation-Date: 2022-03-25 14:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,9 +164,6 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
-# python-format
-#, fuzzy, python-format
-#| msgid "Extra time (33% generally)"
 msgid "Extra time (33% generally)"
 msgstr "Tiers-Temps"
 
@@ -181,18 +178,6 @@ msgstr "Administration des facultés"
 
 msgid "First registration"
 msgstr "Première inscription"
-
-msgid "For course"
-msgstr "Pour le cours"
-
-msgid "For dissertation"
-msgstr "Pour le mémoire"
-
-msgid "For exam"
-msgstr "Pour l'examen"
-
-msgid "For internship"
-msgstr "Pour le stage"
 
 msgid "Function"
 msgstr "Fonction"
