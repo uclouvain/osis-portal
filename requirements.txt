@@ -32,7 +32,7 @@ diff-cover==3.0.1
 tblib==1.7.0
 django-waffle==0.14.0
 git+https://github.com/uclouvain/osis-attribution-sdk.git@wip-build-1.20
-git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@build-1.0.0
+git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@wip-build-1.1
 git+https://github.com/uclouvain/osis-learning-unit-sdk.git@build-1.9.0
 git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@build-1.2.0
 git+https://github.com/uclouvain/osis-education-group-sdk.git@build-1.8.0
