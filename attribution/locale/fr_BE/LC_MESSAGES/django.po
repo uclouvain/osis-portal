@@ -40,7 +40,7 @@ msgid "Add a new application"
 msgstr "Ajouter une nouvelle candidature"
 
 msgid "Additional time"
-msgstr "Temps supplémentaire"
+msgstr "Temps suppl."
 
 msgctxt "plural"
 msgid "All"
@@ -84,6 +84,12 @@ msgstr "Attributions"
 msgid "Cancel"
 msgstr "Annuler"
 
+msgid "Carry-over from January to September"
+msgstr "Report de note de janvier vers septembre"
+
+msgid "Carry-over from previous session"
+msgstr "Report de note de la session précédente"
+
 msgid "Charge"
 msgstr "Charge"
 
@@ -94,6 +100,9 @@ msgstr ""
 
 msgid "Code"
 msgstr "Sigle"
+
+msgid "Copy"
+msgstr "Copie"
 
 msgid "Copy PEPS"
 msgstr "Copie PEPS"
@@ -164,6 +173,9 @@ msgstr "Faculté"
 msgid "Faculty administration"
 msgstr "Administration des facultés"
 
+msgid "First registration"
+msgstr "Première inscription"
+
 msgid "Function"
 msgstr "Fonction"
 
@@ -176,14 +188,8 @@ msgstr "Accompagnateur.trice"
 msgid "High Level Promising athlete"
 msgstr "Sportifs de haut niveau"
 
-msgid "I - First registration"
-msgstr "I - Première inscription"
-
 msgid "I - Première inscription"
 msgstr "I - Première inscription"
-
-msgid "J - Carry-over from January to September"
-msgstr "J - Report de note de janvier vers septembre"
 
 msgid "J - Report de note de janvier vers septembre"
 msgstr "J - Report de note de janvier vers septembre"
@@ -291,10 +297,10 @@ msgstr "Autres aménagements pour les cours et TP"
 msgid "Other educational facilities for exam"
 msgstr "Autres aménagements pour les examens"
 
-msgid "P - Examen partiel"
-msgstr "P - Examen partiel"
+msgid "Other educational facilities : see Excel"
+msgstr "Autres aménagements : Voir Excel"
 
-msgid "P - Partial examination"
+msgid "P - Examen partiel"
 msgstr "P - Examen partiel"
 
 msgid "PDF File"
@@ -305,6 +311,9 @@ msgstr "PEPS"
 
 msgid "PMR"
 msgstr "PMR"
+
+msgid "Partial examination"
+msgstr "Examen partiel"
 
 msgid "Pedagogy proposal"
 msgstr "Votre proposition d'organisation pédagogique"
@@ -336,9 +345,6 @@ msgstr "Projet pour étudiant.e à profil spécifique"
 msgid "Promising athlete"
 msgstr "Espoirs sportifs"
 
-msgid "R - Carry-over from previous session"
-msgstr "R - Report de note de la session précédente"
-
 msgid "R - Report de note de la session précédente"
 msgstr "R - Report de note de la session précédente"
 
@@ -354,6 +360,9 @@ msgstr "Reconduire"
 msgid "Reproduce identically in the following year"
 msgstr "Reproduire à l'identique l'année suivante"
 
+msgid "Satisfactory assessment (mark does not count)"
+msgstr "Evaluation satisfaisante (la note ne compte pas)"
+
 msgid "Schedule"
 msgstr "Horaire"
 
@@ -365,6 +374,9 @@ msgstr "Note"
 
 msgid "Scores responsible"
 msgstr "Responsable de notes"
+
+msgid "Second registration"
+msgstr "Deuxième inscription"
 
 msgid "Select/deselect all attributions to renew"
 msgstr "Sélectionne/déselectionne toutes les attributions pour reconduire"
@@ -384,6 +396,9 @@ msgid ""
 msgstr ""
 "Certain.e.s des étudiant.e.s inscrit.e.s à ce cours ont un statut PEPS "
 "(Projet pour étudiant.e à profil spécifique)"
+
+msgid "Specific profile"
+msgstr "Profil spécifique"
 
 msgid "Specific room of examination"
 msgstr "Local spécifique"
@@ -412,9 +427,6 @@ msgstr "Soumettre"
 msgid "T - Note résultant d’un test"
 msgstr "T - Note résultant d’un test"
 
-msgid "T - Test grade"
-msgstr "T - Note résultant d’un test"
-
 msgid "Teachers"
 msgstr "Enseignants"
 
@@ -423,6 +435,9 @@ msgstr "Charge d'enseignement"
 
 msgid "Teaching charges administration"
 msgstr "Administration des charges d'enseignements"
+
+msgid "Test grade"
+msgstr "Note résultant d’un test"
 
 #, python-format
 msgid ""
@@ -536,10 +551,10 @@ msgstr "Type PEPS"
 msgid "Unexpected error"
 msgstr "Erreur inattendue"
 
-msgid "V - Evaluation satisfaisante (la note ne compte pas)"
-msgstr "V - Evaluation satisfaisante (la note ne compte pas)"
+msgid "Unsatisfactory assessment (mark does not count)"
+msgstr "Evaluation non satisfaisante (la note ne compte pas)"
 
-msgid "V - Satisfactory assessment (mark does not count)"
+msgid "V - Evaluation satisfaisante (la note ne compte pas)"
 msgstr "V - Evaluation satisfaisante (la note ne compte pas)"
 
 msgid "Vacant"
@@ -572,13 +587,7 @@ msgstr "Vol.2 vacant"
 msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
 
-msgid "W - Unsatisfactory assessment (mark does not count)"
-msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
-
 msgid "Y - Deuxième inscription"
-msgstr "Y - Deuxième inscription"
-
-msgid "Y - Second registration"
 msgstr "Y - Deuxième inscription"
 
 msgid "Yes"
