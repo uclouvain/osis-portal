@@ -10,7 +10,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -344,7 +344,7 @@
             {% endif %}
         </div>
     </div>
-
+{% include 'blocks/modal/no_enrollment_confirm.html' %}
 {% endblock %}
 {% block script %}
     <script type="text/javascript">
@@ -451,5 +451,20 @@
         {% endif %}
 
 
+        const inputs = [...document.querySelectorAll('[id^=chckbox_exam_enrol]')];
+        const isNotChecked = (input) =>  !input.checked;
+        const save_button = document.querySelector('[id=bt_validate_exam_enrol_form]')
+        save_button.onclick = function (e){
+            e.preventDefault();
+            const no_input_checked = inputs.every(isNotChecked);
+            if (no_input_checked === true) {
+                const modale = $('#modalConfirmNoExamEnrollment');
+                modale.modal('show');
+            }
+            else {
+                const form = document.querySelector('[id=exam_enrollment_form]');
+                form.submit();
+            }
+        }
     </script>
 {% endblock %}

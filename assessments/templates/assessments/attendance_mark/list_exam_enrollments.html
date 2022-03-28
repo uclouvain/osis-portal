@@ -1,0 +1,121 @@
+{% extends "dashboard_layout.html" %}
+{% load staticfiles i18n %}
+{% load academic_year_display dictionnary %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block title %}{% trans 'My attendance marks' %}{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'attendance-mark-select-offer' %}">{% trans 'My attendance marks' %}</a></li>
+    <li class="active">{% trans "Request an attendance mark (0/20)" %}</li>
+{% endblock %}
+
+{% block content %}
+    {% include "template_messages.html" %}
+
+    <div class="page-header">
+        <h2>{% trans "Request an attendance mark (0/20)" %}</h2>
+    </div>
+
+    <div class="alert alert-warning" role="alert">
+        <p>
+            <i class="fa fa-exclamation-circle"></i>
+            {% trans "Requesting an attendance mark means obtaining a mark of 0/20 for your exam." %}
+            <br>
+            {% trans "Only requests made before the start of the examination can be taken into account." %}
+        </p>
+        <p>
+            {% blocktrans %}Only the learning units for which you are enrolled for the exam are listed below. You can see the state of all your exam enrollments in your <a href="{{ scoresheet_url }}">scoresheet.</a>{% endblocktrans %}
+        </p>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>{% trans 'Last Name' %}, {% trans 'First Name' %}</label>
+                    <br>
+                    {{ student.person.last_name }}, {{ student.person.first_name }}
+                </div>
+                <div class="col-md-2">
+                    <label>{% trans 'Academic Year' %}</label>
+                    <br>
+                    {{ year|display_as_academic_year }}
+                </div>
+                <div class="col-md-2">
+                    <label>{% trans 'Session' %}</label>
+                    <br>
+                    {{ session }}
+                </div>
+                <div class="col-md-5">
+                    <label>{% trans 'Program' %}</label>
+                    <br>
+                    {{ program_title }}
+                </div>
+            </div>
+        </div>
+
+        {%  if exam_enrollments %}
+            <table class="table table-hover">
+                <tr>
+                    <th>{% trans 'Code' %}</th>
+                    <th>{% trans 'Title' %}</th>
+                    <th></th>
+                </tr>
+                {% for row in exam_enrollments %}
+                    <tr>
+                        <td>
+                            {{ row.learning_unit_code }}
+                        </td>
+                        <td>
+                            {{ row.learning_unit_title }}
+                        </td>
+                        <td>
+                            {% with requested_attendance_mark=requested_attendance_marks_by_code|get_item:row.learning_unit_code %}
+                                {% if requested_attendance_mark %}
+                                    <button class="btn btn-primary" disabled>
+                                        {% blocktrans with date_requested=requested_attendance_mark.request_datetime|date:'d-m-y' time_requested=requested_attendance_mark.request_datetime|date:'H:i'%}Score of 0/20 requested on {{ date_requested }} at {{ time_requested }}{% endblocktrans %}
+                                    </button>
+                                {% else %}
+                                    <btn class="btn btn-primary trigger_modal" data-url="{% url 'request-attendance-mark' program_acronym row.learning_unit_code %}">
+                                        {% trans 'Request a mark of 0/20 for this exam' %}
+                                    </btn>
+                                {% endif %}
+                            {% endwith %}
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <i class="fa fa-exclamation-circle"></i> {% blocktrans %}You are not enrolled for the session in {{ session }}{% endblocktrans %}
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+

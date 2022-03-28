@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-29 11:29+0100\n"
+"POT-Creation-Date: 2022-02-16 14:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,6 +110,9 @@ msgstr "Numéro de GSM"
 msgid "My applications"
 msgstr "Mes candidatures"
 
+msgid "My attendance marks"
+msgstr "Mes notes de présence"
+
 msgid "My attestations"
 msgstr "Mes attestations"
 
@@ -138,6 +141,9 @@ msgstr "Service des inscriptions"
 
 msgid "Registration id"
 msgstr "Noma"
+
+msgid "Request an attendance mark (0/20)"
+msgstr "Demander une note de présence (0/20)"
 
 msgid "Scores encoding"
 msgstr "Encodage des notes"

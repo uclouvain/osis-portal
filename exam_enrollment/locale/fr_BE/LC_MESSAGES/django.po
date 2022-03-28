@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-21 09:51+0200\n"
+"POT-Creation-Date: 2022-03-01 16:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,6 +87,9 @@ msgstr "Formulaire d'inscription aux examens non trouvé"
 msgid "Not concerned"
 msgstr "Non concerné"
 
+msgid "Not registered for any exams"
+msgstr "Inscrit·e à aucun examen"
+
 msgid "Please complete <b>IMPERATIVELY</b> the questionnaire."
 msgstr "Merci de compléter <b>OBLIGATOIREMENT</b> le questionnaire."
 
@@ -110,8 +113,17 @@ msgstr ""
 msgid "Which action do you want to perform ?"
 msgstr "Quelle action souhaitez-vous effectuer ?"
 
+msgid "Y - Second registration"
+msgstr "Y - Deuxième inscription"
+
 msgid "Yes"
 msgstr "Oui"
+
+msgid "Yes, I confirm"
+msgstr "Oui, je confirme"
+
+msgid "You are not registered for any exams. Do you want to continue?"
+msgstr "Vous n'êtes inscrit·e à aucun examen. Voulez-vous continuer?"
 
 msgid "You are outside the exams enrollment period"
 msgstr "Vous êtes en dehors de la période d'inscription aux examens"
@@ -124,7 +136,7 @@ msgstr "Sigle"
 
 msgid "choose_offer_for_exams_enrollment"
 msgstr ""
-"Sélectionnez le programme dans lequel vous désirez vous inscrire aux examens."
+"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux examens."
 
 msgid "course"
 msgstr "Cours"
@@ -215,9 +227,6 @@ msgstr "W - Évaluation non satisfaisante (la note ne compte pas)"
 msgid "legend_exam_enrol_x"
 msgstr "X - Droit et sanction"
 
-msgid "Y - Second registration"
-msgstr "Y - Deuxième inscription"
-
 msgid "message_exam_enrolment_state"
 msgstr ""
 "Vous pouvez consulter l'ensemble des états d'inscriptions aux examens dans "
@@ -227,24 +236,24 @@ msgid "message_exam_enrolment_state_link_label"
 msgstr "'Mon état d'inscription aux cours et mes notes d'examen'"
 
 msgid "no_learning_unit_enrollment_found"
-msgstr "Vous n'êtes inscrit à aucun cours dans le cadre du programme {}."
+msgstr "Vous n'êtes inscrit à aucun cours dans le cadre de la formation {}."
 
 msgid "no_offer_enrollment_found"
 msgstr ""
-"Vous n'êtes inscrit à aucun programme d'étude pour l'année académique en "
+"Vous n'êtes inscrit à aucune formation pour l'année académique en "
 "cours ({})."
 
 msgid "offer_choice"
 msgstr "Choix de l'offre"
 
 msgid "program"
-msgstr "Programme"
+msgstr "Formation"
 
 msgid "program_choice"
-msgstr "Choix du programme"
+msgstr "Choix de la formation"
 
 msgid "registration_id"
-msgstr "Matricule"
+msgstr "Noma"
 
 msgid "sept"
 msgstr "Sept"

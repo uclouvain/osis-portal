@@ -157,7 +157,7 @@ class ViewPerformanceHomeAdminTestCase(TestCase):
 
     def test_user_has_not_permission(self):
         self.client.logout()
-        patcher = mock.patch('base.views.api.get_managed_programs_as_dict')
+        patcher = mock.patch('base.views.api.get_managed_programs')
         mock_api_call = patcher.start()
         mock_api_call.return_value = {}
         a_person = PersonFactory()
