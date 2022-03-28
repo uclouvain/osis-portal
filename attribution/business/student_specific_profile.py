@@ -39,21 +39,30 @@ def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
     return student_specific_profile.type_text or "-"
 
 
-def get_arrangements(student_specific_profile: StudentSpecificProfile) -> List[str]:
+def get_arrangements(spec_profile: StudentSpecificProfile) -> List[str]:
     arrangements = []
-    if student_specific_profile.arrangement_additional_time:
-        arrangements.append(_('Extra time'))
-    if student_specific_profile.arrangement_appropriate_copy:
-        arrangements.append(_('Large print'))
-    if student_specific_profile.arrangement_specific_locale:
+    if spec_profile.arrangement_additional_time:
+        arrangements.append(spec_profile.arrangement_additional_time_text)
+    if spec_profile.arrangement_appropriate_copy:
+        arrangements.append('{} : {}'.format(_('Copy'), spec_profile.arrangement_appropriate_copy_text))
+    if spec_profile.arrangement_specific_locale:
         arrangements.append(_('Specific room of examination'))
-    if student_specific_profile.arrangement_other:
-        arrangements.append(_('Other educational facilities'))
-        if student_specific_profile.arrangement_comment:
-            arrangements.append("{} : {}".format(_('Details other educational facilities'),
-                                                 student_specific_profile.arrangement_comment))
+    if _has_other_facility_comment(spec_profile):
+        arrangements.append(_('Other educational facilities : see Excel'))
+
     return arrangements
 
 
 def get_guide(student_specific_profile) -> str:
     return str(student_specific_profile.guide) if student_specific_profile.guide else None
+
+
+def _has_other_facility_comment(student_specific_profile):
+    return any(
+        [
+            student_specific_profile.arrangement_exam_comment,
+            student_specific_profile.arrangement_course_comment,
+            student_specific_profile.arrangement_internship_comment,
+            student_specific_profile.arrangement_dissertation_comment,
+        ]
+    )

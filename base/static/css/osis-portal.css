@@ -200,3 +200,25 @@ table thead .glyphicon-sort-by-attributes-alt{
     color: #337ab7 !important;
     opacity: 1 !important;
 }
+
+.legend-title{
+    text-decoration: underline;
+    font-weight: bold;
+    padding-top: 20px;
+}
+
+.legend-item{
+    display:flex;
+}
+
+.legend-peps .legend-label{
+    min-width: 140px;
+}
+
+.legend-exam .legend-label{
+    min-width: 40px;
+}
+
+.legend-description{
+    display: inline;
+}
