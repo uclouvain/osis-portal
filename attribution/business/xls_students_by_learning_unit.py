@@ -115,8 +115,10 @@ def _make_xls_list(student_list):
                     if student_specific_profile.arrangement_appropriate_copy else '-'
                 ),
                 str(_('Yes')) if student_specific_profile.arrangement_specific_locale else '-',
-                ', '.join(student_specific_profile.arrangement_exam) if student_specific_profile.arrangement_exam else '-',
-                ', '.join(student_specific_profile.arrangement_course) if student_specific_profile.arrangement_course else '-',
+                ', '.join(student_specific_profile.arrangement_exam)
+                if student_specific_profile.arrangement_exam else '-',
+                ', '.join(student_specific_profile.arrangement_course)
+                if student_specific_profile.arrangement_course else '-',
                 str(student_specific_profile.guide) if student_specific_profile.guide else '-',
             ])
         else:
