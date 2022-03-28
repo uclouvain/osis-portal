@@ -42,7 +42,7 @@ def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
 def get_arrangements(student_specific_profile: StudentSpecificProfile) -> List[str]:
     arrangements = []
     if student_specific_profile.arrangement_additional_time:
-        arrangements.append(_('Extra time (33% generally)'))
+        arrangements.append(_('Extra time'))
     if student_specific_profile.arrangement_appropriate_copy:
         arrangements.append(_('Large print'))
     if student_specific_profile.arrangement_specific_locale:

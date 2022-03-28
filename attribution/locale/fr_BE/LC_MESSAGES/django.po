@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-06 10:45+0100\n"
+"POT-Creation-Date: 2022-03-28 13:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +26,21 @@ msgstr ""
 "Les 'Listes des étudiants inscrits à mes examens' sont immédiatement "
 "utilisables pour l'encodage des notes"
 
+msgid ""
+"A4 single-sided, 1.5 line spacing and Arial 14 font, can be replaced by A3 "
+"single-sided"
+msgstr ""
+"A4 recto, interligne 1.5 et police Arial 14, peut être remplacée par une A3 "
+"recto"
+
 msgid "Acronym"
 msgstr "Sigle"
 
 msgid "Add a new application"
 msgstr "Ajouter une nouvelle candidature"
+
+msgid "Additional time"
+msgstr "Temps supplémentaire"
 
 msgctxt "plural"
 msgid "All"
@@ -85,6 +95,9 @@ msgstr ""
 msgid "Code"
 msgstr "Sigle"
 
+msgid "Copy PEPS"
+msgstr "Copie PEPS"
+
 msgid "Credits"
 msgstr "Crédits"
 
@@ -118,9 +131,6 @@ msgstr "ES"
 msgid "ESHN"
 msgstr "ESHN"
 
-msgid "Educational tutor"
-msgstr "Accompagnateur"
-
 msgid "Email"
 msgstr "Email"
 
@@ -142,9 +152,8 @@ msgstr "Exporter liste (Excel)"
 msgid "Export the students list in Excel format"
 msgstr "Exporter la liste des étudiants au format Excel"
 
-# python-format
-msgid "Extra time (33% generally)"
-msgstr "Tiers-Temps"
+msgid "Extra time"
+msgstr "Temps supplémentaire"
 
 msgid "Faculties administration"
 msgstr "Administration des facultés"
@@ -162,7 +171,7 @@ msgid "Global id"
 msgstr "Matricule fgs"
 
 msgid "Guide"
-msgstr "Accompagnateur"
+msgstr "Accompagnateur.trice"
 
 msgid "High Level Promising athlete"
 msgstr "Sportifs de haut niveau"
@@ -274,7 +283,13 @@ msgid "One of your courses is not visible in the list?"
 msgstr "Un de vos cours n’est pas visible dans la liste ?"
 
 msgid "Other educational facilities"
-msgstr "Autre aménagement"
+msgstr "Autres aménagements"
+
+msgid "Other educational facilities for courses and practical exercices"
+msgstr "Autres aménagements pour les cours et TP"
+
+msgid "Other educational facilities for exam"
+msgstr "Autres aménagements pour les examens"
 
 msgid "P - Examen partiel"
 msgstr "P - Examen partiel"
@@ -571,6 +586,9 @@ msgstr "Oui"
 
 msgid "You aren't teaching for any learning unit"
 msgstr "Vous n'êtes assigné à aucune unité d'enseignement"
+
+msgid "concerns writings and/or oral preparations"
+msgstr "concerne les écrits et/ou préparations des oraux"
 
 msgid "date_format"
 msgstr "%d/%m/%Y"

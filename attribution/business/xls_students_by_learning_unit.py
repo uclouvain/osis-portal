@@ -46,6 +46,7 @@ BORDER_LEFT = Border(
 )
 FIRST_COL_PEPS = 'M'
 
+
 def get_xls(student_list, acronym, academic_year):
     xls = _make_xls_list(student_list)
     filename = '{}_{}_{}.xlsx'.format(
@@ -76,12 +77,12 @@ def _make_xls_list(student_list):
         str(_('September')),
         str(_('Last score')),
         str(_('Type of specific profile')),
-        str(_('Extra time (33% generally)')),
+        str(_('Extra time')),
         str(_('Large print')),
         str(_('Specific room of examination')),
-        str(_('Other educational facilities')),
-        str(_('Details other educational facilities')),
-        str(_('Educational tutor')),
+        str(_('Other educational facilities for exam')),
+        str(_('Other educational facilities for courses and practical exercices')),
+        str(_('Guide')),
     ]
     worksheet1.append(col for col in columns)
     for student in student_list:
@@ -105,12 +106,19 @@ def _make_xls_list(student_list):
         if student_specific_profile:
             line_content.extend([
                 get_type_peps(student_specific_profile),
-                str(_('Yes')) if student_specific_profile.arrangement_additional_time else '-',
-                str(_('Yes')) if student_specific_profile.arrangement_appropriate_copy else '-',
+                str(
+                    student_specific_profile.arrangement_additional_time_text
+                    if student_specific_profile.arrangement_additional_time else '-'
+                ),
+                str(
+                    student_specific_profile.arrangement_appropriate_copy_text
+                    if student_specific_profile.arrangement_appropriate_copy else '-'
+                ),
                 str(_('Yes')) if student_specific_profile.arrangement_specific_locale else '-',
-                str(_('Yes')) if student_specific_profile.arrangement_other else '-',
-                str(student_specific_profile.arrangement_comment)
-                if student_specific_profile.arrangement_comment else '-',
+                ', '.join(student_specific_profile.arrangement_exam)
+                if student_specific_profile.arrangement_exam else '-',
+                ', '.join(student_specific_profile.arrangement_course)
+                if student_specific_profile.arrangement_course else '-',
                 str(student_specific_profile.guide) if student_specific_profile.guide else '-',
             ])
         else:
@@ -135,8 +143,14 @@ def _make_xls_list(student_list):
          str(_("High Level Promising athlete"))])
     workbook.worksheets[1].append(
         [str(_("R - Report de note de la session précédente")), "", str(_("ES")), str(_("Promising athlete"))])
-    workbook.worksheets[1].append([str(_("T - Note résultant d’un test"))])
-    workbook.worksheets[1].append([str(_("V - Evaluation satisfaisante (la note ne compte pas)"))])
+    workbook.worksheets[1].append(
+        [str(_("T - Note résultant d’un test")), "", str(_("Copy PEPS")),
+         str(_("A4 single-sided, 1.5 line spacing and Arial 14 font, can be replaced by A3 single-sided"))]
+    )
+    workbook.worksheets[1].append(
+        [str(_("V - Evaluation satisfaisante (la note ne compte pas)")), "", str(_("Additional time")),
+         str(_("concerns writings and/or oral preparations"))]
+    )
     workbook.worksheets[1].append([str(_("W - Evaluation non satisfaisante (la note ne compte pas)"))])
     workbook.worksheets[1].column_dimensions['A'].width = 50
     workbook.worksheets[1].column_dimensions['C'].width = 6
