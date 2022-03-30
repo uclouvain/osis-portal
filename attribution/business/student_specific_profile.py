@@ -41,9 +41,9 @@ def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
 
 def get_arrangements(spec_profile: StudentSpecificProfile) -> List[str]:
     arrangements = []
-    if spec_profile.arrangement_additional_time:
+    if spec_profile.arrangement_additional_time.value:
         arrangements.append(spec_profile.arrangement_additional_time_text)
-    if spec_profile.arrangement_appropriate_copy:
+    if spec_profile.arrangement_appropriate_copy.value:
         arrangements.append('{} : {}'.format(_('Copy'), spec_profile.arrangement_appropriate_copy_text))
     if spec_profile.arrangement_specific_locale:
         arrangements.append(_('Specific room of examination'))
