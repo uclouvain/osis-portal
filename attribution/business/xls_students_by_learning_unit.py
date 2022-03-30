@@ -108,11 +108,11 @@ def _make_xls_list(student_list):
                 get_type_peps(student_specific_profile),
                 str(
                     student_specific_profile.arrangement_additional_time_text
-                    if student_specific_profile.arrangement_additional_time else '-'
+                    if student_specific_profile.arrangement_additional_time.value else '-'
                 ),
                 str(
                     student_specific_profile.arrangement_appropriate_copy_text
-                    if student_specific_profile.arrangement_appropriate_copy else '-'
+                    if student_specific_profile.arrangement_appropriate_copy.value else '-'
                 ),
                 str(_('Yes')) if student_specific_profile.arrangement_specific_locale else '-',
                 ', '.join(student_specific_profile.arrangement_exam)
@@ -194,12 +194,12 @@ def _columns_resizing(ws):
     col_large_print.width = 15
     col_specific_room_of_examination = ws.column_dimensions['P']
     col_specific_room_of_examination.width = 25
-    col_other_educational_facilities = ws.column_dimensions['Q']
-    col_other_educational_facilities.width = 25
-    col_educational_tutor = ws.column_dimensions['R']
-    col_educational_tutor.width = 30
     col_educational_tutor = ws.column_dimensions['S']
     col_educational_tutor.width = 30
+    col_arrangement_exam = ws.column_dimensions['Q']
+    col_arrangement_exam.width = 30
+    col_arrangement_course = ws.column_dimensions['R']
+    col_arrangement_course.width = 30
 
 
 def _columns_registration_id_to_text(ws):
