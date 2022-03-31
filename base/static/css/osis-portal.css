@@ -222,3 +222,12 @@ table thead .glyphicon-sort-by-attributes-alt{
 .legend-description{
     display: inline;
 }
+
+.peps-tooltip-content{
+    text-align:left;
+    padding: 10px;
+}
+
+.peps-tooltip-content ul{
+    padding-left: 20px;
+}

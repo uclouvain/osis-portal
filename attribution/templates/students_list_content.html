@@ -201,7 +201,7 @@
                     <td>{{ student.name }}</td>
                     <td>{{ student.registration_id | default_if_none:''}}</td>
                     <td>{{ student.student_specific_profile|type_peps | default_if_none:'-'}}
-                        {% with student_specific_profile_detail=student.student_specific_profile|arrangements_and_guide %}
+                        {% with student_specific_profile_detail=student.student_specific_profile|arrangements_and_guide:learning_unit_type %}
                             {% if student_specific_profile_detail %}
                                 <span id="arrangements" data-toggle="tooltip" data-placement="right"
                                       title="{{ student_specific_profile_detail }}"
