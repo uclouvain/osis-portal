@@ -41,10 +41,6 @@ urlpatterns = [
         score_encoding.score_sheet_xls,
         name='scores_sheet_xls',
         ),
-    url(r'^scores_encoding/pdf/(?P<learning_unit_code>[0-9A-Za-z-_]+)/$',
-        score_encoding.score_sheet_pdf,
-        name='scores_sheet_pdf',
-        ),
     path('attendance_marks/', include([
         path('select_offer/', SelectOffer.as_view(), name=SelectOffer.name),
         path(
