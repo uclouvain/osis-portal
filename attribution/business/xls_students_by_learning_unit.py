@@ -169,26 +169,29 @@ def _make_xls_list(student_list, learning_unit_type):
 def _get_arrangement_comments(learning_unit_type, student_specific_profile):
 
     if is_type_course_or_others(learning_unit_type):
+        exam_comment = student_specific_profile.arrangement_exam_comment
         specific_profile_exam_comment = ';'.join(
-            [student_specific_profile.arrangement_exam_comment] + student_specific_profile.arrangement_exam
+            [exam_comment] if exam_comment else [] + student_specific_profile.arrangement_exam
         )
+
+        course_comment = student_specific_profile.arrangement_course_comment
         specific_profile_course_comment = ';'.join(
-            [student_specific_profile.arrangement_course_comment] + student_specific_profile.arrangement_course
+            [course_comment] if course_comment else [] + student_specific_profile.arrangement_course
         )
 
     elif learning_unit_type == LearningUnitTypeEnum.INTERNSHIP.value:
-        specific_profile_exam_comment = '-'
-        specific_profile_course_comment = student_specific_profile.arrangement_internship_comment
+        specific_profile_course_comment = '-'
+        specific_profile_exam_comment = student_specific_profile.arrangement_internship_comment or '-'
 
     elif learning_unit_type == LearningUnitTypeEnum.DISSERTATION.value:
-        specific_profile_exam_comment = student_specific_profile.arrangement_dissertation_comment
+        specific_profile_exam_comment = student_specific_profile.arrangement_dissertation_comment or '-'
         specific_profile_course_comment = '-'
 
     else:
         specific_profile_exam_comment = '-'
         specific_profile_course_comment = '-'
 
-    return specific_profile_course_comment, specific_profile_exam_comment
+    return specific_profile_exam_comment, specific_profile_course_comment
 
 
 def _columns_resizing(ws):

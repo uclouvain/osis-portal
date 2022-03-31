@@ -125,9 +125,13 @@ class StudentsListTest(TestCase):
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
     @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
     @mock.patch("attribution.views.students_list.StudentsListView.learning_unit_title", new_callable=mock.PropertyMock)
-    def test_with_attribution_students(self, mock_lu, mock_students_list_endpoint, mock_get_attributions_list):
+    @mock.patch("attribution.views.students_list.StudentsListView.learning_unit_type", new_callable=mock.PropertyMock)
+    def test_with_attribution_students(
+            self, mock_lu_type, mock_lu_title, mock_students_list_endpoint, mock_get_attributions_list
+    ):
         mock_students_list_endpoint.return_value = self.enrollments
-        mock_lu.return_value = "TITLE"
+        mock_lu_type.return_value = "COURSE"
+        mock_lu_title.return_value = "TITLE"
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(
             year=today.year, start_date=today - datetime.timedelta(days=5),

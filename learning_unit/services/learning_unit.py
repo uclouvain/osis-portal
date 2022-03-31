@@ -60,7 +60,7 @@ class LearningUnitService:
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
-                attrs = {'result': None, 'error': e}
+                attrs = {'results': [], 'error': e}
                 learning_units = SimpleNamespace(**attrs, attribute_map=attrs)
         return learning_units
 
