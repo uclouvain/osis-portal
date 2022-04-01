@@ -87,15 +87,24 @@ class TestSelectInternship(TestCase):
         add_permission(self.user, "can_access_internship")
 
         self.cohort = CohortFactory()
-        self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort,
-            self.student.person)
+        self.student_information = test_internship_student_information.create_student_information(
+            self.user,
+            self.cohort,
+            self.student.person
+        )
 
         self.speciality_1 = test_internship_speciality.create_speciality(name="urgence", cohort=self.cohort)
         self.speciality_2 = test_internship_speciality.create_speciality(name="chirurgie", cohort=self.cohort)
-        self.internship_1 = InternshipFactory(name=self.speciality_1.name, cohort=self.cohort,
-            speciality=self.speciality_1)
-        self.internship_2 = InternshipFactory(name=self.speciality_2.name, cohort=self.cohort,
-            speciality=self.speciality_2)
+        self.internship_1 = InternshipFactory(
+            name=self.speciality_1.name,
+            cohort=self.cohort,
+            speciality=self.speciality_1
+        )
+        self.internship_2 = InternshipFactory(
+            name=self.speciality_2.name,
+            cohort=self.cohort,
+            speciality=self.speciality_2
+        )
 
         self.organization_1 = test_organization.create_organization(reference="01", cohort=self.cohort)
         self.organization_2 = test_organization.create_organization(reference="02", cohort=self.cohort)
