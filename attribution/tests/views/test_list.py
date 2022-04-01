@@ -61,15 +61,15 @@ class StudentsListTest(TestCase):
         person.global_id = "001923265"
         person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         person.save()
-        cls.enrollments = SimpleNamespace(**{
+        cls.url = reverse('students_list')
+
+    def setUp(self):
+        self.enrollments = SimpleNamespace(**{
             'results': [Enrollment(**EnrollmentDictFactory()) for _ in range(2)],
             'count': 1,
             'enrolled_students_count': 1,
             'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})
         })
-        cls.url = reverse('students_list')
-
-    def setUp(self):
         self.client.force_login(self.tutor.person.user)
         self.patcher = patch(
             "attribution.views.list.AssessmentsService.get_current_session"
