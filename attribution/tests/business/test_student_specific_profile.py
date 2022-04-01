@@ -49,7 +49,9 @@ class StudentSpecificProfileTest(TestCase):
             'arrangement_appropriate_copy': AppropriateCopyTypesEnum("RECTO"),
             'arrangement_appropriate_copy_text': "copy",
             'arrangement_specific_locale': True,
+            'arrangement_exam': ['arrangement_exam_1', 'arrangement_exam_2'],
             'arrangement_exam_comment': "exam",
+            'arrangement_course': ['arrangement_course_1', 'arrangement_course_2'],
             'arrangement_course_comment': "course",
             'arrangement_internship_comment': "internship",
             'arrangement_dissertation_comment': "dissertation",
@@ -85,12 +87,40 @@ class StudentSpecificProfileTest(TestCase):
         guide = get_guide(student_specific_profile=self.student_specific_profile)
         self.assertEqual(guide, self.guide)
 
-    def test_get_arrangements(self):
-        arrangements = get_arrangements(spec_profile=self.student_specific_profile)
+    def test_get_arrangements_for_course(self):
+        arrangements = get_arrangements(spec_profile=self.student_specific_profile, learning_unit_type='COURSE')
         expected_result = [
             "time",
             "{} : {}".format(_('Copy'), "copy"),
             _('Specific room of examination'),
+            _('Other educational facilities : see Excel'),
+        ]
+        self.assertEqual(arrangements, expected_result)
+
+    def test_get_arrangements_for_course_without_other_comments(self):
+        self.student_specific_profile['arrangement_exam_comment'] = ''
+        self.student_specific_profile['arrangement_exam'] = []
+        self.student_specific_profile['arrangement_course_comment'] = ''
+        self.student_specific_profile['arrangement_course'] = []
+
+        arrangements = get_arrangements(spec_profile=self.student_specific_profile, learning_unit_type='COURSE')
+        expected_result = [
+            "time",
+            "{} : {}".format(_('Copy'), "copy"),
+            _('Specific room of examination'),
+        ]
+        self.assertEqual(arrangements, expected_result)
+
+    def test_get_arrangements_for_internship(self):
+        arrangements = get_arrangements(spec_profile=self.student_specific_profile, learning_unit_type='INTERNSHIP')
+        expected_result = [
+            _('Other educational facilities : see Excel'),
+        ]
+        self.assertEqual(arrangements, expected_result)
+
+    def test_get_arrangements_for_dissertation(self):
+        arrangements = get_arrangements(spec_profile=self.student_specific_profile, learning_unit_type='DISSERTATION')
+        expected_result = [
             _('Other educational facilities : see Excel'),
         ]
         self.assertEqual(arrangements, expected_result)

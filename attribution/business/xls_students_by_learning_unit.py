@@ -33,7 +33,8 @@ from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import save_virtual_workbook
 
-from attribution.business.student_specific_profile import get_type_peps
+from attribution.business.student_specific_profile import get_type_peps, is_type_course_or_others
+from learning_unit.services.learning_unit import LearningUnitTypeEnum
 
 COLUMN_REGISTRATION_ID_NO = 5
 STATUS_COL_WIDTH = 10
@@ -47,8 +48,8 @@ BORDER_LEFT = Border(
 FIRST_COL_PEPS = 'M'
 
 
-def get_xls(student_list, acronym, academic_year):
-    xls = _make_xls_list(student_list)
+def get_xls(student_list, acronym, academic_year, learning_unit_type):
+    xls = _make_xls_list(student_list, learning_unit_type)
     filename = '{}_{}_{}.xlsx'.format(
         _('student_list'),
         acronym,
@@ -59,7 +60,7 @@ def get_xls(student_list, acronym, academic_year):
     return response
 
 
-def _make_xls_list(student_list):
+def _make_xls_list(student_list, learning_unit_type):
     workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = str(_("Students"))
@@ -104,21 +105,28 @@ def _make_xls_list(student_list):
         student_specific_profile = student.get('student_specific_profile')
 
         if student_specific_profile:
+
+            specific_profile_exam_comment, specific_profile_course_comment = _get_arrangement_comments(
+                learning_unit_type,
+                student_specific_profile
+            )
+
             line_content.extend([
                 get_type_peps(student_specific_profile),
                 str(
                     student_specific_profile.arrangement_additional_time_text
-                    if student_specific_profile.arrangement_additional_time.value else '-'
+                    if student_specific_profile.arrangement_additional_time.value
+                    and is_type_course_or_others(learning_unit_type) else '-'
                 ),
                 str(
                     student_specific_profile.arrangement_appropriate_copy_text
-                    if student_specific_profile.arrangement_appropriate_copy.value else '-'
+                    if student_specific_profile.arrangement_appropriate_copy.value
+                    and is_type_course_or_others(learning_unit_type) else '-'
                 ),
-                str(_('Yes')) if student_specific_profile.arrangement_specific_locale else '-',
-                ', '.join(student_specific_profile.arrangement_exam)
-                if student_specific_profile.arrangement_exam else '-',
-                ', '.join(student_specific_profile.arrangement_course)
-                if student_specific_profile.arrangement_course else '-',
+                str(_('Yes')) if student_specific_profile.arrangement_specific_locale
+                and is_type_course_or_others(learning_unit_type) else '-',
+                specific_profile_exam_comment,
+                specific_profile_course_comment,
                 str(student_specific_profile.guide) if student_specific_profile.guide else '-',
             ])
         else:
@@ -156,6 +164,34 @@ def _make_xls_list(student_list):
     workbook.worksheets[1].column_dimensions['C'].width = 6
     workbook.worksheets[1].column_dimensions['D'].width = 50
     return save_virtual_workbook(workbook)
+
+
+def _get_arrangement_comments(learning_unit_type, student_specific_profile):
+
+    if is_type_course_or_others(learning_unit_type):
+        exam_comment = student_specific_profile.arrangement_exam_comment
+        specific_profile_exam_comment = ';'.join(
+            [exam_comment] if exam_comment else [] + student_specific_profile.arrangement_exam
+        )
+
+        course_comment = student_specific_profile.arrangement_course_comment
+        specific_profile_course_comment = ';'.join(
+            [course_comment] if course_comment else [] + student_specific_profile.arrangement_course
+        )
+
+    elif learning_unit_type == LearningUnitTypeEnum.INTERNSHIP.value:
+        specific_profile_course_comment = '-'
+        specific_profile_exam_comment = student_specific_profile.arrangement_internship_comment or '-'
+
+    elif learning_unit_type == LearningUnitTypeEnum.DISSERTATION.value:
+        specific_profile_exam_comment = student_specific_profile.arrangement_dissertation_comment or '-'
+        specific_profile_course_comment = '-'
+
+    else:
+        specific_profile_exam_comment = '-'
+        specific_profile_course_comment = '-'
+
+    return specific_profile_exam_comment, specific_profile_course_comment
 
 
 def _columns_resizing(ws):
