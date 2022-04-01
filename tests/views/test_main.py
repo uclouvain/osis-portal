@@ -81,44 +81,54 @@ class TestMain(TestCase):
 
 
 class TestSelectInternship(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.student = StudentFactory()
-        cls.user = cls.student.person.user
-        add_permission(cls.user, "can_access_internship")
-
-        cls.cohort = CohortFactory()
-        cls.student_information = test_internship_student_information.create_student_information(cls.user, cls.cohort,
-                                                                                                 cls.student.person)
-
-        cls.speciality_1 = test_internship_speciality.create_speciality(name="urgence", cohort=cls.cohort)
-        cls.speciality_2 = test_internship_speciality.create_speciality(name="chirurgie", cohort=cls.cohort)
-        cls.internship_1 = InternshipFactory(name=cls.speciality_1.name, cohort=cls.cohort,
-                                             speciality=cls.speciality_1)
-        cls.internship_2 = InternshipFactory(name=cls.speciality_2.name, cohort=cls.cohort,
-                                             speciality=cls.speciality_2)
-
-        cls.organization_1 = test_organization.create_organization(reference="01", cohort=cls.cohort)
-        cls.organization_2 = test_organization.create_organization(reference="02", cohort=cls.cohort)
-        cls.organization_3 = test_organization.create_organization(reference="03", cohort=cls.cohort)
-        cls.organization_4 = test_organization.create_organization(reference="04", cohort=cls.cohort)
-        cls.organization_5 = test_organization.create_organization(reference="05", cohort=cls.cohort)
-
-        cls.offer_1 = test_internship_offer.create_specific_internship_offer(cls.organization_1, cls.speciality_1,
-                                                                             cohort=cls.cohort)
-        cls.offer_2 = test_internship_offer.create_specific_internship_offer(cls.organization_2, cls.speciality_1,
-                                                                             cohort=cls.cohort)
-        cls.offer_3 = test_internship_offer.create_specific_internship_offer(cls.organization_3, cls.speciality_1,
-                                                                             cohort=cls.cohort)
-        cls.offer_4 = test_internship_offer.create_specific_internship_offer(cls.organization_4, cls.speciality_1,
-                                                                             cohort=cls.cohort)
-
-        cls.offer_5 = test_internship_offer.create_specific_internship_offer(cls.organization_1, cls.speciality_2,
-                                                                             cohort=cls.cohort)
-        cls.offer_6 = test_internship_offer.create_specific_internship_offer(cls.organization_5, cls.speciality_2,
-                                                                             cohort=cls.cohort)
-
     def setUp(self):
+        self.student = StudentFactory()
+        self.user = self.student.person.user
+        add_permission(self.user, "can_access_internship")
+
+        self.cohort = CohortFactory()
+        self.student_information = test_internship_student_information.create_student_information(self.user, self.cohort,
+            self.student.person)
+
+        self.speciality_1 = test_internship_speciality.create_speciality(name="urgence", cohort=self.cohort)
+        self.speciality_2 = test_internship_speciality.create_speciality(name="chirurgie", cohort=self.cohort)
+        self.internship_1 = InternshipFactory(name=self.speciality_1.name, cohort=self.cohort,
+            speciality=self.speciality_1)
+        self.internship_2 = InternshipFactory(name=self.speciality_2.name, cohort=self.cohort,
+            speciality=self.speciality_2)
+
+        self.organization_1 = test_organization.create_organization(reference="01", cohort=self.cohort)
+        self.organization_2 = test_organization.create_organization(reference="02", cohort=self.cohort)
+        self.organization_3 = test_organization.create_organization(reference="03", cohort=self.cohort)
+        self.organization_4 = test_organization.create_organization(reference="04", cohort=self.cohort)
+        self.organization_5 = test_organization.create_organization(reference="05", cohort=self.cohort)
+
+        self.offer_1 = test_internship_offer.create_specific_internship_offer(
+            self.organization_1, self.speciality_1,
+            cohort=self.cohort
+        )
+        self.offer_2 = test_internship_offer.create_specific_internship_offer(
+            self.organization_2, self.speciality_1,
+            cohort=self.cohort
+        )
+        self.offer_3 = test_internship_offer.create_specific_internship_offer(
+            self.organization_3, self.speciality_1,
+            cohort=self.cohort
+        )
+        self.offer_4 = test_internship_offer.create_specific_internship_offer(
+            self.organization_4, self.speciality_1,
+            cohort=self.cohort
+        )
+
+        self.offer_5 = test_internship_offer.create_specific_internship_offer(
+            self.organization_1, self.speciality_2,
+            cohort=self.cohort
+        )
+        self.offer_6 = test_internship_offer.create_specific_internship_offer(
+            self.organization_5, self.speciality_2,
+            cohort=self.cohort
+        )
+
         self.client.force_login(self.user)
 
     def test_with_zero_choices(self):
