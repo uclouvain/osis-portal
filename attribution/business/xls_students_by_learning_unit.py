@@ -180,8 +180,8 @@ def _get_arrangement_comments(learning_unit_type, student_specific_profile):
         )
 
     elif learning_unit_type == LearningUnitTypeEnum.INTERNSHIP.value:
-        specific_profile_course_comment = '-'
-        specific_profile_exam_comment = student_specific_profile.arrangement_internship_comment or '-'
+        specific_profile_exam_comment = '-'
+        specific_profile_course_comment = student_specific_profile.arrangement_internship_comment or '-'
 
     elif learning_unit_type == LearningUnitTypeEnum.DISSERTATION.value:
         specific_profile_exam_comment = student_specific_profile.arrangement_dissertation_comment or '-'
