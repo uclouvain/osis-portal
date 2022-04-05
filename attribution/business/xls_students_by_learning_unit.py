@@ -171,13 +171,13 @@ def _get_arrangement_comments(learning_unit_type, student_specific_profile):
     if is_type_course_or_others(learning_unit_type):
         exam_comment = student_specific_profile.arrangement_exam_comment
         specific_profile_exam_comment = ';'.join(
-            [exam_comment] if exam_comment else [] + student_specific_profile.arrangement_exam
-        )
+            ([exam_comment] if exam_comment else []) + student_specific_profile.arrangement_exam
+        ) or '-'
 
         course_comment = student_specific_profile.arrangement_course_comment
         specific_profile_course_comment = ';'.join(
-            [course_comment] if course_comment else [] + student_specific_profile.arrangement_course
-        )
+            ([course_comment] if course_comment else []) + student_specific_profile.arrangement_course
+        ) or '-'
 
     elif learning_unit_type == LearningUnitTypeEnum.INTERNSHIP.value:
         specific_profile_exam_comment = '-'
