@@ -32,11 +32,15 @@ import urllib3
 from django.conf import settings
 from osis_learning_unit_sdk.api import learning_units_api
 from osis_learning_unit_sdk.model.effective_class import EffectiveClass
+from osis_learning_unit_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk, utils
+from frontoffice.settings.osis_sdk.utils import convert_api_enum
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+LearningUnitTypeEnum = convert_api_enum(LearningUnitTypeEnum)
 
 
 class LearningUnitService:
@@ -56,7 +60,7 @@ class LearningUnitService:
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
-                attrs = {'result': None, 'error': e}
+                attrs = {'results': [], 'error': e}
                 learning_units = SimpleNamespace(**attrs, attribute_map=attrs)
         return learning_units
 

@@ -132,8 +132,12 @@ class StudentsListViewTest(TestCase):
         "attribution.views.students_list.StudentsListView.learning_unit_title",
         new_callable=mock.PropertyMock, return_value="TITLE"
     )
+    @mock.patch(
+        "attribution.views.students_list.StudentsListView.learning_unit_type",
+        new_callable=mock.PropertyMock, return_value="COURSE"
+    )
     @mock.patch("attribution.views.students_list.StudentsListView.has_peps_student", return_value=True)
-    def test_get_learning_unit_enrollments_list(self, mock_peps, mock_title, mock_enrollments):
+    def test_get_learning_unit_enrollments_list(self, mock_peps, mock_title, mock_type, mock_enrollments):
         mock_enrollments.return_value = SimpleNamespace(**{
             'count': 2,
             'enrolled_students_count': 2,
