@@ -24,8 +24,16 @@
 #
 ##############################################################################
 from django.conf.urls import url
+from django.urls import path, include, register_converter
 
+from base.utils.converters import AcronymConverter
 from .views import score_encoding
+from .views.attendance_mark.learning_units import ListExamEnrollments
+from .views.attendance_mark.offers import SelectOffer
+from .views.attendance_mark.outside_period import OutsidePeriod
+from .views.attendance_mark.request_attendance_mark import RequestAttendanceMarkFormView
+
+register_converter(AcronymConverter, 'acronym')
 
 urlpatterns = [
     url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
@@ -33,8 +41,18 @@ urlpatterns = [
         score_encoding.score_sheet_xls,
         name='scores_sheet_xls',
         ),
-    url(r'^scores_encoding/pdf/(?P<learning_unit_code>[0-9A-Za-z-_]+)/$',
-        score_encoding.score_sheet_pdf,
-        name='scores_sheet_pdf',
+    path('attendance_marks/', include([
+        path('select_offer/', SelectOffer.as_view(), name=SelectOffer.name),
+        path(
+            'exam_enrollments/<acronym:program_acronym>/',
+            ListExamEnrollments.as_view(),
+            name=ListExamEnrollments.name
         ),
+        path('outside_period/', OutsidePeriod.as_view(), name=OutsidePeriod.name),
+        path(
+            'request/<acronym:program_acronym>/<str:learning_unit_code>/',
+            RequestAttendanceMarkFormView.as_view(),
+            name=RequestAttendanceMarkFormView.name
+        ),
+    ]))
 ]
