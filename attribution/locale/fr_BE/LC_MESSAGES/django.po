@@ -131,8 +131,8 @@ msgstr "Personnes porteuses de handicap, trouble ou maladie"
 msgid "Display teachers"
 msgstr "Afficher les enseignants"
 
-msgid "Download the list (Excel or PDF)"
-msgstr "Télécharger la liste (Excel ou PDF)"
+msgid "Download the list (Excel)"
+msgstr "Télécharger la liste (Excel)"
 
 msgid "ES"
 msgstr "ES"
@@ -302,9 +302,6 @@ msgstr "Autres aménagements : Voir Excel"
 
 msgid "P - Examen partiel"
 msgstr "P - Examen partiel"
-
-msgid "PDF File"
-msgstr "Fichier PDF"
 
 msgid "PEPS"
 msgstr "PEPS"

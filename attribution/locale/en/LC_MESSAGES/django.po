@@ -122,7 +122,7 @@ msgstr ""
 msgid "Display teachers"
 msgstr ""
 
-msgid "Download the list (Excel or PDF)"
+msgid "Download the list (Excel)"
 msgstr ""
 
 msgid "ES"
@@ -290,9 +290,6 @@ msgid "Other educational facilities : see Excel"
 msgstr ""
 
 msgid "P - Examen partiel"
-msgstr ""
-
-msgid "PDF File"
 msgstr ""
 
 msgid "PEPS"
