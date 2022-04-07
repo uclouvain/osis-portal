@@ -78,7 +78,7 @@
                                     </div>
                                     </abbr>
                                 </th>
-                                <th>{% trans 'Download the list (Excel or PDF)' %}</th>
+                                <th>{% trans 'Download the list (Excel)' %}</th>
                             <tbody>
                         {% if my_learning_units %}
                             {% for learning_unit in my_learning_units %}
@@ -93,14 +93,6 @@
                                         <a href="{% url 'scores_sheet_xls' learning_unit.code %}"
                                            title="{% trans 'Excel File' %}" data-toggle="tooltip">
                                             <i class="far fa-file-excel" aria-hidden="true" style="font-size: 200%"></i>
-                                        </a>
-                                    </button>
-                                    <button class="btn-clear"
-                                            id="bt_produce_pdf_score_encoding_{{ learning_unit.code }}"
-                                            type="button">
-                                        <a href="{% url 'scores_sheet_pdf' learning_unit.code %}"
-                                           title="{% trans 'PDF File' %}" data-toggle="tooltip">
-                                            <i class="far fa-file-pdf" aria-hidden="true" style="font-size: 200%"></i>
                                         </a>
                                     </button>
                                 </td>
