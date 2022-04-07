@@ -34,11 +34,10 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import status
 
 from assessments.services.assessments import AssessmentsService
 from base.views import layout
-
-from rest_framework import status
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
@@ -57,14 +56,6 @@ def score_encoding(request):
 def score_sheet_xls(request, learning_unit_code: str):
     content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary'
     file = AssessmentsService.get_xls_score_sheet(learning_unit_code, request.user.person)
-    return _build_response(content_type, file, request)
-
-
-@login_required
-@permission_required('base.is_tutor', raise_exception=True)
-def score_sheet_pdf(request, learning_unit_code: str):
-    file = AssessmentsService.get_score_sheet_pdf(learning_unit_code, request.user.person)
-    content_type = 'application/pdf'
     return _build_response(content_type, file, request)
 
 
