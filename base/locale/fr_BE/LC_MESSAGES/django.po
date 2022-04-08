@@ -189,7 +189,7 @@ msgstr "Validité"
 
 #, python-format
 msgid "You are currently working on behalf of <em>%(user)s</em>."
-msgstr " Vous avez endossé l'identité de <em>%(user)s</em>."
+msgstr "Vous avez endossé l'identité de <em>%(user)s</em>."
 
 msgid "You are now logged out"
 msgstr "Vous êtes à présent déconnecté"
