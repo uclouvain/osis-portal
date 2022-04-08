@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-06 10:45+0100\n"
+"POT-Creation-Date: 2022-03-25 14:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,10 +24,18 @@ msgid ""
 "scores."
 msgstr ""
 
+msgid ""
+"A4 single-sided, 1.5 line spacing and Arial 14 font, can be replaced by A3 "
+"single-sided"
+msgstr ""
+
 msgid "Acronym"
 msgstr ""
 
 msgid "Add a new application"
+msgstr ""
+
+msgid "Additional time"
 msgstr ""
 
 msgctxt "plural"
@@ -69,6 +77,12 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+msgid "Carry-over from January to September"
+msgstr ""
+
+msgid "Carry-over from previous session"
+msgstr ""
+
 msgid "Charge"
 msgstr ""
 
@@ -76,6 +90,12 @@ msgid "Choose the learning units you want to consider in the list"
 msgstr ""
 
 msgid "Code"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Copy PEPS"
 msgstr ""
 
 msgid "Credits"
@@ -102,7 +122,7 @@ msgstr ""
 msgid "Display teachers"
 msgstr ""
 
-msgid "Download the list (Excel or PDF)"
+msgid "Download the list (Excel)"
 msgstr ""
 
 msgid "ES"
@@ -148,6 +168,9 @@ msgstr ""
 msgid "Faculty administration"
 msgstr ""
 
+msgid "First registration"
+msgstr ""
+
 msgid "Function"
 msgstr ""
 
@@ -160,13 +183,7 @@ msgstr ""
 msgid "High Level Promising athlete"
 msgstr ""
 
-msgid "I - First registration"
-msgstr ""
-
 msgid "I - Première inscription"
-msgstr ""
-
-msgid "J - Carry-over from January to September"
 msgstr ""
 
 msgid "J - Report de note de janvier vers septembre"
@@ -269,19 +286,19 @@ msgstr ""
 msgid "Other educational facilities"
 msgstr ""
 
+msgid "Other educational facilities : see Excel"
+msgstr ""
+
 msgid "P - Examen partiel"
-msgstr ""
-
-msgid "P - Partial examination"
-msgstr ""
-
-msgid "PDF File"
 msgstr ""
 
 msgid "PEPS"
 msgstr ""
 
 msgid "PMR"
+msgstr ""
+
+msgid "Partial examination"
 msgstr ""
 
 msgid "Pedagogy proposal"
@@ -312,9 +329,6 @@ msgstr ""
 msgid "Promising athlete"
 msgstr ""
 
-msgid "R - Carry-over from previous session"
-msgstr ""
-
 msgid "R - Report de note de la session précédente"
 msgstr ""
 
@@ -330,6 +344,9 @@ msgstr ""
 msgid "Reproduce identically in the following year"
 msgstr ""
 
+msgid "Satisfactory assessment (mark does not count)"
+msgstr ""
+
 msgid "Schedule"
 msgstr ""
 
@@ -340,6 +357,9 @@ msgid "Score"
 msgstr ""
 
 msgid "Scores responsible"
+msgstr ""
+
+msgid "Second registration"
 msgstr ""
 
 msgid "Select/deselect all attributions to renew"
@@ -357,6 +377,9 @@ msgstr ""
 msgid ""
 "Some of the students enrolled to this course have a PEPS status (Program for "
 "Students with a Specific Profile)"
+msgstr ""
+
+msgid "Specific profile"
 msgstr ""
 
 msgid "Specific room of examination"
@@ -386,9 +409,6 @@ msgstr ""
 msgid "T - Note résultant d’un test"
 msgstr ""
 
-msgid "T - Test grade"
-msgstr ""
-
 msgid "Teachers"
 msgstr ""
 
@@ -396,6 +416,9 @@ msgid "Teaching charge"
 msgstr ""
 
 msgid "Teaching charges administration"
+msgstr ""
+
+msgid "Test grade"
 msgstr ""
 
 #, python-format
@@ -486,10 +509,10 @@ msgstr ""
 msgid "Unexpected error"
 msgstr ""
 
-msgid "V - Evaluation satisfaisante (la note ne compte pas)"
+msgid "Unsatisfactory assessment (mark does not count)"
 msgstr ""
 
-msgid "V - Satisfactory assessment (mark does not count)"
+msgid "V - Evaluation satisfaisante (la note ne compte pas)"
 msgstr ""
 
 msgid "Vacant"
@@ -522,19 +545,16 @@ msgstr ""
 msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr ""
 
-msgid "W - Unsatisfactory assessment (mark does not count)"
-msgstr ""
-
 msgid "Y - Deuxième inscription"
-msgstr ""
-
-msgid "Y - Second registration"
 msgstr ""
 
 msgid "Yes"
 msgstr ""
 
 msgid "You aren't teaching for any learning unit"
+msgstr ""
+
+msgid "concerns writings and/or oral preparations"
 msgstr ""
 
 msgid "date_format"

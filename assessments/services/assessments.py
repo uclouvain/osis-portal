@@ -59,21 +59,6 @@ class AssessmentsService:
         return _score_encoding_api_call(person, "get_previous_session")
 
     @staticmethod
-    def get_score_sheet_pdf(learning_unit_code: str, person: Person, **kwargs):
-        configuration = assessments_sdk.build_configuration()
-        with osis_assessments_sdk.ApiClient(configuration) as api_client:
-            api_instance = score_encoding_api.ScoreEncodingApi(api_client)
-            try:
-                return api_instance.score_sheets_pdf_export(
-                    codes=[learning_unit_code],
-                    **build_mandatory_auth_headers(person),
-                )
-            except (osis_assessments_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
-                # Run in degraded mode in order to prevent crash all app
-                logger.error(e)
-                return {'error_body': e.body, 'error_status': e.status}
-
-    @staticmethod
     def get_xls_score_sheet(learning_unit_code: str, person: Person, **kwargs):
         configuration = assessments_sdk.build_configuration()
         with osis_assessments_sdk.ApiClient(configuration) as api_client:
