@@ -23,6 +23,7 @@
 # ############################################################################
 import os
 import subprocess
+import traceback
 
 from base.management.commands import makemessages
 
@@ -39,6 +40,7 @@ class Command(makemessages.Command):
     def handle(self, *args, **options):
         options['keep_pot'] = True
         options['verbosity'] = 0
+        options['all'] = True
 
         # Change dir for makemessage execution
         previous_dir = os.getcwd()

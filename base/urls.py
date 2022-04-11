@@ -23,17 +23,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
 from django.conf.urls import url
 
-from base.views import administration, my_osis
+from base.views import my_osis
 from base.views.autocomplete.country import CountryAutocomplete
 from base.views.autocomplete.education_group_year import TrainingAutocomplete
 from dashboard.views.home import Home
 
 urlpatterns = [
-    url(r'^' + settings.ADMIN_URL + 'data/$', administration.data, name='data'),
-    url(r'^' + settings.ADMIN_URL + 'data/maintenance$', administration.data_maintenance, name='data_maintenance'),
     url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
     url(r'^$', Home.as_view(), name='home'),
     # TODO :: to remove shibboleth

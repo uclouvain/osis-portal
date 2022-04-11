@@ -70,8 +70,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'django_registration',
     'hijack',
-    'compat',
-    'hijack_admin',
+    'hijack.contrib.admin',
     'waffle'
 )
 
@@ -489,3 +488,5 @@ OSIS_ADMISSION_SDK_API_KEY_PREFIX = os.environ.get(
 # OSIS-DOCUMENT-CONFIGURATION
 OSIS_DOCUMENT_BASE_URL = os.environ.get('OSIS_DOCUMENT_BASE_URL', '')
 OSIS_DOCUMENT_API_SHARED_SECRET = os.environ.get('OSIS_DOCUMENT_API_SHARED_SECRET', '')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

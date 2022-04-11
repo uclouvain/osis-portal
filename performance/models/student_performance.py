@@ -24,9 +24,9 @@
 #
 ##############################################################################
 from django.contrib import admin
-from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
+from django.db.models import JSONField
 from django.utils import timezone
 
 from performance.models.enums import offer_registration_state, session_month
