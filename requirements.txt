@@ -23,7 +23,7 @@ coverage==4.5.1
 pytz==2018.5
 pyvirtualdisplay==0.2.1
 django-registration==3.2
-django-autocomplete-light==3.8.2
+django-autocomplete-light==3.9.4
 django-hijack==3.0.4
 pycodestyle==2.4.0
 pylint==2.12.2
