@@ -109,7 +109,7 @@ msgid "Registration fetched doesn't match with student registration_id"
 msgstr "Le noma des attestations ne correspond pas au noma de l'étudiant"
 
 msgid "Registration id"
-msgstr "Id d'enregistrement"
+msgstr "Noma"
 
 msgid "Student attestations"
 msgstr "Attestations de l'étudiant"

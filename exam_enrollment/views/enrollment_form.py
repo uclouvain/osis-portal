@@ -92,7 +92,7 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
     def offer_enrollment(self) -> Enrollment:
         offer_enrollments = OfferEnrollmentService.get_my_enrollments_year_list(
             person=self.person, year=self.year
-        ).results
+        )
         return next(
             (offer_enrollment for offer_enrollment in offer_enrollments
              if offer_enrollment.acronym == self.program_code),

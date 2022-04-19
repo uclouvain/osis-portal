@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import json
+from enum import Enum
 from functools import wraps
 from typing import Set
 
@@ -74,6 +75,10 @@ def build_mandatory_auth_headers(person):
         'x_user_email': person.user.email or '',
         'x_user_global_id': person.global_id,
     }
+
+
+def convert_api_enum(api_enum_cls) -> Enum:
+    return Enum(api_enum_cls.__name__, api_enum_cls.allowed_values[('value',)])  # type: ignore # use of functional API
 
 
 def api_exception_handler(api_exception_cls):
