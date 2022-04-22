@@ -7,7 +7,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 ############################################################################
 import json
 import logging
+from datetime import datetime
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, permission_required
@@ -43,6 +44,7 @@ from base.views import layout, common
 from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request
 from performance import models as mdl_performance
 from performance.models.student_performance import StudentPerformance
+
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -65,9 +67,19 @@ def __make_not_authorized_message(stud_perf):
                 "accounting_enrollment_service_url": settings.REGISTRATION_ACCOUNT_SERVICE_URL
             }
         else:
-            return _('The publication of the notes from the %(session_month)s '
-                     'session was not authorized by our faculty.') \
-                   % {"session_month": session_month}
+            notes_diffusion_date = stud_perf.data.get('dateDiffusion')
+            message = _('The publication of the notes from the %(session_month)s session was not authorized by our '
+                        'faculty.') % {"session_month": session_month}
+            if notes_diffusion_date and "VERROU_FACULTE" == not_autorized_status:
+                message = "{} {}".format(
+                    message,
+                    _('The publication of the notes is scheduled for the %(diffusion_date)s at %(diffusion_time)s') %
+                    {
+                        "diffusion_date": datetime.fromtimestamp(notes_diffusion_date).strftime('%d-%m-%Y'),
+                        "diffusion_time": datetime.fromtimestamp(notes_diffusion_date).strftime('%H%M'),
+                    }
+                )
+            return message
     else:
         return None
 
