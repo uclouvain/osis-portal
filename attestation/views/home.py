@@ -114,12 +114,15 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
             person=person,
             reference=PAYMENT_NOTICE_2_WARNING_REFERENCE
         )
+
+        if returned_registration_id != student.registration_id:
+            raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
+
         display_warning_invoice_unavailable_yet = _check_display_warning_invoice_not_available_yet(
             data_year=current_year,
             attestations=attestations
         )
-        if returned_registration_id != student.registration_id:
-            raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
+
     else:
         attestations = None
         current_year = None
@@ -186,11 +189,12 @@ def _is_open(academic_calendar: Dict) -> bool:
 
 
 def _check_display_warning_invoice_not_available_yet(data_year: int, attestations) -> bool:
-    current_year_attestations = next(
-        (attestation for attestation in attestations if attestation["academicYear"] == data_year), None
-    )
-    if current_year_attestations:
-        for attestation in current_year_attestations['attestationStatuses']:
-            if attestation["attestationType"] == INVOICE and not attestation["available"]:
-                return True
+    if attestations:
+        current_year_attestations = next(
+            (attestation for attestation in attestations if attestation["academicYear"] == data_year), None
+        )
+        if current_year_attestations:
+            for attestation in current_year_attestations['attestationStatuses']:
+                if attestation["attestationType"] == INVOICE and not attestation["available"]:
+                    return True
     return False
