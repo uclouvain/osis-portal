@@ -45,6 +45,7 @@ from reference.services.academic_calendar import AcademicCalendarService
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
 REGULAR_REGISTRATION_EXTENDED = "ABC_PROLONGE"
+INVOICE = "AVIS"
 PAYMENT_NOTICE_1_WARNING_REFERENCE = "PAYMENT_NOTICE_1_WARNING"
 PAYMENT_NOTICE_2_WARNING_REFERENCE = "PAYMENT_NOTICE_2_WARNING"
 
@@ -113,6 +114,10 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
             person=person,
             reference=PAYMENT_NOTICE_2_WARNING_REFERENCE
         )
+        display_warning_invoice_unavailable_yet = _check_display_warning_invoice_not_available_yet(
+            data_year=current_year,
+            attestations=attestations
+        )
         if returned_registration_id != student.registration_id:
             raise Exception(_('Registration fetched doesn\'t match with student registration_id'))
     else:
@@ -122,6 +127,7 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         past_year_echeance_attestation = None
         display_warning_first_payment_maturity_tolerance = False
         display_warning_last_payment_deadline_tolerance = False
+        display_warning_invoice_unavailable_yet = False
     return {
         'attestations': attestations,
         'current_year': current_year,
@@ -131,7 +137,8 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE,
         'attestation_type_prolonge': REGULAR_REGISTRATION_EXTENDED,
         'display_warning_first_payment_maturity_tolerance': display_warning_first_payment_maturity_tolerance,
-        'display_warning_last_payment_deadline_tolerance': display_warning_last_payment_deadline_tolerance
+        'display_warning_last_payment_deadline_tolerance': display_warning_last_payment_deadline_tolerance,
+        'display_warning_invoice_unavailable_yet': display_warning_invoice_unavailable_yet
     }
 
 
@@ -176,3 +183,14 @@ def _is_open(academic_calendar: Dict) -> bool:
     start_date = academic_calendar.get('start_date')
     end_date = academic_calendar.get('end_date')
     return start_date <= today and (end_date is None or end_date >= today)
+
+
+def _check_display_warning_invoice_not_available_yet(data_year: int, attestations) -> bool:
+    current_year_attestations = next(
+        (attestation for attestation in attestations if attestation["academicYear"] == data_year), None
+    )
+    if current_year_attestations:
+        for attestation in current_year_attestations['attestationStatuses']:
+            if attestation["attestationType"] == INVOICE and not attestation["available"]:
+                return True
+    return False
