@@ -177,7 +177,7 @@ class ExamEnrollmentFormTest(TestCase):
         error_message = response.context.get("error_message")
         self.assertEqual(
             error_message,
-            _("You are outside the exams enrollment period")
+            _("You are outside the exams enrollment period.")
         )
 
     @patch("exam_enrollment.models.exam_enrollment_request.get_by_student_and_offer_year_acronym_and_fetch_date")
