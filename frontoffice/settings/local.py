@@ -37,6 +37,7 @@ OPTIONAL_APPS = (
     'continuing_education',
     'admission',
     'osis_document',
+    'osis_notification',
 )
 
 OPTIONAL_MIDDLEWARES = ()

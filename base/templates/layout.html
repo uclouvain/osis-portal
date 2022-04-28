@@ -1,6 +1,6 @@
 <!doctype html>
-{% load static i18n %}
- {% load statici18n analytical hijack %}
+{% load static i18n statici18n analytical hijack %}
+{% if 'osis_notification' in installed_apps %}{% load osis_notification %}{% endif %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -44,6 +44,9 @@
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
     <link rel="stylesheet" href="{% static 'fontawesome-free-5.7.2-web/css/all.min.css' %}">
+  {% if 'osis_notification' in installed_apps %}
+    <link rel="stylesheet" href="{% static 'osis_notification/osis-notification.css' %}" />
+  {% endif %}
 
     {% block style %}
     {% endblock %}
@@ -111,6 +114,9 @@
                                 {% endif %}
                             </ul>
                         </li>
+                      {% if 'osis_notification' in installed_apps %}
+                        {% notification_viewer %}
+                      {% endif %}
                     {% endif %}
                 </ul>
             </div>
@@ -163,6 +169,9 @@
     <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
     <script type="text/javascript" src="https://unpkg.com/vue@2/dist/vue.runtime.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/vue-i18n@8/dist/vue-i18n.min.js"></script>
+{% if 'osis_notification' in installed_apps %}
+  <script type="text/javascript" src="{% static 'osis_notification/osis-notification.umd.min.js' %}"></script>
+{% endif %}
     <script src="{% statici18n LANGUAGE_CODE %}"></script>
     <script type="text/javascript" src="{% static "js/modal_form_submit.js" %}"></script>
     {% block script %}
