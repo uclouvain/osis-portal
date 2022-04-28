@@ -104,6 +104,7 @@ MIDDLEWARE = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'waffle.middleware.WaffleMiddleware',
+    'hijack.middleware.HijackUserMiddleware',
 )
 
 # Logging config
