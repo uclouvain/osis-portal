@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-08 10:00+0200\n"
+"POT-Creation-Date: 2022-04-28 15:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,9 +196,6 @@ msgstr ""
 msgid "execute"
 msgstr ""
 
-msgid "hide"
-msgstr ""
-
 msgid "item(s)"
 msgstr ""
 
@@ -220,7 +217,8 @@ msgstr ""
 msgid "per page"
 msgstr ""
 
-msgid "release"
+#, python-format
+msgid "release %(user)s"
 msgstr ""
 
 msgid "reset"
