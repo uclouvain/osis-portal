@@ -187,7 +187,9 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
             error_message = _("You are outside the exams enrollment period.")
             exam_enrollment_date = data.get('exam_enrollment_date')
             if exam_enrollment_date:
-                dt_obj = datetime.fromtimestamp(exam_enrollment_date).strftime('%d-%m-%Y')
+                # Le timestamp donné fourni par Java est en milisecondes et en python c'est en seconde.Donc il faut
+                # diviser par 1000 avant la conversion
+                dt_obj = datetime.fromtimestamp(exam_enrollment_date/1000).strftime('%d-%m-%Y')
                 error_message += " {}".format(
                     _("The next registration period opens on %(next_exam_enrollment_date)s.") %
                     {'next_exam_enrollment_date': dt_obj}
