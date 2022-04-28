@@ -71,12 +71,15 @@ def __make_not_authorized_message(stud_perf):
             message = _('The publication of the notes from the %(session_month)s session was not authorized by our '
                         'faculty.') % {"session_month": session_month}
             if notes_diffusion_date and "VERROU_FACULTE" == not_autorized_status:
+                # Le timestamp donné fourni par Java est en milisecondes et en python c'est en seconde.Donc il faut
+                # diviser par 1000 avant la conversion
+                diffusion_date = notes_diffusion_date/1000
                 message = "{} {}".format(
                     message,
                     _('The publication of the notes is scheduled for the %(diffusion_date)s at %(diffusion_time)s') %
                     {
-                        "diffusion_date": datetime.fromtimestamp(notes_diffusion_date).strftime('%d-%m-%Y'),
-                        "diffusion_time": datetime.fromtimestamp(notes_diffusion_date).strftime('%H%M'),
+                        "diffusion_date": datetime.fromtimestamp(diffusion_date).strftime('%d-%m-%Y'),
+                        "diffusion_time": datetime.fromtimestamp(diffusion_date).strftime('%H%M'),
                     }
                 )
             return message
