@@ -79,7 +79,7 @@ def __make_not_authorized_message(stud_perf):
                     _('The publication of the notes is scheduled for the %(diffusion_date)s at %(diffusion_time)s') %
                     {
                         "diffusion_date": datetime.fromtimestamp(diffusion_date).strftime('%d-%m-%Y'),
-                        "diffusion_time": datetime.fromtimestamp(diffusion_date).strftime('%H%M'),
+                        "diffusion_time": datetime.fromtimestamp(diffusion_date).strftime('%H:%M'),
                     }
                 )
             return message
