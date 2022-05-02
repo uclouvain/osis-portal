@@ -1,5 +1,5 @@
 <!doctype html>
-{% load static i18n statici18n analytical hijack %}
+{% load static i18n statici18n analytical %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -52,7 +52,6 @@
     {% analytical_head_bottom %}
 </head>
 <body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %} class="localmode" {% elif environment == 'QA' %} class="qamode" {% endif %}>
-{#    {% include "hijack/notifications.html" %}#}
     {% analytical_body_top %}
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
