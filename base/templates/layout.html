@@ -1,6 +1,5 @@
 <!doctype html>
 {% load static i18n statici18n analytical hijack %}
-{% if 'osis_notification' in installed_apps %}{% load osis_notification %}{% endif %}
 
 {% comment "License" %}
 * OSIS stands for Open Student Information System. It's an application
@@ -115,7 +114,7 @@
                             </ul>
                         </li>
                       {% if 'osis_notification' in installed_apps %}
-                        {% notification_viewer %}
+                        {% include 'osis_notification/notification_viewer.html' %}
                       {% endif %}
                     {% endif %}
                 </ul>
