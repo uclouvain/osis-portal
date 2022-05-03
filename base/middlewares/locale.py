@@ -1,4 +1,3 @@
-##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -6,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -15,7 +14,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,17 +22,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from django.middleware.locale import LocaleMiddleware
 from django.utils import translation
 
-from base import models as mdl
 
-
-@login_required
-def profile_lang(request, ui_language):
-    mdl.person.change_language(request.user, ui_language)
-    translation.activate(ui_language)
-    request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
-    return redirect(request.META['HTTP_REFERER'])
+class CustomLocaleMiddleware(LocaleMiddleware):
+    """
+        Set default language normally except if there is a query_param equal to 'lang'
+    """
+    def process_request(self, request):
+        language = request.GET.get(
+            'lang',
+            request.session.get(translation.LANGUAGE_SESSION_KEY)
+        )
+        if language:
+            translation.activate(language)
+            request.LANGUAGE_CODE = translation.get_language()
+        else:
+            super().process_request(request)
