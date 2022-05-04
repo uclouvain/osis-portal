@@ -35,6 +35,5 @@ from base import models as mdl
 def profile_lang(request, ui_language):
     mdl.person.change_language(request.user, ui_language)
     translation.activate(ui_language)
-    response = redirect(request.META['HTTP_REFERER'])
-    response.set_cookie(settings.LANGUAGE_COOKIE_NAME, ui_language)
-    return response
+    request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
+    return redirect(request.META['HTTP_REFERER'])

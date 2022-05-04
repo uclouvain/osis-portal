@@ -96,7 +96,7 @@ TESTS_TYPES = os.environ.get('TESTS_TYPES', 'UNIT').upper()
 # Override this tuple in yous environment config (ex dev.py) if you want specific midddleware in specific order
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    'osis_common.middlewares.locale.CustomLocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
