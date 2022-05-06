@@ -103,7 +103,7 @@
         <form method="post" class="form-inline">
         {% csrf_token %}
         <h3>
-            Activités Professionnelles délégables (APD)
+            {% trans 'Entrustable Professional Activity (EPA)' %}
             <a data-toggle="modal" data-target="#apd-doc" style="cursor: pointer;">
                 <span class="glyphicon glyphicon-question-sign"></span>
             </a>
@@ -111,7 +111,7 @@
         <hr/>
         <div class="row">
             <div class="col-xs-12">
-                <label>{% trans 'Targeted APD' %}</label>
+                <label>{% trans 'Targeted EPA' %}</label>
                 <div class="form-group">
                     {% for apd in apds %}
                     <div class="checkbox">

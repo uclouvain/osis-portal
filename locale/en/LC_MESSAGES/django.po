@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-17 09:23+0100\n"
+"POT-Creation-Date: 2022-05-06 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "APDs description"
+msgid "EPAs description"
 msgstr ""
 
 msgid ""
@@ -131,6 +131,9 @@ msgid "Encoding form"
 msgstr ""
 
 msgid "Enrollments from"
+msgstr ""
+
+msgid "Entrustable Professional Activity (EPA)"
 msgstr ""
 
 msgid "Establish a diagnosis"
@@ -352,7 +355,7 @@ msgstr ""
 msgid "Take a history (anamnesis)"
 msgstr ""
 
-msgid "Targeted APD"
+msgid "Targeted EPA"
 msgstr ""
 
 msgid "The activation failed"
@@ -414,7 +417,7 @@ msgstr ""
 msgid "You don't have an account"
 msgstr ""
 
-msgid "You must evaluate minimum {} and maximum {} APDs"
+msgid "You must evaluate minimum {} and maximum {} EPAs"
 msgstr ""
 
 msgid ""
