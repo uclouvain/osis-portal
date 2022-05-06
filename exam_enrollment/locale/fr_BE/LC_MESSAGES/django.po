@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 16:14+0100\n"
+"POT-Creation-Date: 2022-04-22 08:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,6 +110,10 @@ msgstr ""
 "bloc annuel dispensées au premier quadrimestre, en ce compris celles qui ne "
 "donnent lieu qu’à une épreuve partielle (Art. 83 du RGEE)."
 
+#, python-format
+msgid "The next registration period opens on %(next_exam_enrollment_date)s."
+msgstr "La prochaine période d'inscription s'ouvre le %(next_exam_enrollment_date)s."
+
 msgid "Which action do you want to perform ?"
 msgstr "Quelle action souhaitez-vous effectuer ?"
 
@@ -125,8 +129,8 @@ msgstr "Oui, je confirme"
 msgid "You are not registered for any exams. Do you want to continue?"
 msgstr "Vous n'êtes inscrit·e à aucun examen. Voulez-vous continuer?"
 
-msgid "You are outside the exams enrollment period"
-msgstr "Vous êtes en dehors de la période d'inscription aux examens"
+msgid "You are outside the exams enrollment period."
+msgstr "Vous êtes en dehors de la période d'inscription aux examens."
 
 msgid "You can not enrol to exam"
 msgstr "Vous ne pouvez pas vous inscrire aux examens"
@@ -136,7 +140,8 @@ msgstr "Sigle"
 
 msgid "choose_offer_for_exams_enrollment"
 msgstr ""
-"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux examens."
+"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux "
+"examens."
 
 msgid "course"
 msgstr "Cours"
@@ -240,8 +245,7 @@ msgstr "Vous n'êtes inscrit à aucun cours dans le cadre de la formation {}."
 
 msgid "no_offer_enrollment_found"
 msgstr ""
-"Vous n'êtes inscrit à aucune formation pour l'année académique en "
-"cours ({})."
+"Vous n'êtes inscrit à aucune formation pour l'année académique en cours ({})."
 
 msgid "offer_choice"
 msgstr "Choix de l'offre"

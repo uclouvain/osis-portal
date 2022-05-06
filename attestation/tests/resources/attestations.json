@@ -1,0 +1,58 @@
+{
+  "attestationStatusesAllYears": [
+    {
+      "attestationStatuses": [
+        {
+          "attestationType": "AVIS",
+          "printed": true,
+          "available": true
+        },
+        {
+          "attestationType": "DE",
+          "printed": false,
+          "available": true
+        },
+        {
+          "attestationType": "ABC",
+          "printed": true,
+          "available": true
+        },
+        {
+          "attestationType": "ECHEANCE",
+          "printed": false,
+          "available": false
+        }
+      ],
+      "academicYear": 2020,
+      "available": true
+    },
+    {
+      "attestationStatuses": [
+        {
+          "attestationType": "AVIS",
+          "printed": false,
+          "available": false
+        },
+        {
+          "attestationType": "DE",
+          "printed": false,
+          "available": true
+        },
+        {
+          "attestationType": "ABC",
+          "printed": false,
+          "available": true
+        },
+        {
+          "attestationType": "ECHEANCE",
+          "printed": false,
+          "available": false
+        }
+      ],
+      "academicYear": 2021,
+      "available": true
+    }
+  ],
+  "current_year": 2021,
+  "registration_id": "14631100"
+}
