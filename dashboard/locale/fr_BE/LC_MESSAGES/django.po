@@ -98,6 +98,9 @@ msgstr "Listes des étudiants inscrits à mes examens"
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
 
+msgid "Description fiche"
+msgstr "Fiches descriptives"
+
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
 

@@ -52,19 +52,23 @@ body {
     color: orange;
 }
 
-.dashboard-grid .grid-item {
-    width : 340px;
-    margin-bottom: 10px;
+.dashboard-grid{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
 }
+
+.dashboard-grid .grid-item {
+    flex: 1 0 360px;
+    padding: 10px 20px;
+    flex-grow: 0;
+}
+
+
 .dashboard-grid .grid-item i {
     font-size: 400%;
     color: #6699FF;
-    width: 75px;
     padding-bottom: 10px;
-}
-.dashboard-grid .grid-item .description {
-    width: 80%;
-    display: inline-block;
 }
 
 span.dashboard-vpn-warning{
