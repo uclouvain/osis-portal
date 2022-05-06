@@ -153,7 +153,7 @@ def _show_invalid_update_msg(request):
     messages.add_message(
         request,
         messages.ERROR,
-        _("You must evaluate minimum {} and maximum {} APDs").format(MIN_APDS, MAX_APDS)
+        _("You must evaluate minimum {} and maximum {} EPAs").format(MIN_APDS, MAX_APDS)
     )
 
 
