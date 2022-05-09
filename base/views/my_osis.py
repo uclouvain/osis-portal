@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils import translation

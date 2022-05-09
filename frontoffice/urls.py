@@ -28,16 +28,20 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from base.views import common
+from base.views import common, administration
 
 packages = ("attribution",)
 
 urlpatterns = (
-    url(r'^' + settings.ADMIN_URL, admin.site.urls),
+    url(r'^' + settings.ADMIN_URL, include([
+        url(r'^data/$', administration.data, name='data'),
+        url(r'^data/maintenance$', administration.data_maintenance, name='data_maintenance'),
+    ])),
     url(r'', include('base.urls')),
     url(r'^login/$', common.login, name='login'),
     url(r'^logout/$', common.log_out, name='logout'),
     url(r'^logged_out/$', common.logged_out, name='logged_out'),
+    url(r'^' + settings.ADMIN_URL, admin.site.urls),
     url(r'^403/$', common.access_denied, name="error_403"),
     url(r'^hijack/', include('hijack.urls', namespace='hijack')),
 )
@@ -62,6 +66,8 @@ if 'continuing_education' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^continuing_education/', include('continuing_education.urls')),)
 if 'admission' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')),)
+if 'osis_notification' in settings.INSTALLED_APPS:
+    urlpatterns = urlpatterns + (url(r'^osis_notification/', include('osis_notification.urls')),)
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'

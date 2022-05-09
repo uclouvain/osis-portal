@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 16:14+0100\n"
+"POT-Creation-Date: 2022-04-22 08:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,6 +94,10 @@ msgid ""
 "of the RGEE)."
 msgstr ""
 
+#, python-format
+msgid "The next registration period opens on %(next_exam_enrollment_date)s."
+msgstr ""
+
 msgid "Which action do you want to perform ?"
 msgstr ""
 
@@ -109,7 +113,7 @@ msgstr ""
 msgid "You are not registered for any exams. Do you want to continue?"
 msgstr ""
 
-msgid "You are outside the exams enrollment period"
+msgid "You are outside the exams enrollment period."
 msgstr ""
 
 msgid "You can not enrol to exam"

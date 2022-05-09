@@ -26,6 +26,7 @@
 import json
 import logging
 import warnings
+from datetime import datetime
 from typing import Dict, List
 
 import pika
@@ -183,7 +184,17 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
 
     def _get_error_message(self, data: Dict) -> str:
         if data.get('error_message') == 'outside_exam_enrollment_period':
-            error_message = _("You are outside the exams enrollment period")
+            error_message = _("You are outside the exams enrollment period.")
+            exam_enrollment_date = data.get('exam_enrollment_date')
+            if exam_enrollment_date:
+                # Le timestamp donné fourni par Java est en milisecondes et en python c'est en seconde.Donc il faut
+                # diviser par 1000 avant la conversion
+                dt_obj = datetime.fromtimestamp(exam_enrollment_date/1000).strftime('%d-%m-%Y')
+                error_message += " {}".format(
+                    _("The next registration period opens on %(next_exam_enrollment_date)s.") %
+                    {'next_exam_enrollment_date': dt_obj}
+                )
+
         elif data.get('error_message') == 'student_can_not_enrol_to_exam':
             error_message = _("You can not enrol to exam")
         elif data.get('error_message') == 'no_exam_enrollment_found':

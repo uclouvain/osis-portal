@@ -49,12 +49,6 @@ class StudentsListViewTest(TestCase):
         perm = Permission.objects.get(codename="can_access_attribution")
         cls.person.user.user_permissions.add(perm)
         cls.current_year = datetime.date.today().year
-        cls.enrollments = SimpleNamespace(**{
-            'results': [Enrollment(**EnrollmentDictFactory()) for _ in range(2)],
-            'count': 1,
-            'enrolled_students_count': 1,
-            'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})
-        })
         cls.a_tutor = TutorFactory(person=cls.person)
         cls.acronym = 'LELEC1530'
         cls.year = cls.current_year
@@ -67,6 +61,12 @@ class StudentsListViewTest(TestCase):
         })
 
     def setUp(self):
+        self.enrollments = SimpleNamespace(**{
+            'results': [Enrollment(**EnrollmentDictFactory()) for _ in range(2)],
+            'count': 1,
+            'enrolled_students_count': 1,
+            'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})
+        })
         self.client.force_login(self.person.user)
 
     def _get_enrollment_for_acronym(self, acronym, mock_enrollments):
@@ -132,8 +132,12 @@ class StudentsListViewTest(TestCase):
         "attribution.views.students_list.StudentsListView.learning_unit_title",
         new_callable=mock.PropertyMock, return_value="TITLE"
     )
+    @mock.patch(
+        "attribution.views.students_list.StudentsListView.learning_unit_type",
+        new_callable=mock.PropertyMock, return_value="COURSE"
+    )
     @mock.patch("attribution.views.students_list.StudentsListView.has_peps_student", return_value=True)
-    def test_get_learning_unit_enrollments_list(self, mock_peps, mock_title, mock_enrollments):
+    def test_get_learning_unit_enrollments_list(self, mock_peps, mock_title, mock_type, mock_enrollments):
         mock_enrollments.return_value = SimpleNamespace(**{
             'count': 2,
             'enrolled_students_count': 2,

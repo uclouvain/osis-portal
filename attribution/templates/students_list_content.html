@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 {% load i18n detail_student_specific_profile %}
 {% load api_template_tags academic_year_display %}
 
@@ -42,38 +42,81 @@
         </a>
         <div class="collapse" id="legend">
             <div class="row">
-                <div class="col-md-3">
-                    <br><br>
-                    <p><strong>{% trans 'Exam registration state' %}</strong></p>
-                </div>
-                <div class="col-md-4">
-                    <p>{% trans 'P - Partial examination' %}</p>
-                    <p>{% trans 'I - First registration' %}</p>
-                    <p>{% trans 'Y - Second registration' %}</p>
-                    <p>{% trans 'J - Carry-over from January to September' %}</p>
-                </div>
                 <div class="col-md-5">
-                    <p>{% trans 'R - Carry-over from previous session' %}</p>
-                    <p>{% trans 'T - Test grade' %}</p>
-                    <p>{% trans 'V - Satisfactory assessment (mark does not count)' %}</p>
-                    <p>{% trans 'W - Unsatisfactory assessment (mark does not count)' %}</p>
+                    <div class="col-md-12">
+
+                        <p class="legend-title">{% trans 'Exam registration state' %}</p>
+
+                        <div class="legend-item legend-exam">
+                            <p class="legend-label"><strong>P</strong></p>
+                            <p class="legend-description">{% trans 'Partial examination' %}</p>
+                        </div>
+                        <div class="legend-item legend-exam">
+                            <p class="legend-label"><strong>I</strong></p>
+                            <p class="legend-description">{% trans 'First registration' %}</p>
+                        </div>
+                        <div class="legend-item legend-exam">
+                            <p class="legend-label"><strong>Y</strong></p>
+                            <p class="legend-description">{% trans 'Second registration' %}</p>
+                        </div>
+                        <div class="legend-item legend-exam">
+                            <p class="legend-label"><strong>J</strong></p>
+                            <p class="legend-description">{% trans 'Carry-over from January to September' %}</p>
+                        </div>
+                        <div class="legend-item legend-exam">
+                            <p class="legend-label"><strong>R</strong></p>
+                            <p class="legend-description">{% trans 'Carry-over from previous session' %}</p>
+                        </div>
+                        <div class="legend-item legend-exam">
+                            <p class="legend-label"><strong>T</strong></p>
+                            <p class="legend-description">{% trans 'Test grade' %}</p>
+                        </div>
+                        <div class="legend-item legend-exam">
+                            <p class="legend-label"><strong>V</strong></p>
+                            <p class="legend-description">{% trans 'Satisfactory assessment (mark does not count)' %}</p>
+                        </div>
+                        <div class="legend-item legend-exam">
+                            <p class="legend-label"><strong>W</strong></p>
+                            <p class="legend-description">{% trans 'Unsatisfactory assessment (mark does not count)' %}</p>
+                        </div>
+
+                    </div>
+
                 </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-3">
-                    <p><strong>{% trans 'PEPS' %}</strong></p>
-                    <p><strong>{% trans 'DDI' %}</strong></p>
-                    <p><strong>{% trans 'PMR' %}</strong></p>
-                    <p><strong>{% trans 'ESHN' %}</strong></p>
-                    <p><strong>{% trans 'ES' %}</strong></p>
-                </div>
-                <div class="col-md-9">
-                    <p>{% trans 'Program for Students with a Specific Profile' %}</p>
-                    <p>{% trans 'Disability, Disorder or Illness Students' %}</p>
-                    <p>{% trans 'Person with reduced mobility' %}</p>
-                    <p>{% trans 'High Level Promising athlete' %}</p>
-                    <p>{% trans 'Promising athlete' %}</p>
+                <div class="col-md-7">
+                    <div class="col-md-12">
+
+                        <p class="legend-title">{% trans 'Specific profile' %}</p>
+
+                        <div class="legend-item legend-peps">
+                            <p class="legend-label"><strong>{% trans 'PEPS' %}</strong></p>
+                            <p class="legend-description">{% trans 'Program for Students with a Specific Profile' %}</p>
+                        </div>
+                        <div class="legend-item legend-peps">
+                            <p class="legend-label"><strong>{% trans 'DDI' %}</strong></p>
+                            <p class="legend-description">{% trans 'Disability, Disorder or Illness Students' %}</p>
+                        </div>
+                        <div class="legend-item legend-peps">
+                            <p class="legend-label"><strong>{% trans 'PMR' %}</strong></p>
+                            <p class="legend-description">{% trans 'Person with reduced mobility' %}</p>
+                        </div>
+                        <div class="legend-item legend-peps">
+                            <p class="legend-label"><strong>{% trans 'ESHN' %}</strong></p>
+                            <p class="legend-description">{% trans 'High Level Promising athlete' %}</p>
+                        </div>
+                        <div class="legend-item legend-peps">
+                            <p class="legend-label"><strong>{% trans 'ES' %}</strong></p>
+                            <p class="legend-description">{% trans 'Promising athlete' %}</p>
+                        </div>
+                        <div class="legend-item legend-peps">
+                            <p class="legend-label"><strong>{% trans 'Copy PEPS' %}</strong></p>
+                            <p class="legend-description">{% trans 'A4 single-sided, 1.5 line spacing and Arial 14 font, can be replaced by A3 single-sided' %}</p>
+                        </div>
+                        <div class="legend-item legend-peps">
+                            <p class="legend-label"><strong>{% trans 'Additional time' %}</strong></p>
+                            <p class="legend-description">{% trans 'concerns writings and/or oral preparations' %}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -158,7 +201,7 @@
                     <td>{{ student.name }}</td>
                     <td>{{ student.registration_id | default_if_none:''}}</td>
                     <td>{{ student.student_specific_profile|type_peps | default_if_none:'-'}}
-                        {% with student_specific_profile_detail=student.student_specific_profile|arrangements_and_guide %}
+                        {% with student_specific_profile_detail=student.student_specific_profile|arrangements_and_guide:learning_unit_type %}
                             {% if student_specific_profile_detail %}
                                 <span id="arrangements" data-toggle="tooltip" data-placement="right"
                                       title="{{ student_specific_profile_detail }}"

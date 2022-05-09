@@ -61,15 +61,15 @@ class StudentsListTest(TestCase):
         person.global_id = "001923265"
         person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         person.save()
-        cls.enrollments = SimpleNamespace(**{
+        cls.url = reverse('students_list')
+
+    def setUp(self):
+        self.enrollments = SimpleNamespace(**{
             'results': [Enrollment(**EnrollmentDictFactory()) for _ in range(2)],
             'count': 1,
             'enrolled_students_count': 1,
             'attribute_map': dict.fromkeys({'results', 'count', 'enrolled_students_count'})
         })
-        cls.url = reverse('students_list')
-
-    def setUp(self):
         self.client.force_login(self.tutor.person.user)
         self.patcher = patch(
             "attribution.views.list.AssessmentsService.get_current_session"
@@ -125,9 +125,13 @@ class StudentsListTest(TestCase):
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
     @mock.patch("attribution.services.enrollments.LearningUnitEnrollmentService.get_enrollments")
     @mock.patch("attribution.views.students_list.StudentsListView.learning_unit_title", new_callable=mock.PropertyMock)
-    def test_with_attribution_students(self, mock_lu, mock_students_list_endpoint, mock_get_attributions_list):
+    @mock.patch("attribution.views.students_list.StudentsListView.learning_unit_type", new_callable=mock.PropertyMock)
+    def test_with_attribution_students(
+            self, mock_lu_type, mock_lu_title, mock_students_list_endpoint, mock_get_attributions_list
+    ):
         mock_students_list_endpoint.return_value = self.enrollments
-        mock_lu.return_value = "TITLE"
+        mock_lu_type.return_value = "COURSE"
+        mock_lu_title.return_value = "TITLE"
         today = datetime.datetime.today()
         an_academic_year = AcademicYearFactory(
             year=today.year, start_date=today - datetime.timedelta(days=5),

@@ -84,6 +84,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
             'learning_unit_year': int(self.kwargs['learning_unit_year']),
             'learning_unit_acronym': self.code,
             'learning_unit_title': self.learning_unit_title,
+            'learning_unit_type': self.learning_unit_type,
             # TODO:  provide endpoint to check luy has_peps
             'has_peps': self.has_peps_student(),
             'produce_xls_url': self.get_produce_xls_url(),
@@ -96,6 +97,18 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
             self._get_learning_unit_title(),
             self._get_learning_class_title()
         ) if self.is_class else self._get_learning_unit_title()
+
+    @cached_property
+    def learning_unit_type(self):
+        learning_unit = self._get_learning_unit()
+        return learning_unit['type']
+
+    def _get_learning_unit(self):
+        return next(lu for lu in LearningUnitService.get_learning_units(
+            learning_unit_codes=[self.kwargs['learning_unit_acronym']],
+            year=int(self.kwargs['learning_unit_year']),
+            person=self.request.user.person
+        ))
 
     def _get_learning_unit_title(self):
         return LearningUnitService.get_learning_unit_title(
@@ -285,5 +298,6 @@ class StudentsListXlsView(StudentsListView, ApiRetrieveAllObjectsMixin):
         return xls_students_by_learning_unit.get_xls(
             student_list,
             self.kwargs['learning_unit_acronym'],
-            self.kwargs['learning_unit_year']
+            self.kwargs['learning_unit_year'],
+            self.learning_unit_type
         )

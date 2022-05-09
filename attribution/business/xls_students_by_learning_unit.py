@@ -33,7 +33,8 @@ from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import save_virtual_workbook
 
-from attribution.business.student_specific_profile import get_type_peps
+from attribution.business.student_specific_profile import get_type_peps, is_type_course_or_others
+from learning_unit.services.learning_unit import LearningUnitTypeEnum
 
 COLUMN_REGISTRATION_ID_NO = 5
 STATUS_COL_WIDTH = 10
@@ -46,8 +47,9 @@ BORDER_LEFT = Border(
 )
 FIRST_COL_PEPS = 'M'
 
-def get_xls(student_list, acronym, academic_year):
-    xls = _make_xls_list(student_list)
+
+def get_xls(student_list, acronym, academic_year, learning_unit_type):
+    xls = _make_xls_list(student_list, learning_unit_type)
     filename = '{}_{}_{}.xlsx'.format(
         _('student_list'),
         acronym,
@@ -58,7 +60,7 @@ def get_xls(student_list, acronym, academic_year):
     return response
 
 
-def _make_xls_list(student_list):
+def _make_xls_list(student_list, learning_unit_type):
     workbook = Workbook()
     worksheet1 = workbook.active
     worksheet1.title = str(_("Students"))
@@ -76,12 +78,12 @@ def _make_xls_list(student_list):
         str(_('September')),
         str(_('Last score')),
         str(_('Type of specific profile')),
-        str(_('Extra time (33% generally)')),
+        str(_('Extra time')),
         str(_('Large print')),
         str(_('Specific room of examination')),
-        str(_('Other educational facilities')),
-        str(_('Details other educational facilities')),
-        str(_('Educational tutor')),
+        str(_('Other educational facilities for exam')),
+        str(_('Other educational facilities for courses and practical exercices')),
+        str(_('Guide')),
     ]
     worksheet1.append(col for col in columns)
     for student in student_list:
@@ -103,14 +105,28 @@ def _make_xls_list(student_list):
         student_specific_profile = student.get('student_specific_profile')
 
         if student_specific_profile:
+
+            specific_profile_exam_comment, specific_profile_course_comment = _get_arrangement_comments(
+                learning_unit_type,
+                student_specific_profile
+            )
+
             line_content.extend([
                 get_type_peps(student_specific_profile),
-                str(_('Yes')) if student_specific_profile.arrangement_additional_time else '-',
-                str(_('Yes')) if student_specific_profile.arrangement_appropriate_copy else '-',
-                str(_('Yes')) if student_specific_profile.arrangement_specific_locale else '-',
-                str(_('Yes')) if student_specific_profile.arrangement_other else '-',
-                str(student_specific_profile.arrangement_comment)
-                if student_specific_profile.arrangement_comment else '-',
+                str(
+                    student_specific_profile.arrangement_additional_time_text
+                    if student_specific_profile.arrangement_additional_time.value
+                    and is_type_course_or_others(learning_unit_type) else '-'
+                ),
+                str(
+                    student_specific_profile.arrangement_appropriate_copy_text
+                    if student_specific_profile.arrangement_appropriate_copy.value
+                    and is_type_course_or_others(learning_unit_type) else '-'
+                ),
+                str(_('Yes')) if student_specific_profile.arrangement_specific_locale
+                and is_type_course_or_others(learning_unit_type) else '-',
+                specific_profile_exam_comment,
+                specific_profile_course_comment,
                 str(student_specific_profile.guide) if student_specific_profile.guide else '-',
             ])
         else:
@@ -135,13 +151,47 @@ def _make_xls_list(student_list):
          str(_("High Level Promising athlete"))])
     workbook.worksheets[1].append(
         [str(_("R - Report de note de la session précédente")), "", str(_("ES")), str(_("Promising athlete"))])
-    workbook.worksheets[1].append([str(_("T - Note résultant d’un test"))])
-    workbook.worksheets[1].append([str(_("V - Evaluation satisfaisante (la note ne compte pas)"))])
+    workbook.worksheets[1].append(
+        [str(_("T - Note résultant d’un test")), "", str(_("Copy PEPS")),
+         str(_("A4 single-sided, 1.5 line spacing and Arial 14 font, can be replaced by A3 single-sided"))]
+    )
+    workbook.worksheets[1].append(
+        [str(_("V - Evaluation satisfaisante (la note ne compte pas)")), "", str(_("Additional time")),
+         str(_("concerns writings and/or oral preparations"))]
+    )
     workbook.worksheets[1].append([str(_("W - Evaluation non satisfaisante (la note ne compte pas)"))])
     workbook.worksheets[1].column_dimensions['A'].width = 50
     workbook.worksheets[1].column_dimensions['C'].width = 6
     workbook.worksheets[1].column_dimensions['D'].width = 50
     return save_virtual_workbook(workbook)
+
+
+def _get_arrangement_comments(learning_unit_type, student_specific_profile):
+
+    if is_type_course_or_others(learning_unit_type):
+        exam_comment = student_specific_profile.arrangement_exam_comment
+        specific_profile_exam_comment = ';'.join(
+            ([exam_comment] if exam_comment else []) + student_specific_profile.arrangement_exam
+        ) or '-'
+
+        course_comment = student_specific_profile.arrangement_course_comment
+        specific_profile_course_comment = ';'.join(
+            ([course_comment] if course_comment else []) + student_specific_profile.arrangement_course
+        ) or '-'
+
+    elif learning_unit_type == LearningUnitTypeEnum.INTERNSHIP.value:
+        specific_profile_exam_comment = '-'
+        specific_profile_course_comment = student_specific_profile.arrangement_internship_comment or '-'
+
+    elif learning_unit_type == LearningUnitTypeEnum.DISSERTATION.value:
+        specific_profile_exam_comment = student_specific_profile.arrangement_dissertation_comment or '-'
+        specific_profile_course_comment = '-'
+
+    else:
+        specific_profile_exam_comment = '-'
+        specific_profile_course_comment = '-'
+
+    return specific_profile_exam_comment, specific_profile_course_comment
 
 
 def _columns_resizing(ws):
@@ -180,12 +230,12 @@ def _columns_resizing(ws):
     col_large_print.width = 15
     col_specific_room_of_examination = ws.column_dimensions['P']
     col_specific_room_of_examination.width = 25
-    col_other_educational_facilities = ws.column_dimensions['Q']
-    col_other_educational_facilities.width = 25
-    col_educational_tutor = ws.column_dimensions['R']
-    col_educational_tutor.width = 30
     col_educational_tutor = ws.column_dimensions['S']
     col_educational_tutor.width = 30
+    col_arrangement_exam = ws.column_dimensions['Q']
+    col_arrangement_exam.width = 30
+    col_arrangement_course = ws.column_dimensions['R']
+    col_arrangement_course.width = 30
 
 
 def _columns_registration_id_to_text(ws):

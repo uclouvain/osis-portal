@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -265,7 +265,7 @@
             $("input[id^='chb_learning_unit_acronym_']").each(function () {
                 if ($(this).prop("checked") == true) {
                     $('#bt_produce_xls').attr("disabled", false);
-                    return;
+
                 }
             });
         }
