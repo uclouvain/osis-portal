@@ -81,12 +81,11 @@ class TestGetAllCities(TestCase):
 
 
 class TestGetHospitals(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.cohort = CohortFactory()
-        cls.organization_1 = create_organization(cohort=cls.cohort, city="city1")
-        cls.organization_2 = create_organization(reference='02', cohort=cls.cohort, city="city2")
-        cls.organization_3 = create_organization(name="OSAS", reference='03', cohort=cls.cohort, city="city1")
+    def setUp(self) -> None:
+        self.cohort = CohortFactory()
+        self.organization_1 = create_organization(cohort=self.cohort, city="city1")
+        self.organization_2 = create_organization(reference='02', cohort=self.cohort, city="city2")
+        self.organization_3 = create_organization(name="OSAS", reference='03', cohort=self.cohort, city="city1")
 
     def test_with_no_criteria(self):
         hospitals = mdl_organization.search(self.cohort)

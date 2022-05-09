@@ -43,9 +43,12 @@ class TestScoreEncoding(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = PersonFactory().user
-        cls.api_patcher = mock.patch("internship.services.internship.InternshipAPIClient.__new__", return_value=MockAPI)
 
     def setUp(self):
+        self.api_patcher = mock.patch(
+            "internship.services.internship.InternshipAPIClient.__new__",
+            return_value=MockAPI
+        )
         self.client.force_login(self.user)
         self.api_patcher.start()
         self.addCleanup(self.api_patcher.stop)
