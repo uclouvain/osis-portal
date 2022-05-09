@@ -51,29 +51,31 @@
         <div class="panel panel-body">
             <div class="row">
                 <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <em class="fa fa-edit" style="font-size: 400%; color: #6699FF;"></em>
+                    <a href="{% url 'internship_score_encoding' %}">
+                        <div class="col-md-12">
+                            <em class="fa fa-edit" style="font-size: 400%; margin-bottom:10px; color: #6699FF;"></em>
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-md-12 description">
                             <h4 class="media-heading">
                                 <a href="{% url 'internship_score_encoding' %}">{% trans 'Score encoding' %}</a>
                             </h4>
+                            <p>{% trans 'Internship students evaluations' %}</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 {% if is_master %}
                 <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <em class="fa fa-users" style="font-size: 400%; color: #6699FF;"></em>
+                    <a href="{% url 'internship_manage_delegates' %}">
+                        <div class="col-md-12">
+                            <em class="fa fa-users" style="font-size: 400%; margin-bottom: 10px; color: #6699FF;"></em>
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-md-12 description">
                             <h4 class="media-heading">
                                 <a href="{% url 'internship_manage_delegates' %}">{% trans 'Manage delegates' %}</a>
                             </h4>
+                            <p>{% trans 'Assign delegates on your allocations' %}</p>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 {% endif %}
             </div>

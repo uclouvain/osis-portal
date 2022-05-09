@@ -56,10 +56,11 @@ class MockAPI(InternshipApi):
 
     @classmethod
     def masters_uuid_allocations_get(*args, **kwargs):
+        parent_specialty = SpecialtyGet(uuid=str(uuid.uuid4()), acronym='PAR', parent=None)
         return {'count': 1, 'results': [AllocationGet(
             uuid=str(uuid.uuid4()),
             organization=OrganizationGet(uuid=str(uuid.uuid4()), reference=''),
-            specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym=''),
+            specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=parent_specialty),
             role=ChoiceRole.MASTER.name,
         )]}
 
@@ -69,7 +70,7 @@ class MockAPI(InternshipApi):
 
     @classmethod
     def specialties_uuid_get(*args, **kwargs):
-        return SpecialtyGet(uuid=str(uuid.uuid4()), cohort=CohortGet(uuid=str(uuid.uuid4())), acronym='')
+        return SpecialtyGet(uuid=str(uuid.uuid4()), cohort=CohortGet(uuid=str(uuid.uuid4())), acronym='', parent=None)
 
     @classmethod
     def organizations_uuid_get(*args, **kwargs):
@@ -132,6 +133,6 @@ class MockAPI(InternshipApi):
         return {'count': 1, 'results': [AllocationGet(
             uuid=str(uuid.uuid4()),
             organization=OrganizationGet(uuid=str(uuid.uuid4()), reference=''),
-            specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym=''),
+            specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=None),
             role=ChoiceRole.MASTER.name,
         )]}
