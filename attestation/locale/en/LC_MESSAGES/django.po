@@ -97,6 +97,5 @@ msgid "Student attestations"
 msgstr ""
 
 msgid ""
-"Your invoice will be available on your portal in the week following the "
-"registration of your registration."
+"Your notice of registration and invoice will be available soon. You will be notified by e-mail."
 msgstr ""
