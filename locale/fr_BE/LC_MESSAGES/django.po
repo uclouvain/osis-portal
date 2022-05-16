@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-19 16:12+0100\n"
+"POT-Creation-Date: 2022-05-06 14:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "APDs description"
+msgid "EPAs description"
 msgstr "Description des APDs"
 
 msgid ""
@@ -52,6 +52,9 @@ msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
 
 msgid "Appreciate medical emergency"
 msgstr "Reconnaitre l’urgence médicale"
+
+msgid "Assign delegates on your allocations"
+msgstr "Attribuer des délégués sur vos affectations"
 
 #, python-format
 msgid "Autonomy level (%% of students according to periods)"
@@ -136,6 +139,9 @@ msgstr "Formulaire d'évaluation"
 msgid "Enrollments from"
 msgstr "Inscriptions du"
 
+msgid "Entrustable Professional Activity (EPA)"
+msgstr "Activités Professionnelles délégables (APD)"
+
 msgid "Establish a diagnosis"
 msgstr "Établir un diagnostic de travail"
 
@@ -208,6 +214,9 @@ msgstr "Encodage des évaluations de stage"
 
 msgid "Internship student was present during evaluation process"
 msgstr "Le stagiaire était présent pendant le processus d'évaluation"
+
+msgid "Internship students evaluations"
+msgstr "Evaluation des stages"
 
 msgid "Internships"
 msgstr "Stages"
@@ -325,9 +334,11 @@ msgid "Selective internships"
 msgstr "Stages au choix"
 
 msgid ""
-"Some grades have not been validated yet, please do not forget to validate"
+"Some grades have not been validated yet on this page, please do not forget "
+"to validate"
 msgstr ""
-"Il existe encore des évaluations non soumises, n'oubliez pas de les envoyer"
+"Il existe encore des évaluations non soumises sur cette page, n'oubliez pas "
+"de les envoyer"
 
 msgid "Specialist"
 msgstr "Spécialiste"
@@ -359,14 +370,15 @@ msgstr "Résumé de vos choix et affectations"
 msgid "Take a history (anamnesis)"
 msgstr "Prendre l'anamnèse"
 
-msgid "Targeted APD"
+msgid "Targeted EPA"
 msgstr "APDs ciblés"
 
 msgid "The activation failed"
 msgstr "L'activation a échoué"
 
 msgid "The requested scores sheet does not match your internship's allocations"
-msgstr "La feuille de notes demandée ne correspond pas à vos affectations de stages"
+msgstr ""
+"La feuille de notes demandée ne correspond pas à vos affectations de stages"
 
 msgid "The two password fields didn't match."
 msgstr "Les mots de passes sont différents"
@@ -424,7 +436,7 @@ msgstr "Vous ne pouvez plus soumettre vos choix."
 msgid "You don't have an account"
 msgstr "Vous n'avez pas de compte utilisateur"
 
-msgid "You must evaluate minimum {} and maximum {} APDs"
+msgid "You must evaluate minimum {} and maximum {} EPAs"
 msgstr "Vous devez évaluer au minimum {} et au maximum {} APDs"
 
 msgid ""

@@ -48,6 +48,11 @@ def view_score_encoding(request):
     master = InternshipAPIService.get_master(person=request.user.person)
     allocations = InternshipAPIService.get_master_allocations(person=request.user.person, master_uuid=master['uuid'])
     for allocation in allocations:
+
+        # get parent specialty details if subspecialty
+        if allocation.specialty.parent:
+            allocation.specialty = allocation.specialty.parent
+
         stats = InternshipAPIService.get_students_affectations_count(
             person=request.user.person,
             specialty_uuid=allocation['specialty']['uuid'],
@@ -83,7 +88,10 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
     )
 
     not_validated_count = len(
-        [_ for affectation in students_affectations if affectation.score and not affectation.score.validated]
+        [
+            _ for affectation in students_affectations
+            if affectation.score and not affectation.score.validated or not affectation.score
+        ]
     )
 
     periods = Period.objects.filter(cohort__uuid=specialty.cohort.uuid).order_by('date_start')
@@ -145,7 +153,7 @@ def _show_invalid_update_msg(request):
     messages.add_message(
         request,
         messages.ERROR,
-        _("You must evaluate minimum {} and maximum {} APDs").format(MIN_APDS, MAX_APDS)
+        _("You must evaluate minimum {} and maximum {} EPAs").format(MIN_APDS, MAX_APDS)
     )
 
 
