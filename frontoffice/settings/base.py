@@ -70,8 +70,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'django_registration',
     'hijack',
-    'compat',
-    'hijack_admin',
+    'hijack.contrib.admin',
     'waffle'
 )
 
@@ -97,7 +96,7 @@ TESTS_TYPES = os.environ.get('TESTS_TYPES', 'UNIT').upper()
 # Override this tuple in yous environment config (ex dev.py) if you want specific midddleware in specific order
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    'osis_common.middlewares.locale.CustomLocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -105,6 +104,7 @@ MIDDLEWARE = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'waffle.middleware.WaffleMiddleware',
+    'hijack.middleware.HijackUserMiddleware',
 )
 
 # Logging config
@@ -337,7 +337,6 @@ REST_FRAMEWORK = {
 
 # HIJACK
 HIJACK_LOGIN_REDIRECT_URL = '/'  # Where admins are redirected to after hijacking a user
-HIJACK_LOGOUT_REDIRECT_URL = '/admin/auth/user/'  # Where admins are redirected to after releasing a user
 HIJACK_ALLOW_GET_REQUESTS = True
 HIJACK_USE_BOOTSTRAP = True
 
@@ -489,3 +488,5 @@ OSIS_ADMISSION_SDK_API_KEY_PREFIX = os.environ.get(
 # OSIS-DOCUMENT-CONFIGURATION
 OSIS_DOCUMENT_BASE_URL = os.environ.get('OSIS_DOCUMENT_BASE_URL', '')
 OSIS_DOCUMENT_API_SHARED_SECRET = os.environ.get('OSIS_DOCUMENT_API_SHARED_SECRET', '')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

@@ -24,8 +24,8 @@
 #
 ##############################################################################
 from django.contrib import admin
-from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.db.models import JSONField
 
 from base.models.student import Student
 from osis_common.utils.models import get_object_or_none

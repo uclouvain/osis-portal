@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% comment "License" %}
@@ -44,6 +44,11 @@
         {% elif display_warning_last_payment_deadline_tolerance and current_year_echeance_attestation.available %}
             <div class="alert alert-danger" role="alert">
                 {% trans 'Please take note of your payment notice to ensure that you are in order to pay by 1st February at the latest, in order to avoid being disenrolled. If you have regularised your situation in the meantime, please disregard this message.' %}
+            </div>
+        {% endif %}
+        {% if display_warning_invoice_unavailable_yet %}
+            <div class="alert alert-warning" role="alert">
+                {% trans 'Your notice of registration and invoice will be available soon.  You will be notified by e-mail.' %}
             </div>
         {% endif %}
         <div class="panel-body">
