@@ -42,6 +42,12 @@ msgstr ""
 msgid "AVIS"
 msgstr "Avis d'enregistrement et facture"
 
+msgid "FORMULAIRE_STANDARD_ANNEXE_1"
+msgstr "Formulaire standard annexe 1"
+
+msgid "FORMULAIRE_STANDARD_ANNEXE_2"
+msgstr "Formulaire standard annexe 2"
+
 msgid "Attestation"
 msgstr "Attestation"
 
