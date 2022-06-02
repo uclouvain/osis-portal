@@ -66,6 +66,13 @@ msgstr "Avis d'échéance"
 msgid "Faculty administration"
 msgstr "Administration des facultés"
 
+msgid "FORMULAIRE_STANDARD_ANNEXE_1"
+msgstr "Formulaire standard annexe 1"
+
+msgid "FORMULAIRE_STANDARD_ANNEXE_2"
+msgstr "Formulaire standard annexe 2"
+
+
 msgid "No attestation available"
 msgstr "Aucune attestation disponible"
 
