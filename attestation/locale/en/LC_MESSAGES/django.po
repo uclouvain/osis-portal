@@ -103,5 +103,5 @@ msgid "Student attestations"
 msgstr ""
 
 msgid ""
-"Your notice of registration and invoice will be available soon.  You will be notified by e-mail."
+"Your notice of registration and invoice will be available soon. You will be notified by e-mail."
 msgstr ""
