@@ -2,8 +2,22 @@ $('document').ready(function(){
     var recompute_submit_renew_btn_and_select_all_state = function(){
        // Submit button
        var submit_renew_btn = $("#bt_submit_attribution_renew");
+       var tooltip_bt_submit_attribution_renew = $("#tooltip_bt_submit_attribution_renew");
        var checkboxes_checked = $('input:checkbox[id^="chb_attribution_renew_"]:checked');
-       submit_renew_btn.prop('disabled', checkboxes_checked.length == 0);
+
+       if(checkboxes_checked.length == 0){
+           submit_renew_btn.prop('disabled', true);
+           tooltip_bt_submit_attribution_renew.attr(
+               'data-original-title',
+               tooltip_bt_submit_attribution_renew.attr('data-title-toggle-disabled')
+           );
+       } else{
+           submit_renew_btn.prop('disabled', false);
+           tooltip_bt_submit_attribution_renew.attr(
+               'data-original-title',
+               tooltip_bt_submit_attribution_renew.attr('data-title-toggle-enabled')
+           );
+       }
 
        // Select all checkbox
        var select_all_chb =  $("#chb_renew_all");
