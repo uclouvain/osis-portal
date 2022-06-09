@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-28 13:40+0200\n"
+"POT-Creation-Date: 2022-06-03 15:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,9 +118,6 @@ msgstr "Supprimer"
 
 msgid "Delete the application"
 msgstr "Supprimer la candidature"
-
-msgid "Details other educational facilities"
-msgstr "Détails autre aménagement"
 
 msgid "Different explanations are possible:"
 msgstr "Différentes explications sont possibles :"
@@ -288,17 +285,14 @@ msgstr "Pas de cours vacant correspondant"
 msgid "One of your courses is not visible in the list?"
 msgstr "Un de vos cours n’est pas visible dans la liste ?"
 
-msgid "Other educational facilities"
-msgstr "Autres aménagements"
+msgid "Other educational facilities : see Excel"
+msgstr "Autres aménagements : Voir Excel"
 
 msgid "Other educational facilities for courses and practical exercices"
 msgstr "Autres aménagements pour les cours et TP"
 
 msgid "Other educational facilities for exam"
 msgstr "Autres aménagements pour les examens"
-
-msgid "Other educational facilities : see Excel"
-msgstr "Autres aménagements : Voir Excel"
 
 msgid "P - Examen partiel"
 msgstr "P - Examen partiel"
@@ -317,6 +311,9 @@ msgstr "Votre proposition d'organisation pédagogique"
 
 msgid "Person with reduced mobility"
 msgstr "Personnes à mobilité réduite"
+
+msgid "Please choose at least one course"
+msgstr "Veuillez sélectionner au moins un cours"
 
 msgid "Please enter the code of the course to which you would like to apply"
 msgstr "Veuillez introduire le code du cours pour lequel vous voulez postuler"
