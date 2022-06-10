@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -42,7 +42,6 @@ import attestation.views.home
 from base.forms.base_forms import RegistrationIdForm
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
-
 
 STUDENT_REGISTRATION_ID = "70531800"
 STUDENT_GLOBAL_ID = "78961314"
