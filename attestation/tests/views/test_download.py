@@ -40,6 +40,7 @@ from base.tests.factories.student import StudentFactory
 
 STUDENT_GLOBAL_ID = "78961314"
 
+
 def open_sample_pdf():
     pdf_path = 'attestation/tests/resources/sample.pdf'
     with open(pdf_path) as pdf_file:
