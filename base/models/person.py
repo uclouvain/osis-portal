@@ -64,19 +64,12 @@ class Person(SerializableModel):
     language = models.CharField(max_length=30, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
 
     def username(self):
-        if self.user is None:
-            return None
-        return self.user.username
+        return None if self.user is None else self.user.username
 
     def __str__(self):
-        first_name = ""
-        last_name = ""
-        if self.first_name:
-            first_name = self.first_name
-        if self.last_name:
-            last_name = self.last_name + ","
-
-        return u"%s %s" % (last_name.upper(), first_name)
+        first_name = self.first_name or ""
+        last_name = f"{self.last_name}," if self.last_name else ""
+        return f"{last_name.upper()} {first_name}"
 
     class Meta:
         permissions = (
