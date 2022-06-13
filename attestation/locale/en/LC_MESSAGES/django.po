@@ -60,6 +60,12 @@ msgstr "Due date notice"
 msgid "Faculty administration"
 msgstr ""
 
+msgid "FORMULAIRE_STANDARD_ANNEXE_1"
+msgstr "Formulaire standard annexe 1"
+
+msgid "FORMULAIRE_STANDARD_ANNEXE_2"
+msgstr "Formulaire standard annexe 2"
+
 msgid "No attestation available"
 msgstr ""
 
@@ -97,6 +103,5 @@ msgid "Student attestations"
 msgstr ""
 
 msgid ""
-"Your invoice will be available on your portal in the week following the "
-"registration of your registration."
+"Your notice of registration and invoice will be available soon. You will be notified by e-mail."
 msgstr ""

@@ -66,6 +66,13 @@ msgstr "Avis d'échéance"
 msgid "Faculty administration"
 msgstr "Administration des facultés"
 
+msgid "FORMULAIRE_STANDARD_ANNEXE_1"
+msgstr "Formulaire standard annexe 1"
+
+msgid "FORMULAIRE_STANDARD_ANNEXE_2"
+msgstr "Formulaire standard annexe 2"
+
+
 msgid "No attestation available"
 msgstr "Aucune attestation disponible"
 
@@ -115,6 +122,5 @@ msgid "Student attestations"
 msgstr "Attestations de l'étudiant"
 
 msgid ""
-"Your invoice will be available on your portal in the week following the "
-"registration of your registration."
-msgstr "Votre facture sera disponible sur votre bureau dans la semaine suivant l'enregistrement de votre inscription."
+"Your notice of registration and invoice will be available soon. You will be notified by e-mail."
+msgstr "Votre avis d'enregistrement et facture sera bientôt disponible. Vous en serez averti par mail."
