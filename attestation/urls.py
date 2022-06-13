@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ urlpatterns = [
         name='attestation_administration'),
     url(r'^administration/select_student/$', AdministrationSelectStudent.as_view(),
         name='attestation_admin_select_student'),
-    url(r'^administration/attestations/(?P<global_id>[0-9]+)/$',
+    url(r'^administration/attestations/(?P<registration_id>[0-9]+)/$',
         AdministrationViewStudentAttestation.as_view(), name='attestation_admin_view'),
     url(r'^administration/attestations/(?P<global_id>[0-9]+)/(?P<academic_year>[0-9]+)/(?P<attestation_type>.+)/$',
         attestation_main.download_student_attestation, name='attestation_admin_download'),

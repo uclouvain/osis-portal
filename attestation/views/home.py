@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ class Home(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
         try:
             return super().dispatch(request, *args, **kwargs)
         except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
-            logger.exception('User {} returned multiple students.'.format(self.request.user.username))
+            logger.exception(f'User {self.request.user.username} returned multiple students.')
             return dashboard.views.home.show_multiple_registration_id_error(self.request)
 
     def get_attestation_data(self) -> Dict:
