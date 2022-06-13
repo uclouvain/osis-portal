@@ -26,6 +26,16 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block style %}
+
+<style>
+    .breadcrumb{
+        display: none !important;
+    }
+</style>
+
+{% endblock %}
+
 {% block content %}
     <div class="page-header">
         <h2>{% trans 'Dashboard' %}</h2>
@@ -33,26 +43,66 @@
 
     {% include "template_messages.html" %}
 
-    <div class="panel panel-default">
-        <div class="panel-body dashboard-grid">
-            {% switch 'admission' %}
-                {% if 'admission' in installed_apps %}
-                    {% include 'admission_dashboard.html' %}
-                {% endif %}
-            {% endswitch %}
+    {% if perms.base.is_tutor or perms.base.is_internship_master %}
 
-            {% if perms.base.is_tutor %}
-                {% include 'tutor_dashboard.html' %}
-            {% endif %}
+    <div class="dashboard-tutor">
 
-            {% if perms.base.is_student %}
-                {% include 'student_dashboard.html' %}
-            {% endif %}
-
-            {% if perms.base.is_internship_master %}
-                {% include 'master_dashboard.html' %}
-            {% endif %}
+        <div class="well well-sm">
+            <h4>{% trans 'Tutor' %}</h4>
         </div>
+
+        <div class="panel-body">
+            <div class="dashboard-grid">
+                {% if perms.base.is_tutor %}
+                    {% include 'tutor_dashboard.html' %}
+                {% endif %}
+                {% if perms.base.is_internship_master %}
+                    {% include 'master_dashboard.html' %}
+                {% endif %}
+            </div>
+        </div>
+
     </div>
+
+    {% endif %}
+
+    {% if perms.base.is_student %}
+
+    <div class="dashboard-student">
+
+        <div class="well well-sm">
+            <h4>{% trans 'Student' %}</h4>
+        </div>
+
+        <div class="panel-body">
+            <div class="dashboard-grid">
+                {% if perms.base.is_tutor %}
+                    {% include 'student_dashboard.html' %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+{#        <div class="panel-body dashboard-grid">#}
+{#            {% switch 'admission' %}#}
+{#                {% if 'admission' in installed_apps %}#}
+{#                    {% include 'admission_dashboard.html' %}#}
+{#                {% endif %}#}
+{#            {% endswitch %}#}
+{##}
+{#            {% if perms.base.is_tutor %}#}
+{#                {% include 'tutor_dashboard.html' %}#}
+{#            {% endif %}#}
+{##}
+{#            {% if perms.base.is_student %}#}
+{#                {% include 'student_dashboard.html' %}#}
+{#            {% endif %}#}
+{##}
+{#        </div>#}
+{#    </div>#}
 {% endblock %}
 

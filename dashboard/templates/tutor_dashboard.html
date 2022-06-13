@@ -1,16 +1,76 @@
 {% load static %}
 {% load i18n %}
 
+{% if 'attribution' in installed_apps %}
+    <div class="grid-item" style="grid-area: my-applications;">
+        <i class="far fa-id-card" style="grid-area: icon;"></i>
+        <h4 class="media-heading" style="grid-area: title;">
+            <a href="{% url 'applications_overview' %}" id="lnk_my_applications">
+                {% trans 'My applications' %}
+            </a>
+        </h4>
+        <div class="description" style="grid-area: description;">
+            <p>{% trans 'This process controls my applications' %}.</p>
+        </div>
+    </div>
+    <div class="grid-item" style="grid-area: teaching-charge;">
+        <i class="far fa-list-alt" style="grid-area: icon;"></i>
+        <h4 class="media-heading" style="grid-area: title;">
+            <a href="{% url 'attribution_home' %}"
+            id="lnk_my_teaching_charge">{% trans 'My teaching charge' %}</a>
+        </h4>
+        <div class="description" style="grid-area: description;">
+            <p>{% trans 'Read my teaching charge and access to lists and emails of students.' %}</p>
+        </div>
+    </div>
+
+    <div class="grid-item" style="grid-area: description-fiche;">
+        <i class="far fa-file-alt" style="grid-area: icon;"></i>
+        <h4 class="media-heading" style="grid-area: title;">
+            <a href="{{ manage_courses_url }}" id="lnk_manage_courses">
+                {% trans 'Description fiche' %}
+            </a>
+        </h4>
+        <div class="description" style="grid-area: description;">
+            <p>{% trans 'Manage description fiche' %}</p>
+            <p>
+                <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
+                {% if osis_vpn_help_url %}
+                    <span class="dashboard-vpn-warning">
+                    {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}"
+                                                     target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain.' %}
+               </span>
+                {% else %}
+                    <span class="dashboard-vpn-warning">
+                    {% trans 'This requires a VPN access outside UCLouvain.' %}
+                </span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <div class="grid-item" style="grid-area: students-list">
+        <i class="fa fa-users" style="grid-area: icon;"></i>
+        <h4 class="media-heading" style="grid-area: title;">
+            <a href="{% url 'students_list' %}" id="lnk_my_students_list">
+                {% trans 'Lists of students enrolled to my exams' %}
+            </a>
+        </h4>
+        <div class="description" style="grid-area: description;">
+            <p>{% trans 'Download lists of students enrolled to exams for online scores encoding (Excel).' %}</p>
+        </div>
+    </div>
+{% endif %}
 
 {% if score_encoding_url %}
-    <div class="grid-item">
-        <i class="fa fa-hashtag"></i>
-        <div class="description">
-            <h4 class="media-heading">
-                <a href="{{ score_encoding_url }}" id="lnk_scores_download_2">
-                    {% trans 'Scores encoding' %}
-                </a>
-            </h4>
+    <div class="grid-item" style="grid-area: score-encoding;">
+        <i class="fa fa-hashtag" style="grid-area: icon;"></i>
+        <h4 class="media-heading" style="grid-area: title;">
+            <a href="{{ score_encoding_url }}" id="lnk_scores_download_2">
+                {% trans 'Scores encoding' %}
+            </a>
+        </h4>
+        <div class="description" style="grid-area: description;">
             <p>{%  trans 'Scores encoding of my students' %}.</p>
             <p>
                 <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
@@ -32,71 +92,16 @@
     </div>
 {% endif %}
 
-{% if 'attribution' in installed_apps %}
-    <div class="grid-item">
-        <i class="far fa-id-card"></i>
-        <div class="description">
-            <h4 class="media-heading">
-                <a href="{% url 'applications_overview' %}" id="lnk_my_applications">
-                    {% trans 'My applications' %}
-                </a>
-            </h4>
-            <p>{% trans 'This process controls my applications' %}.</p>
-        </div>
-    </div>
-    <div class="grid-item">
-        <i class="far fa-list-alt"></i>
-        <div class="description">
-            <h4 class="media-heading">
-                <a href="{% url 'attribution_home' %}"
-                id="lnk_my_teaching_charge">{% trans 'My teaching charge' %}</a>
-            </h4>
-            <p>{% trans 'Read my teaching charge and access to lists and emails of students.' %}</p>
-        </div>
-    </div>
-    <div class="grid-item">
-        <i class="fa fa-users"></i>
-        <div class="description">
-            <h4 class="media-heading"><a href="{% url 'students_list' %}"
-                                         id="lnk_my_students_list">{% trans 'Lists of students enrolled to my exams' %}</a></h4>
-            <p>{% trans 'Download lists of students enrolled to exams for online scores encoding (Excel).' %}</p>
-        </div>
-    </div>
 
-    <div class="grid-item">
-        <i class="far fa-file-alt"></i>
-        <div class="description">
-            <h4 class="media-heading">
-                <a href="{{ manage_courses_url }}" id="lnk_manage_courses">
-                    {% trans 'Description fiche' %}
-                </a>
-            </h4>
-            <p>{% trans 'Manage description fiche' %}</p>
-            <p>
-                <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
-                {% if osis_vpn_help_url %}
-                    <span class="dashboard-vpn-warning">
-                    {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}"
-                                                     target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain.' %}
-               </span>
-                {% else %}
-                    <span class="dashboard-vpn-warning">
-                    {% trans 'This requires a VPN access outside UCLouvain.' %}
-                </span>
-                {% endif %}
-            </p>
-        </div>
-    </div>
-{% endif %}
-{% if 'dissertation' in installed_apps and request.user.person.adviser %}
-    <div class="grid-item">
-        <i class="fa fa-edit"></i>
-        <div class="description">
-            <h4 class="media-heading">
-                <a href="{{ dissertation_url }}" id="lnk_dissertation">
-                    {% trans 'Dissertations' %}
-                </a>
-            </h4>
+{#{% if 'dissertation' in installed_apps and request.user.person.adviser %}#}
+    <div class="grid-item" style="grid-area: dissertation;">
+        <i class="fa fa-edit" style="grid-area: icon;"></i>
+        <h4 class="media-heading" style="grid-area: title;">
+            <a href="{{ dissertation_url }}" id="lnk_dissertation">
+                {% trans 'Dissertations' %}
+            </a>
+        </h4>
+        <div class="description" style="grid-area: description;">
             <p>{% trans "Student's dissertations management" %}.</p>
             <p>
                 <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
@@ -113,4 +118,4 @@
             </p>
         </div>
     </div>
-{% endif %}
+{#{% endif %}#}

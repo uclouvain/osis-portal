@@ -53,17 +53,46 @@ body {
 }
 
 .dashboard-grid{
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-auto-flow: column;
     padding: 20px;
 }
 
 .dashboard-grid .grid-item {
-    flex: 1 0 360px;
-    padding: 10px 20px;
-    flex-grow: 0;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0.5rem;
+    padding: 30px 30px;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas:
+      "icon title"
+      "description description";
 }
 
+.dashboard-tutor .dashboard-grid{
+    grid-template-areas:
+      "my-applications students-list dissertation"
+      "teaching-charge score-encoding internship"
+      "description-fiche . .";
+}
+
+.dashboard-student .dashboard-grid{
+    grid-template-areas:
+      "my-data performance internship"
+      "attestation exam-enrollment ."
+      ". attendance .";
+}
+
+.dashboard-grid .media-heading, .dashboard-grid i{
+    align-self: center;
+}
 
 .dashboard-grid .grid-item i {
     font-size: 400%;
