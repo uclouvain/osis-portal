@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ class AdministrationViewStudentAttestation(Administration, TemplateView):
 
     @cached_property
     def student(self) -> Student:
-        return student_mdl.find_by_registration_id(self.kwargs['global_id'])
+        return student_mdl.find_by_registration_id(self.kwargs['registration_id'])
 
     @cached_property
     def person(self) -> Person:

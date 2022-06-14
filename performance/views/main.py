@@ -45,7 +45,6 @@ from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_req
 from performance import models as mdl_performance
 from performance.models.student_performance import StudentPerformance
 
-
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
@@ -194,6 +193,9 @@ def visualize_student_result(request, pk):
     if stud_perf and not __can_visualize_student_result(request, pk):
         raise PermissionDenied
     try:
+        # Ici on est dans une vue d'administration où le gestionnaire accède aux différentes pages après avoir renseigné
+        # le NOMA d'un étudiant
+        # Comment ici cela pourrait-il fonctionner? L'utilisateur est un gestionnaire !!
         stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dashboard.views.home.show_multiple_registration_id_error(request)
