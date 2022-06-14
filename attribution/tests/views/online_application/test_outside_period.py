@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -42,8 +42,6 @@ class TestOutsideEncodingPeriodView(OnlineApplicationContextTestMixin, TestCase)
 
     def setUp(self) -> None:
         self.open_application_course_calendar()
-
-        self.add_can_access_application_permission_to_user(self.tutor.person.user)
         self.client.force_login(self.tutor.person.user)
 
     def test_case_period_closed_assert_message_displayed(self):

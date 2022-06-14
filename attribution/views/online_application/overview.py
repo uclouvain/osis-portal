@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -48,10 +48,12 @@ class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, Templ
     # TemplateView
     template_name = "attribution_overview.html"
 
-    def get(self, request, *args, **kwargs):
-        if not permission.is_online_application_opened(self.request.user):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        elif not permission.is_online_application_opened(request.user):
             return redirect("outside_applications_period")
-        return super().get(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     @cached_property
     def tutor(self):
