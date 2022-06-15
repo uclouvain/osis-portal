@@ -57,33 +57,43 @@ body {
     grid-gap: 20px;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    grid-auto-flow: column;
-    padding: 20px;
 }
 
 .dashboard-grid .grid-item {
+    cursor: pointer;
     background-color: #fff;
     background-clip: border-box;
     border: 1px solid rgba(0, 0, 0, .125);
     border-radius: 0.5rem;
-    padding: 30px 30px;
+    padding: 20px 30px;
     display: grid;
-    grid-gap: 20px;
+    column-gap: 20px;
+    row-gap: 10px;
     grid-template-columns: 1fr 4fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 0fr 1fr;
     grid-template-areas:
       "icon title"
       "description description";
+    transition: background-color 0.4s;
 }
 
-.dashboard-tutor .dashboard-grid{
+.grid-item a {
+    text-decoration: none;
+    color: #6699FF;
+}
+
+.dashboard-grid .grid-item:hover {
+    background-color: #f5f5f5;
+}
+
+.dashboard-tutor .dashboard-fixed-placement{
     grid-template-areas:
       "my-applications students-list dissertation"
       "teaching-charge score-encoding internship"
       "description-fiche . .";
 }
 
-.dashboard-student .dashboard-grid{
+.dashboard-student .dashboard-fixed-placement{
     grid-template-areas:
       "my-data performance internship"
       "attestation exam-enrollment ."
@@ -98,6 +108,13 @@ body {
     font-size: 400%;
     color: #6699FF;
     padding-bottom: 10px;
+}
+
+@media screen and (max-width: 991px) {
+     .dashboard-grid{
+         display: flex;
+         flex-direction: column;
+     }
 }
 
 span.dashboard-vpn-warning{

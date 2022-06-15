@@ -93,7 +93,7 @@
 {% endif %}
 
 
-{#{% if 'dissertation' in installed_apps and request.user.person.adviser %}#}
+{% if 'dissertation' in installed_apps and request.user.person.adviser %}
     <div class="grid-item" style="grid-area: dissertation;">
         <i class="fa fa-edit" style="grid-area: icon;"></i>
         <h4 class="media-heading" style="grid-area: title;">
@@ -118,4 +118,4 @@
             </p>
         </div>
     </div>
-{#{% endif %}#}
+{% endif %}
