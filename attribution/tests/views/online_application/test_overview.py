@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ from rest_framework import status
 
 from attribution.tests.views.online_application.common import OnlineApplicationContextTestMixin
 from base.templatetags.academic_year_display import display_as_academic_year
+from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
-from base.tests.factories.user import UserFactory
 
 
 class TestApplicationOverviewView(OnlineApplicationContextTestMixin, TestCase):
@@ -70,7 +70,7 @@ class TestApplicationOverviewView(OnlineApplicationContextTestMixin, TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_case_user_without_permission(self):
-        self.client.force_login(UserFactory())
+        self.client.force_login(PersonFactory().user)
 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
