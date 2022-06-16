@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -40,9 +40,8 @@ from base.templatetags.academic_year_display import display_as_academic_year
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+class OutsidePeriod(LoginRequiredMixin, TemplateView):
     template_name = "attribution_access_denied.html"
-    permission_required = 'base.can_access_attribution_application'
 
     @cached_property
     def calendar(self):
@@ -56,10 +55,7 @@ class OutsidePeriod(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         self._manage_previous_academic_event()
         self._manage_next_academic_event()
-
-        return {
-            **super().get_context_data(**kwargs)
-        }
+        return super().get_context_data(**kwargs)
 
     def _manage_next_academic_event(self):
         next_academic_event = self.calendar.get_next_academic_event()
