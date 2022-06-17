@@ -41,70 +41,86 @@
         <h2>{% trans 'Dashboard' %}</h2>
     </div>
 
-    {% include "template_messages.html" %}
-
-    {% if perms.base.is_tutor or perms.base.is_internship_master %}
-        <div class="dashboard-tutor">
-            <div class="panel-body">
-                <div class="dashboard-grid">
-                    {% if perms.base.is_tutor %}
-                        {% include 'tutor_dashboard.html' %}
-                    {% endif %}
-                    {% if perms.base.is_internship_master %}
-                        {% include 'master_dashboard.html' %}
-                    {% endif %}
-                </div>
-            </div>
-
-        </div>
-    {% endif %}
-
-    {% if perms.base.is_student and perms.base.is_tutor or perms.base.is_internship_master %}
-        <hr/>
-    {% endif %}
-
-    {% if perms.base.is_student %}
-        <div class="dashboard-student">
-            <div class="panel-body">
-                <div class="dashboard-grid">
-                    {% include 'student_dashboard.html' %}
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
     {% switch 'admission' %}
         {% if 'admission' in installed_apps %}
             {% include 'admission_dashboard.html' %}
         {% endif %}
     {% endswitch %}
 
+    {% include "template_messages.html" %}
+
+    {% for role, role_tiles in tiles.items %}
+
+        <div class="dashboard-{{ role|lower }}">
+            <div class="panel-body">
+                <div class="dashboard-grid">
+                    {% for tile in role_tiles %}
+                    <div class="grid-item" style="grid-area: auto/{{ tile.column }}">
+                        <i class="{{ tile.icon }}" style="grid-area: icon;"></i>
+                        <h4 class="media-heading" style="grid-area: title;">
+                            <a href="{{ tile.url }}" id="lnk_my_applications">
+                                {{ tile.title }}
+                            </a>
+                        </h4>
+                        <div class="description" style="grid-area: description;">
+                            <p>{{ tile.description }}</p>
+                            {% if tile.VPN %}
+                                <p>
+                                    <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
+                                    {% if osis_vpn_help_url %}
+                                        <span class="dashboard-vpn-warning">
+                                            {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}" target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain.' %}
+                                        </span>
+                                    {% else %}
+                                        <span class="dashboard-vpn-warning">
+                                            {% trans 'This requires a VPN access outside UCLouvain.' %}
+                                        </span>
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if not forloop.last %}
+                <hr/>
+            {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
 {% endblock %}
 
 {% block script %}
 
-<script>
+    <script>
 
-    const MIN_SIZE_FOR_GRID_AREAS = 3;
+        const MIN_SIZE_FOR_GRID_AREAS = 3;
 
-    for(let role of ['tutor', 'student']){
-        initDashboardAutoPlacement(role);
-    }
+        for(let role of ['tutor', 'student']){
+            initDashboardAutoPlacement(role);
+        }
 
-    function initDashboardAutoPlacement(role){
-        const dashboardGrid = document.querySelector(`.dashboard-${role} .dashboard-grid`);
-        if(dashboardGrid){
-            if(dashboardGrid.querySelectorAll('.grid-item').length > MIN_SIZE_FOR_GRID_AREAS){
-                dashboardGrid.classList.add('dashboard-fixed-placement');
-            } else {
-                dashboardGrid.querySelectorAll('.grid-item').forEach(el => el.style.gridArea = 'auto');
+        function initDashboardAutoPlacement(role){
+            const dashboardGrid = document.querySelector(`.dashboard-${role} .dashboard-grid`);
+            if(dashboardGrid){
+                if(dashboardGrid.querySelectorAll('.grid-item').length > MIN_SIZE_FOR_GRID_AREAS){
+                    dashboardGrid.classList.add('dashboard-fixed-placement');
+                } else {
+                    dashboardGrid.querySelectorAll('.grid-item').forEach(el => el.style.gridArea = 'auto');
+                }
             }
         }
-    }
 
-    // propagate click on grid-item to sibling 'a' element
-    document.querySelectorAll('.grid-item').forEach(el => el.addEventListener('click', () => el.querySelector('a').click()));
+        // propagate click on grid-item to sibling 'a' element
+        document.querySelectorAll('.grid-item').forEach(el => el.addEventListener('click', () => el.querySelector('a').click()));
 
-</script>
+    </script>
 
 {% endblock %}
