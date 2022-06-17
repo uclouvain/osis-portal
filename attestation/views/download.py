@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ from django.utils.translation import ugettext_lazy as _
 import dashboard.views.home
 from attestation.queues import student_attestation
 from base.business import student as student_bsn
-from base.models import student as student_mdl, person as person_mdl
+from base.models import person as person_mdl
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 ATTESTATION_TYPE_ECHEANCE = "ECHEANCE"
@@ -49,39 +49,47 @@ def download_attestation(request, academic_year, attestation_type):
     try:
         student = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
-        logger.exception('User {} returned multiple students.'.format(request.user.username))
+        logger.exception(f'User {request.user.username} returned multiple students.')
         return dashboard.views.home.show_multiple_registration_id_error(request)
 
-    attestation_pdf = student_attestation.fetch_student_attestation(student.person.global_id,
-                                                                    academic_year,
-                                                                    attestation_type,
-                                                                    request.user)
+    attestation_pdf = student_attestation.fetch_student_attestation(
+        student.person.global_id,
+        academic_year,
+        attestation_type,
+        request.user
+    )
 
     if attestation_pdf:
         return _make_pdf_attestation(attestation_pdf, attestation_type)
-    else:
-        messages.add_message(request, messages.ERROR, _('Student attestations'))
-        return redirect(reverse('attestation_home'))
+
+    messages.add_message(request, messages.ERROR, _('Student attestations'))
+    return redirect(reverse('attestation_home'))
 
 
 @login_required
 @permission_required('base.is_faculty_administrator', raise_exception=True)
 def download_student_attestation(request, global_id, academic_year, attestation_type):
-    attestation_pdf = student_attestation.fetch_student_attestation(global_id,
-                                                                    academic_year,
-                                                                    attestation_type,
-                                                                    request.user)
+    attestation_pdf = student_attestation.fetch_student_attestation(
+        global_id,
+        academic_year,
+        attestation_type,
+        request.user
+    )
     if attestation_pdf:
         return _make_pdf_attestation(attestation_pdf, attestation_type)
-    else:
-        person = person_mdl.find_by_global_id(global_id)
-        student = student_mdl.find_by_person(person)
-        messages.add_message(request, messages.ERROR, _('Student attestations'))
-        return redirect(reverse('attestation_admin_view', args=[student.registration_id]))
+
+    person = person_mdl.find_by_global_id(global_id)
+    try:
+        student = student_bsn.find_by_user_and_discriminate(person.user)
+    except MultipleObjectsReturned:
+        return dashboard.views.home.show_multiple_registration_id_error(request)
+
+    messages.add_message(request, messages.ERROR, _('Student attestations'))
+    return redirect(reverse('attestation_admin_view', args=[student.registration_id]))
 
 
 def _make_pdf_attestation(attestation_pdf, attestation_type):
-    filename = "%s.pdf" % _(attestation_type)
+    filename = f"{_(attestation_type)}.pdf"
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     response.write(attestation_pdf)
