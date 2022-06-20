@@ -46,6 +46,7 @@ queue_exception_logger = logging.getLogger(settings.QUEUE_EXCEPTION_LOGGER)
 class ScoreSheetXls(LoginRequiredMixin, PermissionRequiredMixin, View):
     permission_required = 'base.is_tutor'
     raise_exception = True
+    name = 'scores_sheet_xls'
 
     def get(self, request, *args, **kwargs):
         file = AssessmentsService.get_xls_score_sheet(self.kwargs['learning_unit_code'], request.user.person)

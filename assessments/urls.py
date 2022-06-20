@@ -27,18 +27,18 @@ from django.conf.urls import url
 from django.urls import path, include, register_converter
 
 from base.utils.converters import AcronymConverter
-from .views import score_encoding
 from .views.attendance_mark.learning_units import ListExamEnrollments
 from .views.attendance_mark.offers import SelectOffer
 from .views.attendance_mark.outside_period import OutsidePeriod
 from .views.attendance_mark.request_attendance_mark import RequestAttendanceMarkFormView
+from .views.score_encoding import ScoreSheetXls
 
 register_converter(AcronymConverter, 'acronym')
 
 urlpatterns = [
     url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z_-]+)/',
-        score_encoding.score_sheet_xls,
-        name='scores_sheet_xls',
+        ScoreSheetXls.as_view(),
+        name=ScoreSheetXls.name,
         ),
     path('attendance_marks/', include([
         path('select_offer/', SelectOffer.as_view(), name=SelectOffer.name),
