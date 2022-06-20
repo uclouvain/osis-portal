@@ -35,6 +35,8 @@
 
     {% for role, role_tiles in tiles.items %}
 
+        {% if role_tiles %}
+
         <div class="dashboard-{{ role|lower }}">
             <div class="panel-body">
                 <div class="dashboard-grid">
@@ -74,7 +76,16 @@
 
         </div>
 
+    {% endif %}
+
+
     {% endfor %}
+
+    {% switch 'admission' %}
+        {% if 'admission' in installed_apps and request.user.person %}
+            {% include 'admission_dashboard.html' %}
+        {% endif %}
+    {% endswitch %}
 
 
 {% endblock %}
