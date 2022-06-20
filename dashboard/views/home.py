@@ -50,10 +50,10 @@ class Home(LoginRequiredMixin, TemplateView):
         }
 
     def get_available_tiles(self):
-        available_tiles = {}
-        for dashboard, tiles in self.get_tiles_data().items():
-            available_tiles[dashboard] = [tile for tile in tiles if self.is_available(tile)]
-        return available_tiles
+        return {
+            dashboard: [tile for tile in tiles if self.is_available(tile)]
+            for dashboard, tiles in self.get_tiles_data().items()
+        }
 
     def is_available(self, tile):
         return tile['has_perm'] and tile['app'] in settings.INSTALLED_APPS or \
@@ -197,33 +197,9 @@ class Home(LoginRequiredMixin, TemplateView):
             }
         ]
 
-        admission_tiles = [
-            {
-                'column': 'admission',
-                'title': _('My enrolment request'),
-                'url': reverse('admission:doctorate-list'),
-                'icon': 'fa fa-address-card',
-                'description': _("Create and manage my enrolment request for UCLouvain"),
-                'VPN': False,
-                'app': 'admission',
-                'has_perm': True
-            },
-            {
-                'column': 'admission',
-                'title': _('Manage doctorates'),
-                'url': reverse('admission:supervised-list'),
-                'icon': 'fa fa-address-card',
-                'description': _("Access my doctoral students' requests"),
-                'VPN': False,
-                'app': 'admission',
-                'has_perm': True
-            },
-        ]
-
         return {
             'tutor': tutor_tiles,
             'student': student_tiles,
-            'admission': admission_tiles,
         }
 
 
