@@ -36,7 +36,6 @@ from .views.attendance_mark.request_attendance_mark import RequestAttendanceMark
 register_converter(AcronymConverter, 'acronym')
 
 urlpatterns = [
-    url(r'^scores_encoding/$', score_encoding.score_encoding, name='scores_encoding'),
     url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z_-]+)/',
         score_encoding.score_sheet_xls,
         name='scores_sheet_xls',
