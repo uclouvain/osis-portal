@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from itertools import groupby
 
 from django.conf import settings
 from django.contrib import messages
@@ -39,12 +38,9 @@ class Home(LoginRequiredMixin, TemplateView):
 
     def get_settings_url_context(self):
         return {
-            'manage_courses_url': settings.OSIS_MANAGE_COURSES_URL,
             'osis_vpn_help_url': settings.OSIS_VPN_HELP_URL,
-            'dissertation_url': settings.OSIS_DISSERTATION_URL,
-            'score_encoding_url': settings.OSIS_SCORE_ENCODING_URL,
             'score_encoding_vpn_help_url': settings.OSIS_VPN_HELP_URL,
-            'tiles': self.get_tiles_grouped_by_role(),
+            'tiles': self.get_available_tiles(),
         }
 
     def get_context_data(self, **kwargs):
@@ -53,28 +49,37 @@ class Home(LoginRequiredMixin, TemplateView):
             **self.get_settings_url_context()
         }
 
-    @staticmethod
-    def get_tiles_data():
+    def get_available_tiles(self):
+        available_tiles = {}
+        for dashboard, tiles in self.get_tiles_data().items():
+            available_tiles[dashboard] = [tile for tile in tiles if self.is_available(tile)]
+        return available_tiles
+
+    def is_available(self, tile):
+        return tile['has_perm'] and tile['app'] in settings.INSTALLED_APPS or \
+               (tile['url'] and tile['url'] == settings.OSIS_SCORE_ENCODING_URL)
+
+    def get_tiles_data(self):
         tutor_tiles = [
             {
                 'column': 'courses',
                 'title': _('My applications'),
                 'url': reverse('applications_overview'),
                 'icon': 'far fa-id-card',
-                'description': _('This process controls my applications.'),
-                'role': 'TUTOR',
+                'description': _('This process controls my applications'),
                 'VPN': False,
-                'app': 'attribution'
+                'app': 'attribution',
+                'has_perm': self.request.user.has_perm('base.is_tutor')
             },
             {
                 'column': 'courses',
                 'title': _('My teaching charge'),
                 'url': reverse('attribution_home'),
                 'icon': 'far fa-list-alt',
-                'description': _('Read my teaching charge and access to lists and emails of students.'),
-                'role': 'TUTOR',
+                'description': _('Read my teaching charge and access to lists and emails of students'),
                 'VPN': False,
-                'app': 'attribution'
+                'app': 'attribution',
+                'has_perm': self.request.user.has_perm('base.is_tutor')
             },
             {
                 'column': 'courses',
@@ -82,49 +87,50 @@ class Home(LoginRequiredMixin, TemplateView):
                 'url': settings.OSIS_MANAGE_COURSES_URL,
                 'icon': 'far fa-file-alt',
                 'description': _('Manage description fiche'),
-                'role': 'TUTOR',
                 'VPN': True,
-                'app': 'attribution'
+                'app': 'attribution',
+                'has_perm': self.request.user.has_perm('base.is_tutor')
             },
             {
                 'column': 'exams',
                 'title': _('Lists of students enrolled to my exams'),
                 'url': reverse('students_list'),
                 'icon': 'fa fa-users',
-                'description': _('Download lists of students enrolled to exams for online scores encoding (Excel).'),
-                'role': 'TUTOR',
+                'description': _('Download lists of students enrolled to exams for online scores encoding (Excel)'),
                 'VPN': False,
-                'app': 'attribution'
+                'app': 'attribution',
+                'has_perm': self.request.user.has_perm('base.is_tutor')
             },
             {
                 'column': 'exams',
                 'title': _('Scores encoding'),
                 'url': settings.OSIS_SCORE_ENCODING_URL,
                 'icon': 'far fa-hashtag',
-                'description': _('Scores encoding of my students.'),
-                'role': 'TUTOR',
+                'description': _('Scores encoding of my students'),
                 'VPN': True,
-                'app': 'score_encoding'
+                'app': 'score_encoding',
+                'has_perm': self.request.user.has_perm('base.is_tutor')
             },
             {
                 'column': 'submodules',
                 'title': _('Dissertations'),
                 'url': settings.OSIS_DISSERTATION_URL,
                 'icon': 'far fa-edit',
-                'description': _("Student's dissertations management."),
-                'role': 'TUTOR',
+                'description': _("Student's dissertations management"),
                 'VPN': True,
-                'app': 'dissertation'
+                'app': 'dissertation',
+                # TODO: use dissertation API to check if user is an adviser
+                'has_perm': hasattr(self.request.user, 'person') and hasattr(self.request.user.person, 'adviser')
             },
             {
                 'column': 'submodules',
                 'title': _('Internships assessment'),
                 'url': reverse('internship'),
                 'icon': 'fa fa-user-md',
-                'description': _("This process controls internships assessment."),
-                'role': 'TUTOR',
+                'description': _("This process controls internships assessment"),
                 'VPN': False,
-                'app': 'internship'
+                'app': 'internship',
+                'has_perm': self.request.user.has_perm('base.is_internship_master')
             },
         ]
 
@@ -134,60 +140,60 @@ class Home(LoginRequiredMixin, TemplateView):
                 'title': _('My personal data'),
                 'url': reverse('student_id_data_home'),
                 'icon': 'far fa-id-card',
-                'description': _('This process shows personal data.'),
-                'role': 'STUDENT',
+                'description': _('This process shows personal data'),
                 'VPN': False,
                 'app': 'base',
+                'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
                 'column': 'personal',
                 'title': _('My attestations'),
                 'url': reverse('attestation_home'),
                 'icon': 'far fa-file-pdf',
-                'description': _('This process controls my attestations.'),
-                'role': 'STUDENT',
+                'description': _('This process controls my attestations'),
                 'VPN': False,
                 'app': 'attestation',
+                'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
                 'column': 'exams',
                 'title': _('Annual program'),
                 'url': reverse('performance_home'),
                 'icon': 'fa fa-chart-line',
-                'description': _('View my annual program and exam marks.'),
-                'role': 'STUDENT',
+                'description': _('View my annual program and exam marks'),
                 'VPN': False,
                 'app': 'performance',
+                'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
                 'column': 'exams',
                 'title': _('Exams enrollment'),
                 'url': reverse('exam_enrollment_offer_choice'),
                 'icon': 'fa fa-book',
-                'description': _('Manage my exam registration.'),
-                'role': 'STUDENT',
+                'description': _('Manage my exam registration'),
                 'VPN': False,
                 'app': 'exam_enrollment',
+                'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
                 'column': 'exams',
                 'title': _('My attendance marks'),
                 'url': reverse('attendance-mark-select-offer'),
                 'icon': 'fa fa-user-slash',
-                'description': _('Request an attendance mark (0/20).'),
-                'role': 'STUDENT',
+                'description': _('Request an attendance mark (0/20)'),
                 'VPN': False,
                 'app': 'assessments',
+                'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
                 'column': 'submodules',
                 'title': _('Internships'),
                 'url': reverse('internship'),
                 'icon': 'fa fa-user-md',
-                'description': _('This process controls students internships.'),
-                'role': 'STUDENT',
+                'description': _('This process controls students internships'),
                 'VPN': False,
                 'app': 'internship',
+                'has_perm': self.request.user.has_perm('base.is_student')
             }
         ]
 
@@ -198,37 +204,27 @@ class Home(LoginRequiredMixin, TemplateView):
                 'url': reverse('admission:doctorate-list'),
                 'icon': 'fa fa-address-card',
                 'description': _("Create and manage my enrolment request for UCLouvain"),
-                'role': 'ADMISSION',
                 'VPN': False,
                 'app': 'admission',
+                'has_perm': True
             },
             {
                 'column': 'admission',
                 'title': _('Manage doctorates'),
                 'url': reverse('admission:supervised-list'),
                 'icon': 'fa fa-address-card',
-                'description': _("Access my doctoral students' requests."),
-                'role': 'ADMISSION',
+                'description': _("Access my doctoral students' requests"),
                 'VPN': False,
                 'app': 'admission',
+                'has_perm': True
             },
         ]
 
-        return tutor_tiles + student_tiles
-
-    def get_user_roles(self):
-        roles = []
-        if self.request.user.has_perm('base.is_tutor') or self.request.user.has_perm('base.is_master'):
-            roles.append('TUTOR')
-        if self.request.user.has_perm('base.is_student'):
-            roles.append('STUDENT')
-        roles.append('ADMISSION')
-        return roles
-
-    def get_tiles_grouped_by_role(self):
-        tiles = [tile for tile in Home.get_tiles_data() if tile['role'] in self.get_user_roles()]
-        tiles_by_role = {role: list(tiles) for role, tiles in groupby(tiles, key=lambda x: x['role'])}
-        return tiles_by_role
+        return {
+            'tutor': tutor_tiles,
+            'student': student_tiles,
+            'admission': admission_tiles,
+        }
 
 
 def show_multiple_registration_id_error(request):

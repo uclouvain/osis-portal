@@ -26,26 +26,10 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block style %}
-
-<style>
-    .breadcrumb{
-        display: none !important;
-    }
-</style>
-
-{% endblock %}
-
 {% block content %}
     <div class="page-header">
         <h2>{% trans 'Dashboard' %}</h2>
     </div>
-
-    {% switch 'admission' %}
-        {% if 'admission' in installed_apps %}
-            {% include 'admission_dashboard.html' %}
-        {% endif %}
-    {% endswitch %}
 
     {% include "template_messages.html" %}
 
@@ -69,11 +53,11 @@
                                     <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
                                     {% if osis_vpn_help_url %}
                                         <span class="dashboard-vpn-warning">
-                                            {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}" target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain.' %}
+                                            {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}" target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain' %}
                                         </span>
                                     {% else %}
                                         <span class="dashboard-vpn-warning">
-                                            {% trans 'This requires a VPN access outside UCLouvain.' %}
+                                            {% trans 'This requires a VPN access outside UCLouvain' %}
                                         </span>
                                     {% endif %}
                                 </p>
@@ -88,11 +72,9 @@
                 <hr/>
             {% endif %}
 
-            {% endfor %}
-
         </div>
 
-    </div>
+    {% endfor %}
 
 
 {% endblock %}
@@ -118,8 +100,15 @@
             }
         }
 
-        // propagate click on grid-item to sibling 'a' element
-        document.querySelectorAll('.grid-item').forEach(el => el.addEventListener('click', () => el.querySelector('a').click()));
+        // propagate click on grid-item to sibling 'a' element (propagation event priority is given to a:hover)
+        document.querySelectorAll('.grid-item').forEach(el => el.addEventListener('click', () => {
+            const aHover = el.querySelector('a:hover');
+            if(aHover) {
+                aHover.click()
+            } else {
+                el.querySelector('a').click();
+            }
+        }));
 
     </script>
 

@@ -87,8 +87,10 @@ body {
     display: grid;
     grid-gap: 20px;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: none;
-    grid-auto-flow: row;
+}
+
+.dashboard-admission .grid-item {
+    grid-area: auto !important;
 }
 
 .dashboard-grid .grid-item:hover {
@@ -107,11 +109,6 @@ body {
       "personal exams submodules"
       "personal exams submodules"
       "personal exams submodules";
-}
-
-.dashboard-admission .dashboard-fixed-placement{
-    grid-template-areas:
-      "admission admission admission"
 }
 
 .dashboard-grid .media-heading, .dashboard-grid i{
@@ -151,7 +148,7 @@ span.dashboard-vpn-warning a{
 }
 
 span.dashboard-vpn-warning a:hover{
-    text-decoration: none;
+    text-shadow: 0px 0px 1px #f0ad4e;
 }
 
 .tooltip-wrapper {
