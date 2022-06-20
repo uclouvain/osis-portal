@@ -48,15 +48,6 @@ class ScoreSheetXls(LoginRequiredMixin, PermissionRequiredMixin, View):
     raise_exception = True
 
     def get(self, request, *args, **kwargs):
-        return self._build_response(request)
-
-    @staticmethod
-    def get_filename(temp_file_name: str) -> str:
-        filename = temp_file_name
-        pos = filename.rfind('/')
-        return filename[pos + 1:]
-
-    def _build_response(self, request):
         file = AssessmentsService.get_xls_score_sheet(self.kwargs['learning_unit_code'], request.user.person)
         if isinstance(file, BufferedReader):
             content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=binary'
@@ -71,3 +62,9 @@ class ScoreSheetXls(LoginRequiredMixin, PermissionRequiredMixin, View):
                 message = ". ".join(json.loads(file.get('error_body')))
             messages.add_message(request, messages.INFO, message, "alert-info")
         return redirect(reverse('students_list'))
+
+    @staticmethod
+    def get_filename(temp_file_name: str) -> str:
+        filename = temp_file_name
+        pos = filename.rfind('/')
+        return filename[pos + 1:]
