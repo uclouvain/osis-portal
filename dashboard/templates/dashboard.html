@@ -38,7 +38,6 @@
         {% if role_tiles %}
 
         <div class="dashboard-{{ role|lower }}">
-            <div class="panel-body">
                 <div class="dashboard-grid">
                     {% for tile in role_tiles %}
                     <div class="grid-item" style="grid-area: auto/{{ tile.column }}">
@@ -68,7 +67,6 @@
                     </div>
                     {% endfor %}
                 </div>
-            </div>
 
             {% if not forloop.last %}
                 <hr/>
