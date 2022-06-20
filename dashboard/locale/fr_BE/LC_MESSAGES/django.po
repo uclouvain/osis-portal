@@ -108,7 +108,7 @@ msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
 
 msgid "Manage doctorates"
-msgstr ""
+msgstr "Gérer les doctorats"
 
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
@@ -129,7 +129,7 @@ msgid "My attestations"
 msgstr "Mes attestations"
 
 msgid "My enrolment request"
-msgstr ""
+msgstr "Ma demande d'inscription"
 
 msgid "My personal data"
 msgstr "Mes données personnelles"
