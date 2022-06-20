@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 13:41+0100\n"
+"POT-Creation-Date: 2022-06-20 10:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +27,9 @@ msgstr ""
 "affectés à votre utilisateur.</br> Veuillez prendre contact le <a href="
 "\"{registration_department_url}\" target=\"_blank\">Service des "
 "inscriptions</a> afin de résoudre le problème. Merci."
+
+msgid "Access my doctoral students' requests"
+msgstr "Accéder à mes demandes de doctorat"
 
 msgid "Annual program"
 msgstr "Programme annuel"
@@ -49,18 +52,24 @@ msgstr "Ville"
 msgid "Country"
 msgstr "Pays"
 
+msgid "Create and manage my enrolment request for UCLouvain"
+msgstr "Créer et gérer mes demandes d'inscription à l'UCLouvain"
+
 msgid "Dashboard"
 msgstr "Tableau de bord"
+
+msgid "Description fiche"
+msgstr "Fiches descriptives"
 
 msgid "Dissertations"
 msgstr "Mémoires"
 
 msgid ""
 "Download lists of students enrolled to exams for online scores encoding "
-"(Excel)."
+"(Excel)"
 msgstr ""
 "Télécharger les listes d'étudiants inscrits aux examens pour l'encodage des "
-"notes en ligne (Excel)."
+"notes en ligne (Excel)"
 
 msgid "Email"
 msgstr "Email"
@@ -98,6 +107,9 @@ msgstr "Listes des étudiants inscrits à mes examens"
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
 
+msgid "Manage doctorates"
+msgstr "Gérer les doctorats"
+
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
 
@@ -116,6 +128,9 @@ msgstr "Mes notes de présence"
 msgid "My attestations"
 msgstr "Mes attestations"
 
+msgid "My enrolment request"
+msgstr "Ma demande d'inscription"
+
 msgid "My personal data"
 msgstr "Mes données personnelles"
 
@@ -131,10 +146,10 @@ msgstr "Code postal"
 msgid "Private email"
 msgstr "Courriel privé"
 
-msgid "Read my teaching charge and access to lists and emails of students."
+msgid "Read my teaching charge and access to lists and emails of students"
 msgstr ""
 "Consulter ma charge d'enseignement et accéder aux listes et courriels des "
-"étudiants."
+"étudiants"
 
 msgid "Registration department"
 msgstr "Service des inscriptions"
@@ -169,26 +184,26 @@ msgstr "Administration des données personnelles de l'étudiant"
 msgid "Student's dissertations management"
 msgstr "Gestion des mémoires des étudiants"
 
-msgid "This process controls internships assessment."
-msgstr "Gestion des évaluations de stages."
+msgid "This process controls internships assessment"
+msgstr "Gestion des évaluations de stages"
 
 msgid "This process controls my applications"
 msgstr "Gestion de mes candidatures aux cours vacants"
 
-msgid "This process controls my attestations."
-msgstr "Gestion de mes attestations."
+msgid "This process controls my attestations"
+msgstr "Gestion de mes attestations"
 
-msgid "This process controls students internships."
-msgstr "Gestion des stages des étudiants."
+msgid "This process controls students internships"
+msgstr "Gestion des stages des étudiants"
 
-msgid "This process shows personal data."
-msgstr "Accès à mes données personnelles."
+msgid "This process shows personal data"
+msgstr "Accès à mes données personnelles"
 
 msgid "This requires a "
 msgstr "Ceci nécessite un "
 
-msgid "This requires a VPN access outside UCLouvain."
-msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCLouvain."
+msgid "This requires a VPN access outside UCLouvain"
+msgstr "Ceci nécessite un accès VPN en dehors du réseau de l'UCLouvain"
 
 msgid "VPN access"
 msgstr "accès VPN"
@@ -196,5 +211,6 @@ msgstr "accès VPN"
 msgid "View my annual program and exam marks"
 msgstr "Voir mon programme annuel et mes notes d'examen"
 
-msgid "outside UCLouvain."
-msgstr "en dehors du réseau de l'UCLouvain."
+msgid "outside UCLouvain"
+msgstr "en dehors du réseau de l'UCLouvain"
+
