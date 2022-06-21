@@ -28,7 +28,6 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import Group
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from base.models import person as model_person
@@ -55,9 +54,10 @@ class StudentAdmin(SerializableModelAdmin):
                 if user and not user.groups.filter(name=group_name).exists():
                     user.groups.add(group)
                     count += 1
-            self.message_user(request, "{} users added to the group '{}'.".format(count, group_name), level=messages.SUCCESS)
+            self.message_user(request, f"{count} users added to the group '{group_name}'.", level=messages.SUCCESS)
+
         except Group.DoesNotExist:
-            self.message_user(request, "Group {} doesn't exist.".format(group_name), level=messages.ERROR)
+            self.message_user(request, f"Group {group_name} doesn't exist.", level=messages.ERROR)
 
 
 class Student(SerializableModel):
@@ -65,13 +65,10 @@ class Student(SerializableModel):
     person = models.ForeignKey('Person', on_delete=models.PROTECT)
 
     def email(self):
-        if self.person.user:
-            return self.person.user.email
-        else:
-            return self.person.email
+        return self.person.user.email if self.person.user else self.person.email
 
     def __str__(self):
-        return u"%s (%s)" % (self.person, self.registration_id)
+        return f"{self.person} ({self.registration_id})"
 
 
 def find_by_registration_id(registration_id):
@@ -82,11 +79,10 @@ def find_by_registration_id(registration_id):
 
 
 def find_by_person(a_person):
-    try:
-        student = Student.objects.get(person=a_person)
-        return student
-    except ObjectDoesNotExist:
-        return None
+    return get_object_or_none(
+        Student,
+        person=a_person
+    )
 
 
 def find_by_user(a_user):
