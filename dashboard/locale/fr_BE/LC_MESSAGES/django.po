@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 13:41+0100\n"
+"POT-Creation-Date: 2022-06-24 14:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,11 @@ msgstr "Date de naissance"
 
 msgid "Birth location"
 msgstr "Lieu de naissance"
+
+msgid "Can't get into the scores encoding because of a VPN problem?"
+msgstr ""
+"Vous n’arrivez pas à rentrer dans l’encodage des notes à cause d’un souci de "
+"VPN ?"
 
 msgid "City"
 msgstr "Ville"
@@ -83,6 +88,19 @@ msgstr "Identification"
 msgid "If those data are not correct, please contact the "
 msgstr "Si ces données ne sont pas exactes, veuillez prendre contact avec le "
 
+#, python-format
+msgid ""
+"If you can't use OpenVPN this weekend, you can still encode your scores "
+"using the Excel files <a href=\"%(student_list_url)s\"><i>Lists of students "
+"enrolled to my exams</i></a>. These files will be directly injectable in the "
+"scores encoding when you are back in the office or by the secretariat."
+msgstr ""
+"S’il vous est impossible d’utiliser OpenVPN ce weekend, vous pouvez quand "
+"même encoder vos notes en utilisant les fichiers Excel <a href="
+"\"%(student_list_url)s\"><i>Liste des étudiants inscrits à mes examens</i></"
+"a>. Ces fichiers seront directement injectables dans l’outil d’encodage des "
+"notes quand vous serez au bureau ou par l’intermédiaire du secrétariat."
+
 msgid "Internships"
 msgstr "Stages"
 
@@ -94,6 +112,13 @@ msgstr "Nom"
 
 msgid "Lists of students enrolled to my exams"
 msgstr "Listes des étudiants inscrits à mes examens"
+
+#, python-format
+msgid ""
+"Make sure you are using <a href=\"%(osis_vpn_url)s\">OpenVPN Connect</a>."
+msgstr ""
+"Vérifiez que vous utilisez bien <a href=\"%(osis_vpn_url)s\">OpenVPN Connect</"
+"a>."
 
 msgid "Manage description fiche"
 msgstr "Gérer les fiches descriptives"
