@@ -80,7 +80,7 @@ class ApplicationCoursesRemoteCalendar:
         ]
         return events_filtered[-1] if events_filtered else None
 
-    def get_next_academic_event(self, date=None) -> ApplicationCourseCalendar:
+    def get_next_academic_event(self) -> ApplicationCourseCalendar:
         """
         Return next academic event based on today
         """

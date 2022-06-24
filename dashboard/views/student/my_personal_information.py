@@ -54,7 +54,7 @@ class MyPersonalInformation(LoginRequiredMixin, PermissionRequiredMixin, Templat
         try:
             return super().dispatch(request, *args, **kwargs)
         except MultipleObjectsReturned:  # Exception raised by find_by_user_and_discriminate
-            logger.exception('User {} returned multiple students.'.format(request.user.username))
+            logger.exception(f'User {request.user.username} returned multiple students.')
             return dashboard.views.home.show_multiple_registration_id_error(self.request)
 
     def get_context_data(self, **kwargs):
