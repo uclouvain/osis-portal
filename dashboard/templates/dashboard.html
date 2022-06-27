@@ -105,6 +105,7 @@
                     dashboardGrid.classList.add('dashboard-fixed-placement');
                 } else {
                     dashboardGrid.querySelectorAll('.grid-item').forEach(el => el.style.gridArea = 'auto');
+                    dashboardGrid.style.gridTemplateRows = '1fr';
                 }
             }
         }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-20 10:41+0200\n"
+"POT-Creation-Date: 2022-06-27 16:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,9 +22,6 @@ msgid ""
 "linked to your user.</br> Please contact <a href="
 "\"{registration_department_url}\" target=\"_blank\">the Registration "
 "department</a>. Thank you."
-msgstr ""
-
-msgid "Access my doctoral students' requests"
 msgstr ""
 
 msgid "Annual program"
@@ -48,13 +45,7 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-msgid "Create and manage my enrolment request for UCLouvain"
-msgstr ""
-
 msgid "Dashboard"
-msgstr ""
-
-msgid "Description fiche"
 msgstr ""
 
 msgid "Dissertations"
@@ -98,10 +89,7 @@ msgstr ""
 msgid "Lists of students enrolled to my exams"
 msgstr ""
 
-msgid "Manage description fiche"
-msgstr ""
-
-msgid "Manage doctorates"
+msgid "Manage my description fiche"
 msgstr ""
 
 msgid "Manage my exam registration"
@@ -122,7 +110,7 @@ msgstr ""
 msgid "My attestations"
 msgstr ""
 
-msgid "My enrolment request"
+msgid "My description fiche"
 msgstr ""
 
 msgid "My personal data"
