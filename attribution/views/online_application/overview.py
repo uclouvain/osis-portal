@@ -80,18 +80,14 @@ class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, Templ
 
     def get_total_lecturing_charge(self):
         return sum(
-            [
-                float(attribution.lecturing_volume) if attribution.lecturing_volume else 0
-                for attribution in self.charge_summary
-            ]
+            float(attribution.lecturing_volume) if attribution.lecturing_volume else 0
+            for attribution in self.charge_summary
         )
 
     def get_total_practical_charge(self):
         return sum(
-            [
-                float(attribution.practical_volume) if attribution.practical_volume else 0
-                for attribution in self.charge_summary
-            ]
+            float(attribution.practical_volume) if attribution.practical_volume else 0
+            for attribution in self.charge_summary
         )
 
     def get_context_data(self, **kwargs):
