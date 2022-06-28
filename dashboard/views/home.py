@@ -57,8 +57,8 @@ class Home(LoginRequiredMixin, TemplateView):
 
     def is_available(self, tile):
         return tile['has_perm'] and (
-                tile['app'] in settings.INSTALLED_APPS or
-                tile['url'] and tile['url'] == settings.OSIS_SCORE_ENCODING_URL
+            tile['app'] in settings.INSTALLED_APPS or
+            tile['url'] == settings.OSIS_SCORE_ENCODING_URL
         )
 
     def get_tiles_data(self):
