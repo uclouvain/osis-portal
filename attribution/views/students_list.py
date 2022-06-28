@@ -93,10 +93,8 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
 
     @cached_property
     def learning_unit_title(self):
-        return "{} - {}".format(
-            self._get_learning_unit_title(),
-            self._get_learning_class_title()
-        ) if self.is_class else self._get_learning_unit_title()
+        return f"{self._get_learning_unit_title()} - {self._get_learning_class_title()}" \
+            if self.is_class else self._get_learning_unit_title()
 
     @cached_property
     def learning_unit_type(self):
@@ -104,11 +102,13 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         return learning_unit['type']
 
     def _get_learning_unit(self):
-        return next(lu for lu in LearningUnitService.get_learning_units(
-            learning_unit_codes=[self.kwargs['learning_unit_acronym']],
-            year=int(self.kwargs['learning_unit_year']),
-            person=self.request.user.person
-        ))
+        return next(
+            lu for lu in LearningUnitService.get_learning_units(
+                learning_unit_codes=[self.kwargs['learning_unit_acronym']],
+                year=int(self.kwargs['learning_unit_year']),
+                person=self.request.user.person
+            )
+        )
 
     def _get_learning_unit_title(self):
         return LearningUnitService.get_learning_unit_title(
@@ -227,7 +227,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
                 cours = cours_list[nb_cours]
                 if cours['sigleComplet'] == acronym:
                     self.get_student_results(cours, results)
-                nb_cours = nb_cours + 1
+                nb_cours += 1
 
     def get_student_results(self, cours, results):
         sessions = cours['session']
@@ -239,7 +239,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
                     JSON_LEARNING_UNIT_STATUS: self.get_value(sessions[nb_session], JSON_LEARNING_UNIT_STATUS)
                 }
             })
-            nb_session = nb_session + 1
+            nb_session += 1
 
     @staticmethod
     def get_value(session, variable_name):
