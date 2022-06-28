@@ -56,8 +56,10 @@ class Home(LoginRequiredMixin, TemplateView):
         }
 
     def is_available(self, tile):
-        return tile['has_perm'] and tile['app'] in settings.INSTALLED_APPS or \
-               (tile['url'] and tile['url'] == settings.OSIS_SCORE_ENCODING_URL)
+        return tile['has_perm'] and (
+            tile['app'] in settings.INSTALLED_APPS or
+            tile['url'] == settings.OSIS_SCORE_ENCODING_URL
+        )
 
     def get_tiles_data(self):
         tutor_tiles = [
@@ -83,10 +85,10 @@ class Home(LoginRequiredMixin, TemplateView):
             },
             {
                 'column': 'courses',
-                'title': _('Description fiche'),
+                'title': _('My description fiche'),
                 'url': settings.OSIS_MANAGE_COURSES_URL,
                 'icon': 'far fa-file-alt',
-                'description': _('Manage description fiche'),
+                'description': _('Manage my description fiche'),
                 'VPN': True,
                 'app': 'attribution',
                 'has_perm': self.request.user.has_perm('base.is_tutor')
@@ -193,7 +195,10 @@ class Home(LoginRequiredMixin, TemplateView):
                 'description': _('This process controls students internships'),
                 'VPN': False,
                 'app': 'internship',
-                'has_perm': self.request.user.has_perm('base.is_student')
+                'has_perm': (
+                        self.request.user.has_perm('base.is_student')
+                        and self.request.user.groups.filter(name='internship_students').exists()
+                )
             }
         ]
 

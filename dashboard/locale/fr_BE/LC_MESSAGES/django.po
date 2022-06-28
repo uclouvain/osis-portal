@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-20 10:41+0200\n"
+"POT-Creation-Date: 2022-06-27 16:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,9 +27,6 @@ msgstr ""
 "affectés à votre utilisateur.</br> Veuillez prendre contact le <a href="
 "\"{registration_department_url}\" target=\"_blank\">Service des "
 "inscriptions</a> afin de résoudre le problème. Merci."
-
-msgid "Access my doctoral students' requests"
-msgstr "Accéder à mes demandes de doctorat"
 
 msgid "Annual program"
 msgstr "Programme annuel"
@@ -52,14 +49,8 @@ msgstr "Ville"
 msgid "Country"
 msgstr "Pays"
 
-msgid "Create and manage my enrolment request for UCLouvain"
-msgstr "Créer et gérer mes demandes d'inscription à l'UCLouvain"
-
 msgid "Dashboard"
 msgstr "Tableau de bord"
-
-msgid "Description fiche"
-msgstr "Fiches descriptives"
 
 msgid "Dissertations"
 msgstr "Mémoires"
@@ -104,11 +95,8 @@ msgstr "Nom"
 msgid "Lists of students enrolled to my exams"
 msgstr "Listes des étudiants inscrits à mes examens"
 
-msgid "Manage description fiche"
-msgstr "Gérer les fiches descriptives"
-
-msgid "Manage doctorates"
-msgstr "Gérer les doctorats"
+msgid "Manage my description fiche"
+msgstr "Gérer mes fiches descriptives"
 
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
@@ -128,8 +116,8 @@ msgstr "Mes notes de présence"
 msgid "My attestations"
 msgstr "Mes attestations"
 
-msgid "My enrolment request"
-msgstr "Ma demande d'inscription"
+msgid "My description fiche"
+msgstr "Mes fiches descriptives"
 
 msgid "My personal data"
 msgstr "Mes données personnelles"
@@ -213,4 +201,3 @@ msgstr "Voir mon programme annuel et mes notes d'examen"
 
 msgid "outside UCLouvain"
 msgstr "en dehors du réseau de l'UCLouvain"
-
