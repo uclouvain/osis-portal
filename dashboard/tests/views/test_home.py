@@ -24,6 +24,7 @@
 #
 ##############################################################################
 from django.conf import settings
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 
@@ -48,12 +49,17 @@ class TestHome(TestCase):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, "dashboard.html")
 
-    def test_manage_courses_url(self):
-        response = self.client.get(self.url)
-        context = response.context
-        self.assertEqual(context["manage_courses_url"], settings.OSIS_MANAGE_COURSES_URL)
-
     def test_osis_vpn_help_url(self):
         response = self.client.get(self.url)
         context = response.context
         self.assertEqual(context["osis_vpn_help_url"], settings.OSIS_VPN_HELP_URL)
+
+    def test_user_has_access_to_tutor_dashboard(self):
+        self.user.user_permissions.add(Permission.objects.get(codename="is_tutor"))
+        response = self.client.get(self.url)
+        self.assertTrue(response.context['tiles']['tutor'])
+
+    def test_user_has_access_to_student_dashboard(self):
+        self.user.user_permissions.add(Permission.objects.get(codename="is_student"))
+        response = self.client.get(self.url)
+        self.assertTrue(response.context['tiles']['student'])
