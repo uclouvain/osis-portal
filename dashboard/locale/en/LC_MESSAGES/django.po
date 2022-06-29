@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-24 14:44+0200\n"
+"POT-Creation-Date: 2022-06-29 08:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,9 +37,6 @@ msgid "Birth date"
 msgstr ""
 
 msgid "Birth location"
-msgstr ""
-
-msgid "Can't get into the scores encoding because of a VPN problem?"
 msgstr ""
 
 msgid "City"
@@ -80,14 +77,6 @@ msgstr ""
 msgid "If those data are not correct, please contact the "
 msgstr ""
 
-#, python-format
-msgid ""
-"If you can't use OpenVPN this weekend, you can still encode your scores "
-"using the Excel files <a href=\"%(student_list_url)s\"><i>Lists of students "
-"enrolled to my exams</i></a>. These files will be directly injectable in the "
-"scores encoding when you are back in the office or by the secretariat."
-msgstr ""
-
 msgid "Internships"
 msgstr ""
 
@@ -98,11 +87,6 @@ msgid "Last name"
 msgstr ""
 
 msgid "Lists of students enrolled to my exams"
-msgstr ""
-
-#, python-format
-msgid ""
-"Make sure you are using <a href=\"%(osis_vpn_url)s\">OpenVPN Connect</a>."
 msgstr ""
 
 msgid "Manage description fiche"
