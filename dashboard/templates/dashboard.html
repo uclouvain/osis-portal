@@ -33,20 +33,6 @@
 
     {% include "template_messages.html" %}
 
-    {% if perms.base.is_tutor %}
-    <div class="alert alert-warning" role="alert" style="display:inline-block;">
-        {% url 'students_list' as student_list_url %}
-        <p>
-
-            {% trans "Can't get into the scores encoding because of a VPN problem?" %}
-            <br>
-            {% blocktranslate %}Make sure you are using <a href="{{ osis_vpn_url }}">OpenVPN Connect</a>.{% endblocktranslate %}
-            <br>
-            {% blocktranslate %}If you can't use OpenVPN this weekend, you can still encode your scores using the Excel files <a href="{{ student_list_url }}"><i>Lists of students enrolled to my exams</i></a>. These files will be directly injectable in the scores encoding when you are back in the office or by the secretariat.{% endblocktranslate %}
-        </p>
-    </div>
-    {% endif %}
-
     <div class="panel panel-default">
         <div class="panel-body dashboard-grid">
             {% switch 'admission' %}
