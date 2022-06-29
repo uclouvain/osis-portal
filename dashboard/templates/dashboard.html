@@ -33,37 +33,93 @@
 
     {% include "template_messages.html" %}
 
-    <div class="panel panel-default">
-        <div class="panel-body dashboard-grid">
-            {% switch 'admission' %}
-                {% if 'admission' in installed_apps %}
-                    {% include 'admission_dashboard.html' %}
-                {% endif %}
-            {% endswitch %}
+    {% for role, role_tiles in tiles.items %}
 
-            {% if perms.base.is_tutor %}
-                {% include 'tutor_dashboard.html' %}
+        {% if role_tiles %}
+
+        <div class="dashboard-{{ role|lower }}">
+                <div class="dashboard-grid">
+                    {% for tile in role_tiles %}
+                    <div class="grid-item" style="grid-area: auto/{{ tile.column }}">
+                        <i class="{{ tile.icon }}" style="grid-area: icon;"></i>
+                        <h4 class="media-heading" style="grid-area: title;">
+                            <a href="{{ tile.url }}" id="lnk_my_applications">
+                                {{ tile.title }}
+                            </a>
+                        </h4>
+                        <div class="description" style="grid-area: description;">
+                            <p>{{ tile.description }}</p>
+                            {% if tile.VPN %}
+                                <p>
+                                    <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
+                                    {% if osis_vpn_help_url %}
+                                        <span class="dashboard-vpn-warning">
+                                            {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}" target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain' %}
+                                        </span>
+                                    {% else %}
+                                        <span class="dashboard-vpn-warning">
+                                            {% trans 'This requires a VPN access outside UCLouvain' %}
+                                        </span>
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            {% if not forloop.last %}
+                <hr/>
             {% endif %}
 
-            {% if perms.base.is_student %}
-                {% include 'student_dashboard.html' %}
-            {% endif %}
-
-            {% if perms.base.is_internship_master %}
-                {% include 'master_dashboard.html' %}
-            {% endif %}
         </div>
-    </div>
+
+    {% endif %}
+
+
+    {% endfor %}
+
+    {% switch 'admission' %}
+        {% if 'admission' in installed_apps and request.user.person %}
+            {% include 'admission_dashboard.html' %}
+        {% endif %}
+    {% endswitch %}
+
+
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.dashboard-grid').masonry({
-                itemSelector: '.grid-item',
-                columnWidth: 360,
-                fitWidth: true
-            });
-        });
+
+    <script>
+
+        const MIN_SIZE_FOR_GRID_AREAS = 3;
+
+        for(let role of ['tutor', 'student']){
+            initDashboardAutoPlacement(role);
+        }
+
+        function initDashboardAutoPlacement(role){
+            const dashboardGrid = document.querySelector(`.dashboard-${role} .dashboard-grid`);
+            if(dashboardGrid){
+                if(dashboardGrid.querySelectorAll('.grid-item').length > MIN_SIZE_FOR_GRID_AREAS){
+                    dashboardGrid.classList.add('dashboard-fixed-placement');
+                } else {
+                    dashboardGrid.querySelectorAll('.grid-item').forEach(el => el.style.gridArea = 'auto');
+                    dashboardGrid.style.gridTemplateRows = '1fr';
+                }
+            }
+        }
+
+        // propagate click on grid-item to sibling 'a' element (propagation event priority is given to a:hover)
+        document.querySelectorAll('.grid-item').forEach(el => el.addEventListener('click', () => {
+            const aHover = el.querySelector('a:hover');
+            if(aHover) {
+                aHover.click()
+            } else {
+                el.querySelector('a').click();
+            }
+        }));
+
     </script>
+
 {% endblock %}
