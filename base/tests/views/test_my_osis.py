@@ -46,7 +46,7 @@ class ProfileLangTest(TestCase):
         self.client.logout()
         response = self.client.get(self.url)
 
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_language_not_known(self):
         url = reverse('profile_lang', args=["unk"])

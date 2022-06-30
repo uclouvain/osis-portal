@@ -31,6 +31,4 @@ register = template.Library()
 
 @register.filter()
 def display_as_academic_year(year: int):
-    if year:
-        return "{}-{}".format(year, str(year + 1)[-2:])
-    return ""
+    return f"{year}-{str(year + 1)[-2:]}" if year else ""

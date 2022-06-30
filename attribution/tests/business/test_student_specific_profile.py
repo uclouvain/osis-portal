@@ -60,10 +60,10 @@ class StudentSpecificProfileTest(TestCase):
 
     def test_get_type_peps_sport(self):
         sport_peps = get_type_peps(student_specific_profile=self.student_specific_profile)
-        self.assertEqual(sport_peps, "{} - {}".format(
-            self.student_specific_profile.type_text,
-            self.student_specific_profile.subtype_text
-        ))
+        self.assertEqual(
+            sport_peps,
+            f"{self.student_specific_profile.type_text} - {self.student_specific_profile.subtype_text}"
+        )
 
     def test_get_type_peps_disability(self):
         disability_type_text = "Disability"
@@ -74,7 +74,7 @@ class StudentSpecificProfileTest(TestCase):
         self.student_specific_profile.subtype_text = disability_subtype_text
 
         disability_peps = get_type_peps(student_specific_profile=self.student_specific_profile)
-        self.assertEqual(disability_peps, "{} - {}".format(disability_type_text, disability_subtype_text))
+        self.assertEqual(disability_peps, f"{disability_type_text} - {disability_subtype_text}")
 
     def test_get_type_peps_not_defined(self):
 
@@ -91,10 +91,11 @@ class StudentSpecificProfileTest(TestCase):
         arrangements = get_arrangements(spec_profile=self.student_specific_profile, learning_unit_type='COURSE')
         expected_result = [
             "time",
-            "{} : {}".format(_('Copy'), "copy"),
+            f"{_('Copy')} : copy",
             _('Specific room of examination'),
-            _('Other educational facilities : see Excel'),
+            _('Other educational facilities : see Excel')
         ]
+
         self.assertEqual(arrangements, expected_result)
 
     def test_get_arrangements_for_course_without_other_comments(self):
@@ -106,9 +107,10 @@ class StudentSpecificProfileTest(TestCase):
         arrangements = get_arrangements(spec_profile=self.student_specific_profile, learning_unit_type='COURSE')
         expected_result = [
             "time",
-            "{} : {}".format(_('Copy'), "copy"),
-            _('Specific room of examination'),
+            f"{_('Copy')} : copy",
+            _('Specific room of examination')
         ]
+
         self.assertEqual(arrangements, expected_result)
 
     def test_get_arrangements_for_internship(self):

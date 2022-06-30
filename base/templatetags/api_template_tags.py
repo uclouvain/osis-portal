@@ -42,12 +42,13 @@ def pagination(context, condensed=True, delta=DEFAULT_CONDENSED_PAGINATION_DELTA
     requested_offset = int(context['request'].GET.get('offset', 0))
     pages = [
         {
-            'number': page+1,
+            'number': page + 1,
             'limit': pagination_limit,
-            'offset': str(pagination_limit*page),
-            'active_page': pagination_limit*page == requested_offset,
-        } for page in range(0, pages_count)
+            'offset': str(pagination_limit * page),
+            'active_page': pagination_limit * page == requested_offset,
+        } for page in range(pages_count)
     ]
+
     context['pages'] = pages
     context['first_offset'] = 0
     context['last_offset'] = (pages_count-1) * pagination_limit

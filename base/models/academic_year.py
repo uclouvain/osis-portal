@@ -52,7 +52,7 @@ class AcademicYear(SerializableModel):
         return AcademicYear.objects.get(year=self.year - 1)
 
     def __str__(self):
-        return u"%s-%s" % (self.year, str(self.year + 1)[-2:])
+        return f"{self.year}-{str(self.year + 1)[-2:]}"
 
 
 def find_academic_years(start_date=None, end_date=None):
@@ -89,10 +89,7 @@ def find_by_year(a_year):
 
 def find_next_year():
     academic_yr = current_academic_year()
-    if academic_yr:
-        return academic_yr.year + 1
-    else:
-        return None
+    return academic_yr.year + 1 if academic_yr else None
 
 
 def find_next_academic_year():

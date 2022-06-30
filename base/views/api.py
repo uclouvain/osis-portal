@@ -34,7 +34,7 @@ from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 
-REQUEST_HEADER = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+REQUEST_HEADER = {'Authorization': f'Token {settings.OSIS_PORTAL_TOKEN}'}
 API_URL = settings.URL_API_BASE_PERSON_ROLES
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -67,5 +67,4 @@ def get_managed_programs(global_id) -> Set[str]:
 
 def transform_response_to_data(response):
     stream = io.BytesIO(response.content)
-    data = JSONParser().parse(stream)
-    return data
+    return JSONParser().parse(stream)
