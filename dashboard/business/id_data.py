@@ -59,7 +59,7 @@ def _get_main_data(student: Student) -> Dict:
     main_data_path = settings.STUDENT_ID_DATA.get('MAIN_DATA_PATH')
     main_data_url = server_top_url + main_data_path.format(student.person.global_id)
     main_data = _get_data_from_esb(main_data_url).get('lireDossierEtudiantResponse').get('return')
-    main_data['email'] = student.email if not None else ''
+    main_data['email'] = student.email
     return main_data
 
 
@@ -67,16 +67,14 @@ def _get_personal_data(student: Student) -> Dict:
     server_top_url = settings.ESB_URL
     personal_data_path = settings.STUDENT_ID_DATA.get('PERSONAL_DATA_PATH')
     personal_data_url = server_top_url + personal_data_path.format(student.person.global_id)
-    personal_data = _get_data_from_esb(personal_data_url).get('return')
-    return personal_data
+    return _get_data_from_esb(personal_data_url).get('return')
 
 
 def _get_birth_data(student: Student) -> Dict:
     server_top_url = settings.ESB_URL
     birth_data_path = settings.STUDENT_ID_DATA.get('BIRTH_DATA_PATH')
     birth_data_url = server_top_url + birth_data_path.format(student.person.global_id)
-    birth_data = _get_data_from_esb(birth_data_url).get('return')
-    return birth_data
+    return _get_data_from_esb(birth_data_url).get('return')
 
 
 def get_student_id_data(registration_id: str = None) -> Optional[Dict]:
@@ -89,11 +87,10 @@ def get_student_id_data(registration_id: str = None) -> Optional[Dict]:
 
 
 def _get_data_from_esb(url: str) -> Dict:
-    logger.info('URL ESB : ' + url)
+    logger.info(f'URL ESB : {url}')
     esb_headers = {"Authorization": settings.ESB_AUTHORIZATION, "Accept": settings.ESB_CONTENT_TYPE}
     esb_request = request.Request(url, headers=esb_headers)
     esb_connection = request.urlopen(esb_request, timeout=settings.ESB_TIMEOUT)
     esb_response = esb_connection.read().decode(settings.ESB_ENCODING)
     esb_connection.close()
-    esb_data = json.loads(esb_response)
-    return esb_data
+    return json.loads(esb_response)

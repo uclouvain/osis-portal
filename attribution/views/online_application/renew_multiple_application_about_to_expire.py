@@ -48,9 +48,7 @@ class RenewMultipleAttributionsAboutToExpireView(LoginRequiredMixin, PermissionR
             return redirect("outside_applications_period")
 
         post_data = dict(request.POST.lists())
-        vacant_course_codes = [
-            param.split("_")[-1] for param, value in post_data.items() if "vacant_course_" in param
-        ]
+        vacant_course_codes = [param.split("_")[-1] for param in post_data if "vacant_course_" in param]
 
         if vacant_course_codes:
             ApplicationService.renew_attributions_about_to_expire(vacant_course_codes, self.request.user.person)

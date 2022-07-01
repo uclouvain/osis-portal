@@ -53,7 +53,7 @@ msgstr ""
 
 msgid ""
 "Download lists of students enrolled to exams for online scores encoding "
-"(Excel)."
+"(Excel)"
 msgstr ""
 
 msgid "Email"
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Lists of students enrolled to my exams"
 msgstr ""
 
-msgid "Manage description fiche"
+msgid "Manage my description fiche"
 msgstr ""
 
 msgid "Manage my exam registration"
@@ -110,6 +110,9 @@ msgstr ""
 msgid "My attestations"
 msgstr ""
 
+msgid "My description fiche"
+msgstr ""
+
 msgid "My personal data"
 msgstr ""
 
@@ -125,7 +128,7 @@ msgstr ""
 msgid "Private email"
 msgstr ""
 
-msgid "Read my teaching charge and access to lists and emails of students."
+msgid "Read my teaching charge and access to lists and emails of students"
 msgstr ""
 
 msgid "Registration department"
@@ -161,25 +164,25 @@ msgstr ""
 msgid "Student's dissertations management"
 msgstr ""
 
-msgid "This process controls internships assessment."
+msgid "This process controls internships assessment"
 msgstr ""
 
 msgid "This process controls my applications"
 msgstr ""
 
-msgid "This process controls my attestations."
+msgid "This process controls my attestations"
 msgstr ""
 
-msgid "This process controls students internships."
+msgid "This process controls students internships"
 msgstr ""
 
-msgid "This process shows personal data."
+msgid "This process shows personal data"
 msgstr ""
 
 msgid "This requires a "
 msgstr ""
 
-msgid "This requires a VPN access outside UCLouvain."
+msgid "This requires a VPN access outside UCLouvain"
 msgstr ""
 
 msgid "VPN access"
@@ -188,5 +191,5 @@ msgstr ""
 msgid "View my annual program and exam marks"
 msgstr ""
 
-msgid "outside UCLouvain."
+msgid "outside UCLouvain"
 msgstr ""
