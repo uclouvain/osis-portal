@@ -27,13 +27,14 @@
 {% endcomment %}
 
 {% block content %}
-    <div class="page-header">
-        <h2>{% trans 'Dashboard' %}</h2>
-    </div>
 
     {% include "template_messages.html" %}
 
     {% for role, role_tiles in tiles.items %}
+
+        {% if not forloop.first and role_tiles %}
+            <hr/>
+        {% endif %}
 
         {% if role_tiles %}
 
@@ -67,10 +68,6 @@
                     </div>
                     {% endfor %}
                 </div>
-
-            {% if not forloop.last %}
-                <hr/>
-            {% endif %}
 
         </div>
 
