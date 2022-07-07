@@ -93,6 +93,10 @@ body {
     background-color: #f5f5f5;
 }
 
+.dashboard-tutor, .dashboard-student {
+    padding-top: 30px;
+}
+
 .dashboard-tutor .dashboard-fixed-placement{
     grid-template-areas:
       "courses exams submodules"
@@ -115,6 +119,26 @@ body {
     font-size: 400%;
     color: #6699FF;
     padding-bottom: 10px;
+}
+
+.dashboard-faculty-administration{
+    grid-auto-flow: row;
+}
+
+.dashboard-faculty-administration .grid-item{
+    grid-area: auto;
+}
+
+.grid-item .icon {
+    grid-area: icon;
+}
+
+.grid-item .media-heading {
+    grid-area: title;
+}
+
+.grid-item .description {
+    grid-area: description;
 }
 
 @media screen and (max-width: 991px) {
