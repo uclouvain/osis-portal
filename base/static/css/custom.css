@@ -121,6 +121,26 @@ body {
     padding-bottom: 10px;
 }
 
+.dashboard-faculty-administration{
+    grid-auto-flow: row;
+}
+
+.dashboard-faculty-administration .grid-item{
+    grid-area: auto;
+}
+
+.grid-item .icon {
+    grid-area: icon;
+}
+
+.grid-item .media-heading {
+    grid-area: title;
+}
+
+.grid-item .description {
+    grid-area: description;
+}
+
 @media screen and (max-width: 991px) {
     .dashboard-grid {
         display: flex !important;

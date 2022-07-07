@@ -34,36 +34,36 @@
         <h2>{% trans 'Faculty administration' %}</h2>
     </div>
 
-        <div class="dashboard-grid" style="grid-auto-flow: row;">
-            <div class="grid-item" style="grid-area: auto;">
-                <i class="far fa-id-card" style="grid-area: icon;"></i>
-                <h4 class="media-heading" style="grid-area: title;">
+        <div class="dashboard-grid dashboard-faculty-administration">
+            <div class="grid-item">
+                <i class="icon far fa-id-card"></i>
+                <h4 class="media-heading">
                     <a href="{% url 'student_id_data_administration' %}" id="lnk_std_id_data_administration">
                         {% trans 'Student ID data administration' %}
                     </a>
                 </h4>
-                <div class="description" style="grid-area: description;"></div>
+                <div class="description"></div>
             </div>
             {% if 'performance'  in installed_apps and perms.base.is_faculty_administrator %}
-                <div class="grid-item" style="grid-area: auto;">
-                    <i class="fa fa-chart-line" style="grid-area: icon;"></i>
-                    <h4 class="media-heading" style="grid-area: title;">
+                <div class="grid-item">
+                    <i class="icon fa fa-chart-line"></i>
+                    <h4 class="media-heading">
                         <a href="{% url 'performance_administration' %}" id="lnk_performance_administration">
                             {% trans 'Annual program administration' %}
                         </a>
                     </h4>
-                    <div class="description" style="grid-area: description;"></div>
+                    <div class="description"></div>
                 </div>
             {% endif %}
             {% if 'attestation'  in installed_apps and perms.base.is_faculty_administrator %}
-                <div class="grid-item" style="grid-area: auto;">
-                    <i class="far fa-file-pdf" style="grid-area: icon;"></i>
-                    <h4 class="media-heading" style="grid-area: title;">
+                <div class="grid-item">
+                    <i class="icon far fa-file-pdf"></i>
+                    <h4 class="media-heading">
                         <a href="{% url 'attestation_administration' %}" id="lnk_attestation_administration">
                             {% trans 'Attestations administration' %}
                         </a>
                     </h4>
-                    <div class="description" style="grid-area: description;"></div>
+                    <div class="description"></div>
                 </div>
             {% endif %}
 {#            {% if 'attribution'  in installed_apps and perms.base.is_faculty_administrator %}#}
