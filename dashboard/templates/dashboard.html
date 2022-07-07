@@ -27,13 +27,14 @@
 {% endcomment %}
 
 {% block content %}
-    <div class="page-header">
-        <h2>{% trans 'Dashboard' %}</h2>
-    </div>
 
     {% include "template_messages.html" %}
 
     {% for role, role_tiles in tiles.items %}
+
+        {% if not forloop.first and role_tiles %}
+            <hr/>
+        {% endif %}
 
         {% if role_tiles %}
 
@@ -41,13 +42,13 @@
                 <div class="dashboard-grid">
                     {% for tile in role_tiles %}
                     <div class="grid-item" style="grid-area: auto/{{ tile.column }}">
-                        <i class="{{ tile.icon }}" style="grid-area: icon;"></i>
-                        <h4 class="media-heading" style="grid-area: title;">
+                        <i class="icon {{ tile.icon }}"></i>
+                        <h4 class="media-heading">
                             <a href="{{ tile.url }}" id="lnk_my_applications">
                                 {{ tile.title }}
                             </a>
                         </h4>
-                        <div class="description" style="grid-area: description;">
+                        <div class="description">
                             <p>{{ tile.description }}</p>
                             {% if tile.VPN %}
                                 <p>
@@ -67,10 +68,6 @@
                     </div>
                     {% endfor %}
                 </div>
-
-            {% if not forloop.last %}
-                <hr/>
-            {% endif %}
 
         </div>
 
