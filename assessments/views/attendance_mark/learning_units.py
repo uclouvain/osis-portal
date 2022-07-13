@@ -35,6 +35,7 @@ from osis_exam_enrollment_sdk.model.exam_enrollment import ExamEnrollment
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
 
 from assessments.services import assessments as assessments_service
+from base.business.student import find_by_user_and_discriminate
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService
 from exam_enrollment.services import exam_enrollment as exam_enrollment_service
@@ -61,7 +62,7 @@ class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateV
 
     @cached_property
     def student(self) -> 'Student':
-        return get_object_or_404(Student.objects.select_related('person'), person__user=self.request.user)
+        return find_by_user_and_discriminate(self.request.user)
 
     @cached_property
     def offer_enrollments(self) -> List['Enrollment']:
