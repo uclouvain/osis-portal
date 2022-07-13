@@ -123,11 +123,11 @@ def list_build(request):
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
-    else:
-        current_session_dict = AssessmentsService.get_current_session(request.user.person)
-        data = get_learning_units(request, current_session_dict)
-        data.update({'msg_error': _('No data found')})
-        return render(request, "list/students_exam.html", data)
+
+    current_session_dict = AssessmentsService.get_current_session(request.user.person)
+    data = get_learning_units(request, current_session_dict)
+    data.update({'msg_error': _('No data found')})
+    return render(request, "list/students_exam.html", data)
 
 
 def fetch_student_exam_enrollment(academic_year, codes):
@@ -140,8 +140,8 @@ def fetch_student_exam_enrollment(academic_year, codes):
             document_url = document_base_path.format(anac=academic_year, codes=codes)
             return _fetch_with_basic_auth(server_top_url, document_url)
         except Exception:
-            logger.exception(
-                "Error when fetching document (anac:{}, codes{}, url{})".format(academic_year, codes, document_url))
+            logger.exception(f"Error when fetching document (anac:{academic_year}, codes{codes}, url{document_url})")
+
     return None
 
 
@@ -210,9 +210,9 @@ def list_build_by_person(request, global_id: str):
     list_exam_enrollments_xls = fetch_student_exam_enrollment(str(anac), codes)
     if list_exam_enrollments_xls:
         return _make_xls_list(list_exam_enrollments_xls)
-    else:
-        data.update({'msg_error': _('No data found')})
-        return render(request, "admin/students_exam_list.html", data)
+
+    data.update({'msg_error': _('No data found')})
+    return render(request, "admin/students_exam_list.html", data)
 
 
 def get_codes_parameter_list(request, current_academic_year: AcademicYear, learning_unit_acronyms: List[str]):
@@ -230,9 +230,7 @@ def get_codes_parameter_list(request, current_academic_year: AcademicYear, learn
 
 
 def _get_learning_unit_acronyms(user_learning_units_assigned: List) -> List[str]:
-    learning_unit_acronyms = set()
-    for learning_unit in user_learning_units_assigned:
-        learning_unit_acronyms.add(learning_unit.get('code'))
+    learning_unit_acronyms = {learning_unit.get('code') for learning_unit in user_learning_units_assigned}
     return list(learning_unit_acronyms)
 
 

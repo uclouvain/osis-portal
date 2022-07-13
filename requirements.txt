@@ -37,7 +37,7 @@ git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@wip-build
 git+https://github.com/uclouvain/osis-learning-unit-sdk.git@build-1.9.0
 git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@build-1.2.0
 git+https://github.com/uclouvain/osis-education-group-sdk.git@build-1.8.0
-git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.19
+git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.22
 git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.4
 git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.4.0
 git+https://github.com/uclouvain/osis-exam-enrollment-sdk.git@build-1.0
