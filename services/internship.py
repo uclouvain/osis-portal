@@ -24,7 +24,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-
+import json
 from urllib.parse import urlparse
 
 from osis_internship_sdk import ApiException, ApiClient
@@ -44,8 +44,9 @@ class InternshipAPIClient:
         return internship_api.InternshipApi(ApiClient(configuration=api_config))
 
 
-class InternshipServiceException(Exception):
-    pass
+class InternshipServiceException(ApiException):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class InternshipAPIService:
@@ -163,8 +164,11 @@ class InternshipAPIService:
     def post_master(cls, person, master):
         try:
             return InternshipAPIClient().masters_post(master_get=master, **utils.build_mandatory_auth_headers(person))
-        except ApiException:
-            raise InternshipServiceException
+        except ApiException as e:
+            raise InternshipServiceException(
+                status=e.status,
+                reason=json.loads(e.body)[0] if e.status == 400 else ''
+            )
 
     @classmethod
     def post_master_allocation(cls, person, allocation):
