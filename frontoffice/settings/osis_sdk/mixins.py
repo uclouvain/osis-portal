@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from functools import cached_property
 from typing import Callable
 
 from dal import autocomplete
