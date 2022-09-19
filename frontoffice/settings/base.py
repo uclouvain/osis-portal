@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import os
+import os, random
 
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -358,11 +358,13 @@ PERFORMANCE_CONFIG = {
 
 ATTESTATION_CONFIG = {
     'UPDATE_DELTA_HOURS_DEFAULT': int(os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72)),
-    'SERVER_TO_FETCH_URL': os.environ.get("ATTESTATION_API_URL", ''),
+    'SERVER_TO_FETCH_URL': random.choice(os.environ.get("ATTESTATION_API_URL", '').split()),
     'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
+
+
 
 # Continuing education settings
 ACCOUNT_ACTIVATION_DAYS = int(os.environ.get('IUFC_ACCOUNT_ACTIVATION_DAYS', 7))
