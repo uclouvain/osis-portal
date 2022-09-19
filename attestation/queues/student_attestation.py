@@ -23,7 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import logging, random
+import logging
+import random
 import urllib
 from urllib.error import URLError
 
