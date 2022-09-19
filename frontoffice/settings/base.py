@@ -358,7 +358,7 @@ PERFORMANCE_CONFIG = {
 
 ATTESTATION_CONFIG = {
     'UPDATE_DELTA_HOURS_DEFAULT': int(os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72)),
-    'SERVER_TO_FETCH_URL': random.choice(os.environ.get("ATTESTATION_API_URL", '').split()),
+    'SERVERS_TO_FETCH_URLS': os.environ.get("ATTESTATION_API_URL", 'localhost').split(),
     'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
