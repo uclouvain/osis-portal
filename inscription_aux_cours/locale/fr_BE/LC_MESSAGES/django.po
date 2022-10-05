@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-05 10:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Acronym"
+msgstr "Sigle"
+
+msgid "First name"
+msgstr "Prénom"
+
+msgid "Last name"
+msgstr "Nom"
+
+msgid "My courses enrollment"
+msgstr "Mon inscription aux cours"
+
+msgid "Offer choice"
+msgstr "Choix de la formation"
+
+msgid "Program"
+msgstr "Formation"
+
+msgid "Registration id"
+msgstr "Noma"
+
+msgid "Select an offer for which you want to do courses enrollment."
+msgstr ""
+"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux cours."
+
+msgid "Year"
+msgstr "Année"
+
+#, python-format
+msgid ""
+"You are not enrolled to any program for the academic year "
+"%(annee_academique)s."
+msgstr ""
+"Vous n'êtes inscrit.e à aucune formation pour l'année académique "
+"%(annee_academique)s."

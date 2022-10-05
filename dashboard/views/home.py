@@ -160,7 +160,7 @@ class Home(LoginRequiredMixin, TemplateView):
             {
                 'column': 'exams',
                 'title': _('My courses enrollment'),
-                'url': "#",
+                'url': reverse('inscription-aux-cours:selectionner-formation'),
                 'icon': 'far fa-rectangle-list',
                 'description': _('Manage my annual programme proposal'),
                 'VPN': False,
