@@ -1,4 +1,3 @@
-##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -15,7 +14,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,15 +22,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path, include
+from django import forms
+from osis_inscription_cours_sdk.model.liste_mini_formations import ListeMiniFormations
 
-from inscription_aux_cours.views.mini_formation.inscrire import InscrireAuxMiniFormationsView
-from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
 
-app_name = 'inscription-aux-cours'
-urlpatterns = [
-    path('', SelectionnerFormationView.as_view(), name=SelectionnerFormationView.name),
-    path('mineures_options/<str:sigle_formation>/', include([
-        path('inscription', InscrireAuxMiniFormationsView.as_view(), name=InscrireAuxMiniFormationsView.name),
-    ])),
-]
+class InscriptionMiniFormationForm(forms.Form):
+    mini_formations = forms.MultipleChoiceField(required=False)
+
+    def __init__(self, *args, liste_mini_formations: 'ListeMiniFormations', **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.liste_mini_formations = liste_mini_formations
+        self.__init_mini_formations_field()
+
+    def __init_mini_formations_field(self):
+        self.fields['mini_formations'].choices = [
+            (mini_formation.code, mini_formation.code)
+            for mini_formation in self.liste_mini_formations.mini_formations
+        ]
+

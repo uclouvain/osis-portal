@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,15 +23,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path, include
+import logging
 
-from inscription_aux_cours.views.mini_formation.inscrire import InscrireAuxMiniFormationsView
-from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
+import osis_inscription_cours_sdk
+from django.conf import settings
 
-app_name = 'inscription-aux-cours'
-urlpatterns = [
-    path('', SelectionnerFormationView.as_view(), name=SelectionnerFormationView.name),
-    path('mineures_options/<str:sigle_formation>/', include([
-        path('inscription', InscrireAuxMiniFormationsView.as_view(), name=InscrireAuxMiniFormationsView.name),
-    ])),
-]
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+def build_configuration() -> osis_inscription_cours_sdk.Configuration:
+    """
+    Return SDK configuration of exam_enrollment
+    """
+    if not settings.OSIS_INSCRIPTION_COURS_SDK_HOST:
+        logger.debug("'OSIS_EXAM_ENROLLMENT_SDK_HOST' setting must be set in configuration")
+
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
+
+    return osis_inscription_cours_sdk.Configuration(
+        host=settings.OSIS_INSCRIPTION_COURS_SDK_HOST,
+        api_key_prefix={
+            'Token': settings.OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX
+        },
+        api_key={
+            'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY
+        })

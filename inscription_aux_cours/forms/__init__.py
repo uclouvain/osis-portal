@@ -1,4 +1,3 @@
-##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -15,7 +14,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,15 +22,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path, include
-
-from inscription_aux_cours.views.mini_formation.inscrire import InscrireAuxMiniFormationsView
-from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
-
-app_name = 'inscription-aux-cours'
-urlpatterns = [
-    path('', SelectionnerFormationView.as_view(), name=SelectionnerFormationView.name),
-    path('mineures_options/<str:sigle_formation>/', include([
-        path('inscription', InscrireAuxMiniFormationsView.as_view(), name=InscrireAuxMiniFormationsView.name),
-    ])),
-]
