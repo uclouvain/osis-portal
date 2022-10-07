@@ -71,7 +71,8 @@ INSTALLED_APPS = (
     'django_registration',
     'hijack',
     'hijack.contrib.admin',
-    'waffle'
+    'waffle',
+    'django_htmx',
 )
 
 # Tests settings
@@ -105,6 +106,7 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'waffle.middleware.WaffleMiddleware',
     'hijack.middleware.HijackUserMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 )
 
 # Logging config

@@ -25,13 +25,34 @@
 ##############################################################################
 from django.urls import path, include
 
-from inscription_aux_cours.views.mini_formation.inscrire import InscrireAuxMiniFormationsView
+from inscription_aux_cours.views.cours.desinscrire import DesinscrireAUnCoursView
+from inscription_aux_cours.views.cours.formulaire import FormulaireInscriptionAuxCoursView
+from inscription_aux_cours.views.cours.inscrire import InscrireAUnCoursView
+from inscription_aux_cours.views.cours.inscrire_hors_programme import InscrireAUnCoursHorsProgrammeView
+from inscription_aux_cours.views.mini_formation.desinscrire import DesinscrireAUneMiniFormationView
+from inscription_aux_cours.views.mini_formation.inscriptibles import MiniFormationsInscriptiblesView
+from inscription_aux_cours.views.mini_formation.inscrire import InscrireAUneMiniFormationView
+from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
+from inscription_aux_cours.views.mini_formation.recapitulatif import RecapitulatifInscriptionsMiniFormationsView
 from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
 
 app_name = 'inscription-aux-cours'
 urlpatterns = [
     path('', SelectionnerFormationView.as_view(), name=SelectionnerFormationView.name),
-    path('mineures_options/<str:sigle_formation>/', include([
-        path('inscription', InscrireAuxMiniFormationsView.as_view(), name=InscrireAuxMiniFormationsView.name),
+    path('<str:sigle_formation>/', include([
+        path('formulaire/', FormulaireInscriptionAuxCoursView.as_view(), name=FormulaireInscriptionAuxCoursView.name),
+        path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
+        path('inscrire/', InscrireAUnCoursView.as_view(), name=InscrireAUnCoursView.name),
+        path('inscrire_hors_programme/', InscrireAUnCoursHorsProgrammeView.as_view(), name=InscrireAUnCoursHorsProgrammeView.name),
+        path('desinscrire/', DesinscrireAUnCoursView.as_view(), name=DesinscrireAUnCoursView.name),
+        path(
+            'mineures_options/',
+            include([
+                path('recapitulatif/', RecapitulatifInscriptionsMiniFormationsView.as_view(), name=RecapitulatifInscriptionsMiniFormationsView.name),
+                path('inscription/', MiniFormationsInscriptiblesView.as_view(), name=MiniFormationsInscriptiblesView.name),
+                path('inscrire/', InscrireAUneMiniFormationView.as_view(), name=InscrireAUneMiniFormationView.name),
+                path('desinscrire/', DesinscrireAUneMiniFormationView.as_view(), name=DesinscrireAUneMiniFormationView.name)
+            ]),
+        ),
     ])),
 ]

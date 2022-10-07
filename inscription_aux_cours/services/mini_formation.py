@@ -24,17 +24,20 @@
 #
 ##############################################################################
 import logging
+from functools import partial
+from typing import List
 
 import osis_inscription_cours_sdk
-import urllib3
 from django.conf import settings
-from django.http import Http404
-from osis_inscription_cours_sdk.model.liste_mini_formations import ListeMiniFormations
 from osis_inscription_cours_sdk.api import mini_formation_api
+from osis_inscription_cours_sdk.model.desinscrire_a_une_mini_formation import DesinscrireAUneMiniFormation
+from osis_inscription_cours_sdk.model.inscription_mini_formation import InscriptionMiniFormation
+from osis_inscription_cours_sdk.model.inscrire_a_une_mini_formation import InscrireAUneMiniFormation
+from osis_inscription_cours_sdk.model.liste_mini_formations import ListeMiniFormations
 
 from base.models.person import Person
+from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
-from frontoffice.settings.osis_sdk.utils import build_mandatory_auth_headers
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -45,17 +48,42 @@ class MiniFormationService:
     def get_mini_formations_inscriptibles(sigle_formation: str, person: Person) -> 'ListeMiniFormations':
         return _mini_formation_api_call(person, "mini_formations_inscriptibles", sigle_formation=sigle_formation)
 
+    @staticmethod
+    def inscrire_a_une_mini_formation(person: Person, sigle_formation: str, code_mini_formation: str):
+        cmd = InscrireAUneMiniFormation(
+            code_mini_formation=code_mini_formation
+        )
+        return _mini_formation_api_call(
+            person,
+            'enroll_mini_formation',
+            sigle_formation=sigle_formation,
+            inscrire_a_une_mini_formation=cmd
+        )
 
-def _mini_formation_api_call(person: Person, method_to_call: str, **kwargs):
-    configuration = inscription_aux_cours_sdk.build_configuration()
-    with osis_inscription_cours_sdk.ApiClient(configuration) as api_client:
-        api_instance = mini_formation_api.MiniFormationApi(api_client)
-        try:
-            class_method = getattr(api_instance, method_to_call)
-            result = class_method(**build_mandatory_auth_headers(person), **kwargs)
-        except (osis_inscription_cours_sdk.ApiException, urllib3.exceptions.HTTPError, Http404,) as e:
-            logger.error(e)
-            return None
-    return result
+    @staticmethod
+    def desinscrire_a_une_mini_formation(person: Person, sigle_formation: str, code_mini_formation: str):
+        cmd = DesinscrireAUneMiniFormation(
+            code_mini_formation=code_mini_formation
+        )
+        return _mini_formation_api_call(
+            person,
+            'unenroll_mini_formation',
+            sigle_formation=sigle_formation,
+            desinscrire_a_une_mini_formation=cmd
+        )
+
+    @staticmethod
+    def get_inscriptions(person: Person, sigle_formation: str) -> List['InscriptionMiniFormation']:
+        return _mini_formation_api_call(
+            person,
+            'inscriptions_mini_formations',
+            sigle_formation=sigle_formation
+        )
 
 
+_mini_formation_api_call = partial(
+    call_api,
+    inscription_aux_cours_sdk,
+    osis_inscription_cours_sdk,
+    mini_formation_api.MiniFormationApi
+)

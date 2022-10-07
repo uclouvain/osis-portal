@@ -1,85 +1,14 @@
-{% extends "dashboard_layout.html" %}
-{% load static %}
-{% load i18n academic_year_display %}
-
-{% comment "License" %}
-    * OSIS stands for Open Student Information System. It's an application
-    * designed to manage the core business of higher education institutions,
-    * such as universities, faculties, institutes and professional schools.
-    * The core business involves the administration of students, teachers,
-    * courses, programs and so on.
-    *
-    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
-    *
-    * This program is free software: you can redistribute it and/or modify
-    * it under the terms of the GNU General Public License as published by
-    * the Free Software Foundation, either version 3 of the License, or
-    * (at your option) any later version.
-    *
-    * This program is distributed in the hope that it will be useful,
-    * but WITHOUT ANY WARRANTY; without even the implied warranty of
-    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    * GNU General Public License for more details.
-    *
-    * A copy of this license - GNU General Public License - is available
-    * at the root of the source code of this program.  If not,
-    * see http://www.gnu.org/licenses/.
-{% endcomment %}
-
-{% block breadcrumb %}
-    <li>{% trans 'My courses enrollment' %}</li>
-    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li class="active">{% trans 'My minors or options enrollment' %}</li>
-{% endblock %}
-
-
-{% block content %}
-    <div class="page-header">
-        <h2>{% trans 'My minors or options enrollment' %}</h2>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-body">
-
-            <div class="row">
-                <div class="col-md-4">
-                    <label>{% trans 'Last name' %}, {% trans 'First name' %}</label>
-                    <br>
-                    {{ student.person.last_name }}, {{ student.person.first_name }}
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'Academic year' %}</label>
-                    <br>
-                    {{ annee_academique|display_as_academic_year }}
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'Offer' %}</label>
-                    <br>
-                    {{ formation.title }}
-                </div>
-            </div>
-
-            <br>
-
-            <form id="form-inscription-mini-formations" method="post">
-                {% csrf_token %}
-                <table id="table-inscription-mini-formations" class="table table-hover">
-                    {% for mini_formation in liste_mini_formations_inscriptibles.mini_formations %}
-                        <tr>
-                            <td>{{ mini_formation.intitule }} {% if mini_formation.condition_acces %}<i class='fa-solid fa-key'></i>{% endif %}</td>
-                            <td>
-                                <input type="checkbox" name="mini_formations" value="{{ mini_formation.code }}">
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to courses enrollment' %}
-                </button>
-            </form>
-
-
-        </div>
-    </div>
-
-{% endblock %}
+<form id="form-inscription-{{ code_mini_formation }}" method="post">
+    {% csrf_token %}
+    <input
+            id="checkbox-{{ code_mini_formation }}"
+            type="checkbox"
+            name="checkbox_mini_formation"
+            hx-include="#form-inscription-{{ code_mini_formation }}"
+            hx-target="#form-inscription-{{ code_mini_formation }}"
+            hx-trigger="click"
+            hx-swap="innerHTML"
+            hx-vals='{"code_mini_formation": "{{ code_mini_formation }}"}'
+            hx-post="{% url 'inscription-aux-cours:inscrire-mini-formation' sigle_formation=sigle_formation %}"
+    >
+</form>

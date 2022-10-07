@@ -22,75 +22,37 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
-from django.utils.functional import cached_property
-from django.views.generic import FormView
-from osis_inscription_cours_sdk.model.liste_mini_formations import ListeMiniFormations
-from osis_offer_enrollment_sdk.model.enrollment import Enrollment
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
+from django.views.generic import TemplateView
 
-from base.models import academic_year
-from base.models.person import Person
-from base.models.student import Student
-from base.services.offer_enrollment import OfferEnrollmentService
-from inscription_aux_cours.forms.mini_formation.formulaire_inscription import InscriptionMiniFormationForm
 from inscription_aux_cours.services.mini_formation import MiniFormationService
+from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 
 
-class InscrireAuxMiniFormationsView(LoginRequiredMixin, FormView):
-    name = 'inscrire-mini-formations'
+@method_decorator(require_POST, name='dispatch')
+class InscrireAUneMiniFormationView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+    name = 'inscrire-mini-formation'
 
     # TemplateView
-    template_name = "inscription_aux_cours/mini_formation/inscrire.html"
-    form_class = InscriptionMiniFormationForm
-
-    @cached_property
-    def person(self) -> 'Person':
-        return Person.objects.get(user=self.request.user)
-
-    @cached_property
-    def student(self) -> 'Student':
-        if self.formation:
-            registration_id = self.formation.student_registration_id
-            return Student.objects.get(registration_id=registration_id)
-
-    # TODO should be returned by api
-    @cached_property
-    def annee_academique(self) -> 'int':
-        return academic_year.starting_academic_year().year
+    template_name = "inscription_aux_cours/mini_formation/desinscrire.html"
 
     @property
-    def sigle_formation(self) -> str:
-        return self.kwargs['sigle_formation']
+    def code_mini_formation(self) -> str:
+        return self.request.POST.get('code_mini_formation')
 
-    @cached_property
-    def formation(self) -> 'Enrollment':
-        offer_enrollments = OfferEnrollmentService.get_my_enrollments_year_list(
-            person=self.person, year=self.annee_academique
-        )
-        return next(
-            (offer_enrollment for offer_enrollment in offer_enrollments
-             if offer_enrollment.acronym == self.sigle_formation),
-            None
-        )
+    def post(self, request, *args, **kwargs):
+        code_mini_formation = self.code_mini_formation
+        self.inscrire_a_une_mini_formation(code_mini_formation)
+        return super().get(request, *args, **kwargs)
 
-    @cached_property
-    def mini_formations_inscriptibles(self) -> 'ListeMiniFormations':
-        return MiniFormationService().get_mini_formations_inscriptibles(self.sigle_formation, self.person)
+    def inscrire_a_une_mini_formation(self, code_mini_formation: str):
+        MiniFormationService().inscrire_a_une_mini_formation(self.person, self.sigle_formation, code_mini_formation)
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'student': self.student,
-            'formation': self.formation,
-            'annee_academique': self.annee_academique,
-            'liste_mini_formations_inscriptibles': self.mini_formations_inscriptibles
+            "code_mini_formation": self.code_mini_formation
         }
-
-    def get_form_kwargs(self):
-        form_kwargs = super().get_form_kwargs()
-        form_kwargs['liste_mini_formations'] = self.mini_formations_inscriptibles
-        return form_kwargs
-
-    def get_success_url(self):
-        return reverse("inscription-aux-cours:selectionner-formation")

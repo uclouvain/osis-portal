@@ -1,4 +1,4 @@
-{% extends "dashboard_layout.html" %}
+{% extends "inscription_aux_cours/layout.html" %}
 {% load static %}
 {% load i18n academic_year_display %}
 
@@ -27,8 +27,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li>{% trans 'My courses enrollment' %}</li>
     <li class="active">{% trans 'Offer choice' %}</li>
+    <li>{% trans 'My courses enrollment' %}</li>
 {% endblock %}
 
 
@@ -80,7 +80,7 @@
 
                                 <td>{{ formation.year|display_as_academic_year }}</td>
                                 <td>
-                                    <a href="{% url 'inscription-aux-cours:inscrire-mini-formations' sigle_formation=formation.acronym %}">
+                                    <a href="{% url 'inscription-aux-cours:recapitulatif-mini-formations' sigle_formation=formation.acronym %}">
                                         {{ formation.acronym }}
                                     </a>
                                 </td>

@@ -22,22 +22,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import forms
-from osis_inscription_cours_sdk.model.liste_mini_formations import ListeMiniFormations
+from functools import partial
+
+import osis_education_group_sdk
+from osis_education_group_sdk.api import trainings_api
+from osis_education_group_sdk.model.training_detailed import TrainingDetailed
+
+from base.models.person import Person
+from base.services.utils import call_api
+from frontoffice.settings.osis_sdk import education_group as education_group_sdk
 
 
-class InscriptionMiniFormationForm(forms.Form):
-    mini_formations = forms.MultipleChoiceField(required=False)
+class TrainingService:
+    @staticmethod
+    def get_detail(
+            person: 'Person',
+            year: int,
+            acronym: str,
+    ) -> 'TrainingDetailed':
+        return _call_api(person, 'trainings_read', year=str(year), acronym=acronym)
 
-    def __init__(self, *args, liste_mini_formations: 'ListeMiniFormations', **kwargs):
-        super().__init__(*args, **kwargs)
 
-        self.liste_mini_formations = liste_mini_formations
-        self.__init_mini_formations_field()
-
-    def __init_mini_formations_field(self):
-        self.fields['mini_formations'].choices = [
-            (mini_formation.code, mini_formation.code)
-            for mini_formation in self.liste_mini_formations.mini_formations
-        ]
-
+_call_api = partial(call_api, education_group_sdk, osis_education_group_sdk, trainings_api.TrainingsApi)
