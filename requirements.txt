@@ -1,4 +1,4 @@
-Django==3.2.12
+Django==3.2.16
 django-bootstrap3==15.0.0
 django-localflavor==3.1
 django-statici18n==2.1.3
