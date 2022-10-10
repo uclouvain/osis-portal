@@ -47,7 +47,8 @@ def get_arrangements(spec_profile: StudentSpecificProfile, learning_unit_type: s
         if spec_profile.arrangement_additional_time.value:
             arrangements.append(spec_profile.arrangement_additional_time_text)
         if spec_profile.arrangement_appropriate_copy.value:
-            arrangements.append('{} : {}'.format(_('Copy'), spec_profile.arrangement_appropriate_copy_text))
+            arrangements.append(f"{_('Copy')} : {spec_profile.arrangement_appropriate_copy_text}")
+
         if spec_profile.arrangement_specific_locale:
             arrangements.append(_('Specific room of examination'))
     if _has_other_facility_comment(spec_profile, learning_unit_type):

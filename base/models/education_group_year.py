@@ -98,11 +98,7 @@ class EducationGroupYear(SerializableModel):
         unique_together = ('education_group', 'academic_year')
 
     def __str__(self):
-        return "{} - {} - {}".format(
-            self.partial_acronym,
-            self.acronym,
-            self.academic_year,
-        )
+        return f"{self.partial_acronym} - {self.acronym} - {self.academic_year}"
 
 
 def find_by_education_groups(education_groups):

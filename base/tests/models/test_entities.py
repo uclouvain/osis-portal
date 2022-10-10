@@ -53,7 +53,7 @@ class EntityTest(TestCase):
             start_date=self.start_date,
             end_date=self.end_date
         )
-        self.children = [EntityFactory() for x in range(4)]
+        self.children = [EntityFactory() for _ in range(4)]
         self.types_dict = dict(entity_type.ENTITY_TYPES)
         types = [self.types_dict['SECTOR'],
                  self.types_dict['FACULTY'],
@@ -64,11 +64,11 @@ class EntityTest(TestCase):
             EntityVersionFactory(
                 entity=self.children[x],
                 parent=self.parent,
-                acronym="ENTITY_V_" + str(x),
+                acronym=f"ENTITY_V_{str(x)}",
                 start_date=self.start_date,
                 end_date=self.end_date,
                 entity_type=types[x]
-                )
+            )
 
     def test_find_descendants_with_parent(self):
         entities_with_descendants = EntityVersion.objects.get_tree([self.parent], date=self.date_in_2015)

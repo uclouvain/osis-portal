@@ -64,4 +64,4 @@ class BootstrapForm(forms.Form):
 def set_form_control(self):
     for field in self.fields:
         attr_class = self.fields[field].widget.attrs.get('class') or ''
-        self.fields[field].widget.attrs['class'] = attr_class + ' form-control'
+        self.fields[field].widget.attrs['class'] = f'{attr_class} form-control'

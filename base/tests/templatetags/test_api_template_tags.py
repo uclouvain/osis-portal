@@ -33,9 +33,10 @@ class ApiTemplateTagsTestCase(SimpleTestCase):
 
     def test_should_compute_visible_indices_in_pagination(self):
         pages_count = 20
-        pages = [{'number': page+1} for page in range(0, pages_count)]
+        pages = [{'number': page+1} for page in range(pages_count)]
 
-        visible_indices = compute_visible_indices(pages, int(pages_count/2), DEFAULT_CONDENSED_PAGINATION_DELTA)
+        visible_indices = compute_visible_indices(pages, pages_count // 2, DEFAULT_CONDENSED_PAGINATION_DELTA)
+
         expected_pagination_indices = [1, 8, 9, 10, 11, 12, 20]
 
         self.assertEqual(visible_indices, expected_pagination_indices)

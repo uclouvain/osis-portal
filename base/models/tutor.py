@@ -26,11 +26,10 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
-from base.models import person as model_person
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+from osis_common.utils.models import get_object_or_none
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -54,26 +53,25 @@ class Tutor(SerializableModel):
         )
 
     def __str__(self):
-        return u"%s" % self.person
+        return f"{self.person}"
 
 
 def find_by_person(a_person):
-    try:
-        tutor = Tutor.objects.get(person=a_person)
-        return tutor
-    except ObjectDoesNotExist:
-        return None
+    return get_object_or_none(
+        Tutor,
+        person=a_person
+    )
 
 
 def find_by_person_global_id(global_id):
-    try:
-        return Tutor.objects.get(person__global_id=global_id) if global_id is not None else None
-    except ObjectDoesNotExist:
-        return None
+    return get_object_or_none(
+        Tutor,
+        person__global_id=global_id
+    ) if global_id is not None else None
 
 
 def find_by_id(tutor_id):
-    try:
-        return Tutor.objects.select_related("person").get(pk=tutor_id)
-    except ObjectDoesNotExist:
-        return None
+    return get_object_or_none(
+        Tutor.objects.select_related('person'),
+        pk=tutor_id,
+    )

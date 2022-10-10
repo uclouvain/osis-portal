@@ -40,8 +40,6 @@ class EnrollmentDictFactory(dict, factory.DictFactory):
     student_registration_id = factory.fuzzy.FuzzyText(length=10)
     program = factory.fuzzy.FuzzyText(length=7)
     learning_unit_year = 2020
-    learning_unit_acronym = "{}{}".format(
-        factory.fuzzy.FuzzyText(length=5),
-        factory.fuzzy.FuzzyInteger(low=1000, high=2000)
-    )
+    learning_unit_acronym = f"{factory.fuzzy.FuzzyText(length=5)}{factory.fuzzy.FuzzyInteger(low=1000, high=2000)}"
+
     specific_profile = None
