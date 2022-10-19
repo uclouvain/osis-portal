@@ -30,6 +30,7 @@ pylint==2.12.2
 diff-cover==3.0.1
 tblib==1.7.0
 django-waffle==2.2.1
+setuptools<58
 
 # SDKs
 git+https://github.com/uclouvain/osis-attribution-sdk.git@wip-build-1.20
