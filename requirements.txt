@@ -21,7 +21,7 @@ requests>=2.20.0
 openpyxl==2.3.2
 coverage==5.5
 pytz==2018.5
-pyvirtualdisplay==0.2.1
+pyvirtualdisplay==0.2.5
 django-registration==3.2
 django-autocomplete-light==3.5.1
 django-hijack==3.0.4
