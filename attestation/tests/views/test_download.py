@@ -170,7 +170,8 @@ class DownloadStudentAttestation(TestCase):
 
         self.assertTrue(mock_fetch_student_attestation.called)
         self.assertEqual(response['Content-Type'], 'application/pdf')
-        self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}.pdf"'.format(self.attestation_type))
+        self.assertEqual(response['Content-Disposition'], f'attachment; filename="{self.attestation_type}.pdf"')
+
         self.assertEqual(response.content.decode(), str(open_sample_pdf()))
 
     @mock.patch("base.business.student.find_by_user_and_discriminate")

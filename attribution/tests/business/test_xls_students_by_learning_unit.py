@@ -63,7 +63,7 @@ class XlsStudentsByLearningUnitTest(TestCase):
         self.client.logout()
         response = self.client.post(self.url)
 
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_without_permission(self):
         a_person = PersonFactory()

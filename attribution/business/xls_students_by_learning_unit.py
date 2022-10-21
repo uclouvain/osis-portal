@@ -50,11 +50,7 @@ FIRST_COL_PEPS = 'M'
 
 def get_xls(student_list, acronym, academic_year, learning_unit_type):
     xls = _make_xls_list(student_list, learning_unit_type)
-    filename = '{}_{}_{}.xlsx'.format(
-        _('student_list'),
-        acronym,
-        academic_year
-    )
+    filename = f"{_('student_list')}_{acronym}_{academic_year}.xlsx"
     response = HttpResponse(xls, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = f"attachment; filename={filename}"
     return response

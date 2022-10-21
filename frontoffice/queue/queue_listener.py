@@ -191,7 +191,7 @@ class ConsumerThread(threading.Thread):
 
     # Not necessarily a method.
     def callback_func(self, channel, method, properties, body):
-        logger.debug("{} received '{}'".format(self.name, body))
+        logger.debug(f"{self.name} received '{body}'")
 
     def run(self):
         connection_parameters = {
@@ -249,7 +249,7 @@ class ExampleConsumer:
 
         :rtype: pika.SelectConnection
         """
-        logger.debug('Connecting to %s' % (self._connection_parameters['queue_url']))
+        logger.debug(f"Connecting to {self._connection_parameters['queue_url']}")
         credentials = pika.PlainCredentials(self._connection_parameters['queue_user'],
                                             self._connection_parameters['queue_password'])
         return pika.SelectConnection(pika.ConnectionParameters(self._connection_parameters['queue_url'],
@@ -294,7 +294,8 @@ class ExampleConsumer:
             logger.warning('Closing connection without retry')
             self._connection.ioloop.stop()
         else:
-            logger.warning('Connection closed, reopening in 5 seconds: (%s) %s' % (reply_code, reply_text))
+            logger.warning(f'Connection closed, reopening in 5 seconds: ({reply_code}) {reply_text}')
+
             self._connection.add_timeout(5, self.reconnect)
 
     def reconnect(self):
@@ -367,7 +368,7 @@ class ExampleConsumer:
 
         :param str|unicode exchange_name: The name of the exchange to declare
         """
-        logger.debug('Declaring exchange %s' % (exchange_name))
+        logger.debug(f'Declaring exchange {exchange_name}')
         self._channel.exchange_declare(self.on_exchange_declareok,
                                        exchange_name,
                                        self.EXCHANGE_TYPE)
@@ -390,7 +391,7 @@ class ExampleConsumer:
 
         :param str|unicode queue_name: The name of the queue to declare.
         """
-        logger.debug('Declaring queue %s' % (queue_name))
+        logger.debug(f'Declaring queue {queue_name}')
         self._channel.queue_declare(self.on_queue_declareok, queue_name)
 
     def on_queue_declareok(self, method_frame):
@@ -403,8 +404,8 @@ class ExampleConsumer:
 
         :param pika.frame.Method method_frame: The Queue.DeclareOk frame
         """
-        logger.debug(
-            'Binding %s to %s with %s' % (self.EXCHANGE, self._connection_parameters['queue_name'], self.ROUTING_KEY))
+        logger.debug(f"Binding {self.EXCHANGE} to {self._connection_parameters['queue_name']} with {self.ROUTING_KEY}")
+
         self._channel.queue_bind(self.on_bindok, self._connection_parameters['queue_name'],
                                  self.EXCHANGE, self.ROUTING_KEY)
 
@@ -481,7 +482,7 @@ class ExampleConsumer:
 
         :param int delivery_tag: The delivery tag from the Basic.Deliver frame
         """
-        logger.debug('Acknowledging message %s' % (delivery_tag))
+        logger.debug(f'Acknowledging message {delivery_tag}')
         self._channel.basic_ack(delivery_tag)
 
     def stop_consuming(self):

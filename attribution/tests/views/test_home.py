@@ -16,7 +16,7 @@ class HomeAttributionTest(TestCase):
     def test_case_user_not_logged(self):
         self.client.logout()
         response = self.client.get(self.url)
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_assert_redirect_to_tutor_charge_view(self):
         expected_redirection = reverse('tutor_charge')
