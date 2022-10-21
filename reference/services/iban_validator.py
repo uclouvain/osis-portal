@@ -46,7 +46,7 @@ class IBANValidatorService:
         try:
             Validate(iban)
         except Exception as e:
-            raise IBANValidatorException(message=e.message) from e
+            raise IBANValidatorException(message=e.messages) from e
 
     @classmethod
     def _validate_esb_free(cls, iban: str):
