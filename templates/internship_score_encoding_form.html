@@ -100,7 +100,7 @@
             <h4>{{ organization.name }}</h4>
     </div>
       <div class="panel-body">
-        <form method="post" class="form-inline">
+        <form id="score_encoding_form" method="post" class="form-inline">
         {% csrf_token %}
         <h3>
             {% trans 'Entrustable Professional Activity (EPA)' %}
@@ -229,10 +229,9 @@
                 </label>
             </div>
         </div>
-
         <hr/>
-
-        <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+        <a class="btn btn-primary" data-toggle="modal" data-target="#validation_modal">{% trans 'Save' %}</a>
+            {% include "fragment/validation_request_modal.html" %}
         </form>
       </div>
     </div>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-19 15:48+0200\n"
+"POT-Creation-Date: 2022-10-21 16:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,6 +120,10 @@ msgstr "Délégués"
 
 msgid "Delete"
 msgstr "Supprimer"
+
+msgid "Do you want to validate the encoding? You can always do it later"
+msgstr ""
+"Voulez-vous valider l'encodage ? Vous pouvez toujours le faire plus tard"
 
 msgid "Doctor"
 msgstr "Docteur"
@@ -306,6 +310,9 @@ msgstr "Id d'enregistrement"
 
 msgid "Save"
 msgstr "Enregistrer"
+
+msgid "Save and validate"
+msgstr "Sauvegarder et valider"
 
 msgid "Score encoding"
 msgstr "Encodage des évaluations"
@@ -513,3 +520,9 @@ msgstr "réalise de façon exceptionnelle"
 
 msgid "yes,no,"
 msgstr "oui,non,"
+
+msgid "Later"
+msgstr "Plus tard"
+
+msgid "An error occurred during score update"
+msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
