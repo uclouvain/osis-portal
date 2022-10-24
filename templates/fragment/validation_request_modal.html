@@ -35,13 +35,14 @@
             </h4>
         </div>
           <div class="modal-body">
-            {% trans 'Do you want to validate the encoding? You can always do it later' %}
+            {% trans 'Do you also want to validate the encoding?' %}
+              {% trans 'Grades modifications will no longer be allowed after validation.' %}
               <span class="validation-element"></span>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Cancel' %}</button>
-            <button id="btn-save-and-validate" value="btn-save-validate" name="btn-save-validate" onclick="$('#score_encoding_form').submit();" type="submit" class="btn btn-primary" >{% trans 'Save and validate' %}</button>
-            <button id="btn-save" onclick="$('#score_encoding_form').submit();" type="submit" class="btn btn-danger" >{% trans 'Save' %}</button>
+              <button id="btn-save" onclick="$('#score_encoding_form').submit();" type="submit" class="btn btn-primary" >{% trans 'Save' %}</button>
+              <button id="btn-save-and-validate" value="btn-save-validate" name="btn-save-validate" onclick="$('#score_encoding_form').submit();" type="submit" class="btn btn-primary" >{% trans 'Save and validate' %}</button>
           </div>
         </div>
       </div>
