@@ -54,10 +54,7 @@ def server_error(request, *args, **kwargs):
 
 
 def common_context_processor(request):
-    if hasattr(settings, 'ENVIRONMENT'):
-        env = settings.ENVIRONMENT
-    else:
-        env = 'DEV'
+    env = settings.ENVIRONMENT if hasattr(settings, 'ENVIRONMENT') else 'DEV'
     context = {
         'environment': env,
         'installed_apps': settings.INSTALLED_APPS,
@@ -82,11 +79,8 @@ def _check_notice(request, context):
 
 
 def get_managed_programs(user) -> Set[str]:
-    managed_programs = set()
     person = person_mdl.find_by_user(user)
-    if person:
-        managed_programs = api.get_managed_programs(person.global_id)
-    return managed_programs
+    return api.get_managed_programs(person.global_id) if person else set()
 
 
 def login(request):

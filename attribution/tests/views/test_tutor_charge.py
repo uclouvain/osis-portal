@@ -127,7 +127,7 @@ class TutorChargeViewTest(TestCase):
         self.client.logout()
 
         response = self.client.get(self.url)
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_case_user_have_not_permission(self):
         self.client.force_login(UserFactory())
@@ -232,7 +232,7 @@ class AdminTutorChargeViewTest(TestCase):
         self.client.logout()
 
         response = self.client.get(self.url)
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_case_user_have_not_permission(self):
         self.client.force_login(self.tutor.person.user)

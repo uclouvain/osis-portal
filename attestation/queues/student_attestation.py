@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import logging
+import random
 import urllib
 from urllib.error import URLError
 
@@ -35,7 +36,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 def fetch_student_attestation(global_id, academic_year, attestation_type, username):
     if not hasattr(settings, 'ATTESTATION_CONFIG'):
         return None
-    server_top_url = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_URL')
+    server_top_url = random.choice(settings.ATTESTATION_CONFIG.get('SERVERS_TO_FETCH_URLS'))
     document_base_path = server_top_url + settings.ATTESTATION_CONFIG.get('ATTESTATION_PATH')
     if document_base_path:
         try:

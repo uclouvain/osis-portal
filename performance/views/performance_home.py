@@ -58,8 +58,7 @@ class PerformanceHomeMixin(LoginRequiredMixin, TemplateView):
     @cached_property
     def student_programs(self) -> List[StudentPerformanceDict]:
         query_result = mdl_performance.student_performance.search(registration_id=self.student.registration_id)
-        list_student_programs = self.query_result_to_list(query_result)
-        return list_student_programs
+        return self.query_result_to_list(query_result)
 
     def query_result_to_list(self, query_result: List[StudentPerformance]) -> List[StudentPerformanceDict]:
         performance_results_list = []
@@ -101,7 +100,25 @@ class PerformanceHomeAdmin(PerformanceHomeMixin, UserPassesTestMixin):
         can_access_performance_administration = _can_access_performance_administration(self.request)
         has_student = self.student is not None
         return can_access_performance_administration and not (
-            has_student and not _can_visualize_student_programs(self.request, self.student.registration_id)
+            has_student and not self._can_visualize_student_programs(self.request, self.student.registration_id)
+        )
+
+    @staticmethod
+    def _can_visualize_student_programs(request: HttpRequest, registration_id: str) -> bool:
+        """
+        Student cannot access administration
+        User can visualize student programs if :
+            - The user is faculty_administrator
+            - The user is program manager of at least one of the program in the list of the student programs
+        """
+        if request.user.has_perm('base.is_faculty_administrator'):
+            return True
+        if request.user.has_perm('base.is_student'):
+            return False
+        managed_programs = common.get_managed_programs(request.user)
+        return any(
+            stud_perfs.acronym in managed_programs
+            for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id)
         )
 
     @cached_property
@@ -116,21 +133,3 @@ class PerformanceHomeStudent(PerformanceHomeMixin, PermissionRequiredMixin):
     @cached_property
     def student(self) -> Student:
         return student_business.find_by_user_and_discriminate(self.request.user)
-
-
-def _can_visualize_student_programs(request: HttpRequest, registration_id: str) -> bool:
-    """
-    Student cannot access administration
-    User can visualize student programs if :
-        - The user is faculty_administrator
-        - The user is program manager of at least one of the program in the list of the student programs
-    """
-    if request.user.has_perm('base.is_faculty_administrator'):
-        return True
-    if request.user.has_perm('base.is_student'):
-        return False
-    managed_programs = common.get_managed_programs(request.user)
-    for stud_perfs in mdl_performance.student_performance.search(registration_id=registration_id):
-        if stud_perfs.acronym in managed_programs:
-            return True
-    return False

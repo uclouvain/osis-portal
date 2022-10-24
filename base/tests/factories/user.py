@@ -36,11 +36,12 @@ def generate_email(user, domain=None):
 
 
 class UserFactory(factory.DjangoModelFactory):
+
     class Meta:
         model = 'auth.User'
         django_get_or_create = ('username',)
 
-    username = factory.Sequence(lambda n: 'username_{}'.format(n))
+    username = factory.Sequence(lambda n: f'username_{n}')
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     email = factory.LazyAttribute(generate_email)
@@ -52,6 +53,7 @@ class UserFactory(factory.DjangoModelFactory):
 
     last_login = factory.LazyAttribute(lambda _o: datetime(2000, 1, 1, tzinfo=get_tzinfo()))
     date_joined = factory.LazyAttribute(lambda _o: datetime(1999, 1, 1, tzinfo=get_tzinfo()))
+
 
 
 class SuperUserFactory(UserFactory):

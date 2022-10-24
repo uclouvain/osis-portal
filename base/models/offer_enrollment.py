@@ -45,4 +45,4 @@ class OfferEnrollment(SerializableModel):
     education_group_year = models.ForeignKey('EducationGroupYear', on_delete=models.PROTECT)
 
     def __str__(self):
-        return u"%s - %s" % (self.student, self.education_group_year)
+        return f"{self.student} - {self.education_group_year}"
