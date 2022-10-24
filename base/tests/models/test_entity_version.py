@@ -38,25 +38,27 @@ now = datetime.datetime.now()
 class EntityVersionTest(TestCase):
 
     def setUp(self):
-        self.entities = [EntityFactory() for x in range(2)]
+        self.entities = [EntityFactory() for _ in range(2)]
 
         self.entity_c_older_version = EntityVersionFactory(
             entity=self.entities[0],
-            acronym="C ENTITY_V_" + str(0),
+            acronym='C ENTITY_V_0',
             entity_type=entity_type.FACULTY,
             start_date=datetime.date(now.year - 1, 1, 1),
             end_date=datetime.date(now.year - 1, 12, 31)
         )
+
         self.entity_c_current_version = EntityVersionFactory(
             entity=self.entities[0],
-            acronym="B ENTITY_V_" + str(0),
+            acronym='B ENTITY_V_0',
             entity_type=entity_type.FACULTY,
             start_date=datetime.date(now.year, 1, 1),
             end_date=None
         )
+
         self.entity_a_version = EntityVersionFactory(
             entity=self.entities[1],
-            acronym="A ENTITY_V_" + str(1),
+            acronym='A ENTITY_V_1',
             entity_type=entity_type.FACULTY,
             start_date=datetime.date(now.year, 1, 1),
             end_date=None

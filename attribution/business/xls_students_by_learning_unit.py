@@ -50,13 +50,9 @@ FIRST_COL_PEPS = 'M'
 
 def get_xls(student_list, acronym, academic_year, learning_unit_type):
     xls = _make_xls_list(student_list, learning_unit_type)
-    filename = '{}_{}_{}.xlsx'.format(
-        _('student_list'),
-        acronym,
-        academic_year
-    )
+    filename = f"{_('student_list')}_{acronym}_{academic_year}.xlsx"
     response = HttpResponse(xls, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = "%s%s" % ("attachment; filename=", filename)
+    response['Content-Disposition'] = f"attachment; filename={filename}"
     return response
 
 
@@ -254,17 +250,16 @@ def _set_peps_border(ws, last_row_number):
     Set border at the left of the first peps column
     """
     for cpt in range(1, last_row_number + 1):
-        cell = ws["{}{}".format(FIRST_COL_PEPS, cpt)]
+        cell = ws[f"{FIRST_COL_PEPS}{cpt}"]
         _update_border_for_first_peps_column(cell)
 
 
 def _update_border_for_first_peps_column(cell):
     c = cell.style if cell.has_style else Style()
-
     c.border = BORDER_LEFT
     cell.style = c
 
 
 def _add_filters_on_headers(a_worksheet):
-    full_range = "A1:" + get_column_letter(a_worksheet.max_column) + str(a_worksheet.max_row)
+    full_range = f"A1:{get_column_letter(a_worksheet.max_column)}{str(a_worksheet.max_row)}"
     a_worksheet.auto_filter.ref = full_range

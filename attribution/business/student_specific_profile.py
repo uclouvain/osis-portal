@@ -34,7 +34,8 @@ from learning_unit.services.learning_unit import LearningUnitTypeEnum
 
 def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
     if student_specific_profile.type.value in [peps_type.PepsTypes.SPORT.name, peps_type.PepsTypes.DISABILITY.name]:
-        return "{} - {}".format(student_specific_profile.type_text, student_specific_profile.subtype_text)
+        return f"{student_specific_profile.type_text} - {student_specific_profile.subtype_text}"
+
     if student_specific_profile.type.value == peps_type.PepsTypes.NOT_DEFINED.name:
         return "-"
     return student_specific_profile.type_text or "-"
@@ -46,7 +47,8 @@ def get_arrangements(spec_profile: StudentSpecificProfile, learning_unit_type: s
         if spec_profile.arrangement_additional_time.value:
             arrangements.append(spec_profile.arrangement_additional_time_text)
         if spec_profile.arrangement_appropriate_copy.value:
-            arrangements.append('{} : {}'.format(_('Copy'), spec_profile.arrangement_appropriate_copy_text))
+            arrangements.append(f"{_('Copy')} : {spec_profile.arrangement_appropriate_copy_text}")
+
         if spec_profile.arrangement_specific_locale:
             arrangements.append(_('Specific room of examination'))
     if _has_other_facility_comment(spec_profile, learning_unit_type):

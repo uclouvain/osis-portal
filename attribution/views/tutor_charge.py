@@ -109,18 +109,14 @@ class TutorChargeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
 
     def get_total_lecturing_charge(self) -> float:
         return sum(
-            [
-                float(attribution.lecturing_charge) if attribution.lecturing_charge else 0
-                for attribution in self.attributions if not attribution.is_partim
-            ]
+            float(attribution.lecturing_charge) if attribution.lecturing_charge else 0
+            for attribution in self.attributions if not attribution.is_partim
         )
 
     def get_total_practical_charge(self) -> float:
         return sum(
-            [
-                float(attribution.practical_charge) if attribution.practical_charge else 0
-                for attribution in self.attributions if not attribution.is_partim
-            ]
+            float(attribution.practical_charge) if attribution.practical_charge else 0
+            for attribution in self.attributions if not attribution.is_partim
         )
 
     def _format_attribution_row(self, attribution: Attribution) -> SimpleNamespace:

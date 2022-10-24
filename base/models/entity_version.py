@@ -135,9 +135,7 @@ class EntityVersion(SerializableModel):
     objects = EntityVersionQuerySet.as_manager()
 
     def __str__(self):
-        return "{}".format(
-            self.acronym,
-        )
+        return f"{self.acronym}"
 
 
 def search(**kwargs):

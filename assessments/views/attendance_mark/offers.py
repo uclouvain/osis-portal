@@ -25,14 +25,14 @@
 from typing import List
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
-from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
 
 from assessments.business.attendance_mark import permission
 from assessments.services import assessments as assessments_services
+from base.business.student import find_by_user_and_discriminate
 from base.models.enums import offer_enrollment_state
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService
@@ -47,10 +47,7 @@ class SelectOffer(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 
     @cached_property
     def student(self) -> 'Student':
-        return get_object_or_404(
-            Student.objects.select_related('person'),
-            person__user=self.request.user
-        )
+        return find_by_user_and_discriminate(self.request.user)
 
     @cached_property
     def year(self):

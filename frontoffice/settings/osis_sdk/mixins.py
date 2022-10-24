@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,35 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
+from functools import cached_property
+from typing import Callable
 
-from base.models.offer_enrollment import OfferEnrollment
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
+from dal import autocomplete
+from django import http
 
-
-class EducationGroupAdmin(SerializableModelAdmin):
-    list_display = ('most_recent_acronym',)
-    search_fields = ('educationgroupyear__acronym',)
+from frontoffice.settings.osis_sdk.utils import DEFAULT_API_LIMIT
 
 
-class EducationGroup(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
+class APIPaginatedSelect2ListViewMixin(autocomplete.Select2ListView):
+    get_list_method: Callable
+    API_LIMIT: int = DEFAULT_API_LIMIT
+    get_total_method: Callable
 
-    def __str__(self):
-        return f"{self.uuid}"
+    @cached_property
+    def total(self):
+        return self.get_total_method(person=self.request.user.person, search=self.q)
 
-    @property
-    def most_recent_acronym(self):
-        qs = self.educationgroupyear_set.all()
-        if qs:
-            most_recent_education_group = qs.latest('academic_year__year')
-            return most_recent_education_group.acronym
-        return None
+    def get_list(self, offset=0):
+        return self.get_list_method(person=self.request.user.person, search=self.q, offset=offset)
 
-
-def find_by_student_and_enrollment_states(student, offer_enrollment_states):
-    educ_goup_ids = OfferEnrollment.objects.filter(
-        student=student,
-        enrollment_state__in=offer_enrollment_states
-    ).values('education_group_year__education_group_id')
-    return EducationGroup.objects.filter(pk__in=educ_goup_ids)
+    def get(self, request, *args, **kwargs):
+        page = int(request.GET.get('page', 1))
+        offset = (page - 1) * self.API_LIMIT
+        results = self.results(self.get_list(offset=offset))
+        if self.q:
+            results = self.autocomplete_results(results)
+        return http.JsonResponse({
+            'results': results,
+            'pagination': {
+                'more': offset < self.total
+            }
+        }, content_type='application/json')

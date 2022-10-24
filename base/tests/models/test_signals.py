@@ -46,10 +46,8 @@ def get_or_create_user(user_infos):
 
 
 def get_or_create_person(user=None, first_name='', global_id=''):
-    person = None
     created = False
-    if user:
-        person = mdl_person.find_by_user(user)
+    person = mdl_person.find_by_user(user) if user else None
     if not person and global_id:
         person = mdl_person.find_by_global_id(global_id)
     if not person:
@@ -137,16 +135,13 @@ class AddToGroupsSignalsTest(TestCase):
         return user.groups.filter(name=group).exists()
 
     def get_or_create_test_student(self, person):
-        student = mdl_student.find_by_person(person)
-        if not student:
-            student = mdl_student.Student.objects.create(registration_id=123456789, person=person)
-        return student
+        return mdl_student.find_by_person(person) or mdl_student.Student.objects.create(
+            registration_id=123456789,
+            person=person
+        )
 
     def get_or_create_test_tutor(self, person):
-        tutor = mdl_tutor.find_by_person(person)
-        if not tutor:
-            tutor = mdl_tutor.Tutor.objects.create(person=person)
-        return tutor
+        return mdl_tutor.find_by_person(person) or mdl_tutor.Tutor.objects.create(person=person)
 
     @classmethod
     def setUpTestData(cls):
