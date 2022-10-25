@@ -61,7 +61,7 @@ urlpatterns = [
                 url(r'^(?P<affectation_uuid>[0-9a-f-]+)/$',
                     score_encoding.view_score_encoding_form,
                     name="internship_score_encoding_form"),
-            ]))
+            ])),
         ])),
     ])),
 
