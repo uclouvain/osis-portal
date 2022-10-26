@@ -25,7 +25,7 @@
 ##############################################################################
 from django.conf.urls import url, include
 
-from internship.views import main, hospital, resume, selection, score_encoding
+from internship.views import main, hospital, resume, selection, score_encoding, place_evaluation
 from internship.views.master_delegates import manage_delegates, new_delegate, delete_delegate
 
 urlpatterns = [
@@ -42,6 +42,7 @@ urlpatterns = [
             ])),
             url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
             url(r'^resume/$', resume.view_student_resume, name='student_resume'),
+            url(r'^place_evaluation/$', place_evaluation.view_place_evaluation, name='place_evaluation')
         ])),
     ])),
 

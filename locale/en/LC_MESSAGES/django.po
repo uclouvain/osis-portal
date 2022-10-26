@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-21 16:06+0200\n"
+"POT-Creation-Date: 2022-10-26 11:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,9 @@ msgstr ""
 msgid ""
 "An error occurred during delegate creation, please contact internships "
 "administration (STAC) for further assistance."
+msgstr ""
+
+msgid "An error occurred during score update"
 msgstr ""
 
 msgid "Appreciate medical emergency"
@@ -112,7 +115,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-msgid "Do you want to validate the encoding? You can always do it later"
+msgid "Do you also want to validate the encoding?"
 msgstr ""
 
 msgid "Doctor"
@@ -200,6 +203,9 @@ msgid "Internship delegate {} created with success"
 msgstr ""
 
 msgid "Internship master"
+msgstr ""
+
+msgid "Internship place evaluation"
 msgstr ""
 
 msgid "Internship score encoding"

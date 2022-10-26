@@ -41,44 +41,57 @@
     <div class="panel panel-default">
         <div class="panel panel-body">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="row">
+                <div class="col-md-6">
+                    <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
                         {% if subscription_allowed %}
-                            <div class="col-md-2 text-center"><em class="fa fa-archive"
-                                                                 style="font-size: 400%; color: #6699FF;"></em></div>
-                            <div class="col-md-10">
+                            <div class="col-xs-2 text-center"><em class="fa fa-archive"
+                                                                 style="font-size: 300%; color: #6699FF;"></em></div>
+                            <div class="col-xs-10">
                                 <h4 class="media-heading"><a
                                         href="{% url 'select_internship' cohort_id=cohort.id %}">{% trans 'Submit your internship choices' %}</a>
                                 </h4>
                             </div>
                         {% else %}
-                            <div class="col-md-2 text-center"><em class="fa fa-archive"
-                                                                 style="font-size: 400%; color: #CCC;"></em></div>
-                            <div class="col-md-10">
+                            <div class="col-xs-2 text-center"><em class="fa fa-archive"
+                                                                 style="font-size: 300%; color: #CCC;"></em></div>
+                            <div class="col-xs-10">
                                 <h4 class="media-heading"
                                     style="color: #CCC;">{% trans 'Submit your internship choices' %}</h4>
                             </div>
                         {% endif %}
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-2 text-center"><em class="fa fa-user"
-                                                             style="font-size: 400%; color: #6699FF;"></em></div>
-                        <div class="col-md-10">
+                <div class="col-md-6">
+                    <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+                        <div class="col-xs-2 text-center"><em class="fa fa-user"
+                                                             style="font-size: 300%; color: #6699FF;"></em></div>
+                        <div class="col-xs-10">
                             <h4 class="media-heading"><a
                                     href="{% url 'student_resume' cohort_id=cohort.id %}">{% trans 'Sum up of your choices and your affectations' %}</a>
                             </h4>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-2 text-center"><em class="far fa-hospital"
-                                                             style="font-size: 400%; color: #6699FF;"></em></div>
-                        <div class="col-md-10">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+                        <div class="col-xs-2 text-center"><em class="far fa-hospital"
+                                                             style="font-size: 300%; color: #6699FF;"></em></div>
+                        <div class="col-xs-10">
                             <h4 class="media-heading"><a
                                     href="{% url 'hospitals_list' cohort_id=cohort.id %}">{% trans 'Hospital list' %}</a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row" style="margin-top: 15px; margin-bottom: 15px;">
+                        <div class="col-xs-2 text-center"><em class="fas fa-poll-h"
+                                                             style="font-size: 300%; color: #6699FF;"></em></div>
+                        <div class="col-xs-10">
+                            <h4 class="media-heading"><a
+                                    href="{% url 'place_evaluation' cohort_id=cohort.id %}">{% trans 'Internship place evaluation' %}</a>
                             </h4>
                         </div>
                     </div>
