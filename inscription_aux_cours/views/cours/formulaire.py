@@ -24,7 +24,7 @@
 ##############################################################################
 import itertools
 from decimal import Decimal
-from typing import List
+from typing import List, Optional
 
 import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -33,15 +33,13 @@ from django.utils.functional import cached_property
 from django.views.generic import FormView
 from osis_inscription_cours_sdk.model.configuration_formulaire_inscription_cours import \
     ConfigurationFormulaireInscriptionCours
-from osis_inscription_cours_sdk.model.cours import Cours
-from osis_inscription_cours_sdk.model.formulaire_inscription_cours import FormulaireInscriptionCours
-from osis_inscription_cours_sdk.model.groupement import Groupement
-from osis_inscription_cours_sdk.model.inscription_aun_cours import InscriptionAUnCours
+from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.forms.cours.inscription_hors_programme import InscriptionHorsProgrammeForm
-from inscription_aux_cours.services.cours import CoursService, COURS
+from inscription_aux_cours.services.cours import CoursService
+from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from learning_unit.services.learning_unit import LearningUnitService
@@ -137,8 +135,27 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             'inscriptions_hors_programmes': self.inscriptions_hors_programme,
         }
 
+    @cached_property
+    def demande_particuliere(self) -> Optional['DemandeParticuliere']:
+        return DemandeParticuliereService().recuperer(self.person, self.sigle_formation)
+
+    def get_initial(self):
+        initial = super().get_initial()
+        if self.demande_particuliere:
+            initial['demande_particuliere'] = self.demande_particuliere.demande
+        return initial
+
+    def form_valid(self, form: 'DemandeParticuliereForm'):
+        demande = form.cleaned_data['demande_particuliere']
+        if not form.has_changed():
+            return super().form_valid(form)
+
+        if demande:
+            DemandeParticuliereService().effectuer(self.person, self.sigle_formation, demande)
+        else:
+            DemandeParticuliereService().retirer(self.person, self.sigle_formation)
+
+        return super().form_valid(form)
+
     def get_success_url(self):
-        return reverse(
-            "inscription-aux-cours:recapitulatif",
-            kwargs={"sigle_formation": self.sigle_formation}
-        )
+        return reverse("inscription-aux-cours:recapitulatif", kwargs={"sigle_formation": self.sigle_formation})
