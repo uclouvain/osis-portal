@@ -28,7 +28,7 @@ from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from openpyxl import Workbook
 from openpyxl.styles import Color
-from openpyxl.styles import Style
+from openpyxl.styles import NamedStyle
 from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import save_virtual_workbook
@@ -255,7 +255,7 @@ def _set_peps_border(ws, last_row_number):
 
 
 def _update_border_for_first_peps_column(cell):
-    c = cell.style if cell.has_style else Style()
+    c = cell.style if cell.has_style else NamedStyle()
     c.border = BORDER_LEFT
     cell.style = c
 
