@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import json
+import pathlib
 from unittest.mock import patch
 
 from django.conf import settings
@@ -35,8 +36,7 @@ from dashboard.business import id_data as bsn_id_data
 
 
 def get_json_as_dict(json_path):
-    with open(json_path) as json_file:
-        data_as_json = json_file.read()
+    data_as_json = pathlib.Path(json_path).read_text()
     return json.loads(data_as_json)
 
 

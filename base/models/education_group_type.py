@@ -51,4 +51,4 @@ class EducationGroupType(SerializableModel):
     )
 
     def __str__(self):
-        return u"%s" % self.name
+        return f"{self.name}"

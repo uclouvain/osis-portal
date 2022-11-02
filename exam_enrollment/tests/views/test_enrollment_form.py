@@ -306,8 +306,8 @@ class ExamEnrollmentFormTest(TestCase):
                 "etat_to_inscr": None
             }
         ]
-        for index in range(0, len(exam_enrollments_unexpected)):
-            self.assertNotIn(exam_enrollments_unexpected[index], exam_enrollments)
+        for item in exam_enrollments_unexpected:
+            self.assertNotIn(item, exam_enrollments)
 
     def test_case_student_has_no_learning_unit_enrollment(self):
         self.mocked_learning_unit_enrollment.return_value = None

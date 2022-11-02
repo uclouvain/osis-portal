@@ -47,10 +47,10 @@ def _fetch_student_id_data(student: Student) -> Dict:
         data['birth_data'] = _get_birth_data(student)
     except error.HTTPError:
         log_trace = traceback.format_exc()
-        logger.warning('Error when querying WebService: \n {}'.format(log_trace))
+        logger.warning(f'Error when querying WebService: \n {log_trace}')
     except Exception:
         log_trace = traceback.format_exc()
-        logger.warning('Error when returning student personal data: \n {}'.format(log_trace))
+        logger.warning(f'Error when returning student personal data: \n {log_trace}')
     return data
 
 

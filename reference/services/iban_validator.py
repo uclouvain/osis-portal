@@ -27,6 +27,7 @@ import logging
 import requests
 from django.conf import settings
 from localflavor.generic.validators import IBANValidator
+from requests import RequestException
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -45,7 +46,7 @@ class IBANValidatorService:
         try:
             Validate(iban)
         except Exception as e:
-            raise IBANValidatorException(message=e.message) from e
+            raise IBANValidatorException(message=e.messages) from e
 
     @classmethod
     def _validate_esb_free(cls, iban: str):
@@ -61,12 +62,21 @@ class IBANValidatorService:
 
             if not result.json()['valid']:
                 raise IBANValidatorException(message=result.json()['messages'][0])
+        except RequestException as e:
+            logger.error("[Validate IBAN] An error occured during request to ESB")
+            raise IBANValidatorRequestException from e
         except Exception as e:
-            logger.info("[Validate IBAN] An error occured during request to ESB")
+            logger.error("[Validate IBAN] An error occured during validation")
             raise IBANValidatorException from e
 
 
 class IBANValidatorException(Exception):
-    def __init__(self, message: str = None, **kwargs):
+    def __init__(self, message: str = None):
         self.message = message or "Unable to validate IBAN"
-        super().__init__(**kwargs)
+        super().__init__()
+
+
+class IBANValidatorRequestException(Exception):
+    def __init__(self):
+        self.message = "An error occured during request to ESB"
+        super().__init__()

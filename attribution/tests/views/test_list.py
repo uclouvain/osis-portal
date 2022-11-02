@@ -82,7 +82,7 @@ class StudentsListTest(TestCase):
         self.client.logout()
         response = self.client.get(self.url)
 
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_without_permission(self):
         a_person = PersonFactory()
@@ -132,7 +132,7 @@ class StudentsListTest(TestCase):
         mock_students_list_endpoint.return_value = self.enrollments
         mock_lu_type.return_value = "COURSE"
         mock_lu_title.return_value = "TITLE"
-        today = datetime.datetime.today()
+        today = datetime.datetime.now()
         an_academic_year = AcademicYearFactory(
             year=today.year, start_date=today - datetime.timedelta(days=5),
             end_date=today + datetime.timedelta(days=5)
@@ -185,7 +185,7 @@ class ListBuildTest(TestCase):
         self.client.logout()
         response = self.client.post(self.url)
 
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_without_permission(self):
         a_person = PersonFactory()
@@ -226,7 +226,7 @@ class ListBuildTest(TestCase):
                                                   mock_get_progress_overview,
                                                   mock_get_attributions_list
                                                   ):
-        today = datetime.datetime.today()
+        today = datetime.datetime.now()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
         mock_get_attributions_list.return_value = [
@@ -240,7 +240,7 @@ class ListBuildTest(TestCase):
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
-        key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, LU_ACRONYM)
+        key = f'{LEARNING_UNIT_ACRONYM_ID}{LU_ACRONYM}'
         response = self.client.post(self.url, data={key: ""})
 
         self.assertTrue(mock_fetch.called)
@@ -257,7 +257,7 @@ class ListBuildTest(TestCase):
         an_other_tutor = TutorFactory()
         an_other_tutor.person.user.user_permissions.add(Permission.objects.get(codename="can_access_attribution"))
         self.client.force_login(an_other_tutor.person.user)
-        today = datetime.datetime.today()
+        today = datetime.datetime.now()
         AcademicYearFactory(
             year=today.year,
             start_date=today - datetime.timedelta(days=5),
@@ -267,7 +267,7 @@ class ListBuildTest(TestCase):
         mock_get_attributions_list.return_value = []
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
 
-        key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, "LECON2020")
+        key = f'{LEARNING_UNIT_ACRONYM_ID}LECON2020'
         response = self.client.post(self.url, data={key: ""})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -293,7 +293,7 @@ class ListBuildTest(TestCase):
                                                    mock_get_learning_units,
                                                    mock_get_attributions_list
                                                    ):
-        today = datetime.datetime.today()
+        today = datetime.datetime.now()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
 
@@ -308,7 +308,7 @@ class ListBuildTest(TestCase):
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
-        key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, LU_ACRONYM)
+        key = f'{LEARNING_UNIT_ACRONYM_ID}{LU_ACRONYM}'
         response = self.client.post(self.url, data={key: ""})
 
         filename = "Liste_Insc_Exam.xls"
@@ -316,7 +316,8 @@ class ListBuildTest(TestCase):
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
                          'application/vnd.ms-excel')
-        self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
+        self.assertEqual(response['Content-Disposition'], f'attachment; filename="{filename}"')
+
         self.assertEqual(response.content.decode(), str(return_sample_xls()))
 
 
@@ -337,7 +338,7 @@ class AdminStudentsListTest(TestCase):
         self.client.logout()
         response = self.client.get(self.url)
 
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_without_permission(self):
         a_person = PersonFactory()
@@ -355,7 +356,7 @@ class AdminStudentsListTest(TestCase):
 
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
     def test_with_attributions(self, mock_get_attributions_list):
-        today = datetime.datetime.today()
+        today = datetime.datetime.now()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
         mock_get_attributions_list.return_value = [
@@ -394,7 +395,7 @@ class AdminListBuildTest(TestCase):
         self.client.logout()
         response = self.client.post(self.url)
 
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_without_permission(self):
         a_person = PersonFactory()
@@ -440,7 +441,7 @@ class AdminListBuildTest(TestCase):
                                                   mock_get_score_responsible_list,
                                                   mock_get_progress_overview,
                                                   mock_get_attributions_list):
-        today = datetime.datetime.today()
+        today = datetime.datetime.now()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
 
@@ -455,7 +456,7 @@ class AdminListBuildTest(TestCase):
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
-        key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, LU_ACRONYM)
+        key = f'{LEARNING_UNIT_ACRONYM_ID}{LU_ACRONYM}'
         response = self.client.post(self.url, data={key: ""})
 
         self.assertTrue(mock_fetch.called)
@@ -487,7 +488,7 @@ class AdminListBuildTest(TestCase):
                                                    mock_get_score_responsible_list,
                                                    mock_get_progress_overview,
                                                    mock_get_attributions_list):
-        today = datetime.datetime.today()
+        today = datetime.datetime.now()
         an_academic_year = AcademicYearFactory(year=today.year, start_date=today - datetime.timedelta(days=5),
                                                end_date=today + datetime.timedelta(days=5))
 
@@ -502,7 +503,7 @@ class AdminListBuildTest(TestCase):
         mock_get_learning_units.return_value = [SimpleNamespace(code=LU_ACRONYM)]
         mock_get_score_responsible_list.return_value = [
         ]
-        key = '{}{}'.format(LEARNING_UNIT_ACRONYM_ID, LU_ACRONYM)
+        key = f'{LEARNING_UNIT_ACRONYM_ID}{LU_ACRONYM}'
         response = self.client.post(self.url, data={key: ""})
 
         filename = "Liste_Insc_Exam.xls"
@@ -510,5 +511,6 @@ class AdminListBuildTest(TestCase):
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
                          'application/vnd.ms-excel')
-        self.assertEqual(response['Content-Disposition'], 'attachment; filename="{}"'.format(filename))
+        self.assertEqual(response['Content-Disposition'], f'attachment; filename="{filename}"')
+
         self.assertEqual(response.content.decode(), str(return_sample_xls()))

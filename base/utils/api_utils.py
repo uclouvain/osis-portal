@@ -10,14 +10,13 @@ from frontoffice.settings.osis_sdk.utils import DEFAULT_API_LIMIT
 
 
 def get_list_from_osis(url, **kwargs):
-    header_to_get = {'Authorization': 'Token ' + settings.OSIS_PORTAL_TOKEN}
+    header_to_get = {'Authorization': f'Token {settings.OSIS_PORTAL_TOKEN}'}
     response = requests.get(
         url=url,
         headers=header_to_get,
         params=kwargs,
     )
-    data = response.json()
-    return data
+    return response.json()
 
 
 def get_country_list_from_osis(**kwargs):

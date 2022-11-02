@@ -42,15 +42,13 @@ def type_peps(student_specific_profile):
 
 @register.filter
 def arrangements_and_guide(student_specific_profile, learning_unit_type):
-    specific_profile_detail_html_content = "<div class='peps-tooltip-content'>"
     if student_specific_profile:
+        specific_profile_detail_html_content = "<div class='peps-tooltip-content'>"
         specific_profile_detail_html_content += _get_arrangements_list(student_specific_profile, learning_unit_type)
         guide = get_guide(student_specific_profile)
         if guide:
-            specific_profile_detail_html_content += "</ul><b>{}</b> :<br/>{}".format(
-                _('Guide'),
-                guide
-            )
+            specific_profile_detail_html_content += f"</ul><b>{_('Guide')}</b> :<br/>{guide}"
+
         specific_profile_detail_html_content += "</div>"
         return mark_safe(specific_profile_detail_html_content) if specific_profile_detail_html_content else None
     return None
@@ -59,8 +57,8 @@ def arrangements_and_guide(student_specific_profile, learning_unit_type):
 def _get_arrangements_list(student_specific_profile, learning_unit_type):
     arrangements = get_arrangements(student_specific_profile, learning_unit_type)
     if len(arrangements) >= 1:
-        specific_profile_detail = "<b>{}:</b><ul>".format(_('Arrangements'))
+        specific_profile_detail = f"<b>{_('Arrangements')}:</b><ul>"
         for arrangement in arrangements:
-            specific_profile_detail += "<li>{}</li>".format(arrangement)
-        return "</ul>{}".format(specific_profile_detail)
+            specific_profile_detail += f"<li>{arrangement}</li>"
+        return f"</ul>{specific_profile_detail}"
     return ''

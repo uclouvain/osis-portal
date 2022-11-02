@@ -43,7 +43,7 @@ class TestHome(TestCase):
     def test_user_is_not_logged(self):
         self.client.logout()
         response = self.client.get(self.url)
-        self.assertRedirects(response, "/login/?next={}".format(self.url))
+        self.assertRedirects(response, f"/login/?next={self.url}")
 
     def test_template_used(self):
         response = self.client.get(self.url)

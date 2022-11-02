@@ -71,7 +71,7 @@ class OfferChoiceTest(TestCase):
     def test_user_not_logged(self):
         self.client.logout()
         response = self.client.get(self.url)
-        self.assertRedirects(response, "/login/?next={}".format(self.url))
+        self.assertRedirects(response, f"/login/?next={self.url}")
 
     def test_user_has_not_permission(self):
         self.client.logout()

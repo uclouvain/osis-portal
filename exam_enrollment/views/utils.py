@@ -51,13 +51,13 @@ def get_request_timeout() -> int:
 
 
 def _get_rabbit_settings():
-    credentials = pika.PlainCredentials(settings.QUEUES.get('QUEUE_USER'),
-                                        settings.QUEUES.get('QUEUE_PASSWORD'))
-    rabbit_settings = pika.ConnectionParameters(settings.QUEUES.get('QUEUE_URL'),
-                                                settings.QUEUES.get('QUEUE_PORT'),
-                                                settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
-                                                credentials)
-    return rabbit_settings
+    credentials = pika.PlainCredentials(settings.QUEUES.get('QUEUE_USER'), settings.QUEUES.get('QUEUE_PASSWORD'))
+    return pika.ConnectionParameters(
+        settings.QUEUES.get('QUEUE_URL'),
+        settings.QUEUES.get('QUEUE_PORT'),
+        settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
+        credentials
+    )
 
 
 def _create_channel(connect, queue_name):
