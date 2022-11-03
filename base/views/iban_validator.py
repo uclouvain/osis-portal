@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,32 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
-from base.views import my_osis
-from base.views.autocomplete.country import CountryAutocomplete
-from base.views.autocomplete.education_group_year import TrainingAutocomplete
-from base.views.iban_validator import validator
-from dashboard.views.home import Home
 
-urlpatterns = [
-    url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
-    url(r'^$', Home.as_view(), name='home'),
-    # TODO :: to remove shibboleth
-    url(
-        r'^continuing_education/country-autocomplete/$',
-        CountryAutocomplete.as_view(),
-        name='country-autocomplete',
-    ),
-    url(
-        r'^training-autocomplete/$',
-        TrainingAutocomplete.as_view(),
-        name='training-autocomplete',
-    ),
-]
-
-if settings.DEBUG:
-    urlpatterns.append(
-        url(r'^esb/ibanvalidator/([A-za-z0-9 ]+)/$', validator, name='iban_validator')
-    )
+@login_required
+def validator(request, iban: str):
+    return JsonResponse({'valid': True})

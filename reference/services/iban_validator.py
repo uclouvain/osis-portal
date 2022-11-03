@@ -51,7 +51,7 @@ class IBANValidatorService:
     @classmethod
     def _validate_esb_free(cls, iban: str):
         # Works only for Belgium, Germany, Netherlands, Luxembourg, Switzerland, Austria, Liechtenstein
-        endpoint = settings.ESB_IBAN_ENDPOINT.format(iban=iban)
+        endpoint = settings.ESB_IBAN_ENDPOINT.format(iban=iban.replace(' ', ''))
         url = "{esb_api}/{endpoint}".format(esb_api=settings.ESB_URL, endpoint=endpoint)
         try:
             result = requests.get(
