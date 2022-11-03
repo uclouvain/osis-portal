@@ -49,7 +49,7 @@ class InscrireAUneMiniFormationView(LoginRequiredMixin, InscriptionAuxCoursViewM
         return super().get(request, *args, **kwargs)
 
     def inscrire_a_une_mini_formation(self, code_mini_formation: str):
-        MiniFormationService().inscrire_a_une_mini_formation(self.person, self.sigle_formation, code_mini_formation)
+        MiniFormationService().inscrire_a_une_mini_formation(self.person, self.annee_academique, self.sigle_formation, code_mini_formation)
 
     def get_context_data(self, **kwargs):
         return {

@@ -68,6 +68,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     def programme_annuel(self) -> 'ProgrammeAnnuelEtudiant':
         return CoursService().recuperer_inscriptions(
             self.person,
+            self.annee_academique,
             self.sigle_formation
         )
 

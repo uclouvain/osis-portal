@@ -60,11 +60,13 @@ class InscriptionAuxCoursViewMixin:
 
     @cached_property
     def autorisation(self) -> 'AutoriseInscrireAuxCours':
-        return AutorisationService().est_autorise(self.person, self.sigle_formation)
+        return AutorisationService().est_autorise(self.person, self.annee_academique, self.sigle_formation)
 
     def dispatch(self, request, *args, **kwargs):
         if not self.autorisation.autorise:
-            return redirect(reverse('inscription-aux-cours:non-autorisee', kwargs={'sigle_formation': self.sigle_formation}))
+            return redirect(
+                reverse('inscription-aux-cours:non-autorisee', kwargs={'sigle_formation': self.sigle_formation})
+            )
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

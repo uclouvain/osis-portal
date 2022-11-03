@@ -51,6 +51,7 @@ class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Tem
     def post(self, request, *args, **kwargs):
         CoursService().inscrire_a_un_cours(
             self.person,
+            annee=self.annee_academique,
             sigle_formation=self.sigle_formation,
             code_cours=self.code_cours,
             code_mini_formation=self.code_mini_formation,

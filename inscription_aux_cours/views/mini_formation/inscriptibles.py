@@ -43,11 +43,11 @@ class MiniFormationsInscriptiblesView(LoginRequiredMixin, InscriptionAuxCoursVie
 
     @cached_property
     def mini_formations_inscriptibles(self) -> 'ListeMiniFormations':
-        return MiniFormationService().get_mini_formations_inscriptibles(self.sigle_formation, self.person)
+        return MiniFormationService().get_mini_formations_inscriptibles(self.person, self.annee_academique, self.sigle_formation)
 
     @cached_property
     def inscriptions_mini_formations(self) -> List['InscriptionMiniFormation']:
-        return MiniFormationService().get_inscriptions(self.person, self.sigle_formation)
+        return MiniFormationService().get_inscriptions(self.person, self.annee_academique, self.sigle_formation)
 
     def get_context_data(self, **kwargs):
         return {

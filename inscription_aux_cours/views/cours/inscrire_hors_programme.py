@@ -51,6 +51,7 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
         for code_cours in self.codes_cours:
             CoursService().inscrire_a_un_cours(
                 self.person,
+                annee=self.annee_academique,
                 sigle_formation=self.sigle_formation,
                 code_cours=code_cours,
                 code_mini_formation=self.code_mini_formation,

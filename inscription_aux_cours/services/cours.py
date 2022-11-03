@@ -26,14 +26,12 @@ from functools import partial
 
 import osis_inscription_cours_sdk
 from osis_inscription_cours_sdk.api import cours_api
-from osis_inscription_cours_sdk.model.desinscrire_aun_cours import DesinscrireAUnCours
 from osis_inscription_cours_sdk.model.inscrire_aun_cours import InscrireAUnCours
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 
 from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
-
 
 COURS = 'UNITE_ENSEIGNEMENT'
 GROUPEMENT = 'GROUPEMENT'
@@ -43,6 +41,7 @@ class CoursService:
     @staticmethod
     def inscrire_a_un_cours(
             person: 'Person',
+            annee: int,
             sigle_formation: str,
             code_cours: str,
             code_mini_formation: str = None,
@@ -56,6 +55,7 @@ class CoursService:
         return _cours_api_call(
             person,
             "inscrire_aun_cours",
+            annee=annee,
             sigle_formation=sigle_formation,
             inscrire_aun_cours=cmd
         )
@@ -63,29 +63,30 @@ class CoursService:
     @staticmethod
     def desinscrire_de_un_cours(
             person: 'Person',
+            annee: int,
             sigle_formation: str,
             code_cours: str,
             code_mini_formation: str = None,
     ):
-        cmd = DesinscrireAUnCours(
-            code_cours=code_cours,
-            code_mini_formation=code_mini_formation,
-        )
         return _cours_api_call(
             person,
             "desinscrire_aun_cours",
+            annee=annee,
             sigle_formation=sigle_formation,
-            desinscrire_aun_cours=cmd
+            code_cours=code_cours,
+            code_mini_formation=code_mini_formation,
         )
 
     @staticmethod
     def recuperer_inscriptions(
             person: 'Person',
+            annee: int,
             sigle_formation: str,
     ) -> 'ProgrammeAnnuelEtudiant':
         return _cours_api_call(
             person,
             "inscriptions_cours",
+            annee=annee,
             sigle_formation=sigle_formation
         )
 

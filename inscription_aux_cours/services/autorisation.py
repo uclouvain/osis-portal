@@ -35,8 +35,8 @@ from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_a
 
 class AutorisationService:
     @staticmethod
-    def est_autorise(person: 'Person', sigle_formation: str) -> 'AutoriseInscrireAuxCours':
-        return _autorisation_api_call(person, "get_est_autorise", sigle_formation=sigle_formation, )
+    def est_autorise(person: 'Person', annee: int, sigle_formation: str) -> 'AutoriseInscrireAuxCours':
+        return _autorisation_api_call(person, "get_est_autorise", annee=annee, sigle_formation=sigle_formation, )
 
 
 _autorisation_api_call = partial(

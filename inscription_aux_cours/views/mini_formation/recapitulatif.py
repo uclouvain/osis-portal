@@ -43,7 +43,7 @@ class RecapitulatifInscriptionsMiniFormationsView(LoginRequiredMixin, Inscriptio
 
     @cached_property
     def inscriptions_mini_formations(self) -> List['InscriptionMiniFormation']:
-        return MiniFormationService().get_inscriptions(self.person, self.sigle_formation)
+        return MiniFormationService().get_inscriptions(self.person, self.annee_academique, self.sigle_formation)
 
     @cached_property
     def details_mini_formations_inscrites(self):

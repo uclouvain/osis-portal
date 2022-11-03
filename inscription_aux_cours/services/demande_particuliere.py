@@ -39,16 +39,18 @@ class DemandeParticuliereService:
     @staticmethod
     def recuperer(
             person: 'Person',
+            annee: int,
             sigle_formation: str,
     ) -> Optional['DemandeParticuliere']:
         return _demande_particuliere_api_call(
             person,
             "get_demande_particuliere",
+            annee=annee,
             sigle_formation=sigle_formation
         )
 
     @staticmethod
-    def effectuer(person: 'Person', sigle_formation: str, demande_particuliere: str):
+    def effectuer(person: 'Person', annee: int, sigle_formation: str, demande_particuliere: str):
         cmd = EffectuerDemandeParticuliere(
             sigle_formation=sigle_formation,
             demande=demande_particuliere,
@@ -56,6 +58,7 @@ class DemandeParticuliereService:
         return _demande_particuliere_api_call(
             person,
             "post_demande_particuliere",
+            annee=annee,
             sigle_formation=sigle_formation,
             effectuer_demande_particuliere=cmd
         )
@@ -63,11 +66,13 @@ class DemandeParticuliereService:
     @staticmethod
     def retirer(
             person: 'Person',
+            annee: int,
             sigle_formation: str,
     ):
         return _demande_particuliere_api_call(
             person,
             "delete_demande_particuliere",
+            annee=annee,
             sigle_formation=sigle_formation,
         )
 
