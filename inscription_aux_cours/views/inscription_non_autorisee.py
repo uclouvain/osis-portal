@@ -22,9 +22,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.views.generic import TemplateView
 from osis_education_group_sdk.model.training_detailed import TrainingDetailed
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
 
@@ -36,7 +38,10 @@ from education_group.services.training import TrainingService
 from inscription_aux_cours.services.autorisation import AutorisationService
 
 
-class InscriptionAuxCoursViewMixin:
+class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
+    name = 'non-autorisee'
+    template_name = "inscription_aux_cours/non_autorisee.html"
+
     @cached_property
     def person(self) -> 'Person':
         return Person.objects.get(user=self.request.user)
@@ -49,7 +54,6 @@ class InscriptionAuxCoursViewMixin:
     def sigle_formation(self) -> str:
         return self.kwargs['sigle_formation']
 
-    # TODO should be returned by api
     @cached_property
     def annee_academique(self) -> 'int':
         return academic_year.starting_academic_year().year
@@ -62,14 +66,15 @@ class InscriptionAuxCoursViewMixin:
     def autorisation(self) -> 'AutoriseInscrireAuxCours':
         return AutorisationService().est_autorise(self.person, self.sigle_formation)
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.autorisation.autorise:
-            return redirect(reverse('inscription-aux-cours:non-autorisee', kwargs={'sigle_formation': self.sigle_formation}))
-        return super().dispatch(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        if self.autorisation.autorise:
+            return redirect(reverse('inscription-aux-cours:selectionner-formation'))
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
+            "raison": self.autorisation.msg,
             'student': self.student,
             'formation': self.formation,
             'annee_academique': self.annee_academique,
