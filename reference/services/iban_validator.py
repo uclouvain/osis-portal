@@ -26,6 +26,7 @@ import logging
 
 import requests
 from django.conf import settings
+from django.http import HttpResponse
 from localflavor.generic.validators import IBANValidator
 from requests import RequestException
 
@@ -52,21 +53,24 @@ class IBANValidatorService:
     def _validate_esb_free(cls, iban: str):
         # Works only for Belgium, Germany, Netherlands, Luxembourg, Switzerland, Austria, Liechtenstein
         endpoint = settings.ESB_IBAN_ENDPOINT.format(iban=iban)
-        url = "{esb_api}/{endpoint}".format(esb_api=settings.ESB_URL, endpoint=endpoint)
+        url = "{esb_api}{endpoint}".format(esb_api=settings.ESB_URL, endpoint=endpoint)
         try:
-            result = requests.get(
+            response = requests.get(
                 url,
-                headers={"Authorization": settings.ESB_AUTHORIZATION},
-                timeout=settings.REQUESTS_TIMEOUT or 20
+                headers={
+                    "Authorization": settings.ESB_AUTHORIZATION,
+                },
+                timeout=settings.ESB_TIMEOUT or 20
             )
-
-            if not result.json()['valid']:
-                raise IBANValidatorException(message=result.json()['messages'][0])
+            if response.status_code != HttpResponse.status_code:
+                raise RequestException
+            elif not response.json()['valid']:
+                raise IBANValidatorException(message=response.json()['messages'][0])
         except RequestException as e:
-            logger.error("[Validate IBAN] An error occured during request to ESB")
+            logger.error("[Validate IBAN] An error occurred during request to ESB")
             raise IBANValidatorRequestException from e
         except Exception as e:
-            logger.error("[Validate IBAN] An error occured during validation")
+            logger.error("[Validate IBAN] An error occurred during validation")
             raise IBANValidatorException from e
 
 
@@ -76,7 +80,7 @@ class IBANValidatorException(Exception):
         super().__init__()
 
 
-class IBANValidatorRequestException(Exception):
+class IBANValidatorRequestException(RequestException):
     def __init__(self):
-        self.message = "An error occured during request to ESB"
+        self.message = "An error occurred during request to ESB"
         super().__init__()
