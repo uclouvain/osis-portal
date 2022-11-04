@@ -26,10 +26,9 @@
 from django.conf import settings
 from django.conf.urls import url
 
-from base.views import my_osis
+from base.views import my_osis, iban_validator
 from base.views.autocomplete.country import CountryAutocomplete
 from base.views.autocomplete.education_group_year import TrainingAutocomplete
-from base.views.iban_validator import validator
 from dashboard.views.home import Home
 
 urlpatterns = [
@@ -50,5 +49,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns.append(
-        url(r'^esb/ibanvalidator/([A-za-z0-9 ]+)/$', validator, name='iban_validator')
+        url(r'^esb/ibanvalidator/([A-za-z0-9]+)/$', iban_validator.validator, name='iban_validator')
     )

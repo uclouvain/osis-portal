@@ -23,10 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotFound
 
 
-@login_required
 def validator(request, iban: str):
+    if iban in {'BE87001431855594', 'FR7630001007941234567890185'}:
+        return HttpResponseNotFound()
     return JsonResponse({'valid': True})
