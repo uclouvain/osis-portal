@@ -1,3 +1,6 @@
+{% if erreurs %}
+<i class="fa-solid fa-circle-exclamation fa-danger" title="{{ erreurs|join:"\n" }}"></i>
+{% else %}
 <form id="form-inscription-{{ code_mini_formation }}" method="post">
     {% csrf_token %}
     <input
@@ -13,3 +16,4 @@
             checked
     >
 </form>
+{% endif %}

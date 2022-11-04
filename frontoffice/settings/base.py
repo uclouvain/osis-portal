@@ -286,6 +286,12 @@ OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
 OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
 OSIS_DISSERTATION_URL = os.environ.get('OSIS_DISSERTATION_URL', None)
 INSTITUTION_URL = os.environ.get('INSTITUTION_URL', "https://uclouvain.be/")
+COURSES_SCHEDULE_URL = os.environ.get(
+    'COURSES_SCHEDULE_URL',
+    "https://horaire.uclouvain.be/direct/index.jsp"
+    "?projectId=999&displayConfName=webEtudiant&showTree=false&showOptions=false&"
+    "login=etudiant&password=student&code={codes_cours}"
+)
 
 
 # Queues Definition

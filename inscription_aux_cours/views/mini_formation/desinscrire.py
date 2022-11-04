@@ -28,6 +28,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
+from base.services.utils import ServiceException
 from inscription_aux_cours.services.mini_formation import MiniFormationService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 
@@ -38,6 +39,11 @@ class DesinscrireAUneMiniFormationView(LoginRequiredMixin, InscriptionAuxCoursVi
 
     # TemplateView
     template_name = "inscription_aux_cours/mini_formation/inscrire.html"
+    error_template_name = "inscription_aux_cours/mini_formation/desinscrire.html"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.erreurs = []
 
     @property
     def code_mini_formation(self) -> str:
@@ -45,7 +51,10 @@ class DesinscrireAUneMiniFormationView(LoginRequiredMixin, InscriptionAuxCoursVi
 
     def post(self, request, *args, **kwargs):
         code_mini_formation = self.code_mini_formation
-        self.desinscrire_a_une_mini_formation(code_mini_formation)
+        try:
+            self.desinscrire_a_une_mini_formation(code_mini_formation)
+        except ServiceException as e:
+            self.erreurs = e.messages
         return super().get(request, *args, **kwargs)
 
     def desinscrire_a_une_mini_formation(self, code_mini_formation: str):
@@ -56,8 +65,14 @@ class DesinscrireAUneMiniFormationView(LoginRequiredMixin, InscriptionAuxCoursVi
             code_mini_formation
         )
 
+    def get_template_names(self):
+        if self.erreurs:
+            return [self.error_template_name]
+        return super().get_template_names()
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             "code_mini_formation": self.code_mini_formation,
+            "erreurs": self.erreurs,
         }

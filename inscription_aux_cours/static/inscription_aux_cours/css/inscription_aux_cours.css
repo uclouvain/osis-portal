@@ -43,3 +43,11 @@
 .fa-info {
     color: #337ab7;
 }
+
+.fa-solid.fa-danger {
+    color: #a94442;
+}
+
+textarea.unresizable {
+    resize: none;
+}

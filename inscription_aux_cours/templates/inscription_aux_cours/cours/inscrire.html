@@ -1,3 +1,6 @@
+{% if erreurs %}
+<i class="fa-solid fa-circle-exclamation fa-danger" title="{{ erreurs|join:"\n" }}"></i>
+{% else %}
 <form id=form-inscription-{{ code_mini_formation }}-{{ cours.code }}" method="post">
     {% csrf_token %}
     <input
@@ -12,3 +15,4 @@
             hx-post="{% url 'inscription-aux-cours:inscrire-cours' sigle_formation=sigle_formation %}"
     >
 </form>
+{% endif %}

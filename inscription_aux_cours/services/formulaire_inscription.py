@@ -40,8 +40,17 @@ class FormulaireInscriptionService:
         return _formulaire_api_call(person, "get_formulaire", annee=annee, sigle_formation=sigle_formation,)
 
     @staticmethod
-    def recuperer_configuration(person: 'Person', annee: int, sigle_formation: str) -> 'ConfigurationFormulaireInscriptionCours':
-        return _formulaire_api_call(person, 'get_configuration_formulaire', annee=annee, sigle_formation=sigle_formation)
+    def recuperer_configuration(
+            person: 'Person',
+            annee: int,
+            sigle_formation: str
+    ) -> 'ConfigurationFormulaireInscriptionCours':
+        return _formulaire_api_call(
+            person,
+            'get_configuration_formulaire',
+            annee=annee,
+            sigle_formation=sigle_formation
+        )
 
 
 _formulaire_api_call = partial(

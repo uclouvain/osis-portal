@@ -23,16 +23,18 @@
 #
 ##############################################################################
 from decimal import Decimal
-from typing import List
+from typing import List, Optional
 
 import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
+from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 
 from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours.services.cours import CoursService
+from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from learning_unit.services.learning_unit import LearningUnitService
 
@@ -119,11 +121,16 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             for cours in cours_avec_details
         ]
 
+    @cached_property
+    def demande_particuliere(self) -> Optional['DemandeParticuliere']:
+        return DemandeParticuliereService().recuperer(self.person, self.annee_academique, self.sigle_formation)
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             'student': self.student,
             'formation': self.formation,
             'annee_academique': self.annee_academique,
-            'programme_annuel': self.programme_annuel_avec_details_cours
+            'programme_annuel': self.programme_annuel_avec_details_cours,
+            'demande_particuliere': self.demande_particuliere
         }

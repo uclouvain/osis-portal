@@ -66,11 +66,15 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def configuration_formulaire(self) -> 'ConfigurationFormulaireInscriptionCours':
-        return FormulaireInscriptionService().recuperer_configuration(self.person, self.annee_academique, self.sigle_formation)
+        return FormulaireInscriptionService().recuperer_configuration(
+            self.person,
+            self.annee_academique,
+            self.sigle_formation
+        )
 
     @cached_property
     def formulaire_inscription_hors_programme(self) -> 'InscriptionHorsProgrammeForm':
-        mini_formations = [(None, self.formation.title)]
+        mini_formations = [('', self.formation.title)]
         mini_formations += [
             (mini_formation.code_programme, mini_formation.intitule_formation)
             for mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
@@ -93,7 +97,9 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
                 code_cours=inscription.code,
                 intitule_cours="",
                 credits=inscription.credits
-            ) for inscription in self.formulaire_inscriptions_cours["formulaire_tronc_commun"]['inscriptions_hors_programme']
+            )
+            for inscription
+            in self.formulaire_inscriptions_cours["formulaire_tronc_commun"]['inscriptions_hors_programme']
         ]
         for inscriptions_pour_mini_formation in self.formulaire_inscriptions_cours["formulaires_mini_formation"]:
             result += [
@@ -111,9 +117,19 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             inscriptions_hors_programme: List['InscriptionAUnCoursHorsProgramme']
     ) -> List['InscriptionAUnCoursHorsProgramme']:
         codes_cours = [cours.code_cours for cours in inscriptions_hors_programme]
-        unites_enseignements = LearningUnitService().search_learning_units(self.person, year=self.annee_academique, learning_unit_codes=codes_cours)
-        unites_enseignements_par_code = {unites_enseignement['acronym']: unites_enseignement for unites_enseignement in unites_enseignements}
-        classes = [LearningUnitService().get_effective_classes(self.annee_academique, code, self.person) for code in codes_cours]
+        unites_enseignements = LearningUnitService().search_learning_units(
+            self.person,
+            year=self.annee_academique,
+            learning_unit_codes=codes_cours
+        )
+        unites_enseignements_par_code = {
+            unites_enseignement['acronym']: unites_enseignement
+            for unites_enseignement in unites_enseignements
+        }
+        classes = [
+            LearningUnitService().get_effective_classes(self.annee_academique, code, self.person)
+            for code in codes_cours
+        ]
         classes = list(itertools.chain.from_iterable(classes))
         classes_par_code = {classe['code']: classe for classe in classes}
         return [

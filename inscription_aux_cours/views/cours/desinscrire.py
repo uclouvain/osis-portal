@@ -29,6 +29,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
+from base.services.utils import ServiceException
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 
@@ -40,6 +41,10 @@ class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
     # TemplateView
     template_name = "inscription_aux_cours/cours/inscrire.html"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.erreurs = []
+
     @property
     def code_mini_formation(self) -> Optional[str]:
         return self.request.POST.get('code_mini_formation')
@@ -49,6 +54,14 @@ class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
         return self.request.POST.get('code_cours')
 
     def post(self, request, *args, **kwargs):
+        try:
+            self.desinscrire_a_un_cours()
+        except ServiceException as e:
+            self.erreurs = e.messages
+
+        return super().get(request, *args, **kwargs)
+
+    def desinscrire_a_un_cours(self):
         CoursService().desinscrire_de_un_cours(
             self.person,
             annee=self.annee_academique,
@@ -56,11 +69,11 @@ class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
             code_cours=self.code_cours,
             code_mini_formation=self.code_mini_formation,
         )
-        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             "code_mini_formation": self.code_mini_formation,
-            "code_cours": self.code_cours
+            "code_cours": self.code_cours,
+            "erreurs": self.erreurs
         }
