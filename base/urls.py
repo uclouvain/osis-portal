@@ -49,5 +49,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns.append(
-        url(r'^esb/ibanvalidator/([A-za-z0-9]+)/$', iban_validator.validator, name='iban_validator')
+        url(r'^esb/ibanvalidator/([A-za-z0-9 ]+)/$', iban_validator.validator, name='iban_validator')
     )
