@@ -1,0 +1,56 @@
+{% load static i18n %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th id="colonne-code" class="col-md-2">{% trans 'Acronym' %}</th>
+            <th id="colonne-intitule" class="col-md-8">{% trans "Title" %}</th>
+            <th id="colonne-credits" class="col-md-2">{% trans "Credits" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for contexte in programme_annuel.inscriptions_par_contexte %}
+        <tr class="ligne-contexte">
+            <td colspan="3">{{ contexte.intitule }}</td>
+        </tr>
+        {% for inscription in contexte.cours %}
+            <tr>
+                <td headers="colonne-code">{{ inscription.code }}</td>
+                <td headers="colonne-intitule">{{ inscription.intitule }}</td>
+                <td headers="colonne-credits">{{ inscription.credits }}</td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+    </tbody>
+
+    <tfoot>
+        <tr class="ligne-total-credits">
+            <th colspan="2">{% trans "Total credits" %}</th>
+            <th headers="colonne-credits">{{ programme_annuel.total_credits.normalize }}</th>
+        </tr>
+    </tfoot>
+</table>

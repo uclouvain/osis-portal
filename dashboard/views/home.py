@@ -159,6 +159,16 @@ class Home(LoginRequiredMixin, TemplateView):
             },
             {
                 'column': 'exams',
+                'title': _('My courses enrollment'),
+                'url': reverse('inscription-aux-cours:selectionner-formation'),
+                'icon': 'far fa-rectangle-list',
+                'description': _('Manage my annual programme proposal'),
+                'VPN': False,
+                'app': 'inscription_aux_cours',
+                'has_perm': self.request.user.has_perm('base.is_student')
+            },
+            {
+                'column': 'exams',
                 'title': _('Annual program'),
                 'url': reverse('performance_home'),
                 'icon': 'fa fa-chart-line',

@@ -1,0 +1,107 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-10 14:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Academic year"
+msgstr ""
+
+msgid "Acronym"
+msgstr "Sigle"
+
+msgid "Block"
+msgstr "Bloc"
+
+msgid "Choice"
+msgstr "Choix"
+
+msgid "Credits"
+msgstr "Crédits"
+
+msgid "Exceptionally, not organized this year"
+msgstr "Exceptionnellement, non organisé cette année académique"
+
+msgid "Exceptionally, not organized this year, nor the next"
+msgstr "Exceptionnellement, non organisé cette année académique et l'année suivante"
+
+msgid "First name"
+msgstr "Prénom"
+
+msgid "Last name"
+msgstr "Nom"
+
+msgid "Mandatory"
+msgstr "Obligatoire"
+
+msgid "Modify my minors and options enrollments"
+msgstr "Modifier mon inscription aux mineures et options"
+
+msgid "My courses enrollment"
+msgstr "Mon inscription aux cours"
+
+msgid "My minors or options enrollment"
+msgstr "Mon inscription aux mineures et options"
+
+msgid "Not offered this year but offered the following year"
+msgstr "Non organisé cette année académique mais organisé l’année suivante"
+
+msgid "Offer"
+msgstr "Formation"
+
+msgid "Offer choice"
+msgstr "Choix de la formation"
+
+msgid "Offered this year but not the following year"
+msgstr "Organisé cette année académique mais non organisé l’année suivante"
+
+msgid "Optional"
+msgstr "Optionnel"
+
+msgid "Prerequisites"
+msgstr "Prérequis"
+
+msgid "Program"
+msgstr "Formation"
+
+msgid "Registration id"
+msgstr "Noma"
+
+msgid "Save and continue to courses enrollment"
+msgstr "Enregistrer et poursuivre vers l'inscription aux cours"
+
+msgid "Save and continue to enrollments summary"
+msgstr "Enregistrer et poursuivre vers le récapitulatif des inscriptions"
+
+msgid "Select an offer for which you want to do courses enrollment."
+msgstr ""
+"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux cours."
+
+msgid "The learning unit has prerequisites"
+msgstr "L'unité d'enseignement possède des prérequis"
+
+msgid "Year"
+msgstr "Année"
+
+#, python-format
+msgid ""
+"You are not enrolled to any program for the academic year "
+"%(annee_academique)s."
+msgstr ""
+"Vous n'êtes inscrit.e à aucune formation pour l'année académique "
+"%(annee_academique)s."
+
+msgid "credits"
+msgstr "crédits"

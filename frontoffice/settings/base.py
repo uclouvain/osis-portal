@@ -71,7 +71,8 @@ INSTALLED_APPS = (
     'django_registration',
     'hijack',
     'hijack.contrib.admin',
-    'waffle'
+    'waffle',
+    'django_htmx',
 )
 
 # Tests settings
@@ -105,6 +106,7 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'waffle.middleware.WaffleMiddleware',
     'hijack.middleware.HijackUserMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 )
 
 # Logging config
@@ -460,6 +462,13 @@ OSIS_EXAM_ENROLLMENT_SDK_HOST = os.environ.get("OSIS_EXAM_ENROLLMENT_SDK_HOST", 
 OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get(
     "OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX", "ESB"
 )
+
+# INSCRIPTION-COURS-SDK-CONFIGURATION
+OSIS_INSCRIPTION_COURS_SDK_HOST = os.environ.get(
+    "OSIS_INSCRIPTION_COURS_SDK_HOST",
+    "http://127.0.0.1:8000/api/v1/inscription_aux_cours"
+)
+OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX = os.environ.get("OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX", "ESB")
 
 # DISSERTATION-SDK-CONFIGURATION
 OSIS_DISSERTATION_SDK_HOST = os.environ.get("OSIS_DISSERTATION_SDK_HOST", "")

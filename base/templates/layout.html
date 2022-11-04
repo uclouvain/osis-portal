@@ -46,7 +46,8 @@
   {% if 'osis_notification' in installed_apps %}
     <link rel="stylesheet" href="{% static 'osis_notification/osis-notification.css' %}" />
   {% endif %}
-
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     {% block style %}
     {% endblock %}
     {% analytical_head_bottom %}
@@ -160,8 +161,7 @@
                 href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
     </div>
 
-    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
     <script src="{% static 'js/osis-portal.js' %}"></script>
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>

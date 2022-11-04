@@ -1,0 +1,109 @@
+{% extends "inscription_aux_cours/layout.html" %}
+{% load static %}
+{% load i18n academic_year_display %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
+    <li><a href="{% url 'inscription-aux-cours:formulaire-inscription-cours' sigle_formation=sigle_formation %}">{% trans 'My courses enrollment' %}</a></li>
+    <li class="active">{% trans 'Summary courses enrollment' %}</li>
+{% endblock %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h2>{% trans 'My courses enrollment' %}</h2>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label>{% trans 'Last name' %}, {% trans 'First name' %}</label>
+                    <br>
+                    {{ student.person.last_name }}, {{ student.person.first_name }}
+                </div>
+                <div class="col-md-4">
+                    <label>{% trans 'Academic year' %}</label>
+                    <br>
+                    {{ annee_academique|display_as_academic_year }}
+                </div>
+                <div class="col-md-4">
+                    <label>{% trans 'Offer' %}</label>
+                    <br>
+                    {{ formation.acronym }} - {{ formation.title }}
+                </div>
+            </div>
+
+            <br>
+
+            <div class="alert alert-info" style="display:inline-block;">
+                <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
+            </div>
+
+            {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
+
+
+                <p>
+                    <strong>{% trans "Special requests" %}</strong>
+                    {% if formulaire.configuration.descriptif_demandes_particulieres %}
+                        <br>
+                        {{ formulaire.configuration.descriptif_demandes_particulieres }}
+                    {% endif %}
+                </p>
+
+                <div class="row">
+
+                </div>
+
+                <br>
+
+                <div class="center">
+                    <a class="btn btn-default">
+                        <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}
+                    </a>
+                    <a class="btn btn-default">
+                        <i class="fa-solid fa-clock"></i> {% trans "View my courses schedule" %}
+                    </a>
+                    <a class="btn btn-default">
+                        <i class="fa-solid fa-print"></i> {% trans "Print my proposition of annual program" %}
+                    </a>
+                </div>
+
+                <br>
+
+                <div class="center">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> {% trans 'Submit my proposition of annual program' %}
+                    </button>
+                </div>
+
+        </div>
+    </div>
+
+{% endblock %}
