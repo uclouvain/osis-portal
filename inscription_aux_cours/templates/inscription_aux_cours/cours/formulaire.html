@@ -87,6 +87,7 @@
                 {% endwith %}
             {% endfor %}
 
+            {% if configuration.autorise_etudiant_a_ajouter_cours %}
             <div  id="form-hors-formulaire">
                 <form method="post" action='{% url "inscription-aux-cours:inscrire-cours-hors-programme" formation.acronym %}'>
                     {% csrf_token %}
@@ -123,6 +124,7 @@
                 </form>
 
             </div>
+            {% endif %}
 
             <br>
 
