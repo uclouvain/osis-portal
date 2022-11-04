@@ -27,6 +27,6 @@ from django.http import JsonResponse, HttpResponseNotFound
 
 
 def validator(request, iban: str):
-    if iban.upper() in {'BE87001431855594', 'FR7630001007941234567890185'}:
+    if iban.upper().replace(' ', '') in {'BE87001431855594', 'FR7630001007941234567890185'}:
         return HttpResponseNotFound()
     return JsonResponse({'valid': True})
