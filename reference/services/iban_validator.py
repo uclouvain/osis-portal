@@ -53,7 +53,7 @@ class IBANValidatorService:
     def _validate_esb_free(cls, iban: str):
         # Works only for Belgium, Germany, Netherlands, Luxembourg, Switzerland, Austria, Liechtenstein
         endpoint = settings.ESB_IBAN_ENDPOINT.format(iban=iban)
-        url = settings.IBAN_DEBUG_URL if settings.DEBUG else "{esb_api}{endpoint}".format(
+        url = settings.IBAN_DEBUG_URL.format(iban=iban) if settings.DEBUG else "{esb_api}{endpoint}".format(
             esb_api=settings.ESB_URL,
             endpoint=endpoint
         )
