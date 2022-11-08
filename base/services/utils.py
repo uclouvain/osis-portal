@@ -24,24 +24,21 @@
 ##############################################################################
 import json
 import logging
-from typing import Tuple, List
+from typing import List
 
-import attr
 import urllib3.exceptions
 from django.conf import settings
 from django.http import Http404
-from openapi_client import ApiException
 from rest_framework.settings import api_settings
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk.utils import build_mandatory_auth_headers
 
-
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 class ServiceException(Exception):
-    def __init__(self, api_exception: 'ApiException', *args, **kwargs):
+    def __init__(self, api_exception, *args, **kwargs):
         self.original_exception = api_exception
         super().__init__(*args, **kwargs)
 
