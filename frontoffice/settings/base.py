@@ -478,7 +478,7 @@ ESB_CONTENT_TYPE = os.environ.get('ESB_CONTENT_TYPE', 'application/json')
 ESB_IBAN_ENDPOINT = os.environ.get('ESB_IBAN_ENDPOINT', '')
 
 
-IBAN_DEBUG_URL = os.environ.get('IBAN_DEBUG_ENDPOINT', '')
+IBAN_DEBUG_URL = os.environ.get('IBAN_DEBUG_URL', '')
 
 STUDENT_ID_DATA = {
     'PERSONAL_DATA_PATH': os.environ.get('STUDENT_PERSONAL_DATA_API_PATH', ''),
