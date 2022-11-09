@@ -6,11 +6,11 @@ djangorestframework==3.13.1
 jdcal==1.4
 mock==2.0.0
 pika==0.12.0
-Pillow==8.3.2
+Pillow==9.3.0
 psycopg2-binary==2.8.6
-PyPDF2==1.26.0
+PyPDF2==1.28.4
 pypdftk==0.4
-reportlab==3.5.34
+reportlab==3.5.68
 selenium==3.14.0
 django-analytical==3.0.0
 factory-boy==2.11.1
@@ -18,7 +18,7 @@ pendulum==1.2.0
 django-dotenv==1.4.2
 unicodecsv==0.14.1
 requests>=2.20.0
-openpyxl==2.3.2
+openpyxl==3.0.10
 coverage==5.5
 pytz==2018.5
 pyvirtualdisplay==0.2.5

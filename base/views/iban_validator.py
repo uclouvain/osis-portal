@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,31 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
-from django.conf.urls import url
+from django.http import JsonResponse, HttpResponseNotFound
 
-from base.views import my_osis, iban_validator
-from base.views.autocomplete.country import CountryAutocomplete
-from base.views.autocomplete.education_group_year import TrainingAutocomplete
-from dashboard.views.home import Home
 
-urlpatterns = [
-    url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
-    url(r'^$', Home.as_view(), name='home'),
-    # TODO :: to remove shibboleth
-    url(
-        r'^continuing_education/country-autocomplete/$',
-        CountryAutocomplete.as_view(),
-        name='country-autocomplete',
-    ),
-    url(
-        r'^training-autocomplete/$',
-        TrainingAutocomplete.as_view(),
-        name='training-autocomplete',
-    ),
-]
-
-if settings.DEBUG:
-    urlpatterns.append(
-        url(r'^esb/ibanvalidator/([A-za-z0-9 ]+)/$', iban_validator.validator, name='iban_validator')
-    )
+def validator(request, iban: str):
+    if iban.upper() in {'BE87 0014 3185 5594', 'FR76 3000 1007 9412 3456 7890 185'}:
+        return HttpResponseNotFound()
+    return JsonResponse({'valid': True})
