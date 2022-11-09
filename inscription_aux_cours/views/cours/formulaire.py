@@ -38,6 +38,7 @@ from osis_inscription_cours_sdk.model.programme_annuel_etudiant import Programme
 from osis_learning_unit_sdk.model.classe import Classe
 from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 
+from base.services.utils import ServiceException
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.forms.cours.inscription_hors_programme import InscriptionHorsProgrammeForm
 from inscription_aux_cours.services.cours import CoursService
@@ -160,7 +161,10 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:
-        return DemandeParticuliereService().recuperer(self.person, self.annee_academique, self.sigle_formation)
+        try:
+            return DemandeParticuliereService().recuperer(self.person, self.annee_academique, self.sigle_formation)
+        except ServiceException:
+            return None
 
     def get_initial(self):
         initial = super().get_initial()

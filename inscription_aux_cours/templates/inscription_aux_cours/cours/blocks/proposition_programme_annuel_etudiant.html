@@ -33,7 +33,8 @@
         </tr>
     </thead>
     <tbody>
-    {% for contexte in programme_annuel.inscriptions_par_contexte %}
+    {% for contexte in programme_annuel.inscriptions_par_contexte%}
+        {% if contexte.cours %}
         <tr class="ligne-contexte">
             <td colspan="3">{{ contexte.intitule }}</td>
         </tr>
@@ -44,6 +45,7 @@
                 <td headers="colonne-credits">{{ inscription.credits|floatformat|default_if_none:'-' }}</td>
             </tr>
         {% endfor %}
+        {% endif %}
     {% endfor %}
     </tbody>
 
