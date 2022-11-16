@@ -59,7 +59,6 @@ class InscrireAUneMiniFormationView(LoginRequiredMixin, InscriptionAuxCoursViewM
     def inscrire_a_une_mini_formation(self, code_mini_formation: str):
         MiniFormationService().inscrire_a_une_mini_formation(
             self.person,
-            self.annee_academique,
             self.sigle_formation,
             code_mini_formation
         )

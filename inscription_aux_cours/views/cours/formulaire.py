@@ -66,13 +66,12 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def formulaire_inscriptions_cours(self):
-        return FormulaireInscriptionService().recuperer(self.person, self.annee_academique, self.sigle_formation)
+        return FormulaireInscriptionService().recuperer(self.person, self.sigle_formation)
 
     @cached_property
     def configuration_formulaire(self) -> 'ConfigurationFormulaireInscriptionCours':
         return FormulaireInscriptionService().recuperer_configuration(
             self.person,
-            self.annee_academique,
             self.sigle_formation
         )
 
@@ -90,7 +89,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def programme_annuel_etudiant(self) -> 'ProgrammeAnnuelEtudiant':
-        return CoursService().recuperer_inscriptions(self.person, self.annee_academique, self.sigle_formation)
+        return CoursService().recuperer_inscriptions(self.person, self.sigle_formation)
 
     @cached_property
     def inscriptions_hors_programme(self) -> List['InscriptionAUnCoursHorsProgramme']:
@@ -162,7 +161,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:
         try:
-            return DemandeParticuliereService().recuperer(self.person, self.annee_academique, self.sigle_formation)
+            return DemandeParticuliereService().recuperer(self.person, self.sigle_formation)
         except ServiceException:
             return None
 
@@ -178,9 +177,9 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             return super().form_valid(form)
 
         if demande:
-            DemandeParticuliereService().effectuer(self.person, self.annee_academique, self.sigle_formation, demande)
+            DemandeParticuliereService().effectuer(self.person, self.sigle_formation, demande)
         else:
-            DemandeParticuliereService().retirer(self.person, self.annee_academique, self.sigle_formation)
+            DemandeParticuliereService().retirer(self.person, self.sigle_formation)
 
         return super().form_valid(form)
 

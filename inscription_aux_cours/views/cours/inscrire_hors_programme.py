@@ -70,7 +70,6 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
     def inscrire_a_un_cours(self, code_cours: str) -> None:
         CoursService().inscrire_a_un_cours(
             self.person,
-            annee=self.annee_academique,
             sigle_formation=self.sigle_formation,
             code_cours=code_cours,
             code_mini_formation=self.code_mini_formation,

@@ -41,7 +41,6 @@ class CoursService:
     @staticmethod
     def inscrire_a_un_cours(
             person: 'Person',
-            annee: int,
             sigle_formation: str,
             code_cours: str,
             code_mini_formation: str = None,
@@ -55,7 +54,6 @@ class CoursService:
         return _cours_api_call(
             person,
             "inscrire_aun_cours",
-            annee=annee,
             sigle_formation=sigle_formation,
             inscrire_aun_cours=cmd
         )
@@ -63,7 +61,6 @@ class CoursService:
     @staticmethod
     def desinscrire_de_un_cours(
             person: 'Person',
-            annee: int,
             sigle_formation: str,
             code_cours: str,
             code_mini_formation: str = None,
@@ -71,7 +68,6 @@ class CoursService:
         return _cours_api_call(
             person,
             "desinscrire_aun_cours",
-            annee=annee,
             sigle_formation=sigle_formation,
             code_cours=code_cours,
             code_mini_formation=code_mini_formation,
@@ -80,13 +76,11 @@ class CoursService:
     @staticmethod
     def recuperer_inscriptions(
             person: 'Person',
-            annee: int,
             sigle_formation: str,
     ) -> 'ProgrammeAnnuelEtudiant':
         return _cours_api_call(
             person,
             "inscriptions_cours",
-            annee=annee,
             sigle_formation=sigle_formation
         )
 

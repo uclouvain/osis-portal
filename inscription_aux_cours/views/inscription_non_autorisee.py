@@ -64,7 +64,7 @@ class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
 
     @cached_property
     def autorisation(self) -> 'AutoriseInscrireAuxCours':
-        return AutorisationService().est_autorise(self.person, self.annee_academique, self.sigle_formation)
+        return AutorisationService().est_autorise(self.person, self.sigle_formation)
 
     def get(self, request, *args, **kwargs):
         if self.autorisation.autorise:
