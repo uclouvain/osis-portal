@@ -56,29 +56,30 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
             try:
                 self.inscrire_a_un_cours(code_cours)
             except ServiceException as e:
-                erreurs.extend(self.formatter_messages_d_erreurs(code_cours, e.messages))
+                erreurs.extend(formatter_messages_d_erreurs(code_cours, e.messages))
 
-        self.afficher_erreurs(request, erreurs)
+        self.afficher_erreurs(erreurs)
 
         return redirect(
             reverse(
                 "inscription-aux-cours:formulaire-inscription-cours",
-                kwargs={"sigle_formation": self.sigle_formation}
+                kwargs={"code_programme": self.code_programme}
             )
         )
 
     def inscrire_a_un_cours(self, code_cours: str) -> None:
-        CoursService().inscrire_a_un_cours(
+        CoursService().inscrire(
             self.person,
-            sigle_formation=self.sigle_formation,
+            code_programme=self.code_programme,
             code_cours=code_cours,
             code_mini_formation=self.code_mini_formation,
             hors_formulaire=True
         )
 
-    def formatter_messages_d_erreurs(self, code_cours: str, messages: List[str]) -> List[str]:
-        return [f"{code_cours}: {message}" for message in messages]
-
-    def afficher_erreurs(self, request, erreurs: List[str]) -> None:
+    def afficher_erreurs(self, erreurs: List[str]) -> None:
         for erreur in erreurs:
-            messages.add_message(request, messages.ERROR, erreur)
+            messages.add_message(self.request, messages.ERROR, erreur)
+
+
+def formatter_messages_d_erreurs(code_cours: str, messages: List[str]) -> List[str]:
+    return [f"{code_cours}: {message}" for message in messages]

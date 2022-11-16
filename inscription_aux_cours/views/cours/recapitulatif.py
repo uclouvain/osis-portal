@@ -32,6 +32,7 @@ from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 
+from base.services.utils import ServiceException
 from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
@@ -74,19 +75,17 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
 
     @cached_property
     def programme_annuel(self) -> 'ProgrammeAnnuelEtudiant':
-        return CoursService().recuperer_inscriptions(
-            self.person,
-            self.sigle_formation
-        )
+        return CoursService().recuperer_programme_annuel(self.person, self.code_programme)
 
     @property
     def codes_cours_du_programme_annuel(self) -> List[str]:
-        codes_cours = [cours['code'] for cours in self.programme_annuel['tronc_commun']]
-        return codes_cours + [
+        codes_cours_tronc_commun = [cours['code'] for cours in self.programme_annuel['tronc_commun']]
+        codes_cours_mini_formations = [
             cours['code']
             for mini_formation in self.programme_annuel['mini_formations']
             for cours in mini_formation['cours']
         ]
+        return codes_cours_tronc_commun + codes_cours_mini_formations
 
     @cached_property
     def details_unites_enseignement(self):
@@ -115,7 +114,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     @cached_property
     def programme_annuel_avec_details_cours(self) -> 'PropositionProgrammeAnnuel':
         inscriptions_tronc_commun = InscriptionsParContexte(
-            intitule=self.formation['title'],
+            intitule=self.programme.intitule,
             cours=self._build_cours(self.programme_annuel['tronc_commun'])
         )
         inscriptions_aux_mini_formations = [
@@ -146,13 +145,15 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:
-        return DemandeParticuliereService().recuperer(self.person, self.sigle_formation)
+        try:
+            return DemandeParticuliereService().recuperer(self.person, self.code_programme)
+        except ServiceException:
+            return None
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             'student': self.student,
-            'formation': self.formation,
             'annee_academique': self.annee_academique,
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere

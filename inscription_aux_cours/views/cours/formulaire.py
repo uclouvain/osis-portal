@@ -66,18 +66,18 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def formulaire_inscriptions_cours(self):
-        return FormulaireInscriptionService().recuperer(self.person, self.sigle_formation)
+        return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
 
     @cached_property
     def configuration_formulaire(self) -> 'ConfigurationFormulaireInscriptionCours':
         return FormulaireInscriptionService().recuperer_configuration(
             self.person,
-            self.sigle_formation
+            self.code_programme
         )
 
     @cached_property
     def formulaire_inscription_hors_programme(self) -> 'InscriptionHorsProgrammeForm':
-        mini_formations = [('', self.formation.title)]
+        mini_formations = [('', self.programme.intitule_formation)]
         mini_formations += [
             (mini_formation.code_programme, mini_formation.intitule_formation)
             for mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
@@ -89,7 +89,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def programme_annuel_etudiant(self) -> 'ProgrammeAnnuelEtudiant':
-        return CoursService().recuperer_inscriptions(self.person, self.sigle_formation)
+        return CoursService().recuperer_programme_annuel(self.person, self.code_programme)
 
     @cached_property
     def inscriptions_hors_programme(self) -> List['InscriptionAUnCoursHorsProgramme']:
@@ -161,7 +161,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:
         try:
-            return DemandeParticuliereService().recuperer(self.person, self.sigle_formation)
+            return DemandeParticuliereService().recuperer(self.person, self.code_programme)
         except ServiceException:
             return None
 
@@ -177,11 +177,11 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             return super().form_valid(form)
 
         if demande:
-            DemandeParticuliereService().effectuer(self.person, self.sigle_formation, demande)
+            DemandeParticuliereService().effectuer(self.person, self.code_programme, demande)
         else:
-            DemandeParticuliereService().retirer(self.person, self.sigle_formation)
+            DemandeParticuliereService().retirer(self.person, self.code_programme)
 
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse("inscription-aux-cours:recapitulatif", kwargs={"sigle_formation": self.sigle_formation})
+        return reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})

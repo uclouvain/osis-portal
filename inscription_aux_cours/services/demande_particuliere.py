@@ -26,6 +26,7 @@ from functools import partial
 from typing import Optional
 
 import osis_inscription_cours_sdk
+from django.http import Http404
 from osis_inscription_cours_sdk.api import demande_particuliere_api
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.effectuer_demande_particuliere import EffectuerDemandeParticuliere
@@ -37,38 +38,35 @@ from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_a
 
 class DemandeParticuliereService:
     @staticmethod
-    def recuperer(
-            person: 'Person',
-            sigle_formation: str,
-    ) -> Optional['DemandeParticuliere']:
-        return _demande_particuliere_api_call(
-            person,
-            "get_demande_particuliere",
-            sigle_formation=sigle_formation
-        )
+    def recuperer(person: 'Person', code_programme: str) -> Optional['DemandeParticuliere']:
+        try:
+            return _demande_particuliere_api_call(
+                person,
+                "get_demande_particuliere",
+                code_programme=code_programme
+            )
+        except Http404:
+            return None
 
     @staticmethod
-    def effectuer(person: 'Person', sigle_formation: str, demande_particuliere: str):
+    def effectuer(person: 'Person', code_programme: str, demande_particuliere: str):
         cmd = EffectuerDemandeParticuliere(
-            sigle_formation=sigle_formation,
+            code_programme=code_programme,
             demande=demande_particuliere,
         )
         return _demande_particuliere_api_call(
             person,
             "post_demande_particuliere",
-            sigle_formation=sigle_formation,
+            code_programme=code_programme,
             effectuer_demande_particuliere=cmd
         )
 
     @staticmethod
-    def retirer(
-            person: 'Person',
-            sigle_formation: str,
-    ):
+    def retirer(person: 'Person', code_programme: str,):
         return _demande_particuliere_api_call(
             person,
             "delete_demande_particuliere",
-            sigle_formation=sigle_formation,
+            code_programme=code_programme,
         )
 
 

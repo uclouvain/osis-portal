@@ -62,9 +62,9 @@ class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
         return super().get(request, *args, **kwargs)
 
     def desinscrire_a_un_cours(self):
-        CoursService().desinscrire_de_un_cours(
+        CoursService().desinscrire(
             self.person,
-            sigle_formation=self.sigle_formation,
+            code_programme=self.code_programme,
             code_cours=self.code_cours,
             code_mini_formation=self.code_mini_formation,
         )

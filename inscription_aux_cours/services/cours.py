@@ -39,9 +39,9 @@ GROUPEMENT = 'GROUPEMENT'
 
 class CoursService:
     @staticmethod
-    def inscrire_a_un_cours(
+    def inscrire(
             person: 'Person',
-            sigle_formation: str,
+            code_programme: str,
             code_cours: str,
             code_mini_formation: str = None,
             hors_formulaire: bool = None
@@ -54,34 +54,34 @@ class CoursService:
         return _cours_api_call(
             person,
             "inscrire_aun_cours",
-            sigle_formation=sigle_formation,
+            code_programme=code_programme,
             inscrire_aun_cours=cmd
         )
 
     @staticmethod
-    def desinscrire_de_un_cours(
+    def desinscrire(
             person: 'Person',
-            sigle_formation: str,
+            code_programme: str,
             code_cours: str,
             code_mini_formation: str = None,
     ):
         return _cours_api_call(
             person,
             "desinscrire_aun_cours",
-            sigle_formation=sigle_formation,
+            code_programme=code_programme,
             code_cours=code_cours,
             code_mini_formation=code_mini_formation,
         )
 
     @staticmethod
-    def recuperer_inscriptions(
+    def recuperer_programme_annuel(
             person: 'Person',
-            sigle_formation: str,
+            code_programme: str,
     ) -> 'ProgrammeAnnuelEtudiant':
         return _cours_api_call(
             person,
             "inscriptions_cours",
-            sigle_formation=sigle_formation
+            code_programme=code_programme
         )
 
 

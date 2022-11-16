@@ -27,15 +27,15 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
-from osis_education_group_sdk.model.training_detailed import TrainingDetailed
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
+from osis_program_management_sdk.model.programme import Programme
 
 from base.business.student import find_by_user_and_discriminate
-from base.models import academic_year
 from base.models.person import Person
 from base.models.student import Student
-from education_group.services.training import TrainingService
 from inscription_aux_cours.services.autorisation import AutorisationService
+from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
+from program_management.services.programme import ProgrammeService
 
 
 class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
@@ -51,20 +51,20 @@ class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
         return find_by_user_and_discriminate(self.request.user)
 
     @property
-    def sigle_formation(self) -> str:
-        return self.kwargs['sigle_formation']
+    def code_programme(self) -> str:
+        return self.kwargs['code_programme']
 
     @cached_property
     def annee_academique(self) -> 'int':
-        return academic_year.starting_academic_year().year
+        return PeriodeInscriptionAuxCoursService().get_annee(self.person)
 
     @cached_property
-    def formation(self) -> 'TrainingDetailed':
-        return TrainingService().get_detail(self.person, self.annee_academique, self.sigle_formation)
+    def programme(self) -> 'Programme':
+        return ProgrammeService.rechercher(self.person, annee=self.annee_academique, codes=[self.code_programme])[0]
 
     @cached_property
     def autorisation(self) -> 'AutoriseInscrireAuxCours':
-        return AutorisationService().est_autorise(self.person, self.sigle_formation)
+        return AutorisationService().est_autorise(self.person, self.code_programme)
 
     def get(self, request, *args, **kwargs):
         if self.autorisation.autorise:
@@ -76,6 +76,5 @@ class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
             **super().get_context_data(**kwargs),
             "raison": self.autorisation.msg,
             'student': self.student,
-            'formation': self.formation,
-            'annee_academique': self.annee_academique,
+            'programme': self.programme,
         }

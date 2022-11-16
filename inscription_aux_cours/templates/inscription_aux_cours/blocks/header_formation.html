@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load academic_year_display %}
+{% load academic_year_display inscription_aux_cours_extra %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -34,11 +34,11 @@
     <div class="col-md-3">
         <label>{% trans 'Academic year' %}</label>
         <br>
-        {{ annee_academique|display_as_academic_year }}
+        {{ programme.annee|display_as_academic_year }}
     </div>
     <div class="col-md-6">
         <label>{% trans 'Offer' %}</label>
         <br>
-        {{ formation.acronym }} - {{ formation.title }}
+        {{ programme|get_sigle_programme }} - {{ programme.intitule_formation }}
     </div>
 </div>

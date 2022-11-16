@@ -22,35 +22,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from functools import partial
-
-import osis_inscription_cours_sdk
-from osis_inscription_cours_sdk.api import formulaire_api
-from osis_inscription_cours_sdk.model.configuration_formulaire_inscription_cours import \
-    ConfigurationFormulaireInscriptionCours
-
-from base.models.person import Person
-from base.services.utils import call_api
-from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
-
-
-class FormulaireInscriptionService:
-    @staticmethod
-    def recuperer(person: 'Person', code_programme: str):
-        return _formulaire_api_call(person, "get_formulaire", code_programme=code_programme,)
-
-    @staticmethod
-    def recuperer_configuration(person: 'Person', code_programme: str) -> 'ConfigurationFormulaireInscriptionCours':
-        return _formulaire_api_call(
-            person,
-            'get_configuration_formulaire',
-            code_programme=code_programme
-        )
-
-
-_formulaire_api_call = partial(
-    call_api,
-    inscription_aux_cours_sdk,
-    osis_inscription_cours_sdk,
-    formulaire_api.FormulaireApi
-)

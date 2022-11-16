@@ -56,7 +56,7 @@
             <br>
 
             <div class="center">
-                <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' formation.acronym %}" class="btn btn-default">
+                <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default">
                     {% trans "Modify my minors and options enrollments" %}
                 </a>
             </div>
@@ -64,7 +64,7 @@
             <br>
 
             <div class="center">
-                <a class="btn btn-primary" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' sigle_formation=sigle_formation %}">
+                <a class="btn btn-primary" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans 'Continue to courses enrollment' %}
                 </a>
             </div>

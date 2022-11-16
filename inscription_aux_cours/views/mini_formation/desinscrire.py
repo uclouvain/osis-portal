@@ -58,11 +58,7 @@ class DesinscrireAUneMiniFormationView(LoginRequiredMixin, InscriptionAuxCoursVi
         return super().get(request, *args, **kwargs)
 
     def desinscrire_a_une_mini_formation(self, code_mini_formation: str):
-        return MiniFormationService().desinscrire_a_une_mini_formation(
-            self.person,
-            self.sigle_formation,
-            code_mini_formation
-        )
+        MiniFormationService().desinscrire(self.person, self.code_programme, code_mini_formation)
 
     def get_template_names(self):
         if self.erreurs:

@@ -27,13 +27,15 @@ from typing import List
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
-from osis_offer_enrollment_sdk.model.enrollment import Enrollment
+from osis_offer_enrollment_sdk.model.inscription import Inscription
+from osis_program_management_sdk.model.programme import Programme
 
-from base.models import academic_year
-from base.models.enums import offer_enrollment_state
+from base.business.student import find_by_user_and_discriminate
 from base.models.person import Person
 from base.models.student import Student
-from base.services.offer_enrollment import OfferEnrollmentService
+from base.services.offer_enrollment import InscriptionFormationsService
+from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
+from program_management.services.programme import ProgrammeService
 
 
 class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -49,30 +51,27 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
 
     @cached_property
     def student(self) -> 'Student':
-        if self.formations:
-            registration_id = self.formations[0].student_registration_id
-            return Student.objects.get(registration_id=registration_id)
+        return find_by_user_and_discriminate(self.request.user)
 
-    # TODO should be returned by api
     @cached_property
     def annee_academique(self) -> 'int':
-        return academic_year.starting_academic_year().year
+        return PeriodeInscriptionAuxCoursService().get_annee(self.person)
 
     @cached_property
-    def formations(self) -> List['Enrollment']:
-        return OfferEnrollmentService.get_my_enrollments_year_list(
-            person=self.person,
-            year=self.annee_academique,
-            enrollment_state=[
-                offer_enrollment_state.SUBSCRIBED,
-                offer_enrollment_state.PROVISORY
-            ]
-        ) if self.person else []
+    def inscriptions(self) -> List['Inscription']:
+        return InscriptionFormationsService.mes_inscriptions(self.person, annee=self.annee_academique)
+
+    @cached_property
+    def programmes(self) -> List['Programme']:
+        if not self.inscriptions:
+            return []
+        codes = [inscription.code_programme for inscription in self.inscriptions]
+        return ProgrammeService.rechercher(self.person, annee=self.annee_academique, codes=codes)
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             'student': self.student,
-            'formations': self.formations,
+            'programmes': self.programmes,
             'annee_academique': self.annee_academique,
         }

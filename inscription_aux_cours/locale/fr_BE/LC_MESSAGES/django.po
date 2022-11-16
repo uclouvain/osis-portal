@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-04 13:41+0100\n"
+"POT-Creation-Date: 2022-11-21 09:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,7 +112,9 @@ msgstr "Récapitulatif d'inscription aux cours"
 msgid ""
 "This minor has access conditions, please refer to the procedure to enroll: "
 "{lien_condition_acces}"
-msgstr "Cette mineure a des conditions d'accès, veuillez consulter la procédure à suivre pour vous y inscrire: {lien_condition_acces}"
+msgstr ""
+"Cette mineure a des conditions d'accès, veuillez consulter la procédure à "
+"suivre pour vous y inscrire: {lien_condition_acces}"
 
 msgid "Title"
 msgstr "Intitulé"
@@ -125,6 +127,13 @@ msgstr "Visualiser l'horaire de mes cours"
 
 msgid "Year"
 msgstr "Année"
+
+msgid "You are not enrolled to a minor or deepening."
+msgstr ""
+"Vous n'êtes pas encore inscrit.e à une mineure ou un approfondissement."
+
+msgid "You are not enrolled to an option."
+msgstr "Vous n'êtes pas encore inscrit.e à une option."
 
 #, python-format
 msgid ""

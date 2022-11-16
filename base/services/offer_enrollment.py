@@ -25,6 +25,7 @@
 ##############################################################################
 import logging
 from enum import Enum
+from functools import partial
 from typing import List
 
 import osis_offer_enrollment_sdk
@@ -33,13 +34,24 @@ from django.conf import settings
 from osis_offer_enrollment_sdk import ApiException
 from osis_offer_enrollment_sdk.api import enrollment_api
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
-from osis_offer_enrollment_sdk.model.enrollment_list import EnrollmentList
+from osis_offer_enrollment_sdk.model.inscription import Inscription
 
 from base.models.person import Person
+from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import offer_enrollment as offer_enrollment_sdk, utils
 from frontoffice.settings.osis_sdk.utils import api_exception_handler
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+
+class InscriptionFormationsService:
+    @staticmethod
+    def mes_inscriptions(person: 'Person', annee: int) -> List['Inscription']:
+        return _offer_enrollment_api_call(
+            person,
+            'mes_inscriptions_get',
+            annee=annee
+        )
 
 
 class OfferEnrollmentService:
@@ -76,7 +88,13 @@ class OfferEnrollmentService:
     @api_exception_handler(api_exception_cls=ApiException)
     def get_my_enrollments_year_list(cls, person: Person, year: int, **kwargs) -> List['Enrollment']:
         return cls.get_my_enrollments_list(person=person, year=year, **kwargs).get("results", [])
-
-
 class OfferEnrollmentBusinessException(Enum):
     DoubleNOMA = "OFFER_ENROLLMENT-1"
+
+
+_offer_enrollment_api_call = partial(
+    call_api,
+    offer_enrollment_sdk,
+    osis_offer_enrollment_sdk,
+    enrollment_api.EnrollmentApi
+)

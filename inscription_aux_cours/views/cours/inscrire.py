@@ -61,9 +61,9 @@ class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Tem
         return super().get(request, *args, **kwargs)
 
     def inscrire_a_un_cours(self):
-        CoursService().inscrire_a_un_cours(
+        CoursService().inscrire(
             self.person,
-            sigle_formation=self.sigle_formation,
+            code_programme=self.code_programme,
             code_cours=self.code_cours,
             code_mini_formation=self.code_mini_formation,
             hors_formulaire=False

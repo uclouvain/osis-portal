@@ -22,11 +22,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from base.models.person import Person
-from education_group.services.education_group import EducationGroupService
+import re
+
+from django import template
+from unidecode import unidecode
+
+register = template.Library()
 
 
-class InMemoryEducationGroupService(EducationGroupService):
-    @staticmethod
-    def get_program_title(acronym: str, year: int, person: 'Person', **kwargs) -> str:
-        return "Program title"
+SPECIAL_CHARACTERS_PATTERN = r"[-'\s]"
+SPECIAL_CHARACTERS_REGEX = re.compile(SPECIAL_CHARACTERS_PATTERN)
+
+
+def unaccent(s: str) -> str:
+    string_without_special_characters = re.sub(SPECIAL_CHARACTERS_REGEX, "", s)
+    lower_cased_character = str.lower(string_without_special_characters)
+    return unidecode(lower_cased_character)
+
+
+@register.filter(is_safe=False)
+def dictsortunaccent(value, key):
+    return sorted(
+        value,
+        key=lambda item: unaccent(getattr(item, key))
+    )

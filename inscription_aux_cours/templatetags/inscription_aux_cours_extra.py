@@ -33,6 +33,7 @@ from osis_inscription_cours_sdk.model.inscription_aun_cours import InscriptionAU
 from osis_inscription_cours_sdk.model.inscription_mini_formation import InscriptionMiniFormation
 from osis_inscription_cours_sdk.model.mini_formation import MiniFormation
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
+from osis_program_management_sdk.model.programme import Programme
 
 from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
 from inscription_aux_cours.views.cours.recapitulatif import PropositionProgrammeAnnuel
@@ -98,3 +99,15 @@ def get_lien_horaire_cours(programme_annuel: 'PropositionProgrammeAnnuel') -> st
     return settings.COURSES_SCHEDULE_URL.format(
         codes_cours=urllib.parse.quote(",".join(codes_cours))
     )
+
+
+@register.filter
+def get_sigle_programme(programme: 'Programme') -> str:
+    if programme.version:
+        return f"{programme.sigle}[{programme.version}]"
+    return f"{programme.sigle}"
+
+
+@register.filter
+def est_bachelier(programme: 'Programme') -> bool:
+    return programme.type == "BACHELOR"

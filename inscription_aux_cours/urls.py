@@ -40,7 +40,7 @@ from inscription_aux_cours.views.selectionner_formation import SelectionnerForma
 app_name = 'inscription-aux-cours'
 urlpatterns = [
     path('', SelectionnerFormationView.as_view(), name=SelectionnerFormationView.name),
-    path('<str:sigle_formation>/', include([
+    path('<str:code_programme>/', include([
         path('non_autorisee/', InscriptionNonAutoriseeView.as_view(), name=InscriptionNonAutoriseeView.name),
         path('formulaire/', FormulaireInscriptionAuxCoursView.as_view(), name=FormulaireInscriptionAuxCoursView.name),
         path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),

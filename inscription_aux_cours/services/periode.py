@@ -22,32 +22,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import logging
+import datetime
+from typing import List
 
-import osis_education_group_sdk
-import urllib3
-from django.conf import settings
-from osis_education_group_sdk.api import trainings_api
+from osis_reference_sdk.model.academic_calendar import AcademicCalendar
 
 from base.models.person import Person
-from frontoffice.settings.osis_sdk import education_group as education_group_sdk, utils
+from reference.services.academic_calendar import AcademicCalendarService
 
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
+REFERENCE_INSCRIPTION_AUX_COURS = 'COURSE_ENROLLMENT_SWITCHING_CALENDAR'
 
 
-class EducationGroupService:
-    @staticmethod
-    def get_program_title(acronym: str, year: int, person: Person, **kwargs) -> str:
-        configuration = education_group_sdk.build_configuration()
-        with osis_education_group_sdk.ApiClient(configuration) as api_client:
-            api_instance = trainings_api.TrainingsApi(api_client)
-            try:
-                return api_instance.trainingstitle_read(
-                    acronym=acronym,
-                    year=year,
-                    **utils.build_mandatory_auth_headers(person),
-                ).title
-            except (osis_education_group_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
-                # Run in degraded mode in order to prevent crash all app
-                logger.error(e)
-        return ""
+class PeriodeInscriptionAuxCoursService:
+    @classmethod
+    def get_annee(cls, person: 'Person') -> int:
+        calendriers = AcademicCalendarService.get_academic_calendar_list(
+            person,
+            reference=REFERENCE_INSCRIPTION_AUX_COURS
+        )['results']  # type: List[AcademicCalendar]
+        today = datetime.date.today()
+        return next(
+            calendrier for calendrier in calendriers
+            if calendrier.start_date <= today <= calendrier.end_date
+        ).data_year

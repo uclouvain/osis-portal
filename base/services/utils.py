@@ -28,7 +28,7 @@ from typing import List
 
 import urllib3.exceptions
 from django.conf import settings
-from django.http import Http404
+from django.http import Http404, HttpResponseNotFound
 from rest_framework.settings import api_settings
 
 from base.models.person import Person
@@ -58,6 +58,8 @@ def call_api(settings_sdk, sdk, api, person: 'Person', method_to_call: str, **kw
             result = class_method(**build_mandatory_auth_headers(person), **kwargs)
         except sdk.ApiException as api_exception:
             logger.warning(api_exception)
+            if api_exception.status == HttpResponseNotFound.status_code:
+                raise Http404
             raise ServiceException(api_exception)
         except (urllib3.exceptions.HTTPError, Http404) as e:
             # Run in degraded mode in order to prevent crash all app

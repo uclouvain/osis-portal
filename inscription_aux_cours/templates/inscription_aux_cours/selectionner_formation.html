@@ -1,6 +1,6 @@
 {% extends "inscription_aux_cours/layout.html" %}
-{% load static %}
-{% load i18n academic_year_display %}
+{% load static i18n %}
+{% load academic_year_display inscription_aux_cours_extra %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -55,7 +55,7 @@
 
             <br>
 
-            {% if formations %}
+            {% if programmes %}
                 <div class="alert alert-info" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                     {% trans 'Select an offer for which you want to do courses enrollment.' %}
@@ -68,23 +68,23 @@
             {% endif %}
 
             <div class="row">
-                {% if formations %}
+                {% if programmes %}
                     <table id="table_exam_enrollment_offer_choice" class="table table-striped table-hover">
                         <tr>
                             <th>{% trans 'Year' %}</th>
                             <th>{% trans 'Acronym' %}</th>
                             <th>{% trans 'Program' %}</th>
                         </tr>
-                        {% for formation in formations %}
+                        {% for programme in programmes %}
                             <tr>
 
-                                <td>{{ formation.year|display_as_academic_year }}</td>
+                                <td>{{ programme.annee|display_as_academic_year }}</td>
                                 <td>
-                                    <a href="{% url 'inscription-aux-cours:recapitulatif-mini-formations' sigle_formation=formation.acronym %}">
-                                        {{ formation.acronym }}
+                                    <a href="{% url 'inscription-aux-cours:recapitulatif-mini-formations' programme.code %}">
+                                        {{ programme|get_sigle_programme }}
                                     </a>
                                 </td>
-                                <td>{{ formation.title }}</td>
+                                <td>{{ programme.intitule_formation }}</td>
                             </tr>
                         {% endfor %}
                     </table>

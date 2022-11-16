@@ -51,3 +51,7 @@
 textarea.unresizable {
     resize: none;
 }
+
+.no-break{
+    white-space: nowrap;
+}
