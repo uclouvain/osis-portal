@@ -26,7 +26,7 @@ import logging
 
 import requests
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from localflavor.generic.validators import IBANValidator
 from requests import RequestException
 
@@ -53,12 +53,9 @@ class IBANValidatorService:
     def _validate_esb_free(cls, iban: str):
         # Works only for Belgium, Germany, Netherlands, Luxembourg, Switzerland, Austria, Liechtenstein
         endpoint = settings.ESB_IBAN_ENDPOINT.format(iban=iban)
-        url = settings.IBAN_DEBUG_URL.format(iban=iban) if settings.DEBUG else "{esb_api}{endpoint}".format(
-            esb_api=settings.ESB_URL,
-            endpoint=endpoint
-        )
+        url = f"{settings.ESB_URL}{endpoint}"
         try:
-            response = requests.get(
+            response = cls.fake_validator(iban) if settings.DEBUG else requests.get(
                 url,
                 headers={
                     "Authorization": settings.ESB_AUTHORIZATION,
@@ -75,6 +72,12 @@ class IBANValidatorService:
         except Exception as e:
             logger.error("[Validate IBAN] An error occurred during validation")
             raise IBANValidatorException from e
+
+    @staticmethod
+    def fake_validator(iban: str):
+        if iban.upper() in {'BE87 0014 3185 5594', 'FR76 3000 1007 9412 3456 7890 185'}:
+            return HttpResponseNotFound()
+        return JsonResponse({'valid': True})
 
 
 class IBANValidatorException(Exception):
