@@ -109,5 +109,12 @@ def get_sigle_programme(programme: 'Programme') -> str:
 
 
 @register.filter
+def get_intitule_programme(programme: 'Programme') -> str:
+    if programme.version:
+        return f"{programme.intitule_formation}[{programme.intitule}]"
+    return f"{programme.intitule_formation}"
+
+
+@register.filter
 def est_bachelier(programme: 'Programme') -> bool:
     return programme.type == "BACHELOR"
