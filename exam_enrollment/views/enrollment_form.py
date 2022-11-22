@@ -179,7 +179,6 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
             'teams_exam': data.get('teams_exam'),
             'moodle_exam': data.get('moodle_exam'),
             'covid_period': data.get('covid_period'),
-            'is_11ba': self.program_code.endswith('11BA'),
         }
 
     def _get_error_message(self, data: Dict) -> str:
