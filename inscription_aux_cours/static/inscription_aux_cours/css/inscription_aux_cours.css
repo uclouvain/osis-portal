@@ -39,3 +39,19 @@
 .ligne-total-credits > th[headers="colonne-credits"] {
     background-color: #80808029;
 }
+
+.fa-info {
+    color: #337ab7;
+}
+
+.fa-solid.fa-danger {
+    color: #a94442;
+}
+
+textarea.unresizable {
+    resize: none;
+}
+
+.no-break{
+    white-space: nowrap;
+}

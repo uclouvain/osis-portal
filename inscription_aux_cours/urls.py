@@ -29,6 +29,7 @@ from inscription_aux_cours.views.cours.desinscrire import DesinscrireAUnCoursVie
 from inscription_aux_cours.views.cours.formulaire import FormulaireInscriptionAuxCoursView
 from inscription_aux_cours.views.cours.inscrire import InscrireAUnCoursView
 from inscription_aux_cours.views.cours.inscrire_hors_programme import InscrireAUnCoursHorsProgrammeView
+from inscription_aux_cours.views.inscription_non_autorisee import InscriptionNonAutoriseeView
 from inscription_aux_cours.views.mini_formation.desinscrire import DesinscrireAUneMiniFormationView
 from inscription_aux_cours.views.mini_formation.inscriptibles import MiniFormationsInscriptiblesView
 from inscription_aux_cours.views.mini_formation.inscrire import InscrireAUneMiniFormationView
@@ -39,7 +40,8 @@ from inscription_aux_cours.views.selectionner_formation import SelectionnerForma
 app_name = 'inscription-aux-cours'
 urlpatterns = [
     path('', SelectionnerFormationView.as_view(), name=SelectionnerFormationView.name),
-    path('<str:sigle_formation>/', include([
+    path('<str:code_programme>/', include([
+        path('non_autorisee/', InscriptionNonAutoriseeView.as_view(), name=InscriptionNonAutoriseeView.name),
         path('formulaire/', FormulaireInscriptionAuxCoursView.as_view(), name=FormulaireInscriptionAuxCoursView.name),
         path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
         path('inscrire/', InscrireAUnCoursView.as_view(), name=InscrireAUnCoursView.name),

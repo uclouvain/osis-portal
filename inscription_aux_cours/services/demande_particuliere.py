@@ -23,66 +23,56 @@
 #
 ##############################################################################
 from functools import partial
+from typing import Optional
 
 import osis_inscription_cours_sdk
-from osis_inscription_cours_sdk.api import cours_api
-from osis_inscription_cours_sdk.model.inscrire_aun_cours import InscrireAUnCours
-from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
+from django.http import Http404
+from osis_inscription_cours_sdk.api import demande_particuliere_api
+from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
+from osis_inscription_cours_sdk.model.effectuer_demande_particuliere import EffectuerDemandeParticuliere
 
 from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
 
-COURS = 'UNITE_ENSEIGNEMENT'
-GROUPEMENT = 'GROUPEMENT'
 
-
-class CoursService:
+class DemandeParticuliereService:
     @staticmethod
-    def inscrire(
-            person: 'Person',
-            code_programme: str,
-            code_cours: str,
-            code_mini_formation: str = None,
-            hors_formulaire: bool = None
-    ):
-        cmd = InscrireAUnCours(
-            code_cours=code_cours,
-            code_mini_formation=code_mini_formation or "",
-            hors_formulaire=hors_formulaire
-        )
-        return _cours_api_call(
-            person,
-            "inscrire_aun_cours",
+    def recuperer(person: 'Person', code_programme: str) -> Optional['DemandeParticuliere']:
+        try:
+            return _demande_particuliere_api_call(
+                person,
+                "get_demande_particuliere",
+                code_programme=code_programme
+            )
+        except Http404:
+            return None
+
+    @staticmethod
+    def effectuer(person: 'Person', code_programme: str, demande_particuliere: str):
+        cmd = EffectuerDemandeParticuliere(
             code_programme=code_programme,
-            inscrire_aun_cours=cmd
+            demande=demande_particuliere,
         )
-
-    @staticmethod
-    def desinscrire(
-            person: 'Person',
-            code_programme: str,
-            code_cours: str,
-            code_mini_formation: str = None,
-    ):
-        return _cours_api_call(
+        return _demande_particuliere_api_call(
             person,
-            "desinscrire_aun_cours",
+            "post_demande_particuliere",
             code_programme=code_programme,
-            code_cours=code_cours,
-            code_mini_formation=code_mini_formation,
+            effectuer_demande_particuliere=cmd
         )
 
     @staticmethod
-    def recuperer_programme_annuel(
-            person: 'Person',
-            code_programme: str,
-    ) -> 'ProgrammeAnnuelEtudiant':
-        return _cours_api_call(
+    def retirer(person: 'Person', code_programme: str,):
+        return _demande_particuliere_api_call(
             person,
-            "inscriptions_cours",
-            code_programme=code_programme
+            "delete_demande_particuliere",
+            code_programme=code_programme,
         )
 
 
-_cours_api_call = partial(call_api, inscription_aux_cours_sdk, osis_inscription_cours_sdk, cours_api.CoursApi)
+_demande_particuliere_api_call = partial(
+    call_api,
+    inscription_aux_cours_sdk,
+    osis_inscription_cours_sdk,
+    demande_particuliere_api.DemandeParticuliereApi
+)

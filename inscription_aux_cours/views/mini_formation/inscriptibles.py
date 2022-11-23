@@ -25,6 +25,7 @@
 from typing import List
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -42,19 +43,31 @@ class MiniFormationsInscriptiblesView(LoginRequiredMixin, InscriptionAuxCoursVie
     template_name = "inscription_aux_cours/mini_formation/inscriptibles.html"
 
     @cached_property
-    def mini_formations_inscriptibles(self) -> 'ListeMiniFormations':
-        return MiniFormationService().get_mini_formations_inscriptibles(self.sigle_formation, self.person)
+    def liste_mini_formations_inscriptibles(self) -> 'ListeMiniFormations':
+        return MiniFormationService().get_inscriptibles(self.person, self.code_programme)
 
     @cached_property
-    def inscriptions_mini_formations(self) -> List['InscriptionMiniFormation']:
-        return MiniFormationService().get_inscriptions(self.person, self.sigle_formation)
+    def inscriptions(self) -> List['InscriptionMiniFormation']:
+        return MiniFormationService().get_inscriptions(self.person, self.code_programme)
+
+    def get(self, request, *args, **kwargs):
+        if not self.liste_mini_formations_inscriptibles.mini_formations:
+            return redirect(
+                reverse(
+                    "inscription-aux-cours:formulaire-inscription-cours",
+                    kwargs={"code_programme": self.code_programme}
+                )
+            )
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'liste_mini_formations_inscriptibles': self.mini_formations_inscriptibles,
-            'inscriptions_mini_formations': self.inscriptions_mini_formations,
+            'intitule': self.liste_mini_formations_inscriptibles.intitule,
+            'commentaire': self.liste_mini_formations_inscriptibles.commentaire,
+            'inscriptibles': self.liste_mini_formations_inscriptibles.mini_formations,
+            'inscriptions': self.inscriptions,
         }
 
     def get_success_url(self):
-        return reverse("inscription-aux-cours:inscrire-cours", kwargs={"sigle_formation": self.sigle_formation})
+        return reverse("inscription-aux-cours:inscrire-cours", kwargs={"code_programme": self.code_programme})

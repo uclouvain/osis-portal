@@ -24,6 +24,7 @@
 ##############################################################################
 from typing import Optional, List
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -31,6 +32,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.http import require_POST
 
+from base.services.utils import ServiceException
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 
@@ -48,18 +50,36 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
         return self.request.POST.getlist('cours', list())
 
     def post(self, request, *args, **kwargs):
+        erreurs = []
+
         for code_cours in self.codes_cours:
-            CoursService().inscrire_a_un_cours(
-                self.person,
-                sigle_formation=self.sigle_formation,
-                code_cours=code_cours,
-                code_mini_formation=self.code_mini_formation,
-                hors_formulaire=True
-            )
+            try:
+                self.inscrire_a_un_cours(code_cours)
+            except ServiceException as e:
+                erreurs.extend(formatter_messages_d_erreurs(code_cours, e.messages))
+
+        self.afficher_erreurs(erreurs)
+
         return redirect(
             reverse(
                 "inscription-aux-cours:formulaire-inscription-cours",
-                kwargs={"sigle_formation": self.sigle_formation}
+                kwargs={"code_programme": self.code_programme}
             )
         )
 
+    def inscrire_a_un_cours(self, code_cours: str) -> None:
+        CoursService().inscrire(
+            self.person,
+            code_programme=self.code_programme,
+            code_cours=code_cours,
+            code_mini_formation=self.code_mini_formation,
+            hors_formulaire=True
+        )
+
+    def afficher_erreurs(self, erreurs: List[str]) -> None:
+        for erreur in erreurs:
+            messages.add_message(self.request, messages.ERROR, erreur)
+
+
+def formatter_messages_d_erreurs(code_cours: str, messages: List[str]) -> List[str]:
+    return [f"{code_cours}: {message}" for message in messages]

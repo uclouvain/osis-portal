@@ -40,11 +40,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class MiniTrainingService:
     @staticmethod
-    def search(
-            person: Person,
-            year: int = None,
-            codes: List[str] = None
-    ) -> List['MiniTraining']:
+    def search(person: Person, year: int = None, codes: List[str] = None) -> List['MiniTraining']:
         kwargs = {}
         if year:
             kwargs['year'] = year

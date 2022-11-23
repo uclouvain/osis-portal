@@ -30,7 +30,6 @@ from typing import List
 import osis_inscription_cours_sdk
 from django.conf import settings
 from osis_inscription_cours_sdk.api import mini_formation_api
-from osis_inscription_cours_sdk.model.desinscrire_a_une_mini_formation import DesinscrireAUneMiniFormation
 from osis_inscription_cours_sdk.model.inscription_mini_formation import InscriptionMiniFormation
 from osis_inscription_cours_sdk.model.inscrire_a_une_mini_formation import InscrireAUneMiniFormation
 from osis_inscription_cours_sdk.model.liste_mini_formations import ListeMiniFormations
@@ -45,39 +44,40 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 class MiniFormationService:
 
     @staticmethod
-    def get_mini_formations_inscriptibles(sigle_formation: str, person: Person) -> 'ListeMiniFormations':
-        return _mini_formation_api_call(person, "mini_formations_inscriptibles", sigle_formation=sigle_formation)
+    def get_inscriptibles(person: Person, code_programme: str) -> 'ListeMiniFormations':
+        return _mini_formation_api_call(
+            person,
+            "mini_formations_inscriptibles",
+            code_programme=code_programme
+        )
 
     @staticmethod
-    def inscrire_a_une_mini_formation(person: Person, sigle_formation: str, code_mini_formation: str):
+    def inscrire(person: Person, code_programme: str, code_mini_formation: str):
         cmd = InscrireAUneMiniFormation(
             code_mini_formation=code_mini_formation
         )
         return _mini_formation_api_call(
             person,
             'enroll_mini_formation',
-            sigle_formation=sigle_formation,
+            code_programme=code_programme,
             inscrire_a_une_mini_formation=cmd
         )
 
     @staticmethod
-    def desinscrire_a_une_mini_formation(person: Person, sigle_formation: str, code_mini_formation: str):
-        cmd = DesinscrireAUneMiniFormation(
-            code_mini_formation=code_mini_formation
-        )
+    def desinscrire(person: Person, code_programme: str, code_mini_formation: str):
         return _mini_formation_api_call(
             person,
             'unenroll_mini_formation',
-            sigle_formation=sigle_formation,
-            desinscrire_a_une_mini_formation=cmd
+            code_programme=code_programme,
+            code_mini_formation=code_mini_formation
         )
 
     @staticmethod
-    def get_inscriptions(person: Person, sigle_formation: str) -> List['InscriptionMiniFormation']:
+    def get_inscriptions(person: Person, code_programme: str) -> List['InscriptionMiniFormation']:
         return _mini_formation_api_call(
             person,
             'inscriptions_mini_formations',
-            sigle_formation=sigle_formation
+            code_programme=code_programme
         )
 
 

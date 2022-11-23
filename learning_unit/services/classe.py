@@ -22,11 +22,44 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from functools import partial
+from typing import List
+
+import osis_learning_unit_sdk
+from osis_learning_unit_sdk.api import classe_api
+from osis_learning_unit_sdk.model.classe import Classe
+
+from base.services.utils import call_api
+from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk
+
 from base.models.person import Person
-from education_group.services.education_group import EducationGroupService
 
 
-class InMemoryEducationGroupService(EducationGroupService):
+class ClasseService:
     @staticmethod
-    def get_program_title(acronym: str, year: int, person: 'Person', **kwargs) -> str:
-        return "Program title"
+    def rechercher_classes(
+            person: 'Person',
+            annee: int = None,
+            code: str = None,
+            codes: List[str] = None,
+            intitule: str = None
+
+    ) -> List['Classe']:
+        search_parameters = dict(
+            annee=annee,
+            code=code,
+            codes=codes,
+            intitule=intitule,
+        )
+        for key, value in list(search_parameters.items()):
+            if value is None:
+                del search_parameters[key]
+
+        return _classe_api_call(
+            person,
+            "get_classes",
+            **search_parameters
+        )
+
+
+_classe_api_call = partial(call_api, learning_unit_sdk, osis_learning_unit_sdk, classe_api.ClasseApi)

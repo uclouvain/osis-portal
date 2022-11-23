@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-10 14:53+0200\n"
+"POT-Creation-Date: 2022-11-21 09:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,19 +22,24 @@ msgstr ""
 msgid "Acronym"
 msgstr ""
 
-msgid "Block"
+msgid "Add"
 msgstr ""
 
-msgid "Choice"
+msgid "Add a course that is not in the offer"
+msgstr ""
+
+msgid "Added courses"
+msgstr ""
+
+msgid "Continue to courses enrollment"
 msgstr ""
 
 msgid "Credits"
 msgstr ""
 
-msgid "Exceptionally, not organized this year"
-msgstr ""
-
-msgid "Exceptionally, not organized this year, nor the next"
+msgid ""
+"Define in which context you want to enroll the course and search by code "
+"(example: LCHIM1111)."
 msgstr ""
 
 msgid "First name"
@@ -43,7 +48,13 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-msgid "Mandatory"
+msgid "Learning Unit Year"
+msgstr ""
+
+msgid "List of minors or options to which you are enrolled"
+msgstr ""
+
+msgid "Modify my enrollments"
 msgstr ""
 
 msgid "Modify my minors and options enrollments"
@@ -55,22 +66,13 @@ msgstr ""
 msgid "My minors or options enrollment"
 msgstr ""
 
-msgid "Not offered this year but offered the following year"
-msgstr ""
-
 msgid "Offer"
 msgstr ""
 
 msgid "Offer choice"
 msgstr ""
 
-msgid "Offered this year but not the following year"
-msgstr ""
-
-msgid "Optional"
-msgstr ""
-
-msgid "Prerequisites"
+msgid "Print my proposition of annual program"
 msgstr ""
 
 msgid "Program"
@@ -79,25 +81,63 @@ msgstr ""
 msgid "Registration id"
 msgstr ""
 
+msgid "Return to offer choice"
+msgstr ""
+
 msgid "Save and continue to courses enrollment"
 msgstr ""
 
 msgid "Save and continue to enrollments summary"
 msgstr ""
 
+msgid "Search by code (example: LCHIM1111)"
+msgstr ""
+
 msgid "Select an offer for which you want to do courses enrollment."
 msgstr ""
 
-msgid "The learning unit has prerequisites"
+msgid "Special requests"
+msgstr ""
+
+msgid "Submit my proposition of annual program"
+msgstr ""
+
+msgid "Summary courses enrollment"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"This minor has access conditions, please refer to the procedure to enroll: "
+"{lien_condition_acces}"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Total credits"
+msgstr ""
+
+msgid "View my courses schedule"
 msgstr ""
 
 msgid "Year"
+msgstr ""
+
+msgid "You are not enrolled to a minor or deepening."
+msgstr ""
+
+msgid "You are not enrolled to an option."
 msgstr ""
 
 #, python-format
 msgid ""
 "You are not enrolled to any program for the academic year "
 "%(annee_academique)s."
+msgstr ""
+
+msgid ""
+"Your enrollments are saved but you can continue modifying it until you "
+"didin't submit them."
 msgstr ""
 
 msgid "credits"

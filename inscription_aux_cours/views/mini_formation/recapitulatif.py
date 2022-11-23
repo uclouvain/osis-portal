@@ -29,6 +29,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
+from osis_education_group_sdk.model.mini_training import MiniTraining
 from osis_inscription_cours_sdk.model.inscription_mini_formation import InscriptionMiniFormation
 
 from education_group.services.mini_training import MiniTrainingService
@@ -42,24 +43,20 @@ class RecapitulatifInscriptionsMiniFormationsView(LoginRequiredMixin, Inscriptio
     template_name = "inscription_aux_cours/mini_formation/recapitulatif.html"
 
     @cached_property
-    def inscriptions_mini_formations(self) -> List['InscriptionMiniFormation']:
-        return MiniFormationService().get_inscriptions(self.person, self.sigle_formation)
+    def inscriptions(self) -> List['InscriptionMiniFormation']:
+        return MiniFormationService().get_inscriptions(self.person, self.code_programme)
 
     @cached_property
-    def details_mini_formations_inscrites(self):
-        codes_mini_formation = [
-            mini_formation.code_mini_formation
-            for mini_formation in self.inscriptions_mini_formations
-        ]
-        result = MiniTrainingService().search(self.person, year=self.annee_academique, codes=codes_mini_formation)
-        return [mini_formation for mini_formation in result]
+    def mini_formations(self) -> List['MiniTraining']:
+        codes_mini_formation = [mini_formation.code_mini_formation for mini_formation in self.inscriptions]
+        return MiniTrainingService().search(self.person, year=self.annee_academique, codes=codes_mini_formation)
 
     def get(self, request, *args, **kwargs):
-        if not self.inscriptions_mini_formations:
+        if not self.inscriptions:
             return redirect(
                 reverse(
                     "inscription-aux-cours:mini-formations-inscriptibles",
-                    kwargs={"sigle_formation": self.sigle_formation}
+                    kwargs={"code_programme": self.code_programme}
                 )
             )
         return super().get(request, *args, **kwargs)
@@ -67,5 +64,5 @@ class RecapitulatifInscriptionsMiniFormationsView(LoginRequiredMixin, Inscriptio
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'mini_formations': self.details_mini_formations_inscrites,
+            'mini_formations': self.mini_formations,
         }

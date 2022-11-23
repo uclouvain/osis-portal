@@ -106,9 +106,9 @@ body {
 
 .dashboard-student .dashboard-fixed-placement{
     grid-template-areas:
-      "personal exams submodules"
-      "personal exams submodules"
-      "personal exams submodules";
+      "first second third"
+      "first second third"
+      "first second third";
 }
 
 .dashboard-grid .media-heading, .dashboard-grid i{

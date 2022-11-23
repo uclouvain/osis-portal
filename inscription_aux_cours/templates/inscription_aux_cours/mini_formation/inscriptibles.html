@@ -1,6 +1,6 @@
 {% extends "inscription_aux_cours/layout.html" %}
 {% load static i18n %}
-{% load academic_year_display inscription_aux_cours_extra %}
+{% load academic_year_display inscription_aux_cours_extra sort_extra %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -41,40 +41,68 @@
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
 
             <br>
-                <table id="table-inscription-mini-formations" class="table table-hover">
-                    {% for mini_formation in liste_mini_formations_inscriptibles.mini_formations %}
-                        <tr>
-                            <td>{{ mini_formation.intitule }} {% if mini_formation.condition_acces %}<i class='fa-solid fa-key'></i>{% endif %}</td>
-                            <td>
-                                <form id="form-inscription-{{ mini_formation.code }}" method="post">
-                                    {% csrf_token %}
-                                    <input
-                                            id="checkbox-{{ mini_formation.code }}"
-                                            type="checkbox"
-                                            name="checkbox_mini_formation"
-                                            hx-include="#form-inscription-{{ mini_formation.code }}"
-                                            hx-target="#form-inscription-{{ mini_formation.code }}"
-                                            hx-trigger="click"
-                                            hx-swap="innerHTML"
-                                            hx-vals='{"code_mini_formation": "{{ mini_formation.code }}"}'
-                                            {% if mini_formation|est_inscrit_a_la_mini_formation:inscriptions_mini_formations %}
-                                            checked
-                                            hx-post="{% url 'inscription-aux-cours:desinscrire-mini-formation' sigle_formation=sigle_formation %}"
 
-                                            {% else %}
-                                            hx-post="{% url 'inscription-aux-cours:inscrire-mini-formation' sigle_formation=sigle_formation %}"
-                                            {% endif %}
+            {% if not inscriptions %}
+            <div class="alert alert-warning" style="display:inline-block;">
+                <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                {% if programme|est_bachelier %}
+                    {% trans "You are not enrolled to a minor or deepening." %}
+                {% else %}
+                    {% trans "You are not enrolled to an option." %}
+                {% endif %}
+            </div>
+            {% endif %}
 
-                                    >
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                <a class="btn btn-primary" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' sigle_formation=sigle_formation %}">
+
+            <br>
+
+            <div>
+                <h5><strong>{{ intitule }}</strong></h5>
+                <p><i>{{ commentaire|safe }}</i></p>
+            </div>
+
+            <br>
+
+            <table id="table-inscription-mini-formations" class="table table-hover">
+                {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
+                    <tr>
+                        <td>{{ mini_formation.intitule }} {% if mini_formation.condition_acces %}<i class='fa-solid fa-key fa-info'></i>{% endif %}</td>
+                        <td>
+                            <form id="form-inscription-{{ mini_formation.code }}" method="post">
+                                {% csrf_token %}
+                                <input
+                                        id="checkbox-{{ mini_formation.code }}"
+                                        type="checkbox"
+                                        name="checkbox_mini_formation"
+                                        hx-include="#form-inscription-{{ mini_formation.code }}"
+                                        hx-target="#form-inscription-{{ mini_formation.code }}"
+                                        hx-trigger="click"
+                                        hx-swap="innerHTML"
+                                        hx-vals='{"code_mini_formation": "{{ mini_formation.code }}"}'
+                                        {% if mini_formation|est_inscrit_a_la_mini_formation:inscriptions %}
+                                        checked
+                                        hx-post="{% url 'inscription-aux-cours:desinscrire-mini-formation' programme.code %}"
+
+                                        {% else %}
+                                        hx-post="{% url 'inscription-aux-cours:inscrire-mini-formation' programme.code %}"
+                                        {% endif %}
+                                        {% if mini_formation.condition_acces %}
+                                            title="{% get_message_condition_access programme.annee mini_formation %}"
+                                            disabled
+                                        {% endif %}
+
+                                >
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <div class="center">
+                <a class="btn btn-primary" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to courses enrollment' %}
                 </a>
-
+            </div>
 
         </div>
     </div>

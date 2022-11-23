@@ -24,7 +24,7 @@
 ##############################################################################
 import itertools
 from decimal import Decimal
-from typing import List
+from typing import List, Optional, Dict
 
 import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -33,17 +33,19 @@ from django.utils.functional import cached_property
 from django.views.generic import FormView
 from osis_inscription_cours_sdk.model.configuration_formulaire_inscription_cours import \
     ConfigurationFormulaireInscriptionCours
-from osis_inscription_cours_sdk.model.cours import Cours
-from osis_inscription_cours_sdk.model.formulaire_inscription_cours import FormulaireInscriptionCours
-from osis_inscription_cours_sdk.model.groupement import Groupement
-from osis_inscription_cours_sdk.model.inscription_aun_cours import InscriptionAUnCours
+from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
+from osis_learning_unit_sdk.model.classe import Classe
+from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 
+from base.services.utils import ServiceException
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.forms.cours.inscription_hors_programme import InscriptionHorsProgrammeForm
-from inscription_aux_cours.services.cours import CoursService, COURS
+from inscription_aux_cours.services.cours import CoursService
+from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 
 
@@ -64,15 +66,18 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def formulaire_inscriptions_cours(self):
-        return FormulaireInscriptionService().recuperer(self.person, self.sigle_formation)
+        return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
 
     @cached_property
     def configuration_formulaire(self) -> 'ConfigurationFormulaireInscriptionCours':
-        return FormulaireInscriptionService().recuperer_configuration(self.person, self.sigle_formation)
+        return FormulaireInscriptionService().recuperer_configuration(
+            self.person,
+            self.code_programme
+        )
 
     @cached_property
     def formulaire_inscription_hors_programme(self) -> 'InscriptionHorsProgrammeForm':
-        mini_formations = [(None, self.formation.title)]
+        mini_formations = [('', self.programme.intitule_formation)]
         mini_formations += [
             (mini_formation.code_programme, mini_formation.intitule_formation)
             for mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
@@ -84,7 +89,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def programme_annuel_etudiant(self) -> 'ProgrammeAnnuelEtudiant':
-        return CoursService().recuperer_inscriptions(self.person, self.sigle_formation)
+        return CoursService().recuperer_programme_annuel(self.person, self.code_programme)
 
     @cached_property
     def inscriptions_hors_programme(self) -> List['InscriptionAUnCoursHorsProgramme']:
@@ -95,7 +100,9 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
                 code_cours=inscription.code,
                 intitule_cours="",
                 credits=inscription.credits
-            ) for inscription in self.formulaire_inscriptions_cours["formulaire_tronc_commun"]['inscriptions_hors_programme']
+            )
+            for inscription
+            in self.formulaire_inscriptions_cours["formulaire_tronc_commun"]['inscriptions_hors_programme']
         ]
         for inscriptions_pour_mini_formation in self.formulaire_inscriptions_cours["formulaires_mini_formation"]:
             result += [
@@ -113,20 +120,34 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             inscriptions_hors_programme: List['InscriptionAUnCoursHorsProgramme']
     ) -> List['InscriptionAUnCoursHorsProgramme']:
         codes_cours = [cours.code_cours for cours in inscriptions_hors_programme]
-        unites_enseignements = LearningUnitService().search_learning_units(self.person, year=self.annee_academique, learning_unit_codes=codes_cours)
-        unites_enseignements_par_code = {unites_enseignement['acronym']: unites_enseignement for unites_enseignement in unites_enseignements}
-        classes = [LearningUnitService().get_effective_classes(self.annee_academique, code, self.person) for code in codes_cours]
-        classes = list(itertools.chain.from_iterable(classes))
-        classes_par_code = {classe['code']: classe for classe in classes}
+        unites_enseignements_par_code = self._rechercher_unites_enseignements(codes_cours)
+        classes_par_code = self._rechercher_classes(codes_cours)
+
         return [
             attr.evolve(
                 inscription,
                 intitule_cours=unites_enseignements_par_code[inscription.code_cours]['title']
                 if unites_enseignements_par_code.get(inscription.code_cours)
-                else ""
+                else classes_par_code[inscription.code_cours]['intitule']
             )
             for inscription in inscriptions_hors_programme
         ]
+
+    def _rechercher_unites_enseignements(self, codes_cours: List[str]) -> Dict[str, 'LearningUnit']:
+        unites_enseignements = LearningUnitService().search_learning_units(
+            self.person,
+            year=self.annee_academique,
+            learning_unit_codes=codes_cours
+        )
+        return {unites_enseignement['acronym']: unites_enseignement for unites_enseignement in unites_enseignements}
+
+    def _rechercher_classes(self, codes_classes: List[str]) -> Dict[str, 'Classe']:
+        classes = ClasseService().rechercher_classes(
+            self.person,
+            annee=self.annee_academique,
+            codes=codes_classes
+        )
+        return {classe['code']: classe for classe in classes}
 
     def get_context_data(self, **kwargs):
         return {
@@ -137,8 +158,30 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             'inscriptions_hors_programmes': self.inscriptions_hors_programme,
         }
 
+    @cached_property
+    def demande_particuliere(self) -> Optional['DemandeParticuliere']:
+        try:
+            return DemandeParticuliereService().recuperer(self.person, self.code_programme)
+        except ServiceException:
+            return None
+
+    def get_initial(self):
+        initial = super().get_initial()
+        if self.demande_particuliere:
+            initial['demande_particuliere'] = self.demande_particuliere.demande
+        return initial
+
+    def form_valid(self, form: 'DemandeParticuliereForm'):
+        demande = form.cleaned_data['demande_particuliere']
+        if not form.has_changed():
+            return super().form_valid(form)
+
+        if demande:
+            DemandeParticuliereService().effectuer(self.person, self.code_programme, demande)
+        else:
+            DemandeParticuliereService().retirer(self.person, self.code_programme)
+
+        return super().form_valid(form)
+
     def get_success_url(self):
-        return reverse(
-            "inscription-aux-cours:recapitulatif",
-            kwargs={"sigle_formation": self.sigle_formation}
-        )
+        return reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})

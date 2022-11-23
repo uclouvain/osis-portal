@@ -1,6 +1,6 @@
 {% extends "inscription_aux_cours/layout.html" %}
 {% load static %}
-{% load i18n academic_year_display %}
+{% load i18n academic_year_display inscription_aux_cours_extra %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -28,7 +28,7 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li><a href="{% url 'inscription-aux-cours:formulaire-inscription-cours' sigle_formation=sigle_formation %}">{% trans 'My courses enrollment' %}</a></li>
+    <li><a href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">{% trans 'My courses enrollment' %}</a></li>
     <li class="active">{% trans 'Summary courses enrollment' %}</li>
 {% endblock %}
 
@@ -41,23 +41,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
 
-            <div class="row">
-                <div class="col-md-4">
-                    <label>{% trans 'Last name' %}, {% trans 'First name' %}</label>
-                    <br>
-                    {{ student.person.last_name }}, {{ student.person.first_name }}
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'Academic year' %}</label>
-                    <br>
-                    {{ annee_academique|display_as_academic_year }}
-                </div>
-                <div class="col-md-4">
-                    <label>{% trans 'Offer' %}</label>
-                    <br>
-                    {{ formation.acronym }} - {{ formation.title }}
-                </div>
-            </div>
+            {% include "inscription_aux_cours/blocks/header_formation.html" %}
 
             <br>
 
@@ -68,40 +52,37 @@
 
             {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
 
+            <br>
 
-                <p>
-                    <strong>{% trans "Special requests" %}</strong>
-                    {% if formulaire.configuration.descriptif_demandes_particulieres %}
-                        <br>
-                        {{ formulaire.configuration.descriptif_demandes_particulieres }}
-                    {% endif %}
-                </p>
+            <div >
+                <h5><strong>{% trans "Special requests" %}</strong></h5>
+                {% if formulaire.configuration.descriptif_demandes_particulieres %}
+                    <p>{{ formulaire.configuration.descriptif_demandes_particulieres }}</p>
+                {% endif %}
+                <textarea class="form-control unresizable" disabled>{{ demande_particuliere.demande }}</textarea>
+            </div>
 
-                <div class="row">
+            <br>
 
-                </div>
+            <div class="center">
+                <a class="btn btn-default" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
+                    <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}
+                </a>
+                <a class="btn btn-default" href="{% get_lien_horaire_cours programme_annuel %}" target="_blank">
+                    <i class="fa-solid fa-clock"></i> {% trans "View my courses schedule" %}
+                </a>
+                <a class="btn btn-default">
+                    <i class="fa-solid fa-print"></i> {% trans "Print my proposition of annual program" %}
+                </a>
+            </div>
 
-                <br>
+            <br>
 
-                <div class="center">
-                    <a class="btn btn-default">
-                        <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}
-                    </a>
-                    <a class="btn btn-default">
-                        <i class="fa-solid fa-clock"></i> {% trans "View my courses schedule" %}
-                    </a>
-                    <a class="btn btn-default">
-                        <i class="fa-solid fa-print"></i> {% trans "Print my proposition of annual program" %}
-                    </a>
-                </div>
-
-                <br>
-
-                <div class="center">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa-solid fa-floppy-disk"></i> {% trans 'Submit my proposition of annual program' %}
-                    </button>
-                </div>
+            <div class="center">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> {% trans 'Submit my proposition of annual program' %}
+                </button>
+            </div>
 
         </div>
     </div>

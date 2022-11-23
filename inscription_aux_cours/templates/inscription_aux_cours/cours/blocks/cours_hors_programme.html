@@ -37,7 +37,7 @@
             {% for inscription_hors_programme in inscriptions_hors_programme %}
             <tr id="row-{{ inscription_hors_programme.code_cours }}">
                 <td>{{ inscription_hors_programme.code_cours }} - {{ inscription_hors_programme.intitule_cours }}</td>
-                <td>({{ inscription_hors_programme.credits }} {% trans 'credits' %})</td>
+                <td>({{ inscription_hors_programme.credits|floatformat }} {% trans 'credits' %})</td>
                 <td>
                     <form method="post" id="formulaire-desincription-hors-programme-{{ inscription_hors_programme.code_cours }}">
                         {% csrf_token %}
@@ -50,7 +50,7 @@
                                 hx-trigger="click"
                                 hx-swap="delete"
                                 hx-vals='{"code_mini_formation": "{{ inscription_hors_programme.code_mini_formation }}", "code_cours": "{{ inscription_hors_programme.code_cours }}"}'
-                                hx-post="{% url 'inscription-aux-cours:desinscrire-cours' sigle_formation=formation.acronym %}"
+                                hx-post="{% url 'inscription-aux-cours:desinscrire-cours' programme.code %}"
                                 checked
                         >
                     </form>

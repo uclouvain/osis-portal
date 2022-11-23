@@ -22,28 +22,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from typing import List
-
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
-from osis_offer_enrollment_sdk.model.inscription import Inscription
+from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
 from osis_program_management_sdk.model.programme import Programme
 
 from base.business.student import find_by_user_and_discriminate
 from base.models.person import Person
 from base.models.student import Student
-from base.services.offer_enrollment import InscriptionFormationsService
+from inscription_aux_cours.services.autorisation import AutorisationService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
 from program_management.services.programme import ProgrammeService
 
 
-class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    permission_required = "base.is_student"
-
-    template_name = 'inscription_aux_cours/selectionner_formation.html'
-
-    name = 'selectionner-formation'
+class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
+    name = 'non-autorisee'
+    template_name = "inscription_aux_cours/non_autorisee.html"
 
     @cached_property
     def person(self) -> 'Person':
@@ -53,25 +50,31 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
     def student(self) -> 'Student':
         return find_by_user_and_discriminate(self.request.user)
 
+    @property
+    def code_programme(self) -> str:
+        return self.kwargs['code_programme']
+
     @cached_property
     def annee_academique(self) -> 'int':
         return PeriodeInscriptionAuxCoursService().get_annee(self.person)
 
     @cached_property
-    def inscriptions(self) -> List['Inscription']:
-        return InscriptionFormationsService.mes_inscriptions(self.person, annee=self.annee_academique)
+    def programme(self) -> 'Programme':
+        return ProgrammeService.rechercher(self.person, annee=self.annee_academique, codes=[self.code_programme])[0]
 
     @cached_property
-    def programmes(self) -> List['Programme']:
-        if not self.inscriptions:
-            return []
-        codes = [inscription.code_programme for inscription in self.inscriptions]
-        return ProgrammeService.rechercher(self.person, annee=self.annee_academique, codes=codes)
+    def autorisation(self) -> 'AutoriseInscrireAuxCours':
+        return AutorisationService().est_autorise(self.person, self.code_programme)
+
+    def get(self, request, *args, **kwargs):
+        if self.autorisation.autorise:
+            return redirect(reverse('inscription-aux-cours:selectionner-formation'))
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
+            "raison": self.autorisation.msg,
             'student': self.student,
-            'programmes': self.programmes,
-            'annee_academique': self.annee_academique,
+            'programme': self.programme,
         }

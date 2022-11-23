@@ -22,16 +22,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import urllib.parse
 from decimal import Decimal
 from typing import List
 
 from django import template
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 from osis_inscription_cours_sdk.model.inscription_aun_cours import InscriptionAUnCours
 from osis_inscription_cours_sdk.model.inscription_mini_formation import InscriptionMiniFormation
 from osis_inscription_cours_sdk.model.mini_formation import MiniFormation
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
+from osis_program_management_sdk.model.programme import Programme
 
 from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
+from inscription_aux_cours.views.cours.recapitulatif import PropositionProgrammeAnnuel
 
 register = template.Library()
 
@@ -77,3 +82,39 @@ def filtrer_inscriptions_hors_programme_par_contexte(
     if not code_mini_formation:
         return [inscription for inscription in inscriptions if not inscription.code_mini_formation]
     return [inscription for inscription in inscriptions if inscription.code_mini_formation == code_mini_formation]
+
+
+@register.simple_tag
+def get_message_condition_access(annee: int, mini_formation: 'MiniFormation') -> str:
+    return _(
+        "This minor has access conditions, please refer to the procedure to enroll: {lien_condition_acces}"
+    ).format(
+        lien_condition_acces=f"{settings.INSTITUTION_URL}prog-{annee}-{mini_formation.sigle}-cond_adm"
+    )
+
+
+@register.simple_tag
+def get_lien_horaire_cours(programme_annuel: 'PropositionProgrammeAnnuel') -> str:
+    codes_cours = [cours.code for contexte in programme_annuel.inscriptions_par_contexte for cours in contexte.cours]
+    return settings.COURSES_SCHEDULE_URL.format(
+        codes_cours=urllib.parse.quote(",".join(codes_cours))
+    )
+
+
+@register.filter
+def get_sigle_programme(programme: 'Programme') -> str:
+    if programme.version:
+        return f"{programme.sigle}[{programme.version}]"
+    return f"{programme.sigle}"
+
+
+@register.filter
+def get_intitule_programme(programme: 'Programme') -> str:
+    if programme.version:
+        return f"{programme.intitule_formation}[{programme.intitule}]"
+    return f"{programme.intitule_formation}"
+
+
+@register.filter
+def est_bachelier(programme: 'Programme') -> bool:
+    return programme.type == "BACHELOR"
