@@ -45,7 +45,7 @@
             {% if not inscriptions %}
             <div class="alert alert-warning" style="display:inline-block;">
                 <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                {% if programme|est_bachelier %}
+                {% if est_bachelier %}
                     {% trans "You are not enrolled to a minor or deepening." %}
                 {% else %}
                     {% trans "You are not enrolled to an option." %}
