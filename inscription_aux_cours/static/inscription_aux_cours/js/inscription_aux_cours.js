@@ -1,17 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
     addTriggerForFormsEnrollToCourse(getInscrireAuCoursUrl(), getCSRFToken());
     addTriggerForFormsUnenrollToCourse(getDesinscrireAuCoursUrl(), getCSRFToken());
-    // addHtmxIndicatorOnForms();
-
+    addLoaderElement();
 }, false);
 
-function addHtmxIndicatorOnForms() {
+
+function addLoaderElement() {
     const forms = document.querySelectorAll(".formulaire-inscription-cours")
     forms.forEach((form, key, parent) => {
-        const checkBox = form.querySelector("input[type=checkbox]");
-        form.setAttribute("htmx-indicator", `#${checkBox.id}`)
+        form.insertAdjacentHTML(
+            'beforeend',
+            "<div class='loading'></div>"
+        )
     });
 }
+
 
 function getInscrireAuCoursUrl() {
     if (document.querySelector(".panel-formulaires-inscription-cours") !== null) {
@@ -64,6 +67,6 @@ function addTriggerOnForm(formElement, postUrl, csrfToken) {
 
 function triggerHtmxPostOnClick(e, postUrl, target, values, headers) {
     e.addEventListener('click', (event) => {
-       htmx.ajax('POST', postUrl, {'target': target, 'swap': 'outerHTML', 'values': values, 'headers': headers})
+       htmx.ajax('POST', postUrl, {'source': e, 'target': target, 'swap': 'outerHTML', 'values': values, 'headers': headers})
     });
 }
