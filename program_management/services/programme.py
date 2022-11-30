@@ -33,11 +33,17 @@ from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import program_management as program_management_sdk
 
+TYPE_BACHELIER = 'BACHELOR'
+
 
 class ProgrammeService:
     @staticmethod
     def rechercher(person: 'Person', annee: int, codes: List[str]) -> List['Programme']:
         return _programme_api_call(person, "programmes_list", annee=annee, codes=codes)
+
+    @staticmethod
+    def est_bachelier(programme: 'Programme') -> bool:
+        return programme.type == TYPE_BACHELIER
 
 
 _programme_api_call = partial(
