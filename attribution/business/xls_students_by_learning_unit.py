@@ -257,7 +257,8 @@ def _set_peps_border(ws, last_row_number):
 def _update_border_for_first_peps_column(cell):
     c = cell.style if cell.has_style else NamedStyle()
     c.border = BORDER_LEFT
-    cell.style = c
+    if not (c.name == 'Normal' and cell.style == 'Normal'):
+        cell.style = c
 
 
 def _add_filters_on_headers(a_worksheet):
