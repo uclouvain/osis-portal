@@ -1,7 +1,7 @@
 {% extends "inscription_aux_cours/layout.html" %}
 {% load static i18n %}
 {% load bootstrap3 %}
-{% load academic_year_display inscription_aux_cours_extra sort_extra %}
+{% load inscription_aux_cours_extra sort_extra %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -73,7 +73,9 @@
                 {% endwith %}
             {% endfor %}
 
-            {% if configuration.autorise_etudiant_a_ajouter_cours %}
+            <br>
+
+            {% if formulaire_hors_programme.code_mini_formation.field.choices %}
             <div  id="form-hors-formulaire">
                 <form method="post" action='{% url "inscription-aux-cours:inscrire-cours-hors-programme" programme.code %}'>
                     {% csrf_token %}
@@ -119,6 +121,7 @@
             {% endif %}
 
             <br>
+            <hr>
 
             <div>
                 <form method="post" id="formulaire-demande-particuliere">

@@ -69,21 +69,16 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
 
     @cached_property
-    def configuration_formulaire(self) -> 'ConfigurationFormulaireInscriptionCours':
-        return FormulaireInscriptionService().recuperer_configuration(
-            self.person,
-            self.code_programme
-        )
-
-    @cached_property
     def formulaire_inscription_hors_programme(self) -> 'InscriptionHorsProgrammeForm':
-        mini_formations = [('', self.programme.intitule_formation)]
-        mini_formations += [
-            (mini_formation.code_programme, mini_formation.intitule_formation)
-            for mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
+        choix_mini_formations = [
+            (formulaire_mini_formation.code_programme, formulaire_mini_formation.intitule_formation)
+            for formulaire_mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
+            if formulaire_mini_formation.configuration.autorise_etudiant_a_ajouter_cours
         ]
+        if self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration.autorise_etudiant_a_ajouter_cours:
+            choix_mini_formations = [('', self.programme.intitule_formation)] + choix_mini_formations
         return InscriptionHorsProgrammeForm(
-            mini_formations,
+            choix_mini_formations,
             initial={'annee': self.annee_academique},
         )
 
@@ -156,7 +151,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'configuration': self.configuration_formulaire,
+            'configuration': self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration,
             'formulaire': self.formulaire_inscriptions_cours,
             'formulaire_hors_programme': self.formulaire_inscription_hors_programme,
             'inscriptions_hors_programmes': self.inscriptions_hors_programme,
