@@ -22,7 +22,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import itertools
 from decimal import Decimal
 from typing import List, Optional, Dict
 
@@ -44,6 +43,7 @@ from inscription_aux_cours.forms.cours.inscription_hors_programme import Inscrip
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
+from inscription_aux_cours.services.mini_formation import MiniFormationService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
@@ -149,6 +149,10 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         )
         return {classe['code']: classe for classe in classes}
 
+    @cached_property
+    def a_des_mini_formations_inscriptibles(self) -> bool:
+        return bool(MiniFormationService().get_inscriptibles(self.person, self.code_programme).mini_formations)
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
@@ -156,6 +160,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             'formulaire': self.formulaire_inscriptions_cours,
             'formulaire_hors_programme': self.formulaire_inscription_hors_programme,
             'inscriptions_hors_programmes': self.inscriptions_hors_programme,
+            'a_des_mini_formations_inscriptibles': self.a_des_mini_formations_inscriptibles
         }
 
     @cached_property

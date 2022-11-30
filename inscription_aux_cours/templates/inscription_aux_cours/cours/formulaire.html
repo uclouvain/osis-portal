@@ -135,13 +135,14 @@
                         {% bootstrap_field form.demande_particuliere label=False form_group_class="col-md-12"%}
                     </div>
 
+                    {% if a_des_mini_formations_inscriptibles %}
                     <br>
-
                     <div class="center">
                         <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default">
                             {% trans "Modify my minors and options enrollments" %}
                         </a>
                     </div>
+                    {% endif %}
 
                     <br>
 
