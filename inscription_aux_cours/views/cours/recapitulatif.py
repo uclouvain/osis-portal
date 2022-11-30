@@ -160,8 +160,6 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'student': self.student,
-            'annee_academique': self.annee_academique,
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere
         }
