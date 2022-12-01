@@ -30,25 +30,20 @@ from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
 from osis_program_management_sdk.model.programme import Programme
 
-from base.business.student import find_by_user_and_discriminate
 from base.models.person import Person
-from base.models.student import Student
 from inscription_aux_cours.services.autorisation import AutorisationService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
 from program_management.services.programme import ProgrammeService
 
 
 class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
+    permission_required = "base.is_student"
     name = 'non-autorisee'
     template_name = "inscription_aux_cours/non_autorisee.html"
 
     @cached_property
     def person(self) -> 'Person':
         return Person.objects.get(user=self.request.user)
-
-    @cached_property
-    def student(self) -> 'Student':
-        return find_by_user_and_discriminate(self.request.user)
 
     @property
     def code_programme(self) -> str:
@@ -75,6 +70,6 @@ class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
         return {
             **super().get_context_data(**kwargs),
             "raison": self.autorisation.msg,
-            'student': self.student,
+            'person': self.person,
             'programme': self.programme,
         }

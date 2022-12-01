@@ -28,22 +28,18 @@ from django.utils.functional import cached_property
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
 from osis_program_management_sdk.model.programme import Programme
 
-from base.business.student import find_by_user_and_discriminate
 from base.models.person import Person
-from base.models.student import Student
 from inscription_aux_cours.services.autorisation import AutorisationService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
 from program_management.services.programme import ProgrammeService
 
 
 class InscriptionAuxCoursViewMixin:
+    permission_required = "base.is_student"
+
     @cached_property
     def person(self) -> 'Person':
         return Person.objects.get(user=self.request.user)
-
-    @cached_property
-    def student(self) -> 'Student':
-        return find_by_user_and_discriminate(self.request.user)
 
     @property
     def code_programme(self) -> str:
@@ -75,6 +71,6 @@ class InscriptionAuxCoursViewMixin:
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'student': self.student,
             'programme': self.programme,
+            'person': self.person
         }
