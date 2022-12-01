@@ -70,3 +70,4 @@ function triggerHtmxPostOnClick(e, postUrl, target, values, headers) {
        htmx.ajax('POST', postUrl, {'source': e, 'target': target, 'swap': 'outerHTML', 'values': values, 'headers': headers})
     });
 }
+
