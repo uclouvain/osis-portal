@@ -22,7 +22,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import itertools
 from decimal import Decimal
 from typing import List, Optional, Dict
 
@@ -30,7 +29,7 @@ import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 from osis_inscription_cours_sdk.model.configuration_formulaire_inscription_cours import \
     ConfigurationFormulaireInscriptionCours
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
@@ -44,6 +43,7 @@ from inscription_aux_cours.forms.cours.inscription_hors_programme import Inscrip
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
+from inscription_aux_cours.services.mini_formation import MiniFormationService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
@@ -57,33 +57,27 @@ class InscriptionAUnCoursHorsProgramme:
     credits: Decimal
 
 
-class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCoursViewMixin, FormView):
+class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCoursViewMixin, TemplateView):
     name = 'formulaire-inscription-cours'
 
     # TemplateView
     template_name = "inscription_aux_cours/cours/formulaire.html"
-    form_class = DemandeParticuliereForm
 
     @cached_property
     def formulaire_inscriptions_cours(self):
         return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
 
     @cached_property
-    def configuration_formulaire(self) -> 'ConfigurationFormulaireInscriptionCours':
-        return FormulaireInscriptionService().recuperer_configuration(
-            self.person,
-            self.code_programme
-        )
-
-    @cached_property
     def formulaire_inscription_hors_programme(self) -> 'InscriptionHorsProgrammeForm':
-        mini_formations = [('', self.programme.intitule_formation)]
-        mini_formations += [
-            (mini_formation.code_programme, mini_formation.intitule_formation)
-            for mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
+        choix_mini_formations = [
+            (formulaire_mini_formation.code_programme, formulaire_mini_formation.intitule_formation)
+            for formulaire_mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
+            if formulaire_mini_formation.configuration.autorise_etudiant_a_ajouter_cours
         ]
+        if self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration.autorise_etudiant_a_ajouter_cours:
+            choix_mini_formations = [('', self.programme.intitule_formation)] + choix_mini_formations
         return InscriptionHorsProgrammeForm(
-            mini_formations,
+            choix_mini_formations,
             initial={'annee': self.annee_academique},
         )
 
@@ -149,13 +143,19 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         )
         return {classe['code']: classe for classe in classes}
 
+    @cached_property
+    def a_des_mini_formations_inscriptibles(self) -> bool:
+        return bool(MiniFormationService().get_inscriptibles(self.person, self.code_programme).mini_formations)
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'configuration': self.configuration_formulaire,
+            'configuration': self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration,
             'formulaire': self.formulaire_inscriptions_cours,
             'formulaire_hors_programme': self.formulaire_inscription_hors_programme,
             'inscriptions_hors_programmes': self.inscriptions_hors_programme,
+            'a_des_mini_formations_inscriptibles': self.a_des_mini_formations_inscriptibles,
+            'form': self.formulaire_demande_particuliere,
         }
 
     @cached_property
@@ -165,23 +165,9 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         except ServiceException:
             return None
 
-    def get_initial(self):
-        initial = super().get_initial()
+    @cached_property
+    def formulaire_demande_particuliere(self) -> 'DemandeParticuliereForm':
+        initial = {}
         if self.demande_particuliere:
-            initial['demande_particuliere'] = self.demande_particuliere.demande
-        return initial
-
-    def form_valid(self, form: 'DemandeParticuliereForm'):
-        demande = form.cleaned_data['demande_particuliere']
-        if not form.has_changed():
-            return super().form_valid(form)
-
-        if demande:
-            DemandeParticuliereService().effectuer(self.person, self.code_programme, demande)
-        else:
-            DemandeParticuliereService().retirer(self.person, self.code_programme)
-
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})
+            initial = {'demande_particuliere': self.demande_particuliere.demande}
+        return DemandeParticuliereForm(initial=initial)

@@ -1,8 +1,20 @@
 document.addEventListener('DOMContentLoaded', function () {
     addTriggerForFormsEnrollToCourse(getInscrireAuCoursUrl(), getCSRFToken());
     addTriggerForFormsUnenrollToCourse(getDesinscrireAuCoursUrl(), getCSRFToken());
-
+    addLoaderElement();
 }, false);
+
+
+function addLoaderElement() {
+    const forms = document.querySelectorAll(".formulaire-inscription-cours")
+    forms.forEach((form, key, parent) => {
+        form.insertAdjacentHTML(
+            'beforeend',
+            "<div class='loading'></div>"
+        )
+    });
+}
+
 
 function getInscrireAuCoursUrl() {
     if (document.querySelector(".panel-formulaires-inscription-cours") !== null) {
@@ -55,6 +67,7 @@ function addTriggerOnForm(formElement, postUrl, csrfToken) {
 
 function triggerHtmxPostOnClick(e, postUrl, target, values, headers) {
     e.addEventListener('click', (event) => {
-       htmx.ajax('POST', postUrl, {'target': target, 'swap': 'innerHTML', 'values': values, 'headers': headers})
+       htmx.ajax('POST', postUrl, {'source': e, 'target': target, 'swap': 'outerHTML', 'values': values, 'headers': headers})
     });
 }
+

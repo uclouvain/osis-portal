@@ -55,3 +55,27 @@ textarea.unresizable {
 .no-break{
     white-space: nowrap;
 }
+
+.htmx-request > input{
+    display: none;
+}
+
+.htmx-request > .loading {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #9c41f2;
+    border-radius: 100%;
+    margin: auto;
+    animation: spin 1s infinite linear;
+}
+
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

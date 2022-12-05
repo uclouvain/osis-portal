@@ -45,12 +45,19 @@
 
             <br>
 
-            <div class="alert alert-info" style="display:inline-block;">
-                <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
-            </div>
+            {% if programme_annuel.a_des_inscriptions %}
+                <div class="alert alert-info" style="display:inline-block;">
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                    {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
+                </div>
 
-            {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
+                {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
+            {% else %}
+                <div class="alert alert-warning" style="display:inline-block;">
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                    {% trans "You are not enrolled to any courses." %}
+                </div>
+            {% endif %}
 
             <br>
 

@@ -27,12 +27,10 @@ from typing import List
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
-from osis_offer_enrollment_sdk.model.inscription import Inscription
+from osis_offer_enrollment_sdk.model.mes_inscriptions import MesInscriptions
 from osis_program_management_sdk.model.programme import Programme
 
-from base.business.student import find_by_user_and_discriminate
 from base.models.person import Person
-from base.models.student import Student
 from base.services.offer_enrollment import InscriptionFormationsService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
 from program_management.services.programme import ProgrammeService
@@ -50,28 +48,25 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         return Person.objects.get(user=self.request.user)
 
     @cached_property
-    def student(self) -> 'Student':
-        return find_by_user_and_discriminate(self.request.user)
-
-    @cached_property
     def annee_academique(self) -> 'int':
         return PeriodeInscriptionAuxCoursService().get_annee(self.person)
 
     @cached_property
-    def inscriptions(self) -> List['Inscription']:
+    def inscriptions(self) -> 'MesInscriptions':
         return InscriptionFormationsService.mes_inscriptions(self.person, annee=self.annee_academique)
 
     @cached_property
     def programmes(self) -> List['Programme']:
-        if not self.inscriptions:
+        if not self.inscriptions.inscriptions:
             return []
-        codes = [inscription.code_programme for inscription in self.inscriptions]
+        codes = [inscription.code_programme for inscription in self.inscriptions.inscriptions]
         return ProgrammeService.rechercher(self.person, annee=self.annee_academique, codes=codes)
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'student': self.student,
+            'person': self.person,
+            'noma': self.inscriptions.noma,
             'programmes': self.programmes,
             'annee_academique': self.annee_academique,
         }

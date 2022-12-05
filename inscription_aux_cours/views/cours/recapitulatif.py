@@ -34,6 +34,7 @@ from osis_inscription_cours_sdk.model.programme_annuel_etudiant import Programme
 
 from base.services.utils import ServiceException
 from education_group.services.mini_training import MiniTrainingService
+from inscription_aux_cours import formatter
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
@@ -66,6 +67,12 @@ class PropositionProgrammeAnnuel:
             for cours in contexte.cours
             if cours.credits
         ])
+
+    @property
+    def a_des_inscriptions(self) -> bool:
+        return any(
+            [inscription for contexte in self.inscriptions_par_contexte for inscription in contexte.cours]
+        )
 
 
 class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
@@ -114,7 +121,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     @cached_property
     def programme_annuel_avec_details_cours(self) -> 'PropositionProgrammeAnnuel':
         inscriptions_tronc_commun = InscriptionsParContexte(
-            intitule=self.programme.intitule,
+            intitule=formatter.get_intitule_programme(self.programme),
             cours=self._build_cours(self.programme_annuel['tronc_commun'])
         )
         inscriptions_aux_mini_formations = [
@@ -153,8 +160,6 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'student': self.student,
-            'annee_academique': self.annee_academique,
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere
         }

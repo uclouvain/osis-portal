@@ -61,13 +61,30 @@
                 <p><i>{{ commentaire|safe }}</i></p>
             </div>
 
+
+            {% if mini_formations_inscrites_non_inscriptibles %}
+            <br>
+
+                <p><i>
+                {% trans 'The following minors or options in which you are enrolled are no longer offered this academic year:' %}
+                <ul>
+                    {% for mini_formation in mini_formations_inscrites_non_inscriptibles %}
+                        <li>{{ mini_formation.title }}</li>
+                    {% endfor %}
+                </ul>
+                {% trans 'For a change in minors or options, please contact your faculty manager.' %}
+
+                </i></p>
+
+            {% endif %}
+
             <br>
 
             <table id="table-inscription-mini-formations" class="table table-hover">
                 {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
                     <tr>
                         <td>{{ mini_formation.intitule }} {% if mini_formation.condition_acces %}<i class='fa-solid fa-key fa-info'></i>{% endif %}</td>
-                        <td>
+                        <td class="col-md-1 center">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
                                 <input
@@ -79,6 +96,7 @@
                                         hx-trigger="click"
                                         hx-swap="innerHTML"
                                         hx-vals='{"code_mini_formation": "{{ mini_formation.code }}"}'
+                                        hx-indicator="#form-inscription-{{ mini_formation.code }}"
                                         {% if mini_formation|est_inscrit_a_la_mini_formation:inscriptions %}
                                         checked
                                         hx-post="{% url 'inscription-aux-cours:desinscrire-mini-formation' programme.code %}"
@@ -92,6 +110,7 @@
                                         {% endif %}
 
                                 >
+                                <div class="loading"></div>
                             </form>
                         </td>
                     </tr>

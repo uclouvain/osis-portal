@@ -35,6 +35,7 @@ from osis_inscription_cours_sdk.model.mini_formation import MiniFormation
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 from osis_program_management_sdk.model.programme import Programme
 
+from inscription_aux_cours import formatter
 from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
 from inscription_aux_cours.views.cours.recapitulatif import PropositionProgrammeAnnuel
 
@@ -110,6 +111,4 @@ def get_sigle_programme(programme: 'Programme') -> str:
 
 @register.filter
 def get_intitule_programme(programme: 'Programme') -> str:
-    if programme.version:
-        return f"{programme.intitule_formation}[{programme.intitule}]"
-    return f"{programme.intitule_formation}"
+    return formatter.get_intitule_programme(programme)

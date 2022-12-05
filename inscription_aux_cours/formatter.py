@@ -22,33 +22,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from functools import partial
-from typing import List
-
-import osis_program_management_sdk
-from osis_program_management_sdk.api import programme_api
 from osis_program_management_sdk.model.programme import Programme
 
-from base.models.person import Person
-from base.services.utils import call_api
-from frontoffice.settings.osis_sdk import program_management as program_management_sdk
 
-TYPE_BACHELIER = 'BACHELOR'
-
-
-class ProgrammeService:
-    @staticmethod
-    def rechercher(person: 'Person', annee: int, codes: List[str]) -> List['Programme']:
-        return _programme_api_call(person, "programmes_list", annee=annee, codes=codes)
-
-    @staticmethod
-    def est_bachelier(programme: 'Programme') -> bool:
-        return programme.type == TYPE_BACHELIER
-
-
-_programme_api_call = partial(
-    call_api,
-    program_management_sdk,
-    osis_program_management_sdk,
-    programme_api.ProgrammeApi
-)
+def get_intitule_programme(programme: 'Programme') -> str:
+    if programme.version:
+        return f"{programme.intitule_formation}[{programme.intitule}]"
+    return f"{programme.intitule_formation}"
