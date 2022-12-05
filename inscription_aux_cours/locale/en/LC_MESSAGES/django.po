@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-21 09:29+0100\n"
+"POT-Creation-Date: 2022-12-05 14:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,6 +43,9 @@ msgid ""
 msgstr ""
 
 msgid "First name"
+msgstr ""
+
+msgid "For a change in minors or options, please contact your faculty manager."
 msgstr ""
 
 msgid "Last name"
@@ -105,6 +108,11 @@ msgstr ""
 msgid "Summary courses enrollment"
 msgstr ""
 
+msgid ""
+"The following minors or options in which you are enrolled are no longer "
+"offered this academic year:"
+msgstr ""
+
 #, python-brace-format
 msgid ""
 "This minor has access conditions, please refer to the procedure to enroll: "
@@ -127,6 +135,9 @@ msgid "You are not enrolled to a minor or deepening."
 msgstr ""
 
 msgid "You are not enrolled to an option."
+msgstr ""
+
+msgid "You are not enrolled to any courses."
 msgstr ""
 
 #, python-format
