@@ -26,6 +26,11 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'inscription_aux_cours/css/print.css' %}" media="print">
+{% endblock %}
+
 {% block breadcrumb %}
     <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
     <li><a href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">{% trans 'My courses enrollment' %}</a></li>
@@ -38,7 +43,7 @@
         <h2>{% trans 'My courses enrollment' %}</h2>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default print">
         <div class="panel-body">
 
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
@@ -46,14 +51,14 @@
             <br>
 
             {% if programme_annuel.a_des_inscriptions %}
-                <div class="alert alert-info" style="display:inline-block;">
+                <div class="alert alert-info hide_print" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                     {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
                 </div>
 
                 {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
             {% else %}
-                <div class="alert alert-warning" style="display:inline-block;">
+                <div class="alert alert-warning hide_print" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                     {% trans "You are not enrolled to any courses." %}
                 </div>
@@ -71,21 +76,21 @@
 
             <br>
 
-            <div class="center">
+            <div class="center hide_print">
                 <a class="btn btn-default" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}
                 </a>
                 <a class="btn btn-default" href="{% get_lien_horaire_cours programme_annuel %}" target="_blank">
                     <i class="fa-solid fa-clock"></i> {% trans "View my courses schedule" %}
                 </a>
-                <a class="btn btn-default">
+                <button class="btn btn-default" onClick="window.print()">
                     <i class="fa-solid fa-print"></i> {% trans "Print my proposition of annual program" %}
-                </a>
+                </button>
             </div>
 
             <br>
 
-            <div class="center">
+            <div class="center hide_print">
                 <button type="submit" class="btn btn-primary">
                     <i class="fa-solid fa-floppy-disk"></i> {% trans 'Submit my proposition of annual program' %}
                 </button>
