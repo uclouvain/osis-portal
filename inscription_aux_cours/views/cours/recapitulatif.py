@@ -33,6 +33,7 @@ from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticu
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 
 from base.services.utils import ServiceException
+from base.templatetags.sort_extra import unaccent
 from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours import formatter
 from inscription_aux_cours.services.cours import CoursService
@@ -130,6 +131,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
                 cours=self._build_cours(mini_formation['cours'])
             ) for mini_formation in self.programme_annuel['mini_formations']
         ]
+        inscriptions_aux_mini_formations.sort(key=lambda contexte: unaccent(contexte.intitule))
         inscriptions = [inscriptions_tronc_commun] + inscriptions_aux_mini_formations \
             if inscriptions_tronc_commun.cours else inscriptions_aux_mini_formations
         return PropositionProgrammeAnnuel(
