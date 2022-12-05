@@ -31,6 +31,7 @@ The dependencies of OSIS-Portal are different from OSIS. That's why it deserves 
     $ cd osis-portal
     $ python3 -m venv venv
     $ source venv/bin/activate
+    (venv)$ python manage_submodules.py
     (venv)$ pip install -r requirements.txt
 
 Create a `.env` file based on `.env.example`:
