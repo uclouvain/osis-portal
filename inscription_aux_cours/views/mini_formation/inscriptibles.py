@@ -55,8 +55,6 @@ class MiniFormationsInscriptiblesView(LoginRequiredMixin, InscriptionAuxCoursVie
 
     @cached_property
     def mini_formations_inscrites_non_inscriptibles(self) -> List['MiniTraining']:
-        if not self.inscriptions:
-            return []
         codes_mini_formations_inscrites = {
             inscription.code_mini_formation
             for inscription in self.inscriptions
@@ -67,6 +65,9 @@ class MiniFormationsInscriptiblesView(LoginRequiredMixin, InscriptionAuxCoursVie
         }
         codes_mini_formations_inscrites_non_inscriptibles = codes_mini_formations_inscrites - \
             codes_mini_formations_inscriptibles
+
+        if not codes_mini_formations_inscrites_non_inscriptibles:
+            return []
         return MiniTrainingService().search(
             self.person,
             year=self.annee_academique,
