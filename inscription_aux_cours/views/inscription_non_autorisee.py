@@ -31,9 +31,9 @@ from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import Autoris
 from osis_program_management_sdk.model.programme import Programme
 
 from base.models.person import Person
+from inscription_aux_cours.business.programmes import recuperer_programme
 from inscription_aux_cours.services.autorisation import AutorisationService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
-from program_management.services.programme import ProgrammeService
 
 
 class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
@@ -55,7 +55,7 @@ class InscriptionNonAutoriseeView(LoginRequiredMixin, TemplateView):
 
     @cached_property
     def programme(self) -> 'Programme':
-        return ProgrammeService.rechercher(self.person, annee=self.annee_academique, codes=[self.code_programme])[0]
+        return recuperer_programme(self.person, self.annee_academique, self.code_programme)
 
     @cached_property
     def autorisation(self) -> 'AutoriseInscrireAuxCours':
