@@ -2,8 +2,25 @@ document.addEventListener('DOMContentLoaded', function () {
     addTriggerForFormsEnrollToCourse(getInscrireAuCoursUrl(), getCSRFToken());
     addTriggerForFormsUnenrollToCourse(getDesinscrireAuCoursUrl(), getCSRFToken());
     addLoaderElement();
+    alignCoursAJoutesTables();
 }, false);
 
+
+function alignCoursAJoutesTables() {
+    const tableCoursAjoutes = document.querySelectorAll("table.cours-ajoutes");
+    tableCoursAjoutes.forEach((table, key, parent) => {
+        const headerTableFormulaire = table.closest("div").previousElementSibling.querySelector("thead");
+        const headerTable = table.querySelector("thead");
+        alignCoursAjoutesTable(headerTable, headerTableFormulaire)
+    });
+}
+
+function alignCoursAjoutesTable(headerTableCoursAjoutes, headerTableFormulaire) {
+    headerTableCoursAjoutes.querySelector("th:nth-child(1)").style.width = getComputedStyle(headerTableFormulaire.querySelector("th:nth-child(1)")).width;
+    headerTableCoursAjoutes.querySelector("th:nth-child(2)").style.width = getComputedStyle(headerTableFormulaire.querySelector("th:nth-child(2)")).width;
+    headerTableCoursAjoutes.querySelector("th:last-child").style.width = getComputedStyle(headerTableFormulaire.querySelector("th:last-child")).width;
+
+}
 
 function addLoaderElement() {
     const forms = document.querySelectorAll(".formulaire-inscription-cours")
