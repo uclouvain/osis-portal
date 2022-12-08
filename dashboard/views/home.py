@@ -160,7 +160,9 @@ class Home(LoginRequiredMixin, TemplateView):
             {
                 'column': 'second',
                 'title': _('My courses enrollment'),
-                'url': reverse('inscription-aux-cours:selectionner-formation'),
+                'url': reverse(
+                    'inscription-aux-cours:selectionner-formation'
+                ) if 'inscription_aux_cours' in settings.INSTALLED_APPS else "#",
                 'icon': 'far fa-rectangle-list',
                 'description': _('Manage my annual programme proposal'),
                 'VPN': False,
