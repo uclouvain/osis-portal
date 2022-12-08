@@ -42,5 +42,6 @@ def fetch_json_attestation_statuses(message):
             if json_data:
                 attestation_statuses = json.loads(json_data.decode("utf-8"))
         except Exception as e:
-            logger.error('Error fetching student attestation statuses.\nmessage sent :  {}'.format(str(message)))
+            logger.error(f'Error fetching student attestation statuses.\nmessage sent :  {str(message)}')
+
     return attestation_statuses

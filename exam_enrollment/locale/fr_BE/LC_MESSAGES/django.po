@@ -99,17 +99,6 @@ msgstr "Merci de compléter OBLIGATOIREMENT le questionnaire ci-dessous"
 msgid "Register to exams or update my exam enrollments"
 msgstr "M'inscrire aux examens ou modifier mon inscription aux examens"
 
-msgid ""
-"The first-year bachelor student must obligatorily register for the January "
-"exam session all the learning units of the first annual block taught in the "
-"first quadrimester, including those giving rise to a partial test (Art. 83 "
-"of the RGEE)."
-msgstr ""
-"L’étudiant·e de première année de bachelier doit  obligatoirement inscrire à "
-"la session d’examens de janvier toutes les unités d’enseignement du premier "
-"bloc annuel dispensées au premier quadrimestre, en ce compris celles qui ne "
-"donnent lieu qu’à une épreuve partielle (Art. 83 du RGEE)."
-
 #, python-format
 msgid "The next registration period opens on %(next_exam_enrollment_date)s."
 msgstr "La prochaine période d'inscription s'ouvre le %(next_exam_enrollment_date)s."

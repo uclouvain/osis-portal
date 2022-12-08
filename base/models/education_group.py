@@ -38,7 +38,7 @@ class EducationGroup(SerializableModel):
     external_id = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return "{}".format(self.uuid)
+        return f"{self.uuid}"
 
     @property
     def most_recent_acronym(self):

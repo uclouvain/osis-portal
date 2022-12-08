@@ -28,7 +28,7 @@ from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from openpyxl import Workbook
 from openpyxl.styles import Color
-from openpyxl.styles import Style
+from openpyxl.styles import NamedStyle
 from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.utils import get_column_letter
 from openpyxl.writer.excel import save_virtual_workbook
@@ -50,11 +50,7 @@ FIRST_COL_PEPS = 'M'
 
 def get_xls(student_list, acronym, academic_year, learning_unit_type):
     xls = _make_xls_list(student_list, learning_unit_type)
-    filename = '{}_{}_{}.xlsx'.format(
-        _('student_list'),
-        acronym,
-        academic_year
-    )
+    filename = f"{_('student_list')}_{acronym}_{academic_year}.xlsx"
     response = HttpResponse(xls, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = f"attachment; filename={filename}"
     return response
@@ -259,9 +255,9 @@ def _set_peps_border(ws, last_row_number):
 
 
 def _update_border_for_first_peps_column(cell):
-    c = cell.style if cell.has_style else Style()
+    c = cell.style if cell.has_style else NamedStyle()
     c.border = BORDER_LEFT
-    cell.style = c
+    cell.border = c.border
 
 
 def _add_filters_on_headers(a_worksheet):

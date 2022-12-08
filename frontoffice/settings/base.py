@@ -71,7 +71,8 @@ INSTALLED_APPS = (
     'django_registration',
     'hijack',
     'hijack.contrib.admin',
-    'waffle'
+    'waffle',
+    'django_htmx',
 )
 
 # Tests settings
@@ -105,6 +106,7 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'waffle.middleware.WaffleMiddleware',
     'hijack.middleware.HijackUserMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 )
 
 # Logging config
@@ -283,6 +285,13 @@ OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
 OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
 OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
 OSIS_DISSERTATION_URL = os.environ.get('OSIS_DISSERTATION_URL', None)
+INSTITUTION_URL = os.environ.get('INSTITUTION_URL', "https://uclouvain.be/")
+COURSES_SCHEDULE_URL = os.environ.get(
+    'COURSES_SCHEDULE_URL',
+    "https://horaire.uclouvain.be/direct/index.jsp"
+    "?projectId=999&displayConfName=webEtudiant&showTree=false&showOptions=false&"
+    "login=etudiant&password=student&code={codes_cours}"
+)
 
 
 # Queues Definition
@@ -358,11 +367,13 @@ PERFORMANCE_CONFIG = {
 
 ATTESTATION_CONFIG = {
     'UPDATE_DELTA_HOURS_DEFAULT': int(os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72)),
-    'SERVER_TO_FETCH_URL': os.environ.get("ATTESTATION_API_URL", ''),
+    'SERVERS_TO_FETCH_URLS': os.environ.get("ATTESTATION_API_URL", 'localhost').split(),
     'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
 }
+
+
 
 # Continuing education settings
 ACCOUNT_ACTIVATION_DAYS = int(os.environ.get('IUFC_ACCOUNT_ACTIVATION_DAYS', 7))
@@ -459,6 +470,24 @@ OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get(
     "OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX", "ESB"
 )
 
+# INSCRIPTION-COURS-SDK-CONFIGURATION
+OSIS_INSCRIPTION_COURS_SDK_HOST = os.environ.get(
+    "OSIS_INSCRIPTION_COURS_SDK_HOST",
+    "http://127.0.0.1:8000/api/v1/inscription_aux_cours"
+)
+OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX = os.environ.get("OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX", "ESB")
+
+# PROGRAM-MANAGEMENT-SDK-CONFIGURATION
+OSIS_PROGRAM_MANAGEMENT_SDK_HOST = os.environ.get(
+    "OSIS_PROGRAM_MANAGEMENT_SDK_HOST",
+    "http://127.0.0.1:8000/api/v1/program_management"
+)
+OSIS_PROGRAM_MANAGEMENT_SDK_API_KEY_PREFIX = os.environ.get("OSIS_PROGRAM_MANAGEMENT_SDK_API_KEY_PREFIX", "ESB")
+
+# DISSERTATION-SDK-CONFIGURATION
+OSIS_DISSERTATION_SDK_HOST = os.environ.get("OSIS_DISSERTATION_SDK_HOST", "")
+OSIS_DISSERTATION_SDK_API_KEY_PREFIX = os.environ.get("OSIS_DISSERTATION_SDK_API_KEY_PREFIX", "Token")
+
 # BASE_API_TESTING
 MOCK_USER_ROLES_API_CALL = os.environ.get('MOCK_USER_ROLES_API_CALL', 'True').lower() == 'true'
 USER_ROLES_API_MOCKED_FUNCT = os.environ.get('USER_ROLES_API_MOCKED_FUNCT', 'base.views.api.get_user_roles')
@@ -469,6 +498,7 @@ ESB_AUTHORIZATION = os.environ.get('ESB_AUTHORIZATION', '')
 ESB_TIMEOUT = int(os.environ.get('ESB_TIMEOUT', '10'))
 ESB_ENCODING = os.environ.get('ESB_ENCODING', 'UTF-8')
 ESB_CONTENT_TYPE = os.environ.get('ESB_CONTENT_TYPE', 'application/json')
+ESB_IBAN_ENDPOINT = os.environ.get('ESB_IBAN_ENDPOINT', '')
 
 STUDENT_ID_DATA = {
     'PERSONAL_DATA_PATH': os.environ.get('STUDENT_PERSONAL_DATA_API_PATH', ''),
@@ -486,7 +516,7 @@ OSIS_ADMISSION_SDK_API_KEY_PREFIX = os.environ.get(
 )
 
 # OSIS-DOCUMENT-CONFIGURATION
-OSIS_DOCUMENT_BASE_URL = os.environ.get('OSIS_DOCUMENT_BASE_URL', '')
+OSIS_DOCUMENT_BASE_URL = os.environ.get('OSIS_DOCUMENT_BASE_URL', 'localhost/')
 OSIS_DOCUMENT_API_SHARED_SECRET = os.environ.get('OSIS_DOCUMENT_API_SHARED_SECRET', '')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

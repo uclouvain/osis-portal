@@ -51,7 +51,7 @@ class ExamEnrollmentRequest(models.Model):
     fetch_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}".format(self.student)
+        return f"{self.student}"
 
     class Meta:
         unique_together = ('student', 'offer_year_acronym',)

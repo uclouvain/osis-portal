@@ -32,10 +32,7 @@ register = template.Library()
 def _is_message_type(context, msg_type):
     request = context['request']
     msgs = messages.get_messages(request)
-    for m in msgs:
-        if msg_type in m.tags:
-            return True
-    return False
+    return any(msg_type in m.tags for m in msgs)
 
 
 @register.simple_tag(takes_context=True)
