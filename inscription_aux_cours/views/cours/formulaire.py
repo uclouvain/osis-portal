@@ -65,7 +65,9 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
 
     @cached_property
     def formulaire_inscriptions_cours(self):
-        return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
+        formulaire = FormulaireInscriptionService().recuperer(self.person, self.code_programme)
+        FormulaireInscriptionService().marquer_comme_lu(self.person, self.code_programme)
+        return formulaire
 
     @cached_property
     def formulaire_inscription_hors_programme(self) -> 'InscriptionHorsProgrammeForm':

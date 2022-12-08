@@ -39,6 +39,10 @@ class FormulaireInscriptionService:
     def recuperer(person: 'Person', code_programme: str):
         return _formulaire_api_call(person, "get_formulaire", code_programme=code_programme,)
 
+    @staticmethod
+    def marquer_comme_lu(person: 'Person', code_programme: str):
+        return _formulaire_api_call(person, "marquer_formulaire_inscription_comme_lu", code_programme=code_programme, )
+
 
 _formulaire_api_call = partial(
     call_api,
