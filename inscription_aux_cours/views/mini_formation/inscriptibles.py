@@ -34,6 +34,7 @@ from osis_inscription_cours_sdk.model.inscription_mini_formation import Inscript
 from osis_inscription_cours_sdk.model.liste_mini_formations import ListeMiniFormations
 
 from education_group.services.mini_training import MiniTrainingService
+from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.services.mini_formation import MiniFormationService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from program_management.services.programme import ProgrammeService
@@ -85,6 +86,8 @@ class MiniFormationsInscriptiblesView(LoginRequiredMixin, InscriptionAuxCoursVie
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        FormulaireInscriptionService().marquer_comme_lu(self.person, self.code_programme)
+
         return {
             **super().get_context_data(**kwargs),
             'intitule': self.liste_mini_formations_inscriptibles.intitule,
