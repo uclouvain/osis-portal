@@ -23,10 +23,8 @@
 #
 ##############################################################################
 from functools import partial
-from typing import Optional
 
 import osis_inscription_cours_sdk
-from django.http import Http404
 from osis_inscription_cours_sdk.api import formulaire_api
 
 from base.models.person import Person
@@ -42,6 +40,10 @@ class FormulaireInscriptionService:
     @staticmethod
     def marquer_comme_lu(person: 'Person', code_programme: str):
         return _formulaire_api_call(person, "marquer_formulaire_inscription_comme_lu", code_programme=code_programme, )
+
+    @staticmethod
+    def soumettre_proposition(person: 'Person', code_programme: str):
+        return _formulaire_api_call(person, "soumettre_proposition", code_programme=code_programme, )
 
 
 _formulaire_api_call = partial(
