@@ -42,7 +42,10 @@ urlpatterns = [
             ])),
             url(r'^hospitals/$', hospital.view_hospitals_list, name='hospitals_list'),
             url(r'^resume/$', resume.view_student_resume, name='student_resume'),
-            url(r'^place_evaluation/$', place_evaluation.view_place_evaluation, name='place_evaluation')
+            url(r'^place_evaluation/', include([
+                url(r'^$', place_evaluation.view_place_evaluations_list, name='place_evaluation_list'),
+                url(r'^(?P<period_name>[\w-]+)/$', place_evaluation.view_place_evaluation_form, name='place_evaluation')
+            ])),
         ])),
     ])),
 

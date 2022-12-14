@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-26 11:00+0200\n"
+"POT-Creation-Date: 2022-12-14 16:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -271,6 +271,9 @@ msgstr "Nouveau délégué"
 msgid "No"
 msgstr "Non"
 
+msgid "No evaluation items defined."
+msgstr "Pas de questions définies pour l'évaluation."
+
 msgid "Number of first choice"
 msgstr "Nombre de 1er choix"
 
@@ -385,6 +388,13 @@ msgstr "APDs ciblés"
 
 msgid "The activation failed"
 msgstr "L'activation a échoué"
+
+msgid ""
+"The place evaluation form is not available before end of internship period "
+"and will be available from "
+msgstr ""
+"Le formulaire d'évaluation du lieu de stage n'est pas accessible avant la "
+"fin de la période de stage et sera disponible à partir du "
 
 msgid "The requested scores sheet does not match your internship's allocations"
 msgstr ""

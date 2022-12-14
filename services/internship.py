@@ -195,3 +195,22 @@ class InternshipAPIService:
             )
         except ApiException as e:
             return e.body, e.status, e.headers
+
+    @classmethod
+    def get_person_affectations(cls, cohort, person):
+        return get_paginated_results(
+            InternshipAPIClient().person_affectations_cohort_person_uuid_get(
+                cohort=cohort.name,
+                person_uuid=str(person.uuid),
+                **utils.build_mandatory_auth_headers(person)
+            )
+        )
+
+    @classmethod
+    def get_evaluation_items(cls, cohort, person):
+        return get_paginated_results(
+            InternshipAPIClient().place_evaluation_items_cohort_get(
+                cohort=cohort.name,
+                **utils.build_mandatory_auth_headers(person)
+            )
+        )

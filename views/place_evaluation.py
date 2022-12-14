@@ -24,27 +24,40 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-import requests
-from django.conf import settings
+
 from django.contrib.auth.decorators import login_required, permission_required
 
 from base.views import layout
 from internship import models as mdl_internship
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
+from internship.services.internship import InternshipAPIService
 
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_not_in_cohort
-def view_place_evaluation(request, cohort_id):
+def view_place_evaluations_list(request, cohort_id):
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    affectations = InternshipAPIService.get_person_affectations(cohort=cohort, person=request.user.person)
 
-    # TODO: get items through service using SDK
+    return layout.render(request, "place_evaluation_list.html", {'cohort': cohort, 'affectations': affectations})
 
-    items = requests.get(
-        f"{settings.OSIS_INTERNSHIP_SDK_HOST}/place_evaluation_items/R6-2023/", headers={
-            'Authorization': f'Token {settings.OSIS_PORTAL_TOKEN}'
-        }
-    ).json()['results']
 
-    return layout.render(request, "place_evaluation.html", {'cohort': cohort, 'items': items})
+@login_required
+@permission_required('internship.can_access_internship', raise_exception=True)
+@redirect_if_not_in_cohort
+def view_place_evaluation_form(request, cohort_id, period_name):
+    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    affectations = InternshipAPIService.get_person_affectations(cohort=cohort, person=request.user.person)
+
+    evaluated_affectation = next(
+        affectation for affectation in affectations if affectation['period']['name'] == period_name
+    )
+
+    items = InternshipAPIService.get_evaluation_items(cohort=cohort, person=request.user.person)
+
+    return layout.render(request, "place_evaluation_form.html", {
+        'cohort': cohort,
+        'items': items,
+        'affectation': evaluated_affectation
+    })

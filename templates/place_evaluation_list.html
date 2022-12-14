@@ -1,6 +1,7 @@
 {% extends "dashboard_layout.html" %}
 {% load static %}
 {% load i18n %}
+{% load period %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -41,35 +42,39 @@
 
     <div class="panel panel-default">
         <div class="panel panel-heading">
-            <h3>HOSPITAL</h3>
-            <h4>Stage en INTERNHIP</h4>
-            <p>Maître de stage: INTERNSHIP MASTER</p>
+            {{ cohort.name }} - {{ request.user.person }}
         </div>
         <div class="panel panel-body">
-
-                <div class="row">
-                    <form method="post">
-                        {% csrf_token %}
-                        {% for item in items %}
-                            <div class="col-md-12"  style="margin-bottom: 15px;">
-                                <div class="form-group">
-                                    <label>{{ item.order }} - {{ item.statement }}</label>
-                                    {% if item.type == "OPEN" %}
-                                        <textarea class="form-control" name="{{ item.statement }}"></textarea>
-                                    {% elif item.type == "CHOICE" %}
-                                            {% for option in item.options %}
-                                            <div class="input-group">
-                                                <input type="radio" id="{{ item.statement }}-{{ option }}" name="{{ item.statement }}-option" value="{{ option }}"/>
-                                                <label for="{{ item.statement }}-{{ option }}">{{ option }}</label>
-                                            </div>
-                                            {% endfor %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </form>
-                </div>
-
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Specialty</th>
+                        <th>Hospital</th>
+                        <th class="text-center">Evaluation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for affectation in affectations %}
+                        <tr>
+                            <td>{{ affectation.period.name }}</td>
+                            <td>{{ affectation.speciality.name }}</td>
+                            <td>{{ affectation.organization.name }}</td>
+                            <td class="text-center">
+                                <a class="btn btn-primary"
+                                        {% if affectation.period|is_past %}
+                                            href="{% url 'place_evaluation' cohort_id=cohort.id period_name=affectation.period.name %}"
+                                        {% else %}
+                                            href="#" disabled
+                                        {% endif %}
+                                >
+                                    <span class="fa-solid fa-file-pen"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
