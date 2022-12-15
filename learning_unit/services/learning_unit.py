@@ -30,8 +30,10 @@ from typing import List
 import osis_learning_unit_sdk
 import urllib3
 from django.conf import settings
+from django.http import Http404
 from osis_learning_unit_sdk.api import learning_units_api
 from osis_learning_unit_sdk.model.effective_class import EffectiveClass
+from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 from osis_learning_unit_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
 
 from base.models.person import Person
@@ -44,6 +46,22 @@ LearningUnitTypeEnum = convert_api_enum(LearningUnitTypeEnum)
 
 
 class LearningUnitService:
+
+    @staticmethod
+    def search_learning_units(
+            person: Person,
+            acronym_like: str = None,
+            learning_unit_codes: List[str] = None,
+            year: int = None
+    ) -> List['LearningUnit']:
+        kwargs = {}
+        if acronym_like:
+            kwargs['acronym_like'] = acronym_like
+        if year:
+            kwargs['year'] = year
+        if learning_unit_codes:
+            kwargs['learning_unit_codes'] = ",".join(learning_unit_codes)
+        return _api_call(person, 'learningunits_list', **kwargs).get('results', [])
 
     @staticmethod
     def get_learning_units(learning_unit_codes: List[str], year: int, person: Person, **kwargs):
@@ -97,3 +115,16 @@ class LearningUnitService:
                 logger.error(e)
                 effective_classes = []
         return effective_classes
+
+
+def _api_call(person: Person, method_to_call: str, **kwargs):
+    configuration = learning_unit_sdk.build_configuration()
+    with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
+        api_instance = learning_units_api.LearningUnitsApi(api_client)
+        try:
+            class_method = getattr(api_instance, method_to_call)
+            result = class_method(**utils.build_mandatory_auth_headers(person), **kwargs)
+        except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError, Http404,) as e:
+            logger.error(e)
+            return None
+    return result

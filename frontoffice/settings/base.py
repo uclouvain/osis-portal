@@ -71,7 +71,8 @@ INSTALLED_APPS = (
     'django_registration',
     'hijack',
     'hijack.contrib.admin',
-    'waffle'
+    'waffle',
+    'django_htmx',
 )
 
 # Tests settings
@@ -105,6 +106,7 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'waffle.middleware.WaffleMiddleware',
     'hijack.middleware.HijackUserMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 )
 
 # Logging config
@@ -283,6 +285,13 @@ OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
 OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
 OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
 OSIS_DISSERTATION_URL = os.environ.get('OSIS_DISSERTATION_URL', None)
+INSTITUTION_URL = os.environ.get('INSTITUTION_URL', "https://uclouvain.be/")
+COURSES_SCHEDULE_URL = os.environ.get(
+    'COURSES_SCHEDULE_URL',
+    "https://horaire.uclouvain.be/direct/index.jsp"
+    "?projectId=999&displayConfName=webEtudiant&showTree=false&showOptions=false&"
+    "login=etudiant&password=student&code={codes_cours}"
+)
 
 
 # Queues Definition
@@ -460,6 +469,20 @@ OSIS_EXAM_ENROLLMENT_SDK_HOST = os.environ.get("OSIS_EXAM_ENROLLMENT_SDK_HOST", 
 OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get(
     "OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX", "ESB"
 )
+
+# INSCRIPTION-COURS-SDK-CONFIGURATION
+OSIS_INSCRIPTION_COURS_SDK_HOST = os.environ.get(
+    "OSIS_INSCRIPTION_COURS_SDK_HOST",
+    "http://127.0.0.1:8000/api/v1/inscription_aux_cours"
+)
+OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX = os.environ.get("OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX", "ESB")
+
+# PROGRAM-MANAGEMENT-SDK-CONFIGURATION
+OSIS_PROGRAM_MANAGEMENT_SDK_HOST = os.environ.get(
+    "OSIS_PROGRAM_MANAGEMENT_SDK_HOST",
+    "http://127.0.0.1:8000/api/v1/program_management"
+)
+OSIS_PROGRAM_MANAGEMENT_SDK_API_KEY_PREFIX = os.environ.get("OSIS_PROGRAM_MANAGEMENT_SDK_API_KEY_PREFIX", "ESB")
 
 # DISSERTATION-SDK-CONFIGURATION
 OSIS_DISSERTATION_SDK_HOST = os.environ.get("OSIS_DISSERTATION_SDK_HOST", "")

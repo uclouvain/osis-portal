@@ -68,6 +68,10 @@ if 'admission' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')),)
 if 'osis_notification' in settings.INSTALLED_APPS:
     urlpatterns = urlpatterns + (url(r'^osis_notification/', include('osis_notification.urls')),)
+if 'inscription_aux_cours' in settings.INSTALLED_APPS:
+    urlpatterns += (url(r'^inscription_aux_cours/', include('inscription_aux_cours.urls')),)
+if 'learning_unit' in settings.INSTALLED_APPS:
+    urlpatterns += (url(r'^learning_unit/', include('learning_unit.urls')),)
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'
