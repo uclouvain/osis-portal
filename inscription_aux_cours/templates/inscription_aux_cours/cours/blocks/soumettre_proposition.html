@@ -23,25 +23,13 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% if proposition_deja_soumise %}
-    <button class="btn btn-success" disabled>
-        <i class="fa-solid fa-check"></i>
-        Vous avez déjà soumis votre proposition de programme annuel
+<form id="form-soumettre-proposition-{{ programme.code }}" action="{% url 'inscription-aux-cours:soumettre-proposition' programme.code %}" method="post">
+    {% csrf_token %}
+    <button
+        type="submit"
+        class="btn btn-primary">
+        <i class="fa-solid fa-floppy-disk"></i> {% trans 'Submit my proposition of annual program' %}
+        <div class="d-inline-block loading"></div>
     </button>
-{% else %}
-    <form id="form-soumettre-proposition-{{ programme.code }}" method="post">
-        {% csrf_token %}
-        <button
-            class="btn btn-primary"
-            hx-include="#form-soumettre-proposition-{{ programme.code }}"
-            hx-target="#form-soumettre-proposition-{{ programme.code }}"
-            hx-trigger="click"
-            hx-swap="innerHTML"
-            hx-post="{% url 'inscription-aux-cours:soumettre-proposition' programme.code %}"
-            hx-indicator="#form-soumettre-proposition-{{ programme.code }}"
-        >
-            <i class="fa-solid fa-floppy-disk"></i> {% trans 'Submit my proposition of annual program' %}
-            <div class="d-inline-block loading"></div>
-        </button>
-    </form>
-{% endif %}
+</form>
+

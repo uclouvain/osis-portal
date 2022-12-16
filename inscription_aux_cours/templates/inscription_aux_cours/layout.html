@@ -43,3 +43,13 @@
         {% endblock %}
     </ol>
 {% endblock %}
+
+{% block content %}
+    {% block page_header %} {% endblock %}
+
+    <div id="template-messages-container">
+        {% include "template_messages.html" %}
+    </div>
+
+    {% block page_body %} {% endblock %}
+{% endblock %}

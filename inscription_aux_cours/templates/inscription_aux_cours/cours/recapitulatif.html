@@ -33,24 +33,22 @@
 {% endblock %}
 
 
-{% block content %}
+{% block page_header %}
     <div class="page-header">
         <h2>{% trans 'My courses enrollment' %}</h2>
     </div>
+{% endblock %}
 
+{% block page_body %}
     <div class="panel panel-default">
         <div class="panel-body">
-
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
-
             <br>
-
             {% if programme_annuel.a_des_inscriptions %}
                 <div class="alert alert-info" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                     {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
                 </div>
-
                 {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
             {% else %}
                 <div class="alert alert-warning" style="display:inline-block;">
@@ -58,19 +56,15 @@
                     {% trans "You are not enrolled to any courses." %}
                 </div>
             {% endif %}
-
             <br>
-
-            <div >
+            <div>
                 <h5><strong>{% trans "Special requests" %}</strong></h5>
                 {% if formulaire.configuration.descriptif_demandes_particulieres %}
                     <p>{{ formulaire.configuration.descriptif_demandes_particulieres }}</p>
                 {% endif %}
                 <textarea class="form-control unresizable" disabled>{{ demande_particuliere.demande }}</textarea>
             </div>
-
             <br>
-
             <div class="center">
                 <a class="btn btn-default" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}
@@ -82,13 +76,10 @@
                     <i class="fa-solid fa-print"></i> {% trans "Print my proposition of annual program" %}
                 </a>
             </div>
-
             <br>
-
             <div class="center">
                 {% include "inscription_aux_cours/cours/blocks/soumettre_proposition.html" %}
             </div>
         </div>
     </div>
-
 {% endblock %}

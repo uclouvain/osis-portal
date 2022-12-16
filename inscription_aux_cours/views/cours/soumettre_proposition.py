@@ -22,15 +22,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 
 from base.services.utils import ServiceException
 from continuing_education.views.common import display_error_messages, display_success_messages
-from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
+from inscription_aux_cours.services.proposition_programme import PropositionProgrammeService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 
 
@@ -43,21 +44,14 @@ class SoumettrePropositionView(LoginRequiredMixin, InscriptionAuxCoursViewMixin,
 
     def post(self, request, *args, **kwargs):
         try:
-            pass
-            #self.soumettre_proposition()
+            self.soumettre_proposition()
+            display_success_messages(request, _("Proposition of annual program successfully submitted"))
         except ServiceException as e:
             display_error_messages(request, e.messages)
-        display_success_messages(request, _("Proposition of annual program successfully submitted"))
-        return super().get(request, *args, **kwargs)
+        return redirect('inscription-aux-cours:recapitulatif', code_programme=self.code_programme)
 
     def soumettre_proposition(self):
-        FormulaireInscriptionService().soumettre_proposition(
+        PropositionProgrammeService().soumettre(
             self.person,
             code_programme=self.code_programme,
         )
-
-    def get_context_data(self, **kwargs):
-        return {
-            **super().get_context_data(**kwargs),
-            'proposition_deja_soumise': True,
-        }

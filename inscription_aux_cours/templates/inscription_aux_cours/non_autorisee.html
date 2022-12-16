@@ -32,36 +32,28 @@
 {% endblock %}
 
 
-{% block content %}
+{% block page_header %}
     <div class="page-header">
         <h2>{% trans 'My courses enrollment' %}</h2>
     </div>
+{% endblock %}
 
+
+{% block page_body %}
     <div class="panel panel-default">
         <div class="panel-body">
-
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
-
             <br>
-
             <div class="alert alert-warning" style="display:inline-block;">
                 <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                 {{ raison }}
             </div>
-
             <br>
-
             <div class="center">
                 <a href="{% url 'inscription-aux-cours:selectionner-formation' %}" class="btn btn-primary">
                     {% trans "Return to offer choice" %}
                 </a>
             </div>
-
-
-
-
-
         </div>
     </div>
-
 {% endblock %}
