@@ -32,24 +32,22 @@
     <li class="active">{% trans 'My courses enrollment' %}</li>
 {% endblock %}
 
-
-{% block content %}
+{% block page_header %}
     <div class="page-header">
         <h2>{% trans 'My courses enrollment' %}</h2>
     </div>
+{% endblock %}
 
+{% block page_body %}
     <div
-            class="panel panel-default panel-formulaires-inscription-cours"
-            data-url-inscrire-cours="{% url 'inscription-aux-cours:inscrire-cours' programme.code %}"
-            data-url-desinscrire-cours="{% url 'inscription-aux-cours:desinscrire-cours' programme.code %}"
-            data-csrf-token="{{ csrf_token }}"
+        class="panel panel-default panel-formulaires-inscription-cours"
+        data-url-inscrire-cours="{% url 'inscription-aux-cours:inscrire-cours' programme.code %}"
+        data-url-desinscrire-cours="{% url 'inscription-aux-cours:desinscrire-cours' programme.code %}"
+        data-csrf-token="{{ csrf_token }}"
     >
         <div class="panel-body">
-
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
-
             <br>
-
             {% include "template_messages.html" %}
 
             <div class="row" id="formulaire-tronc-commun">
@@ -119,10 +117,8 @@
 
             </div>
             {% endif %}
-
             <br>
             <hr>
-
             <div>
                 <form
                         method="post"
@@ -144,7 +140,6 @@
                         {% bootstrap_field form.demande_particuliere label=False form_group_class="col-md-12"%}
                     </div>
                 </form>
-
                 {% if a_des_mini_formations_inscriptibles %}
                     <br>
                     <div class="center">
@@ -153,9 +148,7 @@
                         </a>
                     </div>
                 {% endif %}
-
                 <br>
-
                 <div class="center">
                     <a href="{% url 'inscription-aux-cours:recapitulatif' programme.code %}" class="btn btn-primary">
                         <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to enrollments summary' %}
@@ -165,5 +158,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}

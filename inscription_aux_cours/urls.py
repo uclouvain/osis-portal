@@ -30,6 +30,7 @@ from inscription_aux_cours.views.cours.desinscrire import DesinscrireAUnCoursVie
 from inscription_aux_cours.views.cours.formulaire import FormulaireInscriptionAuxCoursView
 from inscription_aux_cours.views.cours.inscrire import InscrireAUnCoursView
 from inscription_aux_cours.views.cours.inscrire_hors_programme import InscrireAUnCoursHorsProgrammeView
+from inscription_aux_cours.views.cours.soumettre_proposition import SoumettrePropositionView
 from inscription_aux_cours.views.inscription_non_autorisee import InscriptionNonAutoriseeView
 from inscription_aux_cours.views.mini_formation.desinscrire import DesinscrireAUneMiniFormationView
 from inscription_aux_cours.views.mini_formation.inscriptibles import MiniFormationsInscriptiblesView
@@ -49,6 +50,7 @@ urlpatterns = [
         path('inscrire_hors_programme/', InscrireAUnCoursHorsProgrammeView.as_view(), name=InscrireAUnCoursHorsProgrammeView.name),
         path('desinscrire/', DesinscrireAUnCoursView.as_view(), name=DesinscrireAUnCoursView.name),
         path('demande_particuliere/', DemandeParticuliereView.as_view(), name=DemandeParticuliereView.name),
+        path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),
         path(
             'mineures_options/',
             include([
