@@ -59,12 +59,6 @@ class TestListExamEnrollments(TestCase):
         self.mocked_attendance_mark_remote_calendar.return_value = self.remote_calendar
         self.addCleanup(self.attendance_mark_remote_calendar_patcher.stop)
 
-        self.education_group_service_patcher = mock.patch(
-            "education_group.services.education_group.EducationGroupService",
-        )
-        self.mocked_education_group_service = self.education_group_service_patcher.start()
-        self.addCleanup(self.education_group_service_patcher.stop)
-
         self.exam_enrollment_service_patcher = mock.patch(
             'exam_enrollment.services.exam_enrollment.ExamEnrollmentService'
         )

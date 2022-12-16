@@ -1,0 +1,18 @@
+{% if erreurs %}
+<i class="fa-solid fa-circle-exclamation fa-danger" title="{{ erreurs|join:"\n" }}"></i>
+{% else %}
+<form id=form-inscription-{{ code_mini_formation }}-{{ cours.code }}" method="post">
+    {% csrf_token %}
+    <input
+            id="checkbox-{{ code_mini_formation }}-{{ cours.code }}"
+            type="checkbox"
+            name="checkbox_cours"
+            hx-include="#form-inscription-{{ code_mini_formation }}-{{ cours.code }}"
+            hx-target="#form-inscription-{{ code_mini_formation }}-{{ cours.code }}"
+            hx-trigger="click"
+            hx-swap="innerHTML"
+            hx-vals='{"code_mini_formation": "{{ code_mini_formation }}", "code_cours": "{{ cours.code }}"}'
+            hx-post="{% url 'inscription-aux-cours:inscrire-cours' programme.code %}"
+    >
+</form>
+{% endif %}
