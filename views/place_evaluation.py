@@ -24,8 +24,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from base.views import layout
 from internship import models as mdl_internship
@@ -49,15 +52,38 @@ def view_place_evaluations_list(request, cohort_id):
 def view_place_evaluation_form(request, cohort_id, period_name):
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     affectations = InternshipAPIService.get_person_affectations(cohort=cohort, person=request.user.person)
-
     evaluated_affectation = next(
         affectation for affectation in affectations if affectation['period']['name'] == period_name
     )
 
+    evaluation = InternshipAPIService.get_evaluation(person=request.user.person, affectation=evaluated_affectation)
     items = InternshipAPIService.get_evaluation_items(cohort=cohort, person=request.user.person)
+
+    if request.POST:
+        InternshipAPIService.update_evaluation(
+            person=request.user.person,
+            affectation=evaluated_affectation,
+            evaluation={
+                item.uuid: {
+                    "statement": item.statement,
+                    "response": request.POST.get(item.uuid)
+                } for item in items
+            }
+        )
+        messages.add_message(
+            request=request,
+            level=messages.SUCCESS,
+            message=_("Successfully updated place evaluation for {} - {} - {}").format(
+                evaluated_affectation.period.name,
+                evaluated_affectation.speciality.name,
+                evaluated_affectation.organization.name,
+            )
+        )
+        return redirect(reverse('place_evaluation_list', kwargs={'cohort_id': cohort_id}))
 
     return layout.render(request, "place_evaluation_form.html", {
         'cohort': cohort,
         'items': items,
-        'affectation': evaluated_affectation
+        'affectation': evaluated_affectation,
+        'evaluation': evaluation,
     })

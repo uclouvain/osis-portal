@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 16:38+0100\n"
+"POT-Creation-Date: 2022-12-19 12:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -373,6 +373,9 @@ msgstr "Encodez vos choix de stages"
 
 msgid "Succesfull logout"
 msgstr "Déconnexion réalisée avec succès"
+
+msgid "Successfully updated place evaluation for {} - {} - {}"
+msgstr "Evaluation du lieu de stage mise à jour avec succès pour {} - {} - {}"
 
 msgid "Suggested learning methods"
 msgstr "Méthodes d'apprentissage suggérées"
