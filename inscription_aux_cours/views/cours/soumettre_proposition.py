@@ -45,7 +45,11 @@ class SoumettrePropositionView(LoginRequiredMixin, InscriptionAuxCoursViewMixin,
     def post(self, request, *args, **kwargs):
         try:
             self.soumettre_proposition()
-            display_success_messages(request, _("Proposition of annual program successfully submitted"))
+            display_success_messages(
+                request,
+                _("Your proposition of annual program successfully submitted. "
+                  "A confirmation email is sent to the address %(email)s") % {'email': self.request.user.person.email},
+            )
         except ServiceException as e:
             display_error_messages(request, e.messages)
         return redirect('inscription-aux-cours:recapitulatif', code_programme=self.code_programme)
