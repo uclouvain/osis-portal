@@ -27,12 +27,19 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block style %}
+<style>
+    .evaluation-row td{
+        vertical-align: middle !important;
+    }
+</style>
+{% endblock %}
+
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
     <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
     <li class="active">{% trans 'Hospitals' %}</li>
 {% endblock %}
-
 
 {% block content %}
     <div class="page-header">
@@ -46,21 +53,29 @@
             {{ cohort.name }} - {{ request.user.person }}
         </div>
         <div class="panel panel-body">
+
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Period</th>
-                        <th>Specialty</th>
-                        <th>Hospital</th>
-                        <th class="text-center">Evaluation</th>
+                        <th class="visible-xs">{% trans 'Internship' %}</th>
+                        <th class="hidden-xs">{% trans 'Period' %}</th>
+                        <th class="hidden-xs">{% trans 'Specialty' %}</th>
+                        <th class="hidden-xs">{% trans 'Hospital' %}</th>
+                        <th class="text-center">{% trans 'Evaluation' %}</th>
+                        <th class="text-center">{% trans 'Completed' %}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for affectation in affectations %}
-                        <tr>
-                            <td>{{ affectation.period.name }}</td>
-                            <td>{{ affectation.speciality.name }}</td>
-                            <td>{{ affectation.organization.name }}</td>
+                        <tr class="evaluation-row">
+                            <td class="visible-xs">
+                                <div style="font-weight: bolder; margin-bottom: 10px;">{{ affectation.period.name }}</div>
+                                <div style="margin-bottom: 10px;">{{ affectation.speciality.name }}</div>
+                                <div style="margin-bottom: 10px;">{{ affectation.organization.name }}</div>
+                            </td>
+                            <td class="hidden-xs">{{ affectation.period.name }}</td>
+                            <td class="hidden-xs">{{ affectation.speciality.name }}</td>
+                            <td class="hidden-xs">{{ affectation.organization.name }}</td>
                             <td class="text-center">
                                 <a class="btn btn-primary"
                                         {% if affectation.period|is_past %}
@@ -71,6 +86,13 @@
                                 >
                                     <span class="fa-solid fa-file-pen"></span>
                                 </a>
+                            </td>
+                            <td class="text-center">
+                                {% if False %}
+                                    <span class="text-success fa-solid fa-circle-check"></span>
+                                {% else %}
+                                    <span class="text-danger fa-solid fa-circle-xmark"></span>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

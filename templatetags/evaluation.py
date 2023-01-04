@@ -36,4 +36,4 @@ def is_selected_option(evaluation, item, option):
 @register.simple_tag
 def get_input(evaluation, item):
     response = next((v['response'] for k, v in evaluation['evaluation'].items() if k == item['uuid']), None)
-    return response
+    return response or ''
