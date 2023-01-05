@@ -42,7 +42,6 @@ from internship.services.internship import InternshipAPIService
 def view_place_evaluations_list(request, cohort_id):
     cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
     affectations = InternshipAPIService.get_person_affectations(cohort=cohort, person=request.user.person)
-
     return layout.render(request, "place_evaluation_list.html", {'cohort': cohort, 'affectations': affectations})
 
 

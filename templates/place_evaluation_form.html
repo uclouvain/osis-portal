@@ -28,13 +28,21 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block style %}
+<style>
+.form-group.required .statement-label:after {
+  content:" *";
+  color:red;
+}
+</style>
+{% endblock %}
+
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
     <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
     <li><a href="{% url 'place_evaluation_list' cohort_id=cohort.id %}">{% trans 'Internship place evaluation' %}</a></li>
     <li class="active">{{ affectation.period.name }} - {{ affectation.speciality.name }} - {{ affectation.organization.name }}</li>
 {% endblock %}
-
 
 {% block content %}
     <div class="page-header">
@@ -59,18 +67,18 @@
                         {% csrf_token %}
                         {% for item in items %}
                             <div class="col-md-12"  style="margin-bottom: 15px;">
-                                <div class="form-group">
-                                    <label for="{{ item.uuid }}">{{ item.statement }}</label>
+                                <div class="form-group {% if item.required %} required {% endif %}">
+                                    <label class="statement-label" for="{{ item.uuid }}">{{ item.statement }}</label>
                                     {% if item.type == "OPEN" %}
-                                        <textarea class="form-control" name="{{ item.uuid }}" id="{{ item.uuid }}">{% get_input evaluation item %}</textarea>
+                                        <textarea {% if item.required %} required {% endif %} class="form-control" name="{{ item.uuid }}" id="{{ item.uuid }}">{% get_input evaluation item %}</textarea>
                                     {% elif item.type == "NUMBER" %}
-                                        <input type="number" class="form-control" name="{{ item.uuid }}" id="{{ item.uuid }}" value="{% get_input evaluation item %}"/>
+                                        <input {% if item.required %} required {% endif %} type="number" class="form-control" name="{{ item.uuid }}" id="{{ item.uuid }}" value="{% get_input evaluation item %}"/>
                                     {% elif item.type == "CHOICE" %}
                                             {% for option in item.options %}
                                                 {% is_selected_option evaluation item option as selected %}
                                             <div class="radio">
                                                 <label for="{{ item.uuid }}-{{ option }}">
-                                                    <input type="radio" id="{{ item.uuid }}-{{ option }}" name="{{ item.uuid }}" value="{{ option }}"
+                                                    <input {% if item.required %} required {% endif %} type="radio" id="{{ item.uuid }}-{{ option }}" name="{{ item.uuid }}" value="{{ option }}"
                                                     {% if selected %} checked {% endif %}/>
                                                     {{ option }}
                                                 </label>

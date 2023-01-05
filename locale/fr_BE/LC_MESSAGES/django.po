@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-19 12:14+0100\n"
+"POT-Creation-Date: 2023-01-05 13:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,6 +101,9 @@ msgstr "Communiquer au sens large"
 msgid "Complement patient record"
 msgstr "Compléter le dossier patient"
 
+msgid "Completed"
+msgstr "Complétée"
+
 msgid "Conduct clinical examination"
 msgstr "Réaliser l’examen clinique"
 
@@ -148,6 +151,9 @@ msgstr "Activités Professionnelles délégables (APD)"
 
 msgid "Establish a diagnosis"
 msgstr "Établir un diagnostic de travail"
+
+msgid "Evaluation"
+msgstr "Évaluation"
 
 msgid "Evaluation conducted in attendance of the internship student ?"
 msgstr "L'évaluation a-t-elle été réalisée en présence du stagiaire ?"
@@ -355,6 +361,9 @@ msgstr ""
 
 msgid "Specialist"
 msgstr "Spécialiste"
+
+msgid "Specialty"
+msgstr "Spécialité"
 
 msgid "Student"
 msgstr "Étudiant"

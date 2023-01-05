@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-19 12:14+0100\n"
+"POT-Creation-Date: 2023-01-05 13:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,6 +94,9 @@ msgstr ""
 msgid "Complement patient record"
 msgstr ""
 
+msgid "Completed"
+msgstr ""
+
 msgid "Conduct clinical examination"
 msgstr ""
 
@@ -140,6 +143,9 @@ msgid "Entrustable Professional Activity (EPA)"
 msgstr ""
 
 msgid "Establish a diagnosis"
+msgstr ""
+
+msgid "Evaluation"
 msgstr ""
 
 msgid "Evaluation conducted in attendance of the internship student ?"
@@ -338,6 +344,9 @@ msgid ""
 msgstr ""
 
 msgid "Specialist"
+msgstr ""
+
+msgid "Specialty"
 msgstr ""
 
 msgid "Student"
