@@ -51,6 +51,23 @@
 
     {% include "template_messages.html" %}
 
+    <div class="alert alert-info" role="alert" style="margin-bottom: 0;">
+        <table>
+            <tr>
+                <td style="padding-right:12px;"><i class="fa fa-circle-info" style="font-size:180%" aria-hidden="true"></i></td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                {% trans 'Individual internship places evaluations will not be tranferred to the internship master but will be aggregated with other evaluations to guarantee data anonymization.' %}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <div class="panel panel-default">
         <div class="panel panel-heading">
             <h3>{{ affectation.organization.name }}</h3>
