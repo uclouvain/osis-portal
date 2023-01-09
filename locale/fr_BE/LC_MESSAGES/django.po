@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 16:53+0200\n"
+"POT-Creation-Date: 2023-01-06 16:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgid "Address"
 msgstr "Adresse"
 
 msgid "Affectations are available from"
-msgstr "Les affections sont disponibles depuis"
+msgstr "Les affectations sont disponibles depuis le"
 
 msgid "All periods"
 msgstr "Toutes les périodes"
@@ -42,7 +42,8 @@ msgid ""
 "administration (STAC) for further assistance."
 msgstr ""
 "Une erreur est survenue à la création du délégué de stage, veuillez "
-"contacter l'administration des stages (STAC) pour de plus amples informations."
+"contacter l'administration des stages (STAC) pour de plus amples "
+"informations."
 
 msgid "An error occurred during score update"
 msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
@@ -100,6 +101,9 @@ msgstr "Communiquer au sens large"
 msgid "Complement patient record"
 msgstr "Compléter le dossier patient"
 
+msgid "Completed"
+msgstr "Complétée"
+
 msgid "Conduct clinical examination"
 msgstr "Réaliser l’examen clinique"
 
@@ -122,8 +126,7 @@ msgid "Delete"
 msgstr "Supprimer"
 
 msgid "Do you also want to validate the encoding?"
-msgstr ""
-"Souhaitez-vous également valider l'encodage ?"
+msgstr "Souhaitez-vous également valider l'encodage ?"
 
 msgid "Doctor"
 msgstr "Docteur"
@@ -148,6 +151,9 @@ msgstr "Activités Professionnelles délégables (APD)"
 
 msgid "Establish a diagnosis"
 msgstr "Établir un diagnostic de travail"
+
+msgid "Evaluation"
+msgstr "Évaluation"
 
 msgid "Evaluation conducted in attendance of the internship student ?"
 msgstr "L'évaluation a-t-elle été réalisée en présence du stagiaire ?"
@@ -189,6 +195,12 @@ msgstr "Hôpitaux"
 msgid "Improvement areas"
 msgstr "Points à améliorer"
 
+msgid ""
+"Individual internship places evaluations will not be tranferred to the "
+"internship master but will be aggregated with other evaluations to guarantee "
+"data anonymization."
+msgstr "Les évaluations individuelles ne seront pas transmises au maître de stage mais seront envoyées avec les autres évaluations sous format agrégé afin de garantir l'anonymisation des données."
+
 msgid "Intermediary evaluation"
 msgstr "Evaluation intermédiaire"
 
@@ -212,6 +224,9 @@ msgstr "Délégué de stage {} créé avec succès"
 
 msgid "Internship master"
 msgstr "Maître de stage"
+
+msgid "Internship place evaluation"
+msgstr "Evaluation des lieux de stages"
 
 msgid "Internship score encoding"
 msgstr "Encodage des évaluations de stage"
@@ -267,6 +282,9 @@ msgstr "Nouveau délégué"
 
 msgid "No"
 msgstr "Non"
+
+msgid "No evaluation items defined."
+msgstr "Pas de questions définies pour l'évaluation."
 
 msgid "Number of first choice"
 msgstr "Nombre de 1er choix"
@@ -350,6 +368,9 @@ msgstr ""
 msgid "Specialist"
 msgstr "Spécialiste"
 
+msgid "Specialty"
+msgstr "Spécialité"
+
 msgid "Student"
 msgstr "Étudiant"
 
@@ -368,6 +389,9 @@ msgstr "Encodez vos choix de stages"
 msgid "Succesfull logout"
 msgstr "Déconnexion réalisée avec succès"
 
+msgid "Successfully updated place evaluation for {} - {} - {}"
+msgstr "Evaluation du lieu de stage mise à jour avec succès pour {} - {} - {}"
+
 msgid "Suggested learning methods"
 msgstr "Méthodes d'apprentissage suggérées"
 
@@ -382,6 +406,13 @@ msgstr "APDs ciblés"
 
 msgid "The activation failed"
 msgstr "L'activation a échoué"
+
+msgid ""
+"The place evaluation form is not available before end of internship period "
+"and will be available from "
+msgstr ""
+"Le formulaire d'évaluation du lieu de stage n'est pas accessible avant la "
+"fin de la période de stage et sera disponible à partir du "
 
 msgid "The requested scores sheet does not match your internship's allocations"
 msgstr ""

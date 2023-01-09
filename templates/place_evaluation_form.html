@@ -1,0 +1,136 @@
+{% extends "dashboard_layout.html" %}
+{% load static %}
+{% load i18n %}
+{% load period %}
+{% load evaluation %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block style %}
+<style>
+.form-group.required .statement-label:after {
+  content:" *";
+  color:red;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
+    <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
+    <li><a href="{% url 'place_evaluation_list' cohort_id=cohort.id %}">{% trans 'Internship place evaluation' %}</a></li>
+    <li class="active">{{ affectation.period.name }} - {{ affectation.speciality.name }} - {{ affectation.organization.name }}</li>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h2>{% trans 'Internship place evaluation' %}</h2>
+    </div>
+
+    {% include "template_messages.html" %}
+
+    <div class="alert alert-info" role="alert" style="margin-bottom: 0;">
+        <table>
+            <tr>
+                <td style="padding-right:12px;"><i class="fa fa-circle-info" style="font-size:180%" aria-hidden="true"></i></td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                {% trans 'Individual internship places evaluations will not be tranferred to the internship master but will be aggregated with other evaluations to guarantee data anonymization.' %}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel panel-heading">
+            <h3>{{ affectation.organization.name }}</h3>
+            <h4>{{ affectation.speciality.name }}</h4>
+            <p>{% trans "Internship master" %}: {{ affectation.master|default_if_none:'-'}}</p>
+        </div>
+
+        <div class="panel panel-body">
+
+                {% if affectation.period|is_past %}
+
+                <div class="row">
+                    <form method="post" action="#">
+                        {% csrf_token %}
+                        {% for item in items %}
+                            <div class="col-md-12"  style="margin-bottom: 15px;">
+                                <div class="form-group {% if item.required %} required {% endif %}">
+                                    <label class="statement-label" for="{{ item.uuid }}">{{ item.statement }}</label>
+                                    {% if item.type == "OPEN" %}
+                                        <textarea {% if item.required %} required {% endif %} class="form-control" name="{{ item.uuid }}" id="{{ item.uuid }}">{% get_input evaluation item %}</textarea>
+                                    {% elif item.type == "NUMBER" %}
+                                        <input {% if item.required %} required {% endif %} type="number" class="form-control" name="{{ item.uuid }}" id="{{ item.uuid }}" value="{% get_input evaluation item %}"/>
+                                    {% elif item.type == "CHOICE" %}
+                                            {% for option in item.options %}
+                                                {% is_selected_option evaluation item option as selected %}
+                                            <div class="radio">
+                                                <label for="{{ item.uuid }}-{{ option }}">
+                                                    <input {% if item.required %} required {% endif %} type="radio" id="{{ item.uuid }}-{{ option }}" name="{{ item.uuid }}" value="{{ option }}"
+                                                    {% if selected %} checked {% endif %}/>
+                                                    {{ option }}
+                                                </label>
+                                            </div>
+                                            {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="col-md-12">
+                                {% trans "No evaluation items defined." %}
+                            </div>
+                        {% endfor %}
+                        {% if items %}
+                            <div class="col-md-12">
+                                <input type="submit" class="btn btn-primary"/>
+                                <a class="btn btn-default" href="{% url 'place_evaluation_list' cohort_id=cohort.id %}">
+                                    {% trans 'Cancel' %}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+
+                {% else %}
+
+                    <div class="row">
+                        <div class="col-md-12">
+                        {% trans "The place evaluation form is not available before end of internship period and will be available from " %}
+                        {{ affectation.period.date_end|str_to_iso_date }}
+                        </div>
+                    </div>
+
+                {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

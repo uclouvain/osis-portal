@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-21 16:06+0200\n"
+"POT-Creation-Date: 2023-01-06 16:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,9 @@ msgstr ""
 msgid ""
 "An error occurred during delegate creation, please contact internships "
 "administration (STAC) for further assistance."
+msgstr ""
+
+msgid "An error occurred during score update"
 msgstr ""
 
 msgid "Appreciate medical emergency"
@@ -91,6 +94,9 @@ msgstr ""
 msgid "Complement patient record"
 msgstr ""
 
+msgid "Completed"
+msgstr ""
+
 msgid "Conduct clinical examination"
 msgstr ""
 
@@ -112,7 +118,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-msgid "Do you want to validate the encoding? You can always do it later"
+msgid "Do you also want to validate the encoding?"
 msgstr ""
 
 msgid "Doctor"
@@ -137,6 +143,9 @@ msgid "Entrustable Professional Activity (EPA)"
 msgstr ""
 
 msgid "Establish a diagnosis"
+msgstr ""
+
+msgid "Evaluation"
 msgstr ""
 
 msgid "Evaluation conducted in attendance of the internship student ?"
@@ -178,6 +187,12 @@ msgstr ""
 msgid "Improvement areas"
 msgstr ""
 
+msgid ""
+"Individual internship places evaluations will not be tranferred to the "
+"internship master but will be aggregated with other evaluations to guarantee "
+"data anonymization."
+msgstr ""
+
 msgid "Intermediary evaluation"
 msgstr ""
 
@@ -200,6 +215,9 @@ msgid "Internship delegate {} created with success"
 msgstr ""
 
 msgid "Internship master"
+msgstr ""
+
+msgid "Internship place evaluation"
 msgstr ""
 
 msgid "Internship score encoding"
@@ -253,6 +271,9 @@ msgid "New delegate"
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "No evaluation items defined."
 msgstr ""
 
 msgid "Number of first choice"
@@ -331,6 +352,9 @@ msgstr ""
 msgid "Specialist"
 msgstr ""
 
+msgid "Specialty"
+msgstr ""
+
 msgid "Student"
 msgstr ""
 
@@ -349,6 +373,9 @@ msgstr ""
 msgid "Succesfull logout"
 msgstr ""
 
+msgid "Successfully updated place evaluation for {} - {} - {}"
+msgstr ""
+
 msgid "Suggested learning methods"
 msgstr ""
 
@@ -362,6 +389,11 @@ msgid "Targeted EPA"
 msgstr ""
 
 msgid "The activation failed"
+msgstr ""
+
+msgid ""
+"The place evaluation form is not available before end of internship period "
+"and will be available from "
 msgstr ""
 
 msgid "The requested scores sheet does not match your internship's allocations"
