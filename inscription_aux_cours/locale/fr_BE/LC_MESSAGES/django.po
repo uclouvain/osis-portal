@@ -1,0 +1,165 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-12-05 14:10+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Academic year"
+msgstr "Année académique"
+
+msgid "Acronym"
+msgstr "Sigle"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Add a course that is not in the offer"
+msgstr "Ajouter un cours qui n'est pas repris dans le programme ci-dessus"
+
+msgid "Added courses"
+msgstr "Cours ajoutés"
+
+msgid "Continue to courses enrollment"
+msgstr "Poursuivre vers l'inscription aux cours"
+
+msgid "Credits"
+msgstr "Crédits"
+
+msgid ""
+"Define in which context you want to enroll the course and search by code "
+"(example: LCHIM1111)."
+msgstr ""
+"Préciser dans quel contexte vous souhaitez ajouter ce cours et rechercher "
+"par code (exemple: LCHIM1111)."
+
+msgid "First name"
+msgstr "Prénom"
+
+msgid "For a change in minors or options, please contact your faculty manager."
+msgstr "Pour un changement de mineures ou d'options, veuillez contacter votre gestionnaire facultaire."
+
+msgid "Last name"
+msgstr "Nom"
+
+msgid "Learning Unit Year"
+msgstr "Unité d'enseignement"
+
+msgid "List of minors or options to which you are enrolled"
+msgstr "Liste des mineures et options auxquelles vous êtes inscrit.e"
+
+msgid "Modify my enrollments"
+msgstr "Modifier mes inscriptions"
+
+msgid "Modify my minors and options enrollments"
+msgstr "Modifier mon inscription aux mineures et options"
+
+msgid "My courses enrollment"
+msgstr "Mon inscription aux cours"
+
+msgid "My minors or options enrollment"
+msgstr "Mon inscription aux mineures et options"
+
+msgid "Offer"
+msgstr "Formation"
+
+msgid "Offer choice"
+msgstr "Choix de la formation"
+
+msgid "Print my proposition of annual program"
+msgstr "Imprimer ma proposition de programme annuel"
+
+msgid "Program"
+msgstr "Formation"
+
+msgid "Registration id"
+msgstr "Noma"
+
+msgid "Return to offer choice"
+msgstr "Retourner au choix de la formation"
+
+msgid "Save and continue to courses enrollment"
+msgstr "Enregistrer et poursuivre vers l'inscription aux cours"
+
+msgid "Save and continue to enrollments summary"
+msgstr "Enregistrer et poursuivre vers le récapitulatif des inscriptions"
+
+msgid "Search by code (example: LCHIM1111)"
+msgstr "Rechercher par code (exemple: LCHIM1111)"
+
+msgid "Select an offer for which you want to do courses enrollment."
+msgstr ""
+"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux cours."
+
+msgid "Special requests"
+msgstr "Demandes particulières éventuelles"
+
+msgid "Submit my proposition of annual program"
+msgstr "Soumettre ma proposition de programme annuel"
+
+msgid "Summary courses enrollment"
+msgstr "Récapitulatif d'inscription aux cours"
+
+msgid ""
+"The following minors or options in which you are enrolled are no longer "
+"offered this academic year:"
+msgstr "Les mineures ou options suivantes auxquelles vous êtes inscrit.e ne sont plus proposées cette année académique:"
+
+#, python-brace-format
+msgid ""
+"This minor has access conditions, please refer to the procedure to enroll: "
+"{lien_condition_acces}"
+msgstr ""
+"Cette mineure a des conditions d'accès, veuillez consulter la procédure à "
+"suivre pour vous y inscrire: {lien_condition_acces}"
+
+msgid "Title"
+msgstr "Intitulé"
+
+msgid "Total credits"
+msgstr "Nombre total de crédits"
+
+msgid "View my courses schedule"
+msgstr "Visualiser l'horaire de mes cours"
+
+msgid "Year"
+msgstr "Année"
+
+msgid "You are not enrolled to a minor or deepening."
+msgstr ""
+"Vous n'êtes pas encore inscrit.e à une mineure ou un approfondissement."
+
+msgid "You are not enrolled to an option."
+msgstr "Vous n'êtes pas encore inscrit.e à une option."
+
+msgid "You are not enrolled to any courses."
+msgstr "Vous n'êtes inscrit à aucun cours."
+
+#, python-format
+msgid ""
+"You are not enrolled to any program for the academic year "
+"%(annee_academique)s."
+msgstr ""
+"Vous n'êtes inscrit.e à aucune formation pour l'année académique "
+"%(annee_academique)s."
+
+msgid ""
+"Your enrollments are saved but you can continue modifying it until you "
+"didin't submit them."
+msgstr ""
+"Vos inscriptions sont enregistrées mais vous pouvez les modifier tant que "
+"vous ne les avez pas soumises."
+
+msgid "credits"
+msgstr "crédits"

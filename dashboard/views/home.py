@@ -138,7 +138,7 @@ class Home(LoginRequiredMixin, TemplateView):
 
         student_tiles = [
             {
-                'column': 'personal',
+                'column': 'first',
                 'title': _('My personal data'),
                 'url': reverse('student_id_data_home'),
                 'icon': 'far fa-id-card',
@@ -148,7 +148,7 @@ class Home(LoginRequiredMixin, TemplateView):
                 'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
-                'column': 'personal',
+                'column': 'first',
                 'title': _('My attestations'),
                 'url': reverse('attestation_home'),
                 'icon': 'far fa-file-pdf',
@@ -158,7 +158,19 @@ class Home(LoginRequiredMixin, TemplateView):
                 'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
-                'column': 'exams',
+                'column': 'second',
+                'title': _('My courses enrollment'),
+                'url': reverse(
+                    'inscription-aux-cours:selectionner-formation'
+                ) if 'inscription_aux_cours' in settings.INSTALLED_APPS else "#",
+                'icon': 'far fa-rectangle-list',
+                'description': _('Manage my annual programme proposal'),
+                'VPN': False,
+                'app': 'inscription_aux_cours',
+                'has_perm': self.request.user.has_perm('base.is_student')
+            },
+            {
+                'column': 'second',
                 'title': _('Annual program'),
                 'url': reverse('performance_home'),
                 'icon': 'fa fa-chart-line',
@@ -168,7 +180,7 @@ class Home(LoginRequiredMixin, TemplateView):
                 'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
-                'column': 'exams',
+                'column': 'third',
                 'title': _('Exams enrollment'),
                 'url': reverse('exam_enrollment_offer_choice'),
                 'icon': 'fa fa-book',
@@ -178,7 +190,7 @@ class Home(LoginRequiredMixin, TemplateView):
                 'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
-                'column': 'exams',
+                'column': 'third',
                 'title': _('My attendance marks'),
                 'url': reverse('attendance-mark-select-offer'),
                 'icon': 'fa fa-user-slash',
@@ -188,7 +200,7 @@ class Home(LoginRequiredMixin, TemplateView):
                 'has_perm': self.request.user.has_perm('base.is_student')
             },
             {
-                'column': 'submodules',
+                'column': 'third',
                 'title': _('Internships'),
                 'url': reverse('internship'),
                 'icon': 'fa fa-user-md',
