@@ -23,6 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import re
+
+from unidecode import unidecode
+
+SPECIAL_CHARACTERS_PATTERN = r"[-'\s]"
+SPECIAL_CHARACTERS_REGEX = re.compile(SPECIAL_CHARACTERS_PATTERN)
+
+
+def unaccent(s: str) -> str:
+    string_without_special_characters = re.sub(SPECIAL_CHARACTERS_REGEX, "", s)
+    lower_cased_character = str.lower(string_without_special_characters)
+    return unidecode(lower_cased_character)
 
 
 def is_string_not_null_empty(string):

@@ -33,7 +33,7 @@ from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticu
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 
 from base.services.utils import ServiceException
-from base.templatetags.sort_extra import unaccent
+from base.utils.string_utils import unaccent
 from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours import formatter
 from inscription_aux_cours.services.cours import CoursService
