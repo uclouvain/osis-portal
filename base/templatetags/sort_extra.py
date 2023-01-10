@@ -22,22 +22,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import re
 
 from django import template
-from unidecode import unidecode
+
+from base.utils.string_utils import unaccent
 
 register = template.Library()
-
-
-SPECIAL_CHARACTERS_PATTERN = r"[-'\s]"
-SPECIAL_CHARACTERS_REGEX = re.compile(SPECIAL_CHARACTERS_PATTERN)
-
-
-def unaccent(s: str) -> str:
-    string_without_special_characters = re.sub(SPECIAL_CHARACTERS_REGEX, "", s)
-    lower_cased_character = str.lower(string_without_special_characters)
-    return unidecode(lower_cased_character)
 
 
 @register.filter(is_safe=False)
