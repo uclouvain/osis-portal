@@ -78,7 +78,7 @@
                             <td class="hidden-xs">{{ affectation.organization.name }}</td>
                             <td class="text-center">
                                 <a class="btn btn-primary"
-                                        {% if affectation.period|is_past %}
+                                        {% if affectation.period|is_past and affectation.period.place_evaluation_active %}
                                             href="{% url 'place_evaluation' cohort_id=cohort.id period_name=affectation.period.name %}"
                                         {% else %}
                                             href="#" disabled
