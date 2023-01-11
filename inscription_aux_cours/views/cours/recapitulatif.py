@@ -22,10 +22,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from decimal import Decimal
 from typing import List, Optional
 
-import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -36,44 +34,13 @@ from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
 from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours import formatter
+from inscription_aux_cours.data.proposition_programme_annuel import Inscription, InscriptionsParContexte, \
+    PropositionProgrammeAnnuel
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
-
-
-@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
-class Inscription:
-    code: str
-    intitule: str
-    credits: Decimal
-
-
-@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
-class InscriptionsParContexte:
-    intitule: str
-    cours: List[Inscription]
-
-
-@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
-class PropositionProgrammeAnnuel:
-    inscriptions_par_contexte: List['InscriptionsParContexte']
-
-    @property
-    def total_credits(self) -> 'Decimal':
-        return sum([
-            Decimal(cours.credits)
-            for contexte in self.inscriptions_par_contexte
-            for cours in contexte.cours
-            if cours.credits
-        ])
-
-    @property
-    def a_des_inscriptions(self) -> bool:
-        return any(
-            [inscription for contexte in self.inscriptions_par_contexte for inscription in contexte.cours]
-        )
 
 
 class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):

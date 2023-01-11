@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,26 +22,40 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.views.generic import TemplateView
+from decimal import Decimal
+from typing import List
 
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+import attr
 
 
-class InscriptionNonAutoriseeView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
-    permission_required = "base.is_student"
-    name = 'non-autorisee'
-    template_name = "inscription_aux_cours/non_autorisee.html"
+@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
+class Inscription:
+    code: str
+    intitule: str
+    credits: Decimal
 
-    def dispatch(self, request, *args, **kwargs):
-        if self.autorisation.autorise:
-            return redirect(reverse('inscription-aux-cours:selectionner-formation'))
-        return super(TemplateView, self).dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        return {
-            **super().get_context_data(**kwargs),
-            "raison": self.autorisation.msg,
-        }
+@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
+class InscriptionsParContexte:
+    intitule: str
+    cours: List[Inscription]
+
+
+@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
+class PropositionProgrammeAnnuel:
+    inscriptions_par_contexte: List['InscriptionsParContexte']
+
+    @property
+    def total_credits(self) -> 'Decimal':
+        return sum([
+            Decimal(cours.credits)
+            for contexte in self.inscriptions_par_contexte
+            for cours in contexte.cours
+            if cours.credits
+        ])
+
+    @property
+    def a_des_inscriptions(self) -> bool:
+        return any(
+            [inscription for contexte in self.inscriptions_par_contexte for inscription in contexte.cours]
+        )
