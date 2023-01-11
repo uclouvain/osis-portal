@@ -144,7 +144,7 @@ msgid "You are not enrolled to an option."
 msgstr "Vous n'êtes pas encore inscrit.e à une option."
 
 msgid "You are not enrolled to any courses."
-msgstr "Vous n'êtes inscrit à aucun cours."
+msgstr "Vous n'êtes inscrit.e à aucun cours."
 
 #, python-format
 msgid ""

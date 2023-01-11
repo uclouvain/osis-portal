@@ -54,7 +54,7 @@ function addTriggerForFormsUnenrollToCourse(postUrl, csrfToken) {
 function addTriggerOnForm(formElement, postUrl, csrfToken) {
     const codeCours = formElement.dataset.codeCours;
     const codeMiniFormation = formElement.dataset.codeMiniFormation;
-    const target = `#form-inscription-${codeMiniFormation}-${ codeCours }`
+    const target = `#div-inscription-${codeMiniFormation}-${ codeCours }`
 
     triggerHtmxPostOnClick(
         formElement,
