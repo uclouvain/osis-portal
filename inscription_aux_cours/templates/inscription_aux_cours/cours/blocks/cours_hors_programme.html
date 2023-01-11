@@ -38,22 +38,28 @@
             <tr id="row-{{ inscription_hors_programme.code_cours }}">
                 <td>{{ inscription_hors_programme.code_cours }} - {{ inscription_hors_programme.intitule_cours }}</td>
                 <td>({{ inscription_hors_programme.credits|floatformat }} {% trans 'credits' %})</td>
-                <td>
-                    <form method="post" id="formulaire-desincription-hors-programme-{{ inscription_hors_programme.code_cours }}">
-                        {% csrf_token %}
-                        <input
-                                id="checkbox-{{ cours.code }}"
-                                type="checkbox"
-                                name="checkbox_cours"
-                                hx-include="#formulaire-desincription-hors-programme-{{ inscription_hors_programme.code_cours }}"
-                                hx-target="#row-{{ inscription_hors_programme.code_cours }}"
-                                hx-trigger="click"
-                                hx-swap="delete"
-                                hx-vals='{"code_mini_formation": "{{ inscription_hors_programme.code_mini_formation }}", "code_cours": "{{ inscription_hors_programme.code_cours }}"}'
-                                hx-post="{% url 'inscription-aux-cours:desinscrire-cours' programme.code %}"
-                                checked
-                        >
-                    </form>
+                <td style="width: 140px">
+                    <div class="col-md-9 col-md-offset-3">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <form method="post" id="formulaire-desincription-hors-programme-{{ inscription_hors_programme.code_cours }}">
+                                    {% csrf_token %}
+                                    <input
+                                            id="checkbox-{{ cours.code }}"
+                                            type="checkbox"
+                                            name="checkbox_cours"
+                                            hx-include="#formulaire-desincription-hors-programme-{{ inscription_hors_programme.code_cours }}"
+                                            hx-target="#row-{{ inscription_hors_programme.code_cours }}"
+                                            hx-trigger="click"
+                                            hx-swap="delete"
+                                            hx-vals='{"code_mini_formation": "{{ inscription_hors_programme.code_mini_formation }}", "code_cours": "{{ inscription_hors_programme.code_cours }}"}'
+                                            hx-post="{% url 'inscription-aux-cours:desinscrire-cours' programme.code %}"
+                                            checked
+                                    >
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
             {% endfor %}
