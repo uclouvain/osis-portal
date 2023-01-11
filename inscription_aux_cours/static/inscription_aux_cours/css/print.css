@@ -1,0 +1,11 @@
+body {
+    visibility: hidden;
+}
+
+.print {
+    visibility: visible;
+}
+
+.hide_print {
+    visibility: hidden;
+}
