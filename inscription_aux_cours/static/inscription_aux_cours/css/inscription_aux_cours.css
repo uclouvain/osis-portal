@@ -5,14 +5,12 @@
     box-shadow: inset 0 -2px 0 #000000;
 }
 
-.intitule-cours{
-    width: 100%;
-}
 
-.intitule-cours span{
+.intitule-ue span{
     width: inherit;
     display: inline-block;
 }
+
 
 /* reposition autocomplete selected content */
 .select2-container--default .select2-selection--single .select2-selection__rendered {
