@@ -27,6 +27,11 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'inscription_aux_cours/css/formulaire.css' %}">
+{% endblock %}
+
 {% block breadcrumb %}
     <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
     <li class="active">{% trans 'My courses enrollment' %}</li>
