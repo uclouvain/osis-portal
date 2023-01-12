@@ -38,11 +38,13 @@
 {% endblock %}
 
 
-{% block content %}
+{% block page_header %}
     <div class="page-header">
         <h2>{% trans 'My courses enrollment' %}</h2>
     </div>
+{% endblock %}
 
+{% block page_body %}
     <div class="panel panel-default print">
         <div class="panel-body">
 
@@ -66,7 +68,7 @@
 
             <br>
 
-            <div >
+            <div>
                 <h5><strong>{% trans "Special requests" %}</strong></h5>
                 {% if formulaire.configuration.descriptif_demandes_particulieres %}
                     <p>{{ formulaire.configuration.descriptif_demandes_particulieres }}</p>
@@ -89,11 +91,8 @@
             </div>
 
             <br>
-
             <div class="center hide_print">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
-                </button>
+                {% include "inscription_aux_cours/cours/blocks/soumettre_proposition.html" %}
             </div>
 
         </div>
