@@ -1,7 +1,4 @@
-{% extends "inscription_aux_cours/layout.html" %}
-{% load static %}
 {% load i18n %}
-
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -26,34 +23,13 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block breadcrumb %}
-    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li class="active">{% trans 'My courses enrollment' %}</li>
-{% endblock %}
+<form id="form-soumettre-proposition-{{ programme.code }}" action="{% url 'inscription-aux-cours:soumettre-proposition' programme.code %}" method="post">
+    {% csrf_token %}
+    <button
+        type="submit"
+        class="btn btn-primary">
+        <i class="fa-solid fa-floppy-disk"></i> {% trans 'Submit my proposition of annual program' %}
+        <div class="d-inline-block loading"></div>
+    </button>
+</form>
 
-
-{% block page_header %}
-    <div class="page-header">
-        <h2>{% trans 'My courses enrollment' %}</h2>
-    </div>
-{% endblock %}
-
-
-{% block page_body %}
-    <div class="panel panel-default">
-        <div class="panel-body">
-            {% include "inscription_aux_cours/blocks/header_formation.html" %}
-            <br>
-            <div class="alert alert-warning" style="display:inline-block;">
-                <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                {{ raison }}
-            </div>
-            <br>
-            <div class="center">
-                <a href="{% url 'inscription-aux-cours:selectionner-formation' %}" class="btn btn-primary">
-                    {% trans "Return to offer choice" %}
-                </a>
-            </div>
-        </div>
-    </div>
-{% endblock %}

@@ -25,26 +25,26 @@
 from functools import partial
 
 import osis_inscription_cours_sdk
-from osis_inscription_cours_sdk.api import formulaire_api
+from osis_inscription_cours_sdk.api import proposition_programme_api
 
 from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
 
 
-class FormulaireInscriptionService:
+class PropositionProgrammeService:
     @staticmethod
-    def recuperer(person: 'Person', code_programme: str):
-        return _formulaire_api_call(person, "get_formulaire", code_programme=code_programme,)
+    def soumettre(person: 'Person', code_programme: str):
+        return _proposition_programme_api_call(
+            person,
+            "soumettre_proposition_programme",
+            code_programme=code_programme,
+        )
 
-    @staticmethod
-    def marquer_comme_lu(person: 'Person', code_programme: str):
-        return _formulaire_api_call(person, "marquer_formulaire_inscription_comme_lu", code_programme=code_programme, )
 
-
-_formulaire_api_call = partial(
+_proposition_programme_api_call = partial(
     call_api,
     inscription_aux_cours_sdk,
     osis_inscription_cours_sdk,
-    formulaire_api.FormulaireApi
+    proposition_programme_api.PropositionProgrammeApi
 )
