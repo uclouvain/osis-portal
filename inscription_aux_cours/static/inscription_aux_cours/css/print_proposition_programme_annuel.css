@@ -11,6 +11,15 @@
         display: none;
     }
 
+    div.devorange {
+        display: none;
+    }
+
+    div.qagreen {
+        display: none;
+    }
+
+
     ol {
         display: none;
     }
