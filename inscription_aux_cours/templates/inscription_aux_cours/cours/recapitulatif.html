@@ -28,7 +28,7 @@
 
 {% block style %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'inscription_aux_cours/css/print.css' %}" media="print">
+    <link rel="stylesheet" href="{% static 'inscription_aux_cours/css/print_proposition_programme_annuel.css' %}" media="print">
 {% endblock %}
 
 {% block breadcrumb %}
@@ -73,7 +73,7 @@
                 {% if formulaire.configuration.descriptif_demandes_particulieres %}
                     <p>{{ formulaire.configuration.descriptif_demandes_particulieres }}</p>
                 {% endif %}
-                <textarea class="form-control unresizable" disabled>{{ demande_particuliere.demande }}</textarea>
+                <div class="well">{{ demande_particuliere.demande|linebreaks }}</div>
             </div>
 
             <br>
