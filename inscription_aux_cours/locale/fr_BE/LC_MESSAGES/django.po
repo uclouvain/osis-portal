@@ -168,5 +168,11 @@ msgstr ""
 "Vos inscriptions sont enregistrées mais vous pouvez les modifier tant que "
 "vous ne les avez pas soumises."
 
+msgid ""
+"Your proposition of annual program successfully submitted. A confirmation "
+"email is sent to the address %(email)s"
+msgstr "Votre proposition de programme annuel a été soumise avec succès. "
+"Un mail de confirmation est envoyé à l'adresse %(email)s"
+
 msgid "credits"
 msgstr "crédits"

@@ -59,7 +59,7 @@ textarea.unresizable {
     display: none;
 }
 
-.htmx-request > .loading {
+.htmx-request  .loading {
     width: 2rem;
     height: 2rem;
     border: 3px solid #f3f3f3;

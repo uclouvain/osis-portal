@@ -154,5 +154,11 @@ msgid ""
 "didin't submit them."
 msgstr ""
 
+#, python-format
+msgid ""
+"Your proposition of annual program successfully submitted. A confirmation "
+"email is sent to the address %(email)s"
+msgstr ""
+
 msgid "credits"
 msgstr ""

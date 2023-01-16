@@ -32,16 +32,15 @@
 {% endblock %}
 
 
-{% block content %}
+{% block page_header %}
     {% include "inscription_aux_cours/blocks/page_header.html" %}
+{% endblock %}
 
+{% block page_body %}
     <div class="panel panel-default">
         <div class="panel-body">
-
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
-
             <br>
-
             <p>
                 <strong>{% trans "List of minors or options to which you are enrolled" %}</strong>
                 <ul>
@@ -52,24 +51,18 @@
                     {% endfor %}
                 </ul>
             </p>
-
             <br>
-
             <div class="center">
                 <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default">
                     {% trans "Modify my minors and options enrollments" %}
                 </a>
             </div>
-
             <br>
-
             <div class="center">
                 <a class="btn btn-primary" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans 'Continue to courses enrollment' %}
                 </a>
             </div>
-
         </div>
     </div>
-
 {% endblock %}

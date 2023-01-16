@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,29 +22,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from functools import partial
+import json
 
-import osis_inscription_cours_sdk
-from osis_inscription_cours_sdk.api import formulaire_api
+from django import template
 
-from base.models.person import Person
-from base.services.utils import call_api
-from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
+register = template.Library()
 
 
-class FormulaireInscriptionService:
-    @staticmethod
-    def recuperer(person: 'Person', code_programme: str):
-        return _formulaire_api_call(person, "get_formulaire", code_programme=code_programme,)
-
-    @staticmethod
-    def marquer_comme_lu(person: 'Person', code_programme: str):
-        return _formulaire_api_call(person, "marquer_formulaire_inscription_comme_lu", code_programme=code_programme, )
-
-
-_formulaire_api_call = partial(
-    call_api,
-    inscription_aux_cours_sdk,
-    osis_inscription_cours_sdk,
-    formulaire_api.FormulaireApi
-)
+@register.filter()
+def has_reduced_150_dp(student_results: str) -> bool:
+    student_results_json = json.loads(student_results)
+    try:
+        return student_results_json['monAnnee']['monOffre']['article150DP']
+    except KeyError:
+        return False

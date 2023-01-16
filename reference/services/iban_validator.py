@@ -24,9 +24,10 @@
 ##############################################################################
 import logging
 
+import mock
 import requests
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from localflavor.generic.validators import IBANValidator
 from requests import RequestException
 
@@ -67,17 +68,20 @@ class IBANValidatorService:
             elif not response.json()['valid']:
                 raise IBANValidatorException(message=response.json()['messages'][0])
         except RequestException as e:
-            logger.error("[Validate IBAN] An error occurred during request to ESB")
+            logger.error(f"[Validate IBAN] An error occurred during request to ESB : {e}")
             raise IBANValidatorRequestException from e
         except Exception as e:
-            logger.error("[Validate IBAN] An error occurred during validation")
+            logger.error(f"[Validate IBAN] An error occurred during validation : {e}")
             raise IBANValidatorException from e
 
     @staticmethod
     def fake_validator(iban: str):
         if iban.upper() in {'BE87 0014 3185 5594', 'FR76 3000 1007 9412 3456 7890 185'}:
             return HttpResponseNotFound()
-        return JsonResponse({'valid': True})
+        mock_ = mock.Mock()
+        mock_.json.return_value = {'valid': True}
+        mock_.status_code = HttpResponse.status_code
+        return mock_
 
 
 class IBANValidatorException(Exception):
