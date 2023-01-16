@@ -47,12 +47,9 @@
         {% endfor %}
         {% endif %}
     {% endfor %}
-    </tbody>
-
-    <tfoot>
         <tr class="ligne-total-credits">
             <th colspan="2">{% trans "Total credits" %}</th>
             <th headers="colonne-credits">{{ programme_annuel.total_credits.normalize }}</th>
         </tr>
-    </tfoot>
+    </tbody>
 </table>
