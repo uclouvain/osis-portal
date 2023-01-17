@@ -30,6 +30,7 @@ from urllib.parse import urlparse
 from osis_internship_sdk import ApiException, ApiClient
 from osis_internship_sdk.api import internship_api
 from osis_internship_sdk.model.organization_get import OrganizationGet
+from osis_internship_sdk.model.place_evaluation_get import PlaceEvaluationGet
 
 from frontoffice.settings.osis_sdk import internship as internship_sdk, utils
 from internship.models.enums.role_choice import ChoiceRole
@@ -195,3 +196,39 @@ class InternshipAPIService:
             )
         except ApiException as e:
             return e.body, e.status, e.headers
+
+    @classmethod
+    def get_person_affectations(cls, cohort, person):
+        return get_paginated_results(
+            InternshipAPIClient().person_affectations_cohort_person_uuid_get(
+                cohort=cohort.name,
+                person_uuid=str(person.uuid),
+                **utils.build_mandatory_auth_headers(person)
+            )
+        )
+
+    @classmethod
+    def get_evaluation_items(cls, cohort, person):
+        return get_paginated_results(
+            InternshipAPIClient().place_evaluation_items_cohort_get(
+                cohort=cohort.name,
+                **utils.build_mandatory_auth_headers(person)
+            )
+        )
+
+    @classmethod
+    def get_evaluation(cls, person, affectation):
+        return InternshipAPIClient().place_evaluation_affectation_uuid_get(
+            affectation_uuid=affectation.uuid,
+            **utils.build_mandatory_auth_headers(person)
+        )
+
+    @classmethod
+    def update_evaluation(cls, person, affectation, evaluation):
+        return InternshipAPIClient().place_evaluation_affectation_uuid_put(
+            affectation_uuid=affectation.uuid,
+            place_evaluation_get=PlaceEvaluationGet(
+                evaluation=evaluation,
+            ),
+            **utils.build_mandatory_auth_headers(person)
+        )
