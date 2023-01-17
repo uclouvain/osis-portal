@@ -52,7 +52,7 @@ class PropositionProgrammeAnnuel:
             for contexte in self.inscriptions_par_contexte
             for cours in contexte.cours
             if cours.credits
-        ])
+        ], Decimal(0))
 
     @property
     def a_des_inscriptions(self) -> bool:

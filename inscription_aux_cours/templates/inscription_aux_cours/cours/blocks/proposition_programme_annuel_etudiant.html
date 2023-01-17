@@ -42,7 +42,7 @@
             <tr>
                 <td headers="colonne-code">{{ inscription.code }}</td>
                 <td headers="colonne-intitule">{{ inscription.intitule }}</td>
-                <td headers="colonne-credits">{{ inscription.credits|floatformat|default_if_none:'-' }}</td>
+                <td headers="colonne-credits">{{ inscription.credits|floatformat|default:'-' }}</td>
             </tr>
         {% endfor %}
         {% endif %}
