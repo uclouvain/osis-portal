@@ -90,7 +90,7 @@ class MockAPI(InternshipApi):
         return {'count': 1, 'results': [affectation], 'next': 'next_url', 'previous': 'previous_url'}
 
     @classmethod
-    def students_affectations_uuid_get(*args, **kwargs):
+    def students_affectations_affectation_uuid_get(*args, **kwargs):
         return StudentAffectationGet(
             student=Student(uuid=str(uuid.uuid4()), last_name='', first_name=''),
             period=PeriodGet(uuid=str(uuid.uuid4()), name='P1'),
