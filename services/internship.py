@@ -129,7 +129,7 @@ class InternshipAPIService:
 
     @classmethod
     def get_affectation(cls, person, affectation_uuid):
-        return InternshipAPIClient().students_affectations_uuid_get(
+        return InternshipAPIClient().students_affectations_affectation_uuid_get(
             uuid=affectation_uuid, **utils.build_mandatory_auth_headers(person)
         )
 
