@@ -86,16 +86,19 @@ def new_delegate(request, specialty_uuid, organization_uuid):
                     # TODO : remove when migrate to osis
                     _add_existing_user_to_internship_masters_group(person)
                     messages.add_message(
-                        request, SUCCESS, _('Internship delegate {} created with success'.format(
+                        request, SUCCESS, _('Internship delegate {} created with success').format(
                             master.person.last_name
-                        ))
+                        )
                     )
                 internship_ref = _get_internship_reference(allocation)
                 return redirect(reverse('internship_manage_delegates') + "?internship={}".format(internship_ref))
-        except InternshipServiceException:
+        except InternshipServiceException as e:
             messages.add_message(request, ERROR, _(
-                'An error occurred during delegate creation, please contact internships administration (STAC)'
+                'An error occurred during delegate creation, '
+                'please contact internships administration (STAC) for further assistance.'
             ))
+            if e.reason:
+                messages.add_message(request, ERROR, e.reason)
     return redirect(reverse('internship_manage_delegates'))
 
 

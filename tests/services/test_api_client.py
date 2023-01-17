@@ -28,6 +28,9 @@ import uuid
 
 from django.test import TestCase, override_settings
 from osis_internship_sdk.api.internship_api import InternshipApi
+from osis_internship_sdk.model.person_affectation_get import PersonAffectationGet
+from osis_internship_sdk.model.place_evaluation_get import PlaceEvaluationGet
+from osis_internship_sdk.model.place_evaluation_item_get import PlaceEvaluationItemGet
 from osis_internship_sdk.model.score_list_get import ScoreListGet
 from osis_internship_sdk.model.student import Student
 from osis_internship_sdk.models import MasterGet, AllocationGet, PeriodGet, SpecialtyGet, OrganizationGet, \
@@ -56,10 +59,11 @@ class MockAPI(InternshipApi):
 
     @classmethod
     def masters_uuid_allocations_get(*args, **kwargs):
+        parent_specialty = SpecialtyGet(uuid=str(uuid.uuid4()), acronym='PAR', parent=None)
         return {'count': 1, 'results': [AllocationGet(
             uuid=str(uuid.uuid4()),
             organization=OrganizationGet(uuid=str(uuid.uuid4()), reference=''),
-            specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym=''),
+            specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=parent_specialty),
             role=ChoiceRole.MASTER.name,
         )]}
 
@@ -69,7 +73,7 @@ class MockAPI(InternshipApi):
 
     @classmethod
     def specialties_uuid_get(*args, **kwargs):
-        return SpecialtyGet(uuid=str(uuid.uuid4()), cohort=CohortGet(uuid=str(uuid.uuid4())), acronym='')
+        return SpecialtyGet(uuid=str(uuid.uuid4()), cohort=CohortGet(uuid=str(uuid.uuid4())), acronym='', parent=None)
 
     @classmethod
     def organizations_uuid_get(*args, **kwargs):
@@ -132,6 +136,32 @@ class MockAPI(InternshipApi):
         return {'count': 1, 'results': [AllocationGet(
             uuid=str(uuid.uuid4()),
             organization=OrganizationGet(uuid=str(uuid.uuid4()), reference=''),
-            specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym=''),
+            specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=None),
             role=ChoiceRole.MASTER.name,
         )]}
+
+    @classmethod
+    def person_affectations_cohort_person_uuid_get(*args, **kwargs):
+        return {'count': 1, 'results': [PersonAffectationGet(
+            uuid=str(uuid.uuid4()),
+            organization=OrganizationGet(uuid=str(uuid.uuid4()), reference='', name=''),
+            speciality=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=None, name=''),
+            period=PeriodGet(uuid=str(uuid.uuid4()), name='P1', date_end='2023-01-31', date_start='2023-01-01'),
+            master='',
+            internship_evaluated=False,
+        )]}
+
+    @classmethod
+    def place_evaluation_items_cohort_get(*args, **kwargs):
+        return {'count': 1, 'results': [PlaceEvaluationItemGet(
+            uuid=str(uuid.uuid4()),
+            order=0.0,
+            statement='',
+            type='',
+            options=[],
+            required=True,
+        )]}
+
+    @classmethod
+    def place_evaluation_affectation_uuid_get(*args, **kwargs):
+        return PlaceEvaluationGet(evaluation={})
