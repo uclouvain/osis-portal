@@ -38,6 +38,7 @@ from osis_program_management_sdk.model.programme import Programme
 from inscription_aux_cours import formatter
 from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
 from inscription_aux_cours.data.proposition_programme_annuel import PropositionProgrammeAnnuel
+from program_management.services.programme import ProgrammeService
 
 register = template.Library()
 
@@ -87,11 +88,20 @@ def filtrer_inscriptions_hors_programme_par_contexte(
 
 @register.simple_tag
 def get_message_condition_access(annee: int, mini_formation: 'MiniFormation') -> str:
+    lien = f"{settings.INSTITUTION_URL}prog-{annee}-{mini_formation.sigle}-cond_adm"
     return _(
         "This minor has access conditions, please refer to the procedure to enroll: {lien_condition_acces}"
     ).format(
-        lien_condition_acces=f"{settings.INSTITUTION_URL}prog-{annee}-{mini_formation.sigle}-cond_adm"
+        lien_condition_acces=f"<a href='{lien}'>{lien}</a>"
     )
+
+
+@register.simple_tag
+def get_lien_condition_access(programme: 'Programme', mini_formation: 'MiniFormation') -> str:
+    if ProgrammeService.est_bachelier(programme):
+        return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{mini_formation.sigle}-cond_adm"
+    sigle_formation = ProgrammeService.get_sigle_formation(programme)
+    return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{sigle_formation}-programme"
 
 
 @register.simple_tag
