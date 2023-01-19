@@ -33,7 +33,7 @@ from osis_program_management_sdk.model.programme import Programme
 from base.models.person import Person
 from base.services.offer_enrollment import InscriptionFormationsService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
-from program_management.services.programme import ProgrammeService
+from inscription_aux_cours.views.common import recuperer_programmes
 
 
 class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -59,8 +59,7 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
     def programmes(self) -> List['Programme']:
         if not self.inscriptions.inscriptions:
             return []
-        codes = [inscription.code_programme for inscription in self.inscriptions.inscriptions]
-        return ProgrammeService.rechercher(self.person, annee=self.annee_academique, codes=codes)
+        return recuperer_programmes(self.person, self.annee_academique, self.inscriptions.inscriptions)
 
     def get_context_data(self, **kwargs):
         return {
