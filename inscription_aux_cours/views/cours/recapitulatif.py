@@ -60,7 +60,16 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             for mini_formation in self.programme_annuel['mini_formations']
             for cours in mini_formation['cours']
         ]
+
         return codes_cours_tronc_commun + codes_cours_mini_formations
+
+    @property
+    def codes_cours_des_partenariats(self) -> List[str]:
+        return [
+            cours['code']
+            for partenariat in self.programme_annuel['partenariats']
+            for cours in partenariat['cours']
+        ]
 
     @cached_property
     def details_unites_enseignement(self):
@@ -70,6 +79,17 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             learning_unit_codes=self.codes_cours_du_programme_annuel
         )
         return {learning_unit['acronym']: learning_unit for learning_unit in result}
+
+    @cached_property
+    def details_unites_enseignement_de_partenariat(self):
+        result = {}
+        for code in self.codes_cours_des_partenariats:
+            result[code] = LearningUnitService.get_learning_unit_title(
+                year=self.annee_academique,
+                acronym=code,
+                person=self.person
+            )
+        return result
 
     @cached_property
     def details_classes(self):
@@ -92,6 +112,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             intitule=formatter.get_intitule_programme(self.programme),
             cours=self._build_cours(self.programme_annuel['tronc_commun'])
         )
+
         inscriptions_aux_mini_formations = [
             InscriptionsParContexte(
                 intitule=self.details_mini_formation[mini_formation['code']]['title'],
@@ -99,8 +120,19 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             ) for mini_formation in self.programme_annuel['mini_formations']
         ]
         inscriptions_aux_mini_formations.sort(key=lambda contexte: unaccent(contexte.intitule))
-        inscriptions = [inscriptions_tronc_commun] + inscriptions_aux_mini_formations \
-            if inscriptions_tronc_commun.cours else inscriptions_aux_mini_formations
+
+        inscriptions_aux_partenariats = [
+            InscriptionsParContexte(
+                intitule=partenariat['intitule'],
+                cours=self._build_cours(partenariat['cours'])
+            ) for partenariat in self.programme_annuel['partenariats']
+        ]
+        inscriptions_aux_partenariats.sort(key=lambda contexte: unaccent(contexte.intitule))
+
+        inscriptions = [inscriptions_tronc_commun] if inscriptions_tronc_commun.cours else []
+        inscriptions += inscriptions_aux_mini_formations
+        inscriptions += inscriptions_aux_partenariats
+
         return PropositionProgrammeAnnuel(
             inscriptions_par_contexte=inscriptions
         )
@@ -112,12 +144,17 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             inscription = Inscription(
                 code=code,
                 credits=cours['credits'],
-                intitule=self.details_unites_enseignement[code]['title']
-                if code in self.details_unites_enseignement
-                else self.details_classes[code]['intitule']
+                intitule=self._get_intitule(code)
             )
             result.append(inscription)
         return result
+
+    def _get_intitule(self, code) -> str:
+        if code in self.details_unites_enseignement:
+            return self.details_unites_enseignement[code]['title']
+        elif code in self.details_unites_enseignement_de_partenariat:
+            return self.details_unites_enseignement_de_partenariat[code]
+        return self.details_classes[code]['intitule']
 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:

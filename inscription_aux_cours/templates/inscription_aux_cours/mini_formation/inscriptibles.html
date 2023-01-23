@@ -67,7 +67,7 @@
             {% if mini_formations_inscrites_non_inscriptibles %}
             <br>
 
-                <p><i>
+                <p>
                 {% trans 'The following minors or options in which you are enrolled are no longer offered this academic year:' %}
                 <ul>
                     {% for mini_formation in mini_formations_inscrites_non_inscriptibles %}
@@ -75,8 +75,7 @@
                     {% endfor %}
                 </ul>
                 {% trans 'For a change in minors or options, please contact your faculty manager.' %}
-
-                </i></p>
+                </p>
 
             {% endif %}
 
@@ -85,7 +84,18 @@
             <table id="table-inscription-mini-formations" class="table table-hover">
                 {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
                     <tr>
-                        <td>{{ mini_formation.intitule }} {% if mini_formation.condition_acces %}<i class='fa-solid fa-key fa-info'></i>{% endif %}</td>
+                        <td>{{ mini_formation.intitule }}
+                            {% if mini_formation.condition_acces %}
+                                <a href="{% get_lien_condition_access programme mini_formation %}"
+                                   target="_blank"
+                                   data-toggle="tooltip"
+                                   data-html="true"
+                                   data-trigger="hover"
+                                   title="{% trans 'This minor has access conditions, please refer to the procedure to enroll by clicking this link.' %}">
+                                    <i class='fa-solid fa-key fa-info'></i>
+                                </a>
+                            {% endif %}
+                        </td>
                         <td class="col-md-1 center">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
@@ -107,7 +117,6 @@
                                         hx-post="{% url 'inscription-aux-cours:inscrire-mini-formation' programme.code %}"
                                         {% endif %}
                                         {% if mini_formation.condition_acces %}
-                                            title="{% get_message_condition_access programme.annee mini_formation %}"
                                             disabled
                                         {% endif %}
 
