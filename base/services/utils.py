@@ -45,7 +45,7 @@ class ServiceException(Exception):
     @property
     def messages(self) -> List[str]:
         json_body = json.loads(self.original_exception.body)
-        return [error['detail'] for error in json_body[api_settings.NON_FIELD_ERRORS_KEY]]
+        return list({error['detail'] for error in json_body[api_settings.NON_FIELD_ERRORS_KEY]})
 
 
 def call_api(settings_sdk, sdk, api, person: 'Person', method_to_call: str, **kwargs):
