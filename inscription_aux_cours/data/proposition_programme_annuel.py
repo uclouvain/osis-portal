@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,17 +22,40 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from decimal import Decimal
+from typing import List
 
-from django import template
-
-from base.utils.string_utils import unaccent
-
-register = template.Library()
+import attr
 
 
-@register.filter(is_safe=False)
-def dictsortunaccent(value, key):
-    return sorted(
-        value,
-        key=lambda item: unaccent(getattr(item, key))
-    )
+@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
+class Inscription:
+    code: str
+    intitule: str
+    credits: Decimal
+
+
+@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
+class InscriptionsParContexte:
+    intitule: str
+    cours: List[Inscription]
+
+
+@attr.dataclass(auto_attribs=True, frozen=True, slots=True)
+class PropositionProgrammeAnnuel:
+    inscriptions_par_contexte: List['InscriptionsParContexte']
+
+    @property
+    def total_credits(self) -> 'Decimal':
+        return sum([
+            Decimal(cours.credits)
+            for contexte in self.inscriptions_par_contexte
+            for cours in contexte.cours
+            if cours.credits
+        ])
+
+    @property
+    def a_des_inscriptions(self) -> bool:
+        return any(
+            [inscription for contexte in self.inscriptions_par_contexte for inscription in contexte.cours]
+        )

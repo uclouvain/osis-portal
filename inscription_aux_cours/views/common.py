@@ -22,13 +22,19 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import copy
+from typing import List
+
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
+from osis_offer_enrollment_sdk.model.inscription import Inscription
 from osis_program_management_sdk.model.programme import Programme
 
 from base.models.person import Person
+from base.services.offer_enrollment import InscriptionFormationsService
 from inscription_aux_cours.services.autorisation import AutorisationService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
 from program_management.services.programme import ProgrammeService
@@ -54,8 +60,17 @@ class InscriptionAuxCoursViewMixin:
         return PeriodeInscriptionAuxCoursService().get_annee(self.person)
 
     @cached_property
+    def inscription(self) -> 'Inscription':
+        inscriptions = InscriptionFormationsService.mes_inscriptions(self.person, annee=self.annee_academique)
+        return next(
+            inscription
+            for inscription in inscriptions.inscriptions
+            if inscription.code_programme == self.code_programme
+        )
+
+    @cached_property
     def programme(self) -> 'Programme':
-        return ProgrammeService.rechercher(self.person, annee=self.annee_academique, codes=[self.code_programme])[0]
+        return recuperer_programmes(self.person, self.annee_academique, [self.inscription])[0]
 
     @cached_property
     def autorisation(self) -> 'AutoriseInscrireAuxCours':
@@ -74,3 +89,36 @@ class InscriptionAuxCoursViewMixin:
             'programme': self.programme,
             'person': self.person
         }
+
+
+def recuperer_programmes(person: 'Person', annee: int, inscriptions: List['Inscription']) -> List['Programme']:
+    codes = [inscription.code_programme for inscription in inscriptions]
+    programmes = ProgrammeService.rechercher(person, annee=annee, codes=codes)
+
+    codes_inscriptions_premiere_annee = [
+        inscription.code_programme
+        for inscription in inscriptions if inscription.est_en_premiere_annee
+    ]
+    return [
+        adapter_programme_pour_premiere_annee_de_bachelier(programme)
+        if programme.code in codes_inscriptions_premiere_annee else programme
+        for programme in programmes
+    ]
+
+
+def adapter_programme_pour_premiere_annee_de_bachelier(programme: 'Programme') -> 'Programme':
+    copy_programme = copy.copy(programme)
+    copy_programme.sigle = generer_sigle_programme_pour_premiere_annee_de_bachelier(programme.sigle)
+    copy_programme.intitule_formation = generer_intitule_formation_pour_premiere_annee_de_bachelier(
+        programme.intitule_formation
+    )
+    return copy_programme
+
+
+def generer_intitule_formation_pour_premiere_annee_de_bachelier(intitule: 'str') -> 'str':
+    prefixe = _('First year of')
+    return f"{prefixe} {intitule[0].lower()}{intitule[1:]}"
+
+
+def generer_sigle_programme_pour_premiere_annee_de_bachelier(sigle: 'str') -> 'str':
+    return sigle.replace("1BA", "11BA")

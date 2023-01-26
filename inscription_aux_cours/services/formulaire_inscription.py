@@ -23,10 +23,8 @@
 #
 ##############################################################################
 from functools import partial
-from typing import Optional
 
 import osis_inscription_cours_sdk
-from django.http import Http404
 from osis_inscription_cours_sdk.api import formulaire_api
 
 from base.models.person import Person
