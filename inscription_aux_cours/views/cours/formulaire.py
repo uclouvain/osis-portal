@@ -38,6 +38,7 @@ from osis_learning_unit_sdk.model.classe import Classe
 from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 
 from base.services.utils import ServiceException
+from base.utils.string_utils import unaccent
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.forms.cours.inscription_hors_programme import InscriptionHorsProgrammeForm
 from inscription_aux_cours.services.cours import CoursService
@@ -76,6 +77,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             for formulaire_mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
             if formulaire_mini_formation.configuration.autorise_etudiant_a_ajouter_cours
         ]
+        choix_mini_formations.sort(key=lambda choix: unaccent(choix[1]))
         if self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration.autorise_etudiant_a_ajouter_cours:
             choix_mini_formations = [('', self.programme.intitule_formation)] + choix_mini_formations
         return InscriptionHorsProgrammeForm(
@@ -115,6 +117,8 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             self,
             inscriptions_hors_programme: List['InscriptionAUnCoursHorsProgramme']
     ) -> List['InscriptionAUnCoursHorsProgramme']:
+        if not inscriptions_hors_programme:
+            return []
         codes_cours = [cours.code_cours for cours in inscriptions_hors_programme]
         unites_enseignements_par_code = self._rechercher_unites_enseignements(codes_cours)
         classes_par_code = self._rechercher_classes(codes_cours)

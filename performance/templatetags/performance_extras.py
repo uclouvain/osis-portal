@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,17 +22,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
 
 from django import template
-
-from base.utils.string_utils import unaccent
 
 register = template.Library()
 
 
-@register.filter(is_safe=False)
-def dictsortunaccent(value, key):
-    return sorted(
-        value,
-        key=lambda item: unaccent(getattr(item, key))
-    )
+@register.filter()
+def has_reduced_150_dp(student_results: str) -> bool:
+    student_results_json = json.loads(student_results)
+    try:
+        return student_results_json['monAnnee']['monOffre']['article150DP']
+    except KeyError:
+        return False

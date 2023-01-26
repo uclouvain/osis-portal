@@ -37,7 +37,7 @@ from osis_program_management_sdk.model.programme import Programme
 
 from inscription_aux_cours import formatter
 from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
-from inscription_aux_cours.views.cours.recapitulatif import PropositionProgrammeAnnuel
+from inscription_aux_cours.data.proposition_programme_annuel import PropositionProgrammeAnnuel
 
 register = template.Library()
 

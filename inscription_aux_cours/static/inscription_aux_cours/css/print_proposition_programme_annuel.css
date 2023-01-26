@@ -1,0 +1,72 @@
+@media print {
+    @page {
+        size: A4;
+    }
+
+    nav{
+        display: none;
+    }
+
+    div.localred {
+        display: none;
+    }
+
+    div.devorange {
+        display: none;
+    }
+
+    div.qagreen {
+        display: none;
+    }
+
+
+    ol {
+        display: none;
+    }
+
+    .alert {
+        display: none;
+    }
+
+    .page-header {
+        display: none;
+    }
+
+    #template-messages-container {
+        display: none;
+    }
+
+    .hide_print {
+        display: none !important;
+    }
+
+    body{
+        padding:0!important;
+        margin:0!important;
+        visibility: hidden;
+    }
+
+    table {
+        width:100%!important;
+        padding:0!important;
+        margin:0!important;
+        font-size: x-small;
+    }
+
+    label {
+        font-size: large;
+    }
+
+    .print {
+        visibility: visible;
+    }
+
+    div {
+        break-inside: avoid;
+    }
+
+    .ligne-contexte {
+        font-size: larger;
+    }
+
+}
