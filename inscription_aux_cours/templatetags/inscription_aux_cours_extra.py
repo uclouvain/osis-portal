@@ -106,10 +106,21 @@ def get_lien_condition_access(programme: 'Programme', mini_formation: 'MiniForma
 
 @register.simple_tag
 def get_lien_horaire_cours(programme_annuel: 'PropositionProgrammeAnnuel') -> str:
-    codes_cours = [cours.code for contexte in programme_annuel.inscriptions_par_contexte for cours in contexte.cours]
+
+    codes_cours = [
+        _format_code_cours_pour_lien_horaire(cours.code)
+        for contexte in programme_annuel.inscriptions_par_contexte
+        for cours in contexte.cours
+    ]
     return settings.COURSES_SCHEDULE_URL.format(
         codes_cours=urllib.parse.quote(",".join(codes_cours))
     )
+
+
+def _format_code_cours_pour_lien_horaire(code: str) -> str:
+    separation_classe_magistrale = '-'
+    separation_classe_pratique = '_'
+    return code.replace(separation_classe_pratique, "").replace(separation_classe_magistrale, "")
 
 
 @register.filter
