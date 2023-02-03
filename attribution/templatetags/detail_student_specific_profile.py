@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 
 from django import template
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from attribution.business.student_specific_profile import get_type_peps, get_arrangements, get_guide
 
@@ -44,17 +44,21 @@ def type_peps(student_specific_profile):
 def arrangements_and_guide(student_specific_profile, learning_unit_type):
     if student_specific_profile:
         specific_profile_detail_html_content = "<div class='peps-tooltip-content'>"
-        specific_profile_detail_html_content += _get_arrangements_list(student_specific_profile, learning_unit_type)
+        specific_profile_detail_html_content += _get_arrangements_list(
+            student_specific_profile, learning_unit_type.value
+        )
         guide = get_guide(student_specific_profile)
         if guide:
             specific_profile_detail_html_content += f"</ul><b>{_('Guide')}</b> :<br/>{guide}"
 
         specific_profile_detail_html_content += "</div>"
-        return mark_safe(specific_profile_detail_html_content) if specific_profile_detail_html_content else None
+        return (
+            mark_safe(specific_profile_detail_html_content) if specific_profile_detail_html_content else None  # nosec
+        )
     return None
 
 
-def _get_arrangements_list(student_specific_profile, learning_unit_type):
+def _get_arrangements_list(student_specific_profile, learning_unit_type: str):
     arrangements = get_arrangements(student_specific_profile, learning_unit_type)
     if len(arrangements) >= 1:
         specific_profile_detail = f"<b>{_('Arrangements')}:</b><ul>"
