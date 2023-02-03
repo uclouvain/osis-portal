@@ -83,6 +83,7 @@
 
             <table id="table-inscription-mini-formations" class="table table-hover">
                 {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
+                    {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
                     <tr>
                         <td>{{ mini_formation.intitule }}
                             {% if mini_formation.condition_acces %}
@@ -109,22 +110,27 @@
                                         hx-swap="innerHTML"
                                         hx-vals='{"code_mini_formation": "{{ mini_formation.code }}"}'
                                         hx-indicator="#form-inscription-{{ mini_formation.code }}"
-                                        {% if mini_formation|est_inscrit_a_la_mini_formation:inscriptions %}
+
+                                        {% if inscription %}
                                         checked
                                         hx-post="{% url 'inscription-aux-cours:desinscrire-mini-formation' programme.code %}"
-
                                         {% else %}
                                         hx-post="{% url 'inscription-aux-cours:inscrire-mini-formation' programme.code %}"
                                         {% endif %}
+
                                         {% if mini_formation.condition_acces %}
                                             disabled
+                                        {% elif inscription and not inscription.demandee_par_etudiant %}
+                                            disabled
+                                            data-toggle="tooltip"
+                                            title="{% trans 'You cannot unenroll from a minor or option enrolled by your faculty manager.' %}"
                                         {% endif %}
-
                                 >
                                 <div class="loading"></div>
                             </form>
                         </td>
                     </tr>
+                    {% endwith %}
                 {% endfor %}
             </table>
 
