@@ -105,7 +105,7 @@ msgstr "Rechercher par code (exemple: LCHIM1111)"
 
 msgid "Select an offer for which you want to do courses enrollment."
 msgstr ""
-"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux cours."
+"Sélectionnez la formation pour laquelle vous désirez vous inscrire aux cours."
 
 msgid "Special requests"
 msgstr "Demandes particulières éventuelles"
