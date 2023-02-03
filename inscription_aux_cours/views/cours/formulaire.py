@@ -124,20 +124,22 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         return [
             attr.evolve(
                 inscription,
-                intitule_cours=unites_enseignements_par_code[inscription.code_cours]['title']
+                intitule_cours=unites_enseignements_par_code[inscription.code_cours]
                 if unites_enseignements_par_code.get(inscription.code_cours)
                 else classes_par_code[inscription.code_cours]['intitule']
             )
             for inscription in inscriptions_hors_programme
         ]
 
-    def _rechercher_unites_enseignements(self, codes_cours: List[str]) -> Dict[str, 'LearningUnit']:
-        unites_enseignements = LearningUnitService().search_learning_units(
-            self.person,
-            year=self.annee_academique,
-            learning_unit_codes=codes_cours
-        )
-        return {unites_enseignement['acronym']: unites_enseignement for unites_enseignement in unites_enseignements}
+    def _rechercher_unites_enseignements(self, codes_cours: List[str]) -> Dict[str, 'str']:
+        result = dict()
+        for code in codes_cours:
+            result[code] = LearningUnitService.get_learning_unit_title(
+                year=self.annee_academique,
+                acronym=code,
+                person=self.person
+            )
+        return result
 
     def _rechercher_classes(self, codes_classes: List[str]) -> Dict[str, 'Classe']:
         classes = ClasseService().rechercher_classes(
