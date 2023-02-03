@@ -276,14 +276,13 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
                     'class_code': self.kwargs['class_code'],
                 },
             )
-        else:
-            return reverse(
-                'produce_xls_students',
-                kwargs={
-                    'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
-                    'learning_unit_year': self.kwargs['learning_unit_year'],
-                },
-            )
+        return reverse(
+            'produce_xls_students',
+            kwargs={
+                'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
+                'learning_unit_year': self.kwargs['learning_unit_year'],
+            },
+        )
 
 
 class AdminStudentsListView(StudentsListView):
