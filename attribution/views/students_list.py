@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -63,9 +63,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         if self.request.GET.get('ordering') is None:
             query_params_in_url = "?" in self.request.get_full_path()
             url_format = "{}&{}" if query_params_in_url else "{}?{}"
-            return redirect(
-                url_format.format(self.request.get_full_path(), "ordering=program,student_full_name")
-            )
+            return redirect(url_format.format(self.request.get_full_path(), "ordering=program,student_full_name"))
         return super().get(self, *args, **kwargs)
 
     @property
@@ -93,8 +91,11 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
 
     @cached_property
     def learning_unit_title(self):
-        return f"{self._get_learning_unit_title()} - {self._get_learning_class_title()}" \
-            if self.is_class else self._get_learning_unit_title()
+        return (
+            f"{self._get_learning_unit_title()} - {self._get_learning_class_title()}"
+            if self.is_class
+            else self._get_learning_unit_title()
+        )
 
     @cached_property
     def learning_unit_type(self):
@@ -103,10 +104,12 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
 
     def _get_learning_unit(self):
         return next(
-            lu for lu in LearningUnitService.get_learning_units(
-                learning_unit_codes=[self.kwargs['learning_unit_acronym']],
-                year=int(self.kwargs['learning_unit_year']),
-                person=self.request.user.person
+            iter(
+                LearningUnitService.get_learning_units(
+                    learning_unit_codes=[self.kwargs['learning_unit_acronym']],
+                    year=int(self.kwargs['learning_unit_year']),
+                    person=self.request.user.person,
+                )
             )
         )
 
@@ -114,7 +117,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         return LearningUnitService.get_learning_unit_title(
             acronym=self.kwargs['learning_unit_acronym'],
             year=int(self.kwargs['learning_unit_year']),
-            person=self.request.user.person
+            person=self.request.user.person,
         )
 
     @cached_property
@@ -122,14 +125,10 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         classes = LearningUnitService.get_effective_classes(
             acronym=self.kwargs['learning_unit_acronym'],
             year=int(self.kwargs['learning_unit_year']),
-            person=self.request.user.person
+            person=self.request.user.person,
         )
         return next(
-            (
-                effective_class for effective_class in classes
-                if effective_class.code == self.kwargs['class_code']
-            ),
-            None
+            (effective_class for effective_class in classes if effective_class.code == self.kwargs['class_code']), None
         )
 
     def _get_learning_class_title(self):
@@ -159,10 +158,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         elif note_january != "-":
             last_note = note_january
         return {
-            'name': "{0}, {1}".format(
-                enrollment.student_last_name,
-                enrollment.student_first_name
-            ),
+            'name': f"{enrollment.student_last_name}, {enrollment.student_first_name}",
             'email': enrollment.student_email,
             'program': enrollment.program,
             'acronym': enrollment.learning_unit_acronym,
@@ -174,7 +170,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
             'september_note': self.get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_NOTE),
             'september_status': self.get_session_value(session_results, SEPTEMBER, JSON_LEARNING_UNIT_STATUS),
             'student_specific_profile': enrollment.specific_profile,
-            'last_note': last_note
+            'last_note': last_note,
         }
 
     def get_sessions_results(self, enrollment):
@@ -189,18 +185,17 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         results = {}
 
         a_student_performance = next(
-            (perf for perf in self.sessions_results_for_mapping if a_registration_id == perf.registration_id),
-            None
+            (perf for perf in self.sessions_results_for_mapping if a_registration_id == perf.registration_id), None
         )
 
         if a_student_performance:
             student_data = self.get_student_data_dict(a_student_performance)
-            monAnnee = student_data['monAnnee']
-            if student_data['etudiant']['noma'] == a_registration_id and monAnnee['anac'] == academic_year:
-                monOffre = monAnnee['monOffre']
-                offre = monOffre['offre']
+            mon_annee = student_data['monAnnee']
+            if student_data['etudiant']['noma'] == a_registration_id and mon_annee['anac'] == academic_year:
+                mon_offre = mon_annee['monOffre']
+                offre = mon_offre['offre']
                 if offre['sigleComplet'] == offer_acronym:
-                    cours_list = monOffre['cours']
+                    cours_list = mon_offre['cours']
                     self.manage_cours_list(cours_list, learning_unit_acronym, results)
         return results
 
@@ -209,7 +204,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         return StudentPerformance.objects.filter(
             registration_id__in=list(map(itemgetter('student_registration_id'), self.page_objects_list)),
             acronym__in=set(map(itemgetter('program'), self.page_objects_list)),
-            academic_year=self.kwargs['learning_unit_year']
+            academic_year=self.kwargs['learning_unit_year'],
         )
 
     @staticmethod
@@ -233,12 +228,14 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         sessions = cours['session']
         nb_session = 0
         while nb_session < len(sessions):
-            results.update({
-                sessions[nb_session]['mois']: {
-                    JSON_LEARNING_UNIT_NOTE: self.get_value(sessions[nb_session], JSON_LEARNING_UNIT_NOTE),
-                    JSON_LEARNING_UNIT_STATUS: self.get_value(sessions[nb_session], JSON_LEARNING_UNIT_STATUS)
+            results.update(
+                {
+                    sessions[nb_session]['mois']: {
+                        JSON_LEARNING_UNIT_NOTE: self.get_value(sessions[nb_session], JSON_LEARNING_UNIT_NOTE),
+                        JSON_LEARNING_UNIT_STATUS: self.get_value(sessions[nb_session], JSON_LEARNING_UNIT_STATUS),
+                    }
                 }
-            })
+            )
             nb_session += 1
 
     @staticmethod
@@ -259,7 +256,7 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
         attributions = AttributionService.get_attributions_list(
             year=int(self.kwargs['learning_unit_year']),
             person=self.request.user.person,
-            with_effective_class_repartition=True
+            with_effective_class_repartition=True,
         )
         attribution = next(a for a in attributions if a['code'] == self.kwargs['learning_unit_acronym'])
         if self.is_class:
@@ -271,16 +268,22 @@ class StudentsListView(LoginRequiredMixin, PermissionRequiredMixin, ApiPaginatio
 
     def get_produce_xls_url(self):
         if self.is_class:
-            return reverse('produce_xls_class_students', kwargs={
-                'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
-                'learning_unit_year': self.kwargs['learning_unit_year'],
-                'class_code': self.kwargs['class_code']
-            })
+            return reverse(
+                'produce_xls_class_students',
+                kwargs={
+                    'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
+                    'learning_unit_year': self.kwargs['learning_unit_year'],
+                    'class_code': self.kwargs['class_code'],
+                },
+            )
         else:
-            return reverse('produce_xls_students', kwargs={
-                'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
-                'learning_unit_year': self.kwargs['learning_unit_year'],
-            })
+            return reverse(
+                'produce_xls_students',
+                kwargs={
+                    'learning_unit_acronym': self.kwargs['learning_unit_acronym'],
+                    'learning_unit_year': self.kwargs['learning_unit_year'],
+                },
+            )
 
 
 class AdminStudentsListView(StudentsListView):
@@ -299,5 +302,5 @@ class StudentsListXlsView(StudentsListView, ApiRetrieveAllObjectsMixin):
             student_list,
             self.kwargs['learning_unit_acronym'],
             self.kwargs['learning_unit_year'],
-            self.learning_unit_type
+            self.learning_unit_type.value,
         )
