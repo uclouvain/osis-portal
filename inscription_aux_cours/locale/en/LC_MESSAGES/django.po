@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-03 10:19+0100\n"
+"POT-Creation-Date: 2023-02-06 14:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,6 +159,9 @@ msgstr ""
 
 msgid ""
 "You cannot unenroll from a minor or option enrolled by your faculty manager."
+msgstr ""
+
+msgid "Your contact in faculty:"
 msgstr ""
 
 msgid ""

@@ -1,7 +1,7 @@
 <div class="row" id="div-inscription-{{ code_mini_formation }}-{{ code_cours }}">
     <div class="col-md-2">
         {% if erreurs %}
-            <i class="fa-solid fa-circle-exclamation fa-danger" title="{{ erreurs|join:"\n" }}"></i>
+            <i class="fa-solid fa-circle-exclamation fa-danger" data-toggle="tooltip" title="{{ erreurs|join:"\n" }}"></i>
         {% else %}
             <form id="form-inscription-{{ code_mini_formation }}-{{ code_cours }}" method="post">
                 {% csrf_token %}
