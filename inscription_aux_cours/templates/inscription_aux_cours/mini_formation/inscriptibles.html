@@ -67,15 +67,17 @@
             {% if mini_formations_inscrites_non_inscriptibles %}
             <br>
 
-                <p>
-                {% trans 'The following minors or options in which you are enrolled are no longer offered this academic year:' %}
-                <ul>
-                    {% for mini_formation in mini_formations_inscrites_non_inscriptibles %}
-                        <li>{{ mini_formation.title }}</li>
-                    {% endfor %}
-                </ul>
-                {% trans 'For a change in minors or options, please contact your faculty manager.' %}
-                </p>
+                <div class="alert alert-warning">
+                    <p>
+                        {% trans 'The following minors or options in which you are enrolled are no longer offered this academic year:' %}
+                    <ul>
+                        {% for mini_formation in mini_formations_inscrites_non_inscriptibles %}
+                            <li>{{ mini_formation.title }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% trans 'For a change in minors or options, please contact your faculty manager.' %}
+                    </p>
+                </div>
 
             {% endif %}
 
