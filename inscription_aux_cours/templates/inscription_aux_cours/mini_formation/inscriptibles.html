@@ -99,7 +99,7 @@
                                 </a>
                             {% endif %}
                         </td>
-                        <td class="col-md-1 center">
+                        <td class="col-md-1">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
                                 <input
@@ -109,7 +109,7 @@
                                         hx-include="#form-inscription-{{ mini_formation.code }}"
                                         hx-target="#form-inscription-{{ mini_formation.code }}"
                                         hx-trigger="click"
-                                        hx-swap="innerHTML"
+                                        hx-swap="outerHTML"
                                         hx-vals='{"code_mini_formation": "{{ mini_formation.code }}"}'
                                         hx-indicator="#form-inscription-{{ mini_formation.code }}"
 
@@ -128,7 +128,7 @@
                                             title="{% trans 'You cannot unenroll from a minor or option enrolled by your faculty manager.' %}"
                                         {% endif %}
                                 >
-                                <div class="loading"></div>
+                                <div class="loading pull-left"></div>
                             </form>
                         </td>
                     </tr>

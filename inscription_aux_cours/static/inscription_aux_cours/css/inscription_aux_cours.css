@@ -63,6 +63,10 @@ textarea.unresizable {
     display: none;
 }
 
+.htmx-request > i{
+    display: none;
+}
+
 .htmx-request  .loading {
     width: 2rem;
     height: 2rem;
