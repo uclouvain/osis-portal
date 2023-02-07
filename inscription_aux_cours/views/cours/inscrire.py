@@ -40,10 +40,16 @@ class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Tem
 
     # TemplateView
     template_name = "inscription_aux_cours/cours/desinscrire.html"
+    error_template_name = "inscription_aux_cours/cours/inscrire.html"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.erreurs = []
+
+    def get_template_names(self):
+        if self.erreurs:
+            return [self.error_template_name]
+        return super().get_template_names()
 
     @property
     def code_mini_formation(self) -> Optional[str]:
