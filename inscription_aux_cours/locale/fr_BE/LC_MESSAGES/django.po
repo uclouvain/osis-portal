@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-06 14:45+0100\n"
+"POT-Creation-Date: 2023-02-07 08:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,6 +81,12 @@ msgstr "Formation"
 
 msgid "Offer choice"
 msgstr "Choix de la formation"
+
+msgid "Please modify your enrollments."
+msgstr "Veuillez modifier votre inscription aux cours."
+
+msgid "Prerequisite not acquired"
+msgstr "Prérequis non acquis"
 
 msgid "Print my proposition of annual program"
 msgstr "Imprimer ma proposition de programme annuel"
@@ -177,6 +183,9 @@ msgstr ""
 "Vous ne pouvez pas vous désinscrire d'une mineure ou d'une option ajoutée "
 "par votre gestionnaire facultaire."
 
+msgid "You didn't acquired the prerequisites for the following courses:"
+msgstr "Vous n'avez pas acquis les prérequis pour les cours suivants:"
+
 msgid "Your contact in faculty:"
 msgstr "Votre contact en faculté:"
 
@@ -197,4 +206,3 @@ msgstr ""
 
 msgid "credits"
 msgstr "crédits"
-
