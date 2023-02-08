@@ -1,40 +1,24 @@
-<div class="row" id="div-inscription-{{ code_mini_formation }}-{{ code_cours }}">
-    <div class="col-md-2">
-        {% if erreurs %}
-            <i class="fa-solid fa-circle-exclamation fa-danger" title="{{ erreurs|join:"\n" }}"></i>
-        {% else %}
-            <form id="form-inscription-{{ code_mini_formation }}-{{ code_cours }}" method="post">
-                {% csrf_token %}
-                <input
-                        id="checkbox-{{ code_mini_formation }}-{{ code_cours }}"
-                        type="checkbox"
-                        name="checkbox_cours"
-                        hx-include="#form-inscription-{{ code_mini_formation }}-{{ code_cours }}"
-                        hx-target="#div-inscription-{{ code_mini_formation }}-{{ code_cours }}"
-                        hx-trigger="click"
-                        hx-swap="outerHTML"
-                        hx-vals='{"code_mini_formation": "{{ code_mini_formation }}", "code_cours": "{{ code_cours }}"}'
-                        hx-post="{% url 'inscription-aux-cours:desinscrire-cours' programme.code %}"
-                        hx-indicator="#form-inscription-{{ code_mini_formation }}-{{ code_cours }}"
-                        checked
-                >
-                <div class="loading"></div>
-            </form>
-        {% endif %}
-    </div>
+<form id="form-inscription-{{ code_mini_formation }}-{{ code_cours }}" method="post">
+    {% csrf_token %}
+    <div class="loading pull-left"></div>
+    <input
+            id="checkbox-{{ code_mini_formation }}-{{ code_cours }}"
+            type="checkbox"
+            name="checkbox_cours"
+            hx-include="#form-inscription-{{ code_mini_formation }}-{{ code_cours }}"
+            hx-target="#form-inscription-{{ code_mini_formation }}-{{ code_cours }}"
+            hx-trigger="click"
+            hx-swap="outerHTML"
+            hx-vals='{"code_mini_formation": "{{ code_mini_formation }}", "code_cours": "{{ code_cours }}"}'
+            hx-post="{% url 'inscription-aux-cours:desinscrire-cours' programme.code %}"
+            hx-indicator="#form-inscription-{{ code_mini_formation }}-{{ code_cours }}"
+            checked
+    >
+    {% if erreurs %}
+        <i class="fa-solid fa-circle-exclamation fa-danger" data-toggle="tooltip" title="{{ erreurs|join:"\n" }}"></i>
+    {% endif %}
 
-    <span style="text-align: center">
-        {% if not erreurs %}
-        <div class="insc_meme_context">
-            {% if etat_inscription %}
-            <span class="badge badge_insc_meme_context" style="background-color: rgba(3, 51, 173, 0.5);">{{ etat_inscription }}</span>
-            {% endif %}
-        </div>
-        {% endif %}
-    </span>
-</div>
-
-
-<script>
-    document.querySelectorAll('#form-inscription-{{ code_mini_formation }}-{{ code_cours }}').forEach((el)=>el.closest('tr').style.backgroundColor="rgba(3,51,173, 0.07)");
-</script>
+    {% if etat_inscription %}
+        <span class="fa-pull-right badge badge_insc_meme_context">{{ etat_inscription }}</span>
+    {% endif %}
+</form>

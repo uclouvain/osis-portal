@@ -40,7 +40,17 @@
         </tr>
         {% for inscription in contexte.cours %}
             <tr>
-                <td headers="colonne-code">{{ inscription.code }}</td>
+                <td headers="colonne-code">
+                    {{ inscription.code }}
+                    {% if inscription.code in cours_dont_prerequis_non_acquis %}
+                        <i
+                                class="fa fa-exclamation-circle fa-danger"
+                                style="font-size:120%" aria-hidden="true"
+                                title="{% trans 'Prerequisite not acquired' %}"
+                                data-toggle="tooltip"
+                        ></i>
+                    {% endif %}
+                </td>
                 <td headers="colonne-intitule">{{ inscription.intitule }}</td>
                 <td headers="colonne-credits">{{ inscription.credits|floatformat|default:'-' }}</td>
             </tr>

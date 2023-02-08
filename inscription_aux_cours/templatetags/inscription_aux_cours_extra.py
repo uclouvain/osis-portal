@@ -24,7 +24,7 @@
 ##############################################################################
 import urllib.parse
 from decimal import Decimal
-from typing import List
+from typing import List, Optional
 
 from django import template
 from django.conf import settings
@@ -63,6 +63,16 @@ def _formater_volumes(volume_pm: Decimal, volume_pp: Decimal) -> str:
 def est_inscrit_a_la_mini_formation(mini_formation: 'MiniFormation', inscriptions_mini_formations: List['InscriptionMiniFormation']):
     codes_mini_formations_inscrites = {inscription.code_mini_formation for inscription in inscriptions_mini_formations}
     return mini_formation.code in codes_mini_formations_inscrites
+
+@register.filter
+def get_inscription_a_la_mini_formation(
+        mini_formation: 'MiniFormation',
+        inscriptions_mini_formations: List['InscriptionMiniFormation']
+) -> Optional['InscriptionMiniFormation']:
+    return next(
+        (inscription for inscription in inscriptions_mini_formations if inscription.code_mini_formation == mini_formation.code),
+        None
+    )
 
 
 @register.filter

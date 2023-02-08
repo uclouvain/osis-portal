@@ -67,15 +67,17 @@
             {% if mini_formations_inscrites_non_inscriptibles %}
             <br>
 
-                <p>
-                {% trans 'The following minors or options in which you are enrolled are no longer offered this academic year:' %}
-                <ul>
-                    {% for mini_formation in mini_formations_inscrites_non_inscriptibles %}
-                        <li>{{ mini_formation.title }}</li>
-                    {% endfor %}
-                </ul>
-                {% trans 'For a change in minors or options, please contact your faculty manager.' %}
-                </p>
+                <div class="alert alert-warning">
+                    <p>
+                        {% trans 'The following minors or options in which you are enrolled are no longer offered this academic year:' %}
+                    <ul>
+                        {% for mini_formation in mini_formations_inscrites_non_inscriptibles %}
+                            <li>{{ mini_formation.title }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% trans 'For a change in minors or options, please contact your faculty manager.' %}
+                    </p>
+                </div>
 
             {% endif %}
 
@@ -83,6 +85,7 @@
 
             <table id="table-inscription-mini-formations" class="table table-hover">
                 {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
+                    {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
                     <tr>
                         <td>{{ mini_formation.intitule }}
                             {% if mini_formation.condition_acces %}
@@ -96,7 +99,7 @@
                                 </a>
                             {% endif %}
                         </td>
-                        <td class="col-md-1 center">
+                        <td class="col-md-1">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
                                 <input
@@ -106,25 +109,30 @@
                                         hx-include="#form-inscription-{{ mini_formation.code }}"
                                         hx-target="#form-inscription-{{ mini_formation.code }}"
                                         hx-trigger="click"
-                                        hx-swap="innerHTML"
+                                        hx-swap="outerHTML"
                                         hx-vals='{"code_mini_formation": "{{ mini_formation.code }}"}'
                                         hx-indicator="#form-inscription-{{ mini_formation.code }}"
-                                        {% if mini_formation|est_inscrit_a_la_mini_formation:inscriptions %}
+
+                                        {% if inscription %}
                                         checked
                                         hx-post="{% url 'inscription-aux-cours:desinscrire-mini-formation' programme.code %}"
-
                                         {% else %}
                                         hx-post="{% url 'inscription-aux-cours:inscrire-mini-formation' programme.code %}"
                                         {% endif %}
+
                                         {% if mini_formation.condition_acces %}
                                             disabled
+                                        {% elif inscription and not inscription.demandee_par_etudiant %}
+                                            disabled
+                                            data-toggle="tooltip"
+                                            title="{% trans 'You cannot unenroll from a minor or option enrolled by your faculty manager.' %}"
                                         {% endif %}
-
                                 >
-                                <div class="loading"></div>
+                                <div class="loading pull-left"></div>
                             </form>
                         </td>
                     </tr>
+                    {% endwith %}
                 {% endfor %}
             </table>
 
@@ -133,6 +141,11 @@
                     <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to courses enrollment' %}
                 </a>
             </div>
+
+            <br>
+            <br>
+
+            {% include "inscription_aux_cours/blocks/contact.html" %}
 
         </div>
     </div>

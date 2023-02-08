@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-26 08:57+0100\n"
+"POT-Creation-Date: 2023-02-07 08:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,6 +78,12 @@ msgstr ""
 msgid "Offer choice"
 msgstr ""
 
+msgid "Please modify your enrollments."
+msgstr ""
+
+msgid "Prerequisite not acquired"
+msgstr ""
+
 msgid "Print my proposition of annual program"
 msgstr ""
 
@@ -87,7 +93,7 @@ msgstr ""
 msgid "Registration id"
 msgstr ""
 
-msgid "Return to offer choice"
+msgid "Return to initial screen"
 msgstr ""
 
 msgid "Save and continue to courses enrollment"
@@ -155,6 +161,16 @@ msgstr ""
 msgid ""
 "You are not enrolled to any program for the academic year "
 "%(annee_academique)s."
+msgstr ""
+
+msgid ""
+"You cannot unenroll from a minor or option enrolled by your faculty manager."
+msgstr ""
+
+msgid "You didn't acquired the prerequisites for the following courses:"
+msgstr ""
+
+msgid "Your contact in faculty:"
 msgstr ""
 
 msgid ""

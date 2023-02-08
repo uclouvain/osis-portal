@@ -43,6 +43,10 @@
     color: #337ab7;
 }
 
+.fa-danger {
+    color: #a94442;
+}
+
 .fa-solid.fa-danger {
     color: #a94442;
 }
@@ -56,6 +60,10 @@ textarea.unresizable {
 }
 
 .htmx-request > input{
+    display: none;
+}
+
+.htmx-request > i{
     display: none;
 }
 

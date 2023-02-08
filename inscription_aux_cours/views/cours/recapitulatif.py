@@ -81,6 +81,11 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
         return {learning_unit['acronym']: learning_unit for learning_unit in result}
 
     @cached_property
+    def cours_dont_prerequis_non_acquis(self) -> List['str']:
+        prerequis_non_acquis = CoursService().recuperer_prerequis_non_acquis(self.person, self.code_programme)
+        return [prerequis.code_cours for prerequis in prerequis_non_acquis]
+
+    @cached_property
     def details_unites_enseignement_de_partenariat(self):
         result = {}
         for code in self.codes_cours_des_partenariats:
@@ -167,5 +172,6 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
         return {
             **super().get_context_data(**kwargs),
             'programme_annuel': self.programme_annuel_avec_details_cours,
-            'demande_particuliere': self.demande_particuliere
+            'demande_particuliere': self.demande_particuliere,
+            'cours_dont_prerequis_non_acquis': self.cours_dont_prerequis_non_acquis
         }
