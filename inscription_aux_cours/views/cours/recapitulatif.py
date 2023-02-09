@@ -22,13 +22,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
+from osis_program_management_sdk.model.programme import Programme
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
@@ -36,11 +37,13 @@ from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours import formatter
 from inscription_aux_cours.data.proposition_programme_annuel import Inscription, InscriptionsParContexte, \
     PropositionProgrammeAnnuel
+from inscription_aux_cours.formatter import get_intitule_programme
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
+from program_management.services.programme import ProgrammeService
 
 
 class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
@@ -106,9 +109,9 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
         return {classe['code']: classe for classe in result}
 
     @cached_property
-    def details_mini_formation(self):
+    def details_mini_formation(self) -> Dict[str, 'Programme']:
         codes_mini_formation = [mini_formation['code'] for mini_formation in self.programme_annuel['mini_formations']]
-        result = MiniTrainingService().search(self.person, year=self.annee_academique, codes=codes_mini_formation)
+        result = ProgrammeService().rechercher(self.person, annee=self.annee_academique, codes=codes_mini_formation)
         return {mini_formation.code: mini_formation for mini_formation in result}
 
     @cached_property
@@ -120,7 +123,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
 
         inscriptions_aux_mini_formations = [
             InscriptionsParContexte(
-                intitule=self.details_mini_formation[mini_formation['code']]['title'],
+                intitule=get_intitule_programme(self.details_mini_formation[mini_formation['code']]),
                 cours=self._build_cours(mini_formation['cours'])
             ) for mini_formation in self.programme_annuel['mini_formations']
         ]
