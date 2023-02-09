@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-07 08:49+0100\n"
+"POT-Creation-Date: 2023-02-08 09:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,6 +185,9 @@ msgstr ""
 
 msgid "You didn't acquired the prerequisites for the following courses:"
 msgstr "Vous n'avez pas acquis les prérequis pour les cours suivants:"
+
+msgid "You have been enrolled to {codes_cours}"
+msgstr "Vous avez été inscrit.e à {codes_cours}"
 
 msgid "Your contact in faculty:"
 msgstr "Votre contact en faculté:"

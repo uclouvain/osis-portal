@@ -24,6 +24,7 @@
 ##############################################################################
 from typing import Optional, List
 
+from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
@@ -51,14 +52,19 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
 
     def post(self, request, *args, **kwargs):
         erreurs = []
+        codes_cours_inscrits = []
 
         for code_cours in self.codes_cours:
             try:
                 self.inscrire_a_un_cours(code_cours)
+                codes_cours_inscrits.append(code_cours)
             except ServiceException as e:
                 erreurs.extend(formatter_messages_d_erreurs(code_cours, e.messages))
 
         self.afficher_erreurs(erreurs)
+
+        if codes_cours_inscrits:
+            self.afficher_succes(codes_cours_inscrits)
 
         return redirect(
             reverse(
@@ -80,6 +86,13 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
         for erreur in erreurs:
             messages.add_message(self.request, messages.ERROR, erreur)
 
+    def afficher_succes(self, codes_cours: List[str]):
+        msg = _('You have been enrolled to {codes_cours}').format(
+            codes_cours=", ".join(codes_cours)
+        )
+        messages.add_message(self.request, messages.SUCCESS, msg)
+
 
 def formatter_messages_d_erreurs(code_cours: str, messages: List[str]) -> List[str]:
     return [f"{code_cours}: {message}" for message in messages]
+
