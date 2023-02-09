@@ -46,9 +46,9 @@
                 <p>
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i> <strong>{% trans "List of minors or options to which you are enrolled" %}</strong>
                 <ul>
-                    {% for mini_formation in mini_formations|dictsort:"title" %}
+                    {% for mini_formation in mini_formations|dictsort:"intitule_formation" %}
                         <li>
-                            {{ mini_formation.title }}
+                            {{ mini_formation|get_intitule_programme }}
                         </li>
                     {% endfor %}
                 </ul>
