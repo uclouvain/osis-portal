@@ -89,17 +89,6 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
         return [prerequis.code_cours for prerequis in prerequis_non_acquis]
 
     @cached_property
-    def details_unites_enseignement_de_partenariat(self):
-        result = {}
-        for code in self.codes_cours_des_partenariats:
-            result[code] = LearningUnitService.get_learning_unit_title(
-                year=self.annee_academique,
-                acronym=code,
-                person=self.person
-            )
-        return result
-
-    @cached_property
     def details_classes(self):
         result = ClasseService.rechercher_classes(
             self.person,
@@ -160,9 +149,13 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     def _get_intitule(self, code) -> str:
         if code in self.details_unites_enseignement:
             return self.details_unites_enseignement[code]['title']
-        elif code in self.details_unites_enseignement_de_partenariat:
-            return self.details_unites_enseignement_de_partenariat[code]
-        return self.details_classes[code]['intitule']
+        elif code in self.details_classes:
+            return self.details_classes[code]['intitule']
+        return LearningUnitService.get_learning_unit_title(
+            year=self.annee_academique,
+            acronym=code,
+            person=self.person
+        )
 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:
