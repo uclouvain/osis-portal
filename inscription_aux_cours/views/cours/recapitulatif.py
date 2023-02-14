@@ -26,6 +26,7 @@ from typing import List, Optional, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
@@ -33,7 +34,6 @@ from osis_program_management_sdk.model.programme import Programme
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
-from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours import formatter
 from inscription_aux_cours.data.proposition_programme_annuel import Inscription, InscriptionsParContexte, \
     PropositionProgrammeAnnuel
@@ -120,7 +120,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
 
         inscriptions_aux_partenariats = [
             InscriptionsParContexte(
-                intitule=partenariat['intitule'],
+                intitule=self._format_intitule_partenariat(partenariat['intitule']),
                 cours=self._build_cours(partenariat['cours'])
             ) for partenariat in self.programme_annuel['partenariats']
         ]
@@ -133,6 +133,9 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
         return PropositionProgrammeAnnuel(
             inscriptions_par_contexte=inscriptions
         )
+
+    def _format_intitule_partenariat(self, intitule: str) -> str:
+        return str(_('My exchange programme')) + ": " + intitule
 
     def _build_cours(self, cours_par_contexte) -> List['Inscription']:
         result = []
