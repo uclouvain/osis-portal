@@ -109,10 +109,13 @@ def get_message_condition_access(annee: int, mini_formation: 'MiniFormation') ->
 @register.simple_tag
 def get_lien_condition_access(programme: 'Programme', mini_formation: 'MiniFormation') -> str:
     if ProgrammeService.est_bachelier(programme):
-        return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{mini_formation.sigle}-cond_adm"
+        return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{_clean_sigle_mini_formation(mini_formation.sigle)}-cond_adm"
     sigle_formation = ProgrammeService.get_sigle_formation(programme)
     return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{sigle_formation}-programme"
 
+
+def _clean_sigle_mini_formation(sigle: str) -> str:
+    return sigle.split('[')[0]
 
 @register.simple_tag
 def get_lien_horaire_cours(programme_annuel: 'PropositionProgrammeAnnuel') -> str:
