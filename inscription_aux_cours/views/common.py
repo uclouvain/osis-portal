@@ -65,9 +65,9 @@ class InscriptionAuxCoursViewMixin:
     def contact(self) -> 'ContactFaculte':
         return ContactService.get_contact_faculte(
             self.person,
-            sigle_formation=self.sigle_formation,
+            sigle_formation=self.sigle_formation.replace('11BA', '1BA'),
             annee=self.annee_academique,
-            pour_premiere_annee="11BA" in self.programme.sigle
+            pour_premiere_annee="11BA" in self.sigle_formation
         )
 
     @cached_property
