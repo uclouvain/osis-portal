@@ -55,17 +55,8 @@
             </div>
             {% endif %}
 
-
-            <br>
-
-            <div>
-                <h5><strong>{{ intitule }}</strong></h5>
-                <p><i>{{ commentaire|safe }}</i></p>
-            </div>
-
-
             {% if mini_formations_inscrites_non_inscriptibles %}
-            <br>
+                <br>
 
                 <div class="alert alert-warning">
                     <p>
@@ -80,6 +71,13 @@
                 </div>
 
             {% endif %}
+
+            <br>
+
+            <div>
+                <h5><strong>{{ intitule }}</strong></h5>
+                <p><i>{{ commentaire|safe }}</i></p>
+            </div>
 
             <br>
 
