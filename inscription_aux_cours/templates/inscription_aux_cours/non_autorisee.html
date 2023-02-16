@@ -51,9 +51,12 @@
             <br>
             <div class="center">
                 <a href="{% url 'inscription-aux-cours:selectionner-formation' %}" class="btn btn-primary">
-                    {% trans "Return to offer choice" %}
+                    {% trans "Return to initial screen" %}
                 </a>
             </div>
+
+            <br>
+            {% include "inscription_aux_cours/blocks/contact.html" %}
         </div>
     </div>
 {% endblock %}

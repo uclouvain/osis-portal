@@ -29,12 +29,12 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
-from osis_education_group_sdk.model.mini_training import MiniTraining
 from osis_inscription_cours_sdk.model.inscription_mini_formation import InscriptionMiniFormation
+from osis_program_management_sdk.model.programme import Programme
 
-from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours.services.mini_formation import MiniFormationService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from program_management.services.programme import ProgrammeService
 
 
 class RecapitulatifInscriptionsMiniFormationsView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
@@ -47,9 +47,9 @@ class RecapitulatifInscriptionsMiniFormationsView(LoginRequiredMixin, Inscriptio
         return MiniFormationService().get_inscriptions(self.person, self.code_programme)
 
     @cached_property
-    def mini_formations(self) -> List['MiniTraining']:
+    def mini_formations(self) -> List['Programme']:
         codes_mini_formation = [mini_formation.code_mini_formation for mini_formation in self.inscriptions]
-        return MiniTrainingService().search(self.person, year=self.annee_academique, codes=codes_mini_formation)
+        return ProgrammeService().rechercher(self.person, annee=self.annee_academique, codes=codes_mini_formation)
 
     def get(self, request, *args, **kwargs):
         if not self.inscriptions:

@@ -45,6 +45,16 @@ class ProgrammeService:
     def est_bachelier(programme: 'Programme') -> bool:
         return programme.type == TYPE_BACHELIER
 
+    @staticmethod
+    def get_sigle_formation(programme: 'Programme') -> str:
+        sigle_programme = programme.sigle
+        sigle_formation = sigle_programme
+        if '2MS/' in sigle_programme:
+            sigle_formation = sigle_programme[0:sigle_programme.index('2MS/') + 2]
+        elif "2MA" in sigle_programme:
+            sigle_formation = sigle_programme[0:sigle_programme.index('2MA') + 2]
+        return sigle_formation
+
 
 _programme_api_call = partial(
     call_api,

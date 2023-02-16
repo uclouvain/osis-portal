@@ -1,6 +1,6 @@
 {% extends "inscription_aux_cours/layout.html" %}
 {% load static i18n %}
-{% load academic_year_display inscription_aux_cours_extra %}
+{% load dictionnary academic_year_display inscription_aux_cours_extra %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -62,7 +62,7 @@
             {% else %}
                 <div class="alert alert-warning" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% blocktrans %}You are not enrolled to any program for the academic year {{ annee_academique }}.{% endblocktrans %}
+                    {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not enrolled to any program for the academic year {{ annee_academique }}.{% endblocktrans %}
                 </div>
             {% endif %}
             <div class="row">
@@ -72,8 +72,10 @@
                             <th>{% trans 'Year' %}</th>
                             <th>{% trans 'Acronym' %}</th>
                             <th>{% trans 'Program' %}</th>
+                            <th></th>
                         </tr>
                         {% for programme in programmes %}
+                            {% with autorisations|get_item:programme.code as autorisation %}
                             <tr>
                                 <td>{{ programme.annee|display_as_academic_year }}</td>
                                 <td>
@@ -82,7 +84,15 @@
                                     </a>
                                 </td>
                                 <td>{{ programme|get_intitule_programme }}</td>
+                                <td>
+                                    {% if autorisation.autorise %}
+                                        <i class="fa-solid fa-lock-open fa-info"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-lock fa-info"></i> <em>{{ autorisation.msg }}</em>
+                                    {% endif %}
+                                </td>
                             </tr>
+                            {% endwith %}
                         {% endfor %}
                     </table>
                 {% endif %}

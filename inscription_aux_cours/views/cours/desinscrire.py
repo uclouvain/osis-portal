@@ -40,10 +40,16 @@ class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
 
     # TemplateView
     template_name = "inscription_aux_cours/cours/inscrire.html"
+    error_template_name = "inscription_aux_cours/cours/desinscrire.html"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.erreurs = []
+
+    def get_template_names(self):
+        if self.erreurs:
+            return [self.error_template_name]
+        return super().get_template_names()
 
     @property
     def code_mini_formation(self) -> Optional[str]:
@@ -61,6 +67,22 @@ class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
 
         return super().get(request, *args, **kwargs)
 
+    def get_etat_inscription_cours(self) -> str:
+        programme_annuel = CoursService().recuperer_programme_annuel(self.person, self.code_programme)
+        inscriptions = programme_annuel.tronc_commun
+        inscriptions += [
+            inscription
+            for insccriptions_a_une_mini_formation in programme_annuel['mini_formations']
+            for inscription in insccriptions_a_une_mini_formation['cours']
+        ]
+        inscription = next(
+            (inscription for inscription in inscriptions if inscription['code'] == self.code_cours),
+            None
+        )
+        if inscription:
+            return inscription.etat
+        return ""
+
     def desinscrire_a_un_cours(self):
         CoursService().desinscrire(
             self.person,
@@ -74,5 +96,6 @@ class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
             **super().get_context_data(**kwargs),
             "code_mini_formation": self.code_mini_formation,
             "code_cours": self.code_cours,
-            "erreurs": self.erreurs
+            "erreurs": self.erreurs,
+            "etat_inscription": self.get_etat_inscription_cours(),
         }

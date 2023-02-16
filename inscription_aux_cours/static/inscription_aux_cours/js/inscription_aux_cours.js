@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+    styleRow();
     addTriggerForFormsEnrollToCourse(getInscrireAuCoursUrl(), getCSRFToken());
     addTriggerForFormsUnenrollToCourse(getDesinscrireAuCoursUrl(), getCSRFToken());
     addLoaderElement();
@@ -9,8 +10,8 @@ function addLoaderElement() {
     const forms = document.querySelectorAll(".formulaire-inscription-cours")
     forms.forEach((form, key, parent) => {
         form.insertAdjacentHTML(
-            'beforeend',
-            "<div class='loading'></div>"
+            'afterbegin',
+            "<div class='loading pull-left'></div>"
         )
     });
 }
@@ -54,7 +55,7 @@ function addTriggerForFormsUnenrollToCourse(postUrl, csrfToken) {
 function addTriggerOnForm(formElement, postUrl, csrfToken) {
     const codeCours = formElement.dataset.codeCours;
     const codeMiniFormation = formElement.dataset.codeMiniFormation;
-    const target = `#div-inscription-${codeMiniFormation}-${ codeCours }`
+    const target = `#form-inscription-${codeMiniFormation}-${ codeCours }`
 
     triggerHtmxPostOnClick(
         formElement,
@@ -71,3 +72,16 @@ function triggerHtmxPostOnClick(e, postUrl, target, values, headers) {
     });
 }
 
+
+document.addEventListener("htmx:afterSwap", styleRow)
+function styleRow() {
+    document.querySelectorAll('.desinscrit').forEach((el)=>el.closest('tr').style.backgroundColor='');
+    document.querySelectorAll('.badge_insc_meme_context').forEach((el)=>el.closest('tr').style.backgroundColor="rgba(3,51,173, 0.07)");
+    document.querySelectorAll('.badge_insc_meme_context').forEach((el)=>el.style.backgroundColor="rgba(3,51,173,0.5)");
+    document.querySelectorAll('.badge_insc_different_context').forEach((el)=>el.closest('tr').style.backgroundColor="rgba(46,174,213, 0.07)");
+    document.querySelectorAll('.badge_insc_different_context').forEach((el)=>el.style.backgroundColor="rgba(46,174,213,0.87)");
+    document.querySelectorAll('.badge_insc_credite_meme_context, .badge_val_meme_context').forEach((el)=>el.closest('tr').style.backgroundColor="rgba(18, 119, 22, 0.07)");
+    document.querySelectorAll('.badge_insc_credite_meme_context, .badge_val_meme_context').forEach((el)=>el.style.backgroundColor="rgba(18, 119, 22, 0.5)");
+    document.querySelectorAll('.badge_insc_credite_different_context, .badge_val_different_context').forEach((el)=>el.closest('tr').style.backgroundColor="rgba(138, 188, 62, 0.07)");
+    document.querySelectorAll('.badge_insc_credite_different_context, .badge_val_different_context').forEach((el)=>el.style.backgroundColor="rgba(138, 188, 62, 1)");
+}

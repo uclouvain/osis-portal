@@ -93,7 +93,7 @@ msgid "Lists of students enrolled to my exams"
 msgstr "Listes des étudiants inscrits à mes examens"
 
 msgid "Manage my annual programme proposal"
-msgstr "Gérer ma proposition de programme annuel"
+msgstr "Composer ma proposition de programme annuel"
 
 msgid "Manage my description fiche"
 msgstr "Gérer mes fiches descriptives"
