@@ -58,6 +58,17 @@
                     {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
                 </div>
 
+                {% if cours_dont_prerequis_non_acquis %}
+                    <div class="alert alert-danger hide_print">
+                        <p>
+                            <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
+                            {% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
+                            <br>
+                            {% trans "Please modify your enrollments." %}
+                        </p>
+                    </div>
+                {% endif %}
+
                 {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
             {% else %}
                 <div class="alert alert-warning hide_print" style="display:inline-block;">
@@ -95,6 +106,11 @@
                 {% include "inscription_aux_cours/cours/blocks/soumettre_proposition.html" %}
             </div>
 
+
+            <br>
+            <br>
+
+            {% include "inscription_aux_cours/blocks/contact.html" %}
         </div>
     </div>
 

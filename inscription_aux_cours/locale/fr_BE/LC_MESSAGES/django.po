@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 14:42+0100\n"
+"POT-Creation-Date: 2023-02-14 08:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,6 +73,9 @@ msgstr "Modifier mon inscription aux mineures et options"
 msgid "My courses enrollment"
 msgstr "Mon inscription aux cours"
 
+msgid "My exchange programme"
+msgstr "Mon programme d'échange"
+
 msgid "My minors or options enrollment"
 msgstr "Mon inscription aux mineures et options"
 
@@ -81,6 +84,12 @@ msgstr "Formation"
 
 msgid "Offer choice"
 msgstr "Choix de la formation"
+
+msgid "Please modify your enrollments."
+msgstr "Veuillez modifier votre inscription aux cours."
+
+msgid "Prerequisite not acquired"
+msgstr "Prérequis non acquis"
 
 msgid "Print my proposition of annual program"
 msgstr "Imprimer ma proposition de programme annuel"
@@ -91,8 +100,8 @@ msgstr "Formation"
 msgid "Registration id"
 msgstr "Noma"
 
-msgid "Return to offer choice"
-msgstr "Retourner au choix de la formation"
+msgid "Return to initial screen"
+msgstr "Retour à l'écran initial"
 
 msgid "Save and continue to courses enrollment"
 msgstr "Enregistrer et poursuivre vers l'inscription aux cours"
@@ -105,7 +114,7 @@ msgstr "Rechercher par code (exemple: LCHIM1111)"
 
 msgid "Select an offer for which you want to do courses enrollment."
 msgstr ""
-"Sélectionnez la formation dans laquelle vous désirez vous inscrire aux cours."
+"Sélectionnez la formation pour laquelle vous désirez vous inscrire aux cours."
 
 msgid "Special requests"
 msgstr "Demandes particulières éventuelles"
@@ -115,6 +124,9 @@ msgstr "Soumettre ma proposition de programme annuel"
 
 msgid "Summary courses enrollment"
 msgstr "Récapitulatif d'inscription aux cours"
+
+msgid "The enrollment will be done by your faculty manager."
+msgstr "L'inscription sera réalisée par votre gestionnaire facultaire."
 
 msgid ""
 "The following minors or options in which you are enrolled are no longer "
@@ -130,6 +142,13 @@ msgid ""
 msgstr ""
 "Cette mineure a des conditions d'accès, veuillez consulter la procédure à "
 "suivre pour vous y inscrire: {lien_condition_acces}"
+
+msgid ""
+"This minor or option has access conditions, please refer to the procedure to "
+"enroll by clicking this link."
+msgstr ""
+"Cette mineure ou option a des conditions d'accès, veuillez consulter la "
+"procédure à suivre pour vous y inscrire en cliquant sur ce lien. "
 
 msgid "Title"
 msgstr "Intitulé"
@@ -162,17 +181,35 @@ msgstr ""
 "%(annee_academique)s."
 
 msgid ""
+"You cannot unenroll from a minor or option enrolled by your faculty manager."
+msgstr ""
+"Vous ne pouvez pas vous désinscrire d'une mineure ou d'une option ajoutée "
+"par votre gestionnaire facultaire."
+
+msgid "You didn't acquired the prerequisites for the following courses:"
+msgstr "Vous n'avez pas acquis les prérequis pour les cours suivants:"
+
+#, python-brace-format
+msgid "You have been enrolled to {codes_cours}"
+msgstr "Vous avez été inscrit.e à {codes_cours}"
+
+msgid "Your contact in faculty:"
+msgstr "Votre contact en faculté:"
+
+msgid ""
 "Your enrollments are saved but you can continue modifying it until you "
 "didin't submit them."
 msgstr ""
 "Vos inscriptions sont enregistrées mais vous pouvez les modifier tant que "
 "vous ne les avez pas soumises."
 
+#, python-format
 msgid ""
 "Your proposition of annual program successfully submitted. A confirmation "
 "email is sent to the address %(email)s"
-msgstr "Votre proposition de programme annuel a été soumise avec succès. "
-"Un mail de confirmation est envoyé à l'adresse %(email)s"
+msgstr ""
+"Votre proposition de programme annuel a été soumise avec succès. Un mail de "
+"confirmation est envoyé à l'adresse %(email)s"
 
 msgid "credits"
 msgstr "crédits"
