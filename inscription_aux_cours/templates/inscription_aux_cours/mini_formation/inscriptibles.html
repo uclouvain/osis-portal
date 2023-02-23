@@ -79,6 +79,21 @@
                 <p><i>{{ commentaire|safe }}</i></p>
             </div>
 
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="legende">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseLegende" aria-expanded="false" aria-controls="collapseLegende">
+                            <i class="fa-solid fa-chevron-down unexpanded"></i> <i class="fa-solid fa-chevron-up expanded"></i> {% trans 'Legend' %}
+                        </a>
+                </div>
+                <div id="collapseLegende" class="panel-collapse collapse" role="tabpanel" aria-labelledby="legende">
+                    <div class="panel-body">
+                        <i class='fa-solid fa-key fa-info'></i>
+                          {% trans "Access to the minors or options marked with a key is subject to compliance with certain conditions (admission test, application file, etc.) which must be read before registering. Please consult the procedure to follow to register by clicking on the key. The registration will be done by your faculty manager." %}
+                    </div>
+                </div>
+            </div>
+
+
             <br>
 
             <table id="table-inscription-mini-formations" class="table table-hover">

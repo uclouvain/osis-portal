@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 14:32+0100\n"
+"POT-Creation-Date: 2023-02-23 15:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Academic year"
+msgstr ""
+
+msgid ""
+"Access to the minors or options marked with a key is subject to compliance "
+"with certain conditions (admission test, application file, etc.) which must "
+"be read before registering. Please consult the procedure to follow to "
+"register by clicking on the key. The registration will be done by your "
+"faculty manager."
 msgstr ""
 
 msgid "Acronym"
@@ -58,6 +66,9 @@ msgid "Last name"
 msgstr ""
 
 msgid "Learning Unit Year"
+msgstr ""
+
+msgid "Legend"
 msgstr ""
 
 msgid "List of minors or options to which you are enrolled"
