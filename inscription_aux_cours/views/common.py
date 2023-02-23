@@ -30,12 +30,14 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
+from osis_inscription_cours_sdk.model.contact_faculte import ContactFaculte
 from osis_offer_enrollment_sdk.model.inscription import Inscription
 from osis_program_management_sdk.model.programme import Programme
 
 from base.models.person import Person
 from base.services.offer_enrollment import InscriptionFormationsService
 from inscription_aux_cours.services.autorisation import AutorisationService
+from inscription_aux_cours.services.contact import ContactService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
 from program_management.services.programme import ProgrammeService
 
@@ -58,6 +60,15 @@ class InscriptionAuxCoursViewMixin:
     @cached_property
     def annee_academique(self) -> 'int':
         return PeriodeInscriptionAuxCoursService().get_annee(self.person)
+
+    @cached_property
+    def contact(self) -> 'ContactFaculte':
+        return ContactService.get_contact_faculte(
+            self.person,
+            sigle_formation=self.sigle_formation.replace('11BA', '1BA'),
+            annee=self.annee_academique,
+            pour_premiere_annee="11BA" in self.sigle_formation
+        )
 
     @cached_property
     def inscription(self) -> 'Inscription':
@@ -87,7 +98,8 @@ class InscriptionAuxCoursViewMixin:
         return {
             **super().get_context_data(**kwargs),
             'programme': self.programme,
-            'person': self.person
+            'person': self.person,
+            'contact': self.contact
         }
 
 

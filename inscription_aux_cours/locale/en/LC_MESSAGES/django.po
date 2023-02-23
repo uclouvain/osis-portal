@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 14:42+0100\n"
+"POT-Creation-Date: 2023-02-14 08:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,9 @@ msgstr ""
 msgid "My courses enrollment"
 msgstr ""
 
+msgid "My exchange programme"
+msgstr ""
+
 msgid "My minors or options enrollment"
 msgstr ""
 
@@ -76,6 +79,12 @@ msgid "Offer"
 msgstr ""
 
 msgid "Offer choice"
+msgstr ""
+
+msgid "Please modify your enrollments."
+msgstr ""
+
+msgid "Prerequisite not acquired"
 msgstr ""
 
 msgid "Print my proposition of annual program"
@@ -87,7 +96,7 @@ msgstr ""
 msgid "Registration id"
 msgstr ""
 
-msgid "Return to offer choice"
+msgid "Return to initial screen"
 msgstr ""
 
 msgid "Save and continue to courses enrollment"
@@ -111,6 +120,9 @@ msgstr ""
 msgid "Summary courses enrollment"
 msgstr ""
 
+msgid "The enrollment will be done by your faculty manager."
+msgstr ""
+
 msgid ""
 "The following minors or options in which you are enrolled are no longer "
 "offered this academic year:"
@@ -120,6 +132,11 @@ msgstr ""
 msgid ""
 "This minor has access conditions, please refer to the procedure to enroll: "
 "{lien_condition_acces}"
+msgstr ""
+
+msgid ""
+"This minor or option has access conditions, please refer to the procedure to "
+"enroll by clicking this link."
 msgstr ""
 
 msgid "Title"
@@ -147,6 +164,20 @@ msgstr ""
 msgid ""
 "You are not enrolled to any program for the academic year "
 "%(annee_academique)s."
+msgstr ""
+
+msgid ""
+"You cannot unenroll from a minor or option enrolled by your faculty manager."
+msgstr ""
+
+msgid "You didn't acquired the prerequisites for the following courses:"
+msgstr ""
+
+#, python-brace-format
+msgid "You have been enrolled to {codes_cours}"
+msgstr ""
+
+msgid "Your contact in faculty:"
 msgstr ""
 
 msgid ""
