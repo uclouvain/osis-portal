@@ -27,15 +27,16 @@ from django.urls import path, include
 
 from inscription_aux_cours.views.cours.demande_particuliere import DemandeParticuliereView
 from inscription_aux_cours.views.cours.desinscrire import DesinscrireAUnCoursView
+from inscription_aux_cours.views.cours.desinscrire_hors_programme import DesinscrireAUnCoursHorsProgrammeView
 from inscription_aux_cours.views.cours.formulaire import FormulaireInscriptionAuxCoursView
 from inscription_aux_cours.views.cours.inscrire import InscrireAUnCoursView
 from inscription_aux_cours.views.cours.inscrire_hors_programme import InscrireAUnCoursHorsProgrammeView
+from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
 from inscription_aux_cours.views.cours.soumettre_proposition import SoumettrePropositionView
 from inscription_aux_cours.views.inscription_non_autorisee import InscriptionNonAutoriseeView
 from inscription_aux_cours.views.mini_formation.desinscrire import DesinscrireAUneMiniFormationView
 from inscription_aux_cours.views.mini_formation.inscriptibles import MiniFormationsInscriptiblesView
 from inscription_aux_cours.views.mini_formation.inscrire import InscrireAUneMiniFormationView
-from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
 from inscription_aux_cours.views.mini_formation.recapitulatif import RecapitulatifInscriptionsMiniFormationsView
 from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
 
@@ -49,6 +50,7 @@ urlpatterns = [
         path('inscrire/', InscrireAUnCoursView.as_view(), name=InscrireAUnCoursView.name),
         path('inscrire_hors_programme/', InscrireAUnCoursHorsProgrammeView.as_view(), name=InscrireAUnCoursHorsProgrammeView.name),
         path('desinscrire/', DesinscrireAUnCoursView.as_view(), name=DesinscrireAUnCoursView.name),
+        path('desinscrire_hors_programme/', DesinscrireAUnCoursHorsProgrammeView.as_view(), name=DesinscrireAUnCoursHorsProgrammeView.name),
         path('demande_particuliere/', DemandeParticuliereView.as_view(), name=DemandeParticuliereView.name),
         path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),
         path(
