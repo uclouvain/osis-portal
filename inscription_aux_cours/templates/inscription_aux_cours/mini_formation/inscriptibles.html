@@ -100,18 +100,7 @@
                 {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
                     {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
                     <tr>
-                        <td>{{ mini_formation.intitule }}
-                            {% if mini_formation.condition_acces %}
-                                <a href="{% get_lien_condition_access programme mini_formation %}"
-                                   target="_blank"
-                                   data-toggle="tooltip"
-                                   data-html="true"
-                                   data-trigger="hover"
-                                   title="<p>{% trans 'This minor or option has access conditions, please refer to the procedure to enroll by clicking this link.' %}<br>{% trans 'The enrollment will be done by your faculty manager.' %}</p>">
-                                    <i class='fa-solid fa-key fa-info'></i>
-                                </a>
-                            {% endif %}
-                        </td>
+                        <td>{{ mini_formation.intitule }}</td>
                         <td class="col-md-1">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
@@ -141,6 +130,25 @@
                                             title="{% trans 'You cannot unenroll from a minor or option enrolled by your faculty manager.' %}"
                                         {% endif %}
                                 >
+                                {% if mini_formation.condition_acces %}
+                                    {% get_lien_condition_access programme mini_formation as lien_condition_access %}
+
+                                    <a data-toggle="popover"
+                                       tabindex="0"
+                                       role="button"
+                                       data-html="true"
+                                       data-placement="top"
+                                       data-trigger="focus"
+                                       data-content="
+                                       <p>
+                                        {% trans 'This minor or option has access conditions, please refer to the procedure to enroll by following this link:' %}
+                                        <a href='{{ lien_condition_access }}' target='_blank'>{{ lien_condition_access }}</a>
+                                        <br>
+                                        {% trans 'The enrollment will be done by your faculty manager.' %}
+                                        </p>">
+                                        <i class='fa-solid fa-key fa-info'></i>
+                                    </a>
+                                {% endif %}
                                 <div class="loading pull-left"></div>
                             </form>
                         </td>

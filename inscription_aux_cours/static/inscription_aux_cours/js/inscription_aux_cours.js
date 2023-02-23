@@ -3,8 +3,13 @@ document.addEventListener('DOMContentLoaded', function () {
     addTriggerForFormsEnrollToCourse(getInscrireAuCoursUrl(), getCSRFToken());
     addTriggerForFormsUnenrollToCourse(getDesinscrireAuCoursUrl(), getCSRFToken());
     addLoaderElement();
+    initPopover();
 }, false);
 
+
+function initPopover() {
+    $('[data-toggle="popover"]').popover();
+}
 
 function addLoaderElement() {
     const forms = document.querySelectorAll(".formulaire-inscription-cours")
