@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 15:28+0100\n"
+"POT-Creation-Date: 2023-02-24 08:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,9 @@ msgstr ""
 msgid "Acronym"
 msgstr "Sigle"
 
+msgid "Activiy with prerequisites"
+msgstr "Activité avec prérequis"
+
 msgid "Add"
 msgstr "Ajouter"
 
@@ -47,11 +50,20 @@ msgstr "Cours ajoutés"
 msgid "Annual program proposal"
 msgstr "Proposition de programme annuel"
 
+msgid "Block"
+msgstr "Block"
+
 msgid "Continue to courses enrollment"
 msgstr "Poursuivre vers l'inscription aux cours"
 
 msgid "Credits"
 msgstr "Crédits"
+
+msgid "Credits of the learning unit are acquired"
+msgstr "Les crédits de l'unité d'enseignement sont acquis"
+
+msgid "Credits of the learning unit are valued"
+msgstr "Les crédits de l'unité d'enseignement ont été valorisés"
 
 msgid ""
 "Define in which context you want to enroll the course and search by code "
@@ -59,6 +71,37 @@ msgid ""
 msgstr ""
 "Préciser dans quel contexte vous souhaitez ajouter ce cours et rechercher "
 "par code (exemple: LCHIM1111)."
+
+msgid "Enrolled in a learning unit"
+msgstr "Inscrit·e à  l'unité d'enseignement"
+
+msgid "Enrolled in a learning unit of continuation cycle"
+msgstr "Inscrit·e à une unité d'enseignement de la poursuite de cycle"
+
+msgid ""
+"Enrolled in a learning unit of continuation cycle, with a dispensatory test"
+msgstr "Inscrit·e à une unité d'enseignement de la poursuite de cycle, avec test dispensatoire"
+
+msgid "Enrolled in a learning unit of the complementary module"
+msgstr "Inscrit·e à une unité d'enseignement du module complémentaire"
+
+msgid ""
+"Enrolled in a learning unit of the complementary module, with a dispensatory "
+"test"
+msgstr "Inscrit·e à une unité d'enseignement du module complémentaire, avec test dispensatoire"
+
+msgid ""
+"Enrolled in a learning unit who does not account in the cycle progression"
+msgstr "Inscrit·e à une unité d'enseignement qui ne compte pas pour la progression dans le cycle"
+
+msgid "Enrolled in a learning unit with a dispensatory test"
+msgstr "Inscrit·e à une unité d'enseignement avec test dispensatoire"
+
+msgid "Exceptionally, not organized this year"
+msgstr "Exceptionnellement, non organisé cette année académique"
+
+msgid "Exceptionally, not organized this year, nor the next"
+msgstr "Exceptionnellement, non organisé cette année académique et l’année suivante"
 
 msgid "First name"
 msgstr "Prénom"
@@ -71,6 +114,9 @@ msgstr ""
 "Pour un changement de mineures ou d'options, veuillez contacter votre "
 "gestionnaire facultaire."
 
+msgid "Indicates annual block"
+msgstr "Indique le(s) bloc(s) annuel(s)"
+
 msgid "Last name"
 msgstr "Nom"
 
@@ -78,10 +124,13 @@ msgid "Learning Unit Year"
 msgstr "Unité d'enseignement"
 
 msgid "Legend"
-msgstr ""
+msgstr "Légende"
 
 msgid "List of minors or options to which you are enrolled"
 msgstr "Liste des mineures et options auxquelles vous êtes inscrit.e"
+
+msgid "Mandatory"
+msgstr "Obligatoire"
 
 msgid "Modify my enrollments"
 msgstr "Modifier mes inscriptions"
@@ -98,11 +147,25 @@ msgstr "Mon programme d'échange"
 msgid "My minors or options enrollment"
 msgstr "Mon inscription aux mineures et options"
 
+msgid ""
+"N.B.: A legend reminder appears by positioning the mouse pointer over the "
+"icon"
+msgstr "NB: Un rappel de légende apparaît en positionnant le pointeur de souris sur l'icône"
+
+msgid "Not offered this year but offered the following year"
+msgstr "Non organisé cette année académique mais organisé l’année suivante"
+
 msgid "Offer"
 msgstr "Formation"
 
 msgid "Offer choice"
 msgstr "Choix de la formation"
+
+msgid "Offered this year but not the following year"
+msgstr "Organisé cette année académique mais non organisé l’année suivante"
+
+msgid "Optional"
+msgstr "Optionnel"
 
 msgid "Please modify your enrollments."
 msgstr "Veuillez modifier votre inscription aux cours."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 15:28+0100\n"
+"POT-Creation-Date: 2023-02-24 08:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,6 +30,9 @@ msgstr ""
 msgid "Acronym"
 msgstr ""
 
+msgid "Activiy with prerequisites"
+msgstr ""
+
 msgid "Add"
 msgstr ""
 
@@ -42,15 +45,55 @@ msgstr ""
 msgid "Annual program proposal"
 msgstr ""
 
+msgid "Block"
+msgstr ""
+
 msgid "Continue to courses enrollment"
 msgstr ""
 
 msgid "Credits"
 msgstr ""
 
+msgid "Credits of the learning unit are acquired"
+msgstr ""
+
+msgid "Credits of the learning unit are valued"
+msgstr ""
+
 msgid ""
 "Define in which context you want to enroll the course and search by code "
 "(example: LCHIM1111)."
+msgstr ""
+
+msgid "Enrolled in a learning unit"
+msgstr ""
+
+msgid "Enrolled in a learning unit of continuation cycle"
+msgstr ""
+
+msgid ""
+"Enrolled in a learning unit of continuation cycle, with a dispensatory test"
+msgstr ""
+
+msgid "Enrolled in a learning unit of the complementary module"
+msgstr ""
+
+msgid ""
+"Enrolled in a learning unit of the complementary module, with a dispensatory "
+"test"
+msgstr ""
+
+msgid ""
+"Enrolled in a learning unit who does not account in the cycle progression"
+msgstr ""
+
+msgid "Enrolled in a learning unit with a dispensatory test"
+msgstr ""
+
+msgid "Exceptionally, not organized this year"
+msgstr ""
+
+msgid "Exceptionally, not organized this year, nor the next"
 msgstr ""
 
 msgid "First name"
@@ -60,6 +103,9 @@ msgid "First year of"
 msgstr ""
 
 msgid "For a change in minors or options, please contact your faculty manager."
+msgstr ""
+
+msgid "Indicates annual block"
 msgstr ""
 
 msgid "Last name"
@@ -72,6 +118,9 @@ msgid "Legend"
 msgstr ""
 
 msgid "List of minors or options to which you are enrolled"
+msgstr ""
+
+msgid "Mandatory"
 msgstr ""
 
 msgid "Modify my enrollments"
@@ -89,10 +138,24 @@ msgstr ""
 msgid "My minors or options enrollment"
 msgstr ""
 
+msgid ""
+"N.B.: A legend reminder appears by positioning the mouse pointer over the "
+"icon"
+msgstr ""
+
+msgid "Not offered this year but offered the following year"
+msgstr ""
+
 msgid "Offer"
 msgstr ""
 
 msgid "Offer choice"
+msgstr ""
+
+msgid "Offered this year but not the following year"
+msgstr ""
+
+msgid "Optional"
 msgstr ""
 
 msgid "Please modify your enrollments."
