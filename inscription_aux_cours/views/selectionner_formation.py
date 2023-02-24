@@ -28,7 +28,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
-from osis_offer_enrollment_sdk.model.mes_inscriptions import MesInscriptions
+from osis_offer_enrollment_sdk.model.inscription import Inscription
 from osis_program_management_sdk.model.programme import Programme
 
 from base.models.person import Person
@@ -54,14 +54,16 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         return PeriodeInscriptionAuxCoursService().get_annee(self.person)
 
     @cached_property
-    def inscriptions(self) -> 'MesInscriptions':
+    def inscriptions(self) -> List['Inscription']:
         return InscriptionFormationsService.mes_inscriptions(self.person, annee=self.annee_academique)
+
+    @property
+    def noma(self) -> str:
+        return self.inscriptions[0].noma if self.inscriptions else ""
 
     @cached_property
     def programmes(self) -> List['Programme']:
-        if not self.inscriptions.inscriptions:
-            return []
-        return recuperer_programmes(self.person, self.annee_academique, self.inscriptions.inscriptions)
+        return recuperer_programmes(self.person, self.annee_academique, self.inscriptions) if self.inscriptions else []
 
     @cached_property
     def autorisations(self) -> Dict[str, 'AutoriseInscrireAuxCours']:
@@ -74,7 +76,7 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         return {
             **super().get_context_data(**kwargs),
             'person': self.person,
-            'noma': self.inscriptions.noma,
+            'noma': self.noma,
             'programmes': self.programmes,
             'autorisations': self.autorisations,
             'annee_academique': self.annee_academique,

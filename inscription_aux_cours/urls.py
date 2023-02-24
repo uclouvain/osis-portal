@@ -35,7 +35,7 @@ from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
 from inscription_aux_cours.views.cours.soumettre_proposition import SoumettrePropositionView
 from inscription_aux_cours.views.inscription_non_autorisee import InscriptionNonAutoriseeView
 from inscription_aux_cours.views.mini_formation.desinscrire import DesinscrireAUneMiniFormationView
-from inscription_aux_cours.views.mini_formation.inscriptibles import MiniFormationsInscriptiblesView
+from inscription_aux_cours.views.mini_formation.formulaire import FormulaireMiniFormationsView
 from inscription_aux_cours.views.mini_formation.inscrire import InscrireAUneMiniFormationView
 from inscription_aux_cours.views.mini_formation.recapitulatif import RecapitulatifInscriptionsMiniFormationsView
 from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
@@ -57,7 +57,7 @@ urlpatterns = [
             'mineures_options/',
             include([
                 path('recapitulatif/', RecapitulatifInscriptionsMiniFormationsView.as_view(), name=RecapitulatifInscriptionsMiniFormationsView.name),
-                path('inscription/', MiniFormationsInscriptiblesView.as_view(), name=MiniFormationsInscriptiblesView.name),
+                path('formulaire/', FormulaireMiniFormationsView.as_view(), name=FormulaireMiniFormationsView.name),
                 path('inscrire/', InscrireAUneMiniFormationView.as_view(), name=InscrireAUneMiniFormationView.name),
                 path('desinscrire/', DesinscrireAUneMiniFormationView.as_view(), name=DesinscrireAUneMiniFormationView.name)
             ]),
