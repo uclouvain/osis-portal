@@ -46,33 +46,17 @@
                         <td>{% trans 'Exceptionally, not organized this year' %}</td>
                     </tr>
                     <tr>
-                        <td>
-                            {% if est_annee_paire %}
-                                <img src="{% static 'preparation_inscription/img/bisannual_odd.png' %}">
-                            {% else %}
-                                <img src="{% static 'preparation_inscription/img/bisannual_even.png' %}">
-                            {% endif %}
-                        </td>
+                        <td><img src="{% static 'preparation_inscription/img/bisannual_odd.png' %}"></td>
                         <td>{% trans 'Not offered this year but offered the following year' %}</td>
                     </tr>
                     <tr>
-                        <td>
-                            {% if est_annee_paire %}
-                                <img src="{% static 'preparation_inscription/img/bisannual_even.png' %}">
-                            {% else %}
-                                <img src="{% static 'preparation_inscription/img/bisannual_odd.png' %}">
-                            {% endif %}
-                        </td>
+                        <td><img src="{% static 'preparation_inscription/img/bisannual_even.png' %}"></td>
                         <td>{% trans 'Offered this year but not the following year' %}</td>
                     </tr>
                     <tr>
                         <td>
                             <img src="{% static 'preparation_inscription/img/delta.png' %}">
-                            {% if est_annee_paire %}
-                                <img src="{% static 'preparation_inscription/img/bisannual_even.png' %}">
-                            {% else %}
-                                <img src="{% static 'preparation_inscription/img/bisannual_odd.png' %}">
-                            {% endif %}
+                            <img src="{% static 'preparation_inscription/img/bisannual_even.png' %}">
                         </td>
                         <td>{% trans 'Exceptionally, not organized this year, nor the next' %}</td>
                     </tr>
