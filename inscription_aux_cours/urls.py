@@ -25,6 +25,7 @@
 ##############################################################################
 from django.urls import path, include
 
+from inscription_aux_cours.views.activites_aide_reussite.formulaire import FormulaireActivitesDeAideALaReussiteView
 from inscription_aux_cours.views.cours.demande_particuliere import DemandeParticuliereView
 from inscription_aux_cours.views.cours.desinscrire import DesinscrireAUnCoursView
 from inscription_aux_cours.views.cours.desinscrire_hors_programme import DesinscrireAUnCoursHorsProgrammeView
@@ -62,5 +63,6 @@ urlpatterns = [
                 path('desinscrire/', DesinscrireAUneMiniFormationView.as_view(), name=DesinscrireAUneMiniFormationView.name)
             ]),
         ),
+        path('activites_aide_reussite/', FormulaireActivitesDeAideALaReussiteView.as_view(), name=FormulaireActivitesDeAideALaReussiteView.name)
     ])),
 ]
