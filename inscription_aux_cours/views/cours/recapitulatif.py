@@ -22,6 +22,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import itertools
 from typing import List, Optional, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -29,11 +30,10 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
-from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
+from osis_inscription_cours_sdk.model.inscription_cours import InscriptionCours
 from osis_program_management_sdk.model.programme import Programme
 
 from base.services.utils import ServiceException
-from base.utils.string_utils import unaccent
 from inscription_aux_cours import formatter
 from inscription_aux_cours.data.proposition_programme_annuel import Inscription, InscriptionsParContexte, \
     PropositionProgrammeAnnuel
@@ -52,27 +52,12 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     template_name = "inscription_aux_cours/cours/recapitulatif.html"
 
     @cached_property
-    def programme_annuel(self) -> 'ProgrammeAnnuelEtudiant':
-        return CoursService().recuperer_programme_annuel(self.person, self.code_programme)
+    def inscriptions(self) -> List['InscriptionCours']:
+        return CoursService().recuperer_inscription_cours(self.person, self.code_programme)
 
     @property
     def codes_cours_du_programme_annuel(self) -> List[str]:
-        codes_cours_tronc_commun = [cours['code'] for cours in self.programme_annuel['tronc_commun']]
-        codes_cours_mini_formations = [
-            cours['code']
-            for mini_formation in self.programme_annuel['mini_formations']
-            for cours in mini_formation['cours']
-        ]
-
-        return codes_cours_tronc_commun + codes_cours_mini_formations
-
-    @property
-    def codes_cours_des_partenariats(self) -> List[str]:
-        return [
-            cours['code']
-            for partenariat in self.programme_annuel['partenariats']
-            for cours in partenariat['cours']
-        ]
+        return [inscription.code_cours for inscription in self.inscriptions]
 
     @cached_property
     def details_unites_enseignement(self):
@@ -99,39 +84,38 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
 
     @cached_property
     def details_mini_formation(self) -> Dict[str, 'Programme']:
-        codes_mini_formation = [mini_formation['code'] for mini_formation in self.programme_annuel['mini_formations']]
-        result = ProgrammeService().rechercher(self.person, annee=self.annee_academique, codes=codes_mini_formation)
+        codes_mini_formation = set(
+            [inscription.code_mini_formation for inscription in self.inscriptions if inscription.code_mini_formation]
+        )
+        result = ProgrammeService().rechercher(self.person, annee=self.annee_academique, codes=list(codes_mini_formation))
         return {mini_formation.code: mini_formation for mini_formation in result}
 
     @cached_property
     def programme_annuel_avec_details_cours(self) -> 'PropositionProgrammeAnnuel':
-        inscriptions_tronc_commun = InscriptionsParContexte(
-            intitule=formatter.get_intitule_programme(self.programme),
-            cours=self._build_cours(self.programme_annuel['tronc_commun'])
+        inscriptions_groupees_par_contexte = itertools.groupby(
+            sorted(
+                self.inscriptions,
+                key=lambda inscr: (inscr.code_mini_formation, inscr.partenariat, inscr.code_cours)
+            ), key=lambda inscr: (inscr.code_mini_formation, inscr.partenariat)
         )
 
-        inscriptions_aux_mini_formations = [
-            InscriptionsParContexte(
-                intitule=get_intitule_programme(self.details_mini_formation[mini_formation['code']]),
-                cours=self._build_cours(mini_formation['cours'])
-            ) for mini_formation in self.programme_annuel['mini_formations']
-        ]
-        inscriptions_aux_mini_formations.sort(key=lambda contexte: unaccent(contexte.intitule))
-
-        inscriptions_aux_partenariats = [
-            InscriptionsParContexte(
-                intitule=self._format_intitule_partenariat(partenariat['intitule']),
-                cours=self._build_cours(partenariat['cours'])
-            ) for partenariat in self.programme_annuel['partenariats']
-        ]
-        inscriptions_aux_partenariats.sort(key=lambda contexte: unaccent(contexte.intitule))
-
-        inscriptions = [inscriptions_tronc_commun] if inscriptions_tronc_commun.cours else []
-        inscriptions += inscriptions_aux_mini_formations
-        inscriptions += inscriptions_aux_partenariats
-
+        inscriptions_par_contexte = []
+        for key, inscriptions in inscriptions_groupees_par_contexte:
+            code_mini_formation, partenariat = key
+            if code_mini_formation:
+                intitule = get_intitule_programme(self.details_mini_formation[code_mini_formation])
+            elif partenariat:
+                intitule = self._format_intitule_partenariat(partenariat)
+            else:
+                intitule = formatter.get_intitule_programme(self.programme)
+            inscriptions_par_contexte.append(
+                InscriptionsParContexte(
+                    intitule=intitule,
+                    cours=self._build_cours(inscriptions)
+                )
+            )
         return PropositionProgrammeAnnuel(
-            inscriptions_par_contexte=inscriptions
+            inscriptions_par_contexte=inscriptions_par_contexte
         )
 
     def _format_intitule_partenariat(self, intitule: str) -> str:
@@ -140,7 +124,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     def _build_cours(self, cours_par_contexte) -> List['Inscription']:
         result = []
         for cours in cours_par_contexte:
-            code = cours['code']
+            code = cours.code_cours
             inscription = Inscription(
                 code=code,
                 credits=cours['credits'],

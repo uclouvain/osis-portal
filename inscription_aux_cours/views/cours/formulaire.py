@@ -27,21 +27,15 @@ from typing import List, Optional, Dict
 
 import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
 from django.utils.functional import cached_property
-from django.views.generic import FormView, TemplateView
-from osis_inscription_cours_sdk.model.configuration_formulaire_inscription_cours import \
-    ConfigurationFormulaireInscriptionCours
+from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
-from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 from osis_learning_unit_sdk.model.classe import Classe
-from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.forms.cours.inscription_hors_programme import InscriptionHorsProgrammeForm
-from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.services.mini_formation import MiniFormationService
@@ -84,10 +78,6 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             choix_mini_formations,
             initial={'annee': self.annee_academique},
         )
-
-    @cached_property
-    def programme_annuel_etudiant(self) -> 'ProgrammeAnnuelEtudiant':
-        return CoursService().recuperer_programme_annuel(self.person, self.code_programme)
 
     @cached_property
     def inscriptions_hors_programme(self) -> List['InscriptionAUnCoursHorsProgramme']:

@@ -27,9 +27,9 @@ from typing import List
 
 import osis_inscription_cours_sdk
 from osis_inscription_cours_sdk.api import cours_api
+from osis_inscription_cours_sdk.model.inscription_cours import InscriptionCours
 from osis_inscription_cours_sdk.model.inscrire_aun_cours import InscrireAUnCours
 from osis_inscription_cours_sdk.model.prerequis_non_acquis import PrerequisNonAcquis
-from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 
 from base.models.person import Person
 from base.services.utils import call_api
@@ -76,10 +76,10 @@ class CoursService:
         )
 
     @staticmethod
-    def recuperer_programme_annuel(
+    def recuperer_inscription_cours(
             person: 'Person',
             code_programme: str,
-    ) -> 'ProgrammeAnnuelEtudiant':
+    ) -> List['InscriptionCours']:
         return _cours_api_call(
             person,
             "inscriptions_cours",
