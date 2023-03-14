@@ -61,7 +61,7 @@ class TestSendApplicationsSummaryView(OnlineApplicationContextTestMixin, TestCas
         self.client.logout()
 
         response = self.client.post(self.url, follow=False)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
         self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)

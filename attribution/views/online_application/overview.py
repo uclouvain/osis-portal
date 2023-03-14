@@ -32,14 +32,13 @@ from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 
-from osis_attribution_sdk import ApiException
 
 from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
-from attribution.services.application import ApplicationService, ApplicationBusinessException
+from attribution.services.application import ApplicationService
 from attribution.utils import permission
 from base.models.person import Person
 from base.templatetags.academic_year_display import display_as_academic_year
-from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException, api_exception_handler
+from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -61,7 +60,6 @@ class ApplicationOverviewView(LoginRequiredMixin, TemplateView):
         return self.request.user.person
 
     @cached_property
-    @api_exception_handler(ApiException)
     def application_course_calendar(self):
         calendars = ApplicationCoursesRemoteCalendar(self.person).get_opened_academic_events()
         if len(calendars) > 1:
