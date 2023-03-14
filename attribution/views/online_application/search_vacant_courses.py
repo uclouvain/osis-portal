@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -38,17 +38,14 @@ from attribution.utils import permission
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class SearchVacantCoursesView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    # PermissionRequiredMixin
-    permission_required = "base.can_access_attribution_application"
-    raise_exception = True
+class SearchVacantCoursesView(LoginRequiredMixin, TemplateView):
 
     # TemplateView
     template_name = "attribution_vacant_list.html"
 
     @cached_property
-    def tutor(self):
-        return self.request.user.person.tutor
+    def person(self):
+        return self.request.user.person
 
     def get(self, request, *args, **kwargs):
         if not permission.is_online_application_opened(self.request.user):
@@ -59,7 +56,7 @@ class SearchVacantCoursesView(LoginRequiredMixin, PermissionRequiredMixin, Templ
             kwargs['vacant_courses'] = ApplicationService.search_vacant_courses(
                 code=form.cleaned_data['learning_container_acronym'],
                 allocation_faculty=getattr(form.cleaned_data['faculty'], 'acronym', ''),
-                person=self.tutor.person
+                person=self.person
             )
         kwargs['form'] = form
         return super().get(request, *args, **kwargs)
@@ -67,6 +64,6 @@ class SearchVacantCoursesView(LoginRequiredMixin, PermissionRequiredMixin, Templ
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'a_tutor': self.tutor,
+            'a_person': self.person,
             'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
         }

@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ from osis_attribution_sdk.model.vacant_declaration_type_enum import VacantDeclar
 from rest_framework import status
 
 from attribution.tests.views.online_application.common import OnlineApplicationContextTestMixin
+from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 from base.tests.factories.user import UserFactory
 
@@ -45,11 +46,10 @@ class TestUpdateApplicationView(OnlineApplicationContextTestMixin, TestCase):
     def setUpTestData(cls):
         cls.application_uuid = uuid.uuid4()
         cls.url = reverse('update_application', kwargs={'application_uuid': cls.application_uuid})
-        cls.tutor = TutorFactory(person__global_id='578945612')
+        cls.person = PersonFactory(global_id='9999999')
 
     def setUp(self):
         self.open_application_course_calendar()
-        self.add_can_access_application_permission_to_user(self.tutor.person.user)
 
         # Create mock ApplicationService
         self.update_application_mocked = mock.Mock(return_value=None)
@@ -89,18 +89,12 @@ class TestUpdateApplicationView(OnlineApplicationContextTestMixin, TestCase):
         self.application_service_patcher.start()
         self.addCleanup(self.application_service_patcher.stop)
 
-        self.client.force_login(self.tutor.person.user)
+        self.client.force_login(self.person.user)
 
     def test_case_user_not_logged(self):
         self.client.logout()
 
         response = self.client.get(self.url, follow=False)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_case_user_without_permission(self):
-        self.client.force_login(UserFactory())
-
-        response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
@@ -118,7 +112,7 @@ class TestUpdateApplicationView(OnlineApplicationContextTestMixin, TestCase):
         response = self.client.get(self.url, data={}, follow=False)
 
         self.assertEqual(response.status_code, HttpResponse.status_code)
-        self.assertEqual(response.context['a_tutor'], self.tutor)
+        self.assertEqual(response.context['a_person'], self.person)
         self.assertEqual(response.context['save_url'], self.url)
         self.assertEqual(response.context['cancel_url'], reverse('applications_overview'))
         self.assertEqual(response.context['help_button_url'], "https://dummy-url.com")
