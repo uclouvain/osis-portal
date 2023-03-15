@@ -53,7 +53,9 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
 
     def get(self, request, *args, **kwargs):
         if not self.acces.est_concerne:
-            return redirect(reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme}))
+            return redirect(
+                reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})
+            )
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -66,7 +68,8 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
                 self.code_programme
             )
         else:
-            ActivitesAideReussiteService.demander_a_ne_pas_completer_inscription_par_des_activites_de_aide_a_la_reussite(
+            ActivitesAideReussiteService.\
+                demander_a_ne_pas_completer_inscription_par_des_activites_de_aide_a_la_reussite(
                 self.person,
                 self.code_programme
             )
