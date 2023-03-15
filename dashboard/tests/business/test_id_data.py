@@ -221,11 +221,11 @@ class TestStudentData(TestCase):
 
     @patch('dashboard.business.id_data._get_data_from_esb')
     def test_get_niss(self, mock_esb):
-        mock_esb.return_value = "92041830152"
+        mock_esb.return_value = {"return": {"niss": "92041830152"}}
         student = StudentFactory()
         given_data = bsn_id_data._get_formated_niss(student)
         expected_data = "92.04.18-301.52"
-        self.assertDictEqual(given_data, expected_data)
+        self.assertEqual(given_data, expected_data)
 
     @patch('dashboard.business.id_data._get_data_from_esb')
     def test_get_data_from_esb(self, mock_esb):
