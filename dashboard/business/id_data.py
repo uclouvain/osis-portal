@@ -69,7 +69,7 @@ def _get_personal_data(student: Student) -> Dict:
     return _get_data_from_esb(personal_data_url).get('return')
 
 
-def _get_niss(student: Student) -> str:
+def _get_niss(student: Student) -> int:
     server_top_url = settings.ESB_URL
     niss_data_path = settings.STUDENT_ID_DATA.get('NISS_DATA_PATH')
     niss_data_url = server_top_url + niss_data_path.format(student.person.global_id)
@@ -77,7 +77,7 @@ def _get_niss(student: Student) -> str:
 
 
 def _get_formated_niss(student: Student) -> str:
-    niss = _get_niss(student)
+    niss = str(_get_niss(student))
     return f"{niss[:2]}.{niss[2:4]}.{niss[4:6]}-{niss[6:9]}.{niss[9:]}"
 
 
