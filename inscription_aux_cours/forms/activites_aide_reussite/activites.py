@@ -36,11 +36,9 @@ class ActivitesAideReussiteForm(forms.Form):
                 (False, _('No'))
             )
         ),
-        error_messages={'required': _('You must complete your enrollment with success suport activites')}
     )
 
-    def __init__(self, *args, disabled=False, required=True, **kwargs):
+    def __init__(self, *args, disabled=False, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.fields['suivre_activites'].disabled = disabled
-        self.fields['suivre_activites'].required = required

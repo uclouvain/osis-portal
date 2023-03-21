@@ -25,13 +25,14 @@
 from typing import Optional
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseNotFound, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import FormView
-from osis_inscription_cours_sdk.model.acces_activites_aide_reussite import AccesActivitesAideReussite
 from osis_inscription_cours_sdk.model.activites_aide_reussite import ActivitesAideReussite
 
+from base.services.utils import ServiceException
 from inscription_aux_cours.forms.activites_aide_reussite.activites import ActivitesAideReussiteForm
 from inscription_aux_cours.services.activites_aide_reussite import ActivitesAideReussiteService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
@@ -47,33 +48,41 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
     def activites_aide_reussite(self) -> Optional['ActivitesAideReussite']:
         return ActivitesAideReussiteService.get_activites_aide_reussite(self.person, self.code_programme)
 
-    @cached_property
-    def acces(self) -> 'AccesActivitesAideReussite':
-        return ActivitesAideReussiteService.get_access(self.person, self.code_programme)
 
     def get(self, request, *args, **kwargs):
-        if not self.acces.est_concerne:
-            return redirect(
-                reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})
-            )
+        try:
+            self.activites_aide_reussite
+        except ServiceException as exc:
+            if exc.status == HttpResponseForbidden.status_code:
+                return redirect(
+                    reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})
+                )
+            raise exc
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         if form.fields['suivre_activites'].disabled:
             return super().form_valid(form)
+
         suivre_activites = form.cleaned_data['suivre_activites']
-        if suivre_activites:
-            ActivitesAideReussiteService.demander_a_completer_inscription_par_des_activites_de_aide_a_la_reussite(
-                self.person,
-                self.code_programme
-            )
-        else:
-            ActivitesAideReussiteService.\
-                demander_a_ne_pas_completer_inscription_par_des_activites_de_aide_a_la_reussite(
-                self.person,
-                self.code_programme
-            )
+        try:
+            if suivre_activites:
+                ActivitesAideReussiteService.demander_a_completer_inscription_par_des_activites_de_aide_a_la_reussite(
+                    self.person,
+                    self.code_programme
+                )
+            else:
+                ActivitesAideReussiteService.\
+                    demander_a_ne_pas_completer_inscription_par_des_activites_de_aide_a_la_reussite(
+                    self.person,
+                    self.code_programme
+                )
+        except ServiceException as service_exc:
+            form.add_error("suivre_activites", service_exc.messages)
+            return self.form_invalid(form)
+
         return super().form_valid(form)
+
 
     def get_success_url(self):
         return reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})
@@ -88,7 +97,6 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
         form_kwargs = super().get_form_kwargs()
         if self.activites_aide_reussite:
             form_kwargs['disabled'] = not self.activites_aide_reussite.demandees_par_etudiant
-            form_kwargs['required'] = self.acces.doit_suivre
         return form_kwargs
 
     def get_context_data(self, **kwargs):

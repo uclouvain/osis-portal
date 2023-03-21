@@ -171,10 +171,13 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
 
     @cached_property
     def activites_aide_reussite(self) -> Optional['ActivitesAideReussite']:
-        return ActivitesAideReussiteService.get_activites_aide_reussite(
-            self.person,
-            self.code_programme
-        )
+        try:
+            return ActivitesAideReussiteService.get_activites_aide_reussite(
+                self.person,
+                self.code_programme
+            )
+        except ServiceException:
+            return None
 
     def get_context_data(self, **kwargs):
         return {

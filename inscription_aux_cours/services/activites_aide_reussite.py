@@ -28,7 +28,6 @@ from typing import Optional
 import osis_inscription_cours_sdk
 from django.http import Http404
 from osis_inscription_cours_sdk.api import activites_aide_reussite_api
-from osis_inscription_cours_sdk.model.acces_activites_aide_reussite import AccesActivitesAideReussite
 from osis_inscription_cours_sdk.model.activites_aide_reussite import ActivitesAideReussite
 from osis_inscription_cours_sdk.model.demande_activites_aide_reussite import DemandeActivitesAideReussite
 
@@ -61,11 +60,8 @@ class ActivitesAideReussiteService:
     ) -> None:
         return _activites_api_call(
             person,
-            "post_activites_aide_reussite",
+            "post_completer_inscription_par_activites_aide_reussite",
             code_programme=code_programme,
-            demande_activites_aide_reussite=DemandeActivitesAideReussite(
-                suivre_activites=True
-            )
         )
 
     @classmethod
@@ -76,23 +72,8 @@ class ActivitesAideReussiteService:
     ) -> None:
         return _activites_api_call(
             person,
-            "post_activites_aide_reussite",
+            "post_ne_pas_completer_inscription_par_activites_aide_reussite",
             code_programme=code_programme,
-            demande_activites_aide_reussite=DemandeActivitesAideReussite(
-                suivre_activites=False
-            )
-        )
-
-    @classmethod
-    def get_access(
-            cls,
-            person: 'Person',
-            code_programme: str,
-    ) -> 'AccesActivitesAideReussite':
-        return _activites_api_call(
-            person,
-            "get_access",
-            code_programme=code_programme
         )
 
 
