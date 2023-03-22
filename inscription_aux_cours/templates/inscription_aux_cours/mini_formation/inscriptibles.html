@@ -81,7 +81,7 @@
 
             <br>
 
-            <table id="table-inscription-mini-formations" class="table table-hover">
+            <table id="table-inscription-mini-formations" class="table table-hover" hx-sync="this:queue all" hx-ext="class-on-confirm">
                 {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
                     {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
                     <tr>
