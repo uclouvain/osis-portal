@@ -3,6 +3,17 @@ document.addEventListener('DOMContentLoaded', function () {
     addTriggerForFormsEnrollToCourse(getInscrireAuCoursUrl(), getCSRFToken());
     addTriggerForFormsUnenrollToCourse(getDesinscrireAuCoursUrl(), getCSRFToken());
     addLoaderElement();
+
+    htmx.defineExtension('class-on-confirm', {
+        onEvent : function(name, evt) {
+            if (name === "htmx:confirm") {
+                const eltSelector = evt.detail.elt.getAttribute('hx-indicator');
+                const elt = document.querySelector(eltSelector);
+                elt.classList.add("htmx-request");
+            }
+        }
+    })
+
 }, false);
 
 
@@ -69,6 +80,7 @@ function addTriggerOnForm(formElement, postUrl, csrfToken) {
 function triggerHtmxPostOnClick(e, postUrl, target, values, headers) {
     e.addEventListener('click', (event) => {
        htmx.ajax('POST', postUrl, {'source': e, 'target': target, 'swap': 'outerHTML', 'values': values, 'headers': headers})
+       e.classList.add('htmx-request');
     });
 }
 
