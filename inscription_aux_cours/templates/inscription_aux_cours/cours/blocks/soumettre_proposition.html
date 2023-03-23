@@ -27,7 +27,12 @@
     {% csrf_token %}
     <button
         type="submit"
-        class="btn btn-primary">
+        class="btn btn-primary"
+        {% if bloquer_soumission %}
+        data-toggle="tooltip"
+        title="{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}"
+        disabled
+        {% endif %}>
         <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
         <div class="d-inline-block loading"></div>
     </button>
