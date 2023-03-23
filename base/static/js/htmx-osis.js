@@ -6,15 +6,29 @@ htmx.defineExtension('osis-disable-element', {
     onEvent: function (name, evt) {
         let elt = evt.detail.elt;
         let target = elt.getAttribute("hx-disable-element");
-        let targetElement = (target == "self") ? elt : document.querySelector(target);
+        let targetElements = (target == "self") ? [elt] : document.querySelectorAll(target);
 
-        if (name === "htmx:beforeRequest" && targetElement) {
-            disableElement(targetElement);
-        } else if (name == "htmx:afterRequest" && targetElement) {
-            enableElement(targetElement);
+        if (name === "htmx:beforeRequest") {
+            targetElements.forEach(element => disableElement(element))
+        } else if (name == "htmx:afterRequest") {
+            targetElements.forEach(element => enableElement(element))
         }
     }
 });
+
+
+htmx.defineExtension('class-on-confirm', {
+    onEvent : function(name, evt) {
+        if (name === "htmx:confirm") {
+            const eltSelector = evt.detail.elt.getAttribute('hx-indicator');
+            const elt = document.querySelector(eltSelector);
+            if (elt !== null) {
+                elt.classList.add("htmx-request");
+            }
+
+        }
+    }
+})
 
 function disableElement(ele) {
     if (ele.tagName === 'A') {
