@@ -172,5 +172,6 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             **super().get_context_data(**kwargs),
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere,
-            'cours_dont_prerequis_non_acquis': self.cours_dont_prerequis_non_acquis
+            'cours_dont_prerequis_non_acquis': self.cours_dont_prerequis_non_acquis,
+            'bloquer_soumission': bool(self.cours_dont_prerequis_non_acquis),
         }
