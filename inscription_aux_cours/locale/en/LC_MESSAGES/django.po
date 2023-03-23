@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-14 08:41+0100\n"
+"POT-Creation-Date: 2023-03-15 09:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,18 @@ msgstr ""
 msgid "Academic year"
 msgstr ""
 
+msgid ""
+"Access to the minors or options marked with a key is subject to compliance "
+"with certain conditions (admission test, application file, etc.) which must "
+"be read before registering. Please consult the procedure to follow to "
+"register by clicking on the key. The registration will be done by your "
+"faculty manager."
+msgstr ""
+
 msgid "Acronym"
+msgstr ""
+
+msgid "Activiy with prerequisites"
 msgstr ""
 
 msgid "Add"
@@ -31,15 +42,58 @@ msgstr ""
 msgid "Added courses"
 msgstr ""
 
+msgid "Annual program proposal"
+msgstr ""
+
+msgid "Block"
+msgstr ""
+
 msgid "Continue to courses enrollment"
 msgstr ""
 
 msgid "Credits"
 msgstr ""
 
+msgid "Credits of the learning unit are acquired"
+msgstr ""
+
+msgid "Credits of the learning unit are valued"
+msgstr ""
+
 msgid ""
 "Define in which context you want to enroll the course and search by code "
 "(example: LCHIM1111)."
+msgstr ""
+
+msgid "Enrolled in a learning unit"
+msgstr ""
+
+msgid "Enrolled in a learning unit of continuation cycle"
+msgstr ""
+
+msgid ""
+"Enrolled in a learning unit of continuation cycle, with a dispensatory test"
+msgstr ""
+
+msgid "Enrolled in a learning unit of the complementary module"
+msgstr ""
+
+msgid ""
+"Enrolled in a learning unit of the complementary module, with a dispensatory "
+"test"
+msgstr ""
+
+msgid ""
+"Enrolled in a learning unit who does not account in the cycle progression"
+msgstr ""
+
+msgid "Enrolled in a learning unit with a dispensatory test"
+msgstr ""
+
+msgid "Exceptionally, not organized this year"
+msgstr ""
+
+msgid "Exceptionally, not organized this year, nor the next"
 msgstr ""
 
 msgid "First name"
@@ -51,13 +105,36 @@ msgstr ""
 msgid "For a change in minors or options, please contact your faculty manager."
 msgstr ""
 
+msgid "I complete my enrollment with success support activities"
+msgstr ""
+
+msgid ""
+"In accordance with article 39 §1 of the RGEE, I complete my enrollment with "
+"activities to help me succeed."
+msgstr ""
+
+msgid ""
+"In accordance with article 39 §1 of the RGEE, I have been informed that I "
+"can complete my enrollment with success support activities. I have decided "
+"not to complete my enrollment with success support activities."
+msgstr ""
+
+msgid "Indicates annual block"
+msgstr ""
+
 msgid "Last name"
 msgstr ""
 
 msgid "Learning Unit Year"
 msgstr ""
 
+msgid "Legend"
+msgstr ""
+
 msgid "List of minors or options to which you are enrolled"
+msgstr ""
+
+msgid "Mandatory"
 msgstr ""
 
 msgid "Modify my enrollments"
@@ -75,10 +152,30 @@ msgstr ""
 msgid "My minors or options enrollment"
 msgstr ""
 
+msgid "My success support activities"
+msgstr ""
+
+msgid ""
+"N.B.: A legend reminder appears by positioning the mouse pointer over the "
+"icon"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Not offered this year but offered the following year"
+msgstr ""
+
 msgid "Offer"
 msgstr ""
 
 msgid "Offer choice"
+msgstr ""
+
+msgid "Offered this year but not the following year"
+msgstr ""
+
+msgid "Optional"
 msgstr ""
 
 msgid "Please modify your enrollments."
@@ -136,7 +233,7 @@ msgstr ""
 
 msgid ""
 "This minor or option has access conditions, please refer to the procedure to "
-"enroll by clicking this link."
+"enroll by following this link:"
 msgstr ""
 
 msgid "Title"
@@ -149,6 +246,9 @@ msgid "View my courses schedule"
 msgstr ""
 
 msgid "Year"
+msgstr ""
+
+msgid "Yes"
 msgstr ""
 
 msgid "You are not enrolled to a minor or deepening."
@@ -177,12 +277,21 @@ msgstr ""
 msgid "You have been enrolled to {codes_cours}"
 msgstr ""
 
+msgid "You must complete your enrollment with success suport activites"
+msgstr ""
+
 msgid "Your contact in faculty:"
 msgstr ""
 
 msgid ""
 "Your enrollments are saved but you can continue modifying it until you "
 "didin't submit them."
+msgstr ""
+
+msgid ""
+"Your faculty organize <ins><a href='https://uclouvain.be/fr/etudier/"
+"activites-secteurs-et-facs.html' target='_blank'>support systems</a></ins> "
+"to help you succeed throughout the year."
 msgstr ""
 
 #, python-format

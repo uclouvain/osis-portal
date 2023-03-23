@@ -79,24 +79,28 @@
                 <p><i>{{ commentaire|safe }}</i></p>
             </div>
 
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="legende">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseLegende" aria-expanded="false" aria-controls="collapseLegende">
+                            <i class="fa-solid fa-chevron-down unexpanded"></i> <i class="fa-solid fa-chevron-up expanded"></i> {% trans 'Legend' %}
+                        </a>
+                </div>
+                <div id="collapseLegende" class="panel-collapse collapse" role="tabpanel" aria-labelledby="legende">
+                    <div class="panel-body">
+                        <i class='fa-solid fa-key fa-info'></i>
+                          {% trans "Access to the minors or options marked with a key is subject to compliance with certain conditions (admission test, application file, etc.) which must be read before registering. Please consult the procedure to follow to register by clicking on the key. The registration will be done by your faculty manager." %}
+                    </div>
+                </div>
+            </div>
+
+
             <br>
 
             <table id="table-inscription-mini-formations" class="table table-hover" hx-sync="this:queue all" hx-ext="class-on-confirm">
                 {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
                     {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
                     <tr>
-                        <td>{{ mini_formation.intitule }}
-                            {% if mini_formation.condition_acces %}
-                                <a href="{% get_lien_condition_access programme mini_formation %}"
-                                   target="_blank"
-                                   data-toggle="tooltip"
-                                   data-html="true"
-                                   data-trigger="hover"
-                                   title="<p>{% trans 'This minor or option has access conditions, please refer to the procedure to enroll by clicking this link.' %}<br>{% trans 'The enrollment will be done by your faculty manager.' %}</p>">
-                                    <i class='fa-solid fa-key fa-info'></i>
-                                </a>
-                            {% endif %}
-                        </td>
+                        <td>{{ mini_formation.intitule }}</td>
                         <td class="col-md-1">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
@@ -126,6 +130,25 @@
                                             title="{% trans 'You cannot unenroll from a minor or option enrolled by your faculty manager.' %}"
                                         {% endif %}
                                 >
+                                {% if mini_formation.condition_acces %}
+                                    {% get_lien_condition_access programme mini_formation as lien_condition_access %}
+
+                                    <a data-toggle="popover"
+                                       tabindex="0"
+                                       role="button"
+                                       data-html="true"
+                                       data-placement="top"
+                                       data-trigger="focus"
+                                       data-content="
+                                       <p>
+                                        {% trans 'This minor or option has access conditions, please refer to the procedure to enroll by following this link:' %}
+                                        <a href='{{ lien_condition_access }}' target='_blank'>{{ lien_condition_access }}</a>
+                                        <br>
+                                        {% trans 'The enrollment will be done by your faculty manager.' %}
+                                        </p>">
+                                        <i class='fa-solid fa-key fa-info'></i>
+                                    </a>
+                                {% endif %}
                                 <div class="loading pull-left"></div>
                             </form>
                         </td>

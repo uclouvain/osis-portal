@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     addTriggerForFormsEnrollToCourse(getInscrireAuCoursUrl(), getCSRFToken());
     addTriggerForFormsUnenrollToCourse(getDesinscrireAuCoursUrl(), getCSRFToken());
     addLoaderElement();
+    initPopover();
 
     htmx.defineExtension('class-on-confirm', {
         onEvent : function(name, evt) {
@@ -12,10 +13,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 elt.classList.add("htmx-request");
             }
         }
-    })
+    });
 
 }, false);
 
+
+function initPopover() {
+    $('[data-toggle="popover"]').popover();
+}
 
 function addLoaderElement() {
     const forms = document.querySelectorAll(".formulaire-inscription-cours")

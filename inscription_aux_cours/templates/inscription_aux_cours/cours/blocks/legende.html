@@ -1,0 +1,114 @@
+{% load i18n static %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="legende">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseLegende" aria-expanded="false" aria-controls="collapseLegende">
+            <i class="fa-solid fa-chevron-down unexpanded"></i> <i class="fa-solid fa-chevron-up expanded"></i> {% trans 'Legend' %}
+        </a>
+    </div>
+    <div id="collapseLegende" class="panel-collapse collapse" role="tabpanel" aria-labelledby="legende">
+        <div class="panel-body">
+            <table class="table table-condensed table-borderless">
+                <tbody>
+                    <tr>
+                        <td><img src="{% static 'preparation_inscription/img/mandatory.png' %}"></td>
+                        <td>{% trans 'Mandatory' %}</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{% static 'preparation_inscription/img/optional.png' %}"></td>
+                        <td>{% trans 'Optional' %}</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{% static 'preparation_inscription/img/delta.png' %}"></td>
+                        <td>{% trans 'Exceptionally, not organized this year' %}</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{% static 'preparation_inscription/img/bisannual_odd.png' %}"></td>
+                        <td>{% trans 'Not offered this year but offered the following year' %}</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{% static 'preparation_inscription/img/bisannual_even.png' %}"></td>
+                        <td>{% trans 'Offered this year but not the following year' %}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="{% static 'preparation_inscription/img/delta.png' %}">
+                            <img src="{% static 'preparation_inscription/img/bisannual_even.png' %}">
+                        </td>
+                        <td>{% trans 'Exceptionally, not organized this year, nor the next' %}</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{% static 'preparation_inscription/img/prerequis.gif' %}"></td>
+                        <td>{% trans 'Activiy with prerequisites' %}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-primary" title="{% trans 'Block' %} 1">1</span></td>
+                        <td>{% trans 'Indicates annual block' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Cred</td>
+                        <td>{% trans 'Credits of the learning unit are acquired' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Val</td>
+                        <td>{% trans 'Credits of the learning unit are valued' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Insc</td>
+                        <td>{% trans 'Enrolled in a learning unit' %}</td>
+                    </tr>
+                    <tr>
+                        <td>InscA</td>
+                        <td>{% trans 'Enrolled in a learning unit of continuation cycle' %}</td>
+                    </tr>
+                    <tr>
+                        <td>InscQ</td>
+                        <td>{% trans 'Enrolled in a learning unit of the complementary module' %}</td>
+                    </tr>
+                    <tr>
+                        <td>InscH</td>
+                        <td>{% trans 'Enrolled in a learning unit who does not account in the cycle progression' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Test</td>
+                        <td>{% trans 'Enrolled in a learning unit with a dispensatory test' %}</td>
+                    </tr>
+                    <tr>
+                        <td>TestA</td>
+                        <td>{% trans 'Enrolled in a learning unit of continuation cycle, with a dispensatory test' %}</td>
+                    </tr>
+                    <tr>
+                        <td>TestQ</td>
+                        <td>{% trans 'Enrolled in a learning unit of the complementary module, with a dispensatory test' %}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                {% trans 'N.B.: A legend reminder appears by positioning the mouse pointer over the icon' %}
+            </p>
+        </div>
+    </div>
+</div>
