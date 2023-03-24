@@ -96,7 +96,7 @@
 
             <br>
 
-            <table id="table-inscription-mini-formations" class="table table-hover">
+            <table id="table-inscription-mini-formations" class="table table-hover" hx-sync="this:queue all" hx-ext="class-on-confirm">
                 {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
                     {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
                     <tr>
@@ -114,6 +114,8 @@
                                         hx-swap="outerHTML"
                                         hx-vals='{"code_mini_formation": "{{ mini_formation.code }}"}'
                                         hx-indicator="#form-inscription-{{ mini_formation.code }}"
+                                        hx-ext="osis-disable-element"
+                                        hx-disable-element="#link-go-to-courses-enrollment"
 
                                         {% if inscription %}
                                         checked
@@ -158,7 +160,7 @@
             </table>
 
             <div class="center">
-                <a class="btn btn-primary" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
+                <a id="link-go-to-courses-enrollment" class="btn btn-primary" role="button" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to courses enrollment' %}
                 </a>
             </div>
