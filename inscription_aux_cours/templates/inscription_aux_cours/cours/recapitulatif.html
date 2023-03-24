@@ -81,8 +81,8 @@
 
             <div>
                 <h5><strong>{% trans "Special requests" %}</strong></h5>
-                {% if formulaire.configuration.descriptif_demandes_particulieres %}
-                    <p>{{ formulaire.configuration.descriptif_demandes_particulieres }}</p>
+                {% if demande_particuliere.descriptif %}
+                    <p>{{ demande_particuliere.descriptif|safe }}</p>
                 {% endif %}
                 <div class="well">{{ demande_particuliere.demande|linebreaks }}</div>
             </div>
