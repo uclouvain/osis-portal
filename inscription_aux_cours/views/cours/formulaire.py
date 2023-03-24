@@ -74,10 +74,10 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         choix_mini_formations = [
             (formulaire_mini_formation.code_programme, formulaire_mini_formation.intitule_formation)
             for formulaire_mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
-            if formulaire_mini_formation.configuration.autorise_etudiant_a_ajouter_cours
+            if formulaire_mini_formation.etudiant_autorise_a_ajouter_cours
         ]
         choix_mini_formations.sort(key=lambda choix: unaccent(choix[1]))
-        if self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration.autorise_etudiant_a_ajouter_cours:
+        if self.formulaire_inscriptions_cours.formulaire_tronc_commun.etudiant_autorise_a_ajouter_cours:
             choix_mini_formations = [('', self.programme.intitule_formation)] + choix_mini_formations
         return InscriptionHorsProgrammeForm(
             choix_mini_formations,
@@ -157,12 +157,12 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'configuration': self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration,
             'formulaire': self.formulaire_inscriptions_cours,
             'formulaire_hors_programme': self.formulaire_inscription_hors_programme,
             'inscriptions_hors_programmes': self.inscriptions_hors_programme,
             'a_des_mini_formations_inscriptibles': self.a_des_mini_formations_inscriptibles,
             'form': self.formulaire_demande_particuliere,
+            'demande_particuliere': self.demande_particuliere,
         }
 
     @cached_property
