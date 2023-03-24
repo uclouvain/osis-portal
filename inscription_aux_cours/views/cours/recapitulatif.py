@@ -185,5 +185,6 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere,
             'cours_dont_prerequis_non_acquis': self.cours_dont_prerequis_non_acquis,
-            'activites_aide_reussite': self.activites_aide_reussite
+            'activites_aide_reussite': self.activites_aide_reussite,
+            'bloquer_soumission': bool(self.cours_dont_prerequis_non_acquis),
         }

@@ -27,7 +27,9 @@ from typing import List, Optional, Dict
 
 import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
+from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
@@ -54,6 +56,7 @@ class InscriptionAUnCoursHorsProgramme:
     credits: Decimal
 
 
+@method_decorator(never_cache, name='dispatch')
 class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCoursViewMixin, TemplateView):
     name = 'formulaire-inscription-cours'
 
