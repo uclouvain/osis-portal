@@ -34,7 +34,7 @@ from django.conf import settings
 from osis_offer_enrollment_sdk import ApiException
 from osis_offer_enrollment_sdk.api import enrollment_api
 from osis_offer_enrollment_sdk.model.enrollment import Enrollment
-from osis_offer_enrollment_sdk.model.mes_inscriptions import MesInscriptions
+from osis_offer_enrollment_sdk.model.inscription import Inscription
 
 from base.models.person import Person
 from base.services.utils import call_api
@@ -46,7 +46,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 class InscriptionFormationsService:
     @staticmethod
-    def mes_inscriptions(person: 'Person', annee: int) -> 'MesInscriptions':
+    def mes_inscriptions(person: 'Person', annee: int) -> List['Inscription']:
         return _offer_enrollment_api_call(
             person,
             'mes_inscriptions_get',
