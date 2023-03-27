@@ -43,11 +43,11 @@ from program_management.services.programme import ProgrammeService
 
 
 @method_decorator(never_cache, name='dispatch')
-class MiniFormationsInscriptiblesView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class FormulaireMiniFormationsView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
     name = 'mini-formations-inscriptibles'
 
     # TemplateView
-    template_name = "inscription_aux_cours/mini_formation/inscriptibles.html"
+    template_name = "inscription_aux_cours/mini_formation/formulaire.html"
 
     @cached_property
     def liste_mini_formations_inscriptibles(self) -> 'ListeMiniFormations':

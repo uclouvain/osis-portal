@@ -75,7 +75,7 @@ class InscriptionAuxCoursViewMixin:
         inscriptions = InscriptionFormationsService.mes_inscriptions(self.person, annee=self.annee_academique)
         return next(
             inscription
-            for inscription in inscriptions.inscriptions
+            for inscription in inscriptions
             if inscription.code_programme == self.code_programme
         )
 

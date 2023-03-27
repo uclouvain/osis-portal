@@ -162,6 +162,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             'inscriptions_hors_programmes': self.inscriptions_hors_programme,
             'a_des_mini_formations_inscriptibles': self.a_des_mini_formations_inscriptibles,
             'form': self.formulaire_demande_particuliere,
+            'est_annee_paire': self.annee_academique % 2 == 0,
             'demande_particuliere': self.demande_particuliere,
         }
 
