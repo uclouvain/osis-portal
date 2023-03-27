@@ -140,9 +140,9 @@
                     {% csrf_token %}
                     <p>
                         <strong>{% trans "Special requests" %}</strong>
-                        {% if configuration.descriptif_demandes_particulieres %}
+                        {% if demande_particuliere.descriptif %}
                             <br>
-                            {{ configuration.descriptif_demandes_particulieres|safe }}
+                            {{ demande_particuliere.descriptif|safe }}
                         {% endif %}
                     </p>
 
