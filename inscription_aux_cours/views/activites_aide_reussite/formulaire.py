@@ -71,7 +71,7 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
                     self.person,
                     self.code_programme
                 )
-            else:
+            elif completer_inscription_par_des_activites is False:
                 ActivitesAideReussiteService.\
                     demander_a_ne_pas_completer_inscription_par_des_activites_de_aide_a_la_reussite(
                     self.person,
