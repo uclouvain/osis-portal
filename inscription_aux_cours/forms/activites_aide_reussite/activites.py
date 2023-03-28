@@ -27,7 +27,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ActivitesAideReussiteForm(forms.Form):
-    suivre_activites = forms.BooleanField(
+    completer_inscription_par_des_activites = forms.BooleanField(
         required=False,
         label=_("I complete my enrollment with success support activities"),
         widget=forms.RadioSelect(
@@ -41,4 +41,4 @@ class ActivitesAideReussiteForm(forms.Form):
     def __init__(self, *args, disabled=False, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['suivre_activites'].disabled = disabled
+        self.fields['completer_inscription_par_des_activites'].disabled = disabled

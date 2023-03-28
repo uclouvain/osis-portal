@@ -61,12 +61,12 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
-        if form.fields['suivre_activites'].disabled:
+        if form.fields['completer_inscription_par_des_activites'].disabled:
             return super().form_valid(form)
 
-        suivre_activites = form.cleaned_data['suivre_activites']
+        completer_inscription_par_des_activites = form.cleaned_data['completer_inscription_par_des_activites']
         try:
-            if suivre_activites:
+            if completer_inscription_par_des_activites:
                 ActivitesAideReussiteService.demander_a_completer_inscription_par_des_activites_de_aide_a_la_reussite(
                     self.person,
                     self.code_programme
@@ -78,7 +78,7 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
                     self.code_programme
                 )
         except ServiceException as service_exc:
-            form.add_error("suivre_activites", service_exc.messages)
+            form.add_error("completer_inscription_par_des_activites", service_exc.messages)
             return self.form_invalid(form)
 
         return super().form_valid(form)
@@ -90,7 +90,7 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
     def get_initial(self):
         initial = super().get_initial()
         if self.activites_aide_reussite:
-            initial['suivre_activites'] = self.activites_aide_reussite.suivies_par_etudiant
+            initial['completer_inscription_par_des_activites'] = self.activites_aide_reussite.suivies_par_etudiant
         return initial
 
     def get_form_kwargs(self):

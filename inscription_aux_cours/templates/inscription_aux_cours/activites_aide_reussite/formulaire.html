@@ -58,6 +58,10 @@
 
                 {% bootstrap_form form layout="horizontal" %}
 
+                {% if form.completer_inscription_par_des_activites.disabled %}
+                <p><small><em>{% trans "Your enrollment has been completed or not with success support activies by your faculty manager. You cannot remove or add them." %}</em></small></p>
+                {% endif %}
+
                 {% if a_des_mini_formations_inscriptibles %}
                     <br>
                     <div class="center">
