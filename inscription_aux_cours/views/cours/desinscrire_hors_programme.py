@@ -72,7 +72,6 @@ class DesinscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCou
         if result:
             return result[0]['title']
 
-
         result = ClasseService.rechercher_classes(
             self.person,
             annee=self.annee_academique,

@@ -25,6 +25,7 @@
 ##############################################################################
 from django.urls import path, include
 
+from inscription_aux_cours.views.activites_aide_reussite.formulaire import FormulaireActivitesDeAideALaReussiteView
 from inscription_aux_cours.views.cours.demande_particuliere import DemandeParticuliereView
 from inscription_aux_cours.views.cours.desinscrire import DesinscrireAUnCoursView
 from inscription_aux_cours.views.cours.desinscrire_hors_programme import DesinscrireAUnCoursHorsProgrammeView
@@ -50,17 +51,30 @@ urlpatterns = [
         path('inscrire/', InscrireAUnCoursView.as_view(), name=InscrireAUnCoursView.name),
         path('inscrire_hors_programme/', InscrireAUnCoursHorsProgrammeView.as_view(), name=InscrireAUnCoursHorsProgrammeView.name),
         path('desinscrire/', DesinscrireAUnCoursView.as_view(), name=DesinscrireAUnCoursView.name),
-        path('desinscrire_hors_programme/', DesinscrireAUnCoursHorsProgrammeView.as_view(), name=DesinscrireAUnCoursHorsProgrammeView.name),
+        path(
+            'desinscrire_hors_programme/',
+            DesinscrireAUnCoursHorsProgrammeView.as_view(),
+            name=DesinscrireAUnCoursHorsProgrammeView.name
+        ),
         path('demande_particuliere/', DemandeParticuliereView.as_view(), name=DemandeParticuliereView.name),
         path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),
         path(
             'mineures_options/',
             include([
-                path('recapitulatif/', RecapitulatifInscriptionsMiniFormationsView.as_view(), name=RecapitulatifInscriptionsMiniFormationsView.name),
+                path(
+                    'recapitulatif/',
+                    RecapitulatifInscriptionsMiniFormationsView.as_view(),
+                    name=RecapitulatifInscriptionsMiniFormationsView.name
+                ),
                 path('formulaire/', FormulaireMiniFormationsView.as_view(), name=FormulaireMiniFormationsView.name),
                 path('inscrire/', InscrireAUneMiniFormationView.as_view(), name=InscrireAUneMiniFormationView.name),
-                path('desinscrire/', DesinscrireAUneMiniFormationView.as_view(), name=DesinscrireAUneMiniFormationView.name)
+                path(
+                    'desinscrire/',
+                    DesinscrireAUneMiniFormationView.as_view(),
+                    name=DesinscrireAUneMiniFormationView.name
+                )
             ]),
         ),
+        path('activites_aide_reussite/', FormulaireActivitesDeAideALaReussiteView.as_view(), name=FormulaireActivitesDeAideALaReussiteView.name)
     ])),
 ]

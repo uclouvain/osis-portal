@@ -47,6 +47,10 @@ class ServiceException(Exception):
         json_body = json.loads(self.original_exception.body)
         return list({error['detail'] for error in json_body[api_settings.NON_FIELD_ERRORS_KEY]})
 
+    @property
+    def status(self):
+        return self.original_exception.status
+
 
 def call_api(settings_sdk, sdk, api, person: 'Person', method_to_call: str, **kwargs):
     configuration = settings_sdk.build_configuration()

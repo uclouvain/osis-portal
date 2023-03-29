@@ -105,6 +105,20 @@ msgstr ""
 msgid "For a change in minors or options, please contact your faculty manager."
 msgstr ""
 
+msgid "I complete my enrollment with success support activities"
+msgstr ""
+
+msgid ""
+"In accordance with article 39 §1 of the RGEE, I complete my enrollment with "
+"activities to help me succeed."
+msgstr ""
+
+msgid ""
+"In accordance with article 39 §1 of the RGEE, I have been informed that I "
+"can complete my enrollment with success support activities. I have decided "
+"not to complete my enrollment with success support activities."
+msgstr ""
+
 msgid "Indicates annual block"
 msgstr ""
 
@@ -141,9 +155,15 @@ msgstr ""
 msgid "My minors or options enrollment"
 msgstr ""
 
+msgid "My success support activities"
+msgstr ""
+
 msgid ""
 "N.B.: A legend reminder appears by positioning the mouse pointer over the "
 "icon"
+msgstr ""
+
+msgid "No"
 msgstr ""
 
 msgid "Not offered this year but offered the following year"
@@ -231,6 +251,9 @@ msgstr ""
 msgid "Year"
 msgstr ""
 
+msgid "Yes"
+msgstr ""
+
 msgid "You are not enrolled to a minor or deepening."
 msgstr ""
 
@@ -261,8 +284,19 @@ msgid "Your contact in faculty:"
 msgstr ""
 
 msgid ""
+"Your enrollment has been completed or not with success support activies by "
+"your faculty manager. You cannot remove or add them."
+msgstr ""
+
+msgid ""
 "Your enrollments are saved but you can continue modifying it until you "
 "didin't submit them."
+msgstr ""
+
+msgid ""
+"Your faculty organize <ins><a href='https://uclouvain.be/fr/etudier/"
+"activites-secteurs-et-facs.html' target='_blank'>support systems</a></ins> "
+"to help you succeed throughout the year."
 msgstr ""
 
 msgid ""
