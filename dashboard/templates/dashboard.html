@@ -30,17 +30,16 @@
 
     {% include "template_messages.html" %}
 
-    {% for role, role_tiles in tiles.items %}
+    {% for grid_tiles in grids_tiles %}
 
-        {% if not forloop.first and role_tiles %}
+        {% if not forloop.first %}
             <hr/>
         {% endif %}
 
-        {% if role_tiles %}
-
-        <div class="dashboard-{{ role|lower }}">
+            <h2>{{ grid_tiles.title }}</h2>
+        <div class="dashboard-{{ grid_tiles.tag|lower }}">
                 <div class="dashboard-grid">
-                    {% for tile in role_tiles %}
+                    {% for tile in grid_tiles.available_tiles %}
                     <div class="grid-item" style="grid-area: auto/{{ tile.column }}">
                         <i class="icon {{ tile.icon }}"></i>
                         <h4 class="media-heading">
@@ -70,9 +69,6 @@
                 </div>
 
         </div>
-
-    {% endif %}
-
 
     {% endfor %}
 
