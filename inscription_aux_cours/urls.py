@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -39,42 +39,96 @@ from inscription_aux_cours.views.mini_formation.desinscrire import DesinscrireAU
 from inscription_aux_cours.views.mini_formation.formulaire import FormulaireMiniFormationsView
 from inscription_aux_cours.views.mini_formation.inscrire import InscrireAUneMiniFormationView
 from inscription_aux_cours.views.mini_formation.recapitulatif import RecapitulatifInscriptionsMiniFormationsView
+from inscription_aux_cours.views.progression.barre_de_progression_de_bloc_1 import BarreDeProgressionDeBloc1View
+from inscription_aux_cours.views.progression.barre_de_progression_de_complement import (
+    BarreDeProgressionDeComplementView,
+)
+from inscription_aux_cours.views.progression.barre_de_progression_de_cycle import BarreDeProgressionDeCycleView
 from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
 
 app_name = 'inscription-aux-cours'
 urlpatterns = [
     path('', SelectionnerFormationView.as_view(), name=SelectionnerFormationView.name),
-    path('<str:code_programme>/', include([
-        path('non_autorisee/', InscriptionNonAutoriseeView.as_view(), name=InscriptionNonAutoriseeView.name),
-        path('formulaire/', FormulaireInscriptionAuxCoursView.as_view(), name=FormulaireInscriptionAuxCoursView.name),
-        path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
-        path('inscrire/', InscrireAUnCoursView.as_view(), name=InscrireAUnCoursView.name),
-        path('inscrire_hors_programme/', InscrireAUnCoursHorsProgrammeView.as_view(), name=InscrireAUnCoursHorsProgrammeView.name),
-        path('desinscrire/', DesinscrireAUnCoursView.as_view(), name=DesinscrireAUnCoursView.name),
-        path(
-            'desinscrire_hors_programme/',
-            DesinscrireAUnCoursHorsProgrammeView.as_view(),
-            name=DesinscrireAUnCoursHorsProgrammeView.name
-        ),
-        path('demande_particuliere/', DemandeParticuliereView.as_view(), name=DemandeParticuliereView.name),
-        path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),
-        path(
-            'mineures_options/',
-            include([
+    path(
+        '<str:code_programme>/',
+        include(
+            [
+                path('non_autorisee/', InscriptionNonAutoriseeView.as_view(), name=InscriptionNonAutoriseeView.name),
                 path(
-                    'recapitulatif/',
-                    RecapitulatifInscriptionsMiniFormationsView.as_view(),
-                    name=RecapitulatifInscriptionsMiniFormationsView.name
+                    'formulaire/',
+                    FormulaireInscriptionAuxCoursView.as_view(),
+                    name=FormulaireInscriptionAuxCoursView.name,
                 ),
-                path('formulaire/', FormulaireMiniFormationsView.as_view(), name=FormulaireMiniFormationsView.name),
-                path('inscrire/', InscrireAUneMiniFormationView.as_view(), name=InscrireAUneMiniFormationView.name),
+                path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
+                path('inscrire/', InscrireAUnCoursView.as_view(), name=InscrireAUnCoursView.name),
                 path(
-                    'desinscrire/',
-                    DesinscrireAUneMiniFormationView.as_view(),
-                    name=DesinscrireAUneMiniFormationView.name
-                )
-            ]),
+                    'inscrire_hors_programme/',
+                    InscrireAUnCoursHorsProgrammeView.as_view(),
+                    name=InscrireAUnCoursHorsProgrammeView.name,
+                ),
+                path('desinscrire/', DesinscrireAUnCoursView.as_view(), name=DesinscrireAUnCoursView.name),
+                path(
+                    'desinscrire_hors_programme/',
+                    DesinscrireAUnCoursHorsProgrammeView.as_view(),
+                    name=DesinscrireAUnCoursHorsProgrammeView.name,
+                ),
+                path('demande_particuliere/', DemandeParticuliereView.as_view(), name=DemandeParticuliereView.name),
+                path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),
+                path(
+                    'mineures_options/',
+                    include(
+                        [
+                            path(
+                                'recapitulatif/',
+                                RecapitulatifInscriptionsMiniFormationsView.as_view(),
+                                name=RecapitulatifInscriptionsMiniFormationsView.name,
+                            ),
+                            path(
+                                'formulaire/',
+                                FormulaireMiniFormationsView.as_view(),
+                                name=FormulaireMiniFormationsView.name,
+                            ),
+                            path(
+                                'inscrire/',
+                                InscrireAUneMiniFormationView.as_view(),
+                                name=InscrireAUneMiniFormationView.name,
+                            ),
+                            path(
+                                'desinscrire/',
+                                DesinscrireAUneMiniFormationView.as_view(),
+                                name=DesinscrireAUneMiniFormationView.name,
+                            ),
+                        ]
+                    ),
+                ),
+                path(
+                    'activites_aide_reussite/',
+                    FormulaireActivitesDeAideALaReussiteView.as_view(),
+                    name=FormulaireActivitesDeAideALaReussiteView.name,
+                ),
+            ]
         ),
-        path('activites_aide_reussite/', FormulaireActivitesDeAideALaReussiteView.as_view(), name=FormulaireActivitesDeAideALaReussiteView.name)
-    ])),
+    ),
+    path(
+        '<str:sigle_programme>/',
+        include(
+            [
+                path(
+                    'barre_de_progression_de_cycle/',
+                    BarreDeProgressionDeCycleView.as_view(),
+                    name=BarreDeProgressionDeCycleView.name,
+                ),
+                path(
+                    'barre_de_progression_de_complement/',
+                    BarreDeProgressionDeComplementView.as_view(),
+                    name=BarreDeProgressionDeComplementView.name,
+                ),
+                path(
+                    'barre_de_progression_de_bloc_1/',
+                    BarreDeProgressionDeBloc1View.as_view(),
+                    name=BarreDeProgressionDeBloc1View.name,
+                ),
+            ]
+        ),
+    ),
 ]
