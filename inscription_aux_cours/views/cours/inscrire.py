@@ -67,17 +67,7 @@ class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Tem
         return super().get(request, *args, **kwargs)
 
     def get_etat_inscription_cours(self) -> str:
-        programme_annuel = CoursService().recuperer_programme_annuel(self.person, self.code_programme)
-        inscriptions = programme_annuel.tronc_commun
-        inscriptions += [
-            inscription
-            for insccriptions_a_une_mini_formation in programme_annuel['mini_formations']
-            for inscription in insccriptions_a_une_mini_formation['cours']
-        ]
-        inscription = next(
-            (inscription for inscription in inscriptions if inscription['code'] == self.code_cours),
-            None
-        )
+        inscription = CoursService().recuperer_inscription_a_un_cours(self.person, self.code_programme, self.code_cours)
         if inscription:
             return inscription.etat
         return ""
@@ -93,7 +83,6 @@ class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Tem
 
     def get_context_data(self, **kwargs):
         return {
-            **super().get_context_data(**kwargs),
             "code_mini_formation": self.code_mini_formation,
             "code_cours": self.code_cours,
             "etat_inscription": self.get_etat_inscription_cours(),

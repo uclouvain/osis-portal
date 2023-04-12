@@ -23,10 +23,12 @@
 #
 ##############################################################################
 from functools import partial
-from typing import List
+from typing import List, Optional
 
 import osis_inscription_cours_sdk
+from django.http import Http404
 from osis_inscription_cours_sdk.api import cours_api
+from osis_inscription_cours_sdk.model.inscription_aun_cours import InscriptionAUnCours
 from osis_inscription_cours_sdk.model.inscrire_aun_cours import InscrireAUnCours
 from osis_inscription_cours_sdk.model.prerequis_non_acquis import PrerequisNonAcquis
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
@@ -76,13 +78,29 @@ class CoursService:
         )
 
     @staticmethod
+    def recuperer_inscription_a_un_cours(
+            person: 'Person',
+            code_programme: str,
+            code_cours: str
+    ) -> Optional['InscriptionAUnCours']:
+        try:
+            return _cours_api_call(
+                person,
+                "inscriptions_cours",
+                code_programme=code_programme,
+                code_cours=code_cours
+            )
+        except Http404:
+            return None
+
+    @staticmethod
     def recuperer_programme_annuel(
             person: 'Person',
             code_programme: str,
     ) -> 'ProgrammeAnnuelEtudiant':
         return _cours_api_call(
             person,
-            "inscriptions_cours",
+            "get_programme_annuel_etudiant",
             code_programme=code_programme
         )
 
