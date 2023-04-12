@@ -40,7 +40,6 @@ class DemandeParticuliereView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
 
     def form_valid(self, form: 'DemandeParticuliereForm'):
         demande_particuliere = form.cleaned_data['demande_particuliere']
-        print(demande_particuliere)
         if demande_particuliere:
             self._effectuer_une_demande_particuliere(demande_particuliere)
         else:
