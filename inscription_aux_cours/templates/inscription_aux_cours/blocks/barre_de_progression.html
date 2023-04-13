@@ -47,7 +47,7 @@
         </div>
 
         <!-- Crédits de progression potentielle -->
-        <div style="width: 4px; height: 2.5%; position: absolute; background: red; left: {{ credits_acquis_pourcentage|add:credits_inscrits_pourcentage }}%;"
+        <div style="width: 4px; height: 100%; position: absolute; background: red; left: {{ credits_acquis_pourcentage|add:credits_inscrits_pourcentage }}%;"
              title="{% trans 'Credits for potential progress' %}">
             {% if credits_de_progression_potentielle != credits_cibles %}
                 <strong>
@@ -65,12 +65,12 @@
                 {% for nieme_jalon in 0|range_for:nombre_jalons_int %}
                     {% if forloop.last and nieme_jalon != credits_cibles %}
                         <!-- Dernier jalon aux crédits cibles si ils sont différents de la valeur du dernier jalon classique  -->
-                        <div style="width: 1px; height: 3%; position: absolute; background: black; left: {% widthratio credits_cibles barre_progression_max 100 %}%;">
+                        <div style="width: 1px; height: 120%; position: absolute; background: black; left: {% widthratio credits_cibles barre_progression_max 100 %}%;">
                             <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ credits_cibles }}</small>
                         </div>
                     {% else %}
                         {% widthratio nieme_jalon 1 valeur_jalon as valeur_nieme_jalon %}
-                        <div style="width: 1px; height: 3%; position: absolute; background: black; left: {% widthratio valeur_nieme_jalon barre_progression_max 100 %}%;">
+                        <div style="width: 1px; height: 120%; position: absolute; background: black; left: {% widthratio valeur_nieme_jalon barre_progression_max 100 %}%;">
                             <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ valeur_nieme_jalon }}</small>
                         </div>
                     {% endif %}
@@ -116,5 +116,8 @@
 <style>
     .progress-bar {
         color: black;
+    }
+    .progress {
+        position: relative;
     }
 </style>
