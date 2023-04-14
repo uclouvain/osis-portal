@@ -24,29 +24,28 @@
 ##############################################################################
 from functools import partial
 
-import osis_parcours_interne_sdk
-from osis_parcours_interne_sdk.api import progression_api
-from osis_parcours_interne_sdk.model.progression_de_bloc1 import ProgressionDeBloc1
-from osis_parcours_interne_sdk.model.progression_de_complement import ProgressionDeComplement
-from osis_parcours_interne_sdk.model.progression_de_cycle import ProgressionDeCycle
+import osis_inscription_cours_sdk
+from django.http import Http404
+from osis_inscription_cours_sdk.api import complement_de_formation_api
 
 from base.models.person import Person
 from base.services.utils import call_api
-from frontoffice.settings.osis_sdk import progression as progression_sdk
+from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
 
 
-class ProgressionService:
-    @staticmethod
-    def recuperer_progression_de_cycle(person: 'Person', sigle_programme: str) -> 'ProgressionDeCycle':
-        return _progression_api_call(person, "get_progression_de_cycle", sigle_programme=sigle_programme)
-
-    @staticmethod
-    def recuperer_progression_de_complement(person: 'Person', sigle_programme: str) -> 'ProgressionDeComplement':
-        return _progression_api_call(person, "get_progression_de_complement", sigle_programme=sigle_programme)
-
-    @staticmethod
-    def recuperer_progression_de_bloc_1(person: 'Person', sigle_programme: str) -> 'ProgressionDeBloc1':
-        return _progression_api_call(person, "get_progression_de_bloc1", sigle_programme=sigle_programme)
+class ComplementService:
+    @classmethod
+    def a_un_complement(cls, person: Person, code_programme: str) -> bool:
+        try:
+            _complement_api_call(person, "get_complement_de_formation", code_programme=code_programme)
+            return True
+        except Http404:
+            return False
 
 
-_progression_api_call = partial(call_api, progression_sdk, osis_parcours_interne_sdk, progression_api.ProgressionApi)
+_complement_api_call = partial(
+    call_api,
+    inscription_aux_cours_sdk,
+    osis_inscription_cours_sdk,
+    complement_de_formation_api.ComplementDeFormationApi,
+)

@@ -26,7 +26,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
-from osis_parcours_interne_sdk.model.progression_de_cycle import ProgressionDeCycle
+from osis_parcours_interne_sdk.model.progression_de_bloc1 import ProgressionDeBloc1
 
 from base.models.person import Person
 from inscription_aux_cours.services.progression import ProgressionService
@@ -47,8 +47,8 @@ class BarreDeProgressionDeBloc1View(LoginRequiredMixin, TemplateView):
         return self.kwargs['sigle_programme']
 
     @cached_property
-    def progression(self) -> 'ProgressionDeCycle':
-        return ProgressionService.recuperer_progression_de_cycle(
+    def progression(self) -> 'ProgressionDeBloc1':
+        return ProgressionService.recuperer_progression_de_bloc_1(
             person=self.person, sigle_programme=self.sigle_programme.replace('11BA', '1BA')
         )
 

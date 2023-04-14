@@ -76,7 +76,17 @@
                         hx-get="{% url 'inscription-aux-cours:barre-progression-cycle-view' programme.sigle %}"
                         hx-trigger="load"
                     ></div>
-                    <div style="flex-grow: 1;"></div>
+                    {% if est_en_premiere_annee_de_bachelier %}
+                        <div style="flex-grow: 1;"
+                            hx-get="{% url 'inscription-aux-cours:barre-progression-bloc-1-view' programme.sigle %}"
+                            hx-trigger="load"
+                        ></div>
+                    {% elif a_un_complement %}
+                        <div style="flex-grow: 1;"
+                            hx-get="{% url 'inscription-aux-cours:barre-progression-complement-view' programme.sigle %}"
+                            hx-trigger="load"
+                        ></div>
+                    {% endif %}
                 </div>
 
                 {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
