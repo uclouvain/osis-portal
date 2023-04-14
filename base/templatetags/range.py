@@ -23,26 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import logging
 
-import osis_inscription_cours_sdk
-from django.conf import settings
+from django import template
 
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
+register = template.Library()
 
 
-def build_configuration() -> osis_inscription_cours_sdk.Configuration:
-    """
-    Return SDK configuration of exam_enrollment
-    """
-    if not settings.OSIS_INSCRIPTION_COURS_SDK_HOST:
-        logger.debug("'OSIS_INSCRIPTION_COURS_SDK_HOST' setting must be set in configuration")
-
-    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
-        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
-
-    return osis_inscription_cours_sdk.Configuration(
-        host=settings.OSIS_INSCRIPTION_COURS_SDK_HOST,
-        api_key_prefix={'Token': settings.OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX},
-        api_key={'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY},
-    )
+@register.filter(name="range_for")
+def range_for(start, end):
+    return range(start, end + 1)

@@ -1,0 +1,123 @@
+{% load static i18n range %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<div class="text-center" style="margin-bottom: 25px;">
+    <strong>
+        {{ intitule }}
+    </strong>
+</div>
+
+{% widthratio credits_acquis barre_progression_max 100 as credits_acquis_pourcentage %}
+{% widthratio credits_inscrits barre_progression_max 100 as credits_inscrits_pourcentage %}
+
+<div>
+    <div class="progress" style="overflow: visible;">
+        <!-- Barres de progressions (crédits acquis / crédits inscrits / crédits restants) -->
+        <div class="progress-bar progress-bar-success progress-bar" id="progress-acquis-{{ view.name }}"
+             style="width: {{ credits_acquis_pourcentage }}%">
+            <strong style="color: white;">{{ credits_acquis|floatformat }}</strong>
+        </div>
+        <div class="progress-bar progress-bar-secondary progress-bar" id="progress-inscrits-{{ view.name }}"
+             style="width: {{ credits_inscrits_pourcentage }}%">
+            <strong style="color: white;">{{ credits_inscrits|floatformat }}</strong>
+        </div>
+        <div class="progress-bar progress-bar" id="progress-restant-{{ view.name }}" style="background-color: lightgray;">
+        </div>
+
+        <!-- Crédits de progression potentielle -->
+        <div style="width: 4px; height: 100%; position: absolute; background: red; left: {{ credits_acquis_pourcentage|add:credits_inscrits_pourcentage }}%;"
+             title="{% trans 'Credits for potential progress' %}">
+            {% if credits_de_progression_potentielle != credits_cibles %}
+                <strong>
+                    <small style="color: red; position: absolute; bottom: 22px; right: -10px;">
+                        {{ credits_de_progression_potentielle|floatformat }}
+                    </small>
+                </strong>
+            {% endif %}
+        </div>
+
+        <!-- Jalons (en général valeur_jalon = 60 crédits) -->
+        {% if valeur_jalon and credits_cibles %}
+            {% widthratio credits_cibles valeur_jalon 1 as nombre_jalons %}
+            {% with nombre_jalons_int=nombre_jalons|add:0 %}
+                {% for nieme_jalon in 0|range_for:nombre_jalons_int %}
+                    {% if forloop.last and nieme_jalon != credits_cibles %}
+                        <!-- Dernier jalon aux crédits cibles si ils sont différents de la valeur du dernier jalon classique  -->
+                        <div style="width: 1px; height: 120%; position: absolute; background: black; left: {% widthratio credits_cibles barre_progression_max 100 %}%;">
+                            <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ credits_cibles }}</small>
+                        </div>
+                    {% else %}
+                        {% widthratio nieme_jalon 1 valeur_jalon as valeur_nieme_jalon %}
+                        <div style="width: 1px; height: 120%; position: absolute; background: black; left: {% widthratio valeur_nieme_jalon barre_progression_max 100 %}%;">
+                            <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ valeur_nieme_jalon }}</small>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
+        {% endif %}
+
+        <!-- Valise -->
+        {% if credits_valorises %}
+            <div style="position: absolute; bottom: 45px; margin-left: -0.6%; left:{% widthratio credits_acquis_pourcentage 2 1 %}%;">
+                <span class="fa-stack fa-xs" style="width: auto;">
+                    <i class="fa-stack-2x fa-solid fa-suitcase" style="color: #337ab7;"></i>
+                    <i class="fa-stack-2x fa-solid fas fa-square" style="color: #337ab7; bottom: 1px; left: 3px; font-size: 18px"></i>
+                    <strong class="fa-stack-1x" style="font-size: 9px; width: 21px; text-align: center; color: white;">{{ credits_valorises|floatformat }}</strong>
+                </span>
+            </div>
+        {% endif %}
+
+        <!-- Picto Diplomé = cible -->
+        {% if credits_cibles %}
+            <i style="position: absolute; bottom: 40px; margin-left: -7px; left: {% widthratio credits_cibles barre_progression_max 100 %}%;" class="fa fa-user-graduate"></i>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    {% if credits_cibles %}
+        set_progression_restante();
+    {% endif %}
+    function set_progression_restante() {
+        const credits_acquis = document.getElementById('progress-acquis-{{ view.name }}');
+        const credits_inscrits = document.getElementById('progress-inscrits-{{ view.name }}');
+        let restant = document.getElementById('progress-restant-{{ view.name }}');
+        restant.style.setProperty(
+            'width', 'calc(100% - ' + credits_acquis.style.width + ' - ' +  credits_inscrits.style.width + ')'
+        );
+        const credits_restants = {{ barre_progression_max }}
+            - parseInt(credits_acquis.innerText) - parseInt(credits_inscrits.innerText);
+        restant.innerHTML = credits_restants > 0 ? '<strong>' + credits_restants + '</strong>' : '';
+    }
+</script>
+
+<style>
+    .progress-bar {
+        color: black;
+    }
+    .progress {
+        position: relative;
+    }
+</style>

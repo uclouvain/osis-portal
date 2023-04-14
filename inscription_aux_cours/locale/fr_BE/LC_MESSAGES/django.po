@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-28 15:52+0200\n"
+"POT-Creation-Date: 2023-04-12 11:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,6 +58,9 @@ msgstr "Poursuivre vers l'inscription aux cours"
 
 msgid "Credits"
 msgstr "Crédits"
+
+msgid "Credits for potential progress"
+msgstr "Crédits de progression potentielle"
 
 msgid "Credits of the learning unit are acquired"
 msgstr "Les crédits de l'unité d'enseignement sont acquis"
@@ -342,7 +345,6 @@ msgstr ""
 "activites-secteurs-et-facs.html' target='_blank'>dispositifs d'aide à la "
 "réussite</a></ins> afin de vous accompagner tout au long des études."
 
-#, python-format
 msgid ""
 "Your proposition of annual program was successfully submitted. Thank you for "
 "contributing to the testing of the form for the composition of the annual "
