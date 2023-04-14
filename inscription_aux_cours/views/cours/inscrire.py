@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -32,10 +32,11 @@ from django.views.generic import TemplateView
 from base.services.utils import ServiceException
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class InscrireAUnCoursView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
     name = 'inscrire-cours'
 
     # TemplateView
@@ -75,8 +76,7 @@ class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Tem
             for inscription in insccriptions_a_une_mini_formation['cours']
         ]
         inscription = next(
-            (inscription for inscription in inscriptions if inscription['code'] == self.code_cours),
-            None
+            (inscription for inscription in inscriptions if inscription['code'] == self.code_cours), None
         )
         if inscription:
             return inscription.etat
@@ -88,7 +88,7 @@ class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Tem
             code_programme=self.code_programme,
             code_cours=self.code_cours,
             code_mini_formation=self.code_mini_formation,
-            hors_formulaire=False
+            hors_formulaire=False,
         )
 
     def get_context_data(self, **kwargs):
@@ -97,5 +97,5 @@ class InscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Tem
             "code_mini_formation": self.code_mini_formation,
             "code_cours": self.code_cours,
             "etat_inscription": self.get_etat_inscription_cours(),
-            "erreurs": self.erreurs
+            "erreurs": self.erreurs,
         }
