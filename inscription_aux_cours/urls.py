@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from inscription_aux_cours.views.activites_aide_reussite.formulaire import FormulaireActivitesDeAideALaReussiteView
 from inscription_aux_cours.views.cours.demande_particuliere import DemandeParticuliereView
@@ -109,8 +109,8 @@ urlpatterns = [
             ]
         ),
     ),
-    path(
-        '<str:sigle_programme>/',
+    re_path(
+        r'^(?P<sigle_programme>[\w ]+([/ ]\w{1,2})?)/',
         include(
             [
                 path(

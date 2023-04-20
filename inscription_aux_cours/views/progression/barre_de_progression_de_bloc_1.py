@@ -29,6 +29,7 @@ from django.views.generic import TemplateView
 from osis_parcours_interne_sdk.model.progression_de_bloc1 import ProgressionDeBloc1
 
 from base.models.person import Person
+from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
 from inscription_aux_cours.services.progression import ProgressionService
 
 
@@ -52,13 +53,18 @@ class BarreDeProgressionDeBloc1View(LoginRequiredMixin, TemplateView):
             person=self.person, sigle_programme=self.sigle_programme.replace('11BA', '1BA')
         )
 
+    @cached_property
+    def annee_academique(self) -> 'int':
+        return PeriodeInscriptionAuxCoursService().get_annee(self.person)
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
+            'annee_academique': self.annee_academique,
             'barre_progression_max': self.progression.barre_de_progression_max,
             'credits_acquis': self.progression.credits_acquis,
             'credits_inscrits': self.progression.credits_inscrits,
             'credits_de_progression_potentielle': self.progression.credits_de_progression_potentielle,
-            'credits_valorises': self.progression.credits_valorises,
             'intitule': self.progression.intitule,
+            'condition_d_affichage': True,
         }

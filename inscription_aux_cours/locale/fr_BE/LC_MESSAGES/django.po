@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 11:26+0200\n"
+"POT-Creation-Date: 2023-04-19 16:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,6 +58,9 @@ msgstr "Poursuivre vers l'inscription aux cours"
 
 msgid "Credits"
 msgstr "Crédits"
+
+msgid "Credits earned/valued"
+msgstr "Crédits acquis/valorisés"
 
 msgid "Credits for potential progress"
 msgstr "Crédits de progression potentielle"
@@ -218,6 +221,9 @@ msgstr "Imprimer ma proposition de programme annuel"
 
 msgid "Program"
 msgstr "Formation"
+
+msgid "Registered credits in "
+msgstr "Crédits inscrits en "
 
 msgid "Registration id"
 msgstr "Noma"

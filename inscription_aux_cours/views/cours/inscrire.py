@@ -40,7 +40,7 @@ class InscrireAUnCoursView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursVie
     name = 'inscrire-cours'
 
     # TemplateView
-    template_name = "inscription_aux_cours/cours/desinscrire.html"
+    htmx_template_name = "inscription_aux_cours/cours/desinscrire.html"
     error_template_name = "inscription_aux_cours/cours/inscrire.html"
 
     def __init__(self, *args, **kwargs):
@@ -78,9 +78,7 @@ class InscrireAUnCoursView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursVie
         inscription = next(
             (inscription for inscription in inscriptions if inscription['code'] == self.code_cours), None
         )
-        if inscription:
-            return inscription.etat
-        return ""
+        return inscription.etat if inscription else ""
 
     def inscrire_a_un_cours(self):
         CoursService().inscrire(

@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -67,17 +67,13 @@ class InscriptionAuxCoursViewMixin:
             self.person,
             sigle_formation=self.sigle_formation.replace('11BA', '1BA'),
             annee=self.annee_academique,
-            pour_premiere_annee="11BA" in self.sigle_formation
+            pour_premiere_annee="11BA" in self.sigle_formation,
         )
 
     @cached_property
     def inscription(self) -> 'Inscription':
         inscriptions = InscriptionFormationsService.mes_inscriptions(self.person, annee=self.annee_academique)
-        return next(
-            inscription
-            for inscription in inscriptions
-            if inscription.code_programme == self.code_programme
-        )
+        return next(inscription for inscription in inscriptions if inscription.code_programme == self.code_programme)
 
     @cached_property
     def programme(self) -> 'Programme':
@@ -99,7 +95,7 @@ class InscriptionAuxCoursViewMixin:
             **super().get_context_data(**kwargs),
             'programme': self.programme,
             'person': self.person,
-            'contact': self.contact
+            'contact': self.contact,
         }
 
 
@@ -108,12 +104,12 @@ def recuperer_programmes(person: 'Person', annee: int, inscriptions: List['Inscr
     programmes = ProgrammeService.rechercher(person, annee=annee, codes=codes)
 
     codes_inscriptions_premiere_annee = [
-        inscription.code_programme
-        for inscription in inscriptions if inscription.est_en_premiere_annee
+        inscription.code_programme for inscription in inscriptions if inscription.est_en_premiere_annee
     ]
     return [
         adapter_programme_pour_premiere_annee_de_bachelier(programme)
-        if programme.code in codes_inscriptions_premiere_annee else programme
+        if programme.code in codes_inscriptions_premiere_annee
+        else programme
         for programme in programmes
     ]
 
