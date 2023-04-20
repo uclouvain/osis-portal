@@ -78,12 +78,11 @@
     .progress-bar-restant {
         border-bottom-color: gray;
     }
+
     .credits-de-progression-potentielle {
-        background: red !important;
-        color: red !important;
+        border: 4px solid red !important;
     }
     .jalons {
-        background: black !important;
-        color: black !important;
+        border: 0.5px solid black !important;
     }
 }
