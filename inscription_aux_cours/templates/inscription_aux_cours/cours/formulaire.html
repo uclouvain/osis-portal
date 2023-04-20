@@ -59,7 +59,10 @@
             {% include "inscription_aux_cours/cours/blocks/legende.html" %}
 
             <br>
-            {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
+
+            <div class="row sticky-bars">
+                {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
+            </div>
 
             <div class="row" id="formulaire-tronc-commun" hx-ext="class-on-confirm">
                 {{ formulaire.formulaire_tronc_commun.html|safe }}

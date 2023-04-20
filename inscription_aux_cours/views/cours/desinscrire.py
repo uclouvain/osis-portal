@@ -40,7 +40,7 @@ class DesinscrireAUnCoursView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCours
     name = 'desinscrire-cours'
 
     # TemplateView
-    template_name = "inscription_aux_cours/cours/inscrire.html"
+    htmx_template_name = "inscription_aux_cours/cours/inscrire.html"
     error_template_name = "inscription_aux_cours/cours/desinscrire.html"
 
     def __init__(self, *args, **kwargs):
