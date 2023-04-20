@@ -1,6 +1,6 @@
 .sticky-header {
     position: sticky;
-    top: 150px;
+    top: 155px;
     background-color: white;
     box-shadow: inset 0 -2px 0 #000000;
     z-index: 1000;
@@ -11,8 +11,9 @@
     top: 60px;
     background-color: white;
     z-index: 1001;
-    margin-right: -14px;
-    margin-left: -14px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
 }
 
 .intitule-ue span {
