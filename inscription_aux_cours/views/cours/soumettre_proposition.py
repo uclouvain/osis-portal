@@ -47,12 +47,18 @@ class SoumettrePropositionView(LoginRequiredMixin, InscriptionAuxCoursViewMixin,
             self.soumettre_proposition()
             display_success_messages(
                 request,
-                _("Your proposition of annual program successfully submitted. "
-                  "A confirmation email is sent to the address %(email)s") % {'email': self.request.user.person.email},
+                self.get_success_message(),
             )
         except ServiceException as e:
             display_error_messages(request, e.messages)
         return redirect('inscription-aux-cours:recapitulatif', code_programme=self.code_programme)
+
+    def get_success_message(self):
+        return _(
+            "Your proposition of annual program was successfully submitted. "
+            "Thank you for contributing to the testing of the form for the composition of the annual program. "
+            "Can you give us feedback by filling the <a href='https://forms.office.com/e/pJQmq4WXzN'>evaluation form</a>."
+        )
 
     def soumettre_proposition(self):
         PropositionProgrammeService().soumettre(

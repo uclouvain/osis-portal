@@ -28,6 +28,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
+from osis_inscription_cours_sdk.model.activites_aide_reussite import ActivitesAideReussite
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 from osis_program_management_sdk.model.programme import Programme
@@ -38,6 +39,7 @@ from inscription_aux_cours import formatter
 from inscription_aux_cours.data.proposition_programme_annuel import Inscription, InscriptionsParContexte, \
     PropositionProgrammeAnnuel
 from inscription_aux_cours.formatter import get_intitule_programme
+from inscription_aux_cours.services.activites_aide_reussite import ActivitesAideReussiteService
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
@@ -167,10 +169,22 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
         except ServiceException:
             return None
 
+    @cached_property
+    def activites_aide_reussite(self) -> Optional['ActivitesAideReussite']:
+        try:
+            return ActivitesAideReussiteService.get_activites_aide_reussite(
+                self.person,
+                self.code_programme
+            )
+        except ServiceException:
+            return None
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere,
-            'cours_dont_prerequis_non_acquis': self.cours_dont_prerequis_non_acquis
+            'cours_dont_prerequis_non_acquis': self.cours_dont_prerequis_non_acquis,
+            'activites_aide_reussite': self.activites_aide_reussite,
+            'bloquer_soumission': bool(self.cours_dont_prerequis_non_acquis),
         }

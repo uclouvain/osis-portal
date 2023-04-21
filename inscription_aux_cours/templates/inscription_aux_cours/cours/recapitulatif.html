@@ -48,6 +48,8 @@
     <div class="panel panel-default print">
         <div class="panel-body">
 
+            <h3 class="visible-print-block">{% trans "Annual program proposal" %}</h3>
+
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
 
             <br>
@@ -79,10 +81,32 @@
 
             <br>
 
+            {% if activites_aide_reussite %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {% trans 'My success support activities' %}
+                    </div>
+                    <div class="panel-body">
+                        {% if activites_aide_reussite.suivies_par_etudiant %}
+                            <p>
+                            {% trans "In accordance with article 39 §1 of the RGEE, I complete my enrollment with activities to help me succeed." %}
+                            </p>
+                        {% else %}
+                            <p>
+                            {% trans "In accordance with article 39 §1 of the RGEE, I have been informed that I can complete my enrollment with success support activities. I have decided not to complete my enrollment with success support activities." %}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endif %}
+
+            <br>
+
             <div>
                 <h5><strong>{% trans "Special requests" %}</strong></h5>
-                {% if formulaire.configuration.descriptif_demandes_particulieres %}
-                    <p>{{ formulaire.configuration.descriptif_demandes_particulieres }}</p>
+                {% if demande_particuliere.descriptif %}
+                    <p>{{ demande_particuliere.descriptif|safe }}</p>
                 {% endif %}
                 <div class="well">{{ demande_particuliere.demande|linebreaks }}</div>
             </div>

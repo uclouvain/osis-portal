@@ -86,3 +86,11 @@ textarea.unresizable {
         transform: rotate(360deg);
     }
 }
+
+[aria-expanded=true] .unexpanded {
+    display: none;
+}
+
+[aria-expanded=false] .expanded {
+    display: none;
+}

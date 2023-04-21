@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -41,7 +41,6 @@ def get_json_as_dict(json_path):
 
 
 class TestStudentData(TestCase):
-
     def setUp(self):
         self.person = PersonFactory()
 
@@ -63,7 +62,7 @@ class TestStudentData(TestCase):
                 'prenom': 'Rudolphe',
                 'statut': 'Formation continue',
                 'gender': 'M',
-                'middlenames': 'Brigitte, Chantal'
+                'middlenames': 'Brigitte, Chantal',
             },
             'private_data': {
                 'matric_fgs': '0202020',
@@ -75,7 +74,7 @@ class TestStudentData(TestCase):
                     'street3': None,
                     'postCode': 7965,
                     'town': 'Outsy',
-                    'country': 'Belgique'
+                    'country': 'Belgique',
                 },
                 'residence': {
                     'street': 'Rue du Kot, 42',
@@ -83,26 +82,29 @@ class TestStudentData(TestCase):
                     'street3': None,
                     'postCode': 1236,
                     'town': 'Las-Bas',
-                    'country': 'Belgique'
-                }
+                    'country': 'Belgique',
+                },
             },
             'birth_data': {
                 'matric_fgs': '0202020',
                 'birthdate': '08/08/1912',
                 'birthcity': 'GRENOBLE',
-                'birthcountry': 'France'
-            }
+                'birthcountry': 'France',
+            },
+            'niss': '92041830152',
         }
         given_data = bsn_id_data.get_student_id_data(registration_id=student.registration_id)
         self.assertDictEqual(given_data, expected_data)
 
+    @patch('dashboard.business.id_data._get_niss')
     @patch('dashboard.business.id_data._get_birth_data')
     @patch('dashboard.business.id_data._get_personal_data')
     @patch('dashboard.business.id_data._get_main_data')
-    def test_fetch_student_data(self, main_data_mock, private_data_mock, birth_data_mock):
+    def test_fetch_student_data(self, main_data_mock, private_data_mock, birth_data_mock, niss_mock):
         main_data_mock.return_value = get_json_as_dict("dashboard/tests/resources/student_main_data.json")
         private_data_mock.return_value = get_json_as_dict("dashboard/tests/resources/student_private_data.json")
         birth_data_mock.return_value = get_json_as_dict("dashboard/tests/resources/student_birth_data.json")
+        niss_mock.return_value = "92041830152"
         student = StudentFactory()
         given_data = bsn_id_data._fetch_student_id_data(student)
         expected_data = {
@@ -117,7 +119,7 @@ class TestStudentData(TestCase):
                     'street3': None,
                     'postCode': 7965,
                     'town': 'Outsy',
-                    'country': 'Belgique'
+                    'country': 'Belgique',
                 },
                 'residence': {
                     'street': 'Rue du Kot, 42',
@@ -125,8 +127,8 @@ class TestStudentData(TestCase):
                     'street3': None,
                     'postCode': 1236,
                     'town': 'Las-Bas',
-                    'country': 'Belgique'
-                }
+                    'country': 'Belgique',
+                },
             },
             'main_data': {
                 'anneeAcademique': 2020,
@@ -141,14 +143,15 @@ class TestStudentData(TestCase):
                 'prenom': 'Rudolphe',
                 'statut': 'Formation continue',
                 'gender': 'M',
-                'middlenames': 'Brigitte, Chantal'
+                'middlenames': 'Brigitte, Chantal',
             },
             'birth_data': {
                 'matric_fgs': '0202020',
                 'birthdate': '08/08/1912',
                 'birthcity': 'GRENOBLE',
                 'birthcountry': 'France',
-            }
+            },
+            'niss': '92.04.18-301.52',
         }
         self.assertDictEqual(given_data, expected_data)
 
@@ -171,7 +174,7 @@ class TestStudentData(TestCase):
             'statut': 'Formation continue',
             'email': student.email,
             'gender': 'M',
-            'middlenames': 'Brigitte, Chantal'
+            'middlenames': 'Brigitte, Chantal',
         }
         self.assertDictEqual(given_data, expected_data)
 
@@ -190,7 +193,7 @@ class TestStudentData(TestCase):
                 'street3': None,
                 'postCode': 7965,
                 'town': 'Outsy',
-                'country': 'Belgique'
+                'country': 'Belgique',
             },
             'residence': {
                 'street': 'Rue du Kot, 42',
@@ -198,8 +201,8 @@ class TestStudentData(TestCase):
                 'street3': None,
                 'postCode': 1236,
                 'town': 'Las-Bas',
-                'country': 'Belgique'
-            }
+                'country': 'Belgique',
+            },
         }
         self.assertDictEqual(given_data, expected_data)
 
@@ -212,15 +215,21 @@ class TestStudentData(TestCase):
             'matric_fgs': '0202020',
             'birthdate': '08/08/1912',
             'birthcity': 'GRENOBLE',
-            'birthcountry': 'France'
+            'birthcountry': 'France',
         }
         self.assertDictEqual(given_data, expected_data)
+
+    @patch('dashboard.business.id_data._get_data_from_esb')
+    def test_get_niss(self, mock_esb):
+        mock_esb.return_value = {"return": {"niss": "92041830152"}}
+        student = StudentFactory()
+        given_data = bsn_id_data._get_formated_niss(student)
+        expected_data = "92.04.18-301.52"
+        self.assertEqual(given_data, expected_data)
 
     @patch('dashboard.business.id_data._get_data_from_esb')
     def test_get_data_from_esb(self, mock_esb):
         mock_esb.return_value = get_json_as_dict("dashboard/tests/resources/esb_test.json")
         given_data = bsn_id_data._get_data_from_esb("test")
-        expected_data = {
-            'return': 'TEST'
-        }
+        expected_data = {'return': 'TEST'}
         self.assertDictEqual(given_data, expected_data)
