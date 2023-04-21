@@ -57,9 +57,9 @@ class TestHome(TestCase):
     def test_user_has_access_to_tutor_dashboard(self):
         self.user.user_permissions.add(Permission.objects.get(codename="is_tutor"))
         response = self.client.get(self.url)
-        self.assertTrue(response.context['tiles']['tutor'])
+        self.assertEqual(response.context['grids_tiles'][0].tag, 'tutor')
 
     def test_user_has_access_to_student_dashboard(self):
         self.user.user_permissions.add(Permission.objects.get(codename="is_student"))
         response = self.client.get(self.url)
-        self.assertTrue(response.context['tiles']['student'])
+        self.assertEqual(response.context['grids_tiles'][0].tag, 'student')
