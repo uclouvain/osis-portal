@@ -39,12 +39,14 @@
             <div class="progress-bar progress-bar-success progress-bar" id="progress-acquis-{{ view.name }}"
                  style="width: {{ credits_acquis_pourcentage }}%"
                  title="{% trans 'Credits earned/valued' %}"
+                 data-toggle="tooltip"
             >
                 <strong style="color: white;">{{ credits_acquis|floatformat }}</strong>
             </div>
             <div class="progress-bar progress-bar-secondary progress-bar" id="progress-inscrits-{{ view.name }}"
                  style="width: {{ credits_inscrits_pourcentage }}%"
                  title="{% trans 'Registered credits in ' %} {{ annee_academique|display_as_academic_year }}"
+                 data-toggle="tooltip"
             >
                 <strong style="color: white;">{{ credits_inscrits|floatformat }}</strong>
             </div>
