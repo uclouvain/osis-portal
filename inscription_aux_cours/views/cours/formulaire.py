@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.forms.cours.inscription_hors_programme import InscriptionHorsProgrammeForm
+from inscription_aux_cours.services.complement import ComplementService
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
@@ -57,7 +58,7 @@ class InscriptionAUnCoursHorsProgramme:
 
 
 @method_decorator(never_cache, name='dispatch')
-class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCoursViewMixin, TemplateView):
+class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
     name = 'formulaire-inscription-cours'
 
     # TemplateView
@@ -93,13 +94,11 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         result = []  # type: List[InscriptionAUnCoursHorsProgramme]
         result += [
             InscriptionAUnCoursHorsProgramme(
-                code_mini_formation="",
-                code_cours=inscription.code,
-                intitule_cours="",
-                credits=inscription.credits
+                code_mini_formation="", code_cours=inscription.code, intitule_cours="", credits=inscription.credits
             )
-            for inscription
-            in self.formulaire_inscriptions_cours["formulaire_tronc_commun"]['inscriptions_hors_programme']
+            for inscription in self.formulaire_inscriptions_cours["formulaire_tronc_commun"][
+                'inscriptions_hors_programme'
+            ]
         ]
         for inscriptions_pour_mini_formation in self.formulaire_inscriptions_cours["formulaires_mini_formation"]:
             result += [
@@ -107,14 +106,14 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
                     code_mini_formation=inscriptions_pour_mini_formation.code_programme,
                     code_cours=inscription.code,
                     intitule_cours="",
-                    credits=inscription.credits
-                ) for inscription in inscriptions_pour_mini_formation['inscriptions_hors_programme']
+                    credits=inscription.credits,
+                )
+                for inscription in inscriptions_pour_mini_formation['inscriptions_hors_programme']
             ]
         return self._remplir_intitule_cours(result)
 
     def _remplir_intitule_cours(
-            self,
-            inscriptions_hors_programme: List['InscriptionAUnCoursHorsProgramme']
+        self, inscriptions_hors_programme: List['InscriptionAUnCoursHorsProgramme']
     ) -> List['InscriptionAUnCoursHorsProgramme']:
         if not inscriptions_hors_programme:
             return []
@@ -127,27 +126,21 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
                 inscription,
                 intitule_cours=unites_enseignements_par_code[inscription.code_cours]
                 if unites_enseignements_par_code.get(inscription.code_cours)
-                else classes_par_code[inscription.code_cours]['intitule']
+                else classes_par_code[inscription.code_cours]['intitule'],
             )
             for inscription in inscriptions_hors_programme
         ]
 
     def _rechercher_unites_enseignements(self, codes_cours: List[str]) -> Dict[str, 'str']:
-        result = dict()
-        for code in codes_cours:
-            result[code] = LearningUnitService.get_learning_unit_title(
-                year=self.annee_academique,
-                acronym=code,
-                person=self.person
+        return {
+            code: LearningUnitService.get_learning_unit_title(
+                year=self.annee_academique, acronym=code, person=self.person
             )
-        return result
+            for code in codes_cours
+        }
 
     def _rechercher_classes(self, codes_classes: List[str]) -> Dict[str, 'Classe']:
-        classes = ClasseService().rechercher_classes(
-            self.person,
-            annee=self.annee_academique,
-            codes=codes_classes
-        )
+        classes = ClasseService().rechercher_classes(self.person, annee=self.annee_academique, codes=codes_classes)
         return {classe['code']: classe for classe in classes}
 
     @cached_property
@@ -164,7 +157,13 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
             'form': self.formulaire_demande_particuliere,
             'est_annee_paire': self.annee_academique % 2 == 0,
             'demande_particuliere': self.demande_particuliere,
+            'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
+            'a_un_complement': self.a_un_complement_de_formation,
         }
+
+    @cached_property
+    def a_un_complement_de_formation(self) -> bool:
+        return ComplementService.a_un_complement(person=self.person, code_programme=self.code_programme)
 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:

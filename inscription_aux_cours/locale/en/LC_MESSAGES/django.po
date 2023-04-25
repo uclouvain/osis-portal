@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-28 15:52+0200\n"
+"POT-Creation-Date: 2023-04-19 16:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,12 @@ msgid "Continue to courses enrollment"
 msgstr ""
 
 msgid "Credits"
+msgstr ""
+
+msgid "Credits earned/valued"
+msgstr ""
+
+msgid "Credits for potential progress"
 msgstr ""
 
 msgid "Credits of the learning unit are acquired"
@@ -191,6 +197,9 @@ msgid "Print my proposition of annual program"
 msgstr ""
 
 msgid "Program"
+msgstr ""
+
+msgid "Registered credits in "
 msgstr ""
 
 msgid "Registration id"
