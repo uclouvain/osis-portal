@@ -35,6 +35,7 @@ from osis_program_management_sdk.model.programme import Programme
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
+from education_group.services.training import TrainingService
 from inscription_aux_cours import formatter
 from inscription_aux_cours.data.proposition_programme_annuel import (
     Inscription,
@@ -170,6 +171,13 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
     def a_un_complement_de_formation(self) -> bool:
         return ComplementService.a_un_complement(person=self.person, code_programme=self.code_programme)
 
+    @cached_property
+    def credits_formation(self) -> int:
+        training = TrainingService.get_detail(
+            person=self.person, year=self.annee_academique, acronym=self.sigle_formation
+        )
+        return training.credits
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
@@ -180,4 +188,5 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
             'bloquer_soumission': bool(self.cours_dont_prerequis_non_acquis),
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,
+            'credits_formation': self.credits_formation,
         }
