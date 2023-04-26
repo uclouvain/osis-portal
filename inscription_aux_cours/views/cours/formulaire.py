@@ -37,6 +37,7 @@ from osis_learning_unit_sdk.model.classe import Classe
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
+from education_group.services.training import TrainingService
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.forms.cours.inscription_hors_programme import InscriptionHorsProgrammeForm
 from inscription_aux_cours.services.complement import ComplementService
@@ -159,7 +160,15 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursV
             'demande_particuliere': self.demande_particuliere,
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,
+            'credits_formation': self.credits_formation,
         }
+
+    @cached_property
+    def credits_formation(self) -> int:
+        training = TrainingService.get_detail(
+            person=self.person, year=self.annee_academique, acronym=self.sigle_formation.replace('11BA', '1BA')
+        )
+        return training.credits
 
     @cached_property
     def a_un_complement_de_formation(self) -> bool:
