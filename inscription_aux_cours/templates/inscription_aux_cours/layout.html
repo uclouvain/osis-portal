@@ -28,8 +28,11 @@
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'inscription_aux_cours/css/inscription_aux_cours.css' %}">
-    <script src="{% static 'js/htmx-1.8.2.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'inscription_aux_cours/css/spinner.css' %}">
+    <script src="{% static 'js/htmx-1.8.6.js' %}" defer></script>
+    <script src="{% static 'js/htmx-osis.js' %}" defer></script>
     <script src="{% static 'inscription_aux_cours/js/inscription_aux_cours.js' %}" defer></script>
+    <script src="{% static 'inscription_aux_cours/js/spinner.js' %}" defer></script>
 {% endblock %}
 
 {% block breadcrumb_area %}
@@ -52,4 +55,9 @@
     </div>
 
     {% block page_body %} {% endblock %}
+
+
+    <div id="overlay">
+        <div id="loader"></div>
+    </div>
 {% endblock %}

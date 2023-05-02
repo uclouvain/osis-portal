@@ -1,0 +1,34 @@
+{% load i18n %}
+{% if erreurs %}
+<tr id="row-{{ code_cours }}">
+    <td> {{ code_cours }} - {{ intitule_cours }}</td>
+    <td>({{ credits|floatformat }} {% trans 'credits' %})</td>
+    <td style="width: 140px">
+        <div class="col-md-9 col-md-offset-2">
+            <div class="row">
+                <form method="post" id="formulaire-desincription-hors-programme-{{ code_cours }}">
+                    {% csrf_token %}
+                    <div class="loading pull-left"></div>
+                    <input
+                            id="checkbox-{{ code_cours }}"
+                            type="checkbox"
+                            name="checkbox_cours"
+                            hx-ext="swap-success-error"
+                            hx-include="#formulaire-desincription-hors-programme-{{ code_cours }}"
+                            hx-target="#row-{{ code_cours }}"
+                            hx-swap="outerHTML"
+                            hx-trigger="click"
+                            hx-vals='{"code_mini_formation": "{{ code_mini_formation }}", "code_cours": "{{ code_cours }}"}'
+                            hx-post="{% url 'inscription-aux-cours:desinscrire-cours-hors-programme' code_programme %}"
+                            hx-indicator="#formulaire-desincription-hors-programme-{{ code_cours }}"
+                            checked
+                    >
+                    <i class="fa-solid fa-circle-exclamation fa-danger" data-toggle="tooltip" title="{{ erreurs|join:"\n" }}"></i>
+                </form>
+            </div>
+        </div>
+    </td>
+</tr>
+{% else %}
+<tr></tr>
+{% endif %}

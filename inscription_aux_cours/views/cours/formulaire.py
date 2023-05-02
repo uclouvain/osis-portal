@@ -27,15 +27,13 @@ from typing import List, Optional, Dict
 
 import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from django.views.generic import FormView, TemplateView
-from osis_inscription_cours_sdk.model.configuration_formulaire_inscription_cours import \
-    ConfigurationFormulaireInscriptionCours
+from django.views.decorators.cache import never_cache
+from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 from osis_learning_unit_sdk.model.classe import Classe
-from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
@@ -58,6 +56,7 @@ class InscriptionAUnCoursHorsProgramme:
     credits: Decimal
 
 
+@method_decorator(never_cache, name='dispatch')
 class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCoursViewMixin, TemplateView):
     name = 'formulaire-inscription-cours'
 
@@ -75,10 +74,10 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         choix_mini_formations = [
             (formulaire_mini_formation.code_programme, formulaire_mini_formation.intitule_formation)
             for formulaire_mini_formation in self.formulaire_inscriptions_cours.formulaires_mini_formation
-            if formulaire_mini_formation.configuration.autorise_etudiant_a_ajouter_cours
+            if formulaire_mini_formation.etudiant_autorise_a_ajouter_cours
         ]
         choix_mini_formations.sort(key=lambda choix: unaccent(choix[1]))
-        if self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration.autorise_etudiant_a_ajouter_cours:
+        if self.formulaire_inscriptions_cours.formulaire_tronc_commun.etudiant_autorise_a_ajouter_cours:
             choix_mini_formations = [('', self.programme.intitule_formation)] + choix_mini_formations
         return InscriptionHorsProgrammeForm(
             choix_mini_formations,
@@ -126,20 +125,22 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
         return [
             attr.evolve(
                 inscription,
-                intitule_cours=unites_enseignements_par_code[inscription.code_cours]['title']
+                intitule_cours=unites_enseignements_par_code[inscription.code_cours]
                 if unites_enseignements_par_code.get(inscription.code_cours)
                 else classes_par_code[inscription.code_cours]['intitule']
             )
             for inscription in inscriptions_hors_programme
         ]
 
-    def _rechercher_unites_enseignements(self, codes_cours: List[str]) -> Dict[str, 'LearningUnit']:
-        unites_enseignements = LearningUnitService().search_learning_units(
-            self.person,
-            year=self.annee_academique,
-            learning_unit_codes=codes_cours
-        )
-        return {unites_enseignement['acronym']: unites_enseignement for unites_enseignement in unites_enseignements}
+    def _rechercher_unites_enseignements(self, codes_cours: List[str]) -> Dict[str, 'str']:
+        result = dict()
+        for code in codes_cours:
+            result[code] = LearningUnitService.get_learning_unit_title(
+                year=self.annee_academique,
+                acronym=code,
+                person=self.person
+            )
+        return result
 
     def _rechercher_classes(self, codes_classes: List[str]) -> Dict[str, 'Classe']:
         classes = ClasseService().rechercher_classes(
@@ -156,12 +157,13 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin,  InscriptionAuxCours
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'configuration': self.formulaire_inscriptions_cours.formulaire_tronc_commun.configuration,
             'formulaire': self.formulaire_inscriptions_cours,
             'formulaire_hors_programme': self.formulaire_inscription_hors_programme,
             'inscriptions_hors_programmes': self.inscriptions_hors_programme,
             'a_des_mini_formations_inscriptibles': self.a_des_mini_formations_inscriptibles,
             'form': self.formulaire_demande_particuliere,
+            'est_annee_paire': self.annee_academique % 2 == 0,
+            'demande_particuliere': self.demande_particuliere,
         }
 
     @cached_property

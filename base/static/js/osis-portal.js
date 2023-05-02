@@ -26,6 +26,10 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
+document.addEventListener("htmx:afterSwap",function (e,) {
+    $(e.target).find('[data-toggle="tooltip"]').tooltip()
+});
+
 // disable pagination page links when out of bound
 document.querySelectorAll('.disabled a').forEach(
     (el) => el.removeAttribute("href")

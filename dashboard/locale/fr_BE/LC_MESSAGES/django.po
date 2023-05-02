@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-05 09:37+0200\n"
+"POT-Creation-Date: 2023-03-30 11:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,7 +93,7 @@ msgid "Lists of students enrolled to my exams"
 msgstr "Listes des étudiants inscrits à mes examens"
 
 msgid "Manage my annual programme proposal"
-msgstr "Gérer ma proposition de programme annuel"
+msgstr "Composer ma proposition de programme annuel"
 
 msgid "Manage my description fiche"
 msgstr "Gérer mes fiches descriptives"
@@ -125,8 +125,14 @@ msgstr "Mes fiches descriptives"
 msgid "My personal data"
 msgstr "Mes données personnelles"
 
+msgid "My student file"
+msgstr "Mon dossier étudiant"
+
 msgid "My teaching charge"
 msgstr "Ma charge d'enseignement"
+
+msgid "National registry number"
+msgstr "Numéro de registre national"
 
 msgid "Personal address"
 msgstr "Adresse du domicile"

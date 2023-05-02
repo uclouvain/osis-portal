@@ -24,7 +24,7 @@
 ##############################################################################
 import urllib.parse
 from decimal import Decimal
-from typing import List
+from typing import List, Optional
 
 from django import template
 from django.conf import settings
@@ -38,6 +38,7 @@ from osis_program_management_sdk.model.programme import Programme
 from inscription_aux_cours import formatter
 from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
 from inscription_aux_cours.data.proposition_programme_annuel import PropositionProgrammeAnnuel
+from program_management.services.programme import ProgrammeService
 
 register = template.Library()
 
@@ -63,6 +64,16 @@ def est_inscrit_a_la_mini_formation(mini_formation: 'MiniFormation', inscription
     codes_mini_formations_inscrites = {inscription.code_mini_formation for inscription in inscriptions_mini_formations}
     return mini_formation.code in codes_mini_formations_inscrites
 
+@register.filter
+def get_inscription_a_la_mini_formation(
+        mini_formation: 'MiniFormation',
+        inscriptions_mini_formations: List['InscriptionMiniFormation']
+) -> Optional['InscriptionMiniFormation']:
+    return next(
+        (inscription for inscription in inscriptions_mini_formations if inscription.code_mini_formation == mini_formation.code),
+        None
+    )
+
 
 @register.filter
 def est_inscrit_au_cours(cours: 'InscriptionAUnCours', programme_annuel_etudiant: ProgrammeAnnuelEtudiant):
@@ -87,19 +98,42 @@ def filtrer_inscriptions_hors_programme_par_contexte(
 
 @register.simple_tag
 def get_message_condition_access(annee: int, mini_formation: 'MiniFormation') -> str:
+    lien = f"{settings.INSTITUTION_URL}prog-{annee}-{mini_formation.sigle}-cond_adm"
     return _(
         "This minor has access conditions, please refer to the procedure to enroll: {lien_condition_acces}"
     ).format(
-        lien_condition_acces=f"{settings.INSTITUTION_URL}prog-{annee}-{mini_formation.sigle}-cond_adm"
+        lien_condition_acces=f"<a href='{lien}'>{lien}</a>"
     )
 
 
 @register.simple_tag
+def get_lien_condition_access(programme: 'Programme', mini_formation: 'MiniFormation') -> str:
+    if ProgrammeService.est_bachelier(programme):
+        return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{_clean_sigle_mini_formation(mini_formation.sigle)}-cond_adm"
+    sigle_formation = ProgrammeService.get_sigle_formation(programme)
+    return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{sigle_formation}-programme"
+
+
+def _clean_sigle_mini_formation(sigle: str) -> str:
+    return sigle.split('[')[0]
+
+@register.simple_tag
 def get_lien_horaire_cours(programme_annuel: 'PropositionProgrammeAnnuel') -> str:
-    codes_cours = [cours.code for contexte in programme_annuel.inscriptions_par_contexte for cours in contexte.cours]
+
+    codes_cours = [
+        _format_code_cours_pour_lien_horaire(cours.code)
+        for contexte in programme_annuel.inscriptions_par_contexte
+        for cours in contexte.cours
+    ]
     return settings.COURSES_SCHEDULE_URL.format(
         codes_cours=urllib.parse.quote(",".join(codes_cours))
     )
+
+
+def _format_code_cours_pour_lien_horaire(code: str) -> str:
+    separation_classe_magistrale = '-'
+    separation_classe_pratique = '_'
+    return code.replace(separation_classe_pratique, "").replace(separation_classe_magistrale, "")
 
 
 @register.filter

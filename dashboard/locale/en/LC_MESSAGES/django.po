@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-05 09:37+0200\n"
+"POT-Creation-Date: 2023-03-30 11:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,7 +119,13 @@ msgstr ""
 msgid "My personal data"
 msgstr ""
 
+msgid "My student file"
+msgstr ""
+
 msgid "My teaching charge"
+msgstr ""
+
+msgid "National registry number"
 msgstr ""
 
 msgid "Personal address"

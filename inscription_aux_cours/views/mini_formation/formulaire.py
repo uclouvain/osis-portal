@@ -27,7 +27,9 @@ from typing import List
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
+from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from osis_education_group_sdk.model.mini_training import MiniTraining
 from osis_inscription_cours_sdk.model.inscription_mini_formation import InscriptionMiniFormation
@@ -40,11 +42,12 @@ from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from program_management.services.programme import ProgrammeService
 
 
-class MiniFormationsInscriptiblesView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+@method_decorator(never_cache, name='dispatch')
+class FormulaireMiniFormationsView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
     name = 'mini-formations-inscriptibles'
 
     # TemplateView
-    template_name = "inscription_aux_cours/mini_formation/inscriptibles.html"
+    template_name = "inscription_aux_cours/mini_formation/formulaire.html"
 
     @cached_property
     def liste_mini_formations_inscriptibles(self) -> 'ListeMiniFormations':
