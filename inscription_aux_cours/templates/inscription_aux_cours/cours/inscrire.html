@@ -16,7 +16,7 @@
             hx-disable-element=".link-disable-on-enrollment-modification"
     >
     {% if erreurs %}
-        <i class="fa-solid fa-circle-exclamation fa-danger" data-toggle="tooltip" title="{{ erreurs|join:"\n" }}"></i>
+        {% include "inscription_aux_cours/blocks/tooltip_erreurs.html" %}
     {% endif %}
     <span class="desinscrit"></span>
 </form>

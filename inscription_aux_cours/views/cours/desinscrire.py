@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -32,14 +32,15 @@ from django.views.generic import TemplateView
 from base.services.utils import ServiceException
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class DesinscrireAUnCoursView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
     name = 'desinscrire-cours'
 
     # TemplateView
-    template_name = "inscription_aux_cours/cours/inscrire.html"
+    htmx_template_name = "inscription_aux_cours/cours/inscrire.html"
     error_template_name = "inscription_aux_cours/cours/desinscrire.html"
 
     def __init__(self, *args, **kwargs):
@@ -76,8 +77,7 @@ class DesinscrireAUnCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, 
             for inscription in insccriptions_a_une_mini_formation['cours']
         ]
         inscription = next(
-            (inscription for inscription in inscriptions if inscription['code'] == self.code_cours),
-            None
+            (inscription for inscription in inscriptions if inscription['code'] == self.code_cours), None
         )
         if inscription:
             return inscription.etat

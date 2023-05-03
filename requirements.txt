@@ -45,13 +45,13 @@ git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.27
 git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.4
 git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.4.0
 git+https://github.com/uclouvain/osis-exam-enrollment-sdk.git@build-1.0
-git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.6
-git+https://github.com/uclouvain/osis-dissertation-sdk.git@wip-build-1.00
+git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.8
+git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.02
 
 # Modules transverses
-git+https://github.com/uclouvain/osis-document.git@dev#egg=osis_document
-git+https://github.com/uclouvain/osis-signature.git@dev#egg=osis_signature
-git+https://github.com/uclouvain/osis-notification.git@dev#egg=osis_notification
-git+https://github.com/uclouvain/osis-async.git@dev#egg=osis_async
+git+https://github.com/uclouvain/osis-document.git@0.1#egg=osis_document
+git+https://github.com/uclouvain/osis-signature.git@0.1#egg=osis_signature
+git+https://github.com/uclouvain/osis-notification.git@0.1#egg=osis_notification
+git+https://github.com/uclouvain/osis-async.git@0.5#egg=osis_async
 
 -r ./osis_common/requirements.txt

@@ -60,4 +60,5 @@ if DEBUG:
         'ROOT_TAG_EXTRA_ATTRS': 'hx-preserve'
     }
 
-
+# To prevent cookies conflicts when Osis and Osis-portal are used in the same navigator
+# SESSION_COOKIE_NAME = 'portalsessionid'
