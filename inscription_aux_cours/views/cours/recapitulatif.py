@@ -173,10 +173,9 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, Templa
 
     @cached_property
     def credits_formation(self) -> int:
-        training = TrainingService.get_detail(
-            person=self.person, year=self.annee_academique, acronym=self.sigle_formation
+        return TrainingService.get_credits(
+            person=self.person, year=self.annee_academique, acronym=self.sigle_formation.replace('11BA', '1BA')
         )
-        return training.credits
 
     def get_context_data(self, **kwargs):
         return {
