@@ -27,10 +27,10 @@ from django.urls import path, include, re_path
 
 from inscription_aux_cours.views.activites_aide_reussite.formulaire import FormulaireActivitesDeAideALaReussiteView
 from inscription_aux_cours.views.cours.demande_particuliere import DemandeParticuliereView
-from inscription_aux_cours.views.cours.desinscrire import DesinscrireAUnCoursView
-from inscription_aux_cours.views.cours.desinscrire_hors_programme import DesinscrireAUnCoursHorsProgrammeView
-from inscription_aux_cours.views.cours.formulaire import FormulaireInscriptionAuxCoursView
-from inscription_aux_cours.views.cours.inscrire import InscrireAUnCoursView
+from inscription_aux_cours.views.cours.desinscrire import DesinscrireUniteEnseignementView
+from inscription_aux_cours.views.cours.desinscrire_hors_programme import DesinscrireUniteEnseignementHorsProgrammeView
+from inscription_aux_cours.views.cours.formulaire import FormulaireCompositionPAEView
+from inscription_aux_cours.views.cours.inscrire import InscrireUniteEnseignementView
 from inscription_aux_cours.views.cours.inscrire_hors_programme import InscrireAUnCoursHorsProgrammeView
 from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
 from inscription_aux_cours.views.cours.soumettre_proposition import SoumettrePropositionView
@@ -56,21 +56,21 @@ urlpatterns = [
                 path('non_autorisee/', InscriptionNonAutoriseeView.as_view(), name=InscriptionNonAutoriseeView.name),
                 path(
                     'formulaire/',
-                    FormulaireInscriptionAuxCoursView.as_view(),
-                    name=FormulaireInscriptionAuxCoursView.name,
+                    FormulaireCompositionPAEView.as_view(),
+                    name=FormulaireCompositionPAEView.name,
                 ),
                 path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
-                path('inscrire/', InscrireAUnCoursView.as_view(), name=InscrireAUnCoursView.name),
+                path('inscrire/', InscrireUniteEnseignementView.as_view(), name=InscrireUniteEnseignementView.name),
                 path(
                     'inscrire_hors_programme/',
                     InscrireAUnCoursHorsProgrammeView.as_view(),
                     name=InscrireAUnCoursHorsProgrammeView.name,
                 ),
-                path('desinscrire/', DesinscrireAUnCoursView.as_view(), name=DesinscrireAUnCoursView.name),
+                path('desinscrire/', DesinscrireUniteEnseignementView.as_view(), name=DesinscrireUniteEnseignementView.name),
                 path(
                     'desinscrire_hors_programme/',
-                    DesinscrireAUnCoursHorsProgrammeView.as_view(),
-                    name=DesinscrireAUnCoursHorsProgrammeView.name,
+                    DesinscrireUniteEnseignementHorsProgrammeView.as_view(),
+                    name=DesinscrireUniteEnseignementHorsProgrammeView.name,
                 ),
                 path('demande_particuliere/', DemandeParticuliereView.as_view(), name=DemandeParticuliereView.name),
                 path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),

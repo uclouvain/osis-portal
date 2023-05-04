@@ -27,10 +27,10 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 
 
-class InscriptionNonAutoriseeView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class InscriptionNonAutoriseeView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     permission_required = "base.is_student"
     name = 'non-autorisee'
     template_name = "inscription_aux_cours/non_autorisee.html"

@@ -31,12 +31,12 @@ from django.views.generic import TemplateView
 
 from base.services.utils import ServiceException
 from inscription_aux_cours.services.cours import CoursService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class DesinscrireAUnCoursView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class DesinscrireUniteEnseignementView(HtmxMixin, LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = 'desinscrire-cours'
 
     # TemplateView

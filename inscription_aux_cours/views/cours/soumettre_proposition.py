@@ -32,11 +32,11 @@ from django.views.generic import TemplateView
 from base.services.utils import ServiceException
 from continuing_education.views.common import display_error_messages, display_success_messages
 from inscription_aux_cours.services.proposition_programme import PropositionProgrammeService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class SoumettrePropositionView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class SoumettrePropositionView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = 'soumettre-proposition'
 
     # TemplateView
