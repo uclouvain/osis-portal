@@ -83,6 +83,7 @@
                                 <th>{% trans 'Attestation type' %}</th>
                                 <th class="text-center">{% trans 'Printed' %}</th>
                                 <th class="text-center">{% trans 'Available' %}</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -120,6 +121,13 @@
                                         {% else %}
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         {% endif %}
+                                </tr>
+                                <tr>
+                                    <td class="text-center">
+                                        {% if attestation_statuse.attestationType == attestation_type_invoice and  attestation_statuse.available %}
+                                            <a class="btn btn-default" target="_blank" href="{{ online_payment_url }}">{% trans 'Pay online' %}</a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>

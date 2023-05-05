@@ -398,6 +398,7 @@ ATTESTATION_CONFIG = {
     'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
+    'ONLINE_PAYMENT_URL': os.environ.get("ONLINE_PAYMENT_URL", ''),
 }
 
 
