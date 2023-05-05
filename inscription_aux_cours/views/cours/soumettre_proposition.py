@@ -55,10 +55,9 @@ class SoumettrePropositionView(LoginRequiredMixin, InscriptionAuxCoursViewMixin,
 
     def get_success_message(self):
         return _(
-            "Your proposition of annual program was successfully submitted. "
-            "Thank you for contributing to the testing of the form for the composition of the annual program. "
-            "Can you give us feedback by filling the <a href='https://forms.office.com/e/pJQmq4WXzN'>evaluation form</a>."
-        )
+            "Your proposition of annual program successfully submitted. "
+            "A confirmation email is sent to the address %(email)s"
+        ) % {'email': self.request.user.person.email}
 
     def soumettre_proposition(self):
         PropositionProgrammeService().soumettre(
