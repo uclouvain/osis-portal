@@ -1,3 +1,4 @@
+{% load i18n %}
 <form id="form-inscription-{{ code_mini_formation }}-{{ code_cours }}" method="post">
     {% csrf_token %}
     <div class="loading pull-left"></div>
@@ -21,6 +22,11 @@
     {% endif %}
 
     {% if etat_inscription %}
-        <span class="fa-pull-right badge badge_insc_meme_context">{{ etat_inscription }}</span>
+        <span class="fa-pull-right badge badge_insc_meme_context"
+              data-toggle="tooltip"
+              title="{% blocktrans with code_ue=programme.code %}Enrolled to {{ code_ue }}.{% endblocktrans %}"
+        >
+            {{ etat_inscription }}
+        </span>
     {% endif %}
 </form>

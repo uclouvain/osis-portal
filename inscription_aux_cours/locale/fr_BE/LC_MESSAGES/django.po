@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 10:42+0200\n"
+"POT-Creation-Date: 2023-05-05 14:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,16 +15,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#, python-format
-msgid ""
-"\n"
-"                                It seems you didn't acquired the "
-"prerequisites for the following courses: %(liste_codes_ue)s.\n"
-"                                This submission will be examined by your "
-"faculty after the submission of your proposal.\n"
-"                            "
-msgstr "Il semble que vous n'ayez pas acquis les prérequis pour %(liste_codes_ue)s. Cette demande sera examinée par la faculté après soumission de votre proposition."
 
 msgid "Academic year"
 msgstr "Année académique"
@@ -119,6 +109,10 @@ msgstr ""
 msgid "Enrolled in a learning unit with a dispensatory test"
 msgstr "Inscrit·e à une unité d'enseignement avec test dispensatoire"
 
+#, python-format
+msgid "Enrolled to %(code_ue)s."
+msgstr "Inscrit.e à %(code_ue)s."
+
 msgid "Exceptionally, not organized this year"
 msgstr "Exceptionnellement, non organisé cette année académique"
 
@@ -159,6 +153,15 @@ msgstr ""
 msgid "Indicates annual block"
 msgstr "Indique le(s) bloc(s) annuel(s)"
 
+msgid ""
+"It seems you didn't acquired the prerequisites for the following courses: "
+"%(liste_codes_ue)s. This submission will be examined by your faculty after "
+"the submission of your proposal."
+msgstr ""
+"Il semble que vous n'ayez pas acquis les prérequis pour %(liste_codes_ue)s. "
+"Cette demande sera examinée par la faculté après soumission de votre "
+"proposition."
+
 msgid "Last name"
 msgstr "Nom"
 
@@ -167,6 +170,9 @@ msgstr "Unité d'enseignement"
 
 msgid "Learning unit failed for a past academic year"
 msgstr "Unité d'enseignement échouée lors d'une année académique précédente"
+
+msgid "Learning unit with prerequisites not acquired"
+msgstr "Unité d'enseignement dont les prérequis ne sont pas acquis"
 
 msgid "Legend"
 msgstr "Légende"
