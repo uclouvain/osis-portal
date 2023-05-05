@@ -69,6 +69,15 @@
                             {% trans "Please modify your enrollments." %}
                         </p>
                     </div>
+                    <div class="alert alert-warning hide_print">
+                        <p>
+                            <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
+                            {% blocktrans with liste_codes_ue=cours_dont_prerequis_non_acquis|join:", " %}
+                                It seems you didn't acquired the prerequisites for the following courses: {{ liste_codes_ue }}.
+                                This submission will be examined by your faculty after the submission of your proposal.
+                            {% endblocktrans %}
+                        </p>
+                    </div>
                 {% endif %}
 
                 {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
