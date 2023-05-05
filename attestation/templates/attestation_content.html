@@ -117,12 +117,11 @@
                                                         {% url 'download_attestation' attestation_type=attestation_statuse.attestationType academic_year=attestation.academicYear %}
                                                         ">
                                                     {% endif %}
-                                            <i class="fa fa-download" aria-hidden="true"></i></a></td>
+                                            <i class="fa fa-download" aria-hidden="true"></i></a>
                                         {% else %}
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         {% endif %}
-                                </tr>
-                                <tr>
+                                    </td>
                                     <td class="text-center">
                                         {% if attestation_statuse.attestationType == attestation_type_invoice and  attestation_statuse.available %}
                                             <a class="btn btn-default" target="_blank" href="{{ online_payment_url }}">{% trans 'Pay online' %}</a>
