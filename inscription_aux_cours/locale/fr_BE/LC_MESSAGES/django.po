@@ -242,7 +242,7 @@ msgstr "Rechercher par code (exemple: LCHIM1111)"
 
 msgid "Select an offer for which you want to do courses enrollment."
 msgstr ""
-"Sélectionnez la formation pour laquelle vous désirez composer votre programme annuel."
+"Cliquez sur le sigle de la formation pour laquelle vous désirez composer votre programme annuel."
 
 msgid "Special requests"
 msgstr "Demandes particulières éventuelles"
