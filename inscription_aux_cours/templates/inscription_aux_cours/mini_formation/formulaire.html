@@ -104,6 +104,25 @@
                         <td class="col-md-1">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
+                                {% if mini_formation.condition_acces %}
+                                    {% get_lien_condition_access programme mini_formation as lien_condition_access %}
+
+                                    <div class="keep-popover-display"
+                                         data-toggle="popover"
+                                         tabindex="0"
+                                         role="button"
+                                         data-html="true"
+                                         data-placement="left"
+                                         data-popover="manual"
+                                         data-content="
+                                           <p>
+                                            {% trans 'This minor or option has access conditions, please refer to the procedure to enroll by following this link:' %}
+                                            <a href='{{ lien_condition_access }}' target='_blank'>{{ lien_condition_access }}</a>
+                                            <br>
+                                            {% trans 'The enrollment will be done by your faculty manager.' %}
+                                            </p>"
+                                    >
+                                {% endif %}
                                 <input
                                         id="checkbox-{{ mini_formation.code }}"
                                         type="checkbox"
@@ -133,23 +152,10 @@
                                         {% endif %}
                                 >
                                 {% if mini_formation.condition_acces %}
-                                    {% get_lien_condition_access programme mini_formation as lien_condition_access %}
-
-                                    <a data-toggle="popover"
-                                       tabindex="0"
-                                       role="button"
-                                       data-html="true"
-                                       data-placement="top"
-                                       data-trigger="focus"
-                                       data-content="
-                                       <p>
-                                        {% trans 'This minor or option has access conditions, please refer to the procedure to enroll by following this link:' %}
-                                        <a href='{{ lien_condition_access }}' target='_blank'>{{ lien_condition_access }}</a>
-                                        <br>
-                                        {% trans 'The enrollment will be done by your faculty manager.' %}
-                                        </p>">
-                                        <i class='fa-solid fa-key fa-info'></i>
-                                    </a>
+                                    <i class='fa-solid fa-key fa-info'></i>
+                                {% endif %}
+                                {% if mini_formation.condition_acces %}
+                                    </div>
                                 {% endif %}
                                 <div class="loading pull-left"></div>
                             </form>
