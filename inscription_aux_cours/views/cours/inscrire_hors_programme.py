@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,22 +24,23 @@
 ##############################################################################
 from typing import Optional, List
 
-from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.decorators.http import require_POST
 
 from base.services.utils import ServiceException
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, View):
+class InscrireAUnCoursHorsProgrammeView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursViewMixin, View):
     name = 'inscrire-cours-hors-programme'
 
     @property
@@ -48,7 +49,7 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
 
     @property
     def codes_cours(self) -> List[str]:
-        return self.request.POST.getlist('cours', list())
+        return self.request.POST.getlist('cours', [])
 
     def post(self, request, *args, **kwargs):
         erreurs = []
@@ -68,8 +69,7 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
 
         return redirect(
             reverse(
-                "inscription-aux-cours:formulaire-inscription-cours",
-                kwargs={"code_programme": self.code_programme}
+                "inscription-aux-cours:formulaire-inscription-cours", kwargs={"code_programme": self.code_programme}
             )
         )
 
@@ -79,7 +79,7 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
             code_programme=self.code_programme,
             code_cours=code_cours,
             code_mini_formation=self.code_mini_formation,
-            hors_formulaire=True
+            hors_formulaire=True,
         )
 
     def afficher_erreurs(self, erreurs: List[str]) -> None:
@@ -87,12 +87,9 @@ class InscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursV
             messages.add_message(self.request, messages.ERROR, erreur)
 
     def afficher_succes(self, codes_cours: List[str]):
-        msg = _('You have been enrolled to {codes_cours}').format(
-            codes_cours=", ".join(codes_cours)
-        )
+        msg = _('You have been enrolled to {codes_cours}').format(codes_cours=", ".join(codes_cours))
         messages.add_message(self.request, messages.SUCCESS, msg)
 
 
 def formatter_messages_d_erreurs(code_cours: str, messages: List[str]) -> List[str]:
     return [f"{code_cours}: {message}" for message in messages]
-

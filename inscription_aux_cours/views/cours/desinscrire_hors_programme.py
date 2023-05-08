@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -34,10 +34,11 @@ from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
+from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class DesinscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class DesinscrireAUnCoursHorsProgrammeView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
     name = 'desinscrire-cours-hors-programme'
 
     # TemplateView
@@ -65,17 +66,13 @@ class DesinscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCou
 
     def get_intitule_cours(self) -> str:
         result = LearningUnitService.search_learning_units(
-            self.person,
-            year=self.annee_academique,
-            learning_unit_codes=[self.code_cours]
+            self.person, year=self.annee_academique, learning_unit_codes=[self.code_cours]
         )
         if result:
             return result[0]['title']
 
         result = ClasseService.rechercher_classes(
-            self.person,
-            annee=self.annee_academique,
-            codes=self.codes_cours_du_programme_annuel
+            self.person, annee=self.annee_academique, codes=self.codes_cours_du_programme_annuel
         )
         if result:
             return result[0]['intitule']
@@ -98,8 +95,7 @@ class DesinscrireAUnCoursHorsProgrammeView(LoginRequiredMixin, InscriptionAuxCou
             for inscription in insccriptions_a_une_mini_formation['cours']
         ]
         inscription = next(
-            (inscription for inscription in inscriptions if inscription['code'] == self.code_cours),
-            None
+            (inscription for inscription in inscriptions if inscription['code'] == self.code_cours), None
         )
         if inscription:
             return inscription.credits
