@@ -1,4 +1,3 @@
-##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -15,7 +14,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,26 +22,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import logging
+from functools import partial
 
 import osis_inscription_cours_sdk
-from django.conf import settings
+from django.http import Http404
+from osis_inscription_cours_sdk.api import complement_de_formation_api
 
-logger = logging.getLogger(settings.DEFAULT_LOGGER)
+from base.models.person import Person
+from base.services.utils import call_api
+from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
 
 
-def build_configuration() -> osis_inscription_cours_sdk.Configuration:
-    """
-    Return SDK configuration of exam_enrollment
-    """
-    if not settings.OSIS_INSCRIPTION_COURS_SDK_HOST:
-        logger.debug("'OSIS_INSCRIPTION_COURS_SDK_HOST' setting must be set in configuration")
+class ComplementService:
+    @classmethod
+    def a_un_complement(cls, person: Person, code_programme: str) -> bool:
+        try:
+            _complement_api_call(person, "get_complement_de_formation", code_programme=code_programme)
+            return True
+        except Http404:
+            return False
 
-    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
-        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
 
-    return osis_inscription_cours_sdk.Configuration(
-        host=settings.OSIS_INSCRIPTION_COURS_SDK_HOST,
-        api_key_prefix={'Token': settings.OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX},
-        api_key={'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY},
-    )
+_complement_api_call = partial(
+    call_api,
+    inscription_aux_cours_sdk,
+    osis_inscription_cours_sdk,
+    complement_de_formation_api.ComplementDeFormationApi,
+)

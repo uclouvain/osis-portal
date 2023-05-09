@@ -3,7 +3,7 @@
         size: A4;
     }
 
-    nav{
+    nav {
         display: none;
     }
 
@@ -18,7 +18,6 @@
     div.qagreen {
         display: none;
     }
-
 
     ol {
         display: none;
@@ -40,16 +39,16 @@
         display: none !important;
     }
 
-    body{
-        padding:0!important;
-        margin:0!important;
+    body {
+        padding: 0 !important;
+        margin: 0 !important;
         visibility: hidden;
     }
 
     table {
-        width:100%!important;
-        padding:0!important;
-        margin:0!important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
         font-size: x-small;
     }
 
@@ -69,4 +68,21 @@
         font-size: larger;
     }
 
+    .progress-bar {
+        position: relative;
+        border-bottom: 2rem solid #337ab7;
+    }
+    .progress-bar-success {
+        border-bottom-color: green;
+    }
+    .progress-bar-restant {
+        border-bottom-color: gray;
+    }
+
+    .credits-de-progression-potentielle {
+        border: 4px solid red !important;
+    }
+    .jalons {
+        border: 0.5px solid black !important;
+    }
 }
