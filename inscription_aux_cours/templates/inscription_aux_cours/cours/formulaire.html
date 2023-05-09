@@ -79,7 +79,7 @@
                     {{ formulaire_mini_formation.html|safe }}
                 </div>
 
-                <strong class="pull-right">{{ credits_acquis_de_progression_par_code|get_item:formulaire_mini_formation.code_programme|floatformat }} {% trans 'credits earned' %}</strong>
+                <strong class="pull-right">{{ credits_acquis_de_progression_par_code|get_item:formulaire_mini_formation.code_programme|floatformat|default:0 }} {% trans 'credits earned' %}</strong>
 
                 {% with inscriptions_hors_programmes|filtrer_inscriptions_hors_programme_par_contexte:formulaire_mini_formation.code_programme as inscriptions_hors_programmes_du_contexte %}
                     {% if inscriptions_hors_programmes_du_contexte %}
