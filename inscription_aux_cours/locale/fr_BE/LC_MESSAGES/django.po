@@ -109,6 +109,10 @@ msgstr ""
 msgid "Enrolled in a learning unit with a dispensatory test"
 msgstr "Inscrit·e à une unité d'enseignement avec test dispensatoire"
 
+msgid "Enrolled to the minor or option"
+msgstr ""
+"Inscrit.e à la mineure ou l'option"
+
 msgid "Exceptionally, not organized this year"
 msgstr "Exceptionnellement, non organisé cette année académique"
 

@@ -96,6 +96,9 @@ msgstr ""
 msgid "Enrolled in a learning unit with a dispensatory test"
 msgstr ""
 
+msgid "Enrolled to the minor or option"
+msgstr ""
+
 msgid "Exceptionally, not organized this year"
 msgstr ""
 
