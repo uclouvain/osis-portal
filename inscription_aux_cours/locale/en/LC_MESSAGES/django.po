@@ -308,11 +308,10 @@ msgid ""
 "to help you succeed throughout the year."
 msgstr ""
 
+#, python-format
 msgid ""
-"Your proposition of annual program was successfully submitted. Thank you for "
-"contributing to the testing of the form for the composition of the annual "
-"program. Can you give us feedback by filling the <a href='https://forms."
-"office.com/e/pJQmq4WXzN'>evaluation form</a>."
+"Your proposition of annual program successfully submitted. A confirmation "
+"email is sent to the address %(email)s"
 msgstr ""
 
 msgid "credits"
