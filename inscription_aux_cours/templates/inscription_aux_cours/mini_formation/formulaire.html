@@ -111,7 +111,7 @@
                     {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
                     <tr>
                         <td>{{ mini_formation.intitule }}</td>
-                        <td class="col-md-1">
+                        <td style="width: 10%">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
                                 {% if mini_formation.condition_acces %}
