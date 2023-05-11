@@ -70,17 +70,20 @@
                 {% widthratio credits_cibles valeur_jalon 1 as nombre_jalons %}
                 {% with nombre_jalons_int=nombre_jalons|add:0 %}
                     {% for nieme_jalon in 0|range_for:nombre_jalons_int %}
-                        {% if forloop.last and nieme_jalon != credits_cibles %}
-                            <!-- Dernier jalon aux crédits cibles si ils sont différents de la valeur du dernier jalon classique  -->
-                            <div class="jalons" style="width: 1px; height: 120%; position: absolute; background: black; left: {% widthratio credits_cibles barre_progression_max 100 %}%;">
-                                <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ credits_cibles }}</small>
-                            </div>
-                        {% else %}
-                            {% widthratio nieme_jalon 1 valeur_jalon as valeur_nieme_jalon %}
+                        {% widthratio nieme_jalon 1 valeur_jalon as valeur_nieme_jalon %}
+                        {% with valeur_nieme_jalon_int=valeur_nieme_jalon|add:0 %}
+                            {% if forloop.last and valeur_nieme_jalon_int != credits_cibles %}
+                                <!-- Dernier jalon aux crédits cibles si ils sont différents de la valeur du dernier jalon classique  -->
+                                <div class="jalons" style="{% if forloop.last and valeur_nieme_jalon_int != credits_cibles %}color: red; {% endif %}width: 1px; height: 120%; position: absolute; background: black; left: {% widthratio credits_cibles barre_progression_max 100 %}%;">
+                                    <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ credits_cibles }}</small>
+                                </div>
+                            {% endif %}
                             <div class="jalons" style="width: 1px; height: 120%; position: absolute; background: black; left: {% widthratio valeur_nieme_jalon barre_progression_max 100 %}%;">
-                                <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ valeur_nieme_jalon }}</small>
+                                {% if not forloop.last or valeur_nieme_jalon_int == credits_cibles %}
+                                    <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ valeur_nieme_jalon }}</small>
+                                {% endif %}
                             </div>
-                        {% endif %}
+                        {% endwith %}
                     {% endfor %}
                 {% endwith %}
             {% endif %}
