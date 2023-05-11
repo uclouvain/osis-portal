@@ -174,10 +174,9 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursV
 
     @cached_property
     def credits_formation(self) -> int:
-        training = TrainingService.get_detail(
+        return TrainingService.get_credits(
             person=self.person, year=self.annee_academique, acronym=self.sigle_formation.replace('11BA', '1BA')
         )
-        return training.credits
 
     @cached_property
     def a_un_complement_de_formation(self) -> bool:
