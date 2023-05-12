@@ -29,7 +29,7 @@
       {% if bloquer_soumission %}
         data-toggle="tooltip"
         data-html="true"
-        data-title="{% if cours_dont_prerequis_non_acquis %}{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}.</br>{% endif %}{% if not depasse_les_90_credits_inscrits %}{% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}{% endif %}"
+        data-title="{% if cours_dont_prerequis_non_acquis %}{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}.</br>{% endif %}{% if depasse_les_90_credits_inscrits %}{% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}{% endif %}"
       {% endif %}
     >
         <button
