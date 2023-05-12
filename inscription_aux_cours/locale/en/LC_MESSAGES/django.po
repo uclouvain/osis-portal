@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 16:34+0200\n"
+"POT-Creation-Date: 2023-05-12 15:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -287,6 +287,11 @@ msgstr ""
 
 #, python-brace-format
 msgid "You have been enrolled to {codes_cours}"
+msgstr ""
+
+msgid ""
+"Your annual program proposal contains more than 90 credits. The student's "
+"annual program (PAE) is supposed to contain 60 credits, maximum 75."
 msgstr ""
 
 msgid "Your contact in faculty:"
