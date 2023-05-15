@@ -26,23 +26,24 @@
 import logging
 
 import osis_inscription_cours_sdk
+import osis_parcours_interne_sdk
 from django.conf import settings
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-def build_configuration() -> osis_inscription_cours_sdk.Configuration:
+def build_configuration() -> osis_parcours_interne_sdk.Configuration:
     """
     Return SDK configuration of exam_enrollment
     """
-    if not settings.OSIS_INSCRIPTION_COURS_SDK_HOST:
-        logger.debug("'OSIS_INSCRIPTION_COURS_SDK_HOST' setting must be set in configuration")
+    if not settings.OSIS_PARCOURS_INTERNE_SDK_HOST:
+        logger.debug("'OSIS_PARCOURS_INTERNE_SDK_HOST' setting must be set in configuration")
 
     if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
         logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
 
     return osis_inscription_cours_sdk.Configuration(
-        host=settings.OSIS_INSCRIPTION_COURS_SDK_HOST,
-        api_key_prefix={'Token': settings.OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX},
+        host=settings.OSIS_PARCOURS_INTERNE_SDK_HOST,
+        api_key_prefix={'Token': settings.OSIS_PARCOURS_INTERNE_SDK_API_KEY_PREFIX},
         api_key={'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY},
     )

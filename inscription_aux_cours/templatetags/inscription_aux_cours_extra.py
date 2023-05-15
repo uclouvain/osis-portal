@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ from osis_inscription_cours_sdk.model.programme_annuel_etudiant import Programme
 from osis_program_management_sdk.model.programme import Programme
 
 from inscription_aux_cours import formatter
-from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
 from inscription_aux_cours.data.proposition_programme_annuel import PropositionProgrammeAnnuel
+from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
 from program_management.services.programme import ProgrammeService
 
 register = template.Library()
@@ -49,29 +49,35 @@ def formater_volumes(obj) -> str:
 
 
 def _formater_volumes(volume_pm: Decimal, volume_pp: Decimal) -> str:
-    vol_tot_pm = "%(total_pm)gh" % {"total_pm": Decimal(volume_pm) or Decimal(0.0)} if volume_pm else ''
+    vol_tot_pm = f"{Decimal(volume_pm) or Decimal(0.0):g}h" if volume_pm else ''
     vol_tot_pp = ''
     if volume_pp:
-        vol_tot_pp = "%(operateur)s%(total_pp)gh" % {
-            "operateur": " + " if volume_pm and volume_pp else "",
-            "total_pp": Decimal(volume_pp)
-        }
+        vol_tot_pp = "{operateur}{total_pp:g}h".format(
+            operateur=" + " if volume_pm and volume_pp else "",
+            total_pp=Decimal(volume_pp),
+        )
     return f"[{vol_tot_pm}{vol_tot_pp}]" if vol_tot_pm or vol_tot_pp else '-'
 
 
 @register.filter
-def est_inscrit_a_la_mini_formation(mini_formation: 'MiniFormation', inscriptions_mini_formations: List['InscriptionMiniFormation']):
+def est_inscrit_a_la_mini_formation(
+    mini_formation: 'MiniFormation', inscriptions_mini_formations: List['InscriptionMiniFormation']
+):
     codes_mini_formations_inscrites = {inscription.code_mini_formation for inscription in inscriptions_mini_formations}
     return mini_formation.code in codes_mini_formations_inscrites
 
+
 @register.filter
 def get_inscription_a_la_mini_formation(
-        mini_formation: 'MiniFormation',
-        inscriptions_mini_formations: List['InscriptionMiniFormation']
+    mini_formation: 'MiniFormation', inscriptions_mini_formations: List['InscriptionMiniFormation']
 ) -> Optional['InscriptionMiniFormation']:
     return next(
-        (inscription for inscription in inscriptions_mini_formations if inscription.code_mini_formation == mini_formation.code),
-        None
+        (
+            inscription
+            for inscription in inscriptions_mini_formations
+            if inscription.code_mini_formation == mini_formation.code
+        ),
+        None,
     )
 
 
@@ -88,8 +94,7 @@ def est_inscrit_au_cours(cours: 'InscriptionAUnCours', programme_annuel_etudiant
 
 @register.filter
 def filtrer_inscriptions_hors_programme_par_contexte(
-        inscriptions: List['InscriptionAUnCoursHorsProgramme'],
-        code_mini_formation: str = None
+    inscriptions: List['InscriptionAUnCoursHorsProgramme'], code_mini_formation: str = None
 ) -> List['InscriptionAUnCoursHorsProgramme']:
     if not code_mini_formation:
         return [inscription for inscription in inscriptions if not inscription.code_mini_formation]
@@ -101,15 +106,16 @@ def get_message_condition_access(annee: int, mini_formation: 'MiniFormation') ->
     lien = f"{settings.INSTITUTION_URL}prog-{annee}-{mini_formation.sigle}-cond_adm"
     return _(
         "This minor has access conditions, please refer to the procedure to enroll: {lien_condition_acces}"
-    ).format(
-        lien_condition_acces=f"<a href='{lien}'>{lien}</a>"
-    )
+    ).format(lien_condition_acces=f"<a href='{lien}'>{lien}</a>")
 
 
 @register.simple_tag
 def get_lien_condition_access(programme: 'Programme', mini_formation: 'MiniFormation') -> str:
     if ProgrammeService.est_bachelier(programme):
-        return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{_clean_sigle_mini_formation(mini_formation.sigle)}-cond_adm"
+        return (
+            f"{settings.INSTITUTION_URL}prog-{programme.annee}-"
+            f"{_clean_sigle_mini_formation(mini_formation.sigle)}-cond_adm"
+        )
     sigle_formation = ProgrammeService.get_sigle_formation(programme)
     return f"{settings.INSTITUTION_URL}prog-{programme.annee}-{sigle_formation}-programme"
 
@@ -117,17 +123,15 @@ def get_lien_condition_access(programme: 'Programme', mini_formation: 'MiniForma
 def _clean_sigle_mini_formation(sigle: str) -> str:
     return sigle.split('[')[0]
 
+
 @register.simple_tag
 def get_lien_horaire_cours(programme_annuel: 'PropositionProgrammeAnnuel') -> str:
-
     codes_cours = [
         _format_code_cours_pour_lien_horaire(cours.code)
         for contexte in programme_annuel.inscriptions_par_contexte
         for cours in contexte.cours
     ]
-    return settings.COURSES_SCHEDULE_URL.format(
-        codes_cours=urllib.parse.quote(",".join(codes_cours))
-    )
+    return settings.COURSES_SCHEDULE_URL.format(codes_cours=urllib.parse.quote(",".join(codes_cours)))
 
 
 def _format_code_cours_pour_lien_horaire(code: str) -> str:
