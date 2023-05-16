@@ -45,7 +45,7 @@ from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.services.mini_formation import MiniFormationService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 
@@ -59,7 +59,7 @@ class InscriptionAUnCoursHorsProgramme:
 
 
 @method_decorator(never_cache, name='dispatch')
-class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = 'formulaire-inscription-cours'
 
     # TemplateView

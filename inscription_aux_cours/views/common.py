@@ -42,7 +42,7 @@ from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursSer
 from program_management.services.programme import ProgrammeService
 
 
-class InscriptionAuxCoursViewMixin:
+class CompositionPAEViewMixin:
     permission_required = "base.is_student"
 
     @cached_property

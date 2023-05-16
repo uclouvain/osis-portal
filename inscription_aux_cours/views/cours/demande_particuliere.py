@@ -30,11 +30,11 @@ from django.views.generic import FormView
 
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class DemandeParticuliereView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, FormView):
+class DemandeParticuliereView(LoginRequiredMixin, CompositionPAEViewMixin, FormView):
     name = "demande-particuliere"
     form_class = DemandeParticuliereForm
 
