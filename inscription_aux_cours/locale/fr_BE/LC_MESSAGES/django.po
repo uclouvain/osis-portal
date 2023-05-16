@@ -54,7 +54,7 @@ msgid "Block"
 msgstr "Block"
 
 msgid "Continue to courses enrollment"
-msgstr "Poursuivre vers ma composition de programme annuel"
+msgstr "Poursuivre ma composition de programme annuel"
 
 msgid "Credits"
 msgstr "Crédits"
@@ -143,8 +143,8 @@ msgid ""
 "not to complete my enrollment with success support activities."
 msgstr ""
 "Conformément à l'article 39 §1er du RGEE, je suis informé.e que je peux "
-"compléter ma composition de programme annuel avec des activités d'aide à la réussite. Je décide de ne "
-"pas compléter ma composition de programme annuel avec des activités d'aide à la réussite."
+"compléter ma composition de programme annuel d'activités d'aide à la réussite. Je décide de ne "
+"pas compléter ma composition de programme annuel d'activités d'aide à la réussite."
 
 msgid "Indicates annual block"
 msgstr "Indique le(s) bloc(s) annuel(s)"
@@ -232,7 +232,7 @@ msgid "Return to initial screen"
 msgstr "Retour à l'écran initial"
 
 msgid "Save and continue to courses enrollment"
-msgstr "Enregistrer et poursuivre vers ma composition de programme annuel"
+msgstr "Enregistrer et poursuivre ma composition de programme annuel"
 
 msgid "Save and continue to enrollments summary"
 msgstr "Enregistrer et poursuivre vers le récapitulatif de ma composition de programme annuel"
