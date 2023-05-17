@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET
 from django.views.generic import TemplateView
 
 from base.services.utils import ServiceException
@@ -35,14 +35,14 @@ from inscription_aux_cours.services.proposition_programme import PropositionProg
 from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
 
 
-@method_decorator(require_POST, name='dispatch')
+@method_decorator(require_GET, name='dispatch')
 class SoumettrePropositionView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
     name = 'soumettre-proposition'
 
     # TemplateView
     template_name = "inscription_aux_cours/cours/blocks/soumettre_proposition.html"
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         try:
             self.soumettre_proposition()
             display_success_messages(
@@ -55,10 +55,9 @@ class SoumettrePropositionView(LoginRequiredMixin, InscriptionAuxCoursViewMixin,
 
     def get_success_message(self):
         return _(
-            "Your proposition of annual program was successfully submitted. "
-            "Thank you for contributing to the testing of the form for the composition of the annual program. "
-            "Can you give us feedback by filling the <a href='https://forms.office.com/e/pJQmq4WXzN'>evaluation form</a>."
-        )
+            "Your proposition of annual program successfully submitted. "
+            "A confirmation email is sent to the address %(email)s"
+        ) % {'email': self.request.user.person.email}
 
     def soumettre_proposition(self):
         PropositionProgrammeService().soumettre(

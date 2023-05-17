@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -36,11 +36,19 @@ from frontoffice.settings.osis_sdk import education_group as education_group_sdk
 class TrainingService:
     @staticmethod
     def get_detail(
-            person: 'Person',
-            year: int,
-            acronym: str,
+        person: 'Person',
+        year: int,
+        acronym: str,
     ) -> 'TrainingDetailed':
         return _call_api(person, 'trainings_read', year=str(year), acronym=acronym)
+
+    @staticmethod
+    def get_credits(
+        person: 'Person',
+        year: int,
+        acronym: str,
+    ) -> int:
+        return _call_api(person, 'trainings_credits_read', year=year, acronym=acronym).credits
 
 
 _call_api = partial(call_api, education_group_sdk, osis_education_group_sdk, trainings_api.TrainingsApi)
