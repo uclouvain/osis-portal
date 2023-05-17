@@ -87,8 +87,18 @@
                 </div>
                 <div id="collapseLegende" class="panel-collapse collapse" role="tabpanel" aria-labelledby="legende">
                     <div class="panel-body">
-                        <i class='fa-solid fa-key fa-info'></i>
-                          {% trans "Access to the minors or options marked with a key is subject to compliance with certain conditions (admission test, application file, etc.) which must be read before registering. Please consult the procedure to follow to register by clicking on the key. The registration will be done by your faculty manager." %}
+                        <table class="table table-condensed table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td class="col-md-1"><i class='fa-solid fa-key fa-info'></i></td>
+                                    <td>{% trans "Access to the minors or options marked with a key is subject to compliance with certain conditions (admission test, application file, etc.) which must be read before registering. Please consult the procedure to follow to register by clicking on the key. The registration will be done by your faculty manager." %}</td>
+                                </tr>
+                                <tr>
+                                    <td>Insc</td>
+                                    <td>{% trans 'Enrolled to the minor or option' %}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -101,9 +111,28 @@
                     {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
                     <tr>
                         <td>{{ mini_formation.intitule }}</td>
-                        <td class="col-md-1">
+                        <td style="width: 10%">
                             <form id="form-inscription-{{ mini_formation.code }}" method="post">
                                 {% csrf_token %}
+                                {% if mini_formation.condition_acces %}
+                                    {% get_lien_condition_access programme mini_formation as lien_condition_access %}
+
+                                    <div class="keep-popover-display"
+                                         data-toggle="popover"
+                                         tabindex="0"
+                                         role="button"
+                                         data-html="true"
+                                         data-placement="left"
+                                         data-popover="manual"
+                                         data-content="
+                                           <p>
+                                            {% trans 'This minor or option has access conditions, please refer to the procedure to enroll by following this link:' %}
+                                            <a href='{{ lien_condition_access }}' target='_blank'>{{ lien_condition_access }}</a>
+                                            <br>
+                                            {% trans 'The enrollment will be done by your faculty manager.' %}
+                                            </p>"
+                                    >
+                                {% endif %}
                                 <input
                                         id="checkbox-{{ mini_formation.code }}"
                                         type="checkbox"
@@ -133,23 +162,13 @@
                                         {% endif %}
                                 >
                                 {% if mini_formation.condition_acces %}
-                                    {% get_lien_condition_access programme mini_formation as lien_condition_access %}
-
-                                    <a data-toggle="popover"
-                                       tabindex="0"
-                                       role="button"
-                                       data-html="true"
-                                       data-placement="top"
-                                       data-trigger="focus"
-                                       data-content="
-                                       <p>
-                                        {% trans 'This minor or option has access conditions, please refer to the procedure to enroll by following this link:' %}
-                                        <a href='{{ lien_condition_access }}' target='_blank'>{{ lien_condition_access }}</a>
-                                        <br>
-                                        {% trans 'The enrollment will be done by your faculty manager.' %}
-                                        </p>">
-                                        <i class='fa-solid fa-key fa-info'></i>
-                                    </a>
+                                    <i class='fa-solid fa-key fa-info'></i>
+                                {% endif %}
+                                {% if inscription %}
+                                    <span class="fa-pull-right badge badge_insc_meme_context">Insc</span>
+                                {% endif %}
+                                {% if mini_formation.condition_acces %}
+                                    </div>
                                 {% endif %}
                                 <div class="loading pull-left"></div>
                             </form>
