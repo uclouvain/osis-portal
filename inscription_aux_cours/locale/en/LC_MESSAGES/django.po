@@ -292,6 +292,11 @@ msgstr ""
 msgid "You have been enrolled to {codes_cours}"
 msgstr ""
 
+msgid ""
+"Your annual program proposal contains more than 90 credits. The student's "
+"annual program (PAE) is supposed to contain 60 credits, maximum 75."
+msgstr ""
+
 msgid "Your contact in faculty:"
 msgstr ""
 

@@ -328,6 +328,13 @@ msgstr "Vous n'avez pas acquis les prérequis pour les cours suivants:"
 msgid "You have been enrolled to {codes_cours}"
 msgstr "Vous avez été inscrit.e à {codes_cours}"
 
+msgid ""
+"Your annual program proposal contains more than 90 credits. The student's "
+"annual program (PAE) is supposed to contain 60 credits, maximum 75."
+msgstr ""
+"Votre proposition de programme annuel contient plus de 90 crédits. "
+"Le programme annuel de l'étudiant (PAE) est censé contenir 60 crédits, maximum 75."
+
 msgid "Your contact in faculty:"
 msgstr "Votre contact en faculté:"
 

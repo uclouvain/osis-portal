@@ -6,7 +6,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -23,18 +23,14 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<form id="form-soumettre-proposition-{{ programme.code }}" action="{% url 'inscription-aux-cours:soumettre-proposition' programme.code %}" method="post">
-    {% csrf_token %}
-    <button
-        type="submit"
-        class="btn btn-primary"
-        {% if bloquer_soumission %}
+<a href="{% url 'inscription-aux-cours:soumettre-proposition' programme.code %}"
+    class="btn btn-primary"
+    {% if bloquer_soumission %}
         data-toggle="tooltip"
-        title="{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}"
+        data-html="true"
+        data-title="{% if cours_dont_prerequis_non_acquis %}{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}.</br>{% endif %}{% if depasse_les_90_credits_inscrits %}{% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}{% endif %}"
         disabled
-        {% endif %}>
-        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
-        <div class="d-inline-block loading"></div>
-    </button>
-</form>
-
+    {% endif %}>
+    <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
+    <div class="d-inline-block loading"></div>
+</a>
