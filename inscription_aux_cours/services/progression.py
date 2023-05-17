@@ -23,9 +23,11 @@
 #
 ##############################################################################
 from functools import partial
+from typing import List
 
 import osis_parcours_interne_sdk
 from osis_parcours_interne_sdk.api import progression_api
+from osis_parcours_interne_sdk.model.credits_acquis_mini_formation import CreditsAcquisMiniFormation
 from osis_parcours_interne_sdk.model.progression_de_bloc1 import ProgressionDeBloc1
 from osis_parcours_interne_sdk.model.progression_de_complement import ProgressionDeComplement
 from osis_parcours_interne_sdk.model.progression_de_cycle import ProgressionDeCycle
@@ -47,6 +49,13 @@ class ProgressionService:
     @staticmethod
     def recuperer_progression_de_bloc_1(person: 'Person', sigle_programme: str) -> 'ProgressionDeBloc1':
         return _progression_api_call(person, "get_progression_de_bloc1", sigle_programme=sigle_programme)
+
+    @staticmethod
+    def recuperer_credits_acquis_dans_mini_formations(
+        person: 'Person',
+        sigle_programme: str,
+    ) -> List['CreditsAcquisMiniFormation']:
+        return _progression_api_call(person, "get_credits_acquis_dans_mini_formations", sigle_programme=sigle_programme)
 
 
 _progression_api_call = partial(call_api, progression_sdk, osis_parcours_interne_sdk, progression_api.ProgressionApi)
