@@ -184,7 +184,7 @@ msgid "My exchange programme"
 msgstr "Mon programme d'échange"
 
 msgid "My minors or options enrollment"
-msgstr "Mes choix de mineures ou options"
+msgstr "Mon choix de mineures ou options"
 
 msgid "My success support activities"
 msgstr "Mes activités d'aide à la réussite"
@@ -258,7 +258,7 @@ msgid "Summary courses enrollment"
 msgstr "Récapitulatif de ma composition de programme annuel"
 
 msgid "The enrollment will be done by your faculty manager."
-msgstr "La composition de votre programme annuel sera réalisée par votre gestionnaire facultaire."
+msgstr "L'inscription sera réalisée par votre gestionnaire facultaire"
 
 msgid ""
 "The following minors or options in which you are enrolled are no longer "
@@ -342,7 +342,7 @@ msgid ""
 "Your enrollment has been completed or not with success support activies by "
 "your faculty manager. You cannot remove or add them."
 msgstr ""
-"Votre composition de programme annuel été complétée ou non d'activités d'aide à la réussite "
+"Votre programme annuel a été complété ou non d'activités d'aide à la réussite "
 "par votre gestionnaire facultaire. Impossible de les retirer ou de les "
 "ajouter."
 
