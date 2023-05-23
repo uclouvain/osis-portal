@@ -203,9 +203,17 @@ tbody tr.class_year {
     background-color: #dc3545;
 }
 
+.badge.danger-color {
+    background-color: #d9534f;
+}
+
 .badge-warning {
     color: #212529;
     background-color: #ffc107;
+}
+
+.badge.warning-color{
+    background-color: #f0ad4e;
 }
 
 .badge-info {

@@ -139,6 +139,8 @@ def _make_attestation_data(attestation_statuses_all_years_json_dict: Dict, stude
         'past_year_echeance_attestation': past_year_echeance_attestation,
         'attestation_type_echeance': ATTESTATION_TYPE_ECHEANCE,
         'attestation_type_prolonge': REGULAR_REGISTRATION_EXTENDED,
+        'attestation_type_invoice': INVOICE,
+        'online_payment_url': settings.ATTESTATION_CONFIG.get('ONLINE_PAYMENT_URL'),
         'display_warning_first_payment_maturity_tolerance': display_warning_first_payment_maturity_tolerance,
         'display_warning_last_payment_deadline_tolerance': display_warning_last_payment_deadline_tolerance,
         'display_warning_invoice_unavailable_yet': display_warning_invoice_unavailable_yet

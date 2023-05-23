@@ -173,10 +173,9 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
 
     @cached_property
     def credits_formation(self) -> int:
-        training = TrainingService.get_detail(
-            person=self.person, year=self.annee_academique, acronym=self.sigle_formation
+        return TrainingService.get_credits(
+            person=self.person, year=self.annee_academique, acronym=self.sigle_formation.replace('11BA', '1BA')
         )
-        return training.credits
 
     def get_context_data(self, **kwargs):
         return {
@@ -185,7 +184,11 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             'demande_particuliere': self.demande_particuliere,
             'cours_dont_prerequis_non_acquis': self.cours_dont_prerequis_non_acquis,
             'activites_aide_reussite': self.activites_aide_reussite,
-            'bloquer_soumission': bool(self.cours_dont_prerequis_non_acquis),
+            'bloquer_soumission': (
+                bool(self.cours_dont_prerequis_non_acquis)
+                or self.programme_annuel_avec_details_cours.total_credits > 90
+            ),
+            'depasse_les_90_credits_inscrits': self.programme_annuel_avec_details_cours.total_credits > 90,
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,
             'credits_formation': self.credits_formation,
