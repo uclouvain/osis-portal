@@ -152,7 +152,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursV
     @cached_property
     def credits_acquis_dans_mini_formations(self) -> Dict[str, str]:
         credits_acquis = ProgressionService.recuperer_credits_acquis_dans_mini_formations(
-            person=self.person, sigle_programme=self.sigle_formation
+            person=self.person, sigle_programme=self.sigle_formation.replace('11BA', '1BA')
         )
         return {credits.code: credits.credits_acquis_de_progression for credits in credits_acquis}
 
