@@ -256,6 +256,6 @@ def _get_covid_period(student: Student, stud_perf: StudentPerformance) -> bool:
     return False
 
 
-def _get_activite_aide_reussite(student: Student, stud_perf: StudentPerformance) -> bool:
+def _get_activite_aide_reussite(student: Student, stud_perf: StudentPerformance) -> str:
     if student:
         return stud_perf.data.get('activiteAideReussite')
