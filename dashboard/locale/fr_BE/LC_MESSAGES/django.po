@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-30 11:52+0200\n"
+"POT-Creation-Date: 2023-05-30 11:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,9 +27,6 @@ msgstr ""
 "affectés à votre utilisateur.</br> Veuillez prendre contact le <a "
 "href=\"{registration_department_url}\" target=\"_blank\">Service des "
 "inscriptions</a> afin de résoudre le problème. Merci."
-
-msgid "Annual program"
-msgstr "Programme annuel"
 
 msgid "Annual program administration"
 msgstr "Administration du programme annuel"
@@ -207,6 +204,9 @@ msgstr "accès VPN"
 
 msgid "View my annual program and exam marks"
 msgstr "Voir mon programme annuel et mes notes d'examen"
+
+msgid "my annual program and my marks"
+msgstr "Mon programme annuel et mes notes"
 
 msgid "outside UCLouvain"
 msgstr "en dehors du réseau de l'UCLouvain"
