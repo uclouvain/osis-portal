@@ -60,12 +60,18 @@
                     {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
                 </div>
 
-                {% if cours_dont_prerequis_non_acquis %}
+                {% if bloquer_soumission %}
                     <div class="alert alert-danger hide_print">
                         <p>
                             <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
-                            {% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
-                            <br>
+                            {% if cours_dont_prerequis_non_acquis %}
+                                {% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
+                                <br>
+                            {% endif %}
+                            {% if depasse_les_90_credits_inscrits %}
+                                {% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}
+                                <br>
+                            {% endif %}
                             {% trans "Please modify your enrollments." %}
                         </p>
                     </div>

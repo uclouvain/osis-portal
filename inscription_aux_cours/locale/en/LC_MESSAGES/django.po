@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-19 16:34+0200\n"
+"POT-Creation-Date: 2023-05-08 10:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,6 +94,9 @@ msgid ""
 msgstr ""
 
 msgid "Enrolled in a learning unit with a dispensatory test"
+msgstr ""
+
+msgid "Enrolled to the minor or option"
 msgstr ""
 
 msgid "Exceptionally, not organized this year"
@@ -289,6 +292,11 @@ msgstr ""
 msgid "You have been enrolled to {codes_cours}"
 msgstr ""
 
+msgid ""
+"Your annual program proposal contains more than 90 credits. The student's "
+"annual program (PAE) is supposed to contain 60 credits, maximum 75."
+msgstr ""
+
 msgid "Your contact in faculty:"
 msgstr ""
 
@@ -308,12 +316,14 @@ msgid ""
 "to help you succeed throughout the year."
 msgstr ""
 
+#, python-format
 msgid ""
-"Your proposition of annual program was successfully submitted. Thank you for "
-"contributing to the testing of the form for the composition of the annual "
-"program. Can you give us feedback by filling the <a href='https://forms."
-"office.com/e/pJQmq4WXzN'>evaluation form</a>."
+"Your proposition of annual program successfully submitted. A confirmation "
+"email is sent to the address %(email)s"
 msgstr ""
 
 msgid "credits"
+msgstr ""
+
+msgid "credits earned"
 msgstr ""
