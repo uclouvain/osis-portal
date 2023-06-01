@@ -172,7 +172,7 @@ msgid "Mandatory"
 msgstr "Obligatoire"
 
 msgid "Modify my enrollments"
-msgstr "Modifier ma composition de programme annuel"
+msgstr "Modifier ma proposition"
 
 msgid "Modify my minors and options enrollments"
 msgstr "Modifier mon choix de mineures ou options"
@@ -221,7 +221,7 @@ msgid "Prerequisite not acquired"
 msgstr "Prérequis non acquis"
 
 msgid "Print my proposition of annual program"
-msgstr "Imprimer ma proposition de programme annuel"
+msgstr "Imprimer ma proposition"
 
 msgid "Program"
 msgstr "Formation"
@@ -289,7 +289,7 @@ msgid "Total credits"
 msgstr "Nombre total de crédits"
 
 msgid "View my courses schedule"
-msgstr "Visualiser l'horaire de mes unités d'enseignement"
+msgstr "Visualiser mon horaire"
 
 msgid "Year"
 msgstr "Année"
