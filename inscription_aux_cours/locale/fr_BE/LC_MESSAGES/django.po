@@ -215,7 +215,7 @@ msgid "Optional"
 msgstr "Optionnel"
 
 msgid "Please modify your enrollments."
-msgstr "Veuillez modifier votre composition de programme annuel."
+msgstr "Veuillez modifier votre proposition de programme annuel."
 
 msgid "Prerequisite not acquired"
 msgstr "Prérequis non acquis"
@@ -239,7 +239,7 @@ msgid "Save and continue to courses enrollment"
 msgstr "Enregistrer et poursuivre ma composition de programme annuel"
 
 msgid "Save and continue to enrollments summary"
-msgstr "Enregistrer et poursuivre vers le récapitulatif de ma composition de programme annuel"
+msgstr "Enregistrer et poursuivre vers le récapitulatif de ma proposition de programme annuel"
 
 msgid "Search by code (example: LCHIM1111)"
 msgstr "Rechercher par code (exemple: LCHIM1111)"
@@ -255,7 +255,7 @@ msgid "Submit my proposition of annual program"
 msgstr "Soumettre ma proposition de programme annuel"
 
 msgid "Summary courses enrollment"
-msgstr "Récapitulatif de ma composition de programme annuel"
+msgstr "Récapitulatif de ma proposition de programme annuel"
 
 msgid "The enrollment will be done by your faculty manager."
 msgstr "L'inscription sera réalisée par votre gestionnaire facultaire"
@@ -350,7 +350,7 @@ msgid ""
 "Your enrollments are saved but you can continue modifying it until you "
 "didin't submit them."
 msgstr ""
-"Votre composition de programme annuel est enregistrée mais vous pouvez la modifier tant que "
+"Votre proposition de programme annuel est enregistrée mais vous pouvez la modifier tant que "
 "vous ne l'avez pas soumise."
 
 msgid ""
