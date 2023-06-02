@@ -47,13 +47,13 @@ from inscription_aux_cours.services.activites_aide_reussite import ActivitesAide
 from inscription_aux_cours.services.complement import ComplementService
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 from program_management.services.programme import ProgrammeService
 
 
-class RecapitulatifView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = "recapitulatif"
 
     template_name = "inscription_aux_cours/cours/recapitulatif.html"
