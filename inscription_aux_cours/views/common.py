@@ -23,7 +23,7 @@
 #
 ##############################################################################
 import copy
-from typing import List
+from typing import List, Dict
 
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -39,6 +39,8 @@ from base.services.offer_enrollment import InscriptionFormationsService
 from inscription_aux_cours.services.autorisation import AutorisationService
 from inscription_aux_cours.services.contact import ContactService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
+from learning_unit.services.learning_unit import LearningUnitService
+from osis_common.utils.debug import profile_db
 from program_management.services.programme import ProgrammeService
 
 
@@ -71,6 +73,7 @@ class CompositionPAEViewMixin:
         )
 
     @cached_property
+    @profile_db
     def inscription(self) -> 'Inscription':
         inscriptions = InscriptionFormationsService.mes_inscriptions(self.person, annee=self.annee_academique)
         return next(inscription for inscription in inscriptions if inscription.code_programme == self.code_programme)
@@ -98,7 +101,17 @@ class CompositionPAEViewMixin:
             'contact': self.contact,
         }
 
+    @profile_db
+    def recuperer_intitules_unites_enseignement(self, codes: List[str]) -> Dict[str, str]:
+        data = LearningUnitService.search_learning_unit_titles(
+            year=self.annee_academique, codes=codes, person=self.person
+        )
+        return {
+            row['acronym']: row['title'] for row in data
+        }
 
+
+@profile_db
 def recuperer_programmes(person: 'Person', annee: int, inscriptions: List['Inscription']) -> List['Programme']:
     codes = [inscription.code_programme for inscription in inscriptions]
     programmes = ProgrammeService.rechercher(person, annee=annee, codes=codes)
