@@ -37,7 +37,7 @@ django-htmx==1.12.2
 # SDKs
 git+https://github.com/uclouvain/osis-attribution-sdk.git@wip-build-1.20
 git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@wip-build-1.1
-git+https://github.com/uclouvain/osis-learning-unit-sdk.git@wip-build-1.11
+git+https://github.com/uclouvain/osis-learning-unit-sdk.git@wip-build-1.12
 git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@wip-build-1.4
 git+https://github.com/uclouvain/osis-education-group-sdk.git@wip-build-1.11
 git+https://github.com/uclouvain/osis-program-management-sdk.git@wip-build-1.4
@@ -45,7 +45,7 @@ git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.27
 git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.4
 git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.4.0
 git+https://github.com/uclouvain/osis-exam-enrollment-sdk.git@build-1.0
-git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.8
+git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.9
 git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.03
 
 # Modules transverses

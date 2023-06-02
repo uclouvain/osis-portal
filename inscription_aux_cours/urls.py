@@ -32,6 +32,7 @@ from inscription_aux_cours.views.cours.desinscrire_hors_programme import Desinsc
 from inscription_aux_cours.views.cours.formulaire import FormulaireCompositionPAEView
 from inscription_aux_cours.views.cours.inscrire import InscrireUniteEnseignementView
 from inscription_aux_cours.views.cours.inscrire_hors_programme import InscrireAUnCoursHorsProgrammeView
+from inscription_aux_cours.views.cours.proposition_programme_annuel import EnregistrerPropositionProgrammeAnnuelView
 from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
 from inscription_aux_cours.views.cours.soumettre_proposition import SoumettrePropositionView
 from inscription_aux_cours.views.inscription_non_autorisee import InscriptionNonAutoriseeView
@@ -65,6 +66,11 @@ urlpatterns = [
                     'inscrire_hors_programme/',
                     InscrireAUnCoursHorsProgrammeView.as_view(),
                     name=InscrireAUnCoursHorsProgrammeView.name,
+                ),
+                path(
+                    'enregistrer_proposition_programme_annuel/',
+                    EnregistrerPropositionProgrammeAnnuelView.as_view(),
+                    name=EnregistrerPropositionProgrammeAnnuelView.name,
                 ),
                 path(
                     'desinscrire/',
