@@ -38,7 +38,12 @@ from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class DesinscrireUniteEnseignementHorsProgrammeView(HtmxMixin, LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
+class DesinscrireUniteEnseignementHorsProgrammeView(
+    HtmxMixin,
+    LoginRequiredMixin,
+    CompositionPAEViewMixin,
+    TemplateView,
+):
     name = 'desinscrire-cours-hors-programme'
 
     # TemplateView

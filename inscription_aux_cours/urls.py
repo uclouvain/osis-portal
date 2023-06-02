@@ -66,7 +66,11 @@ urlpatterns = [
                     InscrireAUnCoursHorsProgrammeView.as_view(),
                     name=InscrireAUnCoursHorsProgrammeView.name,
                 ),
-                path('desinscrire/', DesinscrireUniteEnseignementView.as_view(), name=DesinscrireUniteEnseignementView.name),
+                path(
+                    'desinscrire/',
+                    DesinscrireUniteEnseignementView.as_view(),
+                    name=DesinscrireUniteEnseignementView.name,
+                ),
                 path(
                     'desinscrire_hors_programme/',
                     DesinscrireUniteEnseignementHorsProgrammeView.as_view(),
