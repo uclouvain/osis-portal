@@ -46,7 +46,7 @@ from inscription_aux_cours.services.demande_particuliere import DemandeParticuli
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.services.mini_formation import MiniFormationService
 from inscription_aux_cours.services.progression import ProgressionService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 
@@ -60,7 +60,7 @@ class InscriptionAUnCoursHorsProgramme:
 
 
 @method_decorator(never_cache, name='dispatch')
-class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = 'formulaire-inscription-cours'
 
     # TemplateView
@@ -152,7 +152,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursV
     @cached_property
     def credits_acquis_dans_mini_formations(self) -> Dict[str, str]:
         credits_acquis = ProgressionService.recuperer_credits_acquis_dans_mini_formations(
-            person=self.person, sigle_programme=self.sigle_formation
+            person=self.person, sigle_programme=self.sigle_formation.replace('11BA', '1BA')
         )
         return {credits.code: credits.credits_acquis_de_progression for credits in credits_acquis}
 

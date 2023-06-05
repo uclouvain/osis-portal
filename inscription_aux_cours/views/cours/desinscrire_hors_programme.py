@@ -31,14 +31,19 @@ from django.views.generic import TemplateView
 
 from base.services.utils import ServiceException
 from inscription_aux_cours.services.cours import CoursService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class DesinscrireAUnCoursHorsProgrammeView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class DesinscrireUniteEnseignementHorsProgrammeView(
+    HtmxMixin,
+    LoginRequiredMixin,
+    CompositionPAEViewMixin,
+    TemplateView,
+):
     name = 'desinscrire-cours-hors-programme'
 
     # TemplateView

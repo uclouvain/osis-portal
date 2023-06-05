@@ -35,12 +35,12 @@ from django.views.decorators.http import require_POST
 
 from base.services.utils import ServiceException
 from inscription_aux_cours.services.cours import CoursService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class InscrireAUnCoursHorsProgrammeView(HtmxMixin, LoginRequiredMixin, InscriptionAuxCoursViewMixin, View):
+class InscrireAUnCoursHorsProgrammeView(HtmxMixin, LoginRequiredMixin, CompositionPAEViewMixin, View):
     name = 'inscrire-cours-hors-programme'
 
     @property
