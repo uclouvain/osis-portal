@@ -90,8 +90,10 @@ class EnregistrerPropositionProgrammeAnnuelView(HtmxMixin, LoginRequiredMixin, C
             erreurs = e.messages
 
         self.afficher_erreurs(erreurs)
+        if erreurs:
+            return redirect('inscription-aux-cours:formulaire-inscription-cours', **self.kwargs)
 
-        return redirect('inscription-aux-cours:recapitulatif', code_programme=self.code_programme)
+        return redirect('inscription-aux-cours:formulaire-activites-aide-reussite', **self.kwargs)
 
     def afficher_erreurs(self, erreurs: List[str]) -> None:
         for erreur in erreurs:

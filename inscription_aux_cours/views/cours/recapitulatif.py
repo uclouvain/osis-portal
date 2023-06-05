@@ -188,7 +188,7 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         cours_dont_prerequis_non_acquis = {
             code for code in self.programme_annuel_avec_details_cours.codes_inscrits
             if CodeParser.get_code_unite_enseignement(code) not in codes_acquis
-        }
+        }  # TODO : pas correct, il faut lister aussi les UE qui ont des prérequis.
         return {
             **super().get_context_data(**kwargs),
             'programme_annuel': self.programme_annuel_avec_details_cours,
