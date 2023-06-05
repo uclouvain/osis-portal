@@ -114,7 +114,7 @@ msgid "My attestations"
 msgstr "Mes attestations"
 
 msgid "My courses enrollment"
-msgstr "Mon inscription aux cours"
+msgstr "Ma proposition de programme annuel"
 
 msgid "My description fiche"
 msgstr "Mes fiches descriptives"

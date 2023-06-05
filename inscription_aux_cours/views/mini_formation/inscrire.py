@@ -30,11 +30,11 @@ from django.views.generic import TemplateView
 
 from base.services.utils import ServiceException
 from inscription_aux_cours.services.mini_formation import MiniFormationService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class InscrireAUneMiniFormationView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class InscrireAUneMiniFormationView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = 'inscrire-mini-formation'
 
     # TemplateView
