@@ -23,14 +23,22 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<a href="{% url 'inscription-aux-cours:soumettre-proposition' programme.code %}"
-    class="btn btn-primary"
-    {% if bloquer_soumission %}
-        data-toggle="tooltip"
-        data-html="true"
-        data-title="{% if cours_dont_prerequis_non_acquis %}{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}.</br>{% endif %}{% if depasse_les_90_credits_inscrits %}{% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}{% endif %}"
-        disabled
-    {% endif %}>
-    <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
-    <div class="d-inline-block loading"></div>
-</a>
+{% if cours_dont_prerequis_non_acquis|length > 1 or depasse_les_90_credits_inscrits %}
+    <button
+       class="btn btn-primary"
+       data-toggle="tooltip"
+       data-html="true"
+       data-title="{% if cours_dont_prerequis_non_acquis|length > 1 %}{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}.</br>{% endif %}{% if depasse_les_90_credits_inscrits %}{% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}{% endif %}"
+       disabled
+    >
+        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
+        <div class="d-inline-block loading"></div>
+    </button>
+{% else %}
+    <a href="{% url 'inscription-aux-cours:soumettre-proposition' programme.code %}"
+       class="btn btn-primary"
+    >
+        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
+        <div class="d-inline-block loading"></div>
+    </a>
+{% endif %}

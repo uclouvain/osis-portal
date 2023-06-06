@@ -181,13 +181,15 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             ue.code for ue in ue_avec_prerequis
             if not ue.prerequis_sont_acquis and ue.code in self.programme_annuel_avec_details_cours.codes_inscrits
         }
+        # plus_d_un_prerequis_non_acquis = len(codes_dont_prerequis_non_acquis) > 1
         return {
             **super().get_context_data(**kwargs),
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere,
             'cours_dont_prerequis_non_acquis': codes_dont_prerequis_non_acquis,
+            'codes_ue_avec_prerequis': {ue.code for ue in ue_avec_prerequis},
+            'est_en_fin_de_cycle': self.programme_annuel.est_en_fin_de_cycle,
             'activites_aide_reussite': self.activites_aide_reussite,
-            'bloquer_soumission': (bool(codes_dont_prerequis_non_acquis) or depasse_les_90_credits_inscrits),
             'depasse_les_90_credits_inscrits': depasse_les_90_credits_inscrits,
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,

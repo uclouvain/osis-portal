@@ -43,11 +43,22 @@
                 <td headers="colonne-code">
                     {{ inscription.code }}
                     {% if inscription.code in cours_dont_prerequis_non_acquis %}
+                        <i data-toggle="tooltip"
+                           data-placement="top"
+                           class="fa-solid fa-shield-halved gold" style="color: gold"
+                           title="{% trans 'Learning unit with prerequisites not acquired' %}"
+                        ></i>
                         <i
                                 class="fa fa-exclamation-circle fa-danger"
                                 style="font-size:120%" aria-hidden="true"
                                 title="{% trans 'Prerequisite not acquired' %}"
                                 data-toggle="tooltip"
+                        ></i>
+                    {% elif inscription.code in codes_ue_avec_prerequis %}
+                        <i data-toggle="tooltip"
+                           data-placement="top"
+                           class="fa-solid fa-shield-halved vert"
+                           title="{% trans 'Learning unit with prerequisites acquired' %}"
                         ></i>
                     {% endif %}
                 </td>
