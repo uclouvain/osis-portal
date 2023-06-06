@@ -50,8 +50,6 @@ from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from learning_unit.services.classe import ClasseService
-from learning_unit.services.learning_unit import LearningUnitService
-from osis_common.utils.debug import profile_db
 from program_management.services.programme import ProgrammeService
 
 
@@ -61,7 +59,6 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
     template_name = "inscription_aux_cours/cours/recapitulatif.html"
 
     @cached_property
-    @profile_db
     def programme_annuel(self) -> 'ProgrammeAnnuelEtudiant':
         return CoursService().recuperer_programme_annuel(self.person, self.code_programme)
 
@@ -88,7 +85,6 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         return [prerequis.code_cours for prerequis in prerequis_acquis]
 
     @cached_property
-    @profile_db
     def details_classes(self):
         result = ClasseService.rechercher_classes(
             self.person, annee=self.annee_academique, codes=self.codes_cours_du_programme_annuel
@@ -96,14 +92,12 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         return {classe['code']: classe for classe in result}
 
     @cached_property
-    @profile_db
     def details_mini_formation(self) -> Dict[str, 'Programme']:
         codes_mini_formation = [mini_formation['code'] for mini_formation in self.programme_annuel['mini_formations']]
         result = ProgrammeService().rechercher(self.person, annee=self.annee_academique, codes=codes_mini_formation)
         return {mini_formation.code: mini_formation for mini_formation in result}
 
     @cached_property
-    @profile_db
     def programme_annuel_avec_details_cours(self) -> 'PropositionProgrammeAnnuel':
         intitule_par_code = self.recuperer_intitules_unites_enseignement(self.codes_cours_du_programme_annuel)
 
