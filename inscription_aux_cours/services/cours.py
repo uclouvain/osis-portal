@@ -27,9 +27,8 @@ from typing import List
 
 import osis_inscription_cours_sdk
 from osis_inscription_cours_sdk.api import cours_api
-from osis_inscription_cours_sdk.model.inscrire_aun_cours import InscrireAUnCours
-from osis_inscription_cours_sdk.model.prerequis_acquis import PrerequisAcquis
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
+from osis_inscription_cours_sdk.model.unite_enseignement_avec_prerequis import UniteEnseignementAvecPrerequis
 
 from base.models.person import Person
 from base.services.utils import call_api
@@ -40,40 +39,6 @@ GROUPEMENT = 'GROUPEMENT'
 
 
 class CoursService:
-    @staticmethod
-    def inscrire(
-            person: 'Person',
-            code_programme: str,
-            code_cours: str,
-            code_mini_formation: str = None,
-            hors_formulaire: bool = None
-    ):
-        cmd = InscrireAUnCours(
-            code_cours=code_cours,
-            code_mini_formation=code_mini_formation or "",
-            hors_formulaire=hors_formulaire
-        )
-        return _cours_api_call(
-            person,
-            "inscrire_aun_cours",
-            code_programme=code_programme,
-            inscrire_aun_cours=cmd
-        )
-
-    @staticmethod
-    def desinscrire(
-            person: 'Person',
-            code_programme: str,
-            code_cours: str,
-            code_mini_formation: str = None,
-    ):
-        return _cours_api_call(
-            person,
-            "desinscrire_aun_cours",
-            code_programme=code_programme,
-            code_cours=code_cours,
-            code_mini_formation=code_mini_formation,
-        )
 
     @staticmethod
     def recuperer_programme_annuel(
@@ -87,10 +52,10 @@ class CoursService:
         )
 
     @staticmethod
-    def recuperer_unites_enseignement_acquises(
+    def recuperer_unites_enseignement_avec_prerequis(
             person: 'Person',
             code_programme: str,
-    ) -> List['PrerequisAcquis']:
+    ) -> List['UniteEnseignementAvecPrerequis']:
         return _cours_api_call(
             person,
             "prerequis_acquis",

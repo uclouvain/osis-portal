@@ -29,7 +29,6 @@ import osis_inscription_cours_sdk
 from django.http import Http404
 from osis_inscription_cours_sdk.api import demande_particuliere_api
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
-from osis_inscription_cours_sdk.model.effectuer_demande_particuliere import EffectuerDemandeParticuliere
 
 from base.models.person import Person
 from base.services.utils import call_api
@@ -47,19 +46,6 @@ class DemandeParticuliereService:
             )
         except Http404:
             return None
-
-    @staticmethod
-    def effectuer(person: 'Person', code_programme: str, demande_particuliere: str):
-        cmd = EffectuerDemandeParticuliere(
-            code_programme=code_programme,
-            demande=demande_particuliere,
-        )
-        return _demande_particuliere_api_call(
-            person,
-            "post_demande_particuliere",
-            code_programme=code_programme,
-            effectuer_demande_particuliere=cmd
-        )
 
     @staticmethod
     def retirer(person: 'Person', code_programme: str,):
