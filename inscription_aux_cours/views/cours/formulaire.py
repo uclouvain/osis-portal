@@ -45,7 +45,8 @@ from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.services.mini_formation import MiniFormationService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.services.progression import ProgressionService
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 
@@ -59,7 +60,7 @@ class InscriptionAUnCoursHorsProgramme:
 
 
 @method_decorator(never_cache, name='dispatch')
-class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = 'formulaire-inscription-cours'
 
     # TemplateView
@@ -119,7 +120,7 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursV
         if not inscriptions_hors_programme:
             return []
         codes_cours = [cours.code_cours for cours in inscriptions_hors_programme]
-        unites_enseignements_par_code = self._rechercher_unites_enseignements(codes_cours)
+        unites_enseignements_par_code = self.recuperer_intitules_unites_enseignement(codes_cours)
         classes_par_code = self._rechercher_classes(codes_cours)
 
         return [
@@ -148,6 +149,13 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursV
     def a_des_mini_formations_inscriptibles(self) -> bool:
         return bool(MiniFormationService().get_inscriptibles(self.person, self.code_programme).mini_formations)
 
+    @cached_property
+    def credits_acquis_dans_mini_formations(self) -> Dict[str, str]:
+        credits_acquis = ProgressionService.recuperer_credits_acquis_dans_mini_formations(
+            person=self.person, sigle_programme=self.sigle_formation.replace('11BA', '1BA')
+        )
+        return {credits.code: credits.credits_acquis_de_progression for credits in credits_acquis}
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
@@ -160,15 +168,15 @@ class FormulaireInscriptionAuxCoursView(LoginRequiredMixin, InscriptionAuxCoursV
             'demande_particuliere': self.demande_particuliere,
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,
+            'credits_acquis_de_progression_par_code': self.credits_acquis_dans_mini_formations,
             'credits_formation': self.credits_formation,
         }
 
     @cached_property
     def credits_formation(self) -> int:
-        training = TrainingService.get_detail(
+        return TrainingService.get_credits(
             person=self.person, year=self.annee_academique, acronym=self.sigle_formation.replace('11BA', '1BA')
         )
-        return training.credits
 
     @cached_property
     def a_un_complement_de_formation(self) -> bool:

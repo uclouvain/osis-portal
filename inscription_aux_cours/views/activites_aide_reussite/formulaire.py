@@ -35,10 +35,10 @@ from osis_inscription_cours_sdk.model.activites_aide_reussite import ActivitesAi
 from base.services.utils import ServiceException
 from inscription_aux_cours.forms.activites_aide_reussite.activites import ActivitesAideReussiteForm
 from inscription_aux_cours.services.activites_aide_reussite import ActivitesAideReussiteService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 
 
-class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, FormView):
+class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, CompositionPAEViewMixin, FormView):
     name = "formulaire-activites-aide-reussite"
 
     template_name = "inscription_aux_cours/activites_aide_reussite/formulaire.html"
@@ -47,7 +47,6 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
     @cached_property
     def activites_aide_reussite(self) -> Optional['ActivitesAideReussite']:
         return ActivitesAideReussiteService.get_activites_aide_reussite(self.person, self.code_programme)
-
 
     def get(self, request, *args, **kwargs):
         try:
@@ -82,7 +81,6 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAu
             return self.form_invalid(form)
 
         return super().form_valid(form)
-
 
     def get_success_url(self):
         return reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})

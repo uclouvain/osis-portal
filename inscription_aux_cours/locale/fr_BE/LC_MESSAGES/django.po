@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 14:24+0200\n"
+"POT-Creation-Date: 2023-05-08 10:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,10 +42,10 @@ msgid "Add"
 msgstr "Ajouter"
 
 msgid "Add a course that is not in the offer"
-msgstr "Ajouter un cours qui n'est pas repris dans le programme ci-dessus"
+msgstr "Ajouter une unité d'enseignement qui n'est pas reprise dans le programme ci-dessus"
 
 msgid "Added courses"
-msgstr "Cours ajoutés"
+msgstr "Unités d'enseignement ajoutées"
 
 msgid "Annual program proposal"
 msgstr "Proposition de programme annuel"
@@ -54,7 +54,7 @@ msgid "Block"
 msgstr "Block"
 
 msgid "Continue to courses enrollment"
-msgstr "Poursuivre vers l'inscription aux cours"
+msgstr "Poursuivre ma composition de programme annuel"
 
 msgid "Credits"
 msgstr "Crédits"
@@ -75,7 +75,7 @@ msgid ""
 "Define in which context you want to enroll the course and search by code "
 "(example: LCHIM1111)."
 msgstr ""
-"Préciser dans quel contexte vous souhaitez ajouter ce cours et rechercher "
+"Préciser dans quel contexte vous souhaitez ajouter cette unité d'enseignement et rechercher "
 "par code (exemple: LCHIM1111)."
 
 msgid "Enrolled in a learning unit"
@@ -113,6 +113,10 @@ msgstr "Inscrit·e à une unité d'enseignement avec test dispensatoire"
 msgid "Enrolled to %(code_ue)s."
 msgstr "Inscrit.e à %(code_ue)s."
 
+msgid "Enrolled to the minor or option"
+msgstr ""
+"Inscrit.e à la mineure ou l'option"
+
 msgid "Exceptionally, not organized this year"
 msgstr "Exceptionnellement, non organisé cette année académique"
 
@@ -132,13 +136,13 @@ msgstr ""
 "gestionnaire facultaire."
 
 msgid "I complete my enrollment with success support activities"
-msgstr "Je complète mon inscription par des activités d'aide à la réussite"
+msgstr "Je complète ma composition de programme annuel par des activités d'aide à la réussite"
 
 msgid ""
 "In accordance with article 39 §1 of the RGEE, I complete my enrollment with "
 "activities to help me succeed."
 msgstr ""
-"Conformément à l'article 39 §1er du RGEE, je complète mon inscription "
+"Conformément à l'article 39 §1er du RGEE, je complète ma composition de programme annuel "
 "d'activités d'aide à la réussite."
 
 msgid ""
@@ -147,8 +151,8 @@ msgid ""
 "not to complete my enrollment with success support activities."
 msgstr ""
 "Conformément à l'article 39 §1er du RGEE, je suis informé.e que je peux "
-"compléter  mon inscription d'activités d'aide à la réussite. Je décide de ne "
-"pas compléter mon inscription d'activités d'aide à la réussite."
+"compléter ma composition de programme annuel d'activités d'aide à la réussite. Je décide de ne "
+"pas compléter ma composition de programme annuel d'activités d'aide à la réussite."
 
 msgid "Indicates annual block"
 msgstr "Indique le(s) bloc(s) annuel(s)"
@@ -184,19 +188,19 @@ msgid "Mandatory"
 msgstr "Obligatoire"
 
 msgid "Modify my enrollments"
-msgstr "Modifier mes inscriptions"
+msgstr "Modifier ma proposition"
 
 msgid "Modify my minors and options enrollments"
-msgstr "Modifier mon inscription aux mineures et options"
+msgstr "Modifier mon choix de mineures ou options"
 
 msgid "My courses enrollment"
-msgstr "Mon inscription aux cours"
+msgstr "Ma composition de programme annuel"
 
 msgid "My exchange programme"
 msgstr "Mon programme d'échange"
 
 msgid "My minors or options enrollment"
-msgstr "Mon inscription aux mineures et options"
+msgstr "Mon choix de mineures ou options"
 
 msgid "My success support activities"
 msgstr "Mes activités d'aide à la réussite"
@@ -227,13 +231,13 @@ msgid "Optional"
 msgstr "Optionnel"
 
 msgid "Please modify your enrollments."
-msgstr "Veuillez modifier votre inscription aux cours."
+msgstr "Veuillez modifier votre proposition de programme annuel."
 
 msgid "Prerequisite not acquired"
 msgstr "Prérequis non acquis"
 
 msgid "Print my proposition of annual program"
-msgstr "Imprimer ma proposition de programme annuel"
+msgstr "Imprimer ma proposition"
 
 msgid "Program"
 msgstr "Formation"
@@ -248,17 +252,17 @@ msgid "Return to initial screen"
 msgstr "Retour à l'écran initial"
 
 msgid "Save and continue to courses enrollment"
-msgstr "Enregistrer et poursuivre vers l'inscription aux cours"
+msgstr "Enregistrer et poursuivre ma composition de programme annuel"
 
 msgid "Save and continue to enrollments summary"
-msgstr "Enregistrer et poursuivre vers le récapitulatif des inscriptions"
+msgstr "Enregistrer et poursuivre vers le récapitulatif de ma proposition de programme annuel"
 
 msgid "Search by code (example: LCHIM1111)"
 msgstr "Rechercher par code (exemple: LCHIM1111)"
 
 msgid "Select an offer for which you want to do courses enrollment."
 msgstr ""
-"Sélectionnez la formation pour laquelle vous désirez vous inscrire aux cours."
+"Cliquez sur le sigle de la formation pour laquelle vous désirez composer votre programme annuel."
 
 msgid "Special requests"
 msgstr "Demandes particulières éventuelles"
@@ -267,10 +271,10 @@ msgid "Submit my proposition of annual program"
 msgstr "Soumettre ma proposition de programme annuel"
 
 msgid "Summary courses enrollment"
-msgstr "Récapitulatif d'inscription aux cours"
+msgstr "Récapitulatif de ma proposition de programme annuel"
 
 msgid "The enrollment will be done by your faculty manager."
-msgstr "L'inscription sera réalisée par votre gestionnaire facultaire."
+msgstr "L'inscription sera réalisée par votre gestionnaire facultaire"
 
 msgid ""
 "The following minors or options in which you are enrolled are no longer "
@@ -301,7 +305,7 @@ msgid "Total credits"
 msgstr "Nombre total de crédits"
 
 msgid "View my courses schedule"
-msgstr "Visualiser l'horaire de mes cours"
+msgstr "Visualiser mon horaire"
 
 msgid "Year"
 msgstr "Année"
@@ -317,7 +321,7 @@ msgid "You are not enrolled to an option."
 msgstr "Vous n'êtes pas encore inscrit.e à une option."
 
 msgid "You are not enrolled to any courses."
-msgstr "Vous n'êtes inscrit.e à aucun cours."
+msgstr "Vous n'êtes inscrit.e à aucune unité d'enseignement."
 
 #, python-format
 msgid ""
@@ -334,11 +338,18 @@ msgstr ""
 "par votre gestionnaire facultaire."
 
 msgid "You didn't acquired the prerequisites for the following courses:"
-msgstr "Vous n'avez pas acquis les prérequis pour les cours suivants:"
+msgstr "Vous n'avez pas acquis les prérequis pour les unités d'enseignement suivantes:"
 
 #, python-brace-format
 msgid "You have been enrolled to {codes_cours}"
 msgstr "Vous avez été inscrit.e à {codes_cours}"
+
+msgid ""
+"Your annual program proposal contains more than 90 credits. The student's "
+"annual program (PAE) is supposed to contain 60 credits, maximum 75."
+msgstr ""
+"Votre proposition de programme annuel contient plus de 90 crédits. "
+"Le programme annuel de l'étudiant (PAE) est censé contenir 60 crédits, maximum 75."
 
 msgid "Your contact in faculty:"
 msgstr "Votre contact en faculté:"
@@ -347,7 +358,7 @@ msgid ""
 "Your enrollment has been completed or not with success support activies by "
 "your faculty manager. You cannot remove or add them."
 msgstr ""
-"Votre inscription a été complétée ou non d'activités d'aide à la réussite "
+"Votre programme annuel a été complété ou non d'activités d'aide à la réussite "
 "par votre gestionnaire facultaire. Impossible de les retirer ou de les "
 "ajouter."
 
@@ -355,8 +366,8 @@ msgid ""
 "Your enrollments are saved but you can continue modifying it until you "
 "didin't submit them."
 msgstr ""
-"Vos inscriptions sont enregistrées mais vous pouvez les modifier tant que "
-"vous ne les avez pas soumises."
+"Votre proposition de programme annuel est enregistrée mais vous pouvez la modifier tant que "
+"vous ne l'avez pas soumise."
 
 msgid ""
 "Your faculty organize <ins><a href='https://uclouvain.be/fr/etudier/"
@@ -367,16 +378,16 @@ msgstr ""
 "activites-secteurs-et-facs.html' target='_blank'>dispositifs d'aide à la "
 "réussite</a></ins> afin de vous accompagner tout au long des études."
 
+#, python-format
 msgid ""
-"Your proposition of annual program was successfully submitted. Thank you for "
-"contributing to the testing of the form for the composition of the annual "
-"program. Can you give us feedback by filling the <a href='https://forms."
-"office.com/e/pJQmq4WXzN'>evaluation form</a>."
+"Your proposition of annual program successfully submitted. A confirmation "
+"email is sent to the address %(email)s"
 msgstr ""
-"Votre proposition de programme annuel a été soumise avec succès. Merci "
-"d'avoir participé au testing du futur formulaire de composition du programme "
-"annuel. Continuez en nous donnant votre feed-back dans le <a href='https://"
-"forms.office.com/e/pJQmq4WXzN'>formulaire d'évaluation</a>."
+"Votre proposition de programme annuel a été soumise avec succès. Un mail de "
+"confirmation est envoyé à l'adresse %(email)s"
 
 msgid "credits"
 msgstr "crédits"
+
+msgid "credits earned"
+msgstr "crédits acquis"

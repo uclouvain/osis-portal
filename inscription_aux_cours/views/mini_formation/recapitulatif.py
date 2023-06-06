@@ -33,11 +33,11 @@ from osis_inscription_cours_sdk.model.inscription_mini_formation import Inscript
 from osis_program_management_sdk.model.programme import Programme
 
 from inscription_aux_cours.services.mini_formation import MiniFormationService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from program_management.services.programme import ProgrammeService
 
 
-class RecapitulatifInscriptionsMiniFormationsView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class RecapitulatifInscriptionsMiniFormationsView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = "recapitulatif-mini-formations"
 
     template_name = "inscription_aux_cours/mini_formation/recapitulatif.html"

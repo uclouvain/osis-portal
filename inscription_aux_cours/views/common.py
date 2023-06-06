@@ -23,7 +23,7 @@
 #
 ##############################################################################
 import copy
-from typing import List
+from typing import List, Dict
 
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -39,10 +39,11 @@ from base.services.offer_enrollment import InscriptionFormationsService
 from inscription_aux_cours.services.autorisation import AutorisationService
 from inscription_aux_cours.services.contact import ContactService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
+from learning_unit.services.learning_unit import LearningUnitService
 from program_management.services.programme import ProgrammeService
 
 
-class InscriptionAuxCoursViewMixin:
+class CompositionPAEViewMixin:
     permission_required = "base.is_student"
 
     @cached_property
@@ -96,6 +97,14 @@ class InscriptionAuxCoursViewMixin:
             'programme': self.programme,
             'person': self.person,
             'contact': self.contact,
+        }
+
+    def recuperer_intitules_unites_enseignement(self, codes: List[str]) -> Dict[str, str]:
+        data = LearningUnitService.search_learning_unit_titles(
+            year=self.annee_academique, codes=codes, person=self.person
+        )
+        return {
+            row['acronym']: row['title'] for row in data
         }
 
 

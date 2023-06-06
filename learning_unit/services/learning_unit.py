@@ -25,7 +25,7 @@
 ##############################################################################
 import logging
 from types import SimpleNamespace
-from typing import List
+from typing import List, Dict
 
 import osis_learning_unit_sdk
 import urllib3
@@ -39,6 +39,7 @@ from osis_learning_unit_sdk.model.learning_unit_type_enum import LearningUnitTyp
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk, utils
 from frontoffice.settings.osis_sdk.utils import convert_api_enum
+from osis_common.utils.debug import profile_db
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -48,8 +49,8 @@ LearningUnitTypeEnum = convert_api_enum(LearningUnitTypeEnum)
 class LearningUnitService:
 
     @staticmethod
-    def search_learning_units(
-            person: Person,
+    def search_learning_units(  # TODO à supprimer
+        person: Person,
             acronym_like: str = None,
             learning_unit_codes: List[str] = None,
             year: int = None
@@ -98,6 +99,22 @@ class LearningUnitService:
                 logger.error(e)
                 learning_unit_title = ''
         return learning_unit_title
+
+    @staticmethod
+    def search_learning_unit_titles(year: int, codes: List[str], person: Person) -> List[Dict]:
+        configuration = learning_unit_sdk.build_configuration()
+        with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
+            api_instance = learning_units_api.LearningUnitsApi(api_client)
+            try:
+                return api_instance.learning_units_titles_read(
+                    year=year,
+                    codes=codes,
+                    **utils.build_mandatory_auth_headers(person),
+                )
+            except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+        return []
 
     @staticmethod
     def get_effective_classes(year: int, acronym: str, person: Person) -> List[EffectiveClass]:
