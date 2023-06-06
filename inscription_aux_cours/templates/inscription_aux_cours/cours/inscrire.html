@@ -1,22 +1,8 @@
-<form id="form-inscription-{{ code_mini_formation }}-{{ code_cours }}" method="post">
-    {% csrf_token %}
-    <div class="loading pull-left"></div>
-    <input
-            id="checkbox-{{ code_mini_formation }}-{{ code_cours }}"
-            type="checkbox"
-            name="checkbox_cours"
-            hx-include="#form-inscription-{{ code_mini_formation }}-{{ code_cours }}"
-            hx-target="#form-inscription-{{ code_mini_formation }}-{{ code_cours }}"
-            hx-trigger="click"
-            hx-swap="outerHTML"
-            hx-vals='{"code_mini_formation": "{{ code_mini_formation }}", "code_cours": "{{ code_cours }}"}'
-            hx-post="{% url 'inscription-aux-cours:inscrire-cours' programme.code %}"
-            hx-indicator="#form-inscription-{{ code_mini_formation }}-{{ code_cours }}"
-            hx-ext="osis-disable-element"
-            hx-disable-element=".link-disable-on-enrollment-modification"
-    >
-    {% if erreurs %}
-        {% include "inscription_aux_cours/blocks/tooltip_erreurs.html" %}
-    {% endif %}
-    <span class="desinscrit"></span>
-</form>
+<input
+        id="checkbox-{{ code_mini_formation }}-{{ code_cours }}"
+        type="checkbox"
+        name="checkbox_cours"
+>
+{% if erreurs %}
+    {% include "inscription_aux_cours/blocks/tooltip_erreurs.html" %}
+{% endif %}

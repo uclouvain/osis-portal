@@ -36,7 +36,7 @@ from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 from osis_common.utils.htmx import HtmxMixin
 
-
+# TODo à supprimer
 @method_decorator(require_POST, name='dispatch')
 class DesinscrireUniteEnseignementHorsProgrammeView(
     HtmxMixin,

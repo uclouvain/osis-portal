@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 
 document.addEventListener("htmx:afterSwap", styleRow)
+
+const COLOR_BADGE_INSC = "rgba(3,51,173,0.07)";
+
 function styleRow() {
-    document.querySelectorAll('.desinscrit').forEach((el)=>el.closest('tr').style.backgroundColor='');
-    document.querySelectorAll('.badge_insc_meme_context').forEach((el)=>el.closest('tr').style.backgroundColor="rgba(3,51,173, 0.07)");
+    document.querySelectorAll('.non-inscrit').forEach((el)=>el.closest('tr').style.backgroundColor="");
+    document.querySelectorAll('.badge_insc_meme_context').forEach((el)=>el.closest('tr').style.backgroundColor=COLOR_BADGE_INSC);
     document.querySelectorAll('.badge_insc_meme_context').forEach((el)=>el.style.backgroundColor="rgba(3,51,173,0.5)");
     document.querySelectorAll('.badge_insc_different_context').forEach((el)=>el.closest('tr').style.backgroundColor="rgba(46,174,213, 0.07)");
     document.querySelectorAll('.badge_insc_different_context').forEach((el)=>el.style.backgroundColor="rgba(46,174,213,0.87)");
