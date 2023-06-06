@@ -80,11 +80,6 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         ]
 
     @cached_property
-    def codes_unites_enseignement_acquises(self) -> List['str']:
-        prerequis_acquis = CoursService().recuperer_unites_enseignement_acquises(self.person, self.code_programme)
-        return [prerequis.code_cours for prerequis in prerequis_acquis]
-
-    @cached_property
     def details_classes(self):
         result = ClasseService.rechercher_classes(
             self.person, annee=self.annee_academique, codes=self.codes_cours_du_programme_annuel
@@ -178,18 +173,21 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         maximum_credits_inscrits_autorises = 90
         depasse_les_90_credits_inscrits = \
             self.programme_annuel_avec_details_cours.total_credits > maximum_credits_inscrits_autorises
-        codes_acquis = set(self.codes_unites_enseignement_acquises)
-        cours_dont_prerequis_non_acquis = {
-            code for code in self.programme_annuel_avec_details_cours.codes_inscrits
-            if CodeParser.get_code_unite_enseignement(code) not in codes_acquis
-        }  # TODO : pas correct, il faut lister aussi les UE qui ont des prérequis.
+        ue_avec_prerequis = CoursService().recuperer_unites_enseignement_avec_prerequis(
+            self.person,
+            self.code_programme,
+        )
+        codes_dont_prerequis_non_acquis = {
+            ue.code for ue in ue_avec_prerequis
+            if not ue.prerequis_sont_acquis and ue.code in self.programme_annuel_avec_details_cours.codes_inscrits
+        }
         return {
             **super().get_context_data(**kwargs),
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere,
-            'cours_dont_prerequis_non_acquis': self.codes_unites_enseignement_acquises,
+            'cours_dont_prerequis_non_acquis': codes_dont_prerequis_non_acquis,
             'activites_aide_reussite': self.activites_aide_reussite,
-            'bloquer_soumission': (bool(cours_dont_prerequis_non_acquis) or depasse_les_90_credits_inscrits),
+            'bloquer_soumission': (bool(codes_dont_prerequis_non_acquis) or depasse_les_90_credits_inscrits),
             'depasse_les_90_credits_inscrits': depasse_les_90_credits_inscrits,
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,
