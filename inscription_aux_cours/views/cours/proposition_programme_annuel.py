@@ -22,12 +22,14 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
+from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.decorators.http import require_POST
 
@@ -45,9 +47,21 @@ class EnregistrerPropositionProgrammeAnnuelView(HtmxMixin, LoginRequiredMixin, C
     def code_mini_formation(self) -> Optional[str]:
         return self.request.POST.get('code_mini_formation')
 
-    @property
-    def codes_cours(self) -> List[str]:
-        return [c for c in self.request.POST.getlist('cours', []) if c]
+    @cached_property
+    def demandes_hors_formulaire_par_contexte(self) -> Dict[str, List[str]]:
+        result = {}
+
+        # Demandes dans les formulaires "unités d'enseignement ajoutées"
+        for value in self.request.POST.getlist('demande_hors_formulaire', []):
+            code_mini_formation, code_ue = value.split('_')
+            result.setdefault(code_mini_formation, set()).add(code_ue)
+
+        # Demandes via l'autocomplete et le radio bouton
+        codes_cours = [c for c in self.request.POST.getlist('cours', []) if c]
+        if codes_cours:
+            result.setdefault(self.code_mini_formation, set).update(set(codes_cours))
+
+        return {code_mini_formation: list(codes) for code_mini_formation, codes in result.items()}
 
     def post(self, request, *args, **kwargs):
         erreurs = []
@@ -65,12 +79,12 @@ class EnregistrerPropositionProgrammeAnnuelView(HtmxMixin, LoginRequiredMixin, C
             else:
                 insc_par_mini_formation.setdefault(code_mini_formation, []).append(code_ue)
 
-        demandes_particulieres_dans_tronc_commun = []
-        demandes_particulieres_dans_mini_formation = {}
-        if self.code_mini_formation:
-            demandes_particulieres_dans_mini_formation[self.code_mini_formation] = self.codes_cours
-        else:
-            demandes_particulieres_dans_tronc_commun = self.codes_cours
+        tronc_commun = ''
+        demandes_particulieres_dans_tronc_commun = self.demandes_hors_formulaire_par_contexte.get(tronc_commun)
+        demandes_particulieres_dans_mini_formation = {
+            code_mini_form: codes for code_mini_form, codes in self.demandes_hors_formulaire_par_contexte.items()
+            if code_mini_form != tronc_commun
+        }
 
         demande_particuliere = request.POST['demande_particuliere']
 
@@ -91,6 +105,11 @@ class EnregistrerPropositionProgrammeAnnuelView(HtmxMixin, LoginRequiredMixin, C
 
         self.afficher_erreurs(erreurs)
         if erreurs:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                _("Please fix errors to save and continue to the recap of your annual program proposal"),
+            )
             return redirect('inscription-aux-cours:formulaire-inscription-cours', **self.kwargs)
 
         return redirect('inscription-aux-cours:formulaire-activites-aide-reussite', **self.kwargs)

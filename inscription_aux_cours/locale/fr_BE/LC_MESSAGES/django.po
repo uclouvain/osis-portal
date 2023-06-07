@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-06 22:49+0200\n"
+"POT-Creation-Date: 2023-06-07 22:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,6 +234,13 @@ msgstr "Organisé cette année académique mais non organisé l’année suivant
 
 msgid "Optional"
 msgstr "Optionnel"
+
+msgid ""
+"Please fix errors to save and continue to the recap of your annual program "
+"proposal"
+msgstr ""
+"Veuillez corriger les erreurs dans votre formulaire pour l'enregistrer et "
+"poursuivre vers le récapitulatif de votre proposition de programme annuel."
 
 msgid "Please modify your enrollments."
 msgstr "Veuillez modifier votre proposition de programme annuel."
