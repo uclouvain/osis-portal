@@ -109,6 +109,7 @@
                                                 type="radio"
                                                 name="{{ formulaire_hors_programme.code_mini_formation.html_name }}"
                                                 value="{{ value }}"
+                                                {% if forloop.first %}checked{% endif %}
                                                 required
                                                 {% if forloop.first and forloop.last %}checked{% endif %}
                                         >

@@ -48,12 +48,13 @@
                            class="fa-solid fa-shield-halved gold" style="color: gold"
                            title="{% trans 'Learning unit with prerequisites not acquired' %}"
                         ></i>
-                        <i
-                                class="fa fa-exclamation-circle fa-danger"
+                        {% if not est_en_fin_de_cycle and cours_dont_prerequis_non_acquis|length > 1  %}
+                            <i class="fa fa-exclamation-circle fa-danger"
                                 style="font-size:120%" aria-hidden="true"
                                 title="{% trans 'Prerequisite not acquired' %}"
                                 data-toggle="tooltip"
-                        ></i>
+                            ></i>
+                        {% endif %}
                     {% elif inscription.code in codes_ue_avec_prerequis %}
                         <i data-toggle="tooltip"
                            data-placement="top"
