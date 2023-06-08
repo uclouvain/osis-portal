@@ -26,6 +26,7 @@ from typing import Optional, List, Dict
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -48,57 +49,82 @@ class EnregistrerPropositionProgrammeAnnuelView(HtmxMixin, LoginRequiredMixin, C
         return self.request.POST.get('code_mini_formation')
 
     @cached_property
-    def demandes_hors_formulaire_par_contexte(self) -> Dict[str, List[str]]:
-        result = {}
-
-        # Demandes dans les formulaires "unités d'enseignement ajoutées"
-        for value in self.request.POST.getlist('demande_hors_formulaire', []):
-            code_mini_formation, code_ue = value.split('_')
-            result.setdefault(code_mini_formation, set()).add(code_ue)
-
+    def nouvelles_demandes_hors_formulaire(self) -> Dict[str, List[str]]:
         # Demandes via l'autocomplete et le radio bouton
         codes_cours = [c for c in self.request.POST.getlist('cours', []) if c]
-        if codes_cours:
-            result.setdefault(self.code_mini_formation, set).update(set(codes_cours))
+        return {self.code_mini_formation: codes_cours}
 
-        return {code_mini_formation: list(codes) for code_mini_formation, codes in result.items()}
+    @property
+    def separateur_demandes(self) -> str:
+        return '&'
+
+    def _valider_max_length(self, valeur):
+        if len(valeur) > 1000:
+            raise ValidationError("Valeur trop grande.")
+
+    def _clean(self, valeur) -> Dict[str, List[str]]:
+        """
+        Vérifie l'intégrité des inscriptions.
+        :param valeur: Chaine de caractère formatée comme suit : CodeMiniFromation,CodeUE&CodeMiniFromation,codeUE2
+        :return: Dictionnaire associant le contexte d'inscription (code_mini_formation) à la liste des codes UE
+        """
+        self._valider_max_length(valeur)
+        if not valeur:
+            return {}
+        taille_max_code = 15
+        expressions = valeur.split(self.separateur_demandes)
+        result = {}
+        for expr in expressions:
+            if expr:
+                code_mini_formation, code_ue = expr.split(',')
+                if len(code_mini_formation) > taille_max_code or len(code_ue) > taille_max_code:
+                    raise ValidationError("Données corrompues")
+                if code_ue:
+                    result.setdefault(code_mini_formation, set()).add(code_ue)
+        return {code_mini_form: list(codes) for code_mini_form, codes in result.items()}
+
+    @cached_property
+    def commentaire(self) -> str:
+        commentaire = self.request.POST['demande_particuliere']
+        self._valider_max_length(commentaire)
+        return commentaire
+
+    @cached_property
+    def demandes_inscriptions_dans_formulaires(self) -> Dict[str, List[str]]:
+        # Inclus toutes les demandes inscriptions faites dans les formulaires (pas les demandes hors formulaire)
+        return self._clean(self.request.POST['demandes_inscriptions_dans_formulaire'])
+
+    @cached_property
+    def demandes_desinscriptions(self) -> List[str]:
+        # Inclus les demandes de désinscription hors formulaire et dans formulaire
+        demande_par_code_mini_form = self._clean(self.request.POST['demandes_desinscriptions'])
+        return [code_ue for codes_ue in demande_par_code_mini_form.values() for code_ue in codes_ue]
 
     def post(self, request, *args, **kwargs):
         erreurs = []
 
-        inscriptions = {
-            k.replace('unite_enseignement_inscriptible_', '')
-            for k in request.POST.keys() if 'unite_enseignement_inscriptible_' in k
-        }
-        inscriptions_tronc_commun = []
-        insc_par_mini_formation = {}
-        for i in inscriptions:
-            code_mini_formation, code_ue = i.split('_')
-            if not code_mini_formation:
-                inscriptions_tronc_commun.append(code_ue)
-            else:
-                insc_par_mini_formation.setdefault(code_mini_formation, []).append(code_ue)
-
         tronc_commun = ''
-        demandes_particulieres_dans_tronc_commun = self.demandes_hors_formulaire_par_contexte.get(tronc_commun)
-        demandes_particulieres_dans_mini_formation = {
-            code_mini_form: codes for code_mini_form, codes in self.demandes_hors_formulaire_par_contexte.items()
+        inscriptions_tronc_commun = self.demandes_inscriptions_dans_formulaires.get(tronc_commun, [])
+        inscriptions_dans_mini_formations = {
+            code_mini_form: codes_ue for code_mini_form, codes_ue in self.demandes_inscriptions_dans_formulaires.items()
             if code_mini_form != tronc_commun
         }
-
-        demande_particuliere = request.POST['demande_particuliere']
-
-        # TODO :: utiliser les Forms pour sécurité (injection SQL, etc)
+        demandes_particulieres_dans_tronc_commun = self.nouvelles_demandes_hors_formulaire.get(tronc_commun, [])
+        demandes_particulieres_dans_mini_formation = {
+            code_mini_form: codes_ue for code_mini_form, codes_ue in self.nouvelles_demandes_hors_formulaire.items()
+            if code_mini_form != tronc_commun
+        }
 
         try:
             FormulaireInscriptionService.enregistrer_formulaire_proposition_pae(
                 person=self.person,
                 code_programme=self.code_programme,
                 inscriptions_tronc_commun=inscriptions_tronc_commun,
-                inscriptions_dans_mini_formations=insc_par_mini_formation,
+                inscriptions_dans_mini_formations=inscriptions_dans_mini_formations,
                 demandes_particulieres_dans_tronc_commun=demandes_particulieres_dans_tronc_commun,
                 demandes_particulieres_dans_mini_formation=demandes_particulieres_dans_mini_formation,
-                demande_particuliere=demande_particuliere,
+                demandes_desinscriptions=self.demandes_desinscriptions,
+                demande_particuliere=self.commentaire,
             )
         except ServiceException as e:
             erreurs = e.messages

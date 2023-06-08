@@ -57,6 +57,7 @@ class FormulaireInscriptionService:
         inscriptions_dans_mini_formations: Dict[str, List[str]],
         demandes_particulieres_dans_tronc_commun: List[str],
         demandes_particulieres_dans_mini_formation: Dict[str, List[str]],
+        demandes_desinscriptions: List[str],
         demande_particuliere: str,
     ):
         inscriptions_dans_mini_formations = [
@@ -76,6 +77,7 @@ class FormulaireInscriptionService:
             inscriptions_dans_mini_formations=inscriptions_dans_mini_formations,
             demandes_particulieres_dans_tronc_commun=demandes_particulieres_dans_tronc_commun,
             demandes_particulieres_dans_mini_formations=demandes_particulieres_dans_mini_formations,
+            demandes_desinscriptions=demandes_desinscriptions,
             demande_particuliere=demande_particuliere,
         )
         return _formulaire_api_call(
