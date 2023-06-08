@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load static i18n inscription_aux_cours_extra %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -42,20 +42,20 @@
             <tr>
                 <td headers="colonne-code">
                     {{ inscription.code }}
-                    {% if inscription.code in cours_dont_prerequis_non_acquis %}
+                    {% if inscription.code|get_code_ue_sans_classe in cours_dont_prerequis_non_acquis %}
                         <i data-toggle="tooltip"
                            data-placement="top"
                            class="fa-solid fa-shield-halved gold" style="color: gold"
                            title="{% trans 'Learning unit with prerequisites not acquired' %}"
                         ></i>
-                        {% if not est_en_fin_de_cycle and cours_dont_prerequis_non_acquis|length > 1  %}
+                        {% if not est_en_fin_de_cycle and inscription.code in cours_dont_prerequis_non_acquis %}
                             <i class="fa fa-exclamation-circle fa-danger"
                                 style="font-size:120%" aria-hidden="true"
                                 title="{% trans 'Prerequisite not acquired' %}"
                                 data-toggle="tooltip"
                             ></i>
                         {% endif %}
-                    {% elif inscription.code in codes_ue_avec_prerequis %}
+                    {% elif inscription.code|get_code_ue_sans_classe in codes_ue_avec_prerequis %}
                         <i data-toggle="tooltip"
                            data-placement="top"
                            class="fa-solid fa-shield-halved vert"

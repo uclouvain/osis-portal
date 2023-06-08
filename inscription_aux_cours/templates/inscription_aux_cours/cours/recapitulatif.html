@@ -69,22 +69,25 @@
                                 {% trans "Please modify your enrollments." %}
                         </p>
                     </div>
-                {% elif not est_en_fin_de_cycle and cours_dont_prerequis_non_acquis|length > 1 %}
-                    <div class="alert alert-danger hide_print">
-                        <p>
-                            <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
+                {% endif %}
+                {% if not est_en_fin_de_cycle and cours_dont_prerequis_non_acquis %}
+                    {% if codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis %}
+                        <div class="alert alert-danger hide_print">
+                            <p>
+                                <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
                                 {% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
                                 <br>
                                 {% trans "Please modify your enrollments." %}
-                        </p>
-                    </div>
-                {% elif not est_en_fin_de_cycle and cours_dont_prerequis_non_acquis|length == 1 %}
-                    <div class="alert alert-warning hide_print">
-                        <p>
-                            <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
-                            {% blocktrans with liste_codes_ue=cours_dont_prerequis_non_acquis|join:", " %}It seems you didn't acquired the prerequisites for the following courses: {{ liste_codes_ue }}. This submission will be examined by your faculty after the submission of your proposal.{% endblocktrans %}
-                        </p>
-                    </div>
+                            </p>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning hide_print">
+                            <p>
+                                <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
+                                {% blocktrans with liste_codes_ue=cours_dont_prerequis_non_acquis|join:", " %}It seems you didn't acquired the prerequisites for the following courses: {{ liste_codes_ue }}. This submission will be examined by your faculty after the submission of your proposal.{% endblocktrans %}
+                            </p>
+                        </div>
+                    {% endif %}
                 {% endif %}
 
                 {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}

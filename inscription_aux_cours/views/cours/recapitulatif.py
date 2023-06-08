@@ -177,18 +177,29 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             self.person,
             self.code_programme,
         )
-        codes_dont_prerequis_non_acquis = {
-            ue.code for ue in ue_avec_prerequis
+        cours_dont_prerequis_non_acquis = {
+            ue.code: ue for ue in ue_avec_prerequis
             if not ue.prerequis_sont_acquis and ue.code in self.programme_annuel_avec_details_cours.codes_inscrits
         }
-        # plus_d_un_prerequis_non_acquis = len(codes_dont_prerequis_non_acquis) > 1
+        codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis = {
+            ue.code for ue in cours_dont_prerequis_non_acquis.values()
+            if any((code_inscrit in ue.prerequis_texte for code_inscrit in self.codes_cours_du_programme_annuel))
+        }
+        est_en_fin_de_cycle = self.programme_annuel.est_en_fin_de_cycle
         return {
             **super().get_context_data(**kwargs),
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere,
-            'cours_dont_prerequis_non_acquis': codes_dont_prerequis_non_acquis,
+            'bloquer_soumission': (
+                not est_en_fin_de_cycle and codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis
+            ) or (
+                depasse_les_90_credits_inscrits
+            ),
+            'cours_dont_prerequis_non_acquis': cours_dont_prerequis_non_acquis,
+            'codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis':
+                codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis,
             'codes_ue_avec_prerequis': {ue.code for ue in ue_avec_prerequis},
-            'est_en_fin_de_cycle': self.programme_annuel.est_en_fin_de_cycle,
+            'est_en_fin_de_cycle': est_en_fin_de_cycle,
             'activites_aide_reussite': self.activites_aide_reussite,
             'depasse_les_90_credits_inscrits': depasse_les_90_credits_inscrits,
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
