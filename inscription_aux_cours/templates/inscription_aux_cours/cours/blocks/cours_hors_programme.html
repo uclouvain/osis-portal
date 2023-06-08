@@ -41,12 +41,13 @@
                 <td style="width: 140px">
                     <div class="col-md-9 col-md-offset-3">
                         <div class="row">
-                            <div class="loading pull-left"></div>
                             <input
-                                    id="checkbox-{{ cours.code }}"
+                                    id="unite_enseignement_inscriptible_{{ inscription_hors_programme.code_mini_formation }}_{{ code }}"
+                                    name="unite_enseignement_inscriptible_{{ inscription_hors_programme.code_mini_formation }}_{{ code }}"
+                                    data-code-mini-formation="{{ inscription_hors_programme.code_mini_formation }}"
+                                    data-code-unite-enseignement="{{ inscription_hors_programme.code_cours }}"
                                     type="checkbox"
-                                    name="cours"
-                                    value="{{ cours.code }}"
+                                    value="{{ inscription_hors_programme.code_mini_formation }}_{{ inscription_hors_programme.code_cours }}"
                                     checked
                             >
                         </div>

@@ -52,3 +52,5 @@ class InscriptionHorsProgrammeForm(forms.Form):
 
     def _init_contexte(self, contextes: List[Tuple]):
         self.fields['code_mini_formation'].choices = contextes
+        if len(contextes) == 1:
+            self.fields['code_mini_formation'].required = False

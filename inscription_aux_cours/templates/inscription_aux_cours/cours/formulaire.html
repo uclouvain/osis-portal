@@ -109,9 +109,8 @@
                                                 type="radio"
                                                 name="{{ formulaire_hors_programme.code_mini_formation.html_name }}"
                                                 value="{{ value }}"
-                                                {% if forloop.first %}checked{% endif %}
                                                 required
-                                                {% if forloop.first and forloop.last %}checked{% endif %}
+                                                {% if formulaire_hors_programme.code_mini_formation.field.choices|length == 1 %}checked{% endif %}
                                         >
                                         {{ text }}
                                     </label>
@@ -152,6 +151,8 @@
                 {% endif %}
                 <br>
                 <div class="center">
+                    <input id="demandes_inscriptions_dans_formulaire" type="hidden" name="demandes_inscriptions_dans_formulaire" value="">
+                    <input id="demandes_desinscriptions" type="hidden" name="demandes_desinscriptions" value="">
                     <button type="submit" class="btn btn-primary slow-loading">
                         <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to enrollments summary' %}
                     </button>
@@ -170,19 +171,104 @@
     <script>
 
     const UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS = $("input[id^='unite_enseignement_inscriptible']");
+    let demandes_inscriptions = "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
+    let demandes_desinscriptions = "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
+    const separateurDemandes = "&"
+    const codesDejaInscrits = initialiserCodesDejaInscrits();
+    UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.click(reagirClickCheckboxDansFormulaire);
 
-    UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.click(function (event) {
-        let closest_div = event.target.closest("div[id^='div-inscription']");
-        let closest_tr = event.target.closest('tr');
-        if (this.checked){
-            const badge = '<span class="pull-right badge" style="background-color: rgba(3, 51, 173, 0.5);">Insc</span>';
-            $(badge).appendTo(closest_div);
-            closest_tr.style.backgroundColor=COLOR_BADGE_INSC;
-        } else {
-            closest_tr.style.backgroundColor="";
-            $(closest_tr).find('.badge').remove();
+    function initialiserCodesDejaInscrits(){
+        let codes_deja_inscrits = '';
+        for (let i = 0; i < UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.length; i++) {
+            let checkbox = UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS[i];
+            if (checkbox.checked) {
+                let codeUE = getCodeUniteEnseignement(checkbox);
+                codes_deja_inscrits += separateurDemandes + codeUE;
+            }
         }
-    });
+        return codes_deja_inscrits
+    }
+
+    function reagirClickCheckboxDansFormulaire(event){
+        let checkbox = event.target;
+        let codeMiniFormation = checkbox.getAttribute('data-code-mini-formation');
+        let codeUniteEnseignement = getCodeUniteEnseignement(checkbox);
+        let demandeInscSerialisee = serializeDemandeInscription(codeMiniFormation, codeUniteEnseignement);
+
+        if (this.checked){
+            setBackgroundAndBadge(checkbox);
+            inscrire(demandeInscSerialisee);
+        } else {
+            resetBackgroundAndBadge(checkbox);
+            desinscrire(demandeInscSerialisee);
+        }
+    }
+
+    function getCodeUniteEnseignement(input){
+        return input.getAttribute('data-code-unite-enseignement');
+    }
+
+    function serializeDemandeInscription(codeMiniFormation, codeUniteEnseignement){
+        return `${separateurDemandes}${codeMiniFormation },${ codeUniteEnseignement }`;
+    }
+
+    function setBackgroundAndBadge(checkbox){
+        let closest_div = checkbox.closest("div[id^='div-inscription']");
+        const badge = '<span class="pull-right badge" style="background-color: rgba(3, 51, 173, 0.5);">Insc</span>';
+        $(badge).appendTo(closest_div);
+        checkbox.closest('tr').style.backgroundColor=COLOR_BADGE_INSC;
+    }
+
+    function resetBackgroundAndBadge(checkbox){
+        let closest_tr = checkbox.closest('tr');
+        closest_tr.style.backgroundColor="";
+        $(closest_tr).find("div[id^='div-inscription']").find('.badge').remove();
+    }
+
+    function inscrire(demandeInscSerialisee){
+        if (aDemandeDesinscription(demandeInscSerialisee)){
+            annulerDemandeDesinscription(demandeInscSerialisee);
+        }
+        else {
+            const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
+            if (!codesDejaInscrits.includes(codeUEAInscrire) && ! aDemandeInscription(demandeInscSerialisee)) {
+                // évite de redemander une réinscription à une UE qui était déjà inscrite
+                demandes_inscriptions += demandeInscSerialisee;
+                updateInputHiddenValue("demandes_inscriptions_dans_formulaire", demandes_inscriptions);
+            }
+        }
+    }
+
+    function desinscrire(demandeInscSerialisee){
+        if (aDemandeInscription(demandeInscSerialisee)){
+            annulerDemandeInscription(demandeInscSerialisee);
+        } else {
+            if (! aDemandeDesinscription(demandeInscSerialisee)){
+                demandes_desinscriptions += demandeInscSerialisee;
+                updateInputHiddenValue("demandes_desinscriptions", demandes_desinscriptions);
+            }
+        }
+    }
+
+    function updateInputHiddenValue(inputId, valeur){
+        document.getElementById(inputId).value = valeur;
+    }
+
+    function annulerDemandeInscription(demandeInscSerialisee){
+        demandes_inscriptions = demandes_inscriptions.replace(demandeInscSerialisee, "");
+    }
+
+    function annulerDemandeDesinscription(demandeInscSerialisee){
+        demandes_desinscriptions = demandes_desinscriptions.replace(demandeInscSerialisee, "");
+    }
+
+    function aDemandeDesinscription(demandeInscSerialisee){
+        return demandes_desinscriptions.includes(demandeInscSerialisee);
+    }
+
+    function aDemandeInscription(demandeInscSerialisee){
+        return demandes_inscriptions.includes(demandeInscSerialisee);
+    }
 
     </script>
 {% endblock %}
