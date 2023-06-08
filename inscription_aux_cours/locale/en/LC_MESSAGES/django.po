@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-08 10:46+0200\n"
+"POT-Creation-Date: 2023-06-06 11:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,6 +153,9 @@ msgid "Modify my enrollments"
 msgstr ""
 
 msgid "Modify my minors and options enrollments"
+msgstr ""
+
+msgid "My composition enrollment"
 msgstr ""
 
 msgid "My courses enrollment"
