@@ -224,7 +224,7 @@
     function resetBackgroundAndBadge(checkbox){
         let closest_tr = checkbox.closest('tr');
         closest_tr.style.backgroundColor="";
-        $(closest_tr).find('.badge').remove();
+        $(closest_tr).find("div[id^='div-inscription']").find('.badge').remove();
     }
 
     function inscrire(demandeInscSerialisee){
