@@ -94,7 +94,9 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
 
     @cached_property
     def programme_annuel_avec_details_cours(self) -> 'PropositionProgrammeAnnuel':
-        intitule_par_code = self.recuperer_intitules_unites_enseignement(self.codes_cours_du_programme_annuel)
+        intitule_par_code = self.recuperer_intitules_unites_enseignement(
+            self.codes_cours_du_programme_annuel + self.codes_cours_des_partenariats,
+        )
 
         inscriptions_tronc_commun = InscriptionsParContexte(
             intitule=formatter.get_intitule_programme(self.programme),
