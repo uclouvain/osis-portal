@@ -46,7 +46,7 @@ class EnregistrerPropositionProgrammeAnnuelView(HtmxMixin, LoginRequiredMixin, C
 
     @property
     def code_mini_formation(self) -> Optional[str]:
-        return self.request.POST.get('code_mini_formation')
+        return self.request.POST.get('code_mini_formation', '')
 
     @cached_property
     def nouvelles_demandes_hors_formulaire(self) -> Dict[str, List[str]]:

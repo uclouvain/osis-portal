@@ -31,7 +31,7 @@ from django.utils.translation import gettext_lazy as _
 
 class InscriptionHorsProgrammeForm(forms.Form):
     annee = forms.IntegerField(disabled=True, widget=forms.HiddenInput)
-    code_mini_formation = forms.ChoiceField(required=False)
+    code_mini_formation = forms.ChoiceField()
     cours = forms.MultipleChoiceField(
         required=False,
         label=_('Learning Unit Year').capitalize(),
@@ -52,3 +52,5 @@ class InscriptionHorsProgrammeForm(forms.Form):
 
     def _init_contexte(self, contextes: List[Tuple]):
         self.fields['code_mini_formation'].choices = contextes
+        if len(contextes) == 1:
+            self.fields['code_mini_formation'].required = False

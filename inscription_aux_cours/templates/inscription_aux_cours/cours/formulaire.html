@@ -110,7 +110,7 @@
                                                 name="{{ formulaire_hors_programme.code_mini_formation.html_name }}"
                                                 value="{{ value }}"
                                                 required
-                                                {% if forloop.first and forloop.last %}checked{% endif %}
+                                                {% if formulaire_hors_programme.code_mini_formation.field.choices|length == 1 %}checked{% endif %}
                                         >
                                         {{ text }}
                                     </label>
