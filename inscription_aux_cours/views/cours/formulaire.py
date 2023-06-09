@@ -120,7 +120,7 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
         if not inscriptions_hors_programme:
             return []
         codes_cours = [cours.code_cours for cours in inscriptions_hors_programme]
-        unites_enseignements_par_code = self._rechercher_unites_enseignements(codes_cours)
+        unites_enseignements_par_code = self.recuperer_intitules_unites_enseignement(codes_cours)
         classes_par_code = self._rechercher_classes(codes_cours)
 
         return [

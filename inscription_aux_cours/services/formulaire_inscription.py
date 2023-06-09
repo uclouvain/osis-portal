@@ -23,9 +23,17 @@
 #
 ##############################################################################
 from functools import partial
+from typing import List, Dict
 
 import osis_inscription_cours_sdk
 from osis_inscription_cours_sdk.api import formulaire_api
+from osis_inscription_cours_sdk.model.formulaire_proposition_programme_annuel import \
+    FormulairePropositionProgrammeAnnuel
+from osis_inscription_cours_sdk.model.\
+    formulaire_proposition_programme_annuel_demandes_particulieres_dans_mini_formations import \
+    FormulairePropositionProgrammeAnnuelDemandesParticulieresDansMiniFormations
+from osis_inscription_cours_sdk.model.formulaire_proposition_programme_annuel_inscriptions_dans_mini_formations import \
+    FormulairePropositionProgrammeAnnuelInscriptionsDansMiniFormations
 
 from base.models.person import Person
 from base.services.utils import call_api
@@ -40,6 +48,44 @@ class FormulaireInscriptionService:
     @staticmethod
     def marquer_comme_lu(person: 'Person', code_programme: str):
         return _formulaire_api_call(person, "marquer_formulaire_inscription_comme_lu", code_programme=code_programme, )
+
+    @staticmethod
+    def enregistrer_formulaire_proposition_pae(
+        person: 'Person',
+        code_programme: str,
+        inscriptions_tronc_commun: List[str],
+        inscriptions_dans_mini_formations: Dict[str, List[str]],
+        demandes_particulieres_dans_tronc_commun: List[str],
+        demandes_particulieres_dans_mini_formation: Dict[str, List[str]],
+        demandes_desinscriptions: List[str],
+        demande_particuliere: str,
+    ):
+        inscriptions_dans_mini_formations = [
+            FormulairePropositionProgrammeAnnuelInscriptionsDansMiniFormations(
+                code_mini_formation=code_mini_formation,
+                codes_unites_enseignement=codes_unites_enseignement,
+            ) for code_mini_formation, codes_unites_enseignement in inscriptions_dans_mini_formations.items()
+        ]
+        demandes_particulieres_dans_mini_formations = [
+            FormulairePropositionProgrammeAnnuelDemandesParticulieresDansMiniFormations(
+                code_mini_formation=code_mini_formation,
+                codes_unites_enseignement=codes_unites_enseignement,
+            ) for code_mini_formation, codes_unites_enseignement in demandes_particulieres_dans_mini_formation.items()
+        ]
+        cmd = FormulairePropositionProgrammeAnnuel(
+            inscriptions_dans_tronc_commun=inscriptions_tronc_commun,
+            inscriptions_dans_mini_formations=inscriptions_dans_mini_formations,
+            demandes_particulieres_dans_tronc_commun=demandes_particulieres_dans_tronc_commun,
+            demandes_particulieres_dans_mini_formations=demandes_particulieres_dans_mini_formations,
+            demandes_desinscriptions=demandes_desinscriptions,
+            demande_particuliere=demande_particuliere,
+        )
+        return _formulaire_api_call(
+            person,
+            "enregistrer_formulaire_proposition_pae",
+            code_programme=code_programme,
+            formulaire_proposition_programme_annuel=cmd,
+        )
 
 
 _formulaire_api_call = partial(

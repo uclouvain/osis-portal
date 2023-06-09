@@ -33,7 +33,7 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li><a href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">{% trans 'My courses enrollment' %}</a></li>
+    <li><a href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">{% trans 'My composition enrollment' %}</a></li>
     <li class="active">{% trans 'Summary courses enrollment' %}</li>
 {% endblock %}
 
@@ -60,21 +60,34 @@
                     {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
                 </div>
 
-                {% if bloquer_soumission %}
+                {% if depasse_les_90_credits_inscrits %}
                     <div class="alert alert-danger hide_print">
                         <p>
                             <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
-                            {% if cours_dont_prerequis_non_acquis %}
-                                {% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
-                                <br>
-                            {% endif %}
-                            {% if depasse_les_90_credits_inscrits %}
                                 {% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}
                                 <br>
-                            {% endif %}
-                            {% trans "Please modify your enrollments." %}
+                                {% trans "Please modify your enrollments." %}
                         </p>
                     </div>
+                {% endif %}
+                {% if not est_en_fin_de_cycle and cours_dont_prerequis_non_acquis %}
+                    {% if codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis %}
+                        <div class="alert alert-danger hide_print">
+                            <p>
+                                <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
+                                {% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
+                                <br>
+                                {% trans "Please modify your enrollments." %}
+                            </p>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning hide_print">
+                            <p>
+                                <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
+                                {% blocktrans with liste_codes_ue=cours_dont_prerequis_non_acquis|join:", " %}It seems you didn't acquired the prerequisites for the following courses: {{ liste_codes_ue }}. This submission will be examined by your faculty after the submission of your proposal.{% endblocktrans %}
+                            </p>
+                        </div>
+                    {% endif %}
                 {% endif %}
 
                 {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
