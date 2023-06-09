@@ -198,8 +198,11 @@ msgstr "Modifier ma proposition"
 msgid "Modify my minors and options enrollments"
 msgstr "Modifier mon choix de mineures ou options"
 
-msgid "My courses enrollment"
+msgid "My composition enrollment"
 msgstr "Ma composition de programme annuel"
+
+msgid "My courses enrollment"
+msgstr "Ma proposition de programme annuel"
 
 msgid "My exchange programme"
 msgstr "Mon programme d'échange"

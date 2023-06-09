@@ -169,6 +169,9 @@ msgstr ""
 msgid "Modify my minors and options enrollments"
 msgstr ""
 
+msgid "My composition enrollment"
+msgstr ""
+
 msgid "My courses enrollment"
 msgstr ""
 
