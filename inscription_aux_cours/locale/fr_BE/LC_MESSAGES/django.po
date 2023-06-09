@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-06 11:05+0200\n"
+"POT-Creation-Date: 2023-06-07 22:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,9 +37,6 @@ msgstr "Sigle"
 
 msgid "Activiy with prerequisites"
 msgstr "Activité avec prérequis"
-
-msgid "Add"
-msgstr "Ajouter"
 
 msgid "Add a course that is not in the offer"
 msgstr ""
@@ -111,6 +108,10 @@ msgstr ""
 msgid "Enrolled in a learning unit with a dispensatory test"
 msgstr "Inscrit·e à une unité d'enseignement avec test dispensatoire"
 
+#, python-format
+msgid "Enrolled to %(code_ue)s."
+msgstr "Inscrit.e à %(code_ue)s."
+
 msgid "Enrolled to the minor or option"
 msgstr "Inscrit.e à la mineure ou l'option"
 
@@ -157,6 +158,16 @@ msgstr ""
 msgid "Indicates annual block"
 msgstr "Indique le(s) bloc(s) annuel(s)"
 
+#, python-format
+msgid ""
+"It seems you didn't acquired the prerequisites for the following courses: "
+"%(liste_codes_ue)s. This submission will be examined by your faculty after "
+"the submission of your proposal."
+msgstr ""
+"Il semble que vous n'ayez pas acquis les prérequis pour %(liste_codes_ue)s. "
+"Cette demande sera examinée par la faculté après soumission de votre "
+"proposition."
+
 msgid "Last name"
 msgstr "Nom"
 
@@ -165,6 +176,12 @@ msgstr "Unité d'enseignement"
 
 msgid "Learning unit failed for a past academic year"
 msgstr "Unité d'enseignement échouée lors d'une année académique précédente"
+
+msgid "Learning unit with prerequisites acquired"
+msgstr "Unité d'enseignement dont les prérequis sont acquis"
+
+msgid "Learning unit with prerequisites not acquired"
+msgstr "Unité d'enseignement dont les prérequis ne sont pas acquis"
 
 msgid "Legend"
 msgstr "Légende"
@@ -220,6 +237,13 @@ msgstr "Organisé cette année académique mais non organisé l’année suivant
 
 msgid "Optional"
 msgstr "Optionnel"
+
+msgid ""
+"Please fix errors to save and continue to the recap of your annual program "
+"proposal"
+msgstr ""
+"Veuillez corriger les erreurs dans votre formulaire pour l'enregistrer et "
+"poursuivre vers le récapitulatif de votre proposition de programme annuel."
 
 msgid "Please modify your enrollments."
 msgstr "Veuillez modifier votre proposition de programme annuel."
@@ -335,10 +359,6 @@ msgid "You didn't acquired the prerequisites for the following courses:"
 msgstr ""
 "Vous n'avez pas acquis les prérequis pour les unités d'enseignement "
 "suivantes:"
-
-#, python-brace-format
-msgid "You have been enrolled to {codes_cours}"
-msgstr "Vous avez été inscrit.e à {codes_cours}"
 
 msgid ""
 "Your annual program proposal contains more than 90 credits. The student's "

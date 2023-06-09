@@ -44,12 +44,12 @@ from inscription_aux_cours.data.proposition_programme_annuel import (
 )
 from inscription_aux_cours.formatter import get_intitule_programme
 from inscription_aux_cours.services.activites_aide_reussite import ActivitesAideReussiteService
+from inscription_aux_cours.services.code_unite_enseignement import CodeParser
 from inscription_aux_cours.services.complement import ComplementService
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from learning_unit.services.classe import ClasseService
-from learning_unit.services.learning_unit import LearningUnitService
 from program_management.services.programme import ProgrammeService
 
 
@@ -80,18 +80,6 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         ]
 
     @cached_property
-    def details_unites_enseignement(self):
-        result = LearningUnitService.search_learning_units(
-            self.person, year=self.annee_academique, learning_unit_codes=self.codes_cours_du_programme_annuel
-        )
-        return {learning_unit['acronym']: learning_unit for learning_unit in result}
-
-    @cached_property
-    def cours_dont_prerequis_non_acquis(self) -> List['str']:
-        prerequis_non_acquis = CoursService().recuperer_prerequis_non_acquis(self.person, self.code_programme)
-        return [prerequis.code_cours for prerequis in prerequis_non_acquis]
-
-    @cached_property
     def details_classes(self):
         result = ClasseService.rechercher_classes(
             self.person, annee=self.annee_academique, codes=self.codes_cours_du_programme_annuel
@@ -106,15 +94,19 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
 
     @cached_property
     def programme_annuel_avec_details_cours(self) -> 'PropositionProgrammeAnnuel':
+        intitule_par_code = self.recuperer_intitules_unites_enseignement(
+            self.codes_cours_du_programme_annuel + self.codes_cours_des_partenariats,
+        )
+
         inscriptions_tronc_commun = InscriptionsParContexte(
             intitule=formatter.get_intitule_programme(self.programme),
-            cours=self._build_cours(self.programme_annuel['tronc_commun']),
+            cours=self._build_cours(self.programme_annuel['tronc_commun'], intitule_par_code),
         )
 
         inscriptions_aux_mini_formations = [
             InscriptionsParContexte(
                 intitule=get_intitule_programme(self.details_mini_formation[mini_formation['code']]),
-                cours=self._build_cours(mini_formation['cours']),
+                cours=self._build_cours(mini_formation['cours'], intitule_par_code),
             )
             for mini_formation in self.programme_annuel['mini_formations']
         ]
@@ -123,7 +115,7 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         inscriptions_aux_partenariats = [
             InscriptionsParContexte(
                 intitule=self._format_intitule_partenariat(partenariat['intitule']),
-                cours=self._build_cours(partenariat['cours']),
+                cours=self._build_cours(partenariat['cours'], intitule_par_code),
             )
             for partenariat in self.programme_annuel['partenariats']
         ]
@@ -138,20 +130,22 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
     def _format_intitule_partenariat(self, intitule: str) -> str:
         return str(_('My exchange programme')) + ": " + intitule
 
-    def _build_cours(self, cours_par_contexte) -> List['Inscription']:
+    def _build_cours(self, cours_par_contexte, intitule_par_code) -> List['Inscription']:
         result = []
         for cours in cours_par_contexte:
             code = cours['code']
-            inscription = Inscription(code=code, credits=cours['credits'], intitule=self._get_intitule(code))
+            inscription = Inscription(
+                code=code,
+                credits=cours['credits'],
+                intitule=self._get_intitule(code, intitule_par_code),
+            )
             result.append(inscription)
         return result
 
-    def _get_intitule(self, code) -> str:
-        if code in self.details_unites_enseignement:
-            return self.details_unites_enseignement[code]['title']
-        elif code in self.details_classes:
+    def _get_intitule(self, code, intitule_par_code) -> str:
+        if code in self.details_classes:
             return self.details_classes[code]['intitule']
-        return LearningUnitService.get_learning_unit_title(year=self.annee_academique, acronym=code, person=self.person)
+        return intitule_par_code.get(code, '')
 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:
@@ -178,17 +172,42 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         )
 
     def get_context_data(self, **kwargs):
+        maximum_credits_inscrits_autorises = 90
+        depasse_les_90_credits_inscrits = \
+            self.programme_annuel_avec_details_cours.total_credits > maximum_credits_inscrits_autorises
+        ue_avec_prerequis = CoursService().recuperer_unites_enseignement_avec_prerequis(
+            self.person,
+            self.code_programme,
+        )
+        codes_inscrits = self.programme_annuel_avec_details_cours.codes_inscrits
+        codes_ue_sans_classe_inscrits = {CodeParser.get_code_unite_enseignement(code) for code in codes_inscrits}
+        cours_dont_prerequis_non_acquis = {
+            ue.code: ue for ue in ue_avec_prerequis
+            if not ue.prerequis_sont_acquis and ue.code in codes_ue_sans_classe_inscrits
+        }
+        codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis = {
+            ue.code for ue in cours_dont_prerequis_non_acquis.values()
+            if ue.code in codes_ue_sans_classe_inscrits
+            and any((code_inscrit in ue.prerequis_texte for code_inscrit in self.codes_cours_du_programme_annuel))
+        }
+        est_en_fin_de_cycle = self.programme_annuel.est_en_fin_de_cycle
         return {
             **super().get_context_data(**kwargs),
             'programme_annuel': self.programme_annuel_avec_details_cours,
             'demande_particuliere': self.demande_particuliere,
-            'cours_dont_prerequis_non_acquis': self.cours_dont_prerequis_non_acquis,
-            'activites_aide_reussite': self.activites_aide_reussite,
             'bloquer_soumission': (
-                bool(self.cours_dont_prerequis_non_acquis)
-                or self.programme_annuel_avec_details_cours.total_credits > 90
+                not est_en_fin_de_cycle and codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis
+            ) or (
+                depasse_les_90_credits_inscrits
             ),
-            'depasse_les_90_credits_inscrits': self.programme_annuel_avec_details_cours.total_credits > 90,
+            'cours_dont_prerequis_non_acquis': set(cours_dont_prerequis_non_acquis.keys()),
+            'codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis':
+                codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis,
+            'codes_ue_avec_prerequis': {ue.code for ue in ue_avec_prerequis},
+            'codes_ue_prerequis_acquis': {ue.code for ue in ue_avec_prerequis if ue.prerequis_sont_acquis},
+            'est_en_fin_de_cycle': est_en_fin_de_cycle,
+            'activites_aide_reussite': self.activites_aide_reussite,
+            'depasse_les_90_credits_inscrits': depasse_les_90_credits_inscrits,
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,
             'credits_formation': self.credits_formation,
