@@ -101,3 +101,7 @@ textarea.unresizable {
 [aria-expanded="false"] .expanded {
     display: none;
 }
+
+.vert {
+    color: rgba(138, 188, 62, 1) !important;
+}
