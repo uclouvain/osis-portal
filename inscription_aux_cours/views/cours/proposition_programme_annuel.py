@@ -37,11 +37,10 @@ from django.views.decorators.http import require_POST
 from base.services.utils import ServiceException
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.views.common import CompositionPAEViewMixin
-from osis_common.utils.htmx import HtmxMixin
 
 
 @method_decorator(require_POST, name='dispatch')
-class EnregistrerPropositionProgrammeAnnuelView(HtmxMixin, LoginRequiredMixin, CompositionPAEViewMixin, View):
+class EnregistrerPropositionProgrammeAnnuelView(LoginRequiredMixin, CompositionPAEViewMixin, View):
     name = 'enregistrer-proposition-programme-annuel'
 
     @property
