@@ -179,13 +179,16 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             self.person,
             self.code_programme,
         )
+        codes_inscrits = self.programme_annuel_avec_details_cours.codes_inscrits
+        codes_ue_sans_classe_inscrits = {CodeParser.get_code_unite_enseignement(code) for code in codes_inscrits}
         cours_dont_prerequis_non_acquis = {
             ue.code: ue for ue in ue_avec_prerequis
-            if not ue.prerequis_sont_acquis and ue.code in self.programme_annuel_avec_details_cours.codes_inscrits
+            if not ue.prerequis_sont_acquis and ue.code in codes_ue_sans_classe_inscrits
         }
         codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis = {
             ue.code for ue in cours_dont_prerequis_non_acquis.values()
-            if any((code_inscrit in ue.prerequis_texte for code_inscrit in self.codes_cours_du_programme_annuel))
+            if ue.code in codes_ue_sans_classe_inscrits
+            and any((code_inscrit in ue.prerequis_texte for code_inscrit in self.codes_cours_du_programme_annuel))
         }
         est_en_fin_de_cycle = self.programme_annuel.est_en_fin_de_cycle
         return {
@@ -197,10 +200,11 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             ) or (
                 depasse_les_90_credits_inscrits
             ),
-            'cours_dont_prerequis_non_acquis': cours_dont_prerequis_non_acquis,
+            'cours_dont_prerequis_non_acquis': set(cours_dont_prerequis_non_acquis.keys()),
             'codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis':
                 codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis,
             'codes_ue_avec_prerequis': {ue.code for ue in ue_avec_prerequis},
+            'codes_ue_prerequis_acquis': {ue.code for ue in ue_avec_prerequis if ue.prerequis_sont_acquis},
             'est_en_fin_de_cycle': est_en_fin_de_cycle,
             'activites_aide_reussite': self.activites_aide_reussite,
             'depasse_les_90_credits_inscrits': depasse_les_90_credits_inscrits,
