@@ -34,22 +34,22 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li class="active">{% trans 'My courses enrollment' %}</li>
+    <li class="active">{% trans 'My composition enrollment' %}</li>
 {% endblock %}
 
 {% block page_header %}
     <div class="page-header">
-        <h2>{% trans 'My courses enrollment' %}</h2>
+        <h2>{% trans 'My composition enrollment' %}</h2>
     </div>
 {% endblock %}
 
 {% block page_body %}
+    <form method="post" action='{% url "inscription-aux-cours:enregistrer-proposition-programme-annuel" programme.code %}'>
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.annee  }}
     <div
         class="panel panel-default panel-formulaires-inscription-cours"
-        data-url-inscrire-cours="{% url 'inscription-aux-cours:inscrire-cours' programme.code %}"
-        data-url-desinscrire-cours="{% url 'inscription-aux-cours:desinscrire-cours' programme.code %}"
-        data-csrf-token="{{ csrf_token }}"
-        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
     >
         <div class="panel-body">
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
@@ -92,8 +92,6 @@
 
             {% if formulaire_hors_programme.code_mini_formation.field.choices %}
             <div  id="form-hors-formulaire">
-                <form method="post" action='{% url "inscription-aux-cours:inscrire-cours-hors-programme" programme.code %}'>
-                    {% csrf_token %}
                     {{ formulaire_hors_programme.media }}
                     {{ formulaire_hors_programme.annee  }}
 
@@ -111,8 +109,7 @@
                                                 type="radio"
                                                 name="{{ formulaire_hors_programme.code_mini_formation.html_name }}"
                                                 value="{{ value }}"
-                                                required
-                                                {% if forloop.first and forloop.last %}checked{% endif %}
+                                                {% if forloop.first %}checked{% endif %}
                                         >
                                         {{ text }}
                                     </label>
@@ -125,51 +122,39 @@
 
                     <div class="row">
                         {% bootstrap_field formulaire_hors_programme.cours label=False form_group_class="col-md-6" required_css_class="" %}
-                        <div class="col-md-6">
-                            <button type="submit" class="btn btn-primary slow-loading"><i class="fa-solid fa-plus"></i> {% trans 'Add' %}</button>
-                        </div>
                     </div>
-
-                </form>
 
             </div>
             {% endif %}
             <br>
             <hr>
             <div>
-                <form
-                        method="post"
-                        id="formulaire-demande-particuliere"
-                        hx-post="{% url 'inscription-aux-cours:demande-particuliere' programme.code %}"
-                        hx-swap="none"
-                        hx-trigger="change from:#id_demande_particuliere"
-                >
-                    {% csrf_token %}
-                    <p>
-                        <strong>{% trans "Special requests" %}</strong>
-                        {% if demande_particuliere.descriptif %}
-                            <br>
-                            {{ demande_particuliere.descriptif|safe }}
-                        {% endif %}
-                    </p>
+                <p>
+                    <strong>{% trans "Special requests" %}</strong>
+                    {% if demande_particuliere.descriptif %}
+                        <br>
+                        {{ demande_particuliere.descriptif|safe }}
+                    {% endif %}
+                </p>
 
-                    <div class="row">
-                        {% bootstrap_field form.demande_particuliere label=False form_group_class="col-md-12"%}
-                    </div>
-                </form>
+                <div class="row">
+                    {% bootstrap_field form.demande_particuliere label=False form_group_class="col-md-12"%}
+                </div>
                 {% if a_des_mini_formations_inscriptibles %}
                     <br>
                     <div class="center">
-                        <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default link-disable-on-enrollment-modification">
+                        <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default">
                             {% trans "Modify my minors and options enrollments" %}
                         </a>
                     </div>
                 {% endif %}
                 <br>
                 <div class="center">
-                    <a href="{% url 'inscription-aux-cours:formulaire-activites-aide-reussite' programme.code %}" class="btn btn-primary link-disable-on-enrollment-modification"">
+                    <input id="demandes_inscriptions_dans_formulaire" type="hidden" name="demandes_inscriptions_dans_formulaire" value="">
+                    <input id="demandes_desinscriptions" type="hidden" name="demandes_desinscriptions" value="">
+                    <button type="submit" class="btn btn-primary slow-loading">
                         <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to enrollments summary' %}
-                    </a>
+                    </button>
                 </div>
 
                 <br>
@@ -180,4 +165,109 @@
             </div>
         </div>
     </div>
+    </form>
+
+    <script>
+
+    const UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS = $("input[id^='unite_enseignement_inscriptible']");
+    let demandes_inscriptions = "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
+    let demandes_desinscriptions = "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
+    const separateurDemandes = "&"
+    const codesDejaInscrits = initialiserCodesDejaInscrits();
+    UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.click(reagirClickCheckboxDansFormulaire);
+
+    function initialiserCodesDejaInscrits(){
+        let codes_deja_inscrits = '';
+        for (let i = 0; i < UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.length; i++) {
+            let checkbox = UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS[i];
+            if (checkbox.checked) {
+                let codeUE = getCodeUniteEnseignement(checkbox);
+                codes_deja_inscrits += separateurDemandes + codeUE;
+            }
+        }
+        return codes_deja_inscrits
+    }
+
+    function reagirClickCheckboxDansFormulaire(event){
+        let checkbox = event.target;
+        let codeMiniFormation = checkbox.getAttribute('data-code-mini-formation');
+        let codeUniteEnseignement = getCodeUniteEnseignement(checkbox);
+        let demandeInscSerialisee = serializeDemandeInscription(codeMiniFormation, codeUniteEnseignement);
+
+        if (this.checked){
+            setBackgroundAndBadge(checkbox);
+            inscrire(demandeInscSerialisee);
+        } else {
+            resetBackgroundAndBadge(checkbox);
+            desinscrire(demandeInscSerialisee);
+        }
+    }
+
+    function getCodeUniteEnseignement(input){
+        return input.getAttribute('data-code-unite-enseignement');
+    }
+
+    function serializeDemandeInscription(codeMiniFormation, codeUniteEnseignement){
+        return `${separateurDemandes}${codeMiniFormation },${ codeUniteEnseignement }`;
+    }
+
+    function setBackgroundAndBadge(checkbox){
+        let closest_div = checkbox.closest("div[id^='div-inscription']");
+        const badge = '<span class="pull-right badge" style="background-color: rgba(3, 51, 173, 0.5);">Insc</span>';
+        $(badge).appendTo(closest_div);
+        checkbox.closest('tr').style.backgroundColor=COLOR_BADGE_INSC;
+    }
+
+    function resetBackgroundAndBadge(checkbox){
+        let closest_tr = checkbox.closest('tr');
+        closest_tr.style.backgroundColor="";
+        $(closest_tr).find("div[id^='div-inscription']").find('.badge').remove();
+    }
+
+    function inscrire(demandeInscSerialisee){
+        if (aDemandeDesinscription(demandeInscSerialisee)){
+            annulerDemandeDesinscription(demandeInscSerialisee);
+        }
+        else {
+            const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
+            if (!codesDejaInscrits.includes(codeUEAInscrire) && ! aDemandeInscription(demandeInscSerialisee)) {
+                // évite de redemander une réinscription à une UE qui était déjà inscrite
+                demandes_inscriptions += demandeInscSerialisee;
+                updateInputHiddenValue("demandes_inscriptions_dans_formulaire", demandes_inscriptions);
+            }
+        }
+    }
+
+    function desinscrire(demandeInscSerialisee){
+        if (aDemandeInscription(demandeInscSerialisee)){
+            annulerDemandeInscription(demandeInscSerialisee);
+        } else {
+            if (! aDemandeDesinscription(demandeInscSerialisee)){
+                demandes_desinscriptions += demandeInscSerialisee;
+                updateInputHiddenValue("demandes_desinscriptions", demandes_desinscriptions);
+            }
+        }
+    }
+
+    function updateInputHiddenValue(inputId, valeur){
+        document.getElementById(inputId).value = valeur;
+    }
+
+    function annulerDemandeInscription(demandeInscSerialisee){
+        demandes_inscriptions = demandes_inscriptions.replace(demandeInscSerialisee, "");
+    }
+
+    function annulerDemandeDesinscription(demandeInscSerialisee){
+        demandes_desinscriptions = demandes_desinscriptions.replace(demandeInscSerialisee, "");
+    }
+
+    function aDemandeDesinscription(demandeInscSerialisee){
+        return demandes_desinscriptions.includes(demandeInscSerialisee);
+    }
+
+    function aDemandeInscription(demandeInscSerialisee){
+        return demandes_inscriptions.includes(demandeInscSerialisee);
+    }
+
+    </script>
 {% endblock %}

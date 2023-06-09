@@ -48,7 +48,6 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, CompositionPA
     def activites_aide_reussite(self) -> Optional['ActivitesAideReussite']:
         return ActivitesAideReussiteService.get_activites_aide_reussite(self.person, self.code_programme)
 
-
     def get(self, request, *args, **kwargs):
         try:
             self.activites_aide_reussite
@@ -82,7 +81,6 @@ class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, CompositionPA
             return self.form_invalid(form)
 
         return super().form_valid(form)
-
 
     def get_success_url(self):
         return reverse("inscription-aux-cours:recapitulatif", kwargs={"code_programme": self.code_programme})
