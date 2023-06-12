@@ -166,8 +166,8 @@
     <script>
 
     const UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS = $("input[id^='unite_enseignement_inscriptible']");
-    let demandes_inscriptions = "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
-    let demandes_desinscriptions = "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
+    let demandes_inscriptions = localStorage.getItem("demandes_inscriptions_dans_formulaire") || "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
+    let demandes_desinscriptions = localStorage.getItem("demandes_desinscriptions") || "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
     const separateurDemandes = "&"
     const codesDejaInscrits = initialiserCodesDejaInscrits();
     UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.click(reagirClickCheckboxDansFormulaire);
@@ -197,6 +197,9 @@
             resetBackgroundAndBadge(checkbox);
             desinscrire(demandeInscSerialisee);
         }
+
+        updateInputHiddenValue("demandes_inscriptions_dans_formulaire", demandes_inscriptions);
+        updateInputHiddenValue("demandes_desinscriptions", demandes_desinscriptions);
     }
 
     function getCodeUniteEnseignement(input){
@@ -229,7 +232,6 @@
             if (!codesDejaInscrits.includes(codeUEAInscrire) && ! aDemandeInscription(demandeInscSerialisee)) {
                 // évite de redemander une réinscription à une UE qui était déjà inscrite
                 demandes_inscriptions += demandeInscSerialisee;
-                updateInputHiddenValue("demandes_inscriptions_dans_formulaire", demandes_inscriptions);
             }
         }
     }
@@ -240,13 +242,13 @@
         } else {
             if (! aDemandeDesinscription(demandeInscSerialisee)){
                 demandes_desinscriptions += demandeInscSerialisee;
-                updateInputHiddenValue("demandes_desinscriptions", demandes_desinscriptions);
             }
         }
     }
 
     function updateInputHiddenValue(inputId, valeur){
         document.getElementById(inputId).value = valeur;
+        localStorage.setItem(inputId, valeur);
     }
 
     function annulerDemandeInscription(demandeInscSerialisee){
@@ -264,6 +266,22 @@
     function aDemandeInscription(demandeInscSerialisee){
         return demandes_inscriptions.includes(demandeInscSerialisee);
     }
+
+    function loadStoredChoices(serializedValues, checked){
+        serializedValues.split("&,").forEach((code) => {
+            if(code) {
+                const checkbox = document.querySelector(`#unite_enseignement_inscriptible__${code}`);
+                checkbox.checked = checked;
+                checkbox.dispatchEvent(new Event('click'));
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function(event) {
+        loadStoredChoices(demandes_inscriptions, true);
+        loadStoredChoices(demandes_desinscriptions, false);
+    });
+
 
     </script>
 {% endblock %}
