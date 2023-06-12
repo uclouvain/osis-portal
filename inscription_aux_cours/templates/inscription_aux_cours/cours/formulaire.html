@@ -172,6 +172,11 @@
     const codesDejaInscrits = initialiserCodesDejaInscrits();
     UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.click(reagirClickCheckboxDansFormulaire);
 
+    let debounce_save_id;
+    const DEBOUNCE_DELAY = 500;
+
+    let demandes_cours_hors_formulaire =  [];
+
     function initialiserCodesDejaInscrits(){
         let codes_deja_inscrits = '';
         for (let i = 0; i < UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.length; i++) {
@@ -271,17 +276,42 @@
         serializedValues.split("&,").forEach((code) => {
             if(code) {
                 const checkbox = document.querySelector(`#unite_enseignement_inscriptible__${code}`);
-                checkbox.checked = checked;
-                checkbox.dispatchEvent(new Event('click'));
+                if(checkbox) {
+                    checkbox.checked = checked;
+                    checkbox.dispatchEvent(new Event('click'));
+                }
             }
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function(event) {
-        loadStoredChoices(demandes_inscriptions, true);
-        loadStoredChoices(demandes_desinscriptions, false);
+    document.querySelector('#id_demande_particuliere').addEventListener('input', (e) => {
+        clearTimeout(debounce_save_id);
+        debounce_save_id = setTimeout(() => localStorage.setItem('demande_particuliere', e.target.value), DEBOUNCE_DELAY);
     });
 
+    $('#id_cours').on('select2:select', function (e) {
+        demandes_cours_hors_formulaire.push(e.params.data.id);
+        localStorage.setItem('demandes_cours_hors_formulaire', JSON.stringify(demandes_cours_hors_formulaire));
+    });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // conserver les choix de cours inscrits / desinscrits
+        loadStoredChoices(demandes_inscriptions, true);
+        loadStoredChoices(demandes_desinscriptions, false);
+
+        // conserver la demande particuliere
+        const demandeParticuliere = localStorage.getItem('demande_particuliere');
+        if(demandeParticuliere) document.querySelector('#id_demande_particuliere').value = demandeParticuliere;
+
+        // conserver la selection de cours hors formulaire
+        const coursHorsFormulaire = new Set(JSON.parse(localStorage.getItem('demandes_cours_hors_formulaire')));
+        coursHorsFormulaire.forEach((cours) => {
+           const option = new Option(cours, cours, false, true);
+           $('#id_cours').append(option).trigger('change');
+        });
+    });
 
     </script>
 {% endblock %}
