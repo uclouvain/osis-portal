@@ -284,11 +284,13 @@
         });
     }
 
+    // sauvegarde localement la demande particulière au moment de la saisie
     document.querySelector('#id_demande_particuliere').addEventListener('input', (e) => {
         clearTimeout(debounce_save_id);
         debounce_save_id = setTimeout(() => localStorage.setItem('demande_particuliere', e.target.value), DEBOUNCE_DELAY);
     });
 
+    // sauvegarde localement les cours hors formulaire saisis via autocomplete
     $('#id_cours').on('select2:select', function (e) {
         demandes_cours_hors_formulaire.push(e.params.data.id);
         localStorage.setItem('demandes_cours_hors_formulaire', JSON.stringify(demandes_cours_hors_formulaire));
