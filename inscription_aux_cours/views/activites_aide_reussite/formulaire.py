@@ -35,10 +35,10 @@ from osis_inscription_cours_sdk.model.activites_aide_reussite import ActivitesAi
 from base.services.utils import ServiceException
 from inscription_aux_cours.forms.activites_aide_reussite.activites import ActivitesAideReussiteForm
 from inscription_aux_cours.services.activites_aide_reussite import ActivitesAideReussiteService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 
 
-class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, FormView):
+class FormulaireActivitesDeAideALaReussiteView(LoginRequiredMixin, CompositionPAEViewMixin, FormView):
     name = "formulaire-activites-aide-reussite"
 
     template_name = "inscription_aux_cours/activites_aide_reussite/formulaire.html"

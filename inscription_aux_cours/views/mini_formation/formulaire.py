@@ -38,12 +38,12 @@ from osis_inscription_cours_sdk.model.liste_mini_formations import ListeMiniForm
 from education_group.services.mini_training import MiniTrainingService
 from inscription_aux_cours.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_aux_cours.services.mini_formation import MiniFormationService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from program_management.services.programme import ProgrammeService
 
 
 @method_decorator(never_cache, name='dispatch')
-class FormulaireMiniFormationsView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+class FormulaireMiniFormationsView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = 'mini-formations-inscriptibles'
 
     # TemplateView
