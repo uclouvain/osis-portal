@@ -166,16 +166,25 @@
     <script>
 
     const UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS = $("input[id^='unite_enseignement_inscriptible']");
-    let demandes_inscriptions = localStorage.getItem("demandes_inscriptions_dans_formulaire") || "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
-    let demandes_desinscriptions = localStorage.getItem("demandes_desinscriptions") || "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
-    const separateurDemandes = "&"
+
+    const DEMANDES_INSCRIPTIONS_DANS_FORMULAIRE = "demandes_inscriptions_dans_formulaire";
+    const DEMANDES_DESINSCRIPTIONS = "demandes_desinscriptions";
+    const DEMANDE_PARTICULIERE = 'demande_particuliere';
+    const DEMANDES_COURS_HORS_FORMULAIRE = 'demandes_cours_hors_formulaire';
+
+    let demandes_inscriptions = localStorage.getItem(DEMANDES_INSCRIPTIONS_DANS_FORMULAIRE) || "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
+    let demandes_desinscriptions = localStorage.getItem(DEMANDES_DESINSCRIPTIONS) || "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
+    let demandes_cours_hors_formulaire =  [];
+
+    const separateurDemandes = "&";
     const codesDejaInscrits = initialiserCodesDejaInscrits();
     UNITES_ENSEIGNEMENT_CHCKBOX_INPUTS.click(reagirClickCheckboxDansFormulaire);
 
+    const ID_DEMANDE_PARTICULIERE = "#id_demande_particuliere";
+    const ID_COURS = "#id_cours";
+
     let debounce_save_id;
     const DEBOUNCE_DELAY = 500;
-
-    let demandes_cours_hors_formulaire =  [];
 
     function initialiserCodesDejaInscrits(){
         let codes_deja_inscrits = '';
@@ -203,8 +212,8 @@
             desinscrire(demandeInscSerialisee);
         }
 
-        updateInputHiddenValue("demandes_inscriptions_dans_formulaire", demandes_inscriptions);
-        updateInputHiddenValue("demandes_desinscriptions", demandes_desinscriptions);
+        updateInputHiddenValue(DEMANDES_INSCRIPTIONS_DANS_FORMULAIRE, demandes_inscriptions);
+        updateInputHiddenValue(DEMANDES_DESINSCRIPTIONS, demandes_desinscriptions);
     }
 
     function getCodeUniteEnseignement(input){
@@ -285,15 +294,15 @@
     }
 
     // sauvegarde localement la demande particulière au moment de la saisie
-    document.querySelector('#id_demande_particuliere').addEventListener('input', (e) => {
+    document.querySelector(ID_DEMANDE_PARTICULIERE).addEventListener('input', (e) => {
         clearTimeout(debounce_save_id);
-        debounce_save_id = setTimeout(() => localStorage.setItem('demande_particuliere', e.target.value), DEBOUNCE_DELAY);
+        debounce_save_id = setTimeout(() => localStorage.setItem(DEMANDE_PARTICULIERE, e.target.value), DEBOUNCE_DELAY);
     });
 
     // sauvegarde localement les cours hors formulaire saisis via autocomplete
-    $('#id_cours').on('select2:select', function (e) {
+    $(ID_COURS).on('select2:select', function (e) {
         demandes_cours_hors_formulaire.push(e.params.data.id);
-        localStorage.setItem('demandes_cours_hors_formulaire', JSON.stringify(demandes_cours_hors_formulaire));
+        localStorage.setItem(DEMANDES_COURS_HORS_FORMULAIRE, JSON.stringify(demandes_cours_hors_formulaire));
     });
 
 
@@ -304,14 +313,14 @@
         loadStoredChoices(demandes_desinscriptions, false);
 
         // conserver la demande particuliere
-        const demandeParticuliere = localStorage.getItem('demande_particuliere');
-        if(demandeParticuliere) document.querySelector('#id_demande_particuliere').value = demandeParticuliere;
+        const demandeParticuliere = localStorage.getItem(DEMANDE_PARTICULIERE);
+        if(demandeParticuliere) document.querySelector(ID_DEMANDE_PARTICULIERE).value = demandeParticuliere;
 
         // conserver la selection de cours hors formulaire
-        const coursHorsFormulaire = new Set(JSON.parse(localStorage.getItem('demandes_cours_hors_formulaire')));
+        const coursHorsFormulaire = new Set(JSON.parse(localStorage.getItem(DEMANDES_COURS_HORS_FORMULAIRE)));
         coursHorsFormulaire.forEach((cours) => {
            const option = new Option(cours, cours, false, true);
-           $('#id_cours').append(option).trigger('change');
+           $(ID_COURS).append(option).trigger('change');
         });
     });
 
