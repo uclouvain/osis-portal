@@ -26,6 +26,7 @@
 from django.utils.functional import cached_property
 
 from django.views.generic import TemplateView
+from django.urls import reverse
 from continuing_education.views.common import display_error_messages
 from base.services.utils import ServiceException
 from django.shortcuts import redirect
@@ -39,9 +40,12 @@ class MaPropositionDePaeView(TemplateView, CompositionPAEViewMixin):
 
     def get(self, request, *args, **kwargs):
         try:
-            return redirect(self.ma_proposition_de_pae.links['download'])
+            if self.ma_proposition_de_pae.get('links'):
+                return redirect(self.ma_proposition_de_pae['links']['download'])
         except ServiceException as e:
             display_error_messages(request, e.messages)
+        display_error_messages(self.request, self.ma_proposition_de_pae['message'])
+        return redirect(reverse("dashboard_home"))
 
     @cached_property
     def ma_proposition_de_pae(self):
