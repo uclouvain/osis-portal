@@ -296,7 +296,7 @@
 
     function loadStoredChoices(serializedValues, checked){
         serializedValues.split(separateurDemandes).forEach((serializedValue) => {
-            if(code) {
+            if(serializedValue) {
                 const [codeMiniFormation, codeUE] = serializedValue.split(',');
                 const checkbox = document.querySelector(`#unite_enseignement_inscriptible_${codeMiniFormation}_${codeUE}`);
                 if(checkbox && !checkbox.checked) {
