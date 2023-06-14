@@ -170,11 +170,24 @@
     const DEMANDES_INSCRIPTIONS_DANS_FORMULAIRE = "demandes_inscriptions_dans_formulaire";
     const DEMANDES_DESINSCRIPTIONS = "demandes_desinscriptions";
     const DEMANDE_PARTICULIERE = 'demande_particuliere';
+    const CONTEXTE_AJOUT_COURS_HORS_FORMULAIRE = "contexte_ajout_cours_hors_formulaire";
     const DEMANDES_COURS_HORS_FORMULAIRE = 'demandes_cours_hors_formulaire';
+
+    {% if not has_errors %}
+        // nettoie le localStorage
+        [
+            DEMANDES_INSCRIPTIONS_DANS_FORMULAIRE,
+            DEMANDES_DESINSCRIPTIONS,
+            DEMANDE_PARTICULIERE,
+            DEMANDES_COURS_HORS_FORMULAIRE,
+            CONTEXTE_AJOUT_COURS_HORS_FORMULAIRE
+        ].forEach(key => localStorage.removeItem(key));
+    {% endif %}
 
     let demandes_inscriptions = localStorage.getItem(DEMANDES_INSCRIPTIONS_DANS_FORMULAIRE) || "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
     let demandes_desinscriptions = localStorage.getItem(DEMANDES_DESINSCRIPTIONS) || "";  // String format : "codeMiniformation,codeUE1&codeMiniformation,codeUE2"
     let demandes_cours_hors_formulaire =  [];
+    let contexte_cours_hors_formulaire = "";
 
     const separateurDemandes = "&";
     const codesDejaInscrits = initialiserCodesDejaInscrits();
@@ -243,7 +256,7 @@
         }
         else {
             const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
-            if (!codesDejaInscrits.includes(codeUEAInscrire) && ! aDemandeInscription(demandeInscSerialisee)) {
+            if (!codesDejaInscrits.includes(codeUEAInscrire) && !aDemandeInscription(demandeInscSerialisee)) {
                 // évite de redemander une réinscription à une UE qui était déjà inscrite
                 demandes_inscriptions += demandeInscSerialisee;
             }
@@ -282,10 +295,11 @@
     }
 
     function loadStoredChoices(serializedValues, checked){
-        serializedValues.split("&,").forEach((code) => {
+        serializedValues.split(separateurDemandes).forEach((code) => {
             if(code) {
-                const checkbox = document.querySelector(`#unite_enseignement_inscriptible__${code}`);
-                if(checkbox) {
+                const [codeMiniFormation, codeUE] = code.split(',');
+                const checkbox = document.querySelector(`#unite_enseignement_inscriptible_${codeMiniFormation}_${codeUE}`);
+                if(checkbox && !checkbox.checked) {
                     checkbox.checked = checked;
                     checkbox.dispatchEvent(new Event('click'));
                 }
@@ -305,6 +319,9 @@
         localStorage.setItem(DEMANDES_COURS_HORS_FORMULAIRE, JSON.stringify(demandes_cours_hors_formulaire));
     });
 
+    document.querySelectorAll('input[name="code_mini_formation"]').forEach(el => el.addEventListener('change', () => {
+        if(el.checked) localStorage.setItem(CONTEXTE_AJOUT_COURS_HORS_FORMULAIRE, el.value);
+    }));
 
     document.addEventListener('DOMContentLoaded', () => {
 
@@ -316,12 +333,17 @@
         const demandeParticuliere = localStorage.getItem(DEMANDE_PARTICULIERE);
         if(demandeParticuliere) document.querySelector(ID_DEMANDE_PARTICULIERE).value = demandeParticuliere;
 
+        // conserver le contexte de l'ajout de cours hors formulaire
+        const contexteAjout = localStorage.getItem(CONTEXTE_AJOUT_COURS_HORS_FORMULAIRE);
+        if(contexteAjout) document.querySelector(`input[name="code_mini_formation"][value=${contexteAjout}]`).checked = true;
+
         // conserver la selection de cours hors formulaire
         const coursHorsFormulaire = new Set(JSON.parse(localStorage.getItem(DEMANDES_COURS_HORS_FORMULAIRE)));
         coursHorsFormulaire.forEach((cours) => {
            const option = new Option(cours, cours, false, true);
            $(ID_COURS).append(option).trigger('change');
         });
+
     });
 
     </script>

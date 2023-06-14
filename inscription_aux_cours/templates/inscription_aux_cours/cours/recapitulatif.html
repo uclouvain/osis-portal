@@ -159,16 +159,4 @@
         </div>
     </div>
 
-    <script>
-
-        // nettoie le localStorage pour le prochain accès au formulaire
-        [
-            'demandes_inscriptions_dans_formulaire',
-            'demandes_desinscriptions',
-            'demande_particuliere',
-            'demandes_cours_hors_formulaire'
-        ].forEach(key => localStorage.removeItem(key));
-
-    </script>
-
 {% endblock %}
