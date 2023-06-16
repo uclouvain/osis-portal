@@ -23,7 +23,7 @@
 #
 ##############################################################################
 from decimal import Decimal
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 
 import attr
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -38,6 +38,8 @@ from osis_learning_unit_sdk.model.classe import Classe
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
 from education_group.services.training import TrainingService
+from frontoffice.settings.osis_sdk import api_client_threads_pool
+from frontoffice.settings.osis_sdk.api_client_threads_pool import ConcurrentApiRequestRow
 from inscription_aux_cours.forms.cours.demande_particuliere import DemandeParticuliereForm
 from inscription_aux_cours.forms.cours.inscription_hors_programme import InscriptionHorsProgrammeForm
 from inscription_aux_cours.services.complement import ComplementService
@@ -67,10 +69,55 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
     template_name = "inscription_aux_cours/cours/formulaire.html"
 
     @cached_property
+    def api_requests_results(self) -> Dict[str, Any]:
+        return api_client_threads_pool.instance.make_concurrent_api_requests([
+            ConcurrentApiRequestRow(
+                name='formulaire_inscriptions_cours',
+                method=FormulaireInscriptionService().recuperer,
+                kwargs={'person': self.person, 'code_programme': self.code_programme}
+            ),
+            ConcurrentApiRequestRow(
+                name='marquer_comme_lu',
+                method=FormulaireInscriptionService().marquer_comme_lu,
+                kwargs={'person': self.person, 'code_programme': self.code_programme}
+            ),
+            ConcurrentApiRequestRow(
+                name='programme_annuel_etudiant',
+                method=CoursService().recuperer_programme_annuel,
+                kwargs={'person': self.person, 'code_programme': self.code_programme}
+            ),
+            ConcurrentApiRequestRow(
+                name='mini_formations_inscriptibles',
+                method=MiniFormationService().get_inscriptibles,
+                kwargs={'person': self.person, 'code_programme': self.code_programme}
+            ),
+            ConcurrentApiRequestRow(
+                name='credits_acquis_dans_mini_formations',
+                method=ProgressionService.recuperer_credits_acquis_dans_mini_formations,
+                kwargs={'person': self.person, 'sigle_programme': self.sigle_formation.replace('11BA', '1BA')}
+            ),
+            ConcurrentApiRequestRow(
+                name='credits_formation',
+                method=TrainingService.get_credits,
+                kwargs={
+                    'person': self.person,
+                    'year': self.annee_academique,
+                    'acronym': self.sigle_formation.replace('11BA', '1BA'),
+                }
+            ),
+            ConcurrentApiRequestRow(
+                name='a_un_complement_de_formation',
+                method=ComplementService.a_un_complement,
+                kwargs={
+                    'person': self.person,
+                    'code_programme': self.code_programme,
+                }
+            ),
+        ])
+
+    @cached_property
     def formulaire_inscriptions_cours(self):
-        formulaire = FormulaireInscriptionService().recuperer(self.person, self.code_programme)
-        FormulaireInscriptionService().marquer_comme_lu(self.person, self.code_programme)
-        return formulaire
+        return self.api_requests_results['formulaire_inscriptions_cours']
 
     @cached_property
     def formulaire_inscription_hors_programme(self) -> 'InscriptionHorsProgrammeForm':
@@ -89,7 +136,7 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
 
     @cached_property
     def programme_annuel_etudiant(self) -> 'ProgrammeAnnuelEtudiant':
-        return CoursService().recuperer_programme_annuel(self.person, self.code_programme)
+        return self.api_requests_results['programme_annuel_etudiant']
 
     @cached_property
     def inscriptions_hors_programme(self) -> List['InscriptionAUnCoursHorsProgramme']:
@@ -147,13 +194,11 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
 
     @cached_property
     def a_des_mini_formations_inscriptibles(self) -> bool:
-        return bool(MiniFormationService().get_inscriptibles(self.person, self.code_programme).mini_formations)
+        return bool(self.api_requests_results['mini_formations_inscriptibles'].mini_formations)
 
     @cached_property
     def credits_acquis_dans_mini_formations(self) -> Dict[str, str]:
-        credits_acquis = ProgressionService.recuperer_credits_acquis_dans_mini_formations(
-            person=self.person, sigle_programme=self.sigle_formation.replace('11BA', '1BA')
-        )
+        credits_acquis = self.api_requests_results['credits_acquis_dans_mini_formations']
         return {credits.code: credits.credits_acquis_de_progression for credits in credits_acquis}
 
     def get_context_data(self, **kwargs):
@@ -174,13 +219,11 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
 
     @cached_property
     def credits_formation(self) -> int:
-        return TrainingService.get_credits(
-            person=self.person, year=self.annee_academique, acronym=self.sigle_formation.replace('11BA', '1BA')
-        )
+        return self.api_requests_results['credits_formation']
 
     @cached_property
     def a_un_complement_de_formation(self) -> bool:
-        return ComplementService.a_un_complement(person=self.person, code_programme=self.code_programme)
+        return self.api_requests_results['a_un_complement_de_formation']
 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:

@@ -1,6 +1,9 @@
 import atexit
+from collections import namedtuple
 from multiprocessing.pool import ThreadPool
-from typing import List
+from typing import Dict, List
+
+ConcurrentApiRequestRow = namedtuple('ConcurrentApiRequestRow', ['name', 'method', 'kwargs'])
 
 
 class ApiClientThreadsPool(object):
@@ -23,13 +26,17 @@ class ApiClientThreadsPool(object):
             if hasattr(atexit, 'unregister'):
                 atexit.unregister(self.close)
 
-    def make_concurrent_api_requests(self, api_requests: List[any]):
-        api_results = []
-        for api_request in api_requests:
-            api_results.append(
-                self._pool.apply_async(api_request)
+    def make_concurrent_api_requests(self, concurrent_api_requests: List[ConcurrentApiRequestRow]):
+        concurrent_results = {}
+        for concurrent_api_request in concurrent_api_requests:
+            concurrent_results[concurrent_api_request.name] = self._pool.apply_async(
+                concurrent_api_request.method,
+                kwds=concurrent_api_request.kwargs
             )
-        return [api_result.get() for api_result in api_requests]
+
+        return {
+            name: api_result.get() for name, api_result in concurrent_results.items()
+        }
 
 
-instance = ApiClientThreadsPool(pool_threads=4)
+instance = ApiClientThreadsPool(pool_threads=10)
