@@ -299,7 +299,7 @@
             if(serializedValue) {
                 const [codeMiniFormation, codeUE] = serializedValue.split(',');
                 const checkbox = document.querySelector(`#unite_enseignement_inscriptible_${codeMiniFormation}_${codeUE}`);
-                if(checkbox && !checkbox.checked) {
+                if(checkbox) {
                     checkbox.checked = checked;
                     checkbox.dispatchEvent(new Event('click'));
                 }
@@ -313,9 +313,14 @@
         debounce_save_id = setTimeout(() => localStorage.setItem(DEMANDE_PARTICULIERE, e.target.value), DEBOUNCE_DELAY);
     });
 
-    // sauvegarde localement les cours hors formulaire saisis via autocomplete
-    $(ID_COURS).on('select2:select', function (e) {
-        demandes_cours_hors_formulaire.push(e.params.data.id);
+    // sauvegarde localement les cours hors formulaire selectionnés / déselectionnés via autocomplete
+    $(ID_COURS).on('select2:select select2:unselect', function (e) {
+        if(e.params.data.selected){
+            demandes_cours_hors_formulaire.push(e.params.data.id);
+        } else {
+            const index = demandes_cours_hors_formulaire.indexOf(e.params.data.id);
+            demandes_cours_hors_formulaire.splice(index, 1);
+        }
         localStorage.setItem(DEMANDES_COURS_HORS_FORMULAIRE, JSON.stringify(demandes_cours_hors_formulaire));
     });
 
