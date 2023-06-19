@@ -219,10 +219,10 @@
 
         if (this.checked){
             setBackgroundAndBadge(checkbox);
-            inscrire(demandeInscSerialisee);
+            inscrire(checkbox, demandeInscSerialisee);
         } else {
             resetBackgroundAndBadge(checkbox);
-            desinscrire(demandeInscSerialisee);
+            desinscrire(checkbox, demandeInscSerialisee);
         }
 
         updateInputHiddenValue(DEMANDES_INSCRIPTIONS_DANS_FORMULAIRE, demandes_inscriptions);
@@ -250,12 +250,13 @@
         $(closest_tr).find("div[id^='div-inscription']").find('.badge').remove();
     }
 
-    function inscrire(demandeInscSerialisee){
+    function inscrire(checkbox, demandeInscSerialisee){
+        const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
+        alignerCaseInscriptionAutreContexte(checkbox, codeUEAInscrire);
         if (aDemandeDesinscription(demandeInscSerialisee)){
             annulerDemandeDesinscription(demandeInscSerialisee);
         }
         else {
-            const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
             if (!codesDejaInscrits.includes(codeUEAInscrire) && !aDemandeInscription(demandeInscSerialisee)) {
                 // évite de redemander une réinscription à une UE qui était déjà inscrite
                 demandes_inscriptions += demandeInscSerialisee;
@@ -263,7 +264,9 @@
         }
     }
 
-    function desinscrire(demandeInscSerialisee){
+    function desinscrire(checkbox, demandeInscSerialisee){
+        const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
+        alignerCaseInscriptionAutreContexte(checkbox, codeUEAInscrire);
         if (aDemandeInscription(demandeInscSerialisee)){
             annulerDemandeInscription(demandeInscSerialisee);
         } else {
@@ -294,12 +297,23 @@
         return demandes_inscriptions.includes(demandeInscSerialisee);
     }
 
+    function alignerCaseInscriptionAutreContexte(checkbox, code){
+        document.querySelectorAll(`input[data-code-unite-enseignement="${code}"]`).forEach(el => {
+            if(el.id !== checkbox.id) {
+                el.checked = checkbox.checked;
+                el.disabled = checkbox.checked;
+                resetBackgroundAndBadge(el);
+            }
+        });
+    }
+
+
     function loadStoredChoices(serializedValues, checked){
         serializedValues.split(separateurDemandes).forEach((serializedValue) => {
             if(serializedValue) {
                 const [codeMiniFormation, codeUE] = serializedValue.split(',');
                 const checkbox = document.querySelector(`#unite_enseignement_inscriptible_${codeMiniFormation}_${codeUE}`);
-                if(checkbox && !checkbox.checked) {
+                if(checkbox) {
                     checkbox.checked = checked;
                     checkbox.dispatchEvent(new Event('click'));
                 }
@@ -313,9 +327,14 @@
         debounce_save_id = setTimeout(() => localStorage.setItem(DEMANDE_PARTICULIERE, e.target.value), DEBOUNCE_DELAY);
     });
 
-    // sauvegarde localement les cours hors formulaire saisis via autocomplete
-    $(ID_COURS).on('select2:select', function (e) {
-        demandes_cours_hors_formulaire.push(e.params.data.id);
+    // sauvegarde localement les cours hors formulaire selectionnés / déselectionnés via autocomplete
+    $(ID_COURS).on('select2:select select2:unselect', function (e) {
+        if(e.params.data.selected){
+            demandes_cours_hors_formulaire.push(e.params.data.id);
+        } else {
+            const index = demandes_cours_hors_formulaire.indexOf(e.params.data.id);
+            demandes_cours_hors_formulaire.splice(index, 1);
+        }
         localStorage.setItem(DEMANDES_COURS_HORS_FORMULAIRE, JSON.stringify(demandes_cours_hors_formulaire));
     });
 
@@ -344,6 +363,7 @@
            $(ID_COURS).append(option).trigger('change');
         });
 
+        document.querySelectorAll('.badge_insc_different_context').forEach(el => el.parentNode.querySelector('input[type="checkbox"]').disabled = true);
     });
 
     </script>
