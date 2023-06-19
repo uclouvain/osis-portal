@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-07 22:00+0200\n"
+"POT-Creation-Date: 2023-06-19 14:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -394,6 +394,9 @@ msgstr ""
 "Votre faculté propose des <ins><a href='https://uclouvain.be/fr/etudier/"
 "activites-secteurs-et-facs.html' target='_blank'>dispositifs d'aide à la "
 "réussite</a></ins> afin de vous accompagner tout au long des études."
+
+msgid "Your proposal has not been saved."
+msgstr "Votre proposition de programme annuel n'a pas été enregistrée."
 
 #, python-format
 msgid ""
