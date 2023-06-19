@@ -219,10 +219,10 @@
 
         if (this.checked){
             setBackgroundAndBadge(checkbox);
-            inscrire(demandeInscSerialisee);
+            inscrire(checkbox, demandeInscSerialisee);
         } else {
             resetBackgroundAndBadge(checkbox);
-            desinscrire(demandeInscSerialisee);
+            desinscrire(checkbox, demandeInscSerialisee);
         }
 
         updateInputHiddenValue(DEMANDES_INSCRIPTIONS_DANS_FORMULAIRE, demandes_inscriptions);
@@ -250,12 +250,13 @@
         $(closest_tr).find("div[id^='div-inscription']").find('.badge').remove();
     }
 
-    function inscrire(demandeInscSerialisee){
+    function inscrire(checkbox, demandeInscSerialisee){
+        const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
+        alignerCaseInscriptionAutreContexte(checkbox, codeUEAInscrire);
         if (aDemandeDesinscription(demandeInscSerialisee)){
             annulerDemandeDesinscription(demandeInscSerialisee);
         }
         else {
-            const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
             if (!codesDejaInscrits.includes(codeUEAInscrire) && !aDemandeInscription(demandeInscSerialisee)) {
                 // évite de redemander une réinscription à une UE qui était déjà inscrite
                 demandes_inscriptions += demandeInscSerialisee;
@@ -263,7 +264,9 @@
         }
     }
 
-    function desinscrire(demandeInscSerialisee){
+    function desinscrire(checkbox, demandeInscSerialisee){
+        const codeUEAInscrire = demandeInscSerialisee.split(',')[1];
+        alignerCaseInscriptionAutreContexte(checkbox, codeUEAInscrire);
         if (aDemandeInscription(demandeInscSerialisee)){
             annulerDemandeInscription(demandeInscSerialisee);
         } else {
@@ -293,6 +296,17 @@
     function aDemandeInscription(demandeInscSerialisee){
         return demandes_inscriptions.includes(demandeInscSerialisee);
     }
+
+    function alignerCaseInscriptionAutreContexte(checkbox, code){
+        document.querySelectorAll(`input[data-code-unite-enseignement="${code}"]`).forEach(el => {
+            if(el.id !== checkbox.id) {
+                el.checked = checkbox.checked;
+                el.disabled = checkbox.checked;
+                resetBackgroundAndBadge(el);
+            }
+        });
+    }
+
 
     function loadStoredChoices(serializedValues, checked){
         serializedValues.split(separateurDemandes).forEach((serializedValue) => {
@@ -349,6 +363,7 @@
            $(ID_COURS).append(option).trigger('change');
         });
 
+        document.querySelectorAll('.badge_insc_different_context').forEach(el => el.parentNode.querySelector('input[type="checkbox"]').disabled = true);
     });
 
     </script>
