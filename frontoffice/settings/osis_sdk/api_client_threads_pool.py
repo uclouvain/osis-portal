@@ -1,5 +1,6 @@
 import atexit
 from collections import namedtuple
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from multiprocessing.pool import ThreadPool
 from typing import Dict, List
 
@@ -13,30 +14,32 @@ class ApiClientThreadsPool(object):
     """
     def __init__(self, pool_threads=1):
         atexit.register(self.close)
-        self._pool = ThreadPool(pool_threads)
+        self._executor = ThreadPoolExecutor(max_workers=pool_threads, thread_name_prefix='API-CLIENT-THREADS')
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
 
     def close(self):
-        if self._pool:
-            self._pool.close()
-            self._pool.join()
-            self._pool = None
+        if self._executor:
+            self._executor.shutdown(wait=True)
             if hasattr(atexit, 'unregister'):
                 atexit.unregister(self.close)
 
     def make_concurrent_api_requests(self, concurrent_api_requests: List[ConcurrentApiRequestRow]):
         concurrent_results = {}
+        futures = []
         for concurrent_api_request in concurrent_api_requests:
-            concurrent_results[concurrent_api_request.name] = self._pool.apply_async(
-                concurrent_api_request.method,
-                kwds=concurrent_api_request.kwargs
+            futures.append(
+                self._executor.submit(
+                    lambda c: {c.name: c.method(**c.kwargs)},
+                    c=concurrent_api_request,
+                )
             )
 
-        return {
-            name: api_result.get() for name, api_result in concurrent_results.items()
-        }
+        for future in as_completed(futures):
+            task_result = future.result()
+            concurrent_results.update(task_result)
+        return concurrent_results
 
 
 instance = ApiClientThreadsPool(pool_threads=10)

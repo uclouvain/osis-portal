@@ -113,6 +113,14 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
                     'code_programme': self.code_programme,
                 }
             ),
+            ConcurrentApiRequestRow(
+                name='demande_particuliere',
+                method=DemandeParticuliereService().recuperer,
+                kwargs={
+                    'person': self.person,
+                    'code_programme': self.code_programme,
+                }
+            )
         ])
 
     @cached_property
@@ -228,7 +236,7 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:
         try:
-            return DemandeParticuliereService().recuperer(self.person, self.code_programme)
+            return self.api_requests_results['demande_particuliere']
         except ServiceException:
             return None
 
