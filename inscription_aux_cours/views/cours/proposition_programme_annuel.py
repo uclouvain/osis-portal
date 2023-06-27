@@ -133,6 +133,11 @@ class EnregistrerPropositionProgrammeAnnuelView(LoginRequiredMixin, CompositionP
             messages.add_message(
                 self.request,
                 messages.ERROR,
+                str(_("Your proposal has not been saved.")),
+            )
+            messages.add_message(
+                self.request,
+                messages.ERROR,
                 str(_("Please fix errors to save and continue to the recap of your annual program proposal")),
             )
             return redirect('inscription-aux-cours:formulaire-inscription-cours', **self.kwargs)
