@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-08 10:46+0200\n"
+"POT-Creation-Date: 2023-06-19 17:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,9 +33,6 @@ msgstr ""
 msgid "Activiy with prerequisites"
 msgstr ""
 
-msgid "Add"
-msgstr ""
-
 msgid "Add a course that is not in the offer"
 msgstr ""
 
@@ -46,6 +43,9 @@ msgid "Annual program proposal"
 msgstr ""
 
 msgid "Block"
+msgstr ""
+
+msgid "Code"
 msgstr ""
 
 msgid "Continue to courses enrollment"
@@ -96,6 +96,10 @@ msgstr ""
 msgid "Enrolled in a learning unit with a dispensatory test"
 msgstr ""
 
+#, python-format
+msgid "Enrolled to %(code_ue)s."
+msgstr ""
+
 msgid "Enrolled to the minor or option"
 msgstr ""
 
@@ -131,6 +135,13 @@ msgstr ""
 msgid "Indicates annual block"
 msgstr ""
 
+#, python-format
+msgid ""
+"It seems you didn't acquired the prerequisites for the following courses: "
+"%(liste_codes_ue)s. This submission will be examined by your faculty after "
+"the submission of your proposal."
+msgstr ""
+
 msgid "Last name"
 msgstr ""
 
@@ -138,6 +149,12 @@ msgid "Learning Unit Year"
 msgstr ""
 
 msgid "Learning unit failed for a past academic year"
+msgstr ""
+
+msgid "Learning unit with prerequisites acquired"
+msgstr ""
+
+msgid "Learning unit with prerequisites not acquired"
 msgstr ""
 
 msgid "Legend"
@@ -153,6 +170,9 @@ msgid "Modify my enrollments"
 msgstr ""
 
 msgid "Modify my minors and options enrollments"
+msgstr ""
+
+msgid "My composition enrollment"
 msgstr ""
 
 msgid "My courses enrollment"
@@ -188,6 +208,11 @@ msgid "Offered this year but not the following year"
 msgstr ""
 
 msgid "Optional"
+msgstr ""
+
+msgid ""
+"Please fix errors to save and continue to the recap of your annual program "
+"proposal"
 msgstr ""
 
 msgid "Please modify your enrollments."
@@ -288,10 +313,6 @@ msgstr ""
 msgid "You didn't acquired the prerequisites for the following courses:"
 msgstr ""
 
-#, python-brace-format
-msgid "You have been enrolled to {codes_cours}"
-msgstr ""
-
 msgid ""
 "Your annual program proposal contains more than 90 credits. The student's "
 "annual program (PAE) is supposed to contain 60 credits, maximum 75."
@@ -314,6 +335,9 @@ msgid ""
 "Your faculty organize <ins><a href='https://uclouvain.be/fr/etudier/"
 "activites-secteurs-et-facs.html' target='_blank'>support systems</a></ins> "
 "to help you succeed throughout the year."
+msgstr ""
+
+msgid "Your proposal has not been saved."
 msgstr ""
 
 #, python-format

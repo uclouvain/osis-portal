@@ -37,6 +37,7 @@ from osis_program_management_sdk.model.programme import Programme
 
 from inscription_aux_cours import formatter
 from inscription_aux_cours.data.proposition_programme_annuel import PropositionProgrammeAnnuel
+from inscription_aux_cours.services.code_unite_enseignement import CodeParser
 from inscription_aux_cours.views.cours.formulaire import InscriptionAUnCoursHorsProgramme
 from program_management.services.programme import ProgrammeService
 
@@ -150,3 +151,8 @@ def get_sigle_programme(programme: 'Programme') -> str:
 @register.filter
 def get_intitule_programme(programme: 'Programme') -> str:
     return formatter.get_intitule_programme(programme)
+
+
+@register.filter
+def get_code_ue_sans_classe(code: str) -> str:
+    return CodeParser.get_code_unite_enseignement(code)

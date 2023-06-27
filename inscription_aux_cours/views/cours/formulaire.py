@@ -26,6 +26,7 @@ from decimal import Decimal
 from typing import List, Optional, Dict
 
 import attr
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
@@ -120,7 +121,7 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
         if not inscriptions_hors_programme:
             return []
         codes_cours = [cours.code_cours for cours in inscriptions_hors_programme]
-        unites_enseignements_par_code = self._rechercher_unites_enseignements(codes_cours)
+        unites_enseignements_par_code = self.recuperer_intitules_unites_enseignement(codes_cours)
         classes_par_code = self._rechercher_classes(codes_cours)
 
         return [
@@ -170,6 +171,7 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
             'a_un_complement': self.a_un_complement_de_formation,
             'credits_acquis_de_progression_par_code': self.credits_acquis_dans_mini_formations,
             'credits_formation': self.credits_formation,
+            'has_errors': self.has_errors(),
         }
 
     @cached_property
@@ -195,3 +197,6 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
         if self.demande_particuliere:
             initial = {'demande_particuliere': self.demande_particuliere.demande}
         return DemandeParticuliereForm(initial=initial)
+
+    def has_errors(self):
+        return bool([m.message for m in messages.get_messages(self.request) if m.level == messages.ERROR])
