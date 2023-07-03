@@ -23,7 +23,7 @@
 #
 ##############################################################################
 from decimal import Decimal
-from typing import List
+from typing import List, Set
 
 import attr
 
@@ -59,3 +59,7 @@ class PropositionProgrammeAnnuel:
         return any(
             [inscription for contexte in self.inscriptions_par_contexte for inscription in contexte.cours]
         )
+
+    @property
+    def codes_inscrits(self) -> Set['str']:
+        return {inscription.code for contexte in self.inscriptions_par_contexte for inscription in contexte.cours}

@@ -1,6 +1,6 @@
 .sticky-header {
     position: sticky;
-    top: 155px;
+    top: 60px;
     background-color: white;
     box-shadow: inset 0 -2px 0 #000000;
     z-index: 1000;
@@ -100,4 +100,8 @@ textarea.unresizable {
 
 [aria-expanded="false"] .expanded {
     display: none;
+}
+
+.vert {
+    color: rgba(138, 188, 62, 1) !important;
 }

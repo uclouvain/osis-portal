@@ -1,3 +1,4 @@
+##############################################################################
 #
 #    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
@@ -5,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,44 +24,27 @@
 #
 ##############################################################################
 from functools import partial
-from typing import List
-
 import osis_inscription_cours_sdk
-from osis_inscription_cours_sdk.api import cours_api
-from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
-from osis_inscription_cours_sdk.model.unite_enseignement_avec_prerequis import UniteEnseignementAvecPrerequis
+from osis_inscription_cours_sdk.api import pae_valide_jury_api
 
 from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
 
-COURS = 'UNITE_ENSEIGNEMENT'
-GROUPEMENT = 'GROUPEMENT'
 
-
-class CoursService:
-
+class PdfPaeValideJuryService:
     @staticmethod
-    def recuperer_programme_annuel(
-            person: 'Person',
-            code_programme: str,
-    ) -> 'ProgrammeAnnuelEtudiant':
-        return _cours_api_call(
+    def recuperer(person: 'Person', code_programme: str):
+        return _pdf_pae_valide_jury_api_call(
             person,
-            "inscriptions_cours",
-            code_programme=code_programme
-        )
-
-    @staticmethod
-    def recuperer_unites_enseignement_avec_prerequis(
-            person: 'Person',
-            code_programme: str,
-    ) -> List['UniteEnseignementAvecPrerequis']:
-        return _cours_api_call(
-            person,
-            "prerequis_acquis",
+            "mon_pae_valide_jury",
             code_programme=code_programme,
         )
 
 
-_cours_api_call = partial(call_api, inscription_aux_cours_sdk, osis_inscription_cours_sdk, cours_api.CoursApi)
+_pdf_pae_valide_jury_api_call = partial(
+    call_api,
+    inscription_aux_cours_sdk,
+    osis_inscription_cours_sdk,
+    pae_valide_jury_api.PaeValideJuryApi,
+)
