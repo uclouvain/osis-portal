@@ -27,6 +27,8 @@ from django.urls import path, include, re_path
 
 from inscription_aux_cours.views.activites_aide_reussite.formulaire import FormulaireActivitesDeAideALaReussiteView
 from inscription_aux_cours.views.cours.formulaire import FormulaireCompositionPAEView
+from inscription_aux_cours.views.cours.ma_proposition_de_pae import MaPropositionDePaeView
+from inscription_aux_cours.views.cours.mon_pae_valide_jury import MonPaeValideJuryView
 from inscription_aux_cours.views.cours.proposition_programme_annuel import EnregistrerPropositionProgrammeAnnuelView
 from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
 from inscription_aux_cours.views.cours.soumettre_proposition import SoumettrePropositionView
@@ -62,6 +64,8 @@ urlpatterns = [
                     name=EnregistrerPropositionProgrammeAnnuelView.name,
                 ),
                 path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),
+                path('ma_proposition_de_pae/', MaPropositionDePaeView.as_view(), name=MaPropositionDePaeView.name),
+                path('mon_pae_valide_jury/', MonPaeValideJuryView.as_view(), name=MonPaeValideJuryView.name),
                 path(
                     'mineures_options/',
                     include(
