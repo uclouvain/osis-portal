@@ -198,6 +198,9 @@ msgstr ""
 msgid "Not offered this year but offered the following year"
 msgstr ""
 
+msgid "Number of credits earned for"
+msgstr ""
+
 msgid "Offer"
 msgstr ""
 

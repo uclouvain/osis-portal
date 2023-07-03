@@ -229,6 +229,9 @@ msgstr "Non"
 msgid "Not offered this year but offered the following year"
 msgstr "Non organisé cette année académique mais organisé l’année suivante"
 
+msgid "Number of credits earned for"
+msgstr "Nombre de crédits acquis pour"
+
 msgid "Offer"
 msgstr "Formation"
 
