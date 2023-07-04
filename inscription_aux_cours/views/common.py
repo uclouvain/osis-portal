@@ -112,6 +112,11 @@ def recuperer_programmes(person: 'Person', annee: int, inscriptions: List['Inscr
     codes = [inscription.code_programme for inscription in inscriptions]
     programmes = ProgrammeService.rechercher(person, annee=annee, codes=codes)
 
+    # exclure doctorat et formation doctorale
+    programmes = [
+        p for p in programmes if not (ProgrammeService.est_doctorat(p) or ProgrammeService.est_formation_doctorale(p))
+    ]
+
     codes_inscriptions_premiere_annee = [
         inscription.code_programme for inscription in inscriptions if inscription.est_en_premiere_annee
     ]
