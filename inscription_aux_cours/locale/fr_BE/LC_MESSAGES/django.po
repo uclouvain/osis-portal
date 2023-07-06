@@ -307,6 +307,11 @@ msgstr ""
 "Les mineures ou options suivantes auxquelles vous êtes inscrit.e ne sont "
 "plus proposées cette année académique:"
 
+msgid ""
+"The size of your screen does not allow for optimal navigation within the "
+"form. Please use, if possible, a larger screen for easier navigation."
+msgstr "La taille de votre écran ne permet pas une navigation optimale au sein du formulaire. Veuillez utiliser, si possible, un écran plus grand pour une navigation plus aisée."
+
 #, python-brace-format
 msgid ""
 "This minor has access conditions, please refer to the procedure to enroll: "
@@ -415,5 +420,3 @@ msgstr ""
 msgid "credits"
 msgstr "crédits"
 
-msgid "credits earned"
-msgstr "crédits acquis"
