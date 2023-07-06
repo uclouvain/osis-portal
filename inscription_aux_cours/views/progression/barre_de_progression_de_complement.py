@@ -66,5 +66,5 @@ class BarreDeProgressionDeComplementView(LoginRequiredMixin, TemplateView):
             'credits_inscrits': self.progression.credits_inscrits,
             'credits_de_progression_potentielle': self.progression.credits_de_progression_potentielle,
             'intitule': self.progression.intitule,
-            'condition_d_affichage': True,
+            'condition_d_affichage': bool(self.progression.credits_acquis),
         }
