@@ -141,10 +141,6 @@ msgstr ""
 "Je complète ma composition de programme annuel par des activités d'aide à la "
 "réussite"
 
-#, fuzzy
-#| msgid ""
-#| "In accordance with article 39 §1 of the RGEE, I complete my enrollment "
-#| "with activities to help me succeed."
 msgid ""
 "In accordance with article 39 1 of the RGEE, I complete my enrollment with "
 "activities to help me succeed."
@@ -152,11 +148,6 @@ msgstr ""
 "Conformément à l'article 39 §1er du RGEE, je complète ma composition de "
 "programme annuel d'activités d'aide à la réussite."
 
-#, fuzzy
-#| msgid ""
-#| "In accordance with article 39 §1 of the RGEE, I have been informed that I "
-#| "can complete my enrollment with success support activities. I have "
-#| "decided not to complete my enrollment with success support activities."
 msgid ""
 "In accordance with article 39 1 of the RGEE, I have been informed that I can "
 "complete my enrollment with success support activities. I have decided not "
