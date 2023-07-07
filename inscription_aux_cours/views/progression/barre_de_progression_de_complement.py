@@ -37,7 +37,7 @@ class BarreDeProgressionDeComplementView(LoginRequiredMixin, TemplateView):
     name = 'barre-progression-complement-view'
 
     # HtmxMixin
-    template_name = "inscription_aux_cours/blocks/barre_de_progression.html"
+    template_name = "inscription_aux_cours/blocks/barre_de_progression_de_complement.html"
 
     @cached_property
     def person(self) -> 'Person':
