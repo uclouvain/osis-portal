@@ -24,8 +24,7 @@
 {% endcomment %}
 
 <div {% if condition_d_affichage %}style="flex-grow: 1;"{% endif %}
-    hx-get="{% url 'inscription-aux-cours:barre-progression-complement-view' programme.sigle %}"
-    hx-trigger="load"
+    hx-get="{% url 'inscription-aux-cours:barre-progression-complement-view' sigle_programme %}"
     hx-swap="outerHTML"
 >
     {% include 'inscription_aux_cours/blocks/barre_de_progression.html' %}
