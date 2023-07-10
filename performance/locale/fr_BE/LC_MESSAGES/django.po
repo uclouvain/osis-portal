@@ -152,7 +152,7 @@ msgid "Mention"
 msgstr "Mention"
 
 msgid "My exam marks and regisration state"
-msgstr "Mon état d'inscription aux cours et mes notes d'examen"
+msgstr "Mon programme annuel et mes notes"
 
 msgid "No"
 msgstr "Non"
