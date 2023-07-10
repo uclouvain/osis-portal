@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 # ##############################################################################
+from _decimal import Decimal
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -66,5 +68,5 @@ class BarreDeProgressionDeComplementView(LoginRequiredMixin, TemplateView):
             'credits_inscrits': self.progression.credits_inscrits,
             'credits_de_progression_potentielle': self.progression.credits_de_progression_potentielle,
             'intitule': self.progression.intitule,
-            'condition_d_affichage': bool(self.progression.credits_acquis),
+            'condition_d_affichage': bool(Decimal(self.progression.credits_acquis)),
         }
