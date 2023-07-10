@@ -24,12 +24,13 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-
+import json
 from urllib.parse import urlparse
 
 from osis_internship_sdk import ApiException, ApiClient
 from osis_internship_sdk.api import internship_api
 from osis_internship_sdk.model.organization_get import OrganizationGet
+from osis_internship_sdk.model.place_evaluation_get import PlaceEvaluationGet
 
 from frontoffice.settings.osis_sdk import internship as internship_sdk, utils
 from internship.models.enums.role_choice import ChoiceRole
@@ -44,8 +45,9 @@ class InternshipAPIClient:
         return internship_api.InternshipApi(ApiClient(configuration=api_config))
 
 
-class InternshipServiceException(Exception):
-    pass
+class InternshipServiceException(ApiException):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class InternshipAPIService:
@@ -128,8 +130,8 @@ class InternshipAPIService:
 
     @classmethod
     def get_affectation(cls, person, affectation_uuid):
-        return InternshipAPIClient().students_affectations_uuid_get(
-            uuid=affectation_uuid, **utils.build_mandatory_auth_headers(person)
+        return InternshipAPIClient().students_affectations_affectation_uuid_get(
+            affectation_uuid=affectation_uuid, **utils.build_mandatory_auth_headers(person)
         )
 
     @classmethod
@@ -163,8 +165,11 @@ class InternshipAPIService:
     def post_master(cls, person, master):
         try:
             return InternshipAPIClient().masters_post(master_get=master, **utils.build_mandatory_auth_headers(person))
-        except ApiException:
-            raise InternshipServiceException
+        except ApiException as e:
+            raise InternshipServiceException(
+                status=e.status,
+                reason=json.loads(e.body)[0] if e.status == 400 else ''
+            )
 
     @classmethod
     def post_master_allocation(cls, person, allocation):
@@ -191,3 +196,39 @@ class InternshipAPIService:
             )
         except ApiException as e:
             return e.body, e.status, e.headers
+
+    @classmethod
+    def get_person_affectations(cls, cohort, person):
+        return get_paginated_results(
+            InternshipAPIClient().person_affectations_cohort_person_uuid_get(
+                cohort=cohort.name,
+                person_uuid=str(person.uuid),
+                **utils.build_mandatory_auth_headers(person)
+            )
+        )
+
+    @classmethod
+    def get_evaluation_items(cls, cohort, person):
+        return get_paginated_results(
+            InternshipAPIClient().place_evaluation_items_cohort_get(
+                cohort=cohort.name,
+                **utils.build_mandatory_auth_headers(person)
+            )
+        )
+
+    @classmethod
+    def get_evaluation(cls, person, affectation):
+        return InternshipAPIClient().place_evaluation_affectation_uuid_get(
+            affectation_uuid=affectation.uuid,
+            **utils.build_mandatory_auth_headers(person)
+        )
+
+    @classmethod
+    def update_evaluation(cls, person, affectation, evaluation):
+        return InternshipAPIClient().place_evaluation_affectation_uuid_put(
+            affectation_uuid=affectation.uuid,
+            place_evaluation_get=PlaceEvaluationGet(
+                evaluation=evaluation,
+            ),
+            **utils.build_mandatory_auth_headers(person)
+        )

@@ -102,7 +102,6 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
 @login_required
 @redirect_if_not_master_with_matching_allocation
 def view_score_encoding_form(request, specialty_uuid, organization_uuid, affectation_uuid):
-
     affectation = InternshipAPIService.get_affectation(request.user.person, affectation_uuid)
     period = affectation.period
     student = affectation.student
@@ -122,6 +121,8 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
             return layout.render(request, "internship_score_encoding_form.html", locals())
         if InternshipAPIService.update_score(request.user.person, affectation_uuid, score):
             _show_success_update_msg(request, period, student)
+            if request.POST.get("btn-save-validate"):
+                score_encoding_validate(request, affectation_uuid)
             return redirect(reverse('internship_score_encoding_sheet', kwargs={
                 'specialty_uuid': specialty_uuid,
                 'organization_uuid': organization_uuid,

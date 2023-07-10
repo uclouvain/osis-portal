@@ -28,6 +28,9 @@ import uuid
 
 from django.test import TestCase, override_settings
 from osis_internship_sdk.api.internship_api import InternshipApi
+from osis_internship_sdk.model.person_affectation_get import PersonAffectationGet
+from osis_internship_sdk.model.place_evaluation_get import PlaceEvaluationGet
+from osis_internship_sdk.model.place_evaluation_item_get import PlaceEvaluationItemGet
 from osis_internship_sdk.model.score_list_get import ScoreListGet
 from osis_internship_sdk.model.student import Student
 from osis_internship_sdk.models import MasterGet, AllocationGet, PeriodGet, SpecialtyGet, OrganizationGet, \
@@ -87,7 +90,7 @@ class MockAPI(InternshipApi):
         return {'count': 1, 'results': [affectation], 'next': 'next_url', 'previous': 'previous_url'}
 
     @classmethod
-    def students_affectations_uuid_get(*args, **kwargs):
+    def students_affectations_affectation_uuid_get(*args, **kwargs):
         return StudentAffectationGet(
             student=Student(uuid=str(uuid.uuid4()), last_name='', first_name=''),
             period=PeriodGet(uuid=str(uuid.uuid4()), name='P1'),
@@ -136,3 +139,29 @@ class MockAPI(InternshipApi):
             specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=None),
             role=ChoiceRole.MASTER.name,
         )]}
+
+    @classmethod
+    def person_affectations_cohort_person_uuid_get(*args, **kwargs):
+        return {'count': 1, 'results': [PersonAffectationGet(
+            uuid=str(uuid.uuid4()),
+            organization=OrganizationGet(uuid=str(uuid.uuid4()), reference='', name=''),
+            speciality=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=None, name=''),
+            period=PeriodGet(uuid=str(uuid.uuid4()), name='P1', date_end='2023-01-31', date_start='2023-01-01'),
+            master='',
+            internship_evaluated=False,
+        )]}
+
+    @classmethod
+    def place_evaluation_items_cohort_get(*args, **kwargs):
+        return {'count': 1, 'results': [PlaceEvaluationItemGet(
+            uuid=str(uuid.uuid4()),
+            order=0.0,
+            statement='',
+            type='',
+            options=[],
+            required=True,
+        )]}
+
+    @classmethod
+    def place_evaluation_affectation_uuid_get(*args, **kwargs):
+        return PlaceEvaluationGet(evaluation={})
