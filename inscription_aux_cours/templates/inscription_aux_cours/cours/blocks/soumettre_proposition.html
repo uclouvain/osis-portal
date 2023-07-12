@@ -28,7 +28,7 @@
        class="btn btn-primary"
        data-toggle="tooltip"
        data-html="true"
-       data-title="{% if not est_en_fin_de_cycle and codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis %}{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}.</br>{% endif %}{% if depasse_les_90_credits_inscrits %}{% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}{% endif %}"
+       data-title="{% if not est_en_fin_de_cycle and codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis %}{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}.</br>{% endif %}{% if depasse_le_maximum_credits_inscrits %}{% if a_une_condition_bama15_ou_1adp %}{% trans "Your annual program proposal contains more than 60 credits. Your cumulative annual program (bachelor + master) cannot exceed 60 credits." %}{% else %}{% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}{% endif %}{% endif %}"
        disabled
     >
         <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}

@@ -48,6 +48,7 @@ from inscription_aux_cours.services.code_unite_enseignement import CodeParser
 from inscription_aux_cours.services.complement import ComplementService
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
+from inscription_aux_cours.services.proprietes_pae import ProprietesPAEService
 from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from learning_unit.services.classe import ClasseService
 from program_management.services.programme import ProgrammeService
@@ -172,8 +173,12 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         )
 
     def get_context_data(self, **kwargs):
-        maximum_credits_inscrits_autorises = 90
-        depasse_les_90_credits_inscrits = \
+        a_une_condition_bama15_ou_1adp = ProprietesPAEService.a_une_condition_bama15_ou_1adp(
+            self.person,
+            self.sigle_formation.replace('11BA', '1BA')
+        )
+        maximum_credits_inscrits_autorises = 60 if a_une_condition_bama15_ou_1adp else 90
+        depasse_le_maximum_credits_inscrits = \
             self.programme_annuel_avec_details_cours.total_credits > maximum_credits_inscrits_autorises
         ue_avec_prerequis = CoursService().recuperer_unites_enseignement_avec_prerequis(
             self.person,
@@ -198,7 +203,7 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             'bloquer_soumission': (
                 not est_en_fin_de_cycle and codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis
             ) or (
-                depasse_les_90_credits_inscrits
+                depasse_le_maximum_credits_inscrits
             ),
             'cours_dont_prerequis_non_acquis': set(cours_dont_prerequis_non_acquis.keys()),
             'codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis':
@@ -207,8 +212,9 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             'codes_ue_prerequis_acquis': {ue.code for ue in ue_avec_prerequis if ue.prerequis_sont_acquis},
             'est_en_fin_de_cycle': est_en_fin_de_cycle,
             'activites_aide_reussite': self.activites_aide_reussite,
-            'depasse_les_90_credits_inscrits': depasse_les_90_credits_inscrits,
+            'depasse_le_maximum_credits_inscrits': depasse_le_maximum_credits_inscrits,
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,
             'credits_formation': self.credits_formation,
+            'a_une_condition_bama15_ou_1adp': a_une_condition_bama15_ou_1adp
         }
