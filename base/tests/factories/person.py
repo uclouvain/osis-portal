@@ -37,7 +37,7 @@ from base.tests.factories.user import UserFactory
 def generate_person_email(person, domain=None):
     if domain is None:
         domain = factory.Faker('domain_name').generate({})
-    return '{0.first_name}.{0.last_name}@{1}'.format(person, domain).lower()
+    return '{0}.{1}@{2}'.format(person.first_name, person.last_name.replace(' ', ''), domain).lower()
 
 
 class PersonFactory(factory.DjangoModelFactory):
