@@ -127,7 +127,6 @@ class EnregistrerPropositionProgrammeAnnuelView(LoginRequiredMixin, CompositionP
             )
         except ServiceException as e:
             erreurs = e.messages
-
         self.afficher_erreurs(erreurs)
         if erreurs:
             messages.add_message(
