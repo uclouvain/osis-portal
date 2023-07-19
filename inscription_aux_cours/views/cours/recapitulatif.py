@@ -49,7 +49,6 @@ from inscription_aux_cours.services.complement import ComplementService
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
 from inscription_aux_cours.views.common import CompositionPAEViewMixin
-from learning_unit.services.classe import ClasseService
 from program_management.services.programme import ProgrammeService
 
 
@@ -78,13 +77,6 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         return [
             cours['code'] for partenariat in self.programme_annuel['partenariats'] for cours in partenariat['cours']
         ]
-
-    @cached_property
-    def details_classes(self):
-        result = ClasseService.rechercher_classes(
-            self.person, annee=self.annee_academique, codes=self.codes_cours_du_programme_annuel
-        )
-        return {classe['code']: classe for classe in result}
 
     @cached_property
     def details_mini_formation(self) -> Dict[str, 'Programme']:
@@ -137,15 +129,10 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             inscription = Inscription(
                 code=code,
                 credits=cours['credits'],
-                intitule=self._get_intitule(code, intitule_par_code),
+                intitule=intitule_par_code.get(code, ''),
             )
             result.append(inscription)
         return result
-
-    def _get_intitule(self, code, intitule_par_code) -> str:
-        if code in self.details_classes:
-            return self.details_classes[code]['intitule']
-        return intitule_par_code.get(code, '')
 
     @cached_property
     def demande_particuliere(self) -> Optional['DemandeParticuliere']:
