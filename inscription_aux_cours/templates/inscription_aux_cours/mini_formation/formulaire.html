@@ -179,9 +179,10 @@
             </table>
 
             <div class="center">
-                <a id="link-go-to-courses-enrollment" class="btn btn-primary btn-wrap btn-block-xs" role="button" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
+                <a id="link-go-to-courses-enrollment" class="btn btn-primary btn-wrap btn-block-xs" onclick="modalConfirm()">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to courses enrollment' %}
                 </a>
+                {% include "inscription_aux_cours/mini_formation/modal_confirmation_aucune_inscription.html" %}
             </div>
 
             <br>
@@ -191,4 +192,18 @@
 
         </div>
     </div>
+
+    <script>
+
+        function modalConfirm(){
+            let nombre_miniformations_selectionnees = $("input[id^='checkbox-']:checked");
+            if (nombre_miniformations_selectionnees.length === 0){
+                $('#modalConfirmationAucuneMiniformationSelectionnee').modal('show');
+            } else {
+                showSpinner();
+                location.href = "{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}";
+            }
+        }
+
+    </script>
 {% endblock %}

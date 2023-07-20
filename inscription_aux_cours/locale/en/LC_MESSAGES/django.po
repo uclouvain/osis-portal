@@ -42,7 +42,13 @@ msgstr ""
 msgid "Annual program proposal"
 msgstr ""
 
+msgid "Are you sure you don't want to enroll to any minitraining ?"
+msgstr ""
+
 msgid "Block"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Code"
@@ -193,6 +199,9 @@ msgid ""
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "No minitraining checked confirmation"
 msgstr ""
 
 msgid "Not offered this year but offered the following year"
