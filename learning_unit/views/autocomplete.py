@@ -27,11 +27,8 @@ from typing import List, Dict
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
-from osis_learning_unit_sdk.model.classe import Classe
-from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 
 from base.models.person import Person
-from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 
 

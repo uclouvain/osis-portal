@@ -49,22 +49,6 @@ LearningUnitTypeEnum = convert_api_enum(LearningUnitTypeEnum)
 class LearningUnitService:
 
     @staticmethod
-    def search_learning_units(  # TODO à supprimer
-        person: Person,
-            acronym_like: str = None,
-            learning_unit_codes: List[str] = None,
-            year: int = None
-    ) -> List['LearningUnit']:
-        kwargs = {}
-        if acronym_like:
-            kwargs['acronym_like'] = acronym_like
-        if year:
-            kwargs['year'] = year
-        if learning_unit_codes:
-            kwargs['learning_unit_codes'] = ",".join(learning_unit_codes)
-        return _api_call(person, 'learningunits_list', **kwargs).get('results', [])
-
-    @staticmethod
     def get_learning_units(learning_unit_codes: List[str], year: int, person: Person, **kwargs):
         configuration = learning_unit_sdk.build_configuration()
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
