@@ -25,7 +25,7 @@
 ##############################################################################
 import logging
 from types import SimpleNamespace
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 import osis_learning_unit_sdk
 import urllib3
@@ -101,14 +101,25 @@ class LearningUnitService:
         return learning_unit_title
 
     @staticmethod
-    def search_learning_unit_titles(year: int, codes: List[str], person: Person) -> List[Dict]:
+    def search_learning_unit_titles(
+            year: int,
+            person: Person,
+            code: Optional[str] = None,
+            codes: Optional[List[str]] = None
+    ) -> List[Dict]:
         configuration = learning_unit_sdk.build_configuration()
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
             api_instance = learning_units_api.LearningUnitsApi(api_client)
             try:
+                query_params = {}
+                if code:
+                    query_params['code'] = code
+                if codes:
+                    query_params['codes'] = codes
+
                 return api_instance.learning_units_titles_read(
                     year=year,
-                    codes=codes,
+                    **query_params,
                     **utils.build_mandatory_auth_headers(person),
                 )
             except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
