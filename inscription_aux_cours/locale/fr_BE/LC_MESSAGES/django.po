@@ -50,7 +50,10 @@ msgid "Annual program proposal"
 msgstr "Proposition de programme annuel"
 
 msgid "Are you sure you don't want to enroll to any minitraining ?"
-msgstr "Êtes-vous sûr.e de vouloir vous inscrire à aucune mineure ou option ?"
+msgstr ""
+"Vous n'êtes inscrit.e à aucune mineure ou option. Il est nécessaire de "
+"s'inscrire à une mineure ou option avant de poursuivre (sauf mineure ou "
+"option à condition d'accès ou situation exceptionnelle)."
 
 msgid "Block"
 msgstr "Block"

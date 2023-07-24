@@ -33,11 +33,15 @@
                 <h4 class="modal-title" id="confirmationAucuneMiniformationSelectionneeLabel">{% trans "No minitraining checked confirmation" %}</h4>
             </div>
             <div class="modal-body">
-                <p>{% trans "Are you sure you don't want to enroll to any minitraining ?" %}</p>
+                <div class="alert alert-warning" style="display:inline-block;">
+                    <i class="fa fa-warning" style="font-size:120%" aria-hidden="true"></i>
+                    {% trans "Are you sure you don't want to enroll to any minitraining ?" %}
+                </div>
             </div>
             <div class="modal-footer text-center center">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Cancel' %}</button>
-                <a class="btn btn-primary btn-wrap btn-block-xs"
+                <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans 'Modify my minors and options enrollments' %}</button>
+                <a class="btn btn-default btn-wrap btn-block-xs"
+                   style="margin-top: 5px;"
                    role="button"
                    href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}"
                    onclick="showSpinner()"
