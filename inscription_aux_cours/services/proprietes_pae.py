@@ -23,44 +23,24 @@
 #
 ##############################################################################
 from functools import partial
-from typing import List
 
 import osis_parcours_interne_sdk
-from osis_parcours_interne_sdk.api import progression_api
-from osis_parcours_interne_sdk.model.credits_acquis_mini_formation import CreditsAcquisMiniFormation
-from osis_parcours_interne_sdk.model.progression_de_bloc1 import ProgressionDeBloc1
-from osis_parcours_interne_sdk.model.progression_de_complement import ProgressionDeComplement
-from osis_parcours_interne_sdk.model.progression_de_cycle import ProgressionDeCycle
+from osis_parcours_interne_sdk.api import proprietes_pae_api
 
 from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import parcours_interne as parcours_interne_sdk
 
 
-class ProgressionService:
+class ProprietesPAEService:
     @staticmethod
-    def recuperer_progression_de_cycle(person: 'Person', sigle_programme: str) -> 'ProgressionDeCycle':
-        return _progression_api_call(person, "get_progression_de_cycle", sigle_programme=sigle_programme)
-
-    @staticmethod
-    def recuperer_progression_de_complement(person: 'Person', sigle_programme: str) -> 'ProgressionDeComplement':
-        return _progression_api_call(person, "get_progression_de_complement", sigle_programme=sigle_programme)
-
-    @staticmethod
-    def recuperer_progression_de_bloc_1(person: 'Person', sigle_programme: str) -> 'ProgressionDeBloc1':
-        return _progression_api_call(person, "get_progression_de_bloc1", sigle_programme=sigle_programme)
-
-    @staticmethod
-    def recuperer_credits_acquis_dans_mini_formations(
-        person: 'Person',
-        sigle_programme: str,
-    ) -> List['CreditsAcquisMiniFormation']:
-        return _progression_api_call(person, "get_credits_acquis_dans_mini_formations", sigle_programme=sigle_programme)
+    def a_une_condition_bama15_ou_1adp(person: 'Person', sigle_programme: str) -> bool:
+        return _proprietes_pae_api_call(person, "has_une_condition_bama15_ou1adp", sigle_programme=sigle_programme)
 
 
-_progression_api_call = partial(
+_proprietes_pae_api_call = partial(
     call_api,
     parcours_interne_sdk,
     osis_parcours_interne_sdk,
-    progression_api.ProgressionApi
+    proprietes_pae_api.ProprietesPaeApi
 )
