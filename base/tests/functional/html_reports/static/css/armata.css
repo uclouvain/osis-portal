@@ -1,0 +1,6 @@
+@font-face {
+  font-family: 'Armata';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Armata'), local('Armata-Regular'), url('../fonts/armata.woff2') format('woff2');
+}

@@ -90,7 +90,8 @@ TEST_RUNNER = os.environ.get('TEST_RUNNER', 'osis_common.tests.runner.InstalledA
 SKIP_QUEUES_TESTS = os.environ.get('SKIP_QUEUES_TESTS', 'False').lower() == 'true'
 QUEUES_TESTING_TIMEOUT = float(os.environ.get('QUEUES_TESTING_TIMEOUT', 0.1))
 DEFAULT_QUEUE_TIMEOUT = float(os.environ.get('DEFAULT_QUEUE_TIMEOUT', 15))
-
+# Type of tests to launch (ALL, UNIT, SELENIUM)
+TESTS_TYPES = os.environ.get('TESTS_TYPES', 'UNIT').upper()
 
 # Middleware config
 # Override this tuple in yous environment config (ex dev.py) if you want specific midddleware in specific order
@@ -276,8 +277,8 @@ MAIL_SENDER_CLASSES = os.environ.get(
 LOGIN_URL = os.environ.get('LOGIN_URL', reverse_lazy('login'))
 LOGIN_REDIRECT_URL = os.environ.get('LOGIN_REDIRECT_URL', reverse_lazy('dashboard_home'))
 LOGOUT_URL = os.environ.get('LOGOUT_URL', reverse_lazy('logout'))
-OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL')
-OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL')
+OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL', None)
+OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL', None)
 LOGOUT_BUTTON = os.environ.get('LOGOUT_BUTTON', 'True').lower() == 'true'
 PERSON_EXTERNAL_ID_PATTERN = os.environ.get('PERSON_EXTERNAL_ID_PATTERN', 'osis.person_{global_id}')
 
@@ -286,18 +287,16 @@ PERSON_EXTERNAL_ID_PATTERN = os.environ.get('PERSON_EXTERNAL_ID_PATTERN', 'osis.
 # A relative URL will work on local , but not out of the box on the servers.
 LOGO_INSTITUTION_URL = os.environ.get('LOGO_INSTITUTION_URL', os.path.join(BASE_DIR, "base/static/img/logo_header.jpg"))
 LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
-OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL')
-OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL')
-OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL')
-OSIS_DISSERTATION_URL = os.environ.get('OSIS_DISSERTATION_URL')
+OSIS_SCORE_ENCODING_URL = os.environ.get('OSIS_SCORE_ENCODING_URL', None)
+OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
+OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
+OSIS_DISSERTATION_URL = os.environ.get('OSIS_DISSERTATION_URL', None)
 INSTITUTION_URL = os.environ.get('INSTITUTION_URL', "https://uclouvain.be/")
 COURSES_SCHEDULE_URL = os.environ.get(
     'COURSES_SCHEDULE_URL',
-    (
-        "https://horaire.uclouvain.be/direct/index.jsp"
-        "?projectId=999&displayConfName=webEtudiant&showTree=false&showOptions=false&"
-        "login=etudiant&password=student&code={codes_cours}"
-    ),
+    "https://horaire.uclouvain.be/direct/index.jsp"
+    "?projectId=999&displayConfName=webEtudiant&showTree=false&showOptions=false&"
+    "login=etudiant&password=student&code={codes_cours}",
 )
 
 
@@ -406,13 +405,16 @@ ATTESTATION_CONFIG = {
 # Continuing education settings
 ACCOUNT_ACTIVATION_DAYS = int(os.environ.get('IUFC_ACCOUNT_ACTIVATION_DAYS', 7))
 IUFC_CONFIG = {
-    'ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION': (
-        os.environ.get('IUFC_ACTIVATION_MAIL_OUTSIDE_PRODUCTION', 'false').lower() == 'true'
-    ),
-    'PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION': (
-        os.environ.get('IUFC_PASSWORD_RESET_MAIL_OUTSIDE_PRODUCTION', 'false').lower() == 'true'
-    ),
+    'ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION': os.environ.get('IUFC_ACTIVATION_MAIL_OUTSIDE_PRODUCTION', 'false').lower()
+    == 'true',
+    'PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION': os.environ.get(
+        'IUFC_PASSWORD_RESET_MAIL_OUTSIDE_PRODUCTION', 'false'
+    ).lower()
+    == 'true',
 }
+
+if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
+    from .functional_tests import *
 
 # IUFC API
 URL_CONTINUING_EDUCATION_FILE_API = os.environ.get("URL_CONTINUING_EDUCATION_FILE_API", "")
