@@ -317,6 +317,11 @@ msgid "You didn't acquired the prerequisites for the following courses:"
 msgstr ""
 
 msgid ""
+"Your annual program proposal contains more than 60 credits. Your cumulative "
+"annual program (bachelor + master) cannot exceed 60 credits."
+msgstr ""
+
+msgid ""
 "Your annual program proposal contains more than 90 credits. The student's "
 "annual program (PAE) is supposed to contain 60 credits, maximum 75."
 msgstr ""
