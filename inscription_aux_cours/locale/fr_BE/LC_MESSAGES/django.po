@@ -49,8 +49,17 @@ msgstr "Unités d'enseignement ajoutées"
 msgid "Annual program proposal"
 msgstr "Proposition de programme annuel"
 
+msgid "Are you sure you don't want to enroll to any minitraining ?"
+msgstr ""
+"Vous n'êtes inscrit.e à aucune mineure ou option. Il est nécessaire de "
+"s'inscrire à une mineure ou option avant de poursuivre (sauf mineure ou "
+"option à condition d'accès ou situation exceptionnelle)."
+
 msgid "Block"
 msgstr "Block"
+
+msgid "Cancel"
+msgstr "Annuler"
 
 msgid "Code"
 msgstr "Code"
@@ -226,6 +235,9 @@ msgstr ""
 msgid "No"
 msgstr "Non"
 
+msgid "No minitraining checked confirmation"
+msgstr "Aucune mineure ou option sélectionnée"
+
 msgid "Not offered this year but offered the following year"
 msgstr "Non organisé cette année académique mais organisé l’année suivante"
 
@@ -310,7 +322,10 @@ msgstr ""
 msgid ""
 "The size of your screen does not allow for optimal navigation within the "
 "form. Please use, if possible, a larger screen for easier navigation."
-msgstr "La taille de votre écran ne permet pas une navigation optimale au sein du formulaire. Veuillez utiliser, si possible, un écran plus grand pour une navigation plus aisée."
+msgstr ""
+"La taille de votre écran ne permet pas une navigation optimale au sein du "
+"formulaire. Veuillez utiliser, si possible, un écran plus grand pour une "
+"navigation plus aisée."
 
 #, python-brace-format
 msgid ""
@@ -403,8 +418,8 @@ msgid ""
 "throughout the year."
 msgstr ""
 "Votre faculté propose des <ins><a href='https://uclouvain.be/aar-dispositifs-"
-"facultaires' target='_blank'>dispositifs d'aide à la "
-"réussite</a></ins> afin de vous accompagner tout au long des études."
+"facultaires' target='_blank'>dispositifs d'aide à la réussite</a></ins> afin "
+"de vous accompagner tout au long des études."
 
 msgid "Your proposal has not been saved."
 msgstr "Votre proposition de programme annuel n'a pas été enregistrée."
