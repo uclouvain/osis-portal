@@ -48,7 +48,6 @@ from inscription_aux_cours.services.formulaire_inscription import FormulaireInsc
 from inscription_aux_cours.services.mini_formation import MiniFormationService
 from inscription_aux_cours.services.progression import ProgressionService
 from inscription_aux_cours.views.common import CompositionPAEViewMixin
-from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
 
 
@@ -122,14 +121,11 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
             return []
         codes_cours = [cours.code_cours for cours in inscriptions_hors_programme]
         unites_enseignements_par_code = self.recuperer_intitules_unites_enseignement(codes_cours)
-        classes_par_code = self._rechercher_classes(codes_cours)
 
         return [
             attr.evolve(
                 inscription,
-                intitule_cours=unites_enseignements_par_code[inscription.code_cours]
-                if unites_enseignements_par_code.get(inscription.code_cours)
-                else classes_par_code[inscription.code_cours]['intitule'],
+                intitule_cours=unites_enseignements_par_code[inscription.code_cours],
             )
             for inscription in inscriptions_hors_programme
         ]
@@ -141,10 +137,6 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
             )
             for code in codes_cours
         }
-
-    def _rechercher_classes(self, codes_classes: List[str]) -> Dict[str, 'Classe']:
-        classes = ClasseService().rechercher_classes(self.person, annee=self.annee_academique, codes=codes_classes)
-        return {classe['code']: classe for classe in classes}
 
     @cached_property
     def a_des_mini_formations_inscriptibles(self) -> bool:
