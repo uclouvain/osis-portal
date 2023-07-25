@@ -23,12 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 # ##############################################################################
+from _decimal import Decimal
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_parcours_interne_sdk.model.progression_de_complement import ProgressionDeComplement
 
 from base.models.person import Person
+from education_group.services.training import TrainingService
+from inscription_aux_cours.services.complement import ComplementService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
 from inscription_aux_cours.services.progression import ProgressionService
 
@@ -58,6 +62,11 @@ class BarreDeProgressionDeComplementView(LoginRequiredMixin, TemplateView):
         return PeriodeInscriptionAuxCoursService().get_annee(self.person)
 
     def get_context_data(self, **kwargs):
+        code_programme = TrainingService.get_detail(
+            person=self.person,
+            year=self.annee_academique,
+            acronym=self.sigle_programme
+        ).code
         return {
             **super().get_context_data(**kwargs),
             'annee_academique': self.annee_academique,
@@ -66,5 +75,8 @@ class BarreDeProgressionDeComplementView(LoginRequiredMixin, TemplateView):
             'credits_inscrits': self.progression.credits_inscrits,
             'credits_de_progression_potentielle': self.progression.credits_de_progression_potentielle,
             'intitule': self.progression.intitule,
-            'condition_d_affichage': bool(self.progression.credits_acquis),
+            'condition_d_affichage': (
+                ComplementService.a_un_complement(person=self.person, code_programme=code_programme)
+                or bool(Decimal(self.progression.credits_acquis))
+            ),
         }
