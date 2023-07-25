@@ -25,7 +25,7 @@
 ##############################################################################
 import logging
 from types import SimpleNamespace
-from typing import List, Dict, Optional
+from typing import List, Optional
 
 import osis_learning_unit_sdk
 import urllib3
@@ -33,13 +33,12 @@ from django.conf import settings
 from django.http import Http404
 from osis_learning_unit_sdk.api import learning_units_api
 from osis_learning_unit_sdk.model.effective_class import EffectiveClass
-from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 from osis_learning_unit_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
+from osis_learning_unit_sdk.model.learning_unit_and_class_title import LearningUnitAndClassTitle
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk, utils
 from frontoffice.settings.osis_sdk.utils import convert_api_enum
-from osis_common.utils.debug import profile_db
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -85,12 +84,12 @@ class LearningUnitService:
         return learning_unit_title
 
     @staticmethod
-    def search_learning_unit_titles(
+    def search_learning_unit_and_learning_class_titles(
             year: int,
             person: Person,
             code: Optional[str] = None,
             codes: Optional[List[str]] = None
-    ) -> List[Dict]:
+    ) -> List['LearningUnitAndClassTitle']:
         configuration = learning_unit_sdk.build_configuration()
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
             api_instance = learning_units_api.LearningUnitsApi(api_client)

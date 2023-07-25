@@ -121,14 +121,11 @@ class FormulaireCompositionPAEView(LoginRequiredMixin, CompositionPAEViewMixin, 
             return []
         codes_cours = [cours.code_cours for cours in inscriptions_hors_programme]
         unites_enseignements_par_code = self.recuperer_intitules_unites_enseignement(codes_cours)
-        classes_par_code = self._rechercher_classes(codes_cours)
 
         return [
             attr.evolve(
                 inscription,
-                intitule_cours=unites_enseignements_par_code[inscription.code_cours]
-                if unites_enseignements_par_code.get(inscription.code_cours)
-                else classes_par_code[inscription.code_cours]['intitule'],
+                intitule_cours=unites_enseignements_par_code[inscription.code_cours],
             )
             for inscription in inscriptions_hors_programme
         ]
