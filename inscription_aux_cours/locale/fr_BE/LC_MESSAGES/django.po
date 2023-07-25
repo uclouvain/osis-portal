@@ -49,8 +49,17 @@ msgstr "Unités d'enseignement ajoutées"
 msgid "Annual program proposal"
 msgstr "Proposition de programme annuel"
 
+msgid "Are you sure you don't want to enroll to any minitraining ?"
+msgstr ""
+"Vous n'êtes inscrit.e à aucune mineure ou option. Il est nécessaire de "
+"s'inscrire à une mineure ou option avant de poursuivre (sauf mineure ou "
+"option à condition d'accès ou situation exceptionnelle)."
+
 msgid "Block"
 msgstr "Block"
+
+msgid "Cancel"
+msgstr "Annuler"
 
 msgid "Code"
 msgstr "Code"
@@ -229,6 +238,9 @@ msgstr ""
 
 msgid "No"
 msgstr "Non"
+
+msgid "No minitraining checked confirmation"
+msgstr "Aucune mineure ou option sélectionnée"
 
 msgid "Not offered this year but offered the following year"
 msgstr "Non organisé cette année académique mais organisé l’année suivante"
