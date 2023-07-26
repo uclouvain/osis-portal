@@ -60,11 +60,15 @@
                     {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
                 </div>
 
-                {% if depasse_les_90_credits_inscrits %}
+                {% if depasse_le_maximum_credits_inscrits %}
                     <div class="alert alert-danger hide_print">
                         <p>
                             <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
-                                {% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}
+                                {% if a_une_condition_bama15_ou_1adp %}
+                                    {% trans "Your annual program proposal contains more than 60 credits. Your cumulative annual program (bachelor + master) cannot exceed 60 credits." %}
+                                {% else %}
+                                    {% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}
+                                {% endif %}
                                 <br>
                                 {% trans "Please modify your enrollments." %}
                         </p>
@@ -110,11 +114,11 @@
                     <div class="panel-body">
                         {% if activites_aide_reussite.suivies_par_etudiant %}
                             <p>
-                            {% trans "In accordance with article 39 §1 of the RGEE, I complete my enrollment with activities to help me succeed." %}
+                            {% trans "In accordance with article 39 1 of the RGEE, I complete my enrollment with activities to help me succeed." %}
                             </p>
                         {% else %}
                             <p>
-                            {% trans "In accordance with article 39 §1 of the RGEE, I have been informed that I can complete my enrollment with success support activities. I have decided not to complete my enrollment with success support activities." %}
+                            {% trans "In accordance with article 39 1 of the RGEE, I have been informed that I can complete my enrollment with success support activities. I have decided not to complete my enrollment with success support activities." %}
                             </p>
                         {% endif %}
                     </div>
@@ -135,13 +139,13 @@
             <br>
 
             <div class="center hide_print">
-                <a class="btn btn-default" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
+                <a class="btn btn-default btn-wrap btn-block-xs" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}
                 </a>
-                <a class="btn btn-default" href="{% get_lien_horaire_cours programme_annuel %}" target="_blank">
+                <a class="btn btn-default btn-wrap btn-block-xs" href="{% get_lien_horaire_cours programme_annuel %}" target="_blank">
                     <i class="fa-solid fa-clock"></i> {% trans "View my courses schedule" %}
                 </a>
-                <button class="btn btn-default" onClick="window.print()">
+                <button class="btn btn-default btn-wrap btn-block-xs" onClick="window.print()">
                     <i class="fa-solid fa-print"></i> {% trans "Print my proposition of annual program" %}
                 </button>
             </div>

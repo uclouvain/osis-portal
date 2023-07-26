@@ -105,3 +105,19 @@ textarea.unresizable {
 .vert {
     color: rgba(138, 188, 62, 1) !important;
 }
+
+.btn-wrap{
+    white-space: normal;
+}
+
+/* small screen css */
+@media all and (max-width: 992px) {
+    .btn-block-xs {
+        width: 100%;
+        display: block;
+    }
+
+    #formulaire-tronc-commun{
+        overflow: scroll;
+    }
+}

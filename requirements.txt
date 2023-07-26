@@ -1,4 +1,4 @@
-Django==3.2.19
+Django==3.2.20
 django-bootstrap3==15.0.0
 django-localflavor==3.1
 django-statici18n==2.1.3
@@ -11,7 +11,6 @@ psycopg2-binary==2.8.6
 PyPDF2==1.28.4
 pypdftk==0.4
 reportlab==3.5.68
-selenium==3.14.0
 django-analytical==3.0.0
 factory-boy==2.11.1
 pendulum==1.2.0
@@ -20,7 +19,6 @@ unicodecsv==0.14.1
 unidecode==1.3.2
 requests>=2.20.0
 openpyxl==3.0.10
-coverage==5.5
 pytz==2018.5
 pyvirtualdisplay==0.2.5
 django-registration==3.2
@@ -29,9 +27,8 @@ django-hijack==3.0.4
 pycodestyle==2.4.0
 pylint==2.12.2
 diff-cover==3.0.1
-tblib==1.7.0
 django-waffle==2.2.1
-
+tblib==2.0.0
 django-htmx==1.12.2
 
 # SDKs
@@ -46,10 +43,10 @@ git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.4
 git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.4.0
 git+https://github.com/uclouvain/osis-exam-enrollment-sdk.git@build-1.0
 git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.12
-git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.03
+git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.04
 
 # Modules transverses
-git+https://github.com/uclouvain/osis-document.git@0.5#egg=osis_document
+git+https://github.com/uclouvain/osis-document.git@0.6#egg=osis_document
 git+https://github.com/uclouvain/osis-signature.git@0.1#egg=osis_signature
 git+https://github.com/uclouvain/osis-notification.git@0.1#egg=osis_notification
 git+https://github.com/uclouvain/osis-async.git@0.5#egg=osis_async

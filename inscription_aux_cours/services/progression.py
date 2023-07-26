@@ -34,7 +34,7 @@ from osis_parcours_interne_sdk.model.progression_de_cycle import ProgressionDeCy
 
 from base.models.person import Person
 from base.services.utils import call_api
-from frontoffice.settings.osis_sdk import progression as progression_sdk
+from frontoffice.settings.osis_sdk import parcours_interne as parcours_interne_sdk
 
 
 class ProgressionService:
@@ -58,4 +58,9 @@ class ProgressionService:
         return _progression_api_call(person, "get_credits_acquis_dans_mini_formations", sigle_programme=sigle_programme)
 
 
-_progression_api_call = partial(call_api, progression_sdk, osis_parcours_interne_sdk, progression_api.ProgressionApi)
+_progression_api_call = partial(
+    call_api,
+    parcours_interne_sdk,
+    osis_parcours_interne_sdk,
+    progression_api.ProgressionApi
+)

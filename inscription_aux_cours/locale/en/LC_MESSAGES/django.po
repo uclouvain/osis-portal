@@ -42,7 +42,13 @@ msgstr ""
 msgid "Annual program proposal"
 msgstr ""
 
+msgid "Are you sure you don't want to enroll to any minitraining ?"
+msgstr ""
+
 msgid "Block"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Code"
@@ -122,14 +128,14 @@ msgid "I complete my enrollment with success support activities"
 msgstr ""
 
 msgid ""
-"In accordance with article 39 §1 of the RGEE, I complete my enrollment with "
+"In accordance with article 39 1 of the RGEE, I complete my enrollment with "
 "activities to help me succeed."
 msgstr ""
 
 msgid ""
-"In accordance with article 39 §1 of the RGEE, I have been informed that I "
-"can complete my enrollment with success support activities. I have decided "
-"not to complete my enrollment with success support activities."
+"In accordance with article 39 1 of the RGEE, I have been informed that I can "
+"complete my enrollment with success support activities. I have decided not "
+"to complete my enrollment with success support activities."
 msgstr ""
 
 msgid "Indicates annual block"
@@ -193,6 +199,9 @@ msgid ""
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "No minitraining checked confirmation"
 msgstr ""
 
 msgid "Not offered this year but offered the following year"
@@ -268,6 +277,11 @@ msgid ""
 "offered this academic year:"
 msgstr ""
 
+msgid ""
+"The size of your screen does not allow for optimal navigation within the "
+"form. Please use, if possible, a larger screen for easier navigation."
+msgstr ""
+
 #, python-brace-format
 msgid ""
 "This minor has access conditions, please refer to the procedure to enroll: "
@@ -317,6 +331,11 @@ msgid "You didn't acquired the prerequisites for the following courses:"
 msgstr ""
 
 msgid ""
+"Your annual program proposal contains more than 60 credits. Your cumulative "
+"annual program (bachelor + master) cannot exceed 60 credits."
+msgstr ""
+
+msgid ""
 "Your annual program proposal contains more than 90 credits. The student's "
 "annual program (PAE) is supposed to contain 60 credits, maximum 75."
 msgstr ""
@@ -335,9 +354,9 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Your faculty organize <ins><a href='https://uclouvain.be/fr/etudier/"
-"activites-secteurs-et-facs.html' target='_blank'>support systems</a></ins> "
-"to help you succeed throughout the year."
+"Your faculty organize <ins><a href='https://uclouvain.be/aar-dispositifs-"
+"facultaires' target='_blank'>support systems</a></ins> to help you succeed "
+"throughout the year."
 msgstr ""
 
 msgid "Your proposal has not been saved."
@@ -350,7 +369,4 @@ msgid ""
 msgstr ""
 
 msgid "credits"
-msgstr ""
-
-msgid "credits earned"
 msgstr ""

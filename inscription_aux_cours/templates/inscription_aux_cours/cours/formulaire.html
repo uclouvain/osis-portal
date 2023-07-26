@@ -44,6 +44,12 @@
 {% endblock %}
 
 {% block page_body %}
+    <div class="alert alert-warning visible-xs visible-sm" role="alert">
+        <p>
+            <i class="fa fa-exclamation-circle"></i>
+            {% trans "The size of your screen does not allow for optimal navigation within the form. Please use, if possible, a larger screen for easier navigation." %}
+        </p>
+    </div>
     <form method="post" action='{% url "inscription-aux-cours:enregistrer-proposition-programme-annuel" programme.code %}'>
         {% csrf_token %}
         {{ form.media }}
@@ -139,7 +145,7 @@
                 {% if a_des_mini_formations_inscriptibles %}
                     <br>
                     <div class="center">
-                        <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default">
+                        <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default btn-wrap btn-block-xs">
                             {% trans "Modify my minors and options enrollments" %}
                         </a>
                     </div>
@@ -148,7 +154,7 @@
                 <div class="center">
                     <input id="demandes_inscriptions_dans_formulaire" type="hidden" name="demandes_inscriptions_dans_formulaire" value="">
                     <input id="demandes_desinscriptions" type="hidden" name="demandes_desinscriptions" value="">
-                    <button type="submit" class="btn btn-primary slow-loading">
+                    <button type="submit" class="btn btn-primary btn-wrap btn-block-xs slow-loading">
                         <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to enrollments summary' %}
                     </button>
                 </div>
