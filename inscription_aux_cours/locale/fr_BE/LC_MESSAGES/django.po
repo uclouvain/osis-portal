@@ -401,7 +401,7 @@ msgstr ""
 "programme annuel de l'étudiant (PAE) est censé contenir 60 crédits, maximum "
 "75."
 
-msgid "Your contact in faculty:"
+msgid "Your contact in faculty"
 msgstr "Votre contact en faculté:"
 
 msgid ""

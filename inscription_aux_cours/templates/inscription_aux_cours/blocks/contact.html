@@ -28,7 +28,7 @@
 {% if contact.email %}
 <div class="center">
     <p class="bg-info">
-        {% trans "Your contact in faculty:" %} {{ contact.en_tete }} : {{ contact.email }}
+        <b>{% trans "Your contact in faculty" %}</b> {{ contact.en_tete }} - {{ contact.email }}
     </p>
 </div>
 {% endif %}
