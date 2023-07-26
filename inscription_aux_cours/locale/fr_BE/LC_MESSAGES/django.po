@@ -402,7 +402,7 @@ msgstr ""
 "75."
 
 msgid "Your contact in faculty"
-msgstr "Votre contact en faculté:"
+msgstr "Votre contact en faculté"
 
 msgid ""
 "Your enrollment has been completed or not with success support activies by "
