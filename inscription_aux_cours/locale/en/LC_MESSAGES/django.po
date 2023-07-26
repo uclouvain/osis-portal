@@ -337,7 +337,7 @@ msgid ""
 "annual program (PAE) is supposed to contain 60 credits, maximum 75."
 msgstr ""
 
-msgid "Your contact in faculty:"
+msgid "Your contact in faculty"
 msgstr ""
 
 msgid ""
