@@ -170,8 +170,8 @@ msgstr ""
 msgid "High Level Promising athlete"
 msgstr ""
 
-msgid "I - Premire inscription"
-msgstr ""
+msgid "I - Premiere inscription"
+msgstr "I - Première inscription"
 
 msgid "J - Report de note de janvier vers septembre"
 msgstr ""
@@ -322,8 +322,8 @@ msgstr ""
 msgid "Promising athlete"
 msgstr ""
 
-msgid "R - Report de note de la session prcdente"
-msgstr ""
+msgid "R - Report de note de la session precedente"
+msgstr "R - Report de note de la session précédente"
 
 msgid "Registration id"
 msgstr "Registration id"
@@ -399,8 +399,8 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-msgid "T - Note rsultant dun test"
-msgstr ""
+msgid "T - Note resultant d un test"
+msgstr "T - Note résultant d’un test"
 
 msgid "Teachers"
 msgstr ""
@@ -538,8 +538,8 @@ msgstr ""
 msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr ""
 
-msgid "Y - Deuxime inscription"
-msgstr ""
+msgid "Y - Deuxieme inscription"
+msgstr "Y - Deuxième inscription"
 
 msgid "Yes"
 msgstr ""

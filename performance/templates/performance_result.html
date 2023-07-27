@@ -9,7 +9,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -174,9 +174,9 @@
                 {% if activiteAideReussite %}
                     <div class="row container-fluid text-left">
                         {% if activiteAideReussite == "OUI" %}
-                            <p><small>{% trans "In accordance with article 39 §1 of the RGEE, I complete my enrollment with activities to help me succeed." %}</small></p>
+                            <p><small>{% trans "In accordance with article 39 §1 of the RGEE, I complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with activities to help me succeed</a></ins>." %}</small></p>
                         {% elif activiteAideReussite == "NON" %}
-                            <p><small>{% trans "In accordance with article 39 §1 of the RGEE, I have been informed that I can complete my enrollment with success support activities. I have decided not to complete my enrollment with success support activities." %}</small></p>
+                            <p><small>{% trans "In accordance with article 39 §1 of the RGEE, I have been informed that I can complete my enrollment with success support activities. I have decided not to complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with activities to help me succeed</a></ins>." %}</small></p>
                         {% endif %}
                     </div>
                 {% endif %}

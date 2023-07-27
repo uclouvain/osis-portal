@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -41,9 +41,10 @@ STATUS_COL_WIDTH = 10
 NOTE_COL_WIDTH = 10
 OPENPYXL_STRING_FORMAT = '@'
 BORDER_LEFT = Border(
-    left=Side(border_style=BORDER_MEDIUM,
-              color=Color('FF000000'),
-              ),
+    left=Side(
+        border_style=BORDER_MEDIUM,
+        color=Color('FF000000'),
+    ),
 )
 FIRST_COL_PEPS = 'M'
 
@@ -95,36 +96,40 @@ def _make_xls_list(student_list, learning_unit_type):
             student.get('june_note'),
             student.get('september_status'),
             student.get('september_note'),
-            student.get('last_note')
+            student.get('last_note'),
         ]
 
         student_specific_profile = student.get('student_specific_profile')
 
         if student_specific_profile:
-
             specific_profile_exam_comment, specific_profile_course_comment = _get_arrangement_comments(
-                learning_unit_type,
-                student_specific_profile
+                learning_unit_type, student_specific_profile
             )
 
-            line_content.extend([
-                get_type_peps(student_specific_profile),
-                str(
-                    student_specific_profile.arrangement_additional_time_text
-                    if student_specific_profile.arrangement_additional_time.value
-                    and is_type_course_or_others(learning_unit_type) else '-'
-                ),
-                str(
-                    student_specific_profile.arrangement_appropriate_copy_text
-                    if student_specific_profile.arrangement_appropriate_copy.value
-                    and is_type_course_or_others(learning_unit_type) else '-'
-                ),
-                str(_('Yes')) if student_specific_profile.arrangement_specific_locale
-                and is_type_course_or_others(learning_unit_type) else '-',
-                specific_profile_exam_comment,
-                specific_profile_course_comment,
-                str(student_specific_profile.guide) if student_specific_profile.guide else '-',
-            ])
+            line_content.extend(
+                [
+                    get_type_peps(student_specific_profile),
+                    str(
+                        student_specific_profile.arrangement_additional_time_text
+                        if student_specific_profile.arrangement_additional_time.value
+                        and is_type_course_or_others(learning_unit_type)
+                        else '-'
+                    ),
+                    str(
+                        student_specific_profile.arrangement_appropriate_copy_text
+                        if student_specific_profile.arrangement_appropriate_copy.value
+                        and is_type_course_or_others(learning_unit_type)
+                        else '-'
+                    ),
+                    str(_('Yes'))
+                    if student_specific_profile.arrangement_specific_locale
+                    and is_type_course_or_others(learning_unit_type)
+                    else '-',
+                    specific_profile_exam_comment,
+                    specific_profile_course_comment,
+                    str(student_specific_profile.guide) if student_specific_profile.guide else '-',
+                ]
+            )
         else:
             line_content.extend(["-", "-", "-", "-", "-", "-", "-"])
         worksheet1.append(line_content)
@@ -137,23 +142,40 @@ def _make_xls_list(student_list, learning_unit_type):
     workbook.worksheets[1].append([str(_("Legend"))])
     workbook.worksheets[1].append([str(_("Exam registration state"))])
     workbook.worksheets[1].append(
-        [str(_("P - Examen partiel")), "", str(_("PEPS")), str(_("Program for Students with a Specific Profile"))])
-    workbook.worksheets[1].append(
-        [str(_("I - Première inscription")), "", str(_("DDI")), str(_("Disability, Disorder or Illness Students"))])
-    workbook.worksheets[1].append(
-        [str(_("Y - Deuxième inscription")), "", str(_("PMR")), str(_("Person with reduced mobility"))])
-    workbook.worksheets[1].append(
-        [str(_("J - Report de note de janvier vers septembre")), "", str(_("ESHN")),
-         str(_("High Level Promising athlete"))])
-    workbook.worksheets[1].append(
-        [str(_("R - Report de note de la session précédente")), "", str(_("ES")), str(_("Promising athlete"))])
-    workbook.worksheets[1].append(
-        [str(_("T - Note résultant d’un test")), "", str(_("Copy PEPS")),
-         str(_("A4 single-sided, 1.5 line spacing and Arial 14 font, can be replaced by A3 single-sided"))]
+        [str(_("P - Examen partiel")), "", str(_("PEPS")), str(_("Program for Students with a Specific Profile"))]
     )
     workbook.worksheets[1].append(
-        [str(_("V - Evaluation satisfaisante (la note ne compte pas)")), "", str(_("Additional time")),
-         str(_("concerns writings and/or oral preparations"))]
+        [str(_("I - Premiere inscription")), "", str(_("DDI")), str(_("Disability, Disorder or Illness Students"))]
+    )
+    workbook.worksheets[1].append(
+        [str(_("Y - Deuxieme inscription")), "", str(_("PMR")), str(_("Person with reduced mobility"))]
+    )
+    workbook.worksheets[1].append(
+        [
+            str(_("J - Report de note de janvier vers septembre")),
+            "",
+            str(_("ESHN")),
+            str(_("High Level Promising athlete")),
+        ]
+    )
+    workbook.worksheets[1].append(
+        [str(_("R - Report de note de la session precedente")), "", str(_("ES")), str(_("Promising athlete"))]
+    )
+    workbook.worksheets[1].append(
+        [
+            str(_("T - Note resultant d un test")),
+            "",
+            str(_("Copy PEPS")),
+            str(_("A4 single-sided, 1.5 line spacing and Arial 14 font, can be replaced by A3 single-sided")),
+        ]
+    )
+    workbook.worksheets[1].append(
+        [
+            str(_("V - Evaluation satisfaisante (la note ne compte pas)")),
+            "",
+            str(_("Additional time")),
+            str(_("concerns writings and/or oral preparations")),
+        ]
     )
     workbook.worksheets[1].append([str(_("W - Evaluation non satisfaisante (la note ne compte pas)"))])
     workbook.worksheets[1].column_dimensions['A'].width = 50
@@ -163,17 +185,16 @@ def _make_xls_list(student_list, learning_unit_type):
 
 
 def _get_arrangement_comments(learning_unit_type, student_specific_profile):
-
     if is_type_course_or_others(learning_unit_type):
         exam_comment = student_specific_profile.arrangement_exam_comment
-        specific_profile_exam_comment = ';'.join(
-            ([exam_comment] if exam_comment else []) + student_specific_profile.arrangement_exam
-        ) or '-'
+        specific_profile_exam_comment = (
+            ';'.join(([exam_comment] if exam_comment else []) + student_specific_profile.arrangement_exam) or '-'
+        )
 
         course_comment = student_specific_profile.arrangement_course_comment
-        specific_profile_course_comment = ';'.join(
-            ([course_comment] if course_comment else []) + student_specific_profile.arrangement_course
-        ) or '-'
+        specific_profile_course_comment = (
+            ';'.join(([course_comment] if course_comment else []) + student_specific_profile.arrangement_course) or '-'
+        )
 
     elif learning_unit_type == LearningUnitTypeEnum.INTERNSHIP.value:
         specific_profile_exam_comment = '-'
@@ -255,9 +276,9 @@ def _set_peps_border(ws, last_row_number):
 
 
 def _update_border_for_first_peps_column(cell):
-    c = cell.style if cell.has_style else NamedStyle()
-    c.border = BORDER_LEFT
-    cell.border = c.border
+    cell_style = cell.style if cell.has_style else NamedStyle()
+    cell_style.border = BORDER_LEFT
+    cell.border = cell_style.border
 
 
 def _add_filters_on_headers(a_worksheet):
