@@ -31,10 +31,10 @@ from openpyxl.styles import Color
 from openpyxl.styles import NamedStyle
 from openpyxl.styles.borders import Border, Side, BORDER_MEDIUM
 from openpyxl.utils import get_column_letter
-from openpyxl.writer.excel import save_virtual_workbook
 
 from attribution.business.student_specific_profile import get_type_peps, is_type_course_or_others
 from learning_unit.services.learning_unit import LearningUnitTypeEnum
+from osis_common.document.xls_build import save_virtual_workbook
 
 COLUMN_REGISTRATION_ID_NO = 5
 STATUS_COL_WIDTH = 10
@@ -121,10 +121,12 @@ def _make_xls_list(student_list, learning_unit_type):
                         and is_type_course_or_others(learning_unit_type)
                         else '-'
                     ),
-                    str(_('Yes'))
-                    if student_specific_profile.arrangement_specific_locale
-                    and is_type_course_or_others(learning_unit_type)
-                    else '-',
+                    (
+                        str(_('Yes'))
+                        if student_specific_profile.arrangement_specific_locale
+                        and is_type_course_or_others(learning_unit_type)
+                        else '-'
+                    ),
                     specific_profile_exam_comment,
                     specific_profile_course_comment,
                     str(student_specific_profile.guide) if student_specific_profile.guide else '-',
