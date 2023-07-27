@@ -65,9 +65,6 @@ msgstr ""
 msgid "Applications of "
 msgstr ""
 
-msgid "Arrangements"
-msgstr ""
-
 msgid "Attribution administration"
 msgstr ""
 
@@ -90,9 +87,6 @@ msgid "Choose the learning units you want to consider in the list"
 msgstr ""
 
 msgid "Code"
-msgstr ""
-
-msgid "Copy"
 msgstr ""
 
 msgid "Copy PEPS"
@@ -176,7 +170,7 @@ msgstr ""
 msgid "High Level Promising athlete"
 msgstr ""
 
-msgid "I - Première inscription"
+msgid "I - Premire inscription"
 msgstr ""
 
 msgid "J - Report de note de janvier vers septembre"
@@ -328,7 +322,7 @@ msgstr ""
 msgid "Promising athlete"
 msgstr ""
 
-msgid "R - Report de note de la session précédente"
+msgid "R - Report de note de la session prcdente"
 msgstr ""
 
 msgid "Registration id"
@@ -405,7 +399,7 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-msgid "T - Note résultant d’un test"
+msgid "T - Note rsultant dun test"
 msgstr ""
 
 msgid "Teachers"
@@ -544,7 +538,7 @@ msgstr ""
 msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr ""
 
-msgid "Y - Deuxième inscription"
+msgid "Y - Deuxime inscription"
 msgstr ""
 
 msgid "Yes"
@@ -568,9 +562,6 @@ msgid "no student is enrolled to this course."
 msgstr ""
 
 msgid "student(s)"
-msgstr ""
-
-msgid "student_list"
 msgstr ""
 
 msgid "students enrolled from"
