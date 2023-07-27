@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load static i18n %}
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -23,22 +23,9 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% if bloquer_soumission %}
-    <button
-       class="btn btn-primary btn-wrap btn-block-xs"
-       data-toggle="tooltip"
-       data-html="true"
-       data-title="{% if not est_en_fin_de_cycle and codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis %}{% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}.</br>{% endif %}{% if depasse_les_90_credits_inscrits %}{% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}{% endif %}"
-       disabled
-    >
-        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
-        <div class="d-inline-block loading"></div>
-    </button>
-{% else %}
-    <a href="{% url 'inscription-aux-cours:soumettre-proposition' programme.code %}"
-       class="btn btn-primary btn-wrap btn-block-xs"
-    >
-        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my proposition of annual program' %}
-        <div class="d-inline-block loading"></div>
-    </a>
-{% endif %}
+<div {% if condition_d_affichage %}style="flex-grow: 1;"{% endif %}
+    hx-get="{% url 'inscription-aux-cours:barre-progression-complement-view' sigle_programme %}"
+    hx-swap="outerHTML"
+>
+    {% include 'inscription_aux_cours/blocks/barre_de_progression.html' %}
+</div>
