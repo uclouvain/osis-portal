@@ -179,7 +179,7 @@ msgstr "Accompagnateur.trice"
 msgid "High Level Promising athlete"
 msgstr "Sportifs de haut niveau"
 
-msgid "I - Première inscription"
+msgid "I - Premiere inscription"
 msgstr "I - Première inscription"
 
 msgid "J - Report de note de janvier vers septembre"
@@ -333,7 +333,7 @@ msgstr "Projet pour étudiant.e à profil spécifique"
 msgid "Promising athlete"
 msgstr "Espoirs sportifs"
 
-msgid "R - Report de note de la session précédente"
+msgid "R - Report de note de la session precedente"
 msgstr "R - Report de note de la session précédente"
 
 msgid "Registration id"
@@ -412,7 +412,7 @@ msgstr "Etudiants"
 msgid "Submit"
 msgstr "Soumettre"
 
-msgid "T - Note résultant dun test"
+msgid "T - Note resultant d un test"
 msgstr "T - Note résultant d’un test"
 
 msgid "Teachers"
@@ -575,7 +575,7 @@ msgstr "Vol.2 vacant"
 msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr "W - Evaluation non satisfaisante (la note ne compte pas)"
 
-msgid "Y - Deuxième inscription"
+msgid "Y - Deuxieme inscription"
 msgstr "Y - Deuxième inscription"
 
 msgid "Yes"

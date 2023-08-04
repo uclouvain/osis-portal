@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import operator
 import string
 
 import factory.fuzzy
-import pytz
 
 from performance.models.enums import offer_registration_state as registration_state, session_month
 
@@ -45,11 +44,11 @@ class StudentPerformanceFactory(factory.DjangoModelFactory):
         model = 'performance.StudentPerformance'
 
     registration_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
-    academic_year = datetime.datetime.today().year
+    academic_year = datetime.datetime.now().year
     acronym = factory.fuzzy.FuzzyText(length=15, chars=string.ascii_letters)
     data = load_sample_student_performance()
-    update_date = datetime.datetime.now(tz=pytz.utc) + datetime.timedelta(days=1)
-    creation_date = datetime.datetime.now(tz=pytz.utc)
+    update_date = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(days=1)
+    creation_date = datetime.datetime.now(tz=datetime.timezone.utc)
     authorized = True
     offer_registration_state = registration_state.CESSATION
     session_locked = factory.Iterator(session_month.SESSION_MONTHS, getter=operator.itemgetter(0))
