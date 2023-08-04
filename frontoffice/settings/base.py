@@ -73,7 +73,6 @@ INSTALLED_APPS = (
     'hijack.contrib.admin',
     'waffle',
     'django_htmx',
-    'rosetta',  # TODO: a supprimer une fois traductions faites pour admission...
 )
 
 # Tests settings
