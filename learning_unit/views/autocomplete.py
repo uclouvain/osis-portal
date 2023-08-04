@@ -27,13 +27,10 @@ from typing import List, Dict
 from dal import autocomplete
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.functional import cached_property
-from osis_learning_unit_sdk.model.classe import Classe
-from osis_learning_unit_sdk.model.learning_unit import LearningUnit
 
 from base.models.person import Person
-from learning_unit.services.classe import ClasseService
 from learning_unit.services.learning_unit import LearningUnitService
-
+from osis_learning_unit_sdk.model.learning_unit_and_class_title import LearningUnitAndClassTitle
 
 class LearningUnitYearAutocomplete(LoginRequiredMixin, autocomplete.Select2ListView):
     name = "learning_unit_year_autocomplete"
@@ -55,37 +52,24 @@ class LearningUnitYearAutocomplete(LoginRequiredMixin, autocomplete.Select2ListV
             return []
 
         return [
-                   self._convert_unite_enseignement(unite_enseignement)
-                   for unite_enseignement in self.search_unites_enseignements()
-               ] + [
-            self._convert_classe(classe)
-            for classe in self.search_classes()
+            self._convert_unite_enseignement(unite_enseignement=unite_enseignement)
+            for unite_enseignement in LearningUnitService().search_learning_unit_and_learning_class_titles(
+                year=self.annee,
+                person=self.person,
+                code=self.code
+            )
         ]
-
-    def search_unites_enseignements(self) -> List['LearningUnit']:
-        return LearningUnitService().search_learning_units(self.person, acronym_like=self.code, year=self.annee)
-
-    def search_classes(self) -> List['Classe']:
-        return ClasseService().rechercher_classes(self.person, annee=self.annee, code=self.code)
-
     def autocomplete_results(self, results):
         return results
 
     def results(self, results) -> List[Dict]:
         return sorted(results, key=lambda item: item['text'])
 
-    def _convert_unite_enseignement(self, unite_enseignement: 'LearningUnit') -> Dict:
+    def _convert_unite_enseignement(self, unite_enseignement: 'LearningUnitAndClassTitle') -> Dict:
         return dict(
             id=unite_enseignement['acronym'],
             text=self._format_text(unite_enseignement['acronym'], unite_enseignement['title']),
             selected_text=unite_enseignement['acronym'],
-        )
-
-    def _convert_classe(self, classe: 'Classe') -> Dict:
-        return dict(
-            id=classe['code'],
-            text=self._format_text(classe['code'], classe['intitule']),
-            selected_text=classe['code'],
         )
 
     def _format_text(self, code: str, intitule: str) -> str:

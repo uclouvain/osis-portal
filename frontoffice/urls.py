@@ -27,7 +27,6 @@
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.urls import re_path
 
 from base.views import common, administration
 
@@ -87,9 +86,5 @@ if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
 
     urlpatterns += (url(r'^__debug__/', include(debug_toolbar.urls)),)
 
-
-# TODO: supprimer quand traduction OK dans admission
-if 'rosetta' in settings.INSTALLED_APPS:
-    urlpatterns += (
-        re_path(r'^rosetta/', include('rosetta.urls')),
-    )
+if settings.DEBUG and 'silk' in settings.INSTALLED_APPS:
+    urlpatterns += (url(r'^silk/', include('silk.urls', namespace='silk')),)

@@ -100,7 +100,7 @@ class CompositionPAEViewMixin:
         }
 
     def recuperer_intitules_unites_enseignement(self, codes: List[str]) -> Dict[str, str]:
-        data = LearningUnitService.search_learning_unit_titles(
+        data = LearningUnitService.search_learning_unit_and_learning_class_titles(
             year=self.annee_academique, codes=codes, person=self.person
         )
         return {
