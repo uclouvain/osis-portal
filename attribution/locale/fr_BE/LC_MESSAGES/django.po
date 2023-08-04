@@ -72,9 +72,6 @@ msgstr "Administration des attributions"
 msgid "Applications of "
 msgstr "Candidatures de "
 
-msgid "Arrangements"
-msgstr "Aménagements"
-
 msgid "Attribution administration"
 msgstr "Administration des attributions"
 
@@ -100,9 +97,6 @@ msgstr ""
 
 msgid "Code"
 msgstr "Sigle"
-
-msgid "Copy"
-msgstr "Copie"
 
 msgid "Copy PEPS"
 msgstr "Copie PEPS"
@@ -608,9 +602,6 @@ msgstr "aucun·e étudiant·e n’est inscrit·e à ce cours."
 
 msgid "student(s)"
 msgstr "étudiant(s)"
-
-msgid "student_list"
-msgstr "Liste_etudiants"
 
 msgid "students enrolled from"
 msgstr "étudiants inscrits au cours"
