@@ -138,6 +138,10 @@
 
             <br>
 
+            {% include "inscription_aux_cours/blocks/tableau_de_progression.html" %}
+
+            <br>
+
             <div class="center hide_print">
                 <a class="btn btn-default btn-wrap btn-block-xs" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
                     <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}

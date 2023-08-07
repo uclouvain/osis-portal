@@ -28,19 +28,9 @@
     {% else %}
         {% widthratio 1 1 1 as proportion  %}
     {% endif %}
-    <div style="flex-grow: {{ proportion }};"
-        hx-get="{% url 'inscription-aux-cours:barre-progression-cycle-view' programme.sigle %}"
-        hx-trigger="load"
-    ></div>
+    <div style="flex-grow: {{ proportion }};">{% include "inscription_aux_cours/blocks/barre_de_progression.html" %}</div>
     {% if est_en_premiere_annee_de_bachelier %}
-        <div style="flex-grow: 1;"
-            hx-get="{% url 'inscription-aux-cours:barre-progression-bloc-1-view' programme.sigle %}"
-            hx-trigger="load"
-        ></div>
+        <div style="flex-grow: 1;">{% include "inscription_aux_cours/blocks/barre_de_progression.html" %}</div>
     {% endif %}
-    <div
-        hx-get="{% url 'inscription-aux-cours:barre-progression-complement-view' programme.sigle %}"
-        hx-trigger="load"
-        hx-swap="outerHTML"
-    ></div>
+    <div>{% include "inscription_aux_cours/blocks/barre_de_progression.html" %}</div>
 </div>

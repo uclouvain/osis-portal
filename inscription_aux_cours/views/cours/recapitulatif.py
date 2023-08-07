@@ -32,6 +32,7 @@ from osis_inscription_cours_sdk.model.activites_aide_reussite import ActivitesAi
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 from osis_program_management_sdk.model.programme import Programme
+from osis_parcours_interne_sdk.model.progression_de_cycle import ProgressionDeCycle
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
@@ -48,6 +49,7 @@ from inscription_aux_cours.services.code_unite_enseignement import CodeParser
 from inscription_aux_cours.services.complement import ComplementService
 from inscription_aux_cours.services.cours import CoursService
 from inscription_aux_cours.services.demande_particuliere import DemandeParticuliereService
+from inscription_aux_cours.services.progression import ProgressionService
 from inscription_aux_cours.services.proprietes_pae import ProprietesPAEService
 from inscription_aux_cours.views.common import CompositionPAEViewMixin
 from program_management.services.programme import ProgrammeService
@@ -159,6 +161,12 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             person=self.person, year=self.annee_academique, acronym=self.sigle_formation.replace('11BA', '1BA')
         )
 
+    @cached_property
+    def progression(self) -> 'ProgressionDeCycle':
+        return ProgressionService.recuperer_progression_de_cycle(
+            person=self.person, sigle_programme=self.sigle_formation.replace('11BA', '1BA')
+        )
+
     def get_context_data(self, **kwargs):
         a_une_condition_bama15_ou_1adp = ProprietesPAEService.a_une_condition_bama15_ou_1adp(
             self.person,
@@ -203,5 +211,6 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             'est_en_premiere_annee_de_bachelier': "11BA" in self.sigle_formation,
             'a_un_complement': self.a_un_complement_de_formation,
             'credits_formation': self.credits_formation,
-            'a_une_condition_bama15_ou_1adp': a_une_condition_bama15_ou_1adp
+            'a_une_condition_bama15_ou_1adp': a_une_condition_bama15_ou_1adp,
+            'progression_de_cycle': self.progression,
         }
