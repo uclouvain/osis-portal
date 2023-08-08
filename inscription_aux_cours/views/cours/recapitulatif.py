@@ -32,7 +32,7 @@ from osis_inscription_cours_sdk.model.activites_aide_reussite import ActivitesAi
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 from osis_program_management_sdk.model.programme import Programme
-from osis_parcours_interne_sdk.model.progression_de_cycle import ProgressionDeCycle
+from osis_parcours_interne_sdk.model.progression_de_cycle_dto import ProgressionDeCycleDTO
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
@@ -162,7 +162,7 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         )
 
     @cached_property
-    def progression(self) -> 'ProgressionDeCycle':
+    def progression(self) -> 'ProgressionDeCycleDTO':
         return ProgressionService.recuperer_progression_de_cycle(
             person=self.person, sigle_programme=self.sigle_formation.replace('11BA', '1BA')
         )
