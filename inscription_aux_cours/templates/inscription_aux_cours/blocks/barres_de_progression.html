@@ -1,3 +1,4 @@
+{% load i18n %}
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -28,9 +29,20 @@
     {% else %}
         {% widthratio 1 1 1 as proportion  %}
     {% endif %}
-    <div style="flex-grow: {{ proportion }};">{% include "inscription_aux_cours/blocks/barre_de_progression.html" %}</div>
+    <div style="flex-grow: {{ proportion }};">
+         <div class="text-center" style="margin-bottom: 25px;"><strong>{% trans 'Cycle progress' %}</strong></div>
+        {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=progression_de_cycle.credits_acquis_de_progression_passee credits_inscrits=progression_du_pae_en_cours.credits_inscrits_de_progression barre_progression_max=barre_progression_max_cycle credits_de_progression_potentielle=progression_de_cycle.credits_de_progression_potentielle credits_cibles=progression_de_cycle.credits_cibles credits_valorises=progression_de_cycle.credits_valorises valeur_jalon=progression_de_cycle.valeur_jalon %}
+    </div>
     {% if est_en_premiere_annee_de_bachelier %}
-        <div style="flex-grow: 1;">{% include "inscription_aux_cours/blocks/barre_de_progression.html" %}</div>
+        <div style="flex-grow: 1;">
+             <div class="text-center" style="margin-bottom: 25px;"><strong>{% trans 'Progress in bloc one' %}</strong></div>
+            {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=progression_de_cycle.credits_acquis_de_progression_hors_anticipes credits_inscrits=progression_du_pae_en_cours.credits_inscrits_de_progression_hors_anticipes barre_progression_max=barre_progression_max_bloc_1 credits_de_progression_potentielle=progression_de_cycle.credits_de_progression_potentielle_hors_anticipes credits_cibles=None credits_valorises=progression_de_cycle.credits_valorises_bloc_1 valeur_jalon=None %}
+        </div>
     {% endif %}
-    <div>{% include "inscription_aux_cours/blocks/barre_de_progression.html" %}</div>
+    {% if a_un_complement or progression_de_cycle.credits_acquis %}
+        <div style="flex-grow: 1;">
+             <div class="text-center" style="margin-bottom: 25px;"><strong>{% trans 'Complement progress' %}</strong></div>
+            {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=progression_de_cycle.credits_acquis_de_complement_passee credits_inscrits=progression_du_pae_en_cours.credits_inscrits_de_complement barre_progression_max=barre_progression_max_complement credits_de_progression_potentielle=progression_de_cycle.credits_de_progression_potentielle_de_complement credits_cibles=None credits_valorises=None valeur_jalon=None %}
+        </div>
+    {% endif %}
 </div>

@@ -94,7 +94,9 @@
                     {% endif %}
                 {% endif %}
 
-                {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
+                {% if progression_de_cycle.credits_cibles %}
+                    {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
+                {% endif %}
 
                 {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
             {% else %}
