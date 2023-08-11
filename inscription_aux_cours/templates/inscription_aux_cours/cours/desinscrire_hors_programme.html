@@ -1,0 +1,24 @@
+{% load i18n %}
+{% if erreurs %}
+<tr id="row-{{ code_cours }}">
+    <td> {{ code_cours }} - {{ intitule_cours }}</td>
+    <td>({{ credits|floatformat }} {% trans 'credits' %})</td>
+    <td style="width: 140px">
+        <div class="col-md-9 col-md-offset-2">
+            <div class="row">
+                <div class="loading pull-left"></div>
+                <input
+                        id="checkbox-{{ code_cours }}"
+                        type="checkbox"
+                        name="cours"
+                        value="{{ code_cours }}"
+                        checked
+                >
+                <i class="fa-solid fa-circle-exclamation fa-danger" data-toggle="tooltip" title="{{ erreurs|join:"\n" }}"></i>
+            </div>
+        </div>
+    </td>
+</tr>
+{% else %}
+<tr></tr>
+{% endif %}

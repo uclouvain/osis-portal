@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2020 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@
 ##############################################################################
 from typing import List
 
-from django.utils.translation import ugettext as _
+from django.utils.html import escape
+from django.utils.translation import gettext as _
 from osis_learning_unit_enrollment_sdk.model.student_specific_profile import StudentSpecificProfile
 
 from base.models.enums import peps_type
@@ -34,7 +35,8 @@ from learning_unit.services.learning_unit import LearningUnitTypeEnum
 
 def get_type_peps(student_specific_profile: StudentSpecificProfile) -> str:
     if student_specific_profile.type.value in [peps_type.PepsTypes.SPORT.name, peps_type.PepsTypes.DISABILITY.name]:
-        return "{} - {}".format(student_specific_profile.type_text, student_specific_profile.subtype_text)
+        return f"{student_specific_profile.type_text} - {student_specific_profile.subtype_text}"
+
     if student_specific_profile.type.value == peps_type.PepsTypes.NOT_DEFINED.name:
         return "-"
     return student_specific_profile.type_text or "-"
@@ -46,7 +48,8 @@ def get_arrangements(spec_profile: StudentSpecificProfile, learning_unit_type: s
         if spec_profile.arrangement_additional_time.value:
             arrangements.append(spec_profile.arrangement_additional_time_text)
         if spec_profile.arrangement_appropriate_copy.value:
-            arrangements.append('{} : {}'.format(_('Copy'), spec_profile.arrangement_appropriate_copy_text))
+            arrangements.append(f"{_('Copy')} : {spec_profile.arrangement_appropriate_copy_text}")
+
         if spec_profile.arrangement_specific_locale:
             arrangements.append(_('Specific room of examination'))
     if _has_other_facility_comment(spec_profile, learning_unit_type):
@@ -56,37 +59,45 @@ def get_arrangements(spec_profile: StudentSpecificProfile, learning_unit_type: s
 
 
 def get_guide(student_specific_profile) -> str:
-    return str(student_specific_profile.guide) if student_specific_profile.guide else None
+    return str(escape(student_specific_profile.guide)) if student_specific_profile.guide else None
 
 
 def _has_other_facility_comment(student_specific_profile, learning_unit_type: str) -> bool:
-    return _has_comments_related_to_course_and_others(learning_unit_type, student_specific_profile) or \
-           _has_comments_related_to_internship(learning_unit_type, student_specific_profile) or \
-           _has_comments_related_to_dissertation(learning_unit_type, student_specific_profile)
+    return (
+        _has_comments_related_to_course_and_others(learning_unit_type, student_specific_profile)
+        or _has_comments_related_to_internship(learning_unit_type, student_specific_profile)
+        or _has_comments_related_to_dissertation(learning_unit_type, student_specific_profile)
+    )
 
 
 def _has_comments_related_to_dissertation(learning_unit_type, student_specific_profile):
-    return learning_unit_type == LearningUnitTypeEnum.DISSERTATION.value \
-           and student_specific_profile.arrangement_dissertation_comment
+    return (
+        learning_unit_type == LearningUnitTypeEnum.DISSERTATION.value
+        and student_specific_profile.arrangement_dissertation_comment
+    )
 
 
 def _has_comments_related_to_internship(learning_unit_type, student_specific_profile):
-    return learning_unit_type == LearningUnitTypeEnum.INTERNSHIP.value \
-           and student_specific_profile.arrangement_internship_comment
+    return (
+        learning_unit_type == LearningUnitTypeEnum.INTERNSHIP.value
+        and student_specific_profile.arrangement_internship_comment
+    )
 
 
 def _has_comments_related_to_course_and_others(learning_unit_type, student_specific_profile):
-    return is_type_course_or_others(learning_unit_type) and any([
-        student_specific_profile.arrangement_exam_comment,
-        student_specific_profile.arrangement_course_comment,
-        student_specific_profile.arrangement_exam,
-        student_specific_profile.arrangement_course
-    ])
+    return is_type_course_or_others(learning_unit_type) and any(
+        [
+            student_specific_profile.arrangement_exam_comment,
+            student_specific_profile.arrangement_course_comment,
+            student_specific_profile.arrangement_exam,
+            student_specific_profile.arrangement_course,
+        ]
+    )
 
 
 def is_type_course_or_others(learning_unit_type):
     return learning_unit_type in [
         LearningUnitTypeEnum.COURSE.value,
         LearningUnitTypeEnum.OTHER_INDIVIDUAL.value,
-        LearningUnitTypeEnum.OTHER_COLLECTIVE.value
+        LearningUnitTypeEnum.OTHER_COLLECTIVE.value,
     ]

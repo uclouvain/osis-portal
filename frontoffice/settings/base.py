@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 import os
 
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -71,7 +71,8 @@ INSTALLED_APPS = (
     'django_registration',
     'hijack',
     'hijack.contrib.admin',
-    'waffle'
+    'waffle',
+    'django_htmx',
 )
 
 # Tests settings
@@ -89,14 +90,13 @@ TEST_RUNNER = os.environ.get('TEST_RUNNER', 'osis_common.tests.runner.InstalledA
 SKIP_QUEUES_TESTS = os.environ.get('SKIP_QUEUES_TESTS', 'False').lower() == 'true'
 QUEUES_TESTING_TIMEOUT = float(os.environ.get('QUEUES_TESTING_TIMEOUT', 0.1))
 DEFAULT_QUEUE_TIMEOUT = float(os.environ.get('DEFAULT_QUEUE_TIMEOUT', 15))
-# Type of tests to launch (ALL, UNIT, SELENIUM)
-TESTS_TYPES = os.environ.get('TESTS_TYPES', 'UNIT').upper()
+
 
 # Middleware config
 # Override this tuple in yous environment config (ex dev.py) if you want specific midddleware in specific order
 MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    'osis_common.middlewares.locale.CustomLocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -105,6 +105,7 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware',
     'waffle.middleware.WaffleMiddleware',
     'hijack.middleware.HijackUserMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 )
 
 # Logging config
@@ -116,12 +117,9 @@ LOGGING = {
     'formatters': {
         'verbose': {
             'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s',
-            'datefmt': '%d-%m-%Y %H:%M:%S'
+            'datefmt': '%d-%m-%Y %H:%M:%S',
         },
-        'simple': {
-            'format': '%(asctime)s %(levelname)s %(message)s',
-            'datefmt': '%d-%m-%Y %H:%M:%S'
-        },
+        'simple': {'format': '%(asctime)s %(levelname)s %(message)s', 'datefmt': '%d-%m-%Y %H:%M:%S'},
     },
     'handlers': {
         'console': {
@@ -155,7 +153,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
-        }
+        },
     },
 }
 
@@ -186,7 +184,7 @@ DATABASES = {
         'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'osis'),
         'HOST': os.environ.get("POSTGRES_HOST", '127.0.0.1'),
         'PORT': os.environ.get("POSTGRES_PORT", '5432'),
-        'ATOMIC_REQUEST': os.environ.get('DATABASE_ATOMIC_REQUEST', 'False').lower() == 'true'
+        'ATOMIC_REQUEST': os.environ.get('DATABASE_ATOMIC_REQUEST', 'False').lower() == 'true',
     },
 }
 
@@ -235,8 +233,19 @@ STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 STATICI18N_ROOT = os.path.join(BASE_DIR, os.environ.get('STATICI18N', 'base/static'))
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, "uploads"))
 MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
-CONTENT_TYPES = ['application/csv', 'application/doc', 'application/pdf', 'application/xls', 'application/xml',
-                 'application/zip', 'image/jpeg', 'image/gif', 'image/png', 'text/html', 'text/plain']
+CONTENT_TYPES = [
+    'application/csv',
+    'application/doc',
+    'application/pdf',
+    'application/xls',
+    'application/xml',
+    'application/zip',
+    'image/jpeg',
+    'image/gif',
+    'image/png',
+    'text/html',
+    'text/plain',
+]
 MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE', 5242880))
 
 # Logging settings
@@ -260,33 +269,36 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
 EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 25))
 SEND_BROKEN_LINK_EMAILS = os.environ.get('SEND_BROKEN_LINK_EMAILS', 'True').lower() == 'true'
 MAIL_SENDER_CLASSES = os.environ.get(
-    'MAIL_SENDER_CLASSES',
-    'osis_common.messaging.mail_sender_classes.MessageHistorySender'
+    'MAIL_SENDER_CLASSES', 'osis_common.messaging.mail_sender_classes.MessageHistorySender'
 ).split()
 
 # Authentication settings
 LOGIN_URL = os.environ.get('LOGIN_URL', reverse_lazy('login'))
 LOGIN_REDIRECT_URL = os.environ.get('LOGIN_REDIRECT_URL', reverse_lazy('dashboard_home'))
 LOGOUT_URL = os.environ.get('LOGOUT_URL', reverse_lazy('logout'))
-OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL', None)
-OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL', None)
+OVERRIDED_LOGIN_URL = os.environ.get('OVERRIDED_LOGIN_URL')
+OVERRIDED_LOGOUT_URL = os.environ.get('OVERRIDED_LOGOUT_URL')
 LOGOUT_BUTTON = os.environ.get('LOGOUT_BUTTON', 'True').lower() == 'true'
 PERSON_EXTERNAL_ID_PATTERN = os.environ.get('PERSON_EXTERNAL_ID_PATTERN', 'osis.person_{global_id}')
 
 # This has to be set in your .env with the actual url where you institution logo can be found.
 # Ex : LOGO_INSTITUTION_URL = 'https://www.google.be/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png'
 # A relative URL will work on local , but not out of the box on the servers.
-LOGO_INSTITUTION_URL = os.environ.get('LOGO_INSTITUTION_URL',
-                                      os.path.join(BASE_DIR, "base/static/img/logo_header.jpg"))
+LOGO_INSTITUTION_URL = os.environ.get('LOGO_INSTITUTION_URL', os.path.join(BASE_DIR, "base/static/img/logo_header.jpg"))
 LOGO_OSIS_URL = os.environ.get('LOGO_OSIS_URL', '')
 OSIS_SCORE_ENCODING_URL = os.environ.get(
     'OSIS_SCORE_ENCODING_URL',
     "http://localhost:8000/assessments/scores_encoding/overview"
 )
-OSIS_VPN_HELP_URL = os.environ.get('OSIS_VPN_HELP_URL', None)
-OSIS_MANAGE_COURSES_URL = os.environ.get('OSIS_MANAGE_COURSES_URL', None)
-OSIS_DISSERTATION_URL = os.environ.get('OSIS_DISSERTATION_URL', None)
-
+INSTITUTION_URL = os.environ.get('INSTITUTION_URL', "https://uclouvain.be/")
+COURSES_SCHEDULE_URL = os.environ.get(
+    'COURSES_SCHEDULE_URL',
+    (
+        "https://horaire.uclouvain.be/direct/index.jsp"
+        "?projectId=999&displayConfName=webEtudiant&showTree=false&showOptions=false&"
+        "login=etudiant&password=student&code={codes_cours}"
+    ),
+)
 
 # Queues Definition
 # The queue system uses RabbitMq queues to communicate with other application (ex : osis)
@@ -317,13 +329,35 @@ CKEDITOR_CONFIGS = {
             {'name': 'insert', 'items': ['Table']},
             {
                 'name': 'paragraph',
-                'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
-                          'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+                'items': [
+                    'NumberedList',
+                    'BulletedList',
+                    '-',
+                    'Outdent',
+                    'Indent',
+                    '-',
+                    'Blockquote',
+                    'CreateDiv',
+                    '-',
+                    'JustifyLeft',
+                    'JustifyCenter',
+                    'JustifyRight',
+                    'JustifyBlock',
+                ],
             },
             {
                 'name': 'forms',
-                'items': ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
-                          'HiddenField']
+                'items': [
+                    'Form',
+                    'Checkbox',
+                    'Radio',
+                    'TextField',
+                    'Textarea',
+                    'Select',
+                    'Button',
+                    'ImageButton',
+                    'HiddenField',
+                ],
             },
             {'name': 'about', 'items': ['About']},
         ],
@@ -333,9 +367,7 @@ CKEDITOR_CONFIGS = {
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly']
 }
 
 # HIJACK
@@ -355,29 +387,31 @@ ATTRIBUTION_CONFIG = {
 PERFORMANCE_CONFIG = {
     'UPDATE_DELTA_HOURS_CURRENT_ACADEMIC_YEAR': int(os.environ.get('PERFORMANCE_UPDT_DELTA_CURRENT_ACAD_YR', 12)),
     'UPDATE_DELTA_HOURS_NON_CURRENT_ACADEMIC_YEAR': int(
-        os.environ.get('PERFORMANCE_UPDT_DELTA_NON_CURRENT_ACAD_YR', 720)),
+        os.environ.get('PERFORMANCE_UPDT_DELTA_NON_CURRENT_ACAD_YR', 720)
+    ),
     'UPDATE_DELTA_HOURS_AFTER_CONSUMPTION': int(os.environ.get('PERFORMANCE_UPDT_DELTA_AFTER_CONS', 24)),
 }
 
 ATTESTATION_CONFIG = {
     'UPDATE_DELTA_HOURS_DEFAULT': int(os.environ.get("ATTESTATION_UPDATE_DELTA_HOURS", 72)),
-    'SERVER_TO_FETCH_URL': os.environ.get("ATTESTATION_API_URL", ''),
+    'SERVERS_TO_FETCH_URLS': os.environ.get("ATTESTATION_API_URL", 'localhost').split(),
     'ATTESTATION_PATH': os.environ.get("ATTESTATION_API_PATH", ''),
     'SERVER_TO_FETCH_USER': os.environ.get("ATTESTATION_API_USER", ''),
     'SERVER_TO_FETCH_PASSWORD': os.environ.get("ATTESTATION_API_PASSWORD", ''),
+    'ONLINE_PAYMENT_URL': os.environ.get("ONLINE_PAYMENT_URL", ''),
 }
+
 
 # Continuing education settings
 ACCOUNT_ACTIVATION_DAYS = int(os.environ.get('IUFC_ACCOUNT_ACTIVATION_DAYS', 7))
 IUFC_CONFIG = {
-    'ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION': os.environ.get('IUFC_ACTIVATION_MAIL_OUTSIDE_PRODUCTION',
-                                                             'false').lower() == 'true',
-    'PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION': os.environ.get('IUFC_PASSWORD_RESET_MAIL_OUTSIDE_PRODUCTION',
-                                                                 'false').lower() == 'true'
+    'ACTIVATION_MESSAGES_OUTSIDE_PRODUCTION': (
+        os.environ.get('IUFC_ACTIVATION_MAIL_OUTSIDE_PRODUCTION', 'false').lower() == 'true'
+    ),
+    'PASSWORD_RESET_MESSAGES_OUTSIDE_PRODUCTION': (
+        os.environ.get('IUFC_PASSWORD_RESET_MAIL_OUTSIDE_PRODUCTION', 'false').lower() == 'true'
+    ),
 }
-
-if TESTING and TESTS_TYPES in ('ALL', 'SELENIUM'):
-    from .functional_tests import *
 
 # IUFC API
 URL_CONTINUING_EDUCATION_FILE_API = os.environ.get(
@@ -443,6 +477,7 @@ OSIS_REFERENCE_SDK_API_KEY_PREFIX = os.environ.get(
     "OSIS_REFERENCE_SDK_API_KEY_PREFIX",
     "ESB"
 )
+
 CONTINUING_EDUCATION_OSIS_REFERENCE_SDK_API_KEY_PREFIX = os.environ.get(
     "CONTINUING_EDUCATION_OSIS_REFERENCE_SDK_API_KEY_PREFIX",
     "ESB"
@@ -463,9 +498,7 @@ OSIS_OFFER_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get("OSIS_OFFER_ENROLLMENT
 
 # EDUCATION-GROUP-SDK-CONFIGURATION
 OSIS_EDUCATION_GROUP_SDK_HOST = os.environ.get("OSIS_EDUCATION_GROUP_SDK_HOST", "")
-OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX = os.environ.get(
-    "OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX", "ESB"
-)
+OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX = os.environ.get("OSIS_EDUCATION_GROUP_SDK_API_KEY_PREFIX", "ESB")
 
 # ASSESSMENTS-SDK-CONFIGURATION
 OSIS_ASSESSMENTS_SDK_HOST = os.environ.get(
@@ -485,6 +518,28 @@ OSIS_EXAM_ENROLLMENT_SDK_HOST = os.environ.get(
 )
 OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX = os.environ.get("OSIS_EXAM_ENROLLMENT_SDK_API_KEY_PREFIX", "ESB")
 
+# INSCRIPTION-COURS-SDK-CONFIGURATION
+OSIS_INSCRIPTION_COURS_SDK_HOST = os.environ.get(
+    "OSIS_INSCRIPTION_COURS_SDK_HOST", "http://127.0.0.1:8000/api/v1/inscription_aux_cours"
+)
+OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX = os.environ.get("OSIS_INSCRIPTION_COURS_SDK_API_KEY_PREFIX", "ESB")
+
+# PARCOURS-INTERNE-SDK-CONFIGURATION
+OSIS_PARCOURS_INTERNE_SDK_HOST = os.environ.get(
+    "OSIS_PARCOURS_INTERNE_SDK_HOST", "http://127.0.0.1:8000/api/v1/parcours_interne"
+)
+OSIS_PARCOURS_INTERNE_SDK_API_KEY_PREFIX = os.environ.get("OSIS_PARCOURS_INTERNE_SDK_API_KEY_PREFIX", "ESB")
+
+# PROGRAM-MANAGEMENT-SDK-CONFIGURATION
+OSIS_PROGRAM_MANAGEMENT_SDK_HOST = os.environ.get(
+    "OSIS_PROGRAM_MANAGEMENT_SDK_HOST", "http://127.0.0.1:8000/api/v1/program_management"
+)
+OSIS_PROGRAM_MANAGEMENT_SDK_API_KEY_PREFIX = os.environ.get("OSIS_PROGRAM_MANAGEMENT_SDK_API_KEY_PREFIX", "ESB")
+
+# DISSERTATION-SDK-CONFIGURATION
+OSIS_DISSERTATION_SDK_HOST = os.environ.get("OSIS_DISSERTATION_SDK_HOST", "")
+OSIS_DISSERTATION_SDK_API_KEY_PREFIX = os.environ.get("OSIS_DISSERTATION_SDK_API_KEY_PREFIX", "Token")
+
 # BASE_API_TESTING
 MOCK_USER_ROLES_API_CALL = os.environ.get('MOCK_USER_ROLES_API_CALL', 'True').lower() == 'true'
 USER_ROLES_API_MOCKED_FUNCT = os.environ.get('USER_ROLES_API_MOCKED_FUNCT', 'base.views.api.get_user_roles')
@@ -495,11 +550,13 @@ ESB_AUTHORIZATION = os.environ.get('ESB_AUTHORIZATION', '')
 ESB_TIMEOUT = int(os.environ.get('ESB_TIMEOUT', '10'))
 ESB_ENCODING = os.environ.get('ESB_ENCODING', 'UTF-8')
 ESB_CONTENT_TYPE = os.environ.get('ESB_CONTENT_TYPE', 'application/json')
+ESB_IBAN_ENDPOINT = os.environ.get('ESB_IBAN_ENDPOINT', '')
 
 STUDENT_ID_DATA = {
     'PERSONAL_DATA_PATH': os.environ.get('STUDENT_PERSONAL_DATA_API_PATH', ''),
     'MAIN_DATA_PATH': os.environ.get('STUDENT_MAIN_DATA_API_PATH', ''),
-    'BIRTH_DATA_PATH': os.environ.get('STUDENT_BIRTH_DATA_API_PATH', '')
+    'BIRTH_DATA_PATH': os.environ.get('STUDENT_BIRTH_DATA_API_PATH', ''),
+    'NISS_DATA_PATH': os.environ.get('STUDENT_NISS_DATA_API_PATH', ''),
 }
 
 REGISTRATION_ADMINISTRATION_URL = os.environ.get('REGISTRATION_SERVICE_URL', '')
@@ -508,9 +565,17 @@ REGISTRATION_ACCOUNT_SERVICE_URL = os.environ.get('REGISTRATION_ACCOUNT_SERVICE_
 # ADMISSION-SDK-CONFIGURATION
 OSIS_ADMISSION_SDK_HOST = os.environ.get('OSIS_ADMISSION_SDK_HOST', 'http://127.0.0.1:8000/api/v1/admission')
 OSIS_ADMISSION_SDK_API_KEY_PREFIX = os.environ.get("OSIS_ADMISSION_SDK_API_KEY_PREFIX", "ESB")
+ADMISSION_TOKEN_EXTERNAL = os.environ.get('ADMISSION_TOKEN_EXTERNAL', '')
 
 # OSIS-DOCUMENT-CONFIGURATION
 OSIS_DOCUMENT_BASE_URL = os.environ.get('OSIS_DOCUMENT_BASE_URL', 'http://127.0.0.1:8000/osis_document/')
 OSIS_DOCUMENT_API_SHARED_SECRET = os.environ.get('OSIS_DOCUMENT_API_SHARED_SECRET', '')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# OSIS-NOTIFICATION-CONFIGURATION
+OSIS_NOTIFICATION_BASE_URL = os.environ.get('OSIS_NOTIFICATION_BASE_URL', 'http://localhost:8000/osis_notification/')
+
+# TODO: A supprimer une fois traduction OK dans admission
+ROSETTA_MESSAGES_PER_PAGE = 100
+ROSETTA_SHOW_AT_ADMIN_PANEL = True

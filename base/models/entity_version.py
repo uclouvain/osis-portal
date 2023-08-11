@@ -60,6 +60,8 @@ WITH RECURSIVE under_entity AS (
 SELECT * FROM under_entity ;
 """
 
+SAINT_LOUIS_FACULTY_ACRONYMS = ["DRTB", "ESPB", "IEEB",  "PHLB", "TIMB"]
+
 
 class EntityVersionAdmin(SerializableModelAdmin):
     list_display = ('id', 'entity', 'acronym', 'parent')
@@ -135,9 +137,7 @@ class EntityVersion(SerializableModel):
     objects = EntityVersionQuerySet.as_manager()
 
     def __str__(self):
-        return "{}".format(
-            self.acronym,
-        )
+        return f"{self.acronym}"
 
 
 def search(**kwargs):

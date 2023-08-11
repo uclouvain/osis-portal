@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,12 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import json
 import logging
 import traceback
 from typing import Dict, Optional
-from urllib import error, request
+from urllib import error
 
+import requests
 from django.conf import settings
 
 from base.models import student as student_mdl
@@ -38,19 +38,18 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
 def _fetch_student_id_data(student: Student) -> Dict:
-    data = {
-        'registration_service_url': settings.REGISTRATION_ADMINISTRATION_URL
-    }
+    data = {'registration_service_url': settings.REGISTRATION_ADMINISTRATION_URL}
     try:
         data['personal_data'] = _get_personal_data(student)
         data['main_data'] = _get_main_data(student)
         data['birth_data'] = _get_birth_data(student)
+        data['niss'] = _get_formated_niss(student)
     except error.HTTPError:
         log_trace = traceback.format_exc()
-        logger.warning('Error when querying WebService: \n {}'.format(log_trace))
+        logger.warning(f'Error when querying WebService: \n {log_trace}')
     except Exception:
         log_trace = traceback.format_exc()
-        logger.warning('Error when returning student personal data: \n {}'.format(log_trace))
+        logger.warning(f'Error when returning student personal data: \n {log_trace}')
     return data
 
 
@@ -59,7 +58,7 @@ def _get_main_data(student: Student) -> Dict:
     main_data_path = settings.STUDENT_ID_DATA.get('MAIN_DATA_PATH')
     main_data_url = server_top_url + main_data_path.format(student.person.global_id)
     main_data = _get_data_from_esb(main_data_url).get('lireDossierEtudiantResponse').get('return')
-    main_data['email'] = student.email if not None else ''
+    main_data['email'] = student.email
     return main_data
 
 
@@ -67,16 +66,26 @@ def _get_personal_data(student: Student) -> Dict:
     server_top_url = settings.ESB_URL
     personal_data_path = settings.STUDENT_ID_DATA.get('PERSONAL_DATA_PATH')
     personal_data_url = server_top_url + personal_data_path.format(student.person.global_id)
-    personal_data = _get_data_from_esb(personal_data_url).get('return')
-    return personal_data
+    return _get_data_from_esb(personal_data_url).get('return')
+
+
+def _get_niss(student: Student) -> int:
+    server_top_url = settings.ESB_URL
+    niss_data_path = settings.STUDENT_ID_DATA.get('NISS_DATA_PATH')
+    niss_data_url = server_top_url + niss_data_path.format(student.person.global_id)
+    return _get_data_from_esb(niss_data_url).get('return', {}).get('niss')
+
+
+def _get_formated_niss(student: Student) -> str:
+    niss = str(_get_niss(student))
+    return f"{niss[:2]}.{niss[2:4]}.{niss[4:6]}-{niss[6:9]}.{niss[9:]}"
 
 
 def _get_birth_data(student: Student) -> Dict:
     server_top_url = settings.ESB_URL
     birth_data_path = settings.STUDENT_ID_DATA.get('BIRTH_DATA_PATH')
     birth_data_url = server_top_url + birth_data_path.format(student.person.global_id)
-    birth_data = _get_data_from_esb(birth_data_url).get('return')
-    return birth_data
+    return _get_data_from_esb(birth_data_url).get('return')
 
 
 def get_student_id_data(registration_id: str = None) -> Optional[Dict]:
@@ -89,11 +98,7 @@ def get_student_id_data(registration_id: str = None) -> Optional[Dict]:
 
 
 def _get_data_from_esb(url: str) -> Dict:
-    logger.info('URL ESB : ' + url)
+    logger.info(f'URL ESB : {url}')
     esb_headers = {"Authorization": settings.ESB_AUTHORIZATION, "Accept": settings.ESB_CONTENT_TYPE}
-    esb_request = request.Request(url, headers=esb_headers)
-    esb_connection = request.urlopen(esb_request, timeout=settings.ESB_TIMEOUT)
-    esb_response = esb_connection.read().decode(settings.ESB_ENCODING)
-    esb_connection.close()
-    esb_data = json.loads(esb_response)
-    return esb_data
+    response = requests.get(url, headers=esb_headers, timeout=settings.ESB_TIMEOUT)
+    return response.json()

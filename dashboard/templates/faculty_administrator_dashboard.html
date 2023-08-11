@@ -34,102 +34,53 @@
         <h2>{% trans 'Faculty administration' %}</h2>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body dashboard-grid">
+        <div class="dashboard-grid dashboard-faculty-administration">
             <div class="grid-item">
-                <i class="far fa-id-card"></i>
-                <div class="description">
-                    <h4 class="media-heading">
-                        <a href="{% url 'student_id_data_administration' %}" id="lnk_std_id_data_administration">
-                            {% trans 'Student ID data administration' %}
-                        </a>
-                    </h4>
-                </div>
+                <i class="icon far fa-id-card"></i>
+                <h4 class="media-heading">
+                    <a href="{% url 'student_id_data_administration' %}" id="lnk_std_id_data_administration">
+                        {% trans 'Student ID data administration' %}
+                    </a>
+                </h4>
+                <div class="description"></div>
             </div>
             {% if 'performance'  in installed_apps and perms.base.is_faculty_administrator %}
                 <div class="grid-item">
-                    <i class="fa fa-chart-line"></i>
-                    <div class="description">
-                        <h4 class="media-heading">
-                            <a href="{% url 'performance_administration' %}" id="lnk_performance_administration">
-                                {% trans 'Annual program administration' %}
-                            </a>
-                        </h4>
-                    </div>
+                    <i class="icon fa fa-chart-line"></i>
+                    <h4 class="media-heading">
+                        <a href="{% url 'performance_administration' %}" id="lnk_performance_administration">
+                            {% trans 'Annual program administration' %}
+                        </a>
+                    </h4>
+                    <div class="description"></div>
                 </div>
             {% endif %}
             {% if 'attestation'  in installed_apps and perms.base.is_faculty_administrator %}
                 <div class="grid-item">
-                    <i class="far fa-file-pdf"></i>
-                    <div class="description">
-                        <h4 class="media-heading">
-                            <a href="{% url 'attestation_administration' %}" id="lnk_attestation_administration">
-                                {% trans 'Attestations administration' %}
-                            </a>
-                        </h4>
-                    </div>
+                    <i class="icon far fa-file-pdf"></i>
+                    <h4 class="media-heading">
+                        <a href="{% url 'attestation_administration' %}" id="lnk_attestation_administration">
+                            {% trans 'Attestations administration' %}
+                        </a>
+                    </h4>
+                    <div class="description"></div>
                 </div>
             {% endif %}
-{#            {% if 'attribution'  in installed_apps and perms.base.is_faculty_administrator %}#}
-{#                <div class="grid-item">#}
-{#                    <i class="far fa-id-card"></i>#}
-{#                    <div class="description">#}
-{#                        <h4 class="media-heading">#}
-{#                            <a href="{% url 'attribution_applications' %}" id="lnk_my_applications">#}
-            {#                                {% trans 'Applications administration' %}#}
-            {#                            </a>#}
-            {#                        </h4>#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#                <div class="grid-item">#}
-            {#                    <i class="fa fa-list-alt"></i>#}
-            {#                    <div class="description">#}
-            {#                        <h4 class="media-heading">#}
-            {#                            <a href="{% url 'attribution_admin_select_tutor' %}" id="lnk_attribution_administration">#}
-            {#                                {% trans 'Teaching charges administration' %}#}
-            {#                            </a>#}
-            {#                        </h4>#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#            {% endif %}#}
-            {#            {% if 'assessments'  in installed_apps and perms.base.is_faculty_administrator %}#}
-            {#                <div class="grid-item">#}
-            {#                    <i class="far fa-file-pdf"></i>#}
-            {#                    <div class="description">#}
-{#                        <h4 class="media-heading">#}
-{#                            <a href="{% url 'scores_sheets_admin' %}" id="lnk_scores_sheets_admin">#}
-{#                                {% trans 'Scores sheets administration' %}#}
-{#                            </a>#}
-{#                        </h4>#}
-{#                    </div>#}
-{#                </div>#}
-{#            {% endif %}#}
-{#            {% if 'attribution'  in installed_apps and perms.base.is_faculty_administrator %}#}
-{#                <div class="grid-item">#}
-{#                    <i class="far fa-file-pdf"></i>#}
-{#                    <div class="description">#}
-{#                        <h4 class="media-heading">#}
-{#                            <a href="{% url 'lists_of_students_exams_enrollments' %}"#}
-{#                               id="lnk_lists_of_students_exams_enrollments">#}
-{#                                {% trans 'Lists of students exams enrollments' %}#}
-{#                            </a>#}
-{#                        </h4>#}
-{#                    </div>#}
-{#                </div>#}
-{#            {% endif %}#}
         </div>
-    </div>
 
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.dashboard-grid').masonry({
-                itemSelector: '.grid-item',
-                columnWidth: 360,
-                fitWidth: true
-            });
-        });
-    </script>
+
+<script>
+    // propagate click on grid-item to sibling 'a' element (propagation event priority is given to a:hover)
+    document.querySelectorAll('.grid-item').forEach(el => el.addEventListener('click', () => {
+        const aHover = el.querySelector('a:hover');
+        if(aHover) {
+            aHover.click()
+        } else {
+            el.querySelector('a').click();
+        }
+    }));
+</script>
 {% endblock %}

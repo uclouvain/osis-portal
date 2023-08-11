@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import logging
+import random
 import urllib
 from urllib.error import URLError
 
@@ -35,7 +36,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 def fetch_student_attestation(global_id, academic_year, attestation_type, username):
     if not hasattr(settings, 'ATTESTATION_CONFIG'):
         return None
-    server_top_url = settings.ATTESTATION_CONFIG.get('SERVER_TO_FETCH_URL')
+    server_top_url = random.choice(settings.ATTESTATION_CONFIG.get('SERVERS_TO_FETCH_URLS'))
     document_base_path = server_top_url + settings.ATTESTATION_CONFIG.get('ATTESTATION_PATH')
     if document_base_path:
         try:

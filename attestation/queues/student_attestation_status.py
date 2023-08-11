@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -42,5 +42,6 @@ def fetch_json_attestation_statuses(message):
             if json_data:
                 attestation_statuses = json.loads(json_data.decode("utf-8"))
         except Exception as e:
-            logger.error('Error fetching student attestation statuses.\nmessage sent :  {}'.format(str(message)))
+            logger.error(f'Error fetching student attestation statuses.\nmessage sent :  {str(message)}')
+
     return attestation_statuses

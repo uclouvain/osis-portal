@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 14:36+0100\n"
+"POT-Creation-Date: 2022-06-03 15:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,9 +110,6 @@ msgstr ""
 msgid "Delete the application"
 msgstr ""
 
-msgid "Details other educational facilities"
-msgstr ""
-
 msgid "Different explanations are possible:"
 msgstr ""
 
@@ -129,9 +126,6 @@ msgid "ES"
 msgstr ""
 
 msgid "ESHN"
-msgstr ""
-
-msgid "Educational tutor"
 msgstr ""
 
 msgid "Email"
@@ -155,8 +149,7 @@ msgstr ""
 msgid "Export the students list in Excel format"
 msgstr ""
 
-#, python-format
-msgid "Extra time (33% generally)"
+msgid "Extra time"
 msgstr ""
 
 msgid "Faculties administration"
@@ -183,8 +176,8 @@ msgstr ""
 msgid "High Level Promising athlete"
 msgstr ""
 
-msgid "I - Première inscription"
-msgstr ""
+msgid "I - Premiere inscription"
+msgstr "I - Première inscription"
 
 msgid "J - Report de note de janvier vers septembre"
 msgstr ""
@@ -283,10 +276,13 @@ msgstr ""
 msgid "One of your courses is not visible in the list?"
 msgstr ""
 
-msgid "Other educational facilities"
+msgid "Other educational facilities : see Excel"
 msgstr ""
 
-msgid "Other educational facilities : see Excel"
+msgid "Other educational facilities for courses and practical exercices"
+msgstr ""
+
+msgid "Other educational facilities for exam"
 msgstr ""
 
 msgid "P - Examen partiel"
@@ -305,6 +301,9 @@ msgid "Pedagogy proposal"
 msgstr ""
 
 msgid "Person with reduced mobility"
+msgstr ""
+
+msgid "Please choose at least one course"
 msgstr ""
 
 msgid "Please enter the code of the course to which you would like to apply"
@@ -329,8 +328,8 @@ msgstr ""
 msgid "Promising athlete"
 msgstr ""
 
-msgid "R - Report de note de la session précédente"
-msgstr ""
+msgid "R - Report de note de la session precedente"
+msgstr "R - Report de note de la session précédente"
 
 msgid "Registration id"
 msgstr "Registration id"
@@ -406,8 +405,8 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-msgid "T - Note résultant d’un test"
-msgstr ""
+msgid "T - Note resultant d un test"
+msgstr "T - Note résultant d’un test"
 
 msgid "Teachers"
 msgstr ""
@@ -545,8 +544,8 @@ msgstr ""
 msgid "W - Evaluation non satisfaisante (la note ne compte pas)"
 msgstr ""
 
-msgid "Y - Deuxième inscription"
-msgstr ""
+msgid "Y - Deuxieme inscription"
+msgstr "Y - Deuxième inscription"
 
 msgid "Yes"
 msgstr ""

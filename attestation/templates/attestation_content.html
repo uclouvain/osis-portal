@@ -8,7 +8,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@
             </div>
         {% endif %}
         {% if display_warning_invoice_unavailable_yet %}
-            <div class="alert alert-info" role="alert">
-                {% trans 'Your invoice will be available on your portal in the week following the registration of your registration.' %}
+            <div class="alert alert-warning" role="alert">
+                {% trans 'Your notice of registration and invoice will be available soon. You will be notified by e-mail.' %}
             </div>
         {% endif %}
         <div class="panel-body">
@@ -83,6 +83,7 @@
                                 <th>{% trans 'Attestation type' %}</th>
                                 <th class="text-center">{% trans 'Printed' %}</th>
                                 <th class="text-center">{% trans 'Available' %}</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -116,10 +117,16 @@
                                                         {% url 'download_attestation' attestation_type=attestation_statuse.attestationType academic_year=attestation.academicYear %}
                                                         ">
                                                     {% endif %}
-                                            <i class="fa fa-download" aria-hidden="true"></i></a></td>
+                                            <i class="fa fa-download" aria-hidden="true"></i></a>
                                         {% else %}
                                             <i class="fa fa-times" aria-hidden="true"></i>
                                         {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if attestation_statuse.attestationType == attestation_type_invoice and  attestation_statuse.available %}
+                                            <a class="btn btn-primary" target="_blank" href="{{ online_payment_url }}">{% trans 'Pay online' %}</a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>

@@ -42,11 +42,12 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
-    <link rel="stylesheet" href="{% static 'fontawesome-free-5.7.2-web/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.1.1-web/css/all.min.css' %}">
   {% if 'osis_notification' in installed_apps %}
     <link rel="stylesheet" href="{% static 'osis_notification/osis-notification.css' %}" />
   {% endif %}
-
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     {% block style %}
     {% endblock %}
     {% analytical_head_bottom %}
@@ -160,16 +161,19 @@
                 href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
     </div>
 
-    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
     <script src="{% static 'js/osis-portal.js' %}"></script>
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
-    <script type="text/javascript" src="https://unpkg.com/vue@2/dist/vue.runtime.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/vue-i18n@8/dist/vue-i18n.min.js"></script>
-{% if 'osis_notification' in installed_apps %}
-  <script type="text/javascript" src="{% static 'osis_notification/osis-notification.umd.min.js' %}"></script>
-{% endif %}
+
+    {# Vue, Vue i18n and vue packages #}
+    {# We use 'vue.runtime.global.prod.js' https://github.com/vuejs/core/tree/main/packages/vue#which-dist-file-to-use #}
+    <script src="{% static 'js/vue.min.js' %}"></script>
+    <script src="{% static 'js/vue-i18n.min.js' %}"></script>
+    {% if 'osis_notification' in installed_apps %}
+        <script type="text/javascript" src="{% static 'osis_notification/osis-notification.umd.min.js' %}"></script>
+    {% endif %}
+
     <script src="{% statici18n LANGUAGE_CODE %}"></script>
     <script type="text/javascript" src="{% static "js/modal_form_submit.js" %}"></script>
     {% block script %}

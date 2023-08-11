@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-15 13:41+0100\n"
+"POT-Creation-Date: 2023-06-09 10:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,9 +22,6 @@ msgid ""
 "linked to your user.</br> Please contact <a href="
 "\"{registration_department_url}\" target=\"_blank\">the Registration "
 "department</a>. Thank you."
-msgstr ""
-
-msgid "Annual program"
 msgstr ""
 
 msgid "Annual program administration"
@@ -45,15 +42,12 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-msgid "Dashboard"
-msgstr ""
-
 msgid "Dissertations"
 msgstr ""
 
 msgid ""
 "Download lists of students enrolled to exams for online scores encoding "
-"(Excel)."
+"(Excel)"
 msgstr ""
 
 msgid "Email"
@@ -89,7 +83,10 @@ msgstr ""
 msgid "Lists of students enrolled to my exams"
 msgstr ""
 
-msgid "Manage description fiche"
+msgid "Manage my annual programme proposal"
+msgstr ""
+
+msgid "Manage my description fiche"
 msgstr ""
 
 msgid "Manage my exam registration"
@@ -110,10 +107,22 @@ msgstr ""
 msgid "My attestations"
 msgstr ""
 
+msgid "My composition enrollment"
+msgstr ""
+
+msgid "My description fiche"
+msgstr ""
+
 msgid "My personal data"
 msgstr ""
 
+msgid "My student file"
+msgstr ""
+
 msgid "My teaching charge"
+msgstr ""
+
+msgid "National registry number"
 msgstr ""
 
 msgid "Personal address"
@@ -125,7 +134,7 @@ msgstr ""
 msgid "Private email"
 msgstr ""
 
-msgid "Read my teaching charge and access to lists and emails of students."
+msgid "Read my teaching charge and access to lists and emails of students"
 msgstr ""
 
 msgid "Registration department"
@@ -161,25 +170,25 @@ msgstr ""
 msgid "Student's dissertations management"
 msgstr ""
 
-msgid "This process controls internships assessment."
+msgid "This process controls internships assessment"
 msgstr ""
 
 msgid "This process controls my applications"
 msgstr ""
 
-msgid "This process controls my attestations."
+msgid "This process controls my attestations"
 msgstr ""
 
-msgid "This process controls students internships."
+msgid "This process controls students internships"
 msgstr ""
 
-msgid "This process shows personal data."
+msgid "This process shows personal data"
 msgstr ""
 
 msgid "This requires a "
 msgstr ""
 
-msgid "This requires a VPN access outside UCLouvain."
+msgid "This requires a VPN access outside UCLouvain"
 msgstr ""
 
 msgid "VPN access"
@@ -188,5 +197,8 @@ msgstr ""
 msgid "View my annual program and exam marks"
 msgstr ""
 
-msgid "outside UCLouvain."
+msgid "my annual program and my marks"
+msgstr ""
+
+msgid "outside UCLouvain"
 msgstr ""

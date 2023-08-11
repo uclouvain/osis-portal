@@ -29,7 +29,6 @@ from django.test import TestCase, Client
 
 from base import models as mdl_base
 from base.models import student as mdl_student
-from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from base.tests.models.test_person import create_person
 
@@ -74,7 +73,7 @@ class StudentAdminTest(TestCase):
         messages = list(a_request._messages)
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'success')
-        self.assertEqual(messages[0].message, "{} users added to the group '{}'.".format(1, group_name))
+        self.assertEqual(messages[0].message, f"1 users added to the group '{group_name}'.")
 
         student_group.delete()
 
@@ -84,7 +83,7 @@ class StudentAdminTest(TestCase):
         messages = list(a_request._messages)
         self.assertEqual(len(messages), 1)
         self.assertEqual(messages[0].tags, 'error')
-        self.assertEqual(messages[0].message, "Group {} doesn't exist.".format(group_name))
+        self.assertEqual(messages[0].message, f"Group {group_name} doesn't exist.")
 
 
 def create_student(registration_id="64641200"):

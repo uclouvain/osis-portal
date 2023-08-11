@@ -179,7 +179,6 @@ class ExamEnrollmentForm(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
             'teams_exam': data.get('teams_exam'),
             'moodle_exam': data.get('moodle_exam'),
             'covid_period': data.get('covid_period'),
-            'is_11ba': self.program_code.endswith('11BA'),
         }
 
     def _get_error_message(self, data: Dict) -> str:
@@ -268,9 +267,9 @@ def _build_enrollments_by_learning_unit(request) -> List[Dict]:
 def _build_dicts_is_enrolled_by_acronym(request) -> Dict:
     current_number_session = request.POST['current_number_session']
     return {
-        _extract_acronym(html_tag_id): True if value == "on" else False
+        _extract_acronym(html_tag_id): value == "on"
         for html_tag_id, value in request.POST.items()
-        if "chckbox_exam_enrol_sess{}_".format(current_number_session) in html_tag_id
+        if f"chckbox_exam_enrol_sess{current_number_session}_" in html_tag_id
     }
 
 

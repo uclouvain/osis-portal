@@ -1,0 +1,8 @@
+<input
+        id="checkbox-{{ code_mini_formation }}-{{ code_cours }}"
+        type="checkbox"
+        name="checkbox_cours"
+>
+{% if erreurs %}
+    {% include "inscription_aux_cours/blocks/tooltip_erreurs.html" %}
+{% endif %}

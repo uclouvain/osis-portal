@@ -1,51 +1,45 @@
-Django==3.2.12
-django-bootstrap3==15.0.0
+Django==3.2.20
+django-bootstrap3==15.0.0  # Version 23.3 drops Python3.7 support
 django-localflavor==3.1
 django-statici18n==2.1.3
-djangorestframework==3.13.1
-jdcal==1.4
-mock==2.0.0
+djangorestframework==3.14.0
+mock==5.1.0
 pika==0.12.0
-Pillow==8.3.2
 psycopg2-binary==2.8.6
-PyPDF2==1.26.0
-pypdftk==0.4
-reportlab==3.5.34
-selenium==3.14.0
-django-analytical==3.0.0
+django-analytical==3.1
 factory-boy==2.11.1
-pendulum==1.2.0
 django-dotenv==1.4.2
-unicodecsv==0.14.1
-requests>=2.20.0
-openpyxl==2.3.2
-coverage==4.5.1
-pytz==2018.5
-pyvirtualdisplay==0.2.1
+unidecode==1.3.6
+requests==2.31.0
+openpyxl==3.1.2
 django-registration==3.2
-django-autocomplete-light==3.8.2
-django-hijack==3.0.4
-pycodestyle==2.4.0
-pylint==2.12.2
-diff-cover==3.0.1
-tblib==1.7.0
+django-autocomplete-light==3.5.1
+django-hijack==3.4.1
+pycodestyle==2.10.0
+pylint==2.17.5
+diff-cover==7.7.0  # Useful for diff-quality
 django-waffle==2.2.1
+tblib==2.0.0
+django-htmx==1.15.0  # Version 1.16.0 drops Python3.7 support
 
 # SDKs
 git+https://github.com/uclouvain/osis-attribution-sdk.git@wip-build-1.20
 git+https://github.com/uclouvain/osis-learning-unit-enrollment-sdk.git@wip-build-1.1
-git+https://github.com/uclouvain/osis-learning-unit-sdk.git@build-1.9.0
-git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@build-1.2.0
-git+https://github.com/uclouvain/osis-education-group-sdk.git@build-1.8.0
-git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.18
-git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.3
+git+https://github.com/uclouvain/osis-learning-unit-sdk.git@wip-build-1.14
+git+https://github.com/uclouvain/osis-offer-enrollment-sdk.git@wip-build-1.4
+git+https://github.com/uclouvain/osis-education-group-sdk.git@wip-build-1.12
+git+https://github.com/uclouvain/osis-program-management-sdk.git@wip-build-1.4
+git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.27
+git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.4
 git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.4.0
 git+https://github.com/uclouvain/osis-exam-enrollment-sdk.git@build-1.0
+git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.12
+git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.04
 
 # Modules transverses
-git+https://github.com/uclouvain/osis-document.git@dev#egg=osis_document
-git+https://github.com/uclouvain/osis-signature.git@dev#egg=osis_signature
-git+https://github.com/uclouvain/osis-notification.git@dev#egg=osis_notification
-git+https://github.com/uclouvain/osis-async.git@dev#egg=osis_async
+git+https://github.com/uclouvain/osis-document.git@0.9.4#egg=osis_document
+git+https://github.com/uclouvain/osis-signature.git@0.1#egg=osis_signature
+git+https://github.com/uclouvain/osis-notification.git@0.1#egg=osis_notification
+git+https://github.com/uclouvain/osis-async.git@0.5#egg=osis_async
 
 -r ./osis_common/requirements.txt

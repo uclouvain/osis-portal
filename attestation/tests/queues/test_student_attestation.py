@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ class FetchStudentAttestationTest(SimpleTestCase):
 
         self.assertEqual(response, None)
 
-    @override_settings(ATTESTATION_CONFIG={'SERVER_TO_FETCH_URL': '', 'ATTESTATION_PATH': ''})
+    @override_settings(ATTESTATION_CONFIG={'SERVERS_TO_FETCH_URLS': [''], 'ATTESTATION_PATH': ''})
     def test_when_attestation_config_items_are_none(self):
         response = fetch_student_attestation(GLOBAL_ID, ACADEMIC_YEAR, ATTESTATION_TYPE, 'USER_TEST')
 

@@ -1,0 +1,15 @@
+{% load i18n %}
+<input
+        id="checkbox-{{ code_mini_formation }}-{{ code_cours }}"
+        type="checkbox"
+        name="checkbox_cours"
+        checked
+>
+{% if etat_inscription %}
+    <span class="fa-pull-right badge badge_insc_meme_context"
+          data-toggle="tooltip"
+          title="{% blocktrans with code_ue=programme.code %}Enrolled to {{ code_ue }}.{% endblocktrans %}"
+    >
+        {{ etat_inscription }}
+    </span>
+{% endif %}

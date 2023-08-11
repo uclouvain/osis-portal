@@ -1,6 +1,6 @@
 {% extends "dashboard_layout.html" %}
-{% load static %}
-{% load i18n %}
+{% load static i18n %}
+{% load performance_extras %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -9,7 +9,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@
                     </div>
                 </div>
 
-                <table class="table table-striped table-hover table-bordered table-responsive" id="table_courses">
+                <table class="table table-striped table-hover table-bordered table-responsive" id="table_courses" style="margin-bottom: 5px;">
                     <tr>
                         <th>{% trans 'Course' %}</th>
                         <th>{% trans 'Title' %}</th>
@@ -165,6 +165,21 @@
                     </tr>
                 </table>
 
+                {% if results|has_reduced_150_dp %}
+                    <p>
+                        <small>{% trans 'In accordance with Article 150 of the decree Paysage, this reduced programme is complemented by specific remediation activities.' %}</small>
+                    </p>
+                {% endif %}
+
+                {% if activiteAideReussite %}
+                    <div class="row container-fluid text-left">
+                        {% if activiteAideReussite == "OUI" %}
+                            <p><small>{% trans "In accordance with article 39 §1 of the RGEE, I complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with activities to help me succeed</a></ins>." %}</small></p>
+                        {% elif activiteAideReussite == "NON" %}
+                            <p><small>{% trans "In accordance with article 39 §1 of the RGEE, I have been informed that I can complete my enrollment with success support activities. I have decided not to complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with activities to help me succeed</a></ins>." %}</small></p>
+                        {% endif %}
+                    </div>
+                {% endif %}
                 <div class="row container-fluid text-left">
                     <small class="text-warning">* {% trans 'Attention : From June 2009, the score is expressed to a maximum of 20.' %}</small>
                 </div>

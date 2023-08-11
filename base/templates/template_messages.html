@@ -38,7 +38,7 @@
                             {% for message in messages %}
                                 <tr>
                                     {% if 'error' in message.tags %}
-                                        <td {% if message.tags %}{% endif %}>{{ message | safe}}</td>
+                                        <td {% if message.tags %}{% endif %}>{{ message|safe}}</td>
                                     {%endif%}
                                 </tr>
                             {% endfor %}
@@ -58,7 +58,7 @@
                             {% for message in messages %}
                                 <tr>
                                     {% if 'info' in message.tags %}
-                                        <td {% if message.tags%}{% endif %}>{{ message }}</td>
+                                        <td {% if message.tags%}{% endif %}>{{ message|safe }}</td>
                                     {% endif %}
                                 </tr>
                             {% endfor %}
@@ -78,7 +78,7 @@
                             {% for message in messages %}
                                 <tr>
                                     {% if 'warning' in message.tags %}
-                                        <td {% if message.tags %}{% endif %}>{{ message }}</td>
+                                        <td {% if message.tags %}{% endif %}>{{ message|safe }}</td>
                                     {% endif %}
                                 </tr>
                             {% endfor %}
@@ -98,7 +98,7 @@
                             {% for message in messages %}
                                 <tr>
                                     {% if 'success' in message.tags %}
-                                        <td {% if message.tags %}{% endif %}>{{ message }}</td>
+                                        <td {% if message.tags %}{% endif %}>{{ message|safe }}</td>
                                     {%endif%}
                                 </tr>
                             {% endfor %}

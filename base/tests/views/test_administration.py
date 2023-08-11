@@ -51,8 +51,7 @@ class TestData(TestCase):
         self.client.logout()
         response = self.client.get(self.url)
 
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
-
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_user_is_not_staff(self):
         self.person.user.is_staff = False
@@ -109,8 +108,7 @@ class TestDataMaintenance(TestCase):
     def test_user_not_logged(self):
         self.client.logout()
         response = self.client.get(self.url)
-        self.assertRedirects(response, '/login/?next={}'.format(self.url))
-
+        self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_user_is_not_staff(self):
         self.person.user.is_staff = False

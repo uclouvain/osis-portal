@@ -1,0 +1,102 @@
+{% extends "inscription_aux_cours/layout.html" %}
+{% load static i18n %}
+{% load dictionnary academic_year_display inscription_aux_cours_extra %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li class="active">{% trans 'Offer choice' %}</li>
+    <li>{% trans 'My composition enrollment' %}</li>
+{% endblock %}
+
+
+{% block page_header %}
+    <div class="page-header">
+        <h2>{% trans 'My composition enrollment' %}</h2>
+    </div>
+{% endblock %}
+
+{% block page_body %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>{% trans 'Last name' %}, {% trans 'First name' %}</label>
+                    <br>
+                    {{ person.last_name }}, {{ person.first_name }}
+                </div>
+                <div class="col-md-6">
+                    <label>{% trans 'Registration id' %}</label>
+                    <br>
+                    {{ noma }}
+                </div>
+            </div>
+            <br>
+            {% if programmes %}
+                <div class="alert alert-info" style="display:inline-block;">
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                    {% trans 'Select an offer for which you want to do courses enrollment.' %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning" style="display:inline-block;">
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                    {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not enrolled to any program for the academic year {{ annee_academique }}.{% endblocktrans %}
+                </div>
+            {% endif %}
+            <div class="row">
+                {% if programmes %}
+                    <table id="table_exam_enrollment_offer_choice" class="table table-striped table-hover">
+                        <tr>
+                            <th>{% trans 'Year' %}</th>
+                            <th>{% trans 'Acronym' %}</th>
+                            <th>{% trans 'Program' %}</th>
+                            <th></th>
+                        </tr>
+                        {% for programme in programmes %}
+                            {% with autorisations|get_item:programme.code as autorisation %}
+                            <tr>
+                                <td>{{ programme.annee|display_as_academic_year }}</td>
+                                <td>
+                                    <a href="{% url 'inscription-aux-cours:recapitulatif-mini-formations' programme.code %}">
+                                        {{ programme|get_sigle_programme }}
+                                    </a>
+                                </td>
+                                <td>{{ programme|get_intitule_programme }}</td>
+                                <td>
+                                    {% if autorisation.autorise %}
+                                        <i class="fa-solid fa-lock-open fa-info"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-lock fa-info"></i> <em>{{ autorisation.msg }}</em>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endwith %}
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

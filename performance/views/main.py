@@ -45,7 +45,6 @@ from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_req
 from performance import models as mdl_performance
 from performance.models.student_performance import StudentPerformance
 
-
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
@@ -108,7 +107,8 @@ def __get_performance_data(stud_perf, stud):
         "learning_units_outside_catalog": learning_units_outside_catalog,
         "course_registration_message": course_registration_message,
         "on_site_exams_info": on_site_exams_info,
-        "covid_period": _get_covid_period(stud, stud_perf)
+        "covid_period": _get_covid_period(stud, stud_perf),
+        "activiteAideReussite": _get_activite_aide_reussite(stud, stud_perf),
     }
 
 
@@ -194,6 +194,9 @@ def visualize_student_result(request, pk):
     if stud_perf and not __can_visualize_student_result(request, pk):
         raise PermissionDenied
     try:
+        # Ici on est dans une vue d'administration où le gestionnaire accède aux différentes pages après avoir renseigné
+        # le NOMA d'un étudiant
+        # Comment ici cela pourrait-il fonctionner? L'utilisateur est un gestionnaire !!
         stud = student_bsn.find_by_user_and_discriminate(request.user)
     except MultipleObjectsReturned:
         return dashboard.views.home.show_multiple_registration_id_error(request)
@@ -251,3 +254,8 @@ def _get_covid_period(student: Student, stud_perf: StudentPerformance) -> bool:
                 except json.JSONDecodeError:
                     logger.exception("Json data is not valid")
     return False
+
+
+def _get_activite_aide_reussite(student: Student, stud_perf: StudentPerformance) -> str:
+    if student:
+        return stud_perf.data.get('activiteAideReussite')

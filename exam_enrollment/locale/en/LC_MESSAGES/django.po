@@ -87,13 +87,6 @@ msgstr ""
 msgid "Register to exams or update my exam enrollments"
 msgstr ""
 
-msgid ""
-"The first-year bachelor student must obligatorily register for the January "
-"exam session all the learning units of the first annual block taught in the "
-"first quadrimester, including those giving rise to a partial test (Art. 83 "
-"of the RGEE)."
-msgstr ""
-
 #, python-format
 msgid "The next registration period opens on %(next_exam_enrollment_date)s."
 msgstr ""

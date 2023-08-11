@@ -25,14 +25,16 @@
 ##############################################################################
 import logging
 from types import SimpleNamespace
-from typing import List
+from typing import List, Optional
 
 import osis_learning_unit_sdk
 import urllib3
 from django.conf import settings
+from django.http import Http404
 from osis_learning_unit_sdk.api import learning_units_api
 from osis_learning_unit_sdk.model.effective_class import EffectiveClass
 from osis_learning_unit_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
+from osis_learning_unit_sdk.model.learning_unit_and_class_title import LearningUnitAndClassTitle
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk import learning_unit as learning_unit_sdk, utils
@@ -82,6 +84,33 @@ class LearningUnitService:
         return learning_unit_title
 
     @staticmethod
+    def search_learning_unit_and_learning_class_titles(
+            year: int,
+            person: Person,
+            code: Optional[str] = None,
+            codes: Optional[List[str]] = None
+    ) -> List['LearningUnitAndClassTitle']:
+        configuration = learning_unit_sdk.build_configuration()
+        with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
+            api_instance = learning_units_api.LearningUnitsApi(api_client)
+            try:
+                query_params = {}
+                if code:
+                    query_params['code'] = code
+                if codes:
+                    query_params['codes'] = codes
+
+                return api_instance.learning_units_titles_read(
+                    year=year,
+                    **query_params,
+                    **utils.build_mandatory_auth_headers(person),
+                )
+            except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+                # Run in degraded mode in order to prevent crash all app
+                logger.error(e)
+        return []
+
+    @staticmethod
     def get_effective_classes(year: int, acronym: str, person: Person) -> List[EffectiveClass]:
         configuration = learning_unit_sdk.build_configuration()
         with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
@@ -97,3 +126,16 @@ class LearningUnitService:
                 logger.error(e)
                 effective_classes = []
         return effective_classes
+
+
+def _api_call(person: Person, method_to_call: str, **kwargs):
+    configuration = learning_unit_sdk.build_configuration()
+    with osis_learning_unit_sdk.ApiClient(configuration) as api_client:
+        api_instance = learning_units_api.LearningUnitsApi(api_client)
+        try:
+            class_method = getattr(api_instance, method_to_call)
+            result = class_method(**utils.build_mandatory_auth_headers(person), **kwargs)
+        except (osis_learning_unit_sdk.ApiException, urllib3.exceptions.HTTPError, Http404,) as e:
+            logger.error(e)
+            return None
+    return result
