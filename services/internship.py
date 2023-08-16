@@ -37,6 +37,8 @@ from internship.models.enums.role_choice import ChoiceRole
 from internship.models.score_encoding_utils import DEFAULT_PERIODS
 from internship.services.utils import get_first_paginated_result, get_paginated_results
 
+PAGINATION_SIZE = 100
+
 
 class InternshipAPIClient:
 
@@ -212,7 +214,8 @@ class InternshipAPIService:
         return get_paginated_results(
             InternshipAPIClient().place_evaluation_items_cohort_get(
                 cohort=cohort.name,
-                **utils.build_mandatory_auth_headers(person)
+                limit=PAGINATION_SIZE,
+                **utils.build_mandatory_auth_headers(person),
             )
         )
 
