@@ -42,7 +42,13 @@ msgstr ""
 msgid "Annual program proposal"
 msgstr ""
 
+msgid "Are you sure you don't want to enroll to any minitraining ?"
+msgstr ""
+
 msgid "Block"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Code"
@@ -122,14 +128,16 @@ msgid "I complete my enrollment with success support activities"
 msgstr ""
 
 msgid ""
-"In accordance with article 39 1 of the RGEE, I complete my enrollment with "
-"activities to help me succeed."
+"In accordance with article 39 1 of the RGEE, I complete my enrollment "
+"<ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' "
+"target='_blank'>with activities to help me succeed</a></ins>."
 msgstr ""
 
 msgid ""
 "In accordance with article 39 1 of the RGEE, I have been informed that I can "
 "complete my enrollment with success support activities. I have decided not "
-"to complete my enrollment with success support activities."
+"to complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-"
+"facultaires' target='_blank'>with activities to help me succeed</a></ins>."
 msgstr ""
 
 msgid "Indicates annual block"
@@ -193,6 +201,9 @@ msgid ""
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "No minitraining checked confirmation"
 msgstr ""
 
 msgid "Not offered this year but offered the following year"
@@ -322,11 +333,16 @@ msgid "You didn't acquired the prerequisites for the following courses:"
 msgstr ""
 
 msgid ""
+"Your annual program proposal contains more than 60 credits. Your cumulative "
+"annual program (bachelor + master) cannot exceed 60 credits."
+msgstr ""
+
+msgid ""
 "Your annual program proposal contains more than 90 credits. The student's "
 "annual program (PAE) is supposed to contain 60 credits, maximum 75."
 msgstr ""
 
-msgid "Your contact in faculty:"
+msgid "Your contact in faculty"
 msgstr ""
 
 msgid ""
