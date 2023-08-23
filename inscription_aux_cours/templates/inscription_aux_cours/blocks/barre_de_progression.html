@@ -67,7 +67,7 @@
 
                     <!-- Jalons (en général valeur_jalon = 60 crédits) -->
                     {% if valeur_jalon and credits_cibles %}
-                        {% with nombre_jalons=credits_cibles|div:valeur_jalon|floatformat|add:0 %}
+                        {% with nombre_jalons=credits_cibles|div:valeur_jalon|floatformat:0|add:0 %}
                             {% for nieme_jalon in 0|range_for:nombre_jalons %}
                                 {% with valeur_nieme_jalon=nieme_jalon|mul:valeur_jalon %}
                                     {% if forloop.last and valeur_nieme_jalon != credits_cibles %}
