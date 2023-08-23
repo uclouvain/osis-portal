@@ -28,7 +28,6 @@ from typing import List
 import osis_parcours_interne_sdk
 from osis_parcours_interne_sdk.api import progression_api
 from osis_parcours_interne_sdk.model.credits_acquis_mini_formation import CreditsAcquisMiniFormation
-from osis_parcours_interne_sdk.model.progression_de_cycle_dto import ProgressionDeCycleDTO
 
 from base.models.person import Person
 from base.services.utils import call_api
@@ -37,7 +36,7 @@ from frontoffice.settings.osis_sdk import parcours_interne as parcours_interne_s
 
 class ProgressionService:
     @staticmethod
-    def recuperer_progression_de_cycle(person: 'Person', sigle_programme: str) -> 'ProgressionDeCycleDTO':
+    def recuperer_progression_de_cycle(person: 'Person', sigle_programme: str) -> 'ProgressionDeCycle':
         return _progression_api_call(person, "get_progression_de_cycle", sigle_programme=sigle_programme)
 
     @staticmethod

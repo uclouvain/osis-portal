@@ -33,7 +33,6 @@ from osis_inscription_cours_sdk.model.activites_aide_reussite import ActivitesAi
 from osis_inscription_cours_sdk.model.demande_particuliere import DemandeParticuliere
 from osis_inscription_cours_sdk.model.programme_annuel_etudiant import ProgrammeAnnuelEtudiant
 from osis_program_management_sdk.model.programme import Programme
-from osis_parcours_interne_sdk.model.progression_de_cycle_dto import ProgressionDeCycleDTO
 
 from base.services.utils import ServiceException
 from base.utils.string_utils import unaccent
@@ -163,59 +162,10 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
         )
 
     @cached_property
-    def progression(self) -> 'ProgressionDeCycleDTO':
+    def progression(self) -> 'ProgressionDeCycle':
         return ProgressionService.recuperer_progression_de_cycle(
             person=self.person, sigle_programme=self.sigle_formation.replace('11BA', '1BA')
         )
-
-    @cached_property
-    def progression_du_pae_en_cours(self) -> 'ProgressionAnnuelleDTO':
-        return self.progression.progressions_annuelles[0]
-
-    @cached_property
-    def a_un_contexte_inconnu(self) -> bool:
-        return any(
-            progression_contextualisee.code_mini_formation == self.progression.mobilite
-            for progression_contextualisee in self.progression.progressions_cycles_contextualisees
-        )
-
-    @cached_property
-    def progression_deserialize(self) -> Dict[str, Union[str, int, Decimal]]:
-        progression_deserialize = {
-            attribut: self.progression[attribut]
-            for attribut in list(self.progression.attribute_map.keys())
-        }
-        progression_deserialize['credits_acquis_de_progression_passee'] = Decimal(
-            self.progression['credits_acquis_de_progression_passee']
-        )
-        progression_deserialize['credits_cibles'] = Decimal(
-            self.progression['credits_cibles']
-        )
-
-        progression_deserialize['credits_acquis_de_progression_hors_anticipes'] = Decimal(
-            self.progression['credits_acquis_de_progression_hors_anticipes']
-        )
-        progression_deserialize['credits_acquis_de_complement_passee'] = Decimal(
-            self.progression['credits_acquis_de_complement_passee']
-        )
-        return progression_deserialize
-
-    @cached_property
-    def progression_du_pae_en_cours_deserialize(self) -> Dict[str, Union[str, int, Decimal]]:
-        progression_du_pae_en_cours_deserialize = {
-            attribut: self.progression.progressions_annuelles[0][attribut]
-            for attribut in list(self.progression.progressions_annuelles[0].attribute_map.keys())
-        }
-        progression_du_pae_en_cours_deserialize['credits_inscrits_de_complement'] = Decimal(
-            self.progression_du_pae_en_cours['credits_inscrits_de_complement']
-        )
-        progression_du_pae_en_cours_deserialize['credits_inscrits_de_progression'] = Decimal(
-            self.progression_du_pae_en_cours['credits_inscrits_de_progression']
-        )
-        progression_du_pae_en_cours_deserialize['credits_inscrits_de_progression_hors_anticipes'] = Decimal(
-            self.progression_du_pae_en_cours['credits_inscrits_de_progression_hors_anticipes']
-        )
-        return progression_du_pae_en_cours_deserialize
 
     def get_context_data(self, **kwargs):
         a_une_condition_bama15_ou_1adp = ProprietesPAEService.a_une_condition_bama15_ou_1adp(
@@ -262,22 +212,7 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             'a_un_complement': self.a_un_complement_de_formation,
             'credits_formation': self.credits_formation,
             'a_une_condition_bama15_ou_1adp': a_une_condition_bama15_ou_1adp,
-            'a_un_contexte_inconnu': self.a_un_contexte_inconnu,
-            'progression_de_cycle': self.progression_deserialize,
-            'progression_du_pae_en_cours': self.progression_du_pae_en_cours_deserialize,
-            'nombre_contextes': (
-                len(self.programme_annuel['partenariats']) + len(self.programme_annuel['mini_formations']) +
-                int(self.a_un_contexte_inconnu)
-            ),
-            'barre_progression_max_cycle': max(
-                self.progression.credits_cibles or 0, Decimal(self.progression.credits_de_progression_potentielle)
-            ),
-            'barre_progression_max_bloc_1': max(
-                self.progression.credits_par_bloc,
-                Decimal(self.progression.credits_de_progression_potentielle_hors_anticipes)
-            ),
-            'barre_progression_max_complement': max(
-                self.progression.credits_par_bloc,
-                Decimal(self.progression.credits_de_progression_potentielle_de_complement)
-            ),
+            'barre_de_progression_de_cycle': self.progression.barre_progression_cycle,
+            'barre_de_progression_de_bloc_1': self.progression.barre_progression_bloc_1,
+            'barre_de_progression_de_complement': self.progression.barre_progression_complement,
         }
