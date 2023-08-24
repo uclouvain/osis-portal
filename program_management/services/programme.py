@@ -34,6 +34,8 @@ from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import program_management as program_management_sdk
 
 TYPE_BACHELIER = 'BACHELOR'
+TYPE_DOCTORAT = 'PHD'
+TYPE_FORMATION_DOCTORALE = 'FORMATION_PHD'
 
 
 class ProgrammeService:
@@ -44,6 +46,14 @@ class ProgrammeService:
     @staticmethod
     def est_bachelier(programme: 'Programme') -> bool:
         return programme.type == TYPE_BACHELIER
+
+    @staticmethod
+    def est_formation_doctorale(programme: 'Programme') -> bool:
+        return programme.type == TYPE_FORMATION_DOCTORALE
+
+    @staticmethod
+    def est_doctorat(programme: 'Programme') -> bool:
+        return programme.type == TYPE_DOCTORAT
 
     @staticmethod
     def get_sigle_formation(programme: 'Programme') -> str:
