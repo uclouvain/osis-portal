@@ -28,7 +28,7 @@
     {% else %}
         {% widthratio 1 1 1 as proportion  %}
     {% endif %}
-    <div style="flex-grow: {{ proportion }};"
+    <div style="flex-grow: {{ proportion|add:1 }};"
         hx-get="{% url 'inscription-aux-cours:barre-progression-cycle-view' programme.sigle %}"
         hx-trigger="load"
     ></div>
