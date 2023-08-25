@@ -212,7 +212,8 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             'a_un_complement': self.a_un_complement_de_formation,
             'credits_formation': self.credits_formation,
             'a_une_condition_bama15_ou_1adp': a_une_condition_bama15_ou_1adp,
-            'barre_de_progression_de_cycle': self.progression.barre_progression_cycle,
-            'barre_de_progression_de_bloc_1': self.progression.barre_progression_bloc_1,
-            'barre_de_progression_de_complement': self.progression.barre_progression_complement,
+            'barre_progression_cycle': self.progression.barre_progression_cycle,
+            'barre_progression_bloc_1': self.progression.barre_progression_bloc_1,
+            'barre_progression_complement': self.progression.barre_progression_complement,
+            'tableau_de_progression': self.progression.tableau_de_progression,
         }
