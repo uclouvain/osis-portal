@@ -391,13 +391,6 @@ msgstr ""
 "suivantes:"
 
 msgid ""
-"Your annual program proposal contains more than 60 credits. Your cumulative "
-"annual program (bachelor + master) cannot exceed 60 credits."
-msgstr ""
-"Votre proposition de programme annuel contient plus de 60 crédits. Votre programme "
-"annuel cumulé (bachelier + master) ne peut pas dépasser 60 crédits."
-
-msgid ""
 "Your annual program proposal contains more than 90 credits. The student's "
 "annual program (PAE) is supposed to contain 60 credits, maximum 75."
 msgstr ""
@@ -407,6 +400,11 @@ msgstr ""
 
 msgid "Your contact in faculty"
 msgstr "Votre contact en faculté"
+
+msgid ""
+"Your cumulative annual program (bachelor + master) may not exceed 60 credits."
+msgstr ""
+"Votre programme annuel cumulé (bachelier + master) ne peut pas dépasser 60 crédits."
 
 msgid ""
 "Your enrollment has been completed or not with success support activies by "
