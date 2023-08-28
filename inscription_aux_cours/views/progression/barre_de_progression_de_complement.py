@@ -71,8 +71,8 @@ class BarreDeProgressionDeComplementView(LoginRequiredMixin, TemplateView):
             **super().get_context_data(**kwargs),
             'annee_academique': self.annee_academique,
             'barre_progression_max': self.progression.barre_de_progression_max,
-            'credits_acquis': self.progression.credits_acquis,
-            'credits_inscrits': self.progression.credits_inscrits,
+            'credits_acquis': Decimal(self.progression.credits_acquis),
+            'credits_inscrits': Decimal(self.progression.credits_inscrits),
             'credits_de_progression_potentielle': self.progression.credits_de_progression_potentielle,
             'intitule': self.progression.intitule,
             'condition_d_affichage': (

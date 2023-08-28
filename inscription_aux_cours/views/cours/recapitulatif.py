@@ -164,7 +164,7 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             self.person,
             self.sigle_formation.replace('11BA', '1BA')
         )
-        maximum_credits_inscrits_autorises = 60 if a_une_condition_bama15_ou_1adp else 90
+        maximum_credits_inscrits_autorises = 59 if a_une_condition_bama15_ou_1adp else 90
         depasse_le_maximum_credits_inscrits = \
             self.programme_annuel_avec_details_cours.total_credits > maximum_credits_inscrits_autorises
         ue_avec_prerequis = CoursService().recuperer_unites_enseignement_avec_prerequis(
