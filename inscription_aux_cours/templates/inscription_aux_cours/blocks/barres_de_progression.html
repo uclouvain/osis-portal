@@ -27,7 +27,7 @@
     {% if credits_formation %}
         {% widthratio credits_formation 60 1 as proportion  %}
     {% else %}
-        {% widthratio 1 1 1 as proportion  %}
+        {% widthratio 1 1 1 as proportion|add:1  %}
     {% endif %}
     <div style="flex-grow: {{ proportion }};">
          <div class="text-center" style="margin-bottom: 25px;"><strong>{{ intitule_cycle }}</strong></div>
