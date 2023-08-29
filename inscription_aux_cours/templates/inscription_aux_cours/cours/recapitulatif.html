@@ -93,8 +93,9 @@
                         </div>
                     {% endif %}
                 {% endif %}
-
-                {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
+                {% if credits_cibles_cycle %}
+                    {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
+                {% endif %}
 
                 {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
             {% else %}
@@ -135,6 +136,10 @@
                 {% endif %}
                 <div class="well">{{ demande_particuliere.demande|linebreaks }}</div>
             </div>
+
+            <br>
+
+            {% include "inscription_aux_cours/blocks/tableau_de_progression.html" %}
 
             <br>
 

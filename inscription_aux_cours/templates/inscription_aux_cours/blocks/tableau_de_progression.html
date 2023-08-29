@@ -1,0 +1,234 @@
+{% load static i18n bootstrap3 academic_year_display dictionnary %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<table class="table table-condensed table-progression">
+    <colgroup>
+        <col class="emphasize-border-right">
+        <col span="{{ nombre_contextes|add:2 }}" class="emphasize-border-top-bottom">
+        <col class="emphasize-border-left">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th scope="col"></th>
+        <th scope="col" colspan="{{ nombre_contextes|add:2 }}" class="emphasize-border-top-bottom">
+            {% trans 'Cycle progress' %}
+        </th>
+        <th scope="col">{% trans 'Complement' %}</th>
+        <th scope="col">{% trans 'Out of progression' %}</th>
+    </tr>
+    <tr>
+        <th scope="col">{% trans 'Student cycle program' %}</th>
+        <th scope="col">{% trans 'Total' %}</th>
+        <th scope="col">{% trans 'Common core' %}</th>
+        {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
+            <th scope="col">{{ mini_formation.sigle }}</th>
+        {% endfor %}
+        {% for partenariat in tableau_de_progression.cycle.partenariats %}
+            <th scope="col">{{ partenariat.code_partenaire }}</th>
+        {% endfor %}
+        {% if a_un_contexte_inconnu %}
+            <th scope="col">{% trans 'Mobilite' %}</th>
+        {% endif %}
+        <th scope="col">{% trans 'Total' %}</th>
+        <th scope="col">{% trans 'Total' %}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th scope="row" class="text-center">{% trans 'Maximum possible at year end' %}</th>
+        <td><span class="badge badge-progression-cycle-limite">{{ tableau_de_progression.cycle.total.maximum_credits_possible_fin_annee|floatformat }}</span></td>
+        <td><span class="badge badge-progression-cycle-limite">{{ tableau_de_progression.cycle.tronc_commun.maximum_credits_possible_fin_annee|floatformat|default:0 }}</span></td>
+        {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
+            <td>
+                <span class="badge badge-progression-cycle-limite">
+                    {{ mini_formation.maximum_credits_possible_fin_annee|floatformat|default:0 }}
+                </span>
+            </td>
+        {% endfor %}
+        {% for partenariat in tableau_de_progression.cycle.partenariats %}
+            <td>
+                <span class="badge badge-progression-cycle-limite">
+                    {{ partenariat.maximum_credits_possible_fin_annee|floatformat|default:0 }}
+                </span>
+            </td>
+        {% endfor %}
+        {% if a_un_contexte_inconnu %}
+            <td>
+                <span class="badge badge-progression-cycle-limite">
+                    {{ tableau_de_progression.cycle.mobilite.maximum_credits_possible_fin_annee|floatformat|default:0 }}
+                </span>
+            </td>
+        {% endif %}
+        <td>
+            <span class="badge badge-progression-cycle-limite">
+                {{ tableau_de_progression.complement.maximum_credits_possible_fin_annee|floatformat|default:0 }}
+            </span>
+        </td>
+        <td>
+            <span class="badge badge-progression-cycle-limite">
+                {{ tableau_de_progression.hors_progression.maximum_credits_possible_fin_annee|floatformat|default:0 }}
+            </span>
+        </td>
+    </tr>
+
+    <tr>
+        <th scope="row" class="text-center">{% trans 'Credits earned for the cycle' %}</th>
+        <td><span class="badge badge-progression-cycle-valise">{{ tableau_de_progression.cycle.total.credits_acquis_pour_cycle|floatformat }}</span></td>
+        <td>
+            <span class="badge badge-progression-cycle-valise">{{ tableau_de_progression.cycle.tronc_commun.credits_acquis_pour_cycle|floatformat|default:0 }}</span>
+        </td>
+        {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
+            <td>
+               <span class="badge badge-progression-cycle-valise">
+                    {{ mini_formation.credits_acquis_pour_cycle|floatformat|default:0 }}
+                </span>
+            </td>
+        {% endfor %}
+        {% for partenariat in tableau_de_progression.cycle.partenariats %}
+            <td>
+                <span class="badge badge-progression-cycle-valise">
+                    {{ partenariat.credits_acquis_pour_cycle|floatformat|default:0 }}
+                </span>
+            </td>
+        {% endfor %}
+        {% if a_un_contexte_inconnu %}
+            <td>
+                <span class="badge badge-progression-cycle-valise">
+                    {{ tableau_de_progression.cycle.credits_acquis_pour_cycle|floatformat|default:0 }}
+                </span>
+            </td>
+        {% endif %}
+        <td>
+            <span class="badge badge-progression-cycle-valise">{{ tableau_de_progression.complement.credits_acquis_pour_cycle|floatformat|default:0 }}</span>
+        </td>
+        <td>
+            <span class="badge badge-progression-cycle-valise">
+                {{ tableau_de_progression.hors_progression.credits_acquis_pour_cycle|floatformat|default:0 }}
+            </span>
+        </td>
+    </tr>
+
+    {% for progression_annuelle in tableau_de_progression_progressions_annuelles %}
+        <tr>
+            <td>{{ progression_annuelle.sigle_formation }} {{ progression_annuelle.annee|display_as_academic_year }}</td>
+            <td>
+                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_cycle_total|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_cycle_total|floatformat }}</span>
+            </td>
+            <td>
+                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_cycle_tronc_commun|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_cycle_tronc_commun|floatformat|default:0 }}</span>
+            </td>
+            {% for mini_formation in progression_annuelle.mini_formation %}
+                <td>
+                    <span {% if forloop.parentloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ mini_formation.credits_credites_cycle_mini_formation|floatformat|default:0 }}</strong>/{{ mini_formation.credits_inscrits_cycle_mini_formation|floatformat|default:0 }}</span>
+                </td>
+            {% endfor %}
+            {% for partenariat in progression_annuelle.partenariats %}
+                <td>
+                    <span {% if forloop.parentloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ partenariat.credits_credites_cycle_partenariat|floatformat|default:0 }}</strong>/{{ partenariat.credits_inscrits_cycle_partenariat|floatformat|default:0 }}</span>
+                </td>
+            {% endfor %}
+            {% if a_un_contexte_inconnu %}
+                <td>
+                    <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_cycle_mobilite|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_cycle_mobilite|floatformat|default:0 }}</span>
+                </td>
+            {% endif %}
+            <td>
+                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_complement|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_complement|floatformat|default:0 }}</span>
+            </td>
+            <td>
+                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_hors_progression|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_hors_progression|floatformat|default:0 }}</span>
+            </td>
+        </tr>
+    {% endfor %}
+
+    {% if tableau_de_progression.cycle.total.credits_donnees_du_passe and tableau_de_progression.complement.credits_donnees_du_passe %}
+        <tr>
+            <td>{% trans 'Annual programs prior to 2015-16' %}</td>
+            <td>
+                <span class="badge badge-credits-deja-acquis"><strong>{{ tableau_de_progression.cycle.total.credits_donnees_du_passe|floatformat|default:0 }}</strong></span>
+            </td>
+            <td>
+                <span class="badge badge-credits-deja-acquis"><strong>-</strong></span>
+            </td>
+            {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
+                <td>
+                    <span class="badge badge-credits-deja-acquis"><strong>-</strong></span>
+                </td>
+            {% endfor %}
+            {% for partenariat in tableau_de_progression.cycle.partenariats %}
+                <td>
+                    <span class="badge badge-credits-deja-acquis"><strong>-</strong></span>
+                </td>
+            {% endfor %}
+            {% if a_un_contexte_inconnu %}
+                <td>
+                    <span class="badge badge-credits-deja-acquis"><strong>-</strong></span>
+                </td>
+            {% endif %}
+            <td>
+                <span class="badge badge-credits-deja-acquis"><strong>{{ tableau_de_progression.complement.credits_donnees_du_passe|floatformat|default:0 }}</strong></span>
+            </td>
+            <td>
+                <span class="badge badge-credits-deja-acquis"><strong>{{ tableau_de_progression.hors_progression.credits_donnees_du_passe|floatformat|default:0 }}</strong></span>
+            </td>
+        </tr>
+    {% endif %}
+
+    <tr>
+        <td>{% trans 'Valued credits' %}</td>
+        <td>
+            <span class="fa-stack badge-valise">
+                <i class="fa-stack-2x fa-solid fas fa-square square-valise"></i>
+                <i class="fa-stack-2x fa-solid fa-suitcase valise"></i>
+                <strong class="fa-stack-1x credits-valise">{{ tableau_de_progression.cycle.total.credits_valorises|floatformat|default:0 }}</strong>
+            </span>
+        </td>
+        <td>
+            <span class="fa-stack badge-valise">
+                <i class="fa-stack-2x fa-solid fas fa-square square-valise"></i>
+                <i class="fa-stack-2x fa-solid fa-suitcase valise"></i>
+                <strong class="fa-stack-1x credits-valise">{{ tableau_de_progression.cycle.tronc_commun.credits_valorises|floatformat|default:0 }}</strong>
+            </span>
+        </td>
+        {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
+            <td>
+                <span class="fa-stack badge-valise">
+                    <i class="fa-stack-2x fa-solid fas fa-square square-valise"></i>
+                    <i class="fa-stack-2x fa-solid fa-suitcase valise"></i>
+                    <strong class="fa-stack-1x credits-valise">{{ mini_formation.credits_valorises|floatformat|default:0 }}</strong>
+                </span>
+            </td>
+        {% endfor %}
+        {% for partenariat in tableau_de_progression.cycle.partenariats %}
+            <td></td>
+        {% endfor %}
+        {% if a_un_contexte_inconnu %}
+            <td></td>
+        {% endif %}
+        <td colspan="2"></td>
+    </tr>
+    </tbody>
+</table>

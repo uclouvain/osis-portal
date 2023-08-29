@@ -25,13 +25,6 @@
 
 {% localize off %}
 
-    {% if condition_d_affichage %}
-        <div class="text-center" style="margin-bottom: 25px;">
-            <strong>
-                {{ intitule }}
-            </strong>
-        </div>
-
         {% with credits_acquis_pourcentage=credits_acquis|div:barre_progression_max|mul:100 credits_inscrits_pourcentage=credits_inscrits|div:barre_progression_max|mul:100 %}
             <div>
                 <div class="progress" style="overflow: visible;">
@@ -119,6 +112,5 @@
                 position: relative;
             }
         </style>
-    {% endif %}
 
 {% endlocalize %}
