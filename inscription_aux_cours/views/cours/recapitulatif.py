@@ -167,6 +167,80 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             person=self.person, sigle_programme=self.sigle_formation.replace('11BA', '1BA')
         )
 
+    @cached_property
+    def tableau_de_progression(self) -> 'TableauDeProgression':
+        return self.progression.tableau_de_progression
+
+    @cached_property
+    def nombre_contextes(self) -> int:
+        return (
+            len(self.tableau_de_progression.cycle.mini_formations) +
+            len(self.tableau_de_progression.cycle.partenariats) +
+            int(self.tableau_de_progression.cycle.mobilite.a_un_contexte_inconnu)
+        )
+
+    @cached_property
+    def tableau_de_progression_progressions_annuelles(self) -> List[Dict[str, Union[str, int, List[Dict[str, str]]]]]:
+        return [
+            {
+                "sigle_formation": self.tableau_de_progression.cycle.total.progressions_annuelles[i].sigle_formation,
+                "annee": self.tableau_de_progression.cycle.total.progressions_annuelles[i].annee,
+                "credits_credites_cycle_total": (
+                    self.tableau_de_progression.cycle.total.progressions_annuelles[i].credits_credites
+                ),
+                "credits_inscrits_cycle_total": (
+                    self.tableau_de_progression.cycle.total.progressions_annuelles[i].credits_inscrits
+                ),
+                "credits_credites_cycle_tronc_commun": (
+                    self.tableau_de_progression.cycle.tronc_commun.progressions_annuelles[i].credits_credites
+                ),
+                "credits_inscrits_cycle_tronc_commun": (
+                    self.tableau_de_progression.cycle.tronc_commun.progressions_annuelles[i].credits_inscrits
+                ),
+                "mini_formation": [
+                    {
+                        "credits_credites_cycle_mini_formation": (
+                            mini_formation_cycle.progressions_annuelles[i].credits_credites
+                        ),
+                        "credits_inscrits_cycle_mini_formation": (
+                            mini_formation_cycle.progressions_annuelles[i].credits_inscrits
+                        ),
+                    }
+                    for mini_formation_cycle in self.tableau_de_progression.cycle.mini_formations
+                ],
+                "partenariats": [
+                    {
+                        "credits_credites_cycle_partenariat": (
+                            partenariat_cycle.progressions_annuelles[i].credits_credites
+                        ),
+                        "credits_inscrits_cycle_partenariat": (
+                            partenariat_cycle.progressions_annuelles[i].credits_inscrits
+                        ),
+                    }
+                    for partenariat_cycle in self.tableau_de_progression.cycle.partenariats
+                ],
+                "credits_credites_cycle_mobilite": (
+                    self.tableau_de_progression.cycle.mobilite.progressions_annuelles[i].credits_credites
+                ),
+                "credits_inscrits_cycle_mobilite": (
+                    self.tableau_de_progression.cycle.mobilite.progressions_annuelles[i].credits_inscrits
+                ),
+                "credits_credites_complement": (
+                    self.tableau_de_progression.complement.progressions_annuelles[i].credits_credites
+                ),
+                "credits_inscrits_complement": (
+                    self.tableau_de_progression.complement.progressions_annuelles[i].credits_inscrits
+                ),
+                "credits_credites_hors_progression": (
+                    self.tableau_de_progression.hors_progression.progressions_annuelles[i].credits_credites
+                ),
+                "credits_inscrits_hors_progression": (
+                    self.tableau_de_progression.hors_progression.progressions_annuelles[i].credits_inscrits
+                ),
+            }
+            for i in range(len(self.tableau_de_progression.cycle.total.progressions_annuelles))
+        ]
+
     def get_context_data(self, **kwargs):
         a_une_condition_bama15_ou_1adp = ProprietesPAEService.a_une_condition_bama15_ou_1adp(
             self.person,
@@ -212,8 +286,37 @@ class RecapitulatifView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateVie
             'a_un_complement': self.a_un_complement_de_formation,
             'credits_formation': self.credits_formation,
             'a_une_condition_bama15_ou_1adp': a_une_condition_bama15_ou_1adp,
-            'barre_progression_cycle': self.progression.barre_progression_cycle,
-            'barre_progression_bloc_1': self.progression.barre_progression_bloc_1,
-            'barre_progression_complement': self.progression.barre_progression_complement,
-            'tableau_de_progression': self.progression.tableau_de_progression,
+            'a_un_contexte_inconnu': self.tableau_de_progression.cycle.mobilite.a_un_contexte_inconnu,
+            'nombre_contextes': self.nombre_contextes,
+            'barre_de_progression_max_cycle': self.progression.barre_progression_cycle.barre_de_progression_max,
+            'credits_acquis_cycle': Decimal(self.progression.barre_progression_cycle.credits_acquis),
+            'credits_inscrits_cycle': Decimal(self.progression.barre_progression_cycle.credits_inscrits),
+            'credits_de_progression_potentielle_cycle': (
+                self.progression.barre_progression_cycle.credits_de_progression_potentielle
+            ),
+            'credits_cibles_cycle': self.progression.barre_progression_cycle.credits_cibles,
+            'credits_valorises_cycle': self.progression.barre_progression_cycle.credits_valorises,
+            'valeur_jalon_cycle': self.progression.barre_progression_cycle.valeur_jalon,
+            'intitule_cycle': self.progression.barre_progression_cycle.intitule,
+            'barre_de_progression_max_bloc_1': self.progression.barre_progression_bloc_1.barre_de_progression_max,
+            'credits_acquis_bloc_1': Decimal(self.progression.barre_progression_bloc_1.credits_acquis),
+            'credits_inscrits_bloc_1': Decimal(self.progression.barre_progression_bloc_1.credits_inscrits),
+            'credits_de_progression_potentielle_bloc_1': (
+                self.progression.barre_progression_bloc_1.credits_de_progression_potentielle
+            ),
+            'credits_valorises_bloc_1': self.progression.barre_progression_bloc_1.credits_valorises,
+            'intitule_bloc_1': self.progression.barre_progression_bloc_1.intitule,
+            'barre_de_progression_max_complement': (
+                self.progression.barre_progression_complement.barre_de_progression_max
+            ),
+            'credits_acquis_complement': Decimal(self.progression.barre_progression_complement.credits_acquis),
+            'credits_inscrits_complement': (
+                Decimal(self.progression.barre_progression_complement.credits_inscrits)
+            ),
+            'credits_de_progression_potentielle_complement': (
+                self.progression.barre_progression_complement.credits_de_progression_potentielle
+            ),
+            'intitule_complement': self.progression.barre_progression_complement.intitule,
+            'tableau_de_progression': self.tableau_de_progression,
+            'tableau_de_progression_progressions_annuelles': self.tableau_de_progression_progressions_annuelles,
         }
