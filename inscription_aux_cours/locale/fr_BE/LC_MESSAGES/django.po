@@ -49,6 +49,9 @@ msgstr "Unités d'enseignement ajoutées"
 msgid "Annual program proposal"
 msgstr "Proposition de programme annuel"
 
+msgid "Annual programs prior to 2015-16"
+msgstr "Programmes annuels antérieurs à 2015-16"
+
 msgid "Are you sure you don't want to enroll to any minitraining ?"
 msgstr ""
 "Vous n'êtes inscrit.e à aucune mineure ou option. Il est nécessaire de "
@@ -58,17 +61,23 @@ msgstr ""
 msgid "Block"
 msgstr "Block"
 
-msgid "Cancel"
-msgstr "Annuler"
-
 msgid "Code"
 msgstr "Code"
+
+msgid "Common core"
+msgstr "Tronc commun"
+
+msgid "Complement"
+msgstr "Complément"
 
 msgid "Continue to courses enrollment"
 msgstr "Poursuivre ma composition de programme annuel"
 
 msgid "Credits"
 msgstr "Crédits"
+
+msgid "Credits earned for the cycle"
+msgstr "Crédits acquis pour le cycle"
 
 msgid "Credits earned/valued"
 msgstr "Crédits acquis/valorisés"
@@ -81,6 +90,9 @@ msgstr "Les crédits de l'unité d'enseignement sont acquis"
 
 msgid "Credits of the learning unit are valued"
 msgstr "Les crédits de l'unité d'enseignement ont été valorisés"
+
+msgid "Cycle progress"
+msgstr "Progression dans le cycle"
 
 msgid ""
 "Define in which context you want to enroll the course and search by code "
@@ -208,6 +220,12 @@ msgstr "Liste des mineures et options auxquelles vous êtes inscrit.e"
 msgid "Mandatory"
 msgstr "Obligatoire"
 
+msgid "Maximum possible at year end"
+msgstr "Maximum possible en fin d'année"
+
+msgid "Mobilite"
+msgstr "Mobilité"
+
 msgid "Modify my enrollments"
 msgstr "Modifier ma proposition"
 
@@ -260,6 +278,9 @@ msgstr "Organisé cette année académique mais non organisé l’année suivant
 msgid "Optional"
 msgstr "Optionnel"
 
+msgid "Out of progression"
+msgstr "Hors progression"
+
 msgid ""
 "Please fix errors to save and continue to the recap of your annual program "
 "proposal"
@@ -307,6 +328,9 @@ msgstr ""
 msgid "Special requests"
 msgstr "Demandes particulières éventuelles"
 
+msgid "Student cycle program"
+msgstr "Parcours de cycle de l'étudiant.e"
+
 msgid "Submit my proposition of annual program"
 msgstr "Soumettre ma proposition de programme annuel"
 
@@ -349,8 +373,14 @@ msgstr ""
 msgid "Title"
 msgstr "Intitulé"
 
+msgid "Total"
+msgstr "Total"
+
 msgid "Total credits"
 msgstr "Nombre total de crédits"
+
+msgid "Valued credits"
+msgstr "Crédits valorisés"
 
 msgid "View my courses schedule"
 msgstr "Visualiser mon horaire"

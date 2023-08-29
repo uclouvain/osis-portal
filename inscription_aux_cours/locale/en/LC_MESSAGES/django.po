@@ -42,22 +42,31 @@ msgstr ""
 msgid "Annual program proposal"
 msgstr ""
 
+msgid "Annual programs prior to 2015-16"
+msgstr ""
+
 msgid "Are you sure you don't want to enroll to any minitraining ?"
 msgstr ""
 
 msgid "Block"
 msgstr ""
 
-msgid "Cancel"
+msgid "Code"
 msgstr ""
 
-msgid "Code"
+msgid "Common core"
+msgstr ""
+
+msgid "Complement"
 msgstr ""
 
 msgid "Continue to courses enrollment"
 msgstr ""
 
 msgid "Credits"
+msgstr ""
+
+msgid "Credits earned for the cycle"
 msgstr ""
 
 msgid "Credits earned/valued"
@@ -70,6 +79,9 @@ msgid "Credits of the learning unit are acquired"
 msgstr ""
 
 msgid "Credits of the learning unit are valued"
+msgstr ""
+
+msgid "Cycle progress"
 msgstr ""
 
 msgid ""
@@ -174,6 +186,12 @@ msgstr ""
 msgid "Mandatory"
 msgstr ""
 
+msgid "Maximum possible at year end"
+msgstr ""
+
+msgid "Mobilite"
+msgstr ""
+
 msgid "Modify my enrollments"
 msgstr ""
 
@@ -224,6 +242,9 @@ msgstr ""
 msgid "Optional"
 msgstr ""
 
+msgid "Out of progression"
+msgstr ""
+
 msgid ""
 "Please fix errors to save and continue to the recap of your annual program "
 "proposal"
@@ -265,6 +286,9 @@ msgstr ""
 msgid "Special requests"
 msgstr ""
 
+msgid "Student cycle program"
+msgstr ""
+
 msgid "Submit my proposition of annual program"
 msgstr ""
 
@@ -298,7 +322,13 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+msgid "Total"
+msgstr ""
+
 msgid "Total credits"
+msgstr ""
+
+msgid "Valued credits"
 msgstr ""
 
 msgid "View my courses schedule"

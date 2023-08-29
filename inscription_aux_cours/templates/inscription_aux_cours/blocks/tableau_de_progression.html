@@ -34,15 +34,15 @@
     <tr>
         <th scope="col"></th>
         <th scope="col" colspan="{{ nombre_contextes|add:2 }}" class="emphasize-border-top-bottom">
-            Progression dans le cycle
+            {% trans 'Cycle progress' %}
         </th>
-        <th scope="col">Complément</th>
-        <th scope="col">Hors Progression</th>
+        <th scope="col">{% trans 'Complement' %}</th>
+        <th scope="col">{% trans 'Out of progression' %}</th>
     </tr>
     <tr>
-        <th scope="col">Programme de cycle de l'étudiant.e</th>
-        <th scope="col">Total</th>
-        <th scope="col">Tronc Commun</th>
+        <th scope="col">{% trans 'Student cycle program' %}</th>
+        <th scope="col">{% trans 'Total' %}</th>
+        <th scope="col">{% trans 'Common core' %}</th>
         {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
             <th scope="col">{{ mini_formation.sigle }}</th>
         {% endfor %}
@@ -50,15 +50,15 @@
             <th scope="col">{{ partenariat.code_partenaire }}</th>
         {% endfor %}
         {% if a_un_contexte_inconnu %}
-            <th scope="col">Mobilité</th>
+            <th scope="col">{% trans 'Mobilite' %}</th>
         {% endif %}
-        <th scope="col">Total</th>
-        <th scope="col">Total</th>
+        <th scope="col">{% trans 'Total' %}</th>
+        <th scope="col">{% trans 'Total' %}</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <th scope="row" class="text-center">Maximum possible en fin d'année</th>
+        <th scope="row" class="text-center">{% trans 'Maximum possible at year end' %}</th>
         <td><span class="badge badge-progression-cycle-limite">{{ tableau_de_progression.cycle.total.maximum_credits_possible_fin_annee|floatformat }}</span></td>
         <td><span class="badge badge-progression-cycle-limite">{{ tableau_de_progression.cycle.tronc_commun.maximum_credits_possible_fin_annee|floatformat|default:0 }}</span></td>
         {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
@@ -95,7 +95,7 @@
     </tr>
 
     <tr>
-        <th scope="row" class="text-center">Crédits acquis pour le cycle</th>
+        <th scope="row" class="text-center">{% trans 'Credits earned for the cycle' %}</th>
         <td><span class="badge badge-progression-cycle-valise">{{ tableau_de_progression.cycle.total.credits_acquis_pour_cycle|floatformat }}</span></td>
         <td>
             <span class="badge badge-progression-cycle-valise">{{ tableau_de_progression.cycle.tronc_commun.credits_acquis_pour_cycle|floatformat|default:0 }}</span>
@@ -166,7 +166,7 @@
 
     {% if tableau_de_progression.cycle.total.credits_donnees_du_passe and tableau_de_progression.complement.credits_donnees_du_passe %}
         <tr>
-            <td>Programmes annuels antérieurs à 2015-16</td>
+            <td>{% trans 'Annual programs prior to 2015-16' %}</td>
             <td>
                 <span class="badge badge-credits-deja-acquis"><strong>{{ tableau_de_progression.cycle.total.credits_donnees_du_passe|floatformat|default:0 }}</strong></span>
             </td>
@@ -198,7 +198,7 @@
     {% endif %}
 
     <tr>
-        <td>Crédits valorisés</td>
+        <td>{% trans 'Valued credits' %}</td>
         <td>
             <span class="fa-stack badge-valise">
                 <i class="fa-stack-2x fa-solid fas fa-square square-valise"></i>
