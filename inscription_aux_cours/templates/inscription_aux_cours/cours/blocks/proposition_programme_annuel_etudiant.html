@@ -46,12 +46,12 @@
                         <i data-toggle="tooltip"
                            data-placement="top"
                            class="fa-solid fa-shield-halved gold" style="color: gold"
-                           title="{% trans 'Learning unit with prerequisites not acquired' %}"
+                           title="{% trans 'Course unit for which prerequisites have not been satisfied' %}"
                         ></i>
                         {% if not est_en_fin_de_cycle and inscription.code in cours_dont_prerequis_non_acquis %}
                             <i class="fa fa-exclamation-circle fa-danger"
                                 style="font-size:120%" aria-hidden="true"
-                                title="{% trans 'Prerequisite not acquired' %}"
+                                title="{% trans 'Prerequisite not satisfied' %}"
                                 data-toggle="tooltip"
                             ></i>
                         {% endif %}
@@ -59,7 +59,7 @@
                         <i data-toggle="tooltip"
                            data-placement="top"
                            class="fa-solid fa-shield-halved vert"
-                           title="{% trans 'Learning unit with prerequisites acquired' %}"
+                           title="{% trans 'Course unit for which prerequisites have been satisfied' %}"
                         ></i>
                     {% endif %}
                 </td>
@@ -70,7 +70,7 @@
         {% endif %}
     {% endfor %}
         <tr class="ligne-total-credits">
-            <th colspan="2">{% trans "Total credits" %}</th>
+            <th colspan="2">{% trans "Total number of credits" %}</th>
             <th headers="colonne-credits">{{ programme_annuel.total_credits.normalize }}</th>
         </tr>
     </tbody>

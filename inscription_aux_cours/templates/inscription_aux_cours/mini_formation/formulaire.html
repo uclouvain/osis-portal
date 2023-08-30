@@ -27,8 +27,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li class="active">{% trans 'My minors or options enrollment' %}</li>
+    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Course choice' %}</a></li>
+    <li class="active">{% trans 'My choice of minors or electives' %}</li>
 {% endblock %}
 
 
@@ -48,9 +48,9 @@
             <div class="alert alert-warning" style="display:inline-block;">
                 <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                 {% if est_bachelier %}
-                    {% trans "You are not enrolled to a minor or deepening." %}
+                    {% trans "You have not yet registered for a minor or in-depth study." %}
                 {% else %}
-                    {% trans "You are not enrolled to an option." %}
+                    {% trans "You are not registered for a elective." %}
                 {% endif %}
             </div>
             {% endif %}
@@ -60,13 +60,13 @@
 
                 <div class="alert alert-warning">
                     <p>
-                        {% trans 'The following minors or options in which you are enrolled are no longer offered this academic year:' %}
+                        {% trans 'The following minors or electives in which you are registered are no longer offered this academic year:' %}
                     <ul>
                         {% for mini_formation in mini_formations_inscrites_non_inscriptibles %}
                             <li>{{ mini_formation.title }}</li>
                         {% endfor %}
                     </ul>
-                    {% trans 'For a change in minors or options, please contact your faculty manager.' %}
+                    {% trans 'To change minors or electives, please contact your faculty administrator.' %}
                     </p>
                 </div>
 
@@ -91,11 +91,11 @@
                             <tbody>
                                 <tr>
                                     <td class="col-md-1"><i class='fa-solid fa-key fa-info'></i></td>
-                                    <td>{% trans "Access to the minors or options marked with a key is subject to compliance with certain conditions (admission test, application file, etc.) which must be read before registering. Please consult the procedure to follow to register by clicking on the key. The registration will be done by your faculty manager." %}</td>
+                                    <td>{% trans "Admission to minors or electives marked with a key is subject to meeting certain requirements (entrance exam, application, etc.), which you should familiarise yourself with before registering. To find out how to register, click on the key. Registration will be carried out by your faculty administrator." %}</td>
                                 </tr>
                                 <tr>
                                     <td>Insc</td>
-                                    <td>{% trans 'Enrolled to the minor or option' %}</td>
+                                    <td>{% trans 'Registered for the minor or elective' %}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -126,10 +126,10 @@
                                          data-popover="manual"
                                          data-content="
                                            <p>
-                                            {% trans 'This minor or option has access conditions, please refer to the procedure to enroll by following this link:' %}
+                                            {% trans 'This minor or elective has admission requirements, please consult the registration procedure by clicking this link:' %}
                                             <a href='{{ lien_condition_access }}' target='_blank'>{{ lien_condition_access }}</a>
                                             <br>
-                                            {% trans 'The enrollment will be done by your faculty manager.' %}
+                                            {% trans 'Registration will be carried out by your faculty administrator' %}
                                             </p>"
                                     >
                                 {% endif %}
@@ -158,7 +158,7 @@
                                         {% elif inscription and not inscription.demandee_par_etudiant %}
                                             disabled
                                             data-toggle="tooltip"
-                                            title="{% trans 'You cannot unenroll from a minor or option enrolled by your faculty manager.' %}"
+                                            title="{% trans 'You cannot unregister from a minor or elective added by your faculty administrator.' %}"
                                         {% endif %}
                                 >
                                 {% if mini_formation.condition_acces %}
@@ -180,7 +180,7 @@
 
             <div class="center">
                 <a id="link-go-to-courses-enrollment" class="btn btn-primary btn-wrap btn-block-xs" onclick="modalConfirm()">
-                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to courses enrollment' %}
+                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to my annual programme proposal' %}
                 </a>
                 {% include "inscription_aux_cours/mini_formation/modal_confirmation_aucune_inscription.html" %}
             </div>
