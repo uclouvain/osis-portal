@@ -67,12 +67,12 @@
 
                     <!-- Jalons (en général valeur_jalon = 60 crédits) -->
                     {% if valeur_jalon and credits_cibles %}
-                        {% with nombre_jalons=credits_cibles|div:valeur_jalon|floatformat|add:0 %}
+                        {% with nombre_jalons=credits_cibles|div:valeur_jalon|floatformat:0|add:0 %}
                             {% for nieme_jalon in 0|range_for:nombre_jalons %}
                                 {% with valeur_nieme_jalon=nieme_jalon|mul:valeur_jalon %}
                                     {% if forloop.last and valeur_nieme_jalon != credits_cibles %}
                                         <!-- Dernier jalon aux crédits cibles si ils sont différents de la valeur du dernier jalon classique  -->
-                                        <div class="jalons" style="{% if forloop.last and valeur_nieme_jalon != credits_cibles %}color: red; {% endif %}width: 1px; height: 120%; position: absolute; background: black; left: {{ credits_cibles|div:barre_progression_max|mul:100 }}%;">
+                                        <div class="jalons" style="{% if forloop.last and valeur_nieme_jalon != credits_cibles %}color: red; {% endif %}width: 1px; height: 100%; position: absolute; background: black; left: {{ credits_cibles|div:barre_progression_max|mul:100 }}%;">
                                             <small style="position: absolute; top: 25px; {% if forloop.first %}left: -5px;{% else %}right: -10px;{% endif %}">{{ credits_cibles }}</small>
                                         </div>
                                     {% endif %}

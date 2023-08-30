@@ -26,7 +26,7 @@
     {% if credits_formation %}
         {% widthratio credits_formation 60 1 as proportion  %}
     {% else %}
-        {% widthratio 1 1 1 as proportion  %}
+        {% widthratio 1 1 1 as proportion|add:1  %}
     {% endif %}
     <div style="flex-grow: {{ proportion }};"
         hx-get="{% url 'inscription-aux-cours:barre-progression-cycle-view' programme.sigle %}"
