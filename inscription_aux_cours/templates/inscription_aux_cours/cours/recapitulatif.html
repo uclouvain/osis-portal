@@ -32,15 +32,15 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li><a href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">{% trans 'My composition enrollment' %}</a></li>
-    <li class="active">{% trans 'Summary courses enrollment' %}</li>
+    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Course choice' %}</a></li>
+    <li><a href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">{% trans 'My annual programme' %}</a></li>
+    <li class="active">{% trans 'Summary of my annual programme proposal' %}</li>
 {% endblock %}
 
 
 {% block page_header %}
     <div class="page-header">
-        <h2>{% trans 'My courses enrollment' %}</h2>
+        <h2>{% trans 'My annual programme' %}</h2>
     </div>
 {% endblock %}
 
@@ -48,7 +48,7 @@
     <div class="panel panel-default print">
         <div class="panel-body">
 
-            <h3 class="visible-print-block">{% trans "Annual program proposal" %}</h3>
+            <h3 class="visible-print-block">{% trans "Annual programme proposal" %}</h3>
 
             {% include "inscription_aux_cours/blocks/header_formation.html" %}
 
@@ -57,7 +57,7 @@
             {% if programme_annuel.a_des_inscriptions %}
                 <div class="alert alert-info hide_print" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans "Your enrollments are saved but you can continue modifying it until you didin't submit them." %}
+                    {% trans "Your annual programme proposal is saved, but you can change it as long as you have not submitted it." %}
                 </div>
 
                 {% if depasse_le_maximum_credits_inscrits %}
@@ -65,12 +65,12 @@
                         <p>
                             <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
                                 {% if a_une_condition_bama15_ou_1adp %}
-                                    {% trans "Your cumulative annual program (bachelor + master) may not exceed 60 credits." %}
+                                    {% trans "Your cumulative annual programme (bachelor + master) may not exceed 60 credits." %}
                                 {% else %}
-                                    {% trans "Your annual program proposal contains more than 90 credits. The student's annual program (PAE) is supposed to contain 60 credits, maximum 75." %}
+                                    {% trans "Your annual programme proposal contains more than 90 credits. The student's annual programme (PAE) is supposed to contain 60 credits, maximum 75." %}
                                 {% endif %}
                                 <br>
-                                {% trans "Please modify your enrollments." %}
+                                {% trans "Please modify your annual programme proposal." %}
                         </p>
                     </div>
                 {% endif %}
@@ -79,16 +79,16 @@
                         <div class="alert alert-danger hide_print">
                             <p>
                                 <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
-                                {% trans "You didn't acquired the prerequisites for the following courses:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
+                                {% trans "You have not satisfied the prerequisites for the following course units:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
                                 <br>
-                                {% trans "Please modify your enrollments." %}
+                                {% trans "Please modify your annual programme proposal." %}
                             </p>
                         </div>
                     {% else %}
                         <div class="alert alert-warning hide_print">
                             <p>
                                 <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
-                                {% blocktrans with liste_codes_ue=cours_dont_prerequis_non_acquis|join:", " %}It seems you didn't acquired the prerequisites for the following courses: {{ liste_codes_ue }}. This submission will be examined by your faculty after the submission of your proposal.{% endblocktrans %}
+                                {% blocktrans with liste_codes_ue=cours_dont_prerequis_non_acquis|join:", " %}It appears that you have not satisfied the prerequisites for {{ liste_codes_ue }}. This request will be examined by the faculty after you have submitted your proposal.{% endblocktrans %}
                             </p>
                         </div>
                     {% endif %}
@@ -101,7 +101,7 @@
             {% else %}
                 <div class="alert alert-warning hide_print" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans "You are not enrolled to any courses." %}
+                    {% trans "You are not registered for any course units." %}
                 </div>
             {% endif %}
 
@@ -110,16 +110,16 @@
             {% if activites_aide_reussite %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        {% trans 'My success support activities' %}
+                        {% trans 'My learning support activities' %}
                     </div>
                     <div class="panel-body">
                         {% if activites_aide_reussite.suivies_par_etudiant %}
                             <p>
-                            {% trans "In accordance with article 39 1 of the RGEE, I complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with activities to help me succeed</a></ins>." %}
+                            {% trans "In accordance with article 39 1 of the Academic Regulations and Procedures (RGEE), I am supplementing my annual programme <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with learning support activities</a></ins>." %}
                             </p>
                         {% else %}
                             <p>
-                            {% trans "In accordance with article 39 1 of the RGEE, I have been informed that I can complete my enrollment with success support activities. I have decided not to complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with activities to help me succeed</a></ins>." %}
+                            {% trans "In accordance with article 39 1 of the Academic Regulations and Procedures (RGEE), I have been informed that I can supplement my annual programme <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with learning support activities</a></ins>. I have decided to not supplement my annual programme with learning support activities." %}
                             </p>
                         {% endif %}
                     </div>
@@ -145,13 +145,13 @@
 
             <div class="center hide_print">
                 <a class="btn btn-default btn-wrap btn-block-xs" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
-                    <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}
+                    <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my proposal" %}
                 </a>
                 <a class="btn btn-default btn-wrap btn-block-xs" href="{% get_lien_horaire_cours programme_annuel %}" target="_blank">
-                    <i class="fa-solid fa-clock"></i> {% trans "View my courses schedule" %}
+                    <i class="fa-solid fa-clock"></i> {% trans "View my schedule" %}
                 </a>
                 <button class="btn btn-default btn-wrap btn-block-xs" onClick="window.print()">
-                    <i class="fa-solid fa-print"></i> {% trans "Print my proposition of annual program" %}
+                    <i class="fa-solid fa-print"></i> {% trans "Print my proposal" %}
                 </button>
             </div>
 

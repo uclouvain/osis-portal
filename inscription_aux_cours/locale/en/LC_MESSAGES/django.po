@@ -19,21 +19,27 @@ msgstr ""
 msgid "Academic year"
 msgstr ""
 
+msgid "Activity with prerequisites"
+msgstr ""
+
+msgid "Add a course unit that is not included in the above programme"
+msgstr ""
+
+msgid "Added course units"
+msgstr ""
+
 msgid ""
-"Access to the minors or options marked with a key is subject to compliance "
-"with certain conditions (admission test, application file, etc.) which must "
-"be read before registering. Please consult the procedure to follow to "
-"register by clicking on the key. The registration will be done by your "
-"faculty manager."
+"Admission to minors or electives marked with a key is subject to meeting "
+"certain requirements (entrance exam, application, etc.), which you should "
+"familiarise yourself with before registering. To find out how to register, "
+"click on the key. Registration will be carried out by your faculty "
+"administrator."
 msgstr ""
 
-msgid "Acronym"
+msgid "Annual programs prior to 2015-16"
 msgstr ""
 
-msgid "Activiy with prerequisites"
-msgstr ""
-
-msgid "Add a course that is not in the offer"
+msgid "Annual programme proposal"
 msgstr ""
 
 msgid "Added courses"
@@ -45,10 +51,12 @@ msgstr ""
 msgid "Annual programs prior to 2015-16"
 msgstr ""
 
-msgid "Are you sure you don't want to enroll to any minitraining ?"
+msgid "Block"
 msgstr ""
 
-msgid "Block"
+msgid ""
+"Click on the code of the course for which you want to create your annual "
+"programme."
 msgstr ""
 
 msgid "Code"
@@ -60,71 +68,40 @@ msgstr ""
 msgid "Complement"
 msgstr ""
 
-msgid "Continue to courses enrollment"
+msgid "Continue composing my annual programme"
 msgstr ""
 
-msgid "Credits"
+msgid "Course"
 msgstr ""
 
-msgid "Credits earned for the cycle"
+msgid "Course choice"
 msgstr ""
 
 msgid "Credits earned/valued"
 msgstr ""
 
-msgid "Credits for potential progress"
+msgid "Credits earned for the cycle"
 msgstr ""
 
-msgid "Credits of the learning unit are acquired"
+msgid "Course unit"
 msgstr ""
 
-msgid "Credits of the learning unit are valued"
+msgid "Course unit failed in a previous academic year"
+msgstr ""
+
+msgid "Course unit for which prerequisites have been satisfied"
 msgstr ""
 
 msgid "Cycle progress"
 msgstr ""
 
-msgid ""
-"Define in which context you want to enroll the course and search by code "
-"(example: LCHIM1111)."
+msgid "Course unit for which prerequisites have not been satisfied"
 msgstr ""
 
-msgid "Enrolled in a learning unit"
+msgid "Credits"
 msgstr ""
 
-msgid "Enrolled in a learning unit of continuation cycle"
-msgstr ""
-
-msgid ""
-"Enrolled in a learning unit of continuation cycle, with a dispensatory test"
-msgstr ""
-
-msgid "Enrolled in a learning unit of the complementary module"
-msgstr ""
-
-msgid ""
-"Enrolled in a learning unit of the complementary module, with a dispensatory "
-"test"
-msgstr ""
-
-msgid ""
-"Enrolled in a learning unit who does not account in the cycle progression"
-msgstr ""
-
-msgid "Enrolled in a learning unit with a dispensatory test"
-msgstr ""
-
-#, python-format
-msgid "Enrolled to %(code_ue)s."
-msgstr ""
-
-msgid "Enrolled to the minor or option"
-msgstr ""
-
-msgid "Exceptionally, not organized this year"
-msgstr ""
-
-msgid "Exceptionally, not organized this year, nor the next"
+msgid "Credits earned/validated"
 msgstr ""
 
 msgid "First name"
@@ -133,54 +110,44 @@ msgstr ""
 msgid "First year of"
 msgstr ""
 
-msgid "For a change in minors or options, please contact your faculty manager."
-msgstr ""
-
-msgid "I complete my enrollment with success support activities"
+msgid "I am supplementing my annual programme with learning support activities"
 msgstr ""
 
 msgid ""
-"In accordance with article 39 1 of the RGEE, I complete my enrollment "
+"In accordance with article 39 1 of the Academic Regulations and Procedures "
+"(RGEE), I am supplementing my annual programme <ins><a href='https://"
+"uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with learning "
+"support activities</a></ins>."
+msgstr ""
+"In accordance with article 39 §1 of the Academic Regulations and Procedures "
+"(RGEE), I am supplementing my annual programme <ins><a href='https://"
+"uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with learning "
+"support activities</a></ins>."
+
+msgid ""
+"In accordance with article 39 1 of the Academic Regulations and Procedures "
+"(RGEE), I have been informed that I can supplement my annual programme "
 "<ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' "
-"target='_blank'>with activities to help me succeed</a></ins>."
+"target='_blank'>with learning support activities</a></ins>. I have decided "
+"to not supplement my annual programme with learning support activities."
 msgstr ""
-
-msgid ""
-"In accordance with article 39 1 of the RGEE, I have been informed that I can "
-"complete my enrollment with success support activities. I have decided not "
-"to complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-"
-"facultaires' target='_blank'>with activities to help me succeed</a></ins>."
-msgstr ""
-
-msgid "Indicates annual block"
-msgstr ""
+"In accordance with article 39 §1 of the Academic Regulations and Procedures "
+"(RGEE), I have been informed that I can supplement my annual programme "
+"<ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' "
+"target='_blank'>with learning support activities</a></ins>. I have decided "
+"to not supplement my annual programme with learning support activities."
 
 #, python-format
 msgid ""
-"It seems you didn't acquired the prerequisites for the following courses: "
-"%(liste_codes_ue)s. This submission will be examined by your faculty after "
-"the submission of your proposal."
+"It appears that you have not satisfied the prerequisites for "
+"%(liste_codes_ue)s. This request will be examined by the faculty after you "
+"have submitted your proposal."
 msgstr ""
 
 msgid "Last name"
 msgstr ""
 
-msgid "Learning Unit Year"
-msgstr ""
-
-msgid "Learning unit failed for a past academic year"
-msgstr ""
-
-msgid "Learning unit with prerequisites acquired"
-msgstr ""
-
-msgid "Learning unit with prerequisites not acquired"
-msgstr ""
-
 msgid "Legend"
-msgstr ""
-
-msgid "List of minors or options to which you are enrolled"
 msgstr ""
 
 msgid "Mandatory"
@@ -192,131 +159,171 @@ msgstr ""
 msgid "Mobilite"
 msgstr ""
 
-msgid "Modify my enrollments"
+msgid "Minors and electives for which you are registered"
 msgstr ""
 
-msgid "Modify my minors and options enrollments"
+msgid "Modify my choice of minors or electives"
 msgstr ""
 
-msgid "My composition enrollment"
+msgid "Modify my proposal"
 msgstr ""
 
-msgid "My courses enrollment"
+msgid "My annual programme"
+msgstr ""
+
+msgid "My choice of minors or electives"
 msgstr ""
 
 msgid "My exchange programme"
 msgstr ""
 
-msgid "My minors or options enrollment"
+msgid "My learning support activities"
 msgstr ""
 
-msgid "My success support activities"
-msgstr ""
-
-msgid ""
-"N.B.: A legend reminder appears by positioning the mouse pointer over the "
-"icon"
+msgid "N.B.: A legend reminder appears by positioning the cursor over the icon"
 msgstr ""
 
 msgid "No"
 msgstr ""
 
-msgid "No minitraining checked confirmation"
+msgid "No minor or elective selected"
 msgstr ""
 
-msgid "Not offered this year but offered the following year"
+msgid "Noma"
+msgstr ""
+
+msgid "Not offered this academic year but next academic year"
+msgstr ""
+
+msgid "Not offered this year"
+msgstr ""
+
+msgid "Not offered this year or next year"
 msgstr ""
 
 msgid "Number of credits earned for"
 msgstr ""
 
-msgid "Offer"
-msgstr ""
-
-msgid "Offer choice"
-msgstr ""
-
-msgid "Offered this year but not the following year"
+msgid "Offered this academic year but not next academic year"
 msgstr ""
 
 msgid "Optional"
+msgstr ""
+
+msgid ""
+"Please correct any errors in your form to save it and continue to the "
+"summary of your annual programme proposal."
+msgstr ""
+
+msgid "Please modify your annual programme proposal."
+msgstr ""
+
+msgid "Potential credits earned"
+msgstr ""
+
+msgid "Prerequisite not satisfied"
+msgstr ""
+
+msgid "Print my proposal"
+msgstr ""
+
+msgid "Registered credits in "
+msgstr ""
+
+#, python-format
+msgid "Registered for %(code_ue)s."
+msgstr ""
+
+msgid "Registered for a course unit that counts toward the degree"
+msgstr ""
+
+msgid ""
+"Registered for a course unit that counts toward the degree, with exemption "
+"test"
+msgstr ""
+
+msgid "Registered for a course unit that does not count toward the degree"
+msgstr ""
+
+msgid "Registered for course unit"
+msgstr ""
+
+msgid "Registered for course unit of the complementary module"
 msgstr ""
 
 msgid "Out of progression"
 msgstr ""
 
 msgid ""
-"Please fix errors to save and continue to the recap of your annual program "
-"proposal"
+"Registered for course unit of the complementary module, with exemption test"
 msgstr ""
 
-msgid "Please modify your enrollments."
+msgid "Registered for course unit with exemption test"
 msgstr ""
 
-msgid "Prerequisite not acquired"
+msgid "Registered for the minor or elective"
 msgstr ""
 
-msgid "Print my proposition of annual program"
-msgstr ""
-
-msgid "Program"
-msgstr ""
-
-msgid "Registered credits in "
-msgstr ""
-
-msgid "Registration id"
+msgid "Registration will be carried out by your faculty administrator"
 msgstr ""
 
 msgid "Return to initial screen"
 msgstr ""
 
-msgid "Save and continue to courses enrollment"
+msgid "Save and continue to my annual programme proposal"
 msgstr ""
 
-msgid "Save and continue to enrollments summary"
+msgid "Save and continue to the summary of my annual programme proposal"
 msgstr ""
 
 msgid "Search by code (example: LCHIM1111)"
 msgstr ""
 
-msgid "Select an offer for which you want to do courses enrollment."
+msgid "Special requests"
 msgstr ""
 
-msgid "Special requests"
+msgid "Specify annual block(s)"
+msgstr ""
+
+msgid ""
+"Specify the context in which you want to add this course unit and search by "
+"code (example: LCHIM1111)."
+msgstr ""
+
+msgid "Submit my annual programme proposal"
 msgstr ""
 
 msgid "Student cycle program"
 msgstr ""
 
-msgid "Submit my proposition of annual program"
+msgid "Summary of my annual programme proposal"
 msgstr ""
 
-msgid "Summary courses enrollment"
+msgid "The course unit credits have been earned"
 msgstr ""
 
-msgid "The enrollment will be done by your faculty manager."
+msgid "The course unit credits have been validated"
 msgstr ""
 
 msgid ""
-"The following minors or options in which you are enrolled are no longer "
+"The following minors or electives in which you are registered are no longer "
 "offered this academic year:"
 msgstr ""
 
 msgid ""
-"The size of your screen does not allow for optimal navigation within the "
-"form. Please use, if possible, a larger screen for easier navigation."
+"The size of your screen does not allow optimal navigation within the form. "
+"If possible, please use a larger screen for easier navigation."
 msgstr ""
 
 #, python-brace-format
 msgid ""
-"This minor has access conditions, please refer to the procedure to enroll: "
-"{lien_condition_acces}"
+"This minor has admission requirements, please consult the registration "
+"procedure: {lien_condition_acces}"
 msgstr ""
 
 msgid ""
-"This minor or option has access conditions, please refer to the procedure to "
-"enroll by following this link:"
+"This minor or elective has admission requirements, please consult the "
+"registration procedure by clicking this link:"
 msgstr ""
 
 msgid "Title"
@@ -325,13 +332,17 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-msgid "Total credits"
+msgid ""
+"To change minors or electives, please contact your faculty administrator."
+msgstr ""
+
+msgid "Total number of credits"
 msgstr ""
 
 msgid "Valued credits"
 msgstr ""
 
-msgid "View my courses schedule"
+msgid "View my schedule"
 msgstr ""
 
 msgid "Year"
@@ -340,63 +351,73 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-msgid "You are not enrolled to a minor or deepening."
-msgstr ""
-
-msgid "You are not enrolled to an option."
-msgstr ""
-
-msgid "You are not enrolled to any courses."
+msgid "You are not registered for a elective."
 msgstr ""
 
 #, python-format
 msgid ""
-"You are not enrolled to any program for the academic year "
-"%(annee_academique)s."
+"You are not registered for any course for the %(annee_academique)s  academic "
+"year."
+msgstr ""
+
+msgid "You are not registered for any course units."
 msgstr ""
 
 msgid ""
-"You cannot unenroll from a minor or option enrolled by your faculty manager."
-msgstr ""
-
-msgid "You didn't acquired the prerequisites for the following courses:"
-msgstr ""
-
-msgid ""
-"Your annual program proposal contains more than 90 credits. The student's "
-"annual program (PAE) is supposed to contain 60 credits, maximum 75."
-msgstr ""
-
-msgid "Your contact in faculty"
+"You are not registered for any minor or elective. You must register for a "
+"minor or elective before continuing (except for minors or electives with "
+"admission requirements or exceptional situations)."
 msgstr ""
 
 msgid ""
-"Your cumulative annual program (bachelor + master) may not exceed 60 credits."
+"You cannot unregister from a minor or elective added by your faculty "
+"administrator."
 msgstr ""
 
 msgid ""
-"Your enrollment has been completed or not with success support activies by "
-"your faculty manager. You cannot remove or add them."
+"You have not satisfied the prerequisites for the following course units:"
+msgstr ""
+
+msgid "You have not yet registered for a minor or in-depth study."
 msgstr ""
 
 msgid ""
-"Your enrollments are saved but you can continue modifying it until you "
-"didin't submit them."
-msgstr ""
-
-msgid ""
-"Your faculty organize <ins><a href='https://uclouvain.be/aar-dispositifs-"
-"facultaires' target='_blank'>support systems</a></ins> to help you succeed "
-"throughout the year."
-msgstr ""
-
-msgid "Your proposal has not been saved."
+"Your annual programme proposal contains more than 90 credits. The student's "
+"annual programme (PAE) is supposed to contain 60 credits, maximum 75."
 msgstr ""
 
 #, python-format
 msgid ""
-"Your proposition of annual program successfully submitted. A confirmation "
-"email is sent to the address %(email)s"
+"Your annual programme proposal has been successfully submitted. A "
+"confirmation email will be sent to %(email)s"
+msgstr ""
+
+msgid "Your annual programme proposal has not been saved."
+msgstr ""
+
+msgid ""
+"Your annual programme proposal is saved, but you can change it as long as "
+"you have not submitted it."
+msgstr ""
+
+msgid ""
+"Your cumulative annual programme (bachelor + master) may not exceed 60 "
+"credits."
+msgstr ""
+
+msgid ""
+"Your faculty administrator may or may not have added learning support "
+"activities to your annual programme. These cannot be removed or added."
+msgstr ""
+
+msgid "Your faculty contact"
+msgstr ""
+
+#, python-format
+msgid ""
+"Your faculty offers <ins><a href='https://uclouvain.be/aar-dispositifs-"
+"facultaires' target='_blank'>learning support activities</a></ins> to help "
+"you throughout your studies."
 msgstr ""
 
 msgid "credits"

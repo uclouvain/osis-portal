@@ -31,7 +31,7 @@
                     <!-- Barres de progressions (crédits acquis / crédits inscrits / crédits restants) -->
                     <div class="progress-bar progress-bar-success progress-bar" id="progress-acquis-{{ view.name }}"
                          style="width: {{ credits_acquis_pourcentage }}%"
-                         title="{% trans 'Credits earned/valued' %}"
+                         title="{% trans 'Credits earned/validated' %}"
                          data-toggle="tooltip"
                     >
                         <strong style="color: white;">{{ credits_acquis|floatformat }}</strong>
@@ -48,7 +48,7 @@
 
                     <!-- Crédits de progression potentielle -->
                     <div class="credits-de-progression-potentielle" style="width: 4px; height: 100%; position: absolute; background: red; left: {{ credits_acquis_pourcentage|add_float:credits_inscrits_pourcentage }}%;"
-                         title="{% trans 'Credits for potential progress' %}">
+                         title="{% trans 'Potential credits earned' %}">
                         {% if credits_de_progression_potentielle != credits_cibles %}
                             <strong>
                                 <small style="color: red; position: absolute; bottom: 22px; right: -10px;">

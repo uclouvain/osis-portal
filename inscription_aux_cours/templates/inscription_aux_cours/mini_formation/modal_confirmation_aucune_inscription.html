@@ -30,23 +30,23 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="confirmationAucuneMiniformationSelectionneeLabel">{% trans "No minitraining checked confirmation" %}</h4>
+                <h4 class="modal-title" id="confirmationAucuneMiniformationSelectionneeLabel">{% trans "No minor or elective selected" %}</h4>
             </div>
             <div class="modal-body">
                 <div class="alert alert-warning" style="display:inline-block;">
                     <i class="fa fa-warning" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans "Are you sure you don't want to enroll to any minitraining ?" %}
+                    {% trans "You are not registered for any minor or elective. You must register for a minor or elective before continuing (except for minors or electives with admission requirements or exceptional situations)." %}
                 </div>
             </div>
             <div class="modal-footer text-center center">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans 'Modify my minors and options enrollments' %}</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans 'Modify my choice of minors or electives' %}</button>
                 <a class="btn btn-default btn-wrap btn-block-xs"
                    style="margin-top: 5px;"
                    role="button"
                    href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}"
                    onclick="showSpinner()"
                 >
-                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to courses enrollment' %}
+                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to my annual programme proposal' %}
                 </a>
             </div>
         </div>

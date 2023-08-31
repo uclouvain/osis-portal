@@ -27,8 +27,8 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li class="active">{% trans 'My minors or options enrollment' %}</li>
+    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Course choice' %}</a></li>
+    <li class="active">{% trans 'My choice of minors or electives' %}</li>
 {% endblock %}
 
 
@@ -44,7 +44,7 @@
 
             <div class="alert alert-info">
                 <p>
-                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i> <strong>{% trans "List of minors or options to which you are enrolled" %}</strong>
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i> <strong>{% trans "Minors and electives for which you are registered" %}</strong>
                 <ul>
                     {% for mini_formation in mini_formations|dictsort:"intitule_formation" %}
                         <li>
@@ -57,13 +57,13 @@
             <br>
             <div class="center">
                 <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default">
-                    {% trans "Modify my minors and options enrollments" %}
+                    {% trans "Modify my choice of minors or electives" %}
                 </a>
             </div>
             <br>
             <div class="center">
                 <a class="btn btn-primary" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
-                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Continue to courses enrollment' %}
+                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Continue composing my annual programme' %}
                 </a>
             </div>
 

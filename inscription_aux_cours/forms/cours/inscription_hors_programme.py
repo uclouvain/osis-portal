@@ -34,7 +34,7 @@ class InscriptionHorsProgrammeForm(forms.Form):
     code_mini_formation = forms.ChoiceField(required=False)
     cours = forms.MultipleChoiceField(
         required=False,
-        label=_('Learning Unit Year').capitalize(),
+        label=_('Course unit').capitalize(),
         widget=autocomplete.Select2Multiple(
             url='learning-unit:learning_unit_year_autocomplete',
             attrs={
