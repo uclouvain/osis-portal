@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
@@ -63,42 +64,45 @@ def manage_delegates(request):
 @redirect_if_not_master
 def new_delegate(request, specialty_uuid, organization_uuid):
     if request.POST:
-        person = Person(
-            first_name=request.POST.get('first_name'),
-            last_name=request.POST.get('last_name'),
-            birth_date=request.POST.get('birth_date'),
-            email=request.POST.get('email')
-        )
-        master = MasterGet(person=person, civility=request.POST.get('civility'))
-        try:
-            created_master = InternshipAPIService.post_master(request.user.person, master)
-            if created_master:
-                organization = InternshipAPIService.get_organization(request.user.person, organization_uuid)
-                specialty = InternshipAPIService.get_specialty(request.user.person, specialty_uuid)
-                allocation = AllocationGet(
-                    master=created_master,
-                    organization=organization,
-                    specialty=specialty,
-                    role=ChoiceRole.DELEGATE.name
-                )
-                allocation = InternshipAPIService.post_master_allocation(request.user.person, allocation)
-                if allocation:
-                    # TODO : remove when migrate to osis
-                    _add_existing_user_to_internship_masters_group(person)
-                    messages.add_message(
-                        request, SUCCESS, _('Internship delegate {} created with success').format(
-                            master.person.last_name
-                        )
+        form = DelegateForm(request.POST)
+
+        if form.is_valid():
+            person = Person(
+                first_name=form.cleaned_data['first_name'],
+                last_name=form.cleaned_data['last_name'],
+                birth_date=form.cleaned_data['birth_date'],
+                email=form.cleaned_data['email']
+            )
+            master = MasterGet(person=person, civility=form.cleaned_data['civility'])
+            try:
+                created_master = InternshipAPIService.post_master(request.user.person, master)
+                if created_master:
+                    organization = InternshipAPIService.get_organization(request.user.person, organization_uuid)
+                    specialty = InternshipAPIService.get_specialty(request.user.person, specialty_uuid)
+                    allocation = AllocationGet(
+                        master=created_master,
+                        organization=organization,
+                        specialty=specialty,
+                        role=ChoiceRole.DELEGATE.name
                     )
-                internship_ref = _get_internship_reference(allocation)
-                return redirect(reverse('internship_manage_delegates') + "?internship={}".format(internship_ref))
-        except InternshipServiceException as e:
-            messages.add_message(request, ERROR, _(
-                'An error occurred during delegate creation, '
-                'please contact internships administration (STAC) for further assistance.'
-            ))
-            if e.reason:
-                messages.add_message(request, ERROR, e.reason)
+                    allocation = InternshipAPIService.post_master_allocation(request.user.person, allocation)
+                    if allocation:
+                        # TODO : remove when migrate to osis
+                        _add_existing_user_to_internship_masters_group(person)
+                        messages.add_message(
+                            request, SUCCESS, _('Internship delegate {} created with success').format(
+                                master.person.last_name
+                            )
+                        )
+                    internship_ref = _get_internship_reference(allocation)
+                    return redirect(reverse('internship_manage_delegates') + "?internship={}".format(internship_ref))
+            except InternshipServiceException as e:
+                messages.add_message(request, ERROR, _(
+                    'An error occurred during delegate creation, '
+                    'please contact internships administration (STAC) for further assistance.'
+                ))
+                if e.reason:
+                    messages.add_message(request, ERROR, e.reason)
     return redirect(reverse('internship_manage_delegates'))
 
 
@@ -126,3 +130,11 @@ def _get_user_by_email(email):
         return User.objects.get(email=email)
     except User.DoesNotExist:
         return None
+
+
+class DelegateForm(forms.Form):
+    civility = forms.ChoiceField(choices=['DOCTOR', 'PROFESSOR'])
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    birth_date = forms.DateField()
+    email = forms.EmailField(max_length=50)
