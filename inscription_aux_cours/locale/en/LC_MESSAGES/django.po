@@ -36,19 +36,10 @@ msgid ""
 "administrator."
 msgstr ""
 
-msgid "Annual programs prior to 2015-16"
-msgstr ""
-
 msgid "Annual programme proposal"
 msgstr ""
 
-msgid "Added courses"
-msgstr ""
-
-msgid "Annual program proposal"
-msgstr ""
-
-msgid "Annual programs prior to 2015-16"
+msgid "Annual programmes prior to 2015-16"
 msgstr ""
 
 msgid "Block"
@@ -65,9 +56,6 @@ msgstr ""
 msgid "Common core"
 msgstr ""
 
-msgid "Complement"
-msgstr ""
-
 msgid "Continue composing my annual programme"
 msgstr ""
 
@@ -77,10 +65,10 @@ msgstr ""
 msgid "Course choice"
 msgstr ""
 
-msgid "Credits earned/valued"
+msgid "Course credits earned"
 msgstr ""
 
-msgid "Credits earned for the cycle"
+msgid "Course progress"
 msgstr ""
 
 msgid "Course unit"
@@ -90,9 +78,6 @@ msgid "Course unit failed in a previous academic year"
 msgstr ""
 
 msgid "Course unit for which prerequisites have been satisfied"
-msgstr ""
-
-msgid "Cycle progress"
 msgstr ""
 
 msgid "Course unit for which prerequisites have not been satisfied"
@@ -153,13 +138,13 @@ msgstr ""
 msgid "Mandatory"
 msgstr ""
 
-msgid "Maximum possible at year end"
-msgstr ""
-
-msgid "Mobilite"
+msgid "Maximum possible at year-end"
 msgstr ""
 
 msgid "Minors and electives for which you are registered"
+msgstr ""
+
+msgid "Mobility"
 msgstr ""
 
 msgid "Modify my choice of minors or electives"
@@ -190,6 +175,9 @@ msgid "No minor or elective selected"
 msgstr ""
 
 msgid "Noma"
+msgstr ""
+
+msgid "Non-degree course units"
 msgstr ""
 
 msgid "Not offered this academic year but next academic year"
@@ -251,9 +239,6 @@ msgstr ""
 msgid "Registered for course unit of the complementary module"
 msgstr ""
 
-msgid "Out of progression"
-msgstr ""
-
 msgid ""
 "Registered for course unit of the complementary module, with exemption test"
 msgstr ""
@@ -290,13 +275,16 @@ msgid ""
 "code (example: LCHIM1111)."
 msgstr ""
 
+msgid "Student course programme"
+msgstr ""
+
 msgid "Submit my annual programme proposal"
 msgstr ""
 
-msgid "Student cycle program"
+msgid "Summary of my annual programme proposal"
 msgstr ""
 
-msgid "Summary of my annual programme proposal"
+msgid "Supplement"
 msgstr ""
 
 msgid "The course unit credits have been earned"
@@ -329,17 +317,17 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-msgid "Total"
-msgstr ""
-
 msgid ""
 "To change minors or electives, please contact your faculty administrator."
+msgstr ""
+
+msgid "Total"
 msgstr ""
 
 msgid "Total number of credits"
 msgstr ""
 
-msgid "Valued credits"
+msgid "Validated credits"
 msgstr ""
 
 msgid "View my schedule"
@@ -413,7 +401,6 @@ msgstr ""
 msgid "Your faculty contact"
 msgstr ""
 
-#, python-format
 msgid ""
 "Your faculty offers <ins><a href='https://uclouvain.be/aar-dispositifs-"
 "facultaires' target='_blank'>learning support activities</a></ins> to help "
