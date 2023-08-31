@@ -77,8 +77,6 @@ msgstr "Unité d'enseignement échouée lors d'une année académique précéden
 msgid "Course unit for which prerequisites have been satisfied"
 msgstr "Unité d'enseignement dont les prérequis sont acquis"
 
-#, fuzzy
-#| msgid "Learning unit with prerequisites not acquired"
 msgid "Course unit for which prerequisites have not been satisfied"
 msgstr "Unité d'enseignement dont les prérequis ne sont pas acquis"
 
@@ -441,6 +439,3 @@ msgstr ""
 
 msgid "credits"
 msgstr "crédits"
-
-#~ msgid "SSave and continue to the summary of my annual programme proposal"
-#~ msgstr "Enregistrer et poursuivre ma composition de programme annuel"
