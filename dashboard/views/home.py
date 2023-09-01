@@ -156,7 +156,7 @@ class Home(LoginRequiredMixin, TemplateView):
                 ),
                 Tile(
                     column='second',
-                    title=_('My composition enrollment'),
+                    title=_('My annual programme'),
                     url=reverse(
                         'inscription-aux-cours:selectionner-formation'
                     ) if 'inscription_aux_cours' in settings.INSTALLED_APPS else "#",
