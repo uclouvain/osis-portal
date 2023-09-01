@@ -138,9 +138,9 @@
             </div>
 
             <br>
-
-            {% include "inscription_aux_cours/blocks/tableau_de_progression.html" %}
-
+            {% if credits_cibles_cycle %}
+                {% include "inscription_aux_cours/blocks/tableau_de_progression.html" %}
+            {%  endif %}
             <br>
 
             <div class="center hide_print">
