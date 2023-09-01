@@ -103,6 +103,9 @@ def new_delegate(request, specialty_uuid, organization_uuid):
                 ))
                 if e.reason:
                     messages.add_message(request, ERROR, e.reason)
+        else:
+            for error in form.errors:
+                messages.add_message(request, ERROR, error)
     return redirect(reverse('internship_manage_delegates'))
 
 
