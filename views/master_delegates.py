@@ -136,7 +136,7 @@ def _get_user_by_email(email):
 
 
 class DelegateForm(forms.Form):
-    civility = forms.ChoiceField(choices=['DOCTOR', 'PROFESSOR'])
+    civility = forms.ChoiceField(choices=[('DOCTOR', 'DOCTOR'), ('PROFESSOR', 'PROFESSOR')])
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=50)
     birth_date = forms.DateField()
