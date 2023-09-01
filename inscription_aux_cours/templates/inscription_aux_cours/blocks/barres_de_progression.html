@@ -22,13 +22,18 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<div style="padding-bottom: 20px;">
-    <div
+<div style="display: flex; gap: 30px; padding-bottom: 15px;">
+    {% if credits_formation %}
+        {% widthratio credits_formation 60 1 as proportion  %}
+    {% else %}
+        {% widthratio 1 1 1 as proportion|add:1  %}
+    {% endif %}
+    <div style="flex-grow: {{ proportion }};"
         hx-get="{% url 'inscription-aux-cours:barre-progression-cycle-view' programme.sigle %}"
         hx-trigger="load"
     ></div>
     {% if est_en_premiere_annee_de_bachelier %}
-        <div
+        <div style="flex-grow: 1;"
             hx-get="{% url 'inscription-aux-cours:barre-progression-bloc-1-view' programme.sigle %}"
             hx-trigger="load"
         ></div>
