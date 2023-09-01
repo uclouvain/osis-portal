@@ -70,7 +70,7 @@ def new_delegate(request, specialty_uuid, organization_uuid):
             person = Person(
                 first_name=form.cleaned_data['first_name'],
                 last_name=form.cleaned_data['last_name'],
-                birth_date=form.cleaned_data['birth_date'],
+                birth_date=str(form.cleaned_data['birth_date']),
                 email=form.cleaned_data['email']
             )
             master = MasterGet(person=person, civility=form.cleaned_data['civility'])
