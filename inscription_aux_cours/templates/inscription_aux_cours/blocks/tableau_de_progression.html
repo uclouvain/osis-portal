@@ -135,31 +135,31 @@
         <tr>
             <td>{{ progression_annuelle.sigle_formation }} {{ progression_annuelle.annee|display_as_academic_year }}</td>
             <td>
-                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_cycle_total|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_cycle_total|floatformat }}</span>
+                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}>{{ progression_annuelle.credits_credites_cycle_total|floatformat|default:0 }}/{{ progression_annuelle.credits_inscrits_cycle_total|floatformat }}</span>
             </td>
             <td>
-                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_cycle_tronc_commun|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_cycle_tronc_commun|floatformat|default:0 }}</span>
+                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}>{{ progression_annuelle.credits_credites_cycle_tronc_commun|floatformat|default:0 }}/{{ progression_annuelle.credits_inscrits_cycle_tronc_commun|floatformat|default:0 }}</span>
             </td>
             {% for mini_formation in progression_annuelle.mini_formation %}
                 <td>
-                    <span {% if forloop.parentloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ mini_formation.credits_credites_cycle_mini_formation|floatformat|default:0 }}</strong>/{{ mini_formation.credits_inscrits_cycle_mini_formation|floatformat|default:0 }}</span>
+                    <span {% if forloop.parentloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}>{{ mini_formation.credits_credites_cycle_mini_formation|floatformat|default:0 }}/{{ mini_formation.credits_inscrits_cycle_mini_formation|floatformat|default:0 }}</span>
                 </td>
             {% endfor %}
             {% for partenariat in progression_annuelle.partenariats %}
                 <td>
-                    <span {% if forloop.parentloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ partenariat.credits_credites_cycle_partenariat|floatformat|default:0 }}</strong>/{{ partenariat.credits_inscrits_cycle_partenariat|floatformat|default:0 }}</span>
+                    <span {% if forloop.parentloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}>{{ partenariat.credits_credites_cycle_partenariat|floatformat|default:0 }}/{{ partenariat.credits_inscrits_cycle_partenariat|floatformat|default:0 }}</span>
                 </td>
             {% endfor %}
             {% if a_un_contexte_inconnu %}
                 <td>
-                    <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_cycle_mobilite|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_cycle_mobilite|floatformat|default:0 }}</span>
+                    <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}>{{ progression_annuelle.credits_credites_cycle_mobilite|floatformat|default:0 }}/{{ progression_annuelle.credits_inscrits_cycle_mobilite|floatformat|default:0 }}</span>
                 </td>
             {% endif %}
             <td>
-                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_complement|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_complement|floatformat|default:0 }}</span>
+                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}>{{ progression_annuelle.credits_credites_complement|floatformat|default:0 }}/{{ progression_annuelle.credits_inscrits_complement|floatformat|default:0 }}</span>
             </td>
             <td>
-                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}><strong>{{ progression_annuelle.credits_credites_hors_progression|floatformat|default:0 }}</strong>/{{ progression_annuelle.credits_inscrits_hors_progression|floatformat|default:0 }}</span>
+                <span {% if forloop.first %} class="badge badge-progression-cycle-inscription" {% else %} class="badge badge-credits-deja-acquis" {% endif %}>{{ progression_annuelle.credits_credites_hors_progression|floatformat|default:0 }}/{{ progression_annuelle.credits_inscrits_hors_progression|floatformat|default:0 }}</span>
             </td>
         </tr>
     {% endfor %}
@@ -168,31 +168,31 @@
         <tr>
             <td>{% trans 'Annual programmes prior to 2015-16' %}</td>
             <td>
-                <span class="badge badge-credits-deja-acquis"><strong>{{ tableau_de_progression.cycle.total.credits_donnees_du_passe|floatformat|default:0 }}</strong></span>
+                <span class="badge badge-credits-deja-acquis"><{{ tableau_de_progression.cycle.total.credits_donnees_du_passe|floatformat|default:0 }}</span>
             </td>
             <td>
-                <span class="badge badge-credits-deja-acquis"><strong>-</strong></span>
+                <span class="badge badge-credits-deja-acquis"></span>
             </td>
             {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
                 <td>
-                    <span class="badge badge-credits-deja-acquis"><strong>-</strong></span>
+                    <span class="badge badge-credits-deja-acquis">-</span>
                 </td>
             {% endfor %}
             {% for partenariat in tableau_de_progression.cycle.partenariats %}
                 <td>
-                    <span class="badge badge-credits-deja-acquis"><strong>-</strong></span>
+                    <span class="badge badge-credits-deja-acquis">-</span>
                 </td>
             {% endfor %}
             {% if a_un_contexte_inconnu %}
                 <td>
-                    <span class="badge badge-credits-deja-acquis"><strong>-</strong></span>
+                    <span class="badge badge-credits-deja-acquis">-</span>
                 </td>
             {% endif %}
             <td>
-                <span class="badge badge-credits-deja-acquis"><strong>{{ tableau_de_progression.complement.credits_donnees_du_passe|floatformat|default:0 }}</strong></span>
+                <span class="badge badge-credits-deja-acquis">{{ tableau_de_progression.complement.credits_donnees_du_passe|floatformat|default:0 }}</span>
             </td>
             <td>
-                <span class="badge badge-credits-deja-acquis"><strong>{{ tableau_de_progression.hors_progression.credits_donnees_du_passe|floatformat|default:0 }}</strong></span>
+                <span class="badge badge-credits-deja-acquis">{{ tableau_de_progression.hors_progression.credits_donnees_du_passe|floatformat|default:0 }}</span>
             </td>
         </tr>
     {% endif %}
@@ -201,16 +201,16 @@
         <td>{% trans 'Validated credits' %}</td>
         <td>
             <span class="fa-stack badge-valise">
-                <i class="fa-stack-2x fa-solid fas fa-square square-valise"></i>
-                <i class="fa-stack-2x fa-solid fa-suitcase valise"></i>
-                <strong class="fa-stack-1x credits-valise">{{ tableau_de_progression.cycle.total.credits_valorises|floatformat|default:0 }}</strong>
+                <i class="fa fa-stack-2x fa-solid fas fa-square square-valise"></i>
+                <i class="fa fa-stack-2x fa-solid fa-suitcase valise"></i>
+                <span class="fa-stack-1x credits-valise">{{ tableau_de_progression.cycle.total.credits_valorises|floatformat|default:0 }}</span>
             </span>
         </td>
         <td>
             <span class="fa-stack badge-valise">
-                <i class="fa-stack-2x fa-solid fas fa-square square-valise"></i>
-                <i class="fa-stack-2x fa-solid fa-suitcase valise"></i>
-                <strong class="fa-stack-1x credits-valise">{{ tableau_de_progression.cycle.tronc_commun.credits_valorises|floatformat|default:0 }}</strong>
+                <i class="fa fa-stack-2x fa-solid fas fa-square square-valise"></i>
+                <i class="fa fa-stack-2x fa-solid fa-suitcase valise"></i>
+                <span class="fa-stack-1x credits-valise">{{ tableau_de_progression.cycle.tronc_commun.credits_valorises|floatformat|default:0 }}</span>
             </span>
         </td>
         {% for mini_formation in tableau_de_progression.cycle.mini_formations %}
@@ -218,7 +218,7 @@
                 <span class="fa-stack badge-valise">
                     <i class="fa-stack-2x fa-solid fas fa-square square-valise"></i>
                     <i class="fa-stack-2x fa-solid fa-suitcase valise"></i>
-                    <strong class="fa-stack-1x credits-valise">{{ mini_formation.credits_valorises|floatformat|default:0 }}</strong>
+                    <span class="fa-stack-1x credits-valise">{{ mini_formation.credits_valorises|floatformat|default:0 }}</span>
                 </span>
             </td>
         {% endfor %}
