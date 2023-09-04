@@ -46,6 +46,9 @@ msgstr ""
 msgid "Annual programme proposal"
 msgstr "Proposition de programme annuel"
 
+msgid "Annual programmes prior to 2015-16"
+msgstr "Programmes annuels antérieurs à 2015-16"
+
 msgid "Block"
 msgstr "Block"
 
@@ -59,6 +62,9 @@ msgstr ""
 msgid "Code"
 msgstr "Code"
 
+msgid "Common core"
+msgstr "Tronc commun"
+
 msgid "Continue composing my annual programme"
 msgstr "Poursuivre ma composition de programme annuel"
 
@@ -67,6 +73,12 @@ msgstr "Formation"
 
 msgid "Course choice"
 msgstr "Choix de la formation"
+
+msgid "Course credits earned"
+msgstr "Crédits acquis pour le cycle"
+
+msgid "Course progress"
+msgstr "Progression dans le cycle"
 
 msgid "Course unit"
 msgstr "Unité d'enseignement"
@@ -139,8 +151,14 @@ msgstr "Légende"
 msgid "Mandatory"
 msgstr "Obligatoire"
 
+msgid "Maximum possible at year-end"
+msgstr "Maximum possible en fin d'année"
+
 msgid "Minors and electives for which you are registered"
 msgstr "Liste des mineures et options auxquelles vous êtes inscrit.e"
+
+msgid "Mobility"
+msgstr "Mobilité"
 
 msgid "Modify my choice of minors or electives"
 msgstr "Modifier mon choix de mineures ou options"
@@ -173,6 +191,9 @@ msgstr "Aucune mineure ou option sélectionnée"
 
 msgid "Noma"
 msgstr "Noma"
+
+msgid "Non-degree course units"
+msgstr "Hors progression"
 
 msgid "Not offered this academic year but next academic year"
 msgstr "Non organisé cette année académique mais organisé l’année suivante"
@@ -281,11 +302,17 @@ msgstr ""
 "Préciser dans quel contexte vous souhaitez ajouter cette unité "
 "d'enseignement et rechercher par code (exemple: LCHIM1111)."
 
+msgid "Student course programme"
+msgstr "Parcours de cycle de l'étudiant.e"
+
 msgid "Submit my annual programme proposal"
 msgstr "Soumettre ma proposition de programme annuel"
 
 msgid "Summary of my annual programme proposal"
 msgstr "Récapitulatif de ma proposition de programme annuel"
+
+msgid "Supplement"
+msgstr "Complément"
 
 msgid "The course unit credits have been earned"
 msgstr "Les crédits de l'unité d'enseignement sont acquis"
@@ -332,8 +359,14 @@ msgstr ""
 "Pour un changement de mineures ou d'options, veuillez contacter votre "
 "gestionnaire facultaire."
 
+msgid "Total"
+msgstr "Total"
+
 msgid "Total number of credits"
 msgstr "Nombre total de crédits"
+
+msgid "Validated credits"
+msgstr "Crédits valorisés"
 
 msgid "View my schedule"
 msgstr "Visualiser mon horaire"

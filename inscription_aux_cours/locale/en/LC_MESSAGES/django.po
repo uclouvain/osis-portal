@@ -39,6 +39,9 @@ msgstr ""
 msgid "Annual programme proposal"
 msgstr ""
 
+msgid "Annual programmes prior to 2015-16"
+msgstr ""
+
 msgid "Block"
 msgstr ""
 
@@ -50,6 +53,9 @@ msgstr ""
 msgid "Code"
 msgstr ""
 
+msgid "Common core"
+msgstr ""
+
 msgid "Continue composing my annual programme"
 msgstr ""
 
@@ -57,6 +63,12 @@ msgid "Course"
 msgstr ""
 
 msgid "Course choice"
+msgstr ""
+
+msgid "Course credits earned"
+msgstr ""
+
+msgid "Course progress"
 msgstr ""
 
 msgid "Course unit"
@@ -126,7 +138,13 @@ msgstr ""
 msgid "Mandatory"
 msgstr ""
 
+msgid "Maximum possible at year-end"
+msgstr ""
+
 msgid "Minors and electives for which you are registered"
+msgstr ""
+
+msgid "Mobility"
 msgstr ""
 
 msgid "Modify my choice of minors or electives"
@@ -157,6 +175,9 @@ msgid "No minor or elective selected"
 msgstr ""
 
 msgid "Noma"
+msgstr ""
+
+msgid "Non-degree course units"
 msgstr ""
 
 msgid "Not offered this academic year but next academic year"
@@ -254,10 +275,16 @@ msgid ""
 "code (example: LCHIM1111)."
 msgstr ""
 
+msgid "Student course programme"
+msgstr ""
+
 msgid "Submit my annual programme proposal"
 msgstr ""
 
 msgid "Summary of my annual programme proposal"
+msgstr ""
+
+msgid "Supplement"
 msgstr ""
 
 msgid "The course unit credits have been earned"
@@ -294,7 +321,13 @@ msgid ""
 "To change minors or electives, please contact your faculty administrator."
 msgstr ""
 
+msgid "Total"
+msgstr ""
+
 msgid "Total number of credits"
+msgstr ""
+
+msgid "Validated credits"
 msgstr ""
 
 msgid "View my schedule"
