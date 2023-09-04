@@ -37,11 +37,6 @@ from inscription_aux_cours.views.mini_formation.desinscrire import DesinscrireAU
 from inscription_aux_cours.views.mini_formation.formulaire import FormulaireMiniFormationsView
 from inscription_aux_cours.views.mini_formation.inscrire import InscrireAUneMiniFormationView
 from inscription_aux_cours.views.mini_formation.recapitulatif import RecapitulatifInscriptionsMiniFormationsView
-from inscription_aux_cours.views.progression.barre_de_progression_de_bloc_1 import BarreDeProgressionDeBloc1View
-from inscription_aux_cours.views.progression.barre_de_progression_de_complement import (
-    BarreDeProgressionDeComplementView,
-)
-from inscription_aux_cours.views.progression.barre_de_progression_de_cycle import BarreDeProgressionDeCycleView
 from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
 
 app_name = 'inscription-aux-cours'
@@ -97,28 +92,6 @@ urlpatterns = [
                     'activites_aide_reussite/',
                     FormulaireActivitesDeAideALaReussiteView.as_view(),
                     name=FormulaireActivitesDeAideALaReussiteView.name,
-                ),
-            ]
-        ),
-    ),
-    re_path(
-        r'^(?P<sigle_programme>[\w ]+([/ ]\w{1,2})?)/',
-        include(
-            [
-                path(
-                    'barre_de_progression_de_cycle/',
-                    BarreDeProgressionDeCycleView.as_view(),
-                    name=BarreDeProgressionDeCycleView.name,
-                ),
-                path(
-                    'barre_de_progression_de_complement/',
-                    BarreDeProgressionDeComplementView.as_view(),
-                    name=BarreDeProgressionDeComplementView.name,
-                ),
-                path(
-                    'barre_de_progression_de_bloc_1/',
-                    BarreDeProgressionDeBloc1View.as_view(),
-                    name=BarreDeProgressionDeBloc1View.name,
                 ),
             ]
         ),

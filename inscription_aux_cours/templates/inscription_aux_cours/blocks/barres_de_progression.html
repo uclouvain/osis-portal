@@ -1,3 +1,4 @@
+{% load i18n %}
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -26,21 +27,22 @@
     {% if credits_formation %}
         {% widthratio credits_formation 60 1 as proportion  %}
     {% else %}
-        {% widthratio 1 1 1 as proportion  %}
+        {% widthratio 1 1 1 as proportion|add:1  %}
     {% endif %}
-    <div style="flex-grow: {{ proportion|add:1 }};"
-        hx-get="{% url 'inscription-aux-cours:barre-progression-cycle-view' programme.sigle %}"
-        hx-trigger="load"
-    ></div>
+    <div style="flex-grow: {{ proportion|add:1 }};">
+         <div class="text-center" style="margin-bottom: 25px;"><strong>{{ intitule_cycle }}</strong></div>
+        {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=credits_acquis_cycle credits_inscrits=credits_inscrits_cycle barre_progression_max=barre_de_progression_max_cycle credits_de_progression_potentielle=credits_de_progression_potentielle_cycle credits_cibles=credits_cibles_cycle credits_valorises=credits_valorises_cycle valeur_jalon=valeur_jalon %}
+    </div>
     {% if est_en_premiere_annee_de_bachelier %}
-        <div style="flex-grow: 1;"
-            hx-get="{% url 'inscription-aux-cours:barre-progression-bloc-1-view' programme.sigle %}"
-            hx-trigger="load"
-        ></div>
+        <div style="flex-grow: 1;">
+             <div class="text-center" style="margin-bottom: 25px;"><strong>{{ intitule_bloc_1 }}</strong></div>
+            {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=credits_acquis_bloc_1 credits_inscrits=credits_inscrits_bloc_1 barre_progression_max=barre_de_progression_max_bloc_1 credits_de_progression_potentielle=credits_de_progression_potentielle_bloc_1 credits_cibles=None credits_valorises=credits_valorises_bloc_1 valeur_jalon=None %}
+        </div>
     {% endif %}
-    <div
-        hx-get="{% url 'inscription-aux-cours:barre-progression-complement-view' programme.sigle %}"
-        hx-trigger="load"
-        hx-swap="outerHTML"
-    ></div>
+    {% if a_un_complement or progression_de_cycle.credits_acquis %}
+        <div style="flex-grow: 1;">
+             <div class="text-center" style="margin-bottom: 25px;"><strong>{{ intitule_complement }}</strong></div>
+            {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=credits_acquis_complement credits_inscrits=credits_inscrits_complement barre_progression_max=barre_de_progression_max_complement credits_de_progression_potentielle=credits_de_progression_potentielle_complement credits_cibles=None credits_valorises=None valeur_jalon=None %}
+        </div>
+    {% endif %}
 </div>
