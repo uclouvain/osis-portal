@@ -85,4 +85,40 @@
     .jalons {
         border: 0.5px solid black !important;
     }
+
+    .badge {
+        min-width: 50px !important;
+    }
+
+    /* badges progression */
+    .badge-progression-cycle-valise {
+        background-color: #249924 !important;
+        color: white !important;
+    }
+
+    .badge-progression-cycle-inscription {
+        background-color: #337ab7 !important;
+        color: white !important;
+    }
+
+    .badge-progression-cycle-limite {
+        background-color: #db0000 !important;
+        color: white !important;
+    }
+
+    .badge-credits-deja-acquis {
+        background-color: #e1e1e1 !important;
+        color: black !important;
+        font-weight: normal !important;
+    }
+
+    /* badge valise */
+    .square-valise:before,
+    .valise:before{
+        color: #5cb85c !important;
+    }
+
+    .credits-valise {
+        color: white !important;
+    }
 }

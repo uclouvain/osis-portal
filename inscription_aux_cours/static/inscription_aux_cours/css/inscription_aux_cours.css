@@ -110,6 +110,75 @@ textarea.unresizable {
     white-space: normal;
 }
 
+/* tableau de progression */
+.table-progression {
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+}
+
+.table-progression th[scope="col"] {
+    text-align: center !important;
+}
+
+.table-progression .badge {
+    min-width: 50px;
+}
+
+.emphasize-border-top-bottom {
+    border-top: 2px solid darkgrey !important;
+    border-bottom: 2px solid darkgrey !important;
+}
+
+.emphasize-border-left {
+    border-left: 2px solid darkgrey !important;
+}
+
+.emphasize-border-right {
+    border-right: 2px solid darkgrey !important;
+}
+
+/* badges progression */
+.badge-progression-cycle-valise {
+    background-color: #249924;
+    color: white;
+}
+
+.badge-progression-cycle-inscription {
+    background-color: #337ab7;
+    color: white;
+}
+
+.badge-progression-cycle-limite {
+    background-color: #db0000;
+    color: white;
+}
+
+.badge-credits-deja-acquis {
+    background-color: #e1e1e1;
+    color: black;
+    font-weight: normal;
+}
+
+/* badge valise */
+.badge-valise .square-valise,
+.badge-valise .valise {
+    color: #5cb85c;
+}
+
+.badge-valise .valise {
+    transform: scaleX(1.2);
+}
+
+.badge-valise .square-valise {
+    transform: scale(1.2, 0.85);
+    top: 1px;
+}
+
+.badge-valise .credits-valise {
+    color: white;
+    top: 3px;
+}
+
 /* small screen css */
 @media all and (max-width: 992px) {
     .btn-block-xs {
