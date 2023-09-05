@@ -27,7 +27,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Course choice' %}</a></li>
+    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Course choice' context 'inscription-aux-cours' %}</a></li>
     <li class="active">{% trans 'My learning support activities' %}</li>
 {% endblock %}
 
