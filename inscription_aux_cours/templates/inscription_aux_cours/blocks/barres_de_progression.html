@@ -29,7 +29,7 @@
     {% else %}
         {% widthratio 1 1 1 as proportion|add:1  %}
     {% endif %}
-    <div style="flex-grow: {{ proportion }};">
+    <div style="flex-grow: {{ proportion|add:1 }};">
          <div class="text-center" style="margin-bottom: 25px;"><strong>{{ intitule_cycle }}</strong></div>
         {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=credits_acquis_cycle credits_inscrits=credits_inscrits_cycle barre_progression_max=barre_de_progression_max_cycle credits_de_progression_potentielle=credits_de_progression_potentielle_cycle credits_cibles=credits_cibles_cycle credits_valorises=credits_valorises_cycle valeur_jalon=valeur_jalon %}
     </div>
