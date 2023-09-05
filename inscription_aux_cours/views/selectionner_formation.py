@@ -35,6 +35,7 @@ from base.models.person import Person
 from base.services.offer_enrollment import InscriptionFormationsService
 from inscription_aux_cours.services.autorisation import AutorisationService
 from inscription_aux_cours.services.periode import PeriodeInscriptionAuxCoursService
+from inscription_aux_cours.services.periode_pour_etudiant_inscrire_aux_cours import PeriodeInscriptionEtudiantService
 from inscription_aux_cours.views.common import recuperer_programmes
 
 
@@ -72,6 +73,13 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
             for programme in self.programmes
         }
 
+    @cached_property
+    def periodes(self) -> Dict[str, 'AutoriseInscrireAuxCours']:
+        return {
+            programme.code: PeriodeInscriptionEtudiantService().get_periode(self.person, programme.code)
+            for programme in self.programmes
+        }
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
@@ -79,5 +87,6 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
             'noma': self.noma,
             'programmes': self.programmes,
             'autorisations': self.autorisations,
+            'periodes': self.periodes,
             'annee_academique': self.annee_academique,
         }

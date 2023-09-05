@@ -86,7 +86,7 @@
                                 <td>{{ programme|get_intitule_programme }}</td>
                                 <td>
                                     {% if autorisation.autorise %}
-                                        <i class="fa-solid fa-lock-open fa-info"></i>
+                                        <i class="fa-solid fa-lock-open fa-info"></i> <em>{{ autorisation.msg|safe }}</em>
                                     {% else %}
                                         <i class="fa-solid fa-lock fa-info"></i> <em>{{ autorisation.msg|safe }}</em>
                                     {% endif %}
