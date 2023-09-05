@@ -19,6 +19,10 @@ msgstr ""
 msgid "Academic year"
 msgstr ""
 
+msgctxt "inscription-aux-cours"
+msgid "Acronym"
+msgstr ""
+
 msgid "Activity with prerequisites"
 msgstr ""
 
@@ -50,6 +54,7 @@ msgid ""
 "programme."
 msgstr ""
 
+msgctxt "inscription-aux-cours"
 msgid "Code"
 msgstr ""
 
@@ -59,9 +64,11 @@ msgstr ""
 msgid "Continue composing my annual programme"
 msgstr ""
 
+msgctxt "inscription-aux-cours"
 msgid "Course"
 msgstr ""
 
+msgctxt "inscription-aux-cours"
 msgid "Course choice"
 msgstr ""
 
