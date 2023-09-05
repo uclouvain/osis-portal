@@ -19,6 +19,10 @@ msgstr ""
 msgid "Academic year"
 msgstr "Année académique"
 
+msgctxt "inscription-aux-cours"
+msgid "Acronym"
+msgstr "Sigle"
+
 msgid "Activity with prerequisites"
 msgstr "Activité avec prérequis"
 
@@ -59,6 +63,7 @@ msgstr ""
 "Cliquez sur le sigle de la formation pour laquelle vous désirez composer "
 "votre programme annuel."
 
+msgctxt "inscription-aux-cours"
 msgid "Code"
 msgstr "Code"
 
@@ -68,9 +73,11 @@ msgstr "Tronc commun"
 msgid "Continue composing my annual programme"
 msgstr "Poursuivre ma composition de programme annuel"
 
+msgctxt "inscription-aux-cours"
 msgid "Course"
 msgstr "Formation"
 
+msgctxt "inscription-aux-cours"
 msgid "Course choice"
 msgstr "Choix de la formation"
 
