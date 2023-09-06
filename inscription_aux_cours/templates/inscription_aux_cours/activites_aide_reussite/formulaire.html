@@ -27,14 +27,14 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Offer choice' %}</a></li>
-    <li class="active">{% trans 'My success support activities' %}</li>
+    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Course choice' context 'inscription-aux-cours' %}</a></li>
+    <li class="active">{% trans 'My learning support activities' %}</li>
 {% endblock %}
 
 
 {% block page_header %}
     <div class="page-header">
-        <h2>{% trans 'My success support activities' %}</h2>
+        <h2>{% trans 'My learning support activities' %}</h2>
     </div>
 {% endblock %}
 
@@ -52,28 +52,28 @@
                 <div class="alert alert-info">
                     <p>
                         <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                        {% trans "Your faculty organize <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>support systems</a></ins> to help you succeed throughout the year." %}
+                        {% trans "Your faculty offers <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>learning support activities</a></ins> to help you throughout your studies." %}
                     </p>
                 </div>
 
                 {% bootstrap_form form layout="horizontal" %}
 
                 {% if form.fields.completer_inscription_par_des_activites.disabled %}
-                    <p class="text-center"><small><em>{% trans "Your enrollment has been completed or not with success support activies by your faculty manager. You cannot remove or add them." %}</em></small></p>
+                    <p class="text-center"><small><em>{% trans "Your faculty administrator may or may not have added learning support activities to your annual programme. These cannot be removed or added." %}</em></small></p>
                 {% endif %}
 
                 {% if a_des_mini_formations_inscriptibles %}
                     <br>
                     <div class="center">
                         <a class="btn btn-default" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
-                            <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my enrollments" %}
+                            <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my proposal" %}
                         </a>
                     </div>
                 {% endif %}
                 <br>
                 <div class="center">
                     <button class="btn btn-primary" type="submit">
-                        <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to enrollments summary' %}
+                        <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to the summary of my annual programme proposal' %}
                     </button>
                 </div>
 

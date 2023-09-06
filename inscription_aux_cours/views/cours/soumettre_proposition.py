@@ -55,8 +55,8 @@ class SoumettrePropositionView(LoginRequiredMixin, CompositionPAEViewMixin, Temp
 
     def get_success_message(self):
         return _(
-            "Your proposition of annual program successfully submitted. "
-            "A confirmation email is sent to the address %(email)s"
+            "Your annual programme proposal has been successfully submitted. "
+            "A confirmation email will be sent to %(email)s"
         ) % {'email': self.request.user.person.email}
 
     def soumettre_proposition(self):

@@ -100,7 +100,7 @@ class CompositionPAEViewMixin:
         }
 
     def recuperer_intitules_unites_enseignement(self, codes: List[str]) -> Dict[str, str]:
-        data = LearningUnitService.search_learning_unit_titles(
+        data = LearningUnitService.search_learning_unit_and_learning_class_titles(
             year=self.annee_academique, codes=codes, person=self.person
         )
         return {
@@ -111,6 +111,11 @@ class CompositionPAEViewMixin:
 def recuperer_programmes(person: 'Person', annee: int, inscriptions: List['Inscription']) -> List['Programme']:
     codes = [inscription.code_programme for inscription in inscriptions]
     programmes = ProgrammeService.rechercher(person, annee=annee, codes=codes)
+
+    # exclure doctorat et formation doctorale
+    programmes = [
+        p for p in programmes if not (ProgrammeService.est_doctorat(p) or ProgrammeService.est_formation_doctorale(p))
+    ]
 
     codes_inscriptions_premiere_annee = [
         inscription.code_programme for inscription in inscriptions if inscription.est_en_premiere_annee

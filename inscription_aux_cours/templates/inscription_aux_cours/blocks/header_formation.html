@@ -37,7 +37,7 @@
         {{ programme.annee|display_as_academic_year }}
     </div>
     <div class="col-md-6">
-        <label>{% trans 'Offer' %}</label>
+        <label>{% trans 'Course' context 'inscription-aux-cours' %}</label>
         <br>
         {{ programme|get_sigle_programme }} - {{ programme|get_intitule_programme }}
     </div>
