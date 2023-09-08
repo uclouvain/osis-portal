@@ -334,6 +334,9 @@ msgstr ""
 "Les mineures ou options suivantes auxquelles vous êtes inscrit.e ne sont "
 "plus proposées cette année académique:"
 
+msgid "The form is available until"
+msgstr "Le formulaire est accessible jusqu'au"
+
 msgid ""
 "The size of your screen does not allow optimal navigation within the form. "
 "If possible, please use a larger screen for easier navigation."

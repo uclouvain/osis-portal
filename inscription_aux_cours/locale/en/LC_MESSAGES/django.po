@@ -305,6 +305,9 @@ msgid ""
 "offered this academic year:"
 msgstr ""
 
+msgid "The form is available until"
+msgstr ""
+
 msgid ""
 "The size of your screen does not allow optimal navigation within the form. "
 "If possible, please use a larger screen for easier navigation."

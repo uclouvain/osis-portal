@@ -28,6 +28,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
+from osis_inscription_cours_sdk.model.periode_inscription_etudiant import PeriodeInscriptionEtudiant
 from osis_offer_enrollment_sdk.model.inscription import Inscription
 from osis_program_management_sdk.model.programme import Programme
 
@@ -74,7 +75,7 @@ class SelectionnerFormationView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         }
 
     @cached_property
-    def periodes(self) -> Dict[str, 'AutoriseInscrireAuxCours']:
+    def periodes(self) -> Dict[str, 'PeriodeInscriptionEtudiant']:
         return {
             programme.code: PeriodeInscriptionEtudiantService().get_periode(self.person, programme.code)
             for programme in self.programmes

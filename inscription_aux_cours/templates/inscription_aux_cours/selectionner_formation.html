@@ -86,7 +86,9 @@
                                 <td>{{ programme|get_intitule_programme }}</td>
                                 <td>
                                     {% if autorisation.autorise %}
-                                        <i class="fa-solid fa-lock-open fa-info"></i> <em>{{ autorisation.msg|safe }}</em>
+                                        {% with periodes|get_item:programme.code as periode %}
+                                            <i class="fa-solid fa-lock-open fa-info"></i> <em>{% trans "The form is available until" %} {{ periode.fin }}</em>
+                                        {% endwith %}
                                     {% else %}
                                         <i class="fa-solid fa-lock fa-info"></i> <em>{{ autorisation.msg|safe }}</em>
                                     {% endif %}

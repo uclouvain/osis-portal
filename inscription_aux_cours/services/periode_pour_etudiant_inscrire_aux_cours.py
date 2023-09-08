@@ -26,7 +26,9 @@
 from functools import partial
 
 import osis_inscription_cours_sdk
+from osis_inscription_cours_sdk.api import periode_inscription_etudiant_api
 from osis_inscription_cours_sdk.model.autorise_inscrire_aux_cours import AutoriseInscrireAuxCours
+from osis_inscription_cours_sdk.model.periode_inscription_etudiant import PeriodeInscriptionEtudiant
 
 from base.models.person import Person
 from base.services.utils import call_api

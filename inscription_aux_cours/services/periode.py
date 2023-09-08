@@ -36,12 +36,4 @@ REFERENCE_INSCRIPTION_AUX_COURS = 'COURSE_ENROLLMENT_SWITCHING_CALENDAR'
 class PeriodeInscriptionAuxCoursService:
     @classmethod
     def get_annee(cls, person: 'Person') -> int:
-        calendriers = AcademicCalendarService.get_academic_calendar_list(
-            person,
-            reference=REFERENCE_INSCRIPTION_AUX_COURS
-        )['results']  # type: List[AcademicCalendar]
-        today = datetime.date.today()
-        return next(
-            calendrier for calendrier in calendriers
-            if calendrier.start_date <= today <= calendrier.end_date
-        ).data_year
+        return 2023
