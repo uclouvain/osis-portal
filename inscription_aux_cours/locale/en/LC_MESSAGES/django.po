@@ -50,8 +50,8 @@ msgid "Block"
 msgstr ""
 
 msgid ""
-"Click on the code of the course for which you want to create your annual "
-"programme."
+"Click on the code of the course (acronym) for which you want to create your "
+"annual programme."
 msgstr ""
 
 msgctxt "inscription-aux-cours"
