@@ -29,7 +29,7 @@ from django.utils.translation import gettext_lazy as _
 class ActivitesAideReussiteForm(forms.Form):
     completer_inscription_par_des_activites = forms.NullBooleanField(
         required=True,
-        label=_("I complete my enrollment with success support activities"),
+        label=_("I am supplementing my annual programme with learning support activities"),
         widget=forms.RadioSelect(
             choices=(
                 (True, _('Yes')),
