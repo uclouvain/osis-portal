@@ -70,7 +70,7 @@ class CompositionPAEViewMixin:
                 self.person,
                 sigle_formation=self.sigle_formation.replace('11BA', '1BA'),
                 annee=self.annee_academique,
-                pour_premiere_annee="11BA" in self.sigle_formation or "1BA" in self.sigle_formation,
+                pour_premiere_annee="11BA" in self.sigle_formation,
             )
         except Http404:
             return None
