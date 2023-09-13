@@ -15,7 +15,7 @@
                     <input type="hidden" name="next" value="{% url 'admin:auth_user_changelist' %}">
                     <button type="submit" class="btn btn-default btn-sm django-hijack-button-bootstrap">
                         {% if request.user.get_full_name and request.user.get_full_name.strip %}
-                            {% blocktrans with user=request.user %}release {{ user }}{% endblocktrans %}
+                            {% blocktrans with user=request.user.get_full_name %}release {{ user }}{% endblocktrans %}
                         {% else %}
                             {% blocktrans with user=request.user %}release {{ user }}{% endblocktrans %}
                         {% endif %}
