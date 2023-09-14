@@ -28,6 +28,6 @@ from django import forms
 class DemandeParticuliereForm(forms.Form):
     demande_particuliere = forms.CharField(
         required=False,
-        max_length=2000,
+        max_length=900,
         widget=forms.Textarea
     )
