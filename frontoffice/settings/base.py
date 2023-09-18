@@ -529,6 +529,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # OSIS-NOTIFICATION-CONFIGURATION
 OSIS_NOTIFICATION_BASE_URL = os.environ.get('OSIS_NOTIFICATION_BASE_URL', 'http://localhost:8000/osis_notification/')
 
-# TODO: A supprimer une fois traduction OK dans admission
-ROSETTA_MESSAGES_PER_PAGE = 100
-ROSETTA_SHOW_AT_ADMIN_PANEL = True
+WAFFLE_CREATE_MISSING_SWITCHES = True
