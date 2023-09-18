@@ -19,6 +19,10 @@ msgstr ""
 msgid "Academic year"
 msgstr "Année académique"
 
+msgctxt "inscription-aux-cours"
+msgid "Acronym"
+msgstr "Sigle"
+
 msgid "Activity with prerequisites"
 msgstr "Activité avec prérequis"
 
@@ -53,12 +57,13 @@ msgid "Block"
 msgstr "Block"
 
 msgid ""
-"Click on the code of the course for which you want to create your annual "
-"programme."
+"Click on the code of the course (acronym) for which you want to create your "
+"annual programme."
 msgstr ""
 "Cliquez sur le sigle de la formation pour laquelle vous désirez composer "
 "votre programme annuel."
 
+msgctxt "inscription-aux-cours"
 msgid "Code"
 msgstr "Code"
 
@@ -68,9 +73,11 @@ msgstr "Tronc commun"
 msgid "Continue composing my annual programme"
 msgstr "Poursuivre ma composition de programme annuel"
 
+msgctxt "inscription-aux-cours"
 msgid "Course"
 msgstr "Formation"
 
+msgctxt "inscription-aux-cours"
 msgid "Course choice"
 msgstr "Choix de la formation"
 
@@ -326,6 +333,9 @@ msgid ""
 msgstr ""
 "Les mineures ou options suivantes auxquelles vous êtes inscrit.e ne sont "
 "plus proposées cette année académique:"
+
+msgid "The form is available until"
+msgstr "Le formulaire est accessible jusqu'au"
 
 msgid ""
 "The size of your screen does not allow optimal navigation within the form. "

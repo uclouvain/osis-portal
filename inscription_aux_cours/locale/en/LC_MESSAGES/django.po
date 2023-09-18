@@ -19,6 +19,10 @@ msgstr ""
 msgid "Academic year"
 msgstr ""
 
+msgctxt "inscription-aux-cours"
+msgid "Acronym"
+msgstr ""
+
 msgid "Activity with prerequisites"
 msgstr ""
 
@@ -46,10 +50,11 @@ msgid "Block"
 msgstr ""
 
 msgid ""
-"Click on the code of the course for which you want to create your annual "
-"programme."
+"Click on the code of the course (acronym) for which you want to create your "
+"annual programme."
 msgstr ""
 
+msgctxt "inscription-aux-cours"
 msgid "Code"
 msgstr ""
 
@@ -59,9 +64,11 @@ msgstr ""
 msgid "Continue composing my annual programme"
 msgstr ""
 
+msgctxt "inscription-aux-cours"
 msgid "Course"
 msgstr ""
 
+msgctxt "inscription-aux-cours"
 msgid "Course choice"
 msgstr ""
 
@@ -296,6 +303,9 @@ msgstr ""
 msgid ""
 "The following minors or electives in which you are registered are no longer "
 "offered this academic year:"
+msgstr ""
+
+msgid "The form is available until"
 msgstr ""
 
 msgid ""

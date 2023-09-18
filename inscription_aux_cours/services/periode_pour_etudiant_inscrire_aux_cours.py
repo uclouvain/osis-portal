@@ -22,12 +22,29 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django import forms
+
+from functools import partial
+
+import osis_inscription_cours_sdk
+from osis_inscription_cours_sdk.api import periode_inscription_etudiant_api
+from osis_inscription_cours_sdk.model.periode_inscription_etudiant import PeriodeInscriptionEtudiant
+
+from base.models.person import Person
+from base.services.utils import call_api
+from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
+
+REFERENCE_INSCRIPTION_AUX_COURS = 'COURSE_ENROLLMENT_SWITCHING_CALENDAR'
 
 
-class DemandeParticuliereForm(forms.Form):
-    demande_particuliere = forms.CharField(
-        required=False,
-        max_length=900,
-        widget=forms.Textarea
-    )
+class PeriodeInscriptionEtudiantService:
+    @staticmethod
+    def get_periode(person: 'Person', code_programme: str) -> 'PeriodeInscriptionEtudiant':
+        return _periode_inscription_etudiant_api_call(person, "get_periode", code_programme=code_programme, )
+
+
+_periode_inscription_etudiant_api_call = partial(
+    call_api,
+    inscription_aux_cours_sdk,
+    osis_inscription_cours_sdk,
+    periode_inscription_etudiant_api.PeriodeInscriptionEtudiantApi
+)
