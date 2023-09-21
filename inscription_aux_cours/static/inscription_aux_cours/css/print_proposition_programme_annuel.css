@@ -31,10 +31,6 @@
         display: none;
     }
 
-    #template-messages-container {
-        display: none;
-    }
-
     .hide_print {
         display: none !important;
     }
