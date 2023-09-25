@@ -27,7 +27,7 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li class="active">{% trans 'Course choice' %}</li>
+    <li class="active">{% trans 'Course choice' context 'inscription-aux-cours' %}</li>
     <li>{% trans 'My annual programme' %}</li>
 {% endblock %}
 
@@ -57,7 +57,7 @@
             {% if programmes %}
                 <div class="alert alert-info" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans 'Click on the code of the course for which you want to create your annual programme.' %}
+                    {% trans 'Click on the code of the course (acronym) for which you want to create your annual programme.' %}
                 </div>
             {% else %}
                 <div class="alert alert-warning" style="display:inline-block;">
@@ -70,8 +70,8 @@
                     <table id="table_exam_enrollment_offer_choice" class="table table-striped table-hover">
                         <tr>
                             <th>{% trans 'Year' %}</th>
-                            <th>{% trans 'Code' %}</th>
-                            <th>{% trans 'Course' %}</th>
+                            <th>{% trans 'Acronym' context 'inscription-aux-cours' %}</th>
+                            <th>{% trans 'Course' context 'inscription-aux-cours' %}</th>
                             <th></th>
                         </tr>
                         {% for programme in programmes %}
@@ -86,9 +86,11 @@
                                 <td>{{ programme|get_intitule_programme }}</td>
                                 <td>
                                     {% if autorisation.autorise %}
-                                        <i class="fa-solid fa-lock-open fa-info"></i>
+                                        {% with periodes|get_item:programme.code as periode %}
+                                            <i class="fa-solid fa-lock-open fa-info"></i> <em>{% trans "The form is available until" %} {{ periode.fin }}</em>
+                                        {% endwith %}
                                     {% else %}
-                                        <i class="fa-solid fa-lock fa-info"></i> <em>{{ autorisation.msg }}</em>
+                                        <i class="fa-solid fa-lock fa-info"></i> <em>{{ autorisation.msg|safe }}</em>
                                     {% endif %}
                                 </td>
                             </tr>
