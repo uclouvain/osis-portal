@@ -61,7 +61,7 @@
                 </div>
 
                 {% if depasse_le_maximum_credits_inscrits %}
-                    <div class="alert alert-danger hide_print">
+                    <div class="alert alert-danger">
                         <p>
                             <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
                                 {% if a_une_condition_bama15_ou_1adp %}
@@ -76,7 +76,7 @@
                 {% endif %}
                 {% if not est_en_fin_de_cycle and cours_dont_prerequis_non_acquis %}
                     {% if codes_dont_prerequis_non_acquis_et_inscrit_a_au_moins_un_prerequis %}
-                        <div class="alert alert-danger hide_print">
+                        <div class="alert alert-danger">
                             <p>
                                 <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
                                 {% trans "You have not satisfied the prerequisites for the following course units:" %} {{ cours_dont_prerequis_non_acquis|join:", " }}
@@ -85,7 +85,7 @@
                             </p>
                         </div>
                     {% else %}
-                        <div class="alert alert-warning hide_print">
+                        <div class="alert alert-warning">
                             <p>
                                 <i class="fa fa-exclamation-circle" style="font-size:120%" aria-hidden="true"></i>
                                 {% blocktrans with liste_codes_ue=cours_dont_prerequis_non_acquis|join:", " %}It appears that you have not satisfied the prerequisites for {{ liste_codes_ue }}. This request will be examined by the faculty after you have submitted your proposal.{% endblocktrans %}
@@ -99,7 +99,7 @@
 
                 {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
             {% else %}
-                <div class="alert alert-warning hide_print" style="display:inline-block;">
+                <div class="alert alert-warning" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                     {% trans "You are not registered for any course units." %}
                 </div>
