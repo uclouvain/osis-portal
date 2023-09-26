@@ -11,10 +11,12 @@
             hx-vals='{"code_mini_formation": "{{ code_mini_formation }}"}'
             hx-post="{% url 'inscription-aux-cours:inscrire-mini-formation' programme.code %}"
             hx-indicator="#form-inscription-{{ code_mini_formation }}"
+            hx-ext="osis-disable-element"
+            hx-disable-element="#link-go-to-courses-enrollment"
     >
     {% if erreurs %}
-        <i class="fa-solid fa-circle-exclamation fa-danger" data-toggle="tooltip" title="{{ erreurs|join:"\n" }}"></i>
+        {% include "inscription_aux_cours/blocks/tooltip_erreurs.html" %}
     {% endif %}
     <div class="loading pull-left"></div>
+    <span class="non-inscrit"></span>
 </form>
-

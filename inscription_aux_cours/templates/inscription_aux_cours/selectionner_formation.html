@@ -27,14 +27,14 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li class="active">{% trans 'Offer choice' %}</li>
-    <li>{% trans 'My courses enrollment' %}</li>
+    <li class="active">{% trans 'Course choice' context 'inscription-aux-cours' %}</li>
+    <li>{% trans 'My annual programme' %}</li>
 {% endblock %}
 
 
 {% block page_header %}
     <div class="page-header">
-        <h2>{% trans 'My courses enrollment' %}</h2>
+        <h2>{% trans 'My annual programme' %}</h2>
     </div>
 {% endblock %}
 
@@ -48,7 +48,7 @@
                     {{ person.last_name }}, {{ person.first_name }}
                 </div>
                 <div class="col-md-6">
-                    <label>{% trans 'Registration id' %}</label>
+                    <label>{% trans 'Noma' %}</label>
                     <br>
                     {{ noma }}
                 </div>
@@ -57,12 +57,12 @@
             {% if programmes %}
                 <div class="alert alert-info" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans 'Select an offer for which you want to do courses enrollment.' %}
+                    {% trans 'Click on the code of the course (acronym) for which you want to create your annual programme.' %}
                 </div>
             {% else %}
                 <div class="alert alert-warning" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not enrolled to any program for the academic year {{ annee_academique }}.{% endblocktrans %}
+                    {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }}  academic year.{% endblocktrans %}
                 </div>
             {% endif %}
             <div class="row">
@@ -70,8 +70,8 @@
                     <table id="table_exam_enrollment_offer_choice" class="table table-striped table-hover">
                         <tr>
                             <th>{% trans 'Year' %}</th>
-                            <th>{% trans 'Acronym' %}</th>
-                            <th>{% trans 'Program' %}</th>
+                            <th>{% trans 'Acronym' context 'inscription-aux-cours' %}</th>
+                            <th>{% trans 'Course' context 'inscription-aux-cours' %}</th>
                             <th></th>
                         </tr>
                         {% for programme in programmes %}
@@ -86,9 +86,11 @@
                                 <td>{{ programme|get_intitule_programme }}</td>
                                 <td>
                                     {% if autorisation.autorise %}
-                                        <i class="fa-solid fa-lock-open fa-info"></i>
+                                        {% with periodes|get_item:programme.code as periode %}
+                                            <i class="fa-solid fa-lock-open fa-info"></i> <em>{% trans "The form is available until" %} {{ periode.fin }}</em>
+                                        {% endwith %}
                                     {% else %}
-                                        <i class="fa-solid fa-lock fa-info"></i> <em>{{ autorisation.msg }}</em>
+                                        <i class="fa-solid fa-lock fa-info"></i> <em>{{ autorisation.msg|safe }}</em>
                                     {% endif %}
                                 </td>
                             </tr>

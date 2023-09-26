@@ -1,0 +1,48 @@
+{% load i18n %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<div style="display: flex; gap: 30px; padding-bottom: 15px;">
+    {% if credits_formation %}
+        {% widthratio credits_formation 60 1 as proportion  %}
+    {% else %}
+        {% widthratio 1 1 1 as proportion|add:1  %}
+    {% endif %}
+    <div style="flex-grow: {{ proportion|add:1 }};">
+         <div class="text-center" style="margin-bottom: 25px;"><strong>{{ intitule_cycle }}</strong></div>
+        {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=credits_acquis_cycle credits_inscrits=credits_inscrits_cycle barre_progression_max=barre_de_progression_max_cycle credits_de_progression_potentielle=credits_de_progression_potentielle_cycle credits_cibles=credits_cibles_cycle credits_valorises=credits_valorises_cycle valeur_jalon=valeur_jalon %}
+    </div>
+    {% if est_en_premiere_annee_de_bachelier %}
+        <div style="flex-grow: 1;">
+             <div class="text-center" style="margin-bottom: 25px;"><strong>{{ intitule_bloc_1 }}</strong></div>
+            {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=credits_acquis_bloc_1 credits_inscrits=credits_inscrits_bloc_1 barre_progression_max=barre_de_progression_max_bloc_1 credits_de_progression_potentielle=credits_de_progression_potentielle_bloc_1 credits_cibles=None credits_valorises=credits_valorises_bloc_1 valeur_jalon=None %}
+        </div>
+    {% endif %}
+    {% if a_un_complement or progression_de_cycle.credits_acquis %}
+        <div style="flex-grow: 1;">
+             <div class="text-center" style="margin-bottom: 25px;"><strong>{{ intitule_complement }}</strong></div>
+            {% include "inscription_aux_cours/blocks/barre_de_progression.html" with credits_acquis=credits_acquis_complement credits_inscrits=credits_inscrits_complement barre_progression_max=barre_de_progression_max_complement credits_de_progression_potentielle=credits_de_progression_potentielle_complement credits_cibles=None credits_valorises=None valeur_jalon=None %}
+        </div>
+    {% endif %}
+</div>

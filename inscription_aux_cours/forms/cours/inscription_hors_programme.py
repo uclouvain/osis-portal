@@ -31,10 +31,10 @@ from django.utils.translation import gettext_lazy as _
 
 class InscriptionHorsProgrammeForm(forms.Form):
     annee = forms.IntegerField(disabled=True, widget=forms.HiddenInput)
-    code_mini_formation = forms.ChoiceField()
+    code_mini_formation = forms.ChoiceField(required=False)
     cours = forms.MultipleChoiceField(
-        required=True,
-        label=_('Learning Unit Year').capitalize(),
+        required=False,
+        label=_('Course unit').capitalize(),
         widget=autocomplete.Select2Multiple(
             url='learning-unit:learning_unit_year_autocomplete',
             attrs={

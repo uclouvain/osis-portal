@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-05 09:37+0200\n"
+"POT-Creation-Date: 2023-06-09 10:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,9 +22,6 @@ msgid ""
 "linked to your user.</br> Please contact <a "
 "href=\"{registration_department_url}\" target=\"_blank\">the Registration "
 "department</a>. Thank you."
-msgstr ""
-
-msgid "Annual program"
 msgstr ""
 
 msgid "Annual program administration"
@@ -101,6 +98,9 @@ msgstr ""
 msgid "Mobile number"
 msgstr ""
 
+msgid "My annual programme"
+msgstr ""
+
 msgid "My applications"
 msgstr ""
 
@@ -110,16 +110,19 @@ msgstr ""
 msgid "My attestations"
 msgstr ""
 
-msgid "My courses enrollment"
-msgstr ""
-
 msgid "My description fiche"
 msgstr ""
 
 msgid "My personal data"
 msgstr ""
 
+msgid "My student file"
+msgstr ""
+
 msgid "My teaching charge"
+msgstr ""
+
+msgid "National registry number"
 msgstr ""
 
 msgid "Personal address"
@@ -192,6 +195,9 @@ msgid "VPN access"
 msgstr ""
 
 msgid "View my annual program and exam marks"
+msgstr ""
+
+msgid "my annual program and my marks"
 msgstr ""
 
 msgid "outside UCLouvain"

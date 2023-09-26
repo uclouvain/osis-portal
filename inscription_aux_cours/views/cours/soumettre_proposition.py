@@ -5,7 +5,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,33 +26,38 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET
 from django.views.generic import TemplateView
 
 from base.services.utils import ServiceException
 from continuing_education.views.common import display_error_messages, display_success_messages
 from inscription_aux_cours.services.proposition_programme import PropositionProgrammeService
-from inscription_aux_cours.views.common import InscriptionAuxCoursViewMixin
+from inscription_aux_cours.views.common import CompositionPAEViewMixin
 
 
-@method_decorator(require_POST, name='dispatch')
-class SoumettrePropositionView(LoginRequiredMixin, InscriptionAuxCoursViewMixin, TemplateView):
+@method_decorator(require_GET, name='dispatch')
+class SoumettrePropositionView(LoginRequiredMixin, CompositionPAEViewMixin, TemplateView):
     name = 'soumettre-proposition'
 
     # TemplateView
     template_name = "inscription_aux_cours/cours/blocks/soumettre_proposition.html"
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         try:
             self.soumettre_proposition()
             display_success_messages(
                 request,
-                _("Your proposition of annual program successfully submitted. "
-                  "A confirmation email is sent to the address %(email)s") % {'email': self.request.user.person.email},
+                self.get_success_message(),
             )
         except ServiceException as e:
             display_error_messages(request, e.messages)
         return redirect('inscription-aux-cours:recapitulatif', code_programme=self.code_programme)
+
+    def get_success_message(self):
+        return _(
+            "Your annual programme proposal has been successfully submitted. "
+            "A confirmation email will be sent to %(email)s"
+        ) % {'email': self.request.user.person.email}
 
     def soumettre_proposition(self):
         PropositionProgrammeService().soumettre(

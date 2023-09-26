@@ -1,0 +1,209 @@
+{% extends "inscription_aux_cours/layout.html" %}
+{% load static i18n %}
+{% load academic_year_display inscription_aux_cours_extra sort_extra %}
+
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'inscription-aux-cours:selectionner-formation' %}">{% trans 'Course choice' context 'inscription-aux-cours' %}</a></li>
+    <li class="active">{% trans 'My choice of minors or electives' %}</li>
+{% endblock %}
+
+
+{% block page_header %}
+    {% include "inscription_aux_cours/blocks/page_header.html" %}
+{% endblock %}
+
+{% block page_body %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            {% include "inscription_aux_cours/blocks/header_formation.html" %}
+
+            <br>
+
+            {% if not inscriptions %}
+            <div class="alert alert-warning" style="display:inline-block;">
+                <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                {% if est_bachelier %}
+                    {% trans "You have not yet registered for a minor or in-depth study." %}
+                {% else %}
+                    {% trans "You are not registered for a elective." %}
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if mini_formations_inscrites_non_inscriptibles %}
+                <br>
+
+                <div class="alert alert-warning">
+                    <p>
+                        {% trans 'The following minors or electives in which you are registered are no longer offered this academic year:' %}
+                    <ul>
+                        {% for mini_formation in mini_formations_inscrites_non_inscriptibles %}
+                            <li>{{ mini_formation.title }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% trans 'To change minors or electives, please contact your faculty administrator.' %}
+                    </p>
+                </div>
+
+            {% endif %}
+
+            <br>
+
+            <div>
+                <h5><strong>{{ intitule }}</strong></h5>
+                <p><i>{{ commentaire|safe }}</i></p>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="legende">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseLegende" aria-expanded="false" aria-controls="collapseLegende">
+                            <i class="fa-solid fa-chevron-down unexpanded"></i> <i class="fa-solid fa-chevron-up expanded"></i> {% trans 'Legend' %}
+                        </a>
+                </div>
+                <div id="collapseLegende" class="panel-collapse collapse" role="tabpanel" aria-labelledby="legende">
+                    <div class="panel-body">
+                        <table class="table table-condensed table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td class="col-md-1"><i class='fa-solid fa-key fa-info'></i></td>
+                                    <td>{% trans "Admission to minors or electives marked with a key is subject to meeting certain requirements (entrance exam, application, etc.), which you should familiarise yourself with before registering. To find out how to register, click on the key. Registration will be carried out by your faculty administrator." %}</td>
+                                </tr>
+                                <tr>
+                                    <td>Insc</td>
+                                    <td>{% trans 'Registered for the minor or elective' %}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <br>
+
+            <table id="table-inscription-mini-formations" class="table table-hover" hx-sync="this:queue all" hx-ext="class-on-confirm">
+                {% for mini_formation in inscriptibles|dictsortunaccent:"intitule" %}
+                    {% with mini_formation|get_inscription_a_la_mini_formation:inscriptions as inscription %}
+                    <tr>
+                        <td>{{ mini_formation.intitule }}</td>
+                        <td style="width: 10%">
+                            <form id="form-inscription-{{ mini_formation.code }}" method="post">
+                                {% csrf_token %}
+                                {% if mini_formation.condition_acces %}
+                                    {% get_lien_condition_access programme mini_formation as lien_condition_access %}
+
+                                    <div class="keep-popover-display"
+                                         data-toggle="popover"
+                                         tabindex="0"
+                                         role="button"
+                                         data-html="true"
+                                         data-placement="left"
+                                         data-popover="manual"
+                                         data-content="
+                                           <p>
+                                            {% trans 'This minor or elective has admission requirements, please consult the registration procedure by clicking this link:' %}
+                                            <a href='{{ lien_condition_access }}' target='_blank'>{{ lien_condition_access }}</a>
+                                            <br>
+                                            {% trans 'Registration will be carried out by your faculty administrator' %}
+                                            </p>"
+                                    >
+                                {% endif %}
+                                <input
+                                        id="checkbox-{{ mini_formation.code }}"
+                                        type="checkbox"
+                                        name="checkbox_mini_formation"
+                                        hx-include="#form-inscription-{{ mini_formation.code }}"
+                                        hx-target="#form-inscription-{{ mini_formation.code }}"
+                                        hx-trigger="click"
+                                        hx-swap="outerHTML"
+                                        hx-vals='{"code_mini_formation": "{{ mini_formation.code }}"}'
+                                        hx-indicator="#form-inscription-{{ mini_formation.code }}"
+                                        hx-ext="osis-disable-element"
+                                        hx-disable-element="#link-go-to-courses-enrollment"
+
+                                        {% if inscription %}
+                                        checked
+                                        hx-post="{% url 'inscription-aux-cours:desinscrire-mini-formation' programme.code %}"
+                                        {% else %}
+                                        hx-post="{% url 'inscription-aux-cours:inscrire-mini-formation' programme.code %}"
+                                        {% endif %}
+
+                                        {% if mini_formation.condition_acces %}
+                                            disabled
+                                        {% elif inscription and not inscription.demandee_par_etudiant %}
+                                            disabled
+                                            data-toggle="tooltip"
+                                            title="{% trans 'You cannot unregister from a minor or elective added by your faculty administrator.' %}"
+                                        {% endif %}
+                                >
+                                {% if mini_formation.condition_acces %}
+                                    <i class='fa-solid fa-key fa-info'></i>
+                                {% endif %}
+                                {% if inscription %}
+                                    <span class="fa-pull-right badge badge_insc_meme_context">Insc</span>
+                                {% endif %}
+                                {% if mini_formation.condition_acces %}
+                                    </div>
+                                {% endif %}
+                                <div class="loading pull-left"></div>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endwith %}
+                {% endfor %}
+            </table>
+
+            <div class="center">
+                <a id="link-go-to-courses-enrollment" class="btn btn-primary btn-wrap btn-block-xs" onclick="modalConfirm()">
+                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to my annual programme proposal' %}
+                </a>
+                {% include "inscription_aux_cours/mini_formation/modal_confirmation_aucune_inscription.html" %}
+            </div>
+
+            <br>
+            <br>
+
+            {% include "inscription_aux_cours/blocks/contact.html" %}
+
+        </div>
+    </div>
+
+    <script>
+
+        function modalConfirm(){
+            let nombre_miniformations_selectionnees = $("input[id^='checkbox-']:checked");
+            if (nombre_miniformations_selectionnees.length === 0){
+                $('#modalConfirmationAucuneMiniformationSelectionnee').modal('show');
+            } else {
+                showSpinner();
+                location.href = "{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}";
+            }
+        }
+
+    </script>
+{% endblock %}

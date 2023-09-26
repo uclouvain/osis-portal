@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,42 +23,77 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path, include
+from django.urls import path, include, re_path
 
-from inscription_aux_cours.views.cours.demande_particuliere import DemandeParticuliereView
-from inscription_aux_cours.views.cours.desinscrire import DesinscrireAUnCoursView
-from inscription_aux_cours.views.cours.formulaire import FormulaireInscriptionAuxCoursView
-from inscription_aux_cours.views.cours.inscrire import InscrireAUnCoursView
-from inscription_aux_cours.views.cours.inscrire_hors_programme import InscrireAUnCoursHorsProgrammeView
+from inscription_aux_cours.views.activites_aide_reussite.formulaire import FormulaireActivitesDeAideALaReussiteView
+from inscription_aux_cours.views.cours.formulaire import FormulaireCompositionPAEView
+from inscription_aux_cours.views.cours.ma_proposition_de_pae import MaPropositionDePaeView
+from inscription_aux_cours.views.cours.mon_pae_valide_jury import MonPaeValideJuryView
+from inscription_aux_cours.views.cours.proposition_programme_annuel import EnregistrerPropositionProgrammeAnnuelView
+from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
 from inscription_aux_cours.views.cours.soumettre_proposition import SoumettrePropositionView
 from inscription_aux_cours.views.inscription_non_autorisee import InscriptionNonAutoriseeView
 from inscription_aux_cours.views.mini_formation.desinscrire import DesinscrireAUneMiniFormationView
-from inscription_aux_cours.views.mini_formation.inscriptibles import MiniFormationsInscriptiblesView
+from inscription_aux_cours.views.mini_formation.formulaire import FormulaireMiniFormationsView
 from inscription_aux_cours.views.mini_formation.inscrire import InscrireAUneMiniFormationView
-from inscription_aux_cours.views.cours.recapitulatif import RecapitulatifView
 from inscription_aux_cours.views.mini_formation.recapitulatif import RecapitulatifInscriptionsMiniFormationsView
 from inscription_aux_cours.views.selectionner_formation import SelectionnerFormationView
 
 app_name = 'inscription-aux-cours'
 urlpatterns = [
     path('', SelectionnerFormationView.as_view(), name=SelectionnerFormationView.name),
-    path('<str:code_programme>/', include([
-        path('non_autorisee/', InscriptionNonAutoriseeView.as_view(), name=InscriptionNonAutoriseeView.name),
-        path('formulaire/', FormulaireInscriptionAuxCoursView.as_view(), name=FormulaireInscriptionAuxCoursView.name),
-        path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
-        path('inscrire/', InscrireAUnCoursView.as_view(), name=InscrireAUnCoursView.name),
-        path('inscrire_hors_programme/', InscrireAUnCoursHorsProgrammeView.as_view(), name=InscrireAUnCoursHorsProgrammeView.name),
-        path('desinscrire/', DesinscrireAUnCoursView.as_view(), name=DesinscrireAUnCoursView.name),
-        path('demande_particuliere/', DemandeParticuliereView.as_view(), name=DemandeParticuliereView.name),
-        path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),
-        path(
-            'mineures_options/',
-            include([
-                path('recapitulatif/', RecapitulatifInscriptionsMiniFormationsView.as_view(), name=RecapitulatifInscriptionsMiniFormationsView.name),
-                path('inscription/', MiniFormationsInscriptiblesView.as_view(), name=MiniFormationsInscriptiblesView.name),
-                path('inscrire/', InscrireAUneMiniFormationView.as_view(), name=InscrireAUneMiniFormationView.name),
-                path('desinscrire/', DesinscrireAUneMiniFormationView.as_view(), name=DesinscrireAUneMiniFormationView.name)
-            ]),
+    path(
+        '<str:code_programme>/',
+        include(
+            [
+                path('non_autorisee/', InscriptionNonAutoriseeView.as_view(), name=InscriptionNonAutoriseeView.name),
+                path(
+                    'formulaire/',
+                    FormulaireCompositionPAEView.as_view(),
+                    name=FormulaireCompositionPAEView.name,
+                ),
+                path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
+                path(
+                    'enregistrer_proposition_programme_annuel/',
+                    EnregistrerPropositionProgrammeAnnuelView.as_view(),
+                    name=EnregistrerPropositionProgrammeAnnuelView.name,
+                ),
+                path('soumettre_proposition/', SoumettrePropositionView.as_view(), name=SoumettrePropositionView.name),
+                path('ma_proposition_de_pae/', MaPropositionDePaeView.as_view(), name=MaPropositionDePaeView.name),
+                path('mon_pae_valide_jury/', MonPaeValideJuryView.as_view(), name=MonPaeValideJuryView.name),
+                path(
+                    'mineures_options/',
+                    include(
+                        [
+                            path(
+                                'recapitulatif/',
+                                RecapitulatifInscriptionsMiniFormationsView.as_view(),
+                                name=RecapitulatifInscriptionsMiniFormationsView.name,
+                            ),
+                            path(
+                                'formulaire/',
+                                FormulaireMiniFormationsView.as_view(),
+                                name=FormulaireMiniFormationsView.name,
+                            ),
+                            path(
+                                'inscrire/',
+                                InscrireAUneMiniFormationView.as_view(),
+                                name=InscrireAUneMiniFormationView.name,
+                            ),
+                            path(
+                                'desinscrire/',
+                                DesinscrireAUneMiniFormationView.as_view(),
+                                name=DesinscrireAUneMiniFormationView.name,
+                            ),
+                        ]
+                    ),
+                ),
+                path(
+                    'activites_aide_reussite/',
+                    FormulaireActivitesDeAideALaReussiteView.as_view(),
+                    name=FormulaireActivitesDeAideALaReussiteView.name,
+                ),
+            ]
         ),
-    ])),
+    ),
 ]
