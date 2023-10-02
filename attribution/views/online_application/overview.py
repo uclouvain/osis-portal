@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -26,24 +26,24 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 
+
 from attribution.calendar.application_courses_calendar import ApplicationCoursesRemoteCalendar
 from attribution.services.application import ApplicationService
 from attribution.utils import permission
-from base.models.tutor import Tutor
+from base.models.person import Person
 from base.templatetags.academic_year_display import display_as_academic_year
+from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
-    # PermissionRequiredMixin
-    permission_required = "base.can_access_attribution_application"
-    raise_exception = True
+class ApplicationOverviewView(LoginRequiredMixin, TemplateView):
 
     # TemplateView
     template_name = "attribution_overview.html"
@@ -56,27 +56,33 @@ class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, Templ
         return super().dispatch(request, *args, **kwargs)
 
     @cached_property
-    def tutor(self):
-        return self.request.user.person.tutor
+    def person(self):
+        return self.request.user.person
 
     @cached_property
     def application_course_calendar(self):
-        calendars = ApplicationCoursesRemoteCalendar(self.tutor.person).get_opened_academic_events()
+        calendars = ApplicationCoursesRemoteCalendar(self.person).get_opened_academic_events()
         if len(calendars) > 1:
             logger.warning("Multiple application courses calendars opened at same time")
         return calendars[0]
 
     @cached_property
     def applications(self):
-        return ApplicationService.get_applications(self.tutor.person)
+        return ApplicationService.get_applications(self.person)
 
     @cached_property
     def attributions_about_to_expire(self):
-        return ApplicationService.get_attribution_about_to_expires(self.tutor.person)
+        try:
+            return ApplicationService.get_attribution_about_to_expires(self.person)
+        except MultipleApiBusinessException as e:
+            for exception in e.exceptions:
+                if exception.status_code == 'APPLICATION-13':
+                    detail = exception.detail
+                    raise PermissionDenied(detail)
 
     @cached_property
     def charge_summary(self):
-        return ApplicationService.get_my_charge_summary(self.tutor.person)
+        return ApplicationService.get_my_charge_summary(self.person)
 
     def get_total_lecturing_charge(self):
         return sum(
@@ -105,7 +111,7 @@ class ApplicationOverviewView(LoginRequiredMixin, PermissionRequiredMixin, Templ
             'previous_academic_year': display_as_academic_year(
                 self.application_course_calendar.authorized_target_year - 1
             ),
-            'a_tutor': self.tutor,
+            'a_person': self.person,
             'catalog_url': settings.ATTRIBUTION_CONFIG.get('CATALOG_URL'),
             'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
         }
@@ -115,5 +121,5 @@ class ApplicationOverviewAdminView(ApplicationOverviewView):
     permission_required = "base.is_faculty_administrator"
 
     @cached_property
-    def tutor(self):
-        return Tutor.objects.get(person__global_id=self.kwargs['global_id'])
+    def person(self):
+        return Person.objects.get(global_id=self.kwargs['global_id'])
