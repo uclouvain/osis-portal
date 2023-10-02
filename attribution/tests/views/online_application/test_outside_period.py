@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from attribution.tests.views.online_application.common import OnlineApplicationContextTestMixin
 from base.templatetags.academic_year_display import display_as_academic_year
+from base.tests.factories.person import PersonFactory
 from base.tests.factories.tutor import TutorFactory
 
 
@@ -38,11 +39,11 @@ class TestOutsideEncodingPeriodView(OnlineApplicationContextTestMixin, TestCase)
     @classmethod
     def setUpTestData(cls):
         cls.url = reverse('outside_applications_period')
-        cls.tutor = TutorFactory(person__global_id='578945612')
+        cls.person = PersonFactory(global_id="9999999")
 
     def setUp(self) -> None:
         self.open_application_course_calendar()
-        self.client.force_login(self.tutor.person.user)
+        self.client.force_login(self.person.user)
 
     def test_case_period_closed_assert_message_displayed(self):
         self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)
@@ -55,7 +56,7 @@ class TestOutsideEncodingPeriodView(OnlineApplicationContextTestMixin, TestCase)
         self.assertEqual(messages[0].tags, 'warning')
 
         expected_msg = _(
-            'The period of online application for courses %(year)s will open on %(start_date)s to %(end_date)s'
+            'The period of online application for courses %(year)s will open on %(start_date)s until %(end_date)s'
         ) % {
                            'year': display_as_academic_year(self.calendar.authorized_target_year),
                            'start_date': self.calendar.start_date.strftime('%d/%m/%Y'),
