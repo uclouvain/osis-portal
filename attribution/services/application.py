@@ -84,6 +84,7 @@ class ApplicationService:
             raise Http404
 
     @staticmethod
+    @api_exception_handler(ApiException)
     def get_attribution_about_to_expires(person: Person):
         configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
@@ -191,3 +192,4 @@ class ApplicationBusinessException(Enum):
     NotAuthorOfApplication = "APPLICATION-9"
     AttributionAboutToExpireWithoutVolume = "APPLICATION-10"
     AttributionSubstitute = "APPLICATION-11"
+    CandidateNotFound = "APPLICATION-13"
