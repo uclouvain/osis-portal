@@ -41,7 +41,7 @@ from frontoffice.settings.osis_sdk import attribution as attribution_sdk, utils
 
 from osis_attribution_sdk.api import application_api
 
-from frontoffice.settings.osis_sdk.utils import api_exception_handler
+from frontoffice.settings.osis_sdk.utils import api_exception_handler, api_cache_result
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -184,7 +184,7 @@ class ApplicationService:
         configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
             api_instance = application_api.ApplicationApi(api_client)
-            api_instance.configuration_retrieve(
+            return api_instance.configuration_retrieve(
                 **utils.build_mandatory_auth_headers(person)
             )
 
