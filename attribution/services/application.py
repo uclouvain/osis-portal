@@ -41,7 +41,7 @@ from frontoffice.settings.osis_sdk import attribution as attribution_sdk, utils
 
 from osis_attribution_sdk.api import application_api
 
-from frontoffice.settings.osis_sdk.utils import api_exception_handler, api_cache_result
+from frontoffice.settings.osis_sdk.utils import api_exception_handler
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
