@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
@@ -38,10 +38,7 @@ from attribution.utils import permission
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class DeleteApplicationView(LoginRequiredMixin, PermissionRequiredMixin, View):
-    # PermissionRequiredMixin
-    permission_required = "base.can_access_attribution_application"
-    raise_exception = True
+class DeleteApplicationView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         if not permission.is_online_application_opened(self.request.user):

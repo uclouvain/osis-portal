@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -41,22 +41,19 @@ from frontoffice.settings.osis_sdk.utils import MultipleApiBusinessException
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class CreateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormView):
-    # PermissionRequiredMixin
-    permission_required = "base.can_access_attribution_application"
-    raise_exception = True
+class CreateApplicationView(LoginRequiredMixin, FormView):
 
     # FormView
     form_class = ApplicationForm
     template_name = "application_form.html"
 
     @cached_property
-    def tutor(self):
-        return self.request.user.person.tutor
+    def person(self):
+        return self.request.user.person
 
     @cached_property
     def vacant_course(self):
-        return ApplicationService.get_vacant_course(code=self.kwargs['vacant_course_code'], person=self.tutor.person)
+        return ApplicationService.get_vacant_course(code=self.kwargs['vacant_course_code'], person=self.person)
 
     def get(self, request, *args, **kwargs):
         if not permission.is_online_application_opened(self.request.user):
@@ -82,7 +79,7 @@ class CreateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormVie
                 practical_volume=form.cleaned_data['charge_practical_asked'],
                 remark=form.cleaned_data['remark'],
                 course_summary=form.cleaned_data['course_summary'],
-                person=self.tutor.person
+                person=self.person
             )
         except MultipleApiBusinessException as multiple_business_api_exception:
             for exception in multiple_business_api_exception.exceptions:
@@ -99,7 +96,7 @@ class CreateApplicationView(LoginRequiredMixin, PermissionRequiredMixin, FormVie
             **super().get_context_data(**kwargs),
             'save_url': reverse('create_application', kwargs={'vacant_course_code': self.kwargs['vacant_course_code']}),
             'cancel_url': reverse('applications_overview'),
-            'a_tutor': self.tutor,
+            'a_person': self.person,
             'help_button_url': settings.ATTRIBUTION_CONFIG.get('HELP_BUTTON_URL'),
         }
 
