@@ -34,6 +34,9 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
+from attribution.services.application import ApplicationService
+from base.models.person import Person
+
 
 class Home(LoginRequiredMixin, TemplateView):
     template_name = "dashboard.html"
@@ -50,6 +53,13 @@ class Home(LoginRequiredMixin, TemplateView):
         grids_tiles = [self.get_tutor_grid_tiles(), self.get_student_grid_tiles()]
         return [grid_tiles for grid_tiles in grids_tiles if grid_tiles.available_tiles]
 
+    def _has_perm_to_apply_on_vacant_course(self) -> bool:
+        try:
+            application_configuration = ApplicationService.retrieve_configuration(self.request.user.person)
+            return 'url' in application_configuration.links.get('application_create', {})
+        except Person.DoesNotExist:
+            return False
+
     def get_tutor_grid_tiles(self) -> 'GridTiles':
         return GridTiles(
             title="",
@@ -63,7 +73,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('This process controls my applications'),
                     VPN=False,
                     app='attribution',
-                    has_perm=self.request.user.has_perm('base.is_tutor')
+                    has_perm=self._has_perm_to_apply_on_vacant_course(),
                 ),
                 Tile(
                     column='courses',

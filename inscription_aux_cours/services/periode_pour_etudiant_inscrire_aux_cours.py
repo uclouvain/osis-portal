@@ -30,7 +30,7 @@ from osis_inscription_cours_sdk.api import periode_inscription_etudiant_api
 from osis_inscription_cours_sdk.model.periode_inscription_etudiant import PeriodeInscriptionEtudiant
 
 from base.models.person import Person
-from base.services.utils import call_api
+from base.services.utils import call_api, ServiceException
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
 
 REFERENCE_INSCRIPTION_AUX_COURS = 'COURSE_ENROLLMENT_SWITCHING_CALENDAR'
@@ -39,7 +39,14 @@ REFERENCE_INSCRIPTION_AUX_COURS = 'COURSE_ENROLLMENT_SWITCHING_CALENDAR'
 class PeriodeInscriptionEtudiantService:
     @staticmethod
     def get_periode(person: 'Person', code_programme: str) -> 'PeriodeInscriptionEtudiant':
-        return _periode_inscription_etudiant_api_call(person, "get_periode", code_programme=code_programme, )
+        try:
+            return _periode_inscription_etudiant_api_call(person, "get_periode", code_programme=code_programme, )
+        except ServiceException:
+            return {
+                "debut": "",
+                "fin": "",
+                "annee": ""
+            }
 
 
 _periode_inscription_etudiant_api_call = partial(

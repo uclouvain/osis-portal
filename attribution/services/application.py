@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -84,6 +84,7 @@ class ApplicationService:
             raise Http404
 
     @staticmethod
+    @api_exception_handler(ApiException)
     def get_attribution_about_to_expires(person: Person):
         configuration = attribution_sdk.build_configuration()
         with osis_attribution_sdk.ApiClient(configuration) as api_client:
@@ -178,6 +179,15 @@ class ApplicationService:
             api_instance = application_api.ApplicationApi(api_client)
             api_instance.applications_summary_send(**utils.build_mandatory_auth_headers(person))
 
+    @staticmethod
+    def retrieve_configuration(person: Person):
+        configuration = attribution_sdk.build_configuration()
+        with osis_attribution_sdk.ApiClient(configuration) as api_client:
+            api_instance = application_api.ApplicationApi(api_client)
+            return api_instance.configuration_retrieve(
+                **utils.build_mandatory_auth_headers(person)
+            )
+
 
 class ApplicationBusinessException(Enum):
     LecturingAndPracticalChargeNotFilled = "APPLICATION-1"
@@ -191,3 +201,4 @@ class ApplicationBusinessException(Enum):
     NotAuthorOfApplication = "APPLICATION-9"
     AttributionAboutToExpireWithoutVolume = "APPLICATION-10"
     AttributionSubstitute = "APPLICATION-11"
+    CandidateNotFound = "APPLICATION-13"

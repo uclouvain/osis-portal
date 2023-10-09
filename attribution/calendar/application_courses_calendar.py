@@ -32,8 +32,10 @@ import urllib3
 from django.conf import settings
 from osis_attribution_sdk.api import application_api
 from osis_attribution_sdk.models import ApplicationCourseCalendar
+from osis_attribution_sdk import ApiException
 
 from frontoffice.settings.osis_sdk import attribution as attribution_sdk, utils
+from frontoffice.settings.osis_sdk.utils import api_exception_handler
 
 LOGGER = logging.getLogger(settings.DEFAULT_LOGGER)
 
@@ -64,6 +66,7 @@ class ApplicationCoursesRemoteCalendar:
         """
         return [academic_event.authorized_target_year for academic_event in self.get_opened_academic_events()]
 
+    @api_exception_handler(ApiException)
     def get_opened_academic_events(self) -> List[ApplicationCourseCalendar]:
         """
         Return all current academic event opened based on today

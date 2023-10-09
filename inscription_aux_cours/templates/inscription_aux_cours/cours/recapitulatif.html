@@ -55,7 +55,7 @@
             <br>
 
             {% if programme_annuel.a_des_inscriptions %}
-                <div class="alert alert-info hide_print" style="display:inline-block;">
+                <div class="alert alert-info" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                     {% trans "Your annual programme proposal is saved, but you can change it as long as you have not submitted it." %}
                 </div>
@@ -99,7 +99,10 @@
 
                 {% include "inscription_aux_cours/cours/blocks/proposition_programme_annuel_etudiant.html" %}
             {% else %}
-                <div class="alert alert-warning" style="display:inline-block;">
+                {% if credits_cibles_cycle %}
+                    {% include "inscription_aux_cours/blocks/barres_de_progression.html" %}
+                {% endif %}
+                <div class="alert alert-warning hide_print" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                     {% trans "You are not registered for any course units." %}
                 </div>
