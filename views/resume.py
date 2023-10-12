@@ -62,7 +62,7 @@ def view_student_resume(request, cohort_id):
     student_affectations = mdl_student_affectation.InternshipStudentAffectationStat.objects.filter(
         student=student,
         period_id__in=period_ids
-    ).order_by("period__name")
+    ).order_by("period__date_end")
     specialities = mdl_internship_speciality.find_by_cohort(cohort)
     student_choices = mdl_internship_choice.search(student=student, specialities=specialities)
     cohort = mdl_internship_cohort.Cohort.objects.get(pk=cohort_id)
