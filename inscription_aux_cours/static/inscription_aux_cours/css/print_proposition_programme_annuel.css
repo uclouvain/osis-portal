@@ -23,18 +23,25 @@
         display: none;
     }
 
-    .alert {
-        display: none;
-    }
-
     .page-header {
         display: none;
     }
 
-    #template-messages-container {
-        display: none;
+    .alert-info {
+        color: #31708f!important;
+        background-color: #d9edf7!important;;
+        border-color: #bce8f1!important;;
     }
-
+    .alert-danger{
+        color:#a94442!important;
+        background-color:#f2dede!important;
+        border-color:#ebccd1!important;
+    }
+    .alert-warning{
+        color:#8a6d3b!important;
+        background-color:#fcf8e3!important;
+        border-color:#faebcc!important;
+    }
     .hide_print {
         display: none !important;
     }
