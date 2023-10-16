@@ -45,6 +45,10 @@
     {% if 'osis_notification' in installed_apps %}
         <link rel="stylesheet" href="{% static 'osis_notification/osis-notification.css' %}" />
     {% endif %}
+    {% if 'osis_document' in installed_apps %}
+        <link rel="stylesheet" href="{% static 'osis_document/osis-document.css' %}" />
+    {% endif %}
+
     {% include 'dependencies/jquery.html' %}
     {% include 'dependencies/autocomplete_light.html' %}
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -173,6 +177,9 @@
     <script src="{% static 'js/vue-i18n.min.js' %}"></script>
     {% if 'osis_notification' in installed_apps %}
         <script type="text/javascript" src="{% static 'osis_notification/osis-notification.umd.min.js' %}"></script>
+    {% endif %}
+    {% if 'osis_document' in installed_apps %}
+        <script type="text/javascript" src="{% static 'osis_document/osis-document.umd.min.js' %}"></script>
     {% endif %}
 
     <script src="{% statici18n LANGUAGE_CODE %}"></script>
