@@ -23,14 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.utils.functional import cached_property
-
-from django.views.generic import TemplateView
-from django.urls import reverse
-from continuing_education.views.common import display_error_messages
-from base.services.utils import ServiceException
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.functional import cached_property
+from django.views.generic import TemplateView
 
+from base.services.utils import ServiceException
+from base.views.common import access_denied
+from continuing_education.views.common import display_error_messages
 from inscription_aux_cours.services.pdf_pae_valide_jury import PdfPaeValideJuryService
 from inscription_aux_cours.views.common import CompositionPAEViewMixin
 
@@ -43,6 +44,8 @@ class MonPaeValideJuryView(TemplateView, CompositionPAEViewMixin):
             if self.mon_pae_valide_jury.get('links'):
                 return redirect(self.mon_pae_valide_jury['links']['download'])
         except ServiceException as e:
+            if e.status == HttpResponseForbidden.status_code:
+                return access_denied(request=request, *args, **kwargs)
             display_error_messages(request, e.messages)
         display_error_messages(self.request, self.mon_pae_valide_jury['message'])
         return redirect(reverse("dashboard_home"))

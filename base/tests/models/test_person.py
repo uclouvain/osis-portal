@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import random
+
 from base import models as mdl_base
 
 
@@ -33,7 +35,13 @@ def create_person(first_name="first", last_name="last"):
 
 
 def create_person_with_user(a_user, first_name="first", last_name="last"):
-    person = mdl_base.person.Person(first_name=first_name, last_name=last_name)
+    person = mdl_base.person.Person(first_name=first_name, last_name=last_name, global_id=generate_global_id())
     person.user = a_user
     person.save()
     return person
+
+
+def generate_global_id() -> str:
+    first_digit = str(random.randint(1, 9))
+    other_digits = [str(random.randint(0, 9)) for _ in range(8)]
+    return "".join([first_digit] + other_digits)
