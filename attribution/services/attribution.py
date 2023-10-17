@@ -53,7 +53,7 @@ class AttributionService:
                     ),
                     key=lambda attribution: attribution.code
                 )
-            except (osis_attribution_sdk.ApiException, urllib3.exceptions.HTTPError,) as e:
+            except (osis_attribution_sdk.ApiException, urllib3.exceptions.HTTPError, TypeError) as e:
                 # Run in degraded mode in order to prevent crash all app
                 logger.error(e)
                 attributions = []

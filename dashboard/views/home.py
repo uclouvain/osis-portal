@@ -26,6 +26,7 @@
 from typing import List
 
 import attr
+import urllib3
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -57,7 +58,7 @@ class Home(LoginRequiredMixin, TemplateView):
         try:
             application_configuration = ApplicationService.retrieve_configuration(self.request.user.person)
             return 'url' in application_configuration.links.get('application_create', {})
-        except Person.DoesNotExist:
+        except (Person.DoesNotExist, urllib3.exceptions.MaxRetryError, TypeError):
             return False
 
     def get_tutor_grid_tiles(self) -> 'GridTiles':
