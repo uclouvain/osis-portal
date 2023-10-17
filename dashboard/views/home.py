@@ -58,7 +58,7 @@ class Home(LoginRequiredMixin, TemplateView):
         try:
             application_configuration = ApplicationService.retrieve_configuration(self.request.user.person)
             return 'url' in application_configuration.links.get('application_create', {})
-        except (Person.DoesNotExist, urllib3.exceptions.MaxRetryError):
+        except (Person.DoesNotExist, urllib3.exceptions.MaxRetryError, TypeError):
             return False
 
     def get_tutor_grid_tiles(self) -> 'GridTiles':
