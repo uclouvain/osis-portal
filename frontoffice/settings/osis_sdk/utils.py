@@ -69,7 +69,7 @@ def build_mandatory_auth_headers(person):
     Return mandatory headers used for ESBAuthentification
     """
     return {
-        'accept_language': person.language or settings.LANGUAGE_CODE,
+        'accept_language': person.language or settings.LANGUAGE_CODE or 'en',
         'x_user_first_name': person.first_name or '',
         'x_user_last_name':  person.last_name or '',
         'x_user_email': person.user.email or '',
