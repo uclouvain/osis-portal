@@ -54,7 +54,7 @@ if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true" and DEBUG:
     OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': 'osis_common.middlewares.toolbar.show_toolbar',
-        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-2.1.4.min.js"),
+        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-3.7.1.min.js"),
     }
 
 INSTALLED_APPS += OPTIONAL_APPS
