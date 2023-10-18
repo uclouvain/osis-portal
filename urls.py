@@ -33,7 +33,7 @@ urlpatterns = [
 
     url(r'^student/', include([
         url(r'^$', main.view_cohort_selection, name="internship_cohort_selection"),
-        url(r'^cohort/(?P<cohort_id>[0-9]+)/', include([
+        url(r'^cohort/(?P<cohort_id>[\w-]+)/', include([
             url(r'^$', main.view_internship_student_home, name='internship_student_home'),
             url(r'^selection/', include([
                 url(r'^$', selection.view_internship_selection, name='select_internship'),

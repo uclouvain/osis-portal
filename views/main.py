@@ -34,14 +34,13 @@ from django.utils.translation import gettext_lazy as _
 
 import base.models as mdl_base
 import dashboard.views.home
-import internship.models as mdl_internship
 from base.views import layout
-from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master
 from internship.models.enums.role_choice import ChoiceRole
 from internship.models.enums.user_account_status import UserAccountStatus
 from internship.services.internship import InternshipAPIService
+from internship.templatetags.period import str_to_iso_date
 
 
 @login_required
@@ -67,12 +66,16 @@ def view_internship_role_selection(request):
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
-@redirect_if_not_in_cohort
+# @redirect_if_not_in_cohort
 def view_internship_student_home(request, cohort_id):
-    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    cohort = InternshipAPIService.get_cohort_detail(cohort_name=cohort_id, person=request.user.person)
     today = datetime.date.today()
-    subscription_allowed = cohort.subscription_start_date <= today <= cohort.subscription_end_date
+    subscription_allowed = is_subscription_allowed(cohort, today)
     return layout.render(request, "internship_student_home.html", locals())
+
+
+def is_subscription_allowed(cohort, today):
+    return str_to_iso_date(cohort.subscription_start_date) <= today <= str_to_iso_date(cohort.subscription_end_date)
 
 
 @login_required
@@ -91,9 +94,11 @@ def view_internship_master_home(request):
 def view_cohort_selection(request):
     student = mdl_base.student.find_by_user(request.user)
     if student:
-        cohort_subscriptions = mdl_internship.internship_student_information.find_by_person(student.person)
-        if cohort_subscriptions:
-            cohorts = [subscription.cohort for subscription in cohort_subscriptions]
+        student_info_list = InternshipAPIService.get_internship_student_information_list_by_person(
+            person=student.person
+        )
+        if student_info_list:
+            cohorts = [info['cohort'] for info in student_info_list]
             return layout.render(request, "cohort_selection.html", {'cohorts': cohorts})
         else:
             messages.add_message(

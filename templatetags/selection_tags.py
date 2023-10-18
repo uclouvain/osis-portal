@@ -28,7 +28,6 @@ import json
 import re
 
 from django import template
-from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaulttags import register as reg
 
 register = template.Library()
@@ -37,13 +36,14 @@ register = template.Library()
 @register.simple_tag()
 def choice_for_offer(internship_choices, offer, internship):
     try:
-        choice = internship_choices.get(
-            speciality_id=offer.speciality_id,
-            organization_id=offer.organization_id,
-            internship=internship
-        ).choice
+        choice = next(
+            choice for choice in internship_choices
+            if choice.specialty.uuid == offer.speciality.uuid
+            and choice.organization['uuid'] == offer.organization.uuid
+            and choice.internship == internship.name
+        )
         return str(choice)
-    except (ObjectDoesNotExist, ValueError):
+    except (StopIteration, ValueError):
         return None
 
 
@@ -65,5 +65,4 @@ def only_number(text):
 
 @reg.filter
 def to_json(dict):
-    print(dict)
     return json.dumps(dict)

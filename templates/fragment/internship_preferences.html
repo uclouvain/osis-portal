@@ -39,12 +39,12 @@
         <tbody>
         {% for offer, form, number_first_choices in offers_forms %}
             <tr>
-                <td>{{ offer.organization }}</td>
+                <td>{{ offer.organization.name }}</td>
                 <td>{{ offer.maximum_enrollments }}</td>
                 <td>{{ number_first_choices }}</td>
                 <td hidden>
                     <input type="number" id="{{ form.offer.id_for_label }}" name="{{ form.offer.html_name }}"
-                           class="form-control" value="{{ offer.pk }}">
+                           class="form-control" value="{{ offer.uuid }}">
                 </td>
                 <td>
                     <select id="{{ form.preference.id_for_label }}" name="{{ form.preference.html_name }}"

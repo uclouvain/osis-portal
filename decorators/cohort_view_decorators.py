@@ -24,17 +24,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-import datetime
 from functools import wraps
 
 from django.core.exceptions import MultipleObjectsReturned
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.datetime_safe import date
 
 import base.models as mdl_base
 import dashboard.views.home
 from internship.models import internship_student_information
-from internship.models.cohort import Cohort
+from internship.services.internship import InternshipAPIService
+from internship.templatetags.period import str_to_iso_date
 
 
 def redirect_if_not_in_cohort(function):
@@ -46,7 +47,7 @@ def redirect_if_not_in_cohort(function):
             return dashboard.views.home.show_multiple_registration_id_error(request)
 
         if student and internship_student_information.find_by_person_in_cohort(cohort_id,
-                                                                               student.person_id).count() > 0:
+                                                                               student.person).count > 0:
             return function(request, cohort_id, *args, **kwargs)
         else:
             return redirect(reverse("internship"))
@@ -62,12 +63,16 @@ def redirect_if_subscription_not_allowed(function):
         except MultipleObjectsReturned:
             return dashboard.views.home.show_multiple_registration_id_error(request)
 
-        cohort = Cohort.objects.get(pk=cohort_id)
+        cohort = InternshipAPIService.get_cohort_detail(cohort_name=cohort_id, person=request.user.person)
 
-        if cohort.subscription_start_date <= datetime.date.today() <= cohort.subscription_end_date:
+        if _is_subscription_allowed(cohort):
             response = function(request, cohort_id, *args, **kwargs)
             return response
         else:
             return redirect(reverse("internship_student_home", kwargs={'cohort_id': cohort.id}))
 
     return wrapper
+
+
+def _is_subscription_allowed(c):
+    return str_to_iso_date(c.subscription_start_date) <= date.today() <= str_to_iso_date(c.subscription_end_date)

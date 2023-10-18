@@ -27,6 +27,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from internship.services.internship import InternshipAPIService
 from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
 
 
@@ -67,8 +68,11 @@ def find_by_user_in_cohort(user, cohort):
         return None
 
 
-def find_by_person_in_cohort(cohort_id, person_id):
-    return InternshipStudentInformation.objects.filter(cohort_id=cohort_id, person_id=person_id)
+def find_by_person_in_cohort(cohort_id, person):
+    return InternshipAPIService.get_internship_student_information_by_person_and_cohort(
+        cohort_name=cohort_id, person=person
+    )
+    # return InternshipStudentInformation.objects.filter(cohort_id=cohort_id, person_id=person_id)
 
 
 def find_by_person(person):
