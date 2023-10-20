@@ -115,6 +115,13 @@ class InternshipAPIService:
         )
 
     @classmethod
+    @gather_all_api_paginated_results
+    def get_organizations(cls, person, cohort_name, **kwargs):
+        return InternshipAPIClient().organizations_get(
+            cohort_name=cohort_name, **utils.build_mandatory_auth_headers(person), **kwargs
+        )
+
+    @classmethod
     def get_students_affectations_count(cls, person, specialty_uuid, organization_uuid):
         return InternshipAPIClient().students_affectations_specialty_organization_stats_get(
             specialty=specialty_uuid, organization=organization_uuid, **utils.build_mandatory_auth_headers(person)
@@ -330,7 +337,6 @@ class InternshipAPIService:
             **utils.build_mandatory_auth_headers(person),
             **kwargs
         )
-
 
     @classmethod
     @gather_all_api_paginated_results
