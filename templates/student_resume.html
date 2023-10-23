@@ -1,6 +1,7 @@
 {% extends "dashboard_layout.html" %}
 {% load static %}
 {% load i18n %}
+{% load period %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -181,10 +182,10 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-10 col-sm-11 " style="margin-top: 15px; margin-bottom: 15px; border-left: 1px solid lightgray;">
-                                    <strong>{{ affectation.period.date_start }} - {{ affectation.period.date_end }}</strong>
+                                    <strong>{{ affectation.period.date_start|str_to_iso_date }} - {{ affectation.period.date_end|str_to_iso_date }}</strong>
                                     {% if affectation.internship %}
                                         <br>
-                                        {{ affectation.internship.name }}
+                                        {{ affectation.internship }}
                                     {% endif %}
                                     <br>
                                     {{ affectation.speciality.name }} | {{ affectation.organization.name }}
@@ -240,7 +241,7 @@
                                         {{ affectation.period.name }}
                                     </td>
                                     <td>
-                                        {{ affectation.internship }}
+                                        {{ affectation.specialty.name }}
                                     </td>
                                     {% for apd in apds %}
                                         {% if affectation.score %}
@@ -258,9 +259,9 @@
                                         {% if affectation.score.comments %}
                                             <a data-toggle="modal" data-target="#comments-modal" type="button" class="btn btn-xs btn-default btn-edit-score"
                                                id="comment-btn-{{ student.pk }}-{{ affectation.period.pk }}"
-                                               data-student="{{ student }}" data-period="{{ affectation.period }}"
-                                               data-comments="{{ affectation.score.comments|to_json }}" data-organization="{{ affectation.organization }}"
-                                               data-specialty="{{ affectation.speciality }}">
+                                               data-student="{{ student }}" data-period="{{ affectation.period.name }}"
+                                               data-comments="{{ affectation.score.comments|to_json }}" data-organization="{{ affectation.organization.name }}"
+                                               data-specialty="{{ affectation.speciality.name }}">
                                                 <icon class="fa fa-comment"></icon>
                                             </a>
                                         {% endif %}

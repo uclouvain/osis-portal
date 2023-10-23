@@ -24,6 +24,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+from types import SimpleNamespace
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.datetime_safe import date
@@ -67,6 +68,9 @@ def view_student_resume(request, cohort_id):
     student = mdl_base.student.find_by_user(request.user)
 
     offers = {}
+
+    # transform to SimpleNamespace to have free-form internship objects
+    student_affectations = [SimpleNamespace(**affectation._data_store) for affectation in student_affectations]
 
     for affectation in student_affectations:
         score = InternshipAPIService.get_affectation(
