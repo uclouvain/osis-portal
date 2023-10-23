@@ -54,19 +54,14 @@ if __name__ == "__main__":
 
     if bool(os.environ.get('OTEL_ENABLED', False)):
         opentelemetry.initialize()
-        DjangoInstrumentor(
-            tracer_provider=trace.get_tracer_provider()
-        ).instrument()
-        Psycopg2Instrumentor(
-            tracer_provider=trace.get_tracer_provider()
-        ).instrument(
+        DjangoInstrumentor().instrument(tracer_provider=trace.get_tracer_provider())
+        Psycopg2Instrumentor().instrument(
+            tracer_provider=trace.get_tracer_provider(),
             skip_dep_check=True,  # We use psycopg2-binary so we must skip dep check
             enable_commenter=True,
             commenter_options={},
         )
-        URLLib3Instrumentor(
-            tracer_provider=trace.get_tracer_provider()
-        ).instrument()
+        URLLib3Instrumentor().instrument(tracer_provider=trace.get_tracer_provider())
 
     try:
         execute_from_command_line(sys.argv)

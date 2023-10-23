@@ -9,7 +9,7 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 def initialize():
     resource = Resource(attributes={
-        "service.name": os.environ.get("OTEL_SERVICE_NAME", "unknown_service")
+        "service.name": os.environ.get("OTEL_SERVICE_NAME", "OSIS-PORTAL")
     })
     provider = TracerProvider(resource=resource)
     otlp_exporter = OTLPSpanExporter(
