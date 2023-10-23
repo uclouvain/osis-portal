@@ -41,7 +41,7 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
-    <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
+    <li><a href="{% url 'internship_student_home' cohort_id=cohort.name %}">{% trans 'Internships' %}</a></li>
     <li class="active">{% trans 'Sum up of your choices and your affectations' %}</li>
 {% endblock %}
 
@@ -107,7 +107,7 @@
                         <div class="col-md-4">
                             <strong>{% trans 'gender' %}</strong>
                             <br>
-                            {{ student.person.gender }}
+                            {{ student.person.gender|default_if_none:'-'}}
                         </div>
                         <div class="col-md-4">
                             <strong>{% trans 'email' %}</strong>
