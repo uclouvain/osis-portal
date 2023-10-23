@@ -33,7 +33,6 @@ import base.models as mdl_base
 from base.views import layout
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
-from internship.models import internship_offer as mdl_internship_offer
 from internship.models import internship_student_information as mdl_student_information
 from internship.models.enums.civility import Civility
 from internship.models.score_encoding_utils import APDS
@@ -57,17 +56,18 @@ def view_student_resume(request, cohort_id):
     student_affectations = InternshipAPIService.get_person_affectations(person=request.user.person, cohort=cohort)
     student_affectations = [aff for aff in student_affectations if aff.period.name in [p.name for p in periods]]
 
-    specialities = InternshipAPIService.get_selectable_specialties(person=request.user.person, cohort_name=cohort_id)
-
     student_choices = InternshipAPIService.get_student_choices(
-        person=request.user.person, specialties=specialities
+        person=request.user.person, cohort_name=cohort_id
     ).results
+
+    student_choices = sorted(student_choices, key=lambda choice: choice.choice)
 
     publication_allowed = str_to_iso_date(cohort.publication_start_date) <= date.today()
 
     student = mdl_base.student.find_by_user(request.user)
 
     offers = {}
+
     for affectation in student_affectations:
         score = InternshipAPIService.get_affectation(
             person=request.user.person,
@@ -76,16 +76,18 @@ def view_student_resume(request, cohort_id):
         if score and score.validated:
             score.comments = _replace_comments_keys_with_translations(score.comments)
             setattr(affectation, 'score', score)
-        offer = mdl_internship_offer.find_offer(
-            cohort=cohort,
-            speciality=affectation.speciality,
-            organization=affectation.organization
-        ).first()
+        internship_offers = InternshipAPIService.get_internship_offers(
+            person=request.user.person,
+            cohort_name=cohort_id,
+            specialty=affectation.speciality,
+            organization=affectation.organization,
+        ).results
+        offer = next(offer for offer in internship_offers)
         offer.master = _get_internship_masters_repr(request.user.person, affectation)
         try:
-            offers[affectation.organization].update({affectation.speciality: offer})
+            offers[affectation.organization.reference].update({affectation.speciality.name: offer})
         except KeyError:
-            offers.update({affectation.organization: {affectation.speciality: offer}})
+            offers.update({affectation.organization.reference: {affectation.speciality.name: offer}})
     return layout.render(request, "student_resume.html", {
         "student": student,
         "student_information": student_information,

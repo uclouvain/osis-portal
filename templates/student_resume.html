@@ -153,8 +153,8 @@
                                 <strong>{{ internship.name }}</strong>
                                 <ul>
                                     {% for choice in student_choices %}
-                                        {% if choice.internship_id == internship.id %}
-                                            <li>{{ choice.organization }} | {{ choice.speciality }}
+                                        {% if choice.internship == internship.name %}
+                                            <li>{{ choice.organization.name }} | {{ choice.specialty.name }}
                                                 | {{ choice.choice }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -187,11 +187,11 @@
                                         {{ affectation.internship.name }}
                                     {% endif %}
                                     <br>
-                                    {{ affectation.speciality.name }} | {{ affectation.organization }}
+                                    {{ affectation.speciality.name }} | {{ affectation.organization.name }}
                                     <br>
                                     Address: {{ affectation.organization.location }}
                                     <br>
-                                    {% with organization=affectation.organization speciality=affectation.speciality %}
+                                    {% with organization=affectation.organization.reference speciality=affectation.speciality.name %}
                                         {% with offer=offers|get_item:organization|get_item:speciality %}
                                             {% if offer %}
                                                 {% trans 'Internship master' %} :

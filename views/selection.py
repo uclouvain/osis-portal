@@ -71,7 +71,7 @@ def view_internship_selection(request, cohort_id, internship_id=None):
     internships = [SimpleNamespace(**internship._data_store) for internship in internships]
 
     student_choices = InternshipAPIService.get_student_choices(
-        person=request.user.person, specialties=specialties
+        person=request.user.person, cohort_name=cohort_id
     ).results
 
     all_selectable_offers = InternshipAPIService.get_internship_offers(

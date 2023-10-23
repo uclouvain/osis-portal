@@ -316,21 +316,31 @@ class InternshipAPIService:
 
     @classmethod
     @gather_all_api_paginated_results
-    def get_student_choices(cls, person, specialties, **kwargs):
+    def get_student_choices(cls, person, cohort_name, **kwargs):
         student = person.student_set.first()
-        specialties_uuid = [specialty['uuid'] for specialty in specialties] if specialties else None
         kwargs['limit'] = PAGINATION_SIZE
 
         return InternshipAPIClient().choices_get(
-            student_uuid=str(student.uuid), specialties_uuid=specialties_uuid,
+            student_uuid=str(student.uuid), cohort_name=cohort_name,
             **utils.build_mandatory_auth_headers(person),
             **kwargs
         )
 
     @classmethod
     @gather_all_api_paginated_results
-    def get_internship_offers(cls, person, cohort_name, specialty=None, selectable=False, **kwargs):
+    def get_internship_offers(cls, person, cohort_name, specialty=None, organization=None, selectable=True, **kwargs):
         kwargs['limit'] = PAGINATION_SIZE
+
+        if organization and specialty:
+            return InternshipAPIClient().offers_get(
+                cohort_name=cohort_name,
+                specialty_uuid=specialty.uuid,
+                organization_uuid=organization.uuid,
+                selectable=selectable,
+                **utils.build_mandatory_auth_headers(person),
+                **kwargs
+            )
+
         if specialty:
             return InternshipAPIClient().offers_get(
                 cohort_name=cohort_name,
@@ -339,6 +349,16 @@ class InternshipAPIService:
                 **utils.build_mandatory_auth_headers(person),
                 **kwargs
             )
+
+        if organization:
+            return InternshipAPIClient().offers_get(
+                cohort_name=cohort_name,
+                organization_uuid=organization.uuid,
+                selectable=selectable,
+                **utils.build_mandatory_auth_headers(person),
+                **kwargs
+            )
+
         return InternshipAPIClient().offers_get(
             cohort_name=cohort_name,
             selectable=selectable,
