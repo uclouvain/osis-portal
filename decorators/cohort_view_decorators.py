@@ -33,7 +33,6 @@ from django.utils.datetime_safe import date
 
 import base.models as mdl_base
 import dashboard.views.home
-from internship.models import internship_student_information
 from internship.services.internship import InternshipAPIService
 from internship.templatetags.period import str_to_iso_date
 
@@ -46,8 +45,11 @@ def redirect_if_not_in_cohort(function):
         except MultipleObjectsReturned:
             return dashboard.views.home.show_multiple_registration_id_error(request)
 
-        if student and internship_student_information.find_by_person_in_cohort(cohort_id,
-                                                                               student.person).count > 0:
+        count_student_info = InternshipAPIService.get_internship_student_information_by_person_and_cohort(
+            cohort_name=cohort_id, person=student.person
+        ).count if student else 0
+
+        if student and count_student_info > 0:
             return function(request, cohort_id, *args, **kwargs)
         else:
             return redirect(reverse("internship"))
