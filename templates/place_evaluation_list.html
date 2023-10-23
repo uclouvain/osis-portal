@@ -37,7 +37,7 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
-    <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
+    <li><a href="{% url 'internship_student_home' cohort_id=cohort.name %}">{% trans 'Internships' %}</a></li>
     <li class="active">{% trans 'Hospitals' %}</li>
 {% endblock %}
 
@@ -79,7 +79,7 @@
                             <td class="text-center">
                                 <a class="btn btn-primary"
                                         {% if affectation.period|is_past and affectation.period.place_evaluation_active %}
-                                            href="{% url 'place_evaluation' cohort_id=cohort.id period_name=affectation.period.name %}"
+                                            href="{% url 'place_evaluation' cohort_id=cohort.name period_name=affectation.period.name %}"
                                         {% else %}
                                             href="#" disabled
                                         {% endif %}
@@ -95,6 +95,12 @@
                                 {% endif %}
                             </td>
                         </tr>
+                        {% empty %}
+                            <tr>
+                              <td colspan="6" class="text-center">
+                                  {% trans "No internship to evaluate" %}
+                              </td>
+                            </tr>
                     {% endfor %}
                 </tbody>
             </table>

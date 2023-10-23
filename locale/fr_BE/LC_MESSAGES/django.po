@@ -289,6 +289,9 @@ msgstr "Non"
 msgid "No evaluation items defined."
 msgstr "Pas de questions définies pour l'évaluation."
 
+msgid "No internship to evaluate"
+msgstr "Pas de stage à évaluer"
+
 msgid "Number of first choice"
 msgstr "Nombre de 1er choix"
 
