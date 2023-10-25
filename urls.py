@@ -33,7 +33,7 @@ urlpatterns = [
 
     url(r'^student/', include([
         url(r'^$', main.view_cohort_selection, name="internship_cohort_selection"),
-        url(r'^cohort/(?P<cohort_id>[\w-]+)/', include([
+        url(r'^cohort/(?P<cohort_id>[\w\s-]+)/', include([
             url(r'^$', main.view_internship_student_home, name='internship_student_home'),
             url(r'^selection/', include([
                 url(r'^$', selection.view_internship_selection, name='select_internship'),
@@ -44,7 +44,8 @@ urlpatterns = [
             url(r'^resume/$', resume.view_student_resume, name='student_resume'),
             url(r'^place_evaluation/', include([
                 url(r'^$', place_evaluation.view_place_evaluations_list, name='place_evaluation_list'),
-                url(r'^(?P<period_name>[\w-]+)/$', place_evaluation.view_place_evaluation_form, name='place_evaluation')
+                url(r'^(?P<period_name>[\w\s-]+)/$', place_evaluation.view_place_evaluation_form,
+                    name='place_evaluation')
             ])),
         ])),
     ])),
