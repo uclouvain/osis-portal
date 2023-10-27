@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import uuid
+
 from django.forms import formset_factory
 from django.test import TestCase
 
@@ -69,10 +71,10 @@ class TestOfferPreferenceFormset(TestCase):
         data = {
             'form-TOTAL_FORMS': '2',
             'form-INITIAL_FORMS': '0',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-offer': '4',
+            'form-MAX_NUM_FORMS': '10',
+            'form-0-offer': str(uuid.uuid4()),
             'form-0-preference': '1',
-            'form-1-offer': '5',
+            'form-1-offer': str(uuid.uuid4()),
             'form-1-preference': '2'
         }
 
@@ -82,14 +84,14 @@ class TestOfferPreferenceFormset(TestCase):
         data = {
             'form-TOTAL_FORMS': '2',
             'form-INITIAL_FORMS': '0',
-            'form-MAX_NUM_FORMS': '',
-            'form-0-offer': '4',
+            'form-MAX_NUM_FORMS': '10',
+            'form-0-offer': str(uuid.uuid4()),
             'form-0-preference': '1',
-            'form-1-offer': '5',
+            'form-1-offer': str(uuid.uuid4()),
             'form-1-preference': '0',
-            'form-2-offer': '5',
+            'form-2-offer': str(uuid.uuid4()),
             'form-2-preference': '0',
-            'form-3-offer': '5',
+            'form-3-offer': str(uuid.uuid4()),
             'form-3-preference': '0'
         }
 

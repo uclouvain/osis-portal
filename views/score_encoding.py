@@ -92,8 +92,7 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
             if affectation.score and not affectation.score.validated or not affectation.score
         ]
     )
-
-    periods = Period.objects.filter(cohort__uuid=specialty.cohort.uuid).order_by('date_start')
+    periods = InternshipAPIService.get_periods(person=request.user.person, cohort_name=organization.cohort.name)
 
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 

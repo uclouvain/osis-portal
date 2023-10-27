@@ -31,21 +31,16 @@ from django.urls import reverse
 
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
-from internship.tests.factories.cohort import CohortFactory
-from internship.tests.models import test_internship_student_information
 from internship.tests.services.test_api_client import MockAPI
 
 
 @override_settings(URL_INTERNSHIP_API='url_test_api')
 class TestPlaceEvaluation(TestCase):
+
     @classmethod
     def setUpTestData(cls):
         cls.person = PersonFactory()
         cls.student = StudentFactory(registration_id="45451298", person=cls.person)
-        cls.cohort = CohortFactory()
-        cls.student_information = test_internship_student_information.create_student_information(
-            cls.person.user, cls.cohort, cls.student.person
-        )
         perm = Permission.objects.get(codename="can_access_internship")
         cls.person.user.user_permissions.add(perm)
 
@@ -59,20 +54,20 @@ class TestPlaceEvaluation(TestCase):
         self.addCleanup(self.api_patcher.stop)
 
     def test_view_place_evaluations_list(self):
-        url = reverse('place_evaluation_list', kwargs={'cohort_id': self.cohort.pk})
+        url = reverse('place_evaluation_list', kwargs={'cohort_id': "cohort"})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'place_evaluation_list.html')
 
     def test_view_place_evaluation_form(self):
-        url = reverse('place_evaluation', kwargs={'cohort_id': self.cohort.pk, 'period_name': 'P1'})
+        url = reverse('place_evaluation', kwargs={'cohort_id': "cohort", 'period_name': 'P1'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'place_evaluation_form.html')
 
     @mock.patch('internship.services.internship.InternshipAPIService.update_evaluation')
     def test_post_place_evaluation_form(self, mock_update_evaluation):
-        url = reverse('place_evaluation', kwargs={'cohort_id': self.cohort.pk, 'period_name': 'P1'})
+        url = reverse('place_evaluation', kwargs={'cohort_id': "cohort", 'period_name': 'P1'})
         response = self.client.post(url, data={'evaluation': {'key': 'value'}})
         self.assertTrue(mock_update_evaluation.called)
-        self.assertRedirects(response, reverse('place_evaluation_list', kwargs={'cohort_id': self.cohort.pk}))
+        self.assertRedirects(response, reverse('place_evaluation_list', kwargs={'cohort_id': "cohort"}))

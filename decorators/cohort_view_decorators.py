@@ -71,7 +71,7 @@ def redirect_if_subscription_not_allowed(function):
             response = function(request, cohort_id, *args, **kwargs)
             return response
         else:
-            return redirect(reverse("internship_student_home", kwargs={'cohort_id': cohort.id}))
+            return redirect(reverse("internship_student_home", kwargs={'cohort_id': cohort_id}))
 
     return wrapper
 

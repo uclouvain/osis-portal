@@ -23,33 +23,36 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import mock
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 
 from base.tests.factories.student import StudentFactory
 from base.tests.factories.user import UserFactory
-from internship.tests.factories.cohort import CohortFactory
-from internship.tests.models import test_internship_student_information
+from internship.tests.services.test_api_client import MockAPI
 
 
 class TestHospitalUrl(TestCase):
+
+    def setUp(self):
+        self.api_patcher = mock.patch(
+            "internship.services.internship.InternshipAPIClient.__new__",
+            return_value=MockAPI
+        )
+        self.client.force_login(self.user)
+        self.api_patcher.start()
+        self.addCleanup(self.api_patcher.stop)
+
     @classmethod
     def setUpTestData(cls):
         cls.user = UserFactory()
         cls.student = StudentFactory(registration_id="45451298", person__user=cls.user)
-        cls.cohort = CohortFactory()
-        cls.student_information = test_internship_student_information.create_student_information(cls.user,
-                                                                                                 cls.cohort,
-                                                                                                 cls.student.person)
+
         perm = Permission.objects.get(codename="can_access_internship")
         cls.student.person.user.user_permissions.add(perm)
 
     def test_can_access_hospital_list(self):
-        home_url = reverse("hospitals_list", kwargs={'cohort_id': self.cohort.id})
-        response = self.client.get(home_url)
-        self.assertEqual(response.status_code, 302)
-
-        self.client.force_login(self.user)
+        home_url = reverse("hospitals_list", kwargs={'cohort_id': "cohort"})
         response = self.client.get(home_url)
         self.assertEqual(response.status_code, 200)
