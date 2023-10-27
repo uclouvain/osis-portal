@@ -1,3 +1,3 @@
 pendulum==1.2.0
 
-git+https://github.com/uclouvain/osis-internship-sdk.git@wip-build-1.1.13
+git+https://github.com/uclouvain/osis-internship-sdk.git@wip-build-1.1.14
