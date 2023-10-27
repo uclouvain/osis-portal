@@ -162,7 +162,9 @@ def get_selective_internship_preferences(request, cohort_id):
         person=request.user.person, cohort_name=cohort_id,
     ).results
 
-    formset = _handle_formset_to_save(request, all_selectable_offers, selectable_offers, None, internship, specialty, [])
+    formset = _handle_formset_to_save(
+        request, all_selectable_offers, selectable_offers, None, internship, specialty, []
+    )
     first_choices_by_organization = get_first_choices_by_organization(all_first_choices, specialty)
     offers_forms = zip_offers_formset_and_first_choices(formset, selectable_offers, first_choices_by_organization)
 
