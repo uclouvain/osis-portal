@@ -25,31 +25,18 @@
 ##############################################################################
 from django.db import models
 
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-
-
-class InternshipChoiceAdmin(SerializableModelAdmin):
-    list_display = ('id', 'student', 'organization', 'speciality', 'choice', 'internship', 'uuid', 'registered')
-    fieldsets = ((None, {'fields': ('student', 'organization', 'speciality', 'choice', 'internship', 'priority')}),)
-    raw_id_fields = ('student', 'organization', 'speciality')
-    search_fields = ['uuid', 'student__person__first_name', 'student__person__last_name']
-    list_filter = ['internship__cohort', 'internship']
+from osis_common.models.serializable_model import SerializableModel
 
 
 class InternshipChoice(SerializableModel):
     student = models.ForeignKey('base.Student', on_delete=models.PROTECT)
-    organization = models.ForeignKey('internship.Organization', on_delete=models.CASCADE)
     speciality = models.ForeignKey('internship.InternshipSpeciality', null=True, on_delete=models.CASCADE)
     choice = models.IntegerField()
-    internship = models.ForeignKey('internship.Internship', on_delete=models.CASCADE)
     priority = models.BooleanField()
     registered = models.DateTimeField(null=True, auto_now=True)
 
-    def __str__(self):
-        return u"%s - %s : %s" % (self.organization.acronym, self.speciality.acronym, self.choice)
-
     class Meta:
-        unique_together = (("student", "internship", "choice"),)
+        unique_together = (("student", "choice"),)
 
 
 def search(student=None, speciality=None, internship=None, specialities=None):

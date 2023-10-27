@@ -23,33 +23,4 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.contrib import admin
 
-from internship.models import *
-
-admin.site.register(internship_offer.InternshipOffer,
-                    internship_offer.InternshipOfferAdmin)
-
-admin.site.register(internship_speciality.InternshipSpeciality,
-                    internship_speciality.InternshipSpecialityAdmin)
-
-admin.site.register(organization.Organization,
-                    organization.OrganizationAdmin)
-
-admin.site.register(internship_choice.InternshipChoice,
-                    internship_choice.InternshipChoiceAdmin)
-
-admin.site.register(internship_student_information.InternshipStudentInformation,
-                    internship_student_information.InternshipStudentInformationAdmin)
-
-admin.site.register(period.Period,
-                    period.PeriodAdmin)
-
-admin.site.register(cohort.Cohort,
-                    cohort.CohortAdmin)
-
-admin.site.register(internship.Internship,
-                    internship.InternshipAdmin)
-
-admin.site.register(internship_student_affectation_stat.InternshipStudentAffectationStat,
-                    internship_student_affectation_stat.InternshipStudentAffectationStatAdmin)

@@ -276,6 +276,9 @@ msgstr ""
 msgid "No evaluation items defined."
 msgstr ""
 
+msgid "No internship to evaluate"
+msgstr ""
+
 msgid "Number of first choice"
 msgstr ""
 

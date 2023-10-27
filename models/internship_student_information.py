@@ -23,24 +23,10 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-
-
-class InternshipStudentInformationAdmin(SerializableModelAdmin):
-    list_display = (
-        'person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile', 'contest', 'cohort'
-    )
-    fieldsets = ((None, {
-        'fields': ('person', 'location', 'postal_code', 'city', 'country', 'email', 'phone_mobile',
-                   'contest', 'cohort')
-    }),)
-    raw_id_fields = ('person', 'cohort')
-    list_filter = ['cohort']
-    search_fields = ['person__user__username', 'person__last_name', 'person__first_name']
+from osis_common.models.serializable_model import SerializableModel
 
 
 class InternshipStudentInformation(SerializableModel):
@@ -54,26 +40,6 @@ class InternshipStudentInformation(SerializableModel):
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone_mobile = models.CharField(max_length=100, blank=True, null=True)
     contest = models.CharField(max_length=124, choices=TYPE_CHOICE, null=True, blank=True)
-    cohort = models.ForeignKey('internship.Cohort', on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s" % self.person
-
-
-def find_by_user_in_cohort(user, cohort):
-    try:
-        return InternshipStudentInformation.objects.get(person__user=user, cohort=cohort)
-    except ObjectDoesNotExist:
-        return None
-
-
-def find_by_person_in_cohort(cohort_id, person_id):
-    return InternshipStudentInformation.objects.filter(cohort_id=cohort_id, person_id=person_id)
-
-
-def find_by_person(person):
-    return InternshipStudentInformation.objects.filter(person=person)
-
-
-def exists_by_person(person):
-    return InternshipStudentInformation.objects.filter(person=person).exists()

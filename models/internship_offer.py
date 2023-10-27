@@ -26,28 +26,15 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-
-
-class InternshipOfferAdmin(SerializableModelAdmin):
-    list_display = ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'master', 'selectable')
-    fieldsets = ((None, {
-        'fields': ('organization', 'speciality', 'cohort', 'title', 'maximum_enrollments', 'master',
-                   'selectable')
-    }),)
-    raw_id_fields = ('organization', 'speciality', 'cohort')
-    search_fields = ['organization__name', 'speciality__name']
-    list_filter = ['cohort', 'selectable']
+from osis_common.models.serializable_model import SerializableModel
 
 
 class InternshipOffer(SerializableModel):
-    organization = models.ForeignKey('internship.Organization', on_delete=models.CASCADE)
     speciality = models.ForeignKey('internship.InternshipSpeciality', null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     maximum_enrollments = models.IntegerField()
     master = models.CharField(max_length=100, blank=True, null=True)
     selectable = models.BooleanField(default=True)
-    cohort = models.ForeignKey('internship.Cohort', null=False, on_delete=models.CASCADE)
 
     def __str__(self):
         return u"%s" % self.title

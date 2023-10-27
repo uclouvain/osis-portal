@@ -25,28 +25,14 @@
 ##############################################################################
 from django.db import models
 
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-
-
-class InternshipSpecialityAdmin(SerializableModelAdmin):
-    list_display = ('name', 'acronym', 'cohort', 'selectable')
-    fieldsets = ((None, {'fields': ('name', 'acronym', 'cohort', 'selectable')}),)
-    list_filter = ['cohort', 'selectable']
+from osis_common.models.serializable_model import SerializableModel
 
 
 class InternshipSpeciality(SerializableModel):
     name = models.CharField(max_length=125, blank=False, null=False)
     acronym = models.CharField(max_length=125, blank=False, null=False)
-    cohort = models.ForeignKey('internship.Cohort', null=False, on_delete=models.CASCADE)
     selectable = models.BooleanField(default=True)
 
     def __str__(self):
         return u"%s" % self.name
 
-
-def find_by_cohort(cohort):
-    return InternshipSpeciality.objects.filter(cohort=cohort)
-
-
-def find_selectables(cohort):
-    return find_by_cohort(cohort).filter(selectable=True)

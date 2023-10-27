@@ -27,19 +27,21 @@
 from django.contrib.auth.decorators import login_required, permission_required
 
 from base.views import layout
-from internship import models as mdl_internship
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.forms.form_search_hospital import SearchHospitalForm
+from internship.services.internship import InternshipAPIService
 
 
 @login_required
 @permission_required('internship.can_access_internship', raise_exception=True)
 @redirect_if_not_in_cohort
 def view_hospitals_list(request, cohort_id):
-    cities = mdl_internship.organization.get_all_cities()
+    organizations = InternshipAPIService.get_organizations(person=request.user.person, cohort_name=cohort_id).results
+    cities = sorted({organization.city for organization in organizations if organization.city})
+
     name = ""
     city = ""
-    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    cohort = InternshipAPIService.get_cohort_detail(cohort_name=cohort_id, person=request.user.person)
 
     if request.method == 'POST':
         form = SearchHospitalForm(cities, request.POST)
@@ -49,7 +51,13 @@ def view_hospitals_list(request, cohort_id):
     else:
         form = SearchHospitalForm(cities)
 
-    hospitals = mdl_internship.organization.search(cohort, name, city)
+    hospitals = [organization for organization in organizations]
+
+    if city:
+        hospitals = [h for h in hospitals if h.city and city in h.city]
+
+    if name:
+        hospitals = [h for h in hospitals if h.name and name in h.name]
 
     return layout.render(request, "hospitals.html", {
         'search_form': form,

@@ -27,34 +27,16 @@ from django.db import models
 
 from internship.models.enums.affectation_type import AffectationType
 from internship.models.enums.choice_type import ChoiceType
-from osis_common.models.serializable_model import SerializableModelAdmin, SerializableModel
-
-
-class InternshipStudentAffectationStatAdmin(SerializableModelAdmin):
-    list_display = ('student', 'organization', 'speciality', 'period', 'internship', 'choice', 'cost',
-                    'consecutive_month', 'type')
-    fieldsets = ((None, {
-        'fields': ('student', 'organization', 'speciality', 'period', 'internship', 'choice', 'cost',
-                   'consecutive_month', 'type')
-    }),)
-    raw_id_fields = ('student', 'organization', 'speciality', 'period', 'internship')
-    search_fields = ['student__person__first_name', 'student__person__last_name']
-    list_filter = ('period__cohort', 'choice')
+from osis_common.models.serializable_model import SerializableModel
 
 
 class InternshipStudentAffectationStat(SerializableModel):
     student = models.ForeignKey('base.Student', on_delete=models.PROTECT)
-    organization = models.ForeignKey('internship.Organization', on_delete=models.CASCADE)
     speciality = models.ForeignKey('internship.InternshipSpeciality', on_delete=models.CASCADE)
-    period = models.ForeignKey('internship.Period', on_delete=models.CASCADE)
-    internship = models.ForeignKey('internship.Internship', blank=True, null=True, on_delete=models.CASCADE)
     choice = models.CharField(max_length=1, choices=ChoiceType.choices(), default=ChoiceType.NO_CHOICE.value)
     cost = models.IntegerField(blank=False, null=False)
     consecutive_month = models.BooleanField(default=False, null=False)
     type = models.CharField(max_length=1, choices=AffectationType.choices(), default=AffectationType.NORMAL.value)
-
-    def __str__(self):
-        return u"%s %s %s %s" % (self.student, self.period, self.organization, self.speciality)
 
 
 def search(student=None):
