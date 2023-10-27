@@ -59,10 +59,6 @@ class Migration(migrations.Migration):
             model_name='internshipstudentinformation',
             name='cohort',
         ),
-        migrations.AlterUniqueTogether(
-            name='internshipchoice',
-            unique_together={('student', 'choice')},
-        ),
         migrations.DeleteModel(
             name='Cohort',
         ),
