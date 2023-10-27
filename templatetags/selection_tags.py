@@ -42,7 +42,7 @@ def choice_for_offer(internship_choices, offer, internship):
             and choice.organization['uuid'] == offer.organization.uuid
             and choice.internship == internship.name
         )
-        return str(choice)
+        return str(choice.choice)
     except (StopIteration, ValueError):
         return None
 

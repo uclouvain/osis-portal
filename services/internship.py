@@ -375,3 +375,22 @@ class InternshipAPIService:
             **utils.build_mandatory_auth_headers(person),
             **kwargs
         )
+
+    @classmethod
+    def save_internship_choice(cls, person, cohort_name, **data):
+        return InternshipAPIClient().save_choice_internship_uuid_post(
+            internship_uuid=data['internship_uuid'],
+            internship_choice_create_command={
+                "organization_uuid": data['organization_uuid'],
+                "specialty_uuid": data['specialty_uuid'],
+                "choice": data['choice'],
+            },
+            **utils.build_mandatory_auth_headers(person),
+        )
+
+    @classmethod
+    def delete_internship_choices(cls, person, internship_uuid):
+        return InternshipAPIClient().delete_choices_internship_uuid_delete(
+            internship_uuid=internship_uuid,
+            **utils.build_mandatory_auth_headers(person),
+        )
