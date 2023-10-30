@@ -31,7 +31,6 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
 from django.utils import translation
 
-
 from base import models as mdl
 from base.business import student as student_bsn
 from base.models.person import Person
@@ -118,9 +117,9 @@ def _add_person_to_group(person):
     # Check if student is internship student
     # Only if internship app is installed
     if 'internship' in settings.INSTALLED_APPS:
-        from internship.models.internship_student_information import InternshipStudentInformation
-        if InternshipStudentInformation.objects.filter(person=person).exists():
-            _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
+        # from internship.models.internship_student_information import InternshipStudentInformation
+        # if InternshipStudentInformation.objects.filter(person=person).exists():
+        #     _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
         # check master exists through api client
         from internship.services.internship import InternshipAPIService
         if InternshipAPIService.get_master(person):
