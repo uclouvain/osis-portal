@@ -267,7 +267,7 @@ class TestSelectInternship(TestCase):
 
 
 def add_permission(user, codename):
-    perm = Permission.objects.get(codename=codename)
+    perm = Permission.objects.get(codename=codename, content_type__model='internshipoffer')
     user.user_permissions.add(perm)
 
 
