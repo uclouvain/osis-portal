@@ -100,7 +100,7 @@ def view_internship_selection(request, cohort_id, internship_id=None):
             messages.SUCCESS,
             _build_choices_saved_success_message(saved_choices)
         )
-        return HttpResponseRedirect(request.path_info)
+        return HttpResponseRedirect("{}#{}".format(request.path_info, current_internship.uuid))
 
     return layout.render(
         request,

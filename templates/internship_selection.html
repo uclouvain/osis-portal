@@ -66,8 +66,8 @@
     <ul class="nav nav-tabs">
         {% for internship in internships %}
             {% if internship.speciality %}
-                <li role="presentation" {% if current_internship.uuid == internship.uuid %} class="active" {% endif %}>
-                    <a data-toggle="tab" data-id="{{ internship.uuid }}" href="#{{ internship.uuid }}">
+                <li role="presentation" tabindex="-1" {% if current_internship.uuid == internship.uuid %} class="active" {% endif %}>
+                    <a data-toggle="tab" data-id="{{ internship.uuid }}" href="#{{ internship.uuid }}-tab">
                         {{ internship.name }}
                     </a>
                 </li>
@@ -81,7 +81,7 @@
                     {% if not internship.speciality %}
                         <li role="presentation"
                             class="selective_internship{% if current_internship.uuid == internship.uuid %} active {% endif %}">
-                            <a data-toggle="tab" data-id="{{ internship.uuid }}" href="#{{ internship.uuid }}" onclick="get_selective_internship_preferences('{{ internship.uuid }}')">
+                            <a data-toggle="tab" data-id="{{ internship.uuid }}" href="#{{ internship.uuid }}-tab" onclick="get_selective_internship_preferences('{{ internship.uuid }}')">
                                 {{ internship.name }}
                             </a>
                         </li>
@@ -97,7 +97,7 @@
         <div class="tab-content">
             {% csrf_token %}
             {% for internship in internships %}
-                <div id="{{ internship.uuid }}" class="tab-pane fade
+                <div id="{{ internship.uuid }}-tab" class="tab-pane fade
                             {% if current_internship.uuid == internship.uuid %}
                                 in active
                             {% endif %}
@@ -191,7 +191,7 @@
         $("li.selective_internship.active").closest("li.dropdown").addClass("active");
 
         //keep current tab opened after submit
-        $(".nav-tabs a").on('click', function (e) {
+        $(".nav-tabs a[data-toggle=tab]").on('click', function (e) {
             let internship_id = e.target.dataset.id;
             $("#current_internship_input").val(internship_id);
         });
@@ -224,6 +224,18 @@
             $('.select-non-mandatory-internship').prop('disabled', (i, v) => !v);
             $('#loading-stage-au-choix').hide();
         });
+
+        // use anchor to keep tab open after selection
+        let anchor = $(location).attr('hash');
+        if(anchor){
+            $("#current_internship_input").val(anchor.substr(1));
+            $(`.nav-tabs a[href="${anchor}-tab"]`).tab('show');
+        }
+
+        // keep selective internship tab
+        if (document.querySelector(`.nav-tabs a[href="${anchor}-tab"]`)?.parentElement.classList.contains('selective_internship')){
+            get_selective_internship_preferences(anchor.substr(1));
+        }
 
     </script>
 {% endblock %}
