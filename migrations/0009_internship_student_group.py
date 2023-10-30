@@ -13,10 +13,6 @@ def add_init_internship_student_group(apps, schema_editor):
     Group = apps.get_model('auth', 'Group')
     Permission = apps.get_model('auth', 'Permission')
     internship_students_group, created = Group.objects.get_or_create(name='internship_students')
-    if created:
-        # Add permissions to group
-        internships_perm = Permission.objects.get(codename='can_access_internship')
-        internship_students_group.permissions.add(internships_perm)
 
 
 def add_users_to_internship_student_group(apps, schema_editor):

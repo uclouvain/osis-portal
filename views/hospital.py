@@ -33,7 +33,7 @@ from internship.services.internship import InternshipAPIService
 
 
 @login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
+@permission_required('base.can_access_internship', raise_exception=True)
 @redirect_if_not_in_cohort
 def view_hospitals_list(request, cohort_id):
     organizations = InternshipAPIService.get_organizations(person=request.user.person, cohort_name=cohort_id).results

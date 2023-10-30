@@ -64,7 +64,7 @@ def view_internship_role_selection(request):
 
 
 @login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
+@permission_required('base.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 # @redirect_if_not_in_cohort
 def view_internship_student_home(request, cohort_id):
@@ -89,7 +89,7 @@ def view_internship_master_home(request):
 
 
 @login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
+@permission_required('base.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 def view_cohort_selection(request):
     student = mdl_base.student.find_by_user(request.user)

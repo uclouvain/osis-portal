@@ -41,7 +41,7 @@ from internship.templatetags.period import str_to_iso_date
 
 
 @login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
+@permission_required('base.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 def view_student_resume(request, cohort_id):

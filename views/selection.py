@@ -43,7 +43,7 @@ from internship.services.internship import InternshipAPIService
 
 
 @login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
+@permission_required('base.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @redirect_if_subscription_not_allowed
@@ -132,7 +132,7 @@ def _get_post_chosen_specialty(internship, request, specialty):
 
 
 @login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
+@permission_required('base.can_access_internship', raise_exception=True)
 @redirect_if_multiple_registrations
 @redirect_if_not_in_cohort
 @redirect_if_subscription_not_allowed
