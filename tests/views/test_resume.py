@@ -50,7 +50,7 @@ class TestResumeUrl(TestCase):
         cls.student_information = test_internship_student_information.create_student_information(cls.user,
                                                                                                  cls.cohort,
                                                                                                  cls.student.person)
-        perm = Permission.objects.get(codename="can_access_internship")
+        perm = Permission.objects.get(codename="can_access_internship", content_type__model='internshipoffer')
         cls.user.user_permissions.add(perm)
 
     def test_can_access_student_resume(self):
