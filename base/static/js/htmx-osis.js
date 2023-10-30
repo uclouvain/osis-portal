@@ -46,3 +46,9 @@ function enableElement(ele) {
         ele.disabled = false;
     }
 }
+
+function initializeSelect2(ev) {
+    const el = ev.detail.elt;
+    el.querySelectorAll('[data-autocomplete-light-function=select2]').forEach(window.__dal__initialize)
+}
+document.addEventListener("htmx:afterSwap", initializeSelect2);
