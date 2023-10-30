@@ -34,7 +34,6 @@ import base.models as mdl_base
 from base.views import layout
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.decorators.global_view_decorators import redirect_if_multiple_registrations
-from internship.models import internship_student_information as mdl_student_information
 from internship.models.enums.civility import Civility
 from internship.models.score_encoding_utils import APDS
 from internship.services.internship import InternshipAPIService
@@ -118,21 +117,6 @@ def _get_internship_masters_repr(person, affectation):
             alloc.master.person.last_name.upper()
         ) for alloc in allocations]
     )
-
-
-def save_from_form(form, person, cohort):
-    defaults = {
-        "location": form.cleaned_data["location"],
-        "postal_code": form.cleaned_data["postal_code"],
-        "city": form.cleaned_data["city"],
-        "country": form.cleaned_data["country"],
-        "email": form.cleaned_data["email"],
-        "phone_mobile": form.cleaned_data["phone_mobile"],
-        "contest": form.cleaned_data["contest"],
-    }
-
-    mdl_student_information.InternshipStudentInformation.objects.update_or_create(person=person, cohort=cohort,
-                                                                                  defaults=defaults)
 
 
 def _replace_comments_keys_with_translations(comments):
