@@ -79,6 +79,8 @@ class Person(SerializableModel):
             ("is_internship_master", "Is internship master"),
             ("is_faculty_administrator", "Is faculty administrator"),
             ("can_access_administration", "Can access administration"),
+            # temporary pass internship perm before internship configuration endpoint is available
+            ("can_access_internship", "Can access internship"),
         )
 
 
