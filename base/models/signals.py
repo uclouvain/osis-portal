@@ -102,8 +102,8 @@ def _add_person_to_group(person):
     if 'internship' in settings.INSTALLED_APPS:
         from internship.services.internship import InternshipAPIService
         # check student exists through api client
-        if InternshipAPIService.get_internship_student_information_list_by_person(person=person):
-            _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
+        # if InternshipAPIService.get_internship_student_information_list_by_person(person=person):
+        #     _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
         # check master exists through api client
         if InternshipAPIService.get_master(person):
             _assign_group(person, GROUP_MASTERS_INTERNSHIP)
