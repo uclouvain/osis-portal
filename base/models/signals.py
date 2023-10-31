@@ -90,23 +90,6 @@ def remove_from_student_group(sender, instance, **kwargs):
         instance.person.user.groups.remove(students_group)
 
 
-# Internship receivers are defined only if internship app is installed
-# if 'internship' in settings.INSTALLED_APPS:
-#     from internship.models import internship_student_information as mdl_internship
-#
-#     @receiver(post_save, sender=mdl_internship.InternshipStudentInformation)
-#     def add_to_internship_students_group(sender, instance, **kwargs):
-#         if kwargs.get('created', True) and instance.person.user:
-#             _assign_group(instance.person, GROUP_STUDENTS_INTERNSHIP)
-#
-#
-#     @receiver(post_delete, sender=mdl_internship.InternshipStudentInformation)
-#     def remove_internship_students_group(sender, instance, **kwargs):
-#         if instance.person.user:
-#             internship_students_group = Group.objects.get(name=GROUP_STUDENTS_INTERNSHIP)
-#             instance.person.user.groups.remove(internship_students_group)
-
-
 def _add_person_to_group(person):
     # Check Student
     if student_bsn.check_if_person_is_student(person):
@@ -117,11 +100,7 @@ def _add_person_to_group(person):
     # Check if student is internship student
     # Only if internship app is installed
     if 'internship' in settings.INSTALLED_APPS:
-      
-        # from internship.models.internship_student_information import InternshipStudentInformation
-        # if InternshipStudentInformation.objects.filter(person=person).exists():
-        #     _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
-
+        from internship.services.internship import InternshipAPIService
         # check master exists through api client
         if InternshipAPIService.get_master(person):
             _assign_group(person, GROUP_MASTERS_INTERNSHIP)
