@@ -117,11 +117,12 @@ def _add_person_to_group(person):
     # Check if student is internship student
     # Only if internship app is installed
     if 'internship' in settings.INSTALLED_APPS:
+      
         # from internship.models.internship_student_information import InternshipStudentInformation
         # if InternshipStudentInformation.objects.filter(person=person).exists():
         #     _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
+
         # check master exists through api client
-        from internship.services.internship import InternshipAPIService
         if InternshipAPIService.get_master(person):
             _assign_group(person, GROUP_MASTERS_INTERNSHIP)
 
