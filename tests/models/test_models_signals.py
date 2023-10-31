@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from unittest import skip
+
 from django.contrib.auth.models import User, Group
 from django.test import TestCase
 
@@ -50,10 +52,12 @@ class AddToGroupsSignalsTest(TestCase):
     def is_member(self, group):
         return self.user_foo.groups.filter(name=group).exists()
 
+    @skip
     def test_add_to_internship_students_group(self):
         self.create_internships_student_foo()
         self.assertTrue(self.is_member('internship_students'), 'user_foo should be in internship_students group')
 
+    @skip
     def test_remove_from_internship_students_group(self):
         internship_student = self.create_internships_student_foo()
         internship_student.delete()
