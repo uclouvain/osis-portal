@@ -1,6 +1,7 @@
 {% extends "dashboard_layout.html" %}
 {% load static %}
 {% load i18n %}
+{% load period %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -41,7 +42,7 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
-    <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
+    <li><a href="{% url 'internship_student_home' cohort_id=cohort.name %}">{% trans 'Internships' %}</a></li>
     <li class="active">{% trans 'Sum up of your choices and your affectations' %}</li>
 {% endblock %}
 
@@ -62,12 +63,12 @@
                             {% trans 'Student information' %}
                         </a>
                     </li>
+                    <li role="presentation">
+                        <a href="#choices" aria-controls="choices" role="tab" data-toggle="tab">
+                            {% trans 'Choices received by administration' %}
+                        </a>
+                    </li>
                     {% if publication_allowed %}
-                        <li role="presentation">
-                            <a href="#choices" aria-controls="choices" role="tab" data-toggle="tab">
-                                {% trans 'Choices received by administration' %}
-                            </a>
-                        </li>
                         <li role="presentation">
                             <a href="#affectation" aria-controls="affectation" role="tab" data-toggle="tab">
                                 {% trans 'Internship affectation' %}
@@ -107,7 +108,7 @@
                         <div class="col-md-4">
                             <strong>{% trans 'gender' %}</strong>
                             <br>
-                            {{ student.person.gender }}
+                            {{ student.person.gender|default_if_none:'-'}}
                         </div>
                         <div class="col-md-4">
                             <strong>{% trans 'email' %}</strong>
@@ -153,8 +154,8 @@
                                 <strong>{{ internship.name }}</strong>
                                 <ul>
                                     {% for choice in student_choices %}
-                                        {% if choice.internship_id == internship.id %}
-                                            <li>{{ choice.organization }} | {{ choice.speciality }}
+                                        {% if choice.internship == internship.name %}
+                                            <li>{{ choice.organization.name }} | {{ choice.specialty.name }}
                                                 | {{ choice.choice }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -181,17 +182,17 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-10 col-sm-11 " style="margin-top: 15px; margin-bottom: 15px; border-left: 1px solid lightgray;">
-                                    <strong>{{ affectation.period.date_start }} - {{ affectation.period.date_end }}</strong>
+                                    <strong>{{ affectation.period.date_start|str_to_iso_date }} - {{ affectation.period.date_end|str_to_iso_date }}</strong>
                                     {% if affectation.internship %}
                                         <br>
-                                        {{ affectation.internship.name }}
+                                        {{ affectation.internship }}
                                     {% endif %}
                                     <br>
-                                    {{ affectation.speciality.name }} | {{ affectation.organization }}
+                                    {{ affectation.speciality.name }} | {{ affectation.organization.name }}
                                     <br>
                                     Address: {{ affectation.organization.location }}
                                     <br>
-                                    {% with organization=affectation.organization speciality=affectation.speciality %}
+                                    {% with organization=affectation.organization.reference speciality=affectation.speciality.name %}
                                         {% with offer=offers|get_item:organization|get_item:speciality %}
                                             {% if offer %}
                                                 {% trans 'Internship master' %} :
@@ -240,7 +241,7 @@
                                         {{ affectation.period.name }}
                                     </td>
                                     <td>
-                                        {{ affectation.internship }}
+                                        {{ affectation.specialty.name }}
                                     </td>
                                     {% for apd in apds %}
                                         {% if affectation.score %}
@@ -258,9 +259,9 @@
                                         {% if affectation.score.comments %}
                                             <a data-toggle="modal" data-target="#comments-modal" type="button" class="btn btn-xs btn-default btn-edit-score"
                                                id="comment-btn-{{ student.pk }}-{{ affectation.period.pk }}"
-                                               data-student="{{ student }}" data-period="{{ affectation.period }}"
-                                               data-comments="{{ affectation.score.comments|to_json }}" data-organization="{{ affectation.organization }}"
-                                               data-specialty="{{ affectation.speciality }}">
+                                               data-student="{{ student }}" data-period="{{ affectation.period.name }}"
+                                               data-comments="{{ affectation.score.comments|to_json }}" data-organization="{{ affectation.organization.name }}"
+                                               data-specialty="{{ affectation.speciality.name }}">
                                                 <icon class="fa fa-comment"></icon>
                                             </a>
                                         {% endif %}
@@ -274,6 +275,7 @@
             </div>
         </div>
     </div>
+</div>
 
     {% include 'internship_apd_documentation.html' %}
 

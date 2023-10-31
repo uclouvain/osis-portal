@@ -23,12 +23,3 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from internship.models import cohort
-from internship.models import internship
-from internship.models import internship_choice
-from internship.models import internship_offer
-from internship.models import internship_speciality
-from internship.models import internship_student_affectation_stat
-from internship.models import internship_student_information
-from internship.models import organization
-from internship.models import period

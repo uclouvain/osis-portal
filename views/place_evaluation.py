@@ -32,25 +32,24 @@ from django.utils.translation import gettext_lazy as _
 from osis_internship_sdk.exceptions import ForbiddenException
 
 from base.views import layout
-from internship import models as mdl_internship
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.services.internship import InternshipAPIService
 
 
 @login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
+@permission_required('base.can_access_internship', raise_exception=True)
 @redirect_if_not_in_cohort
 def view_place_evaluations_list(request, cohort_id):
-    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    cohort = InternshipAPIService.get_cohort_detail(cohort_name=cohort_id, person=request.user.person)
     affectations = InternshipAPIService.get_person_affectations(cohort=cohort, person=request.user.person)
     return layout.render(request, "place_evaluation_list.html", {'cohort': cohort, 'affectations': affectations})
 
 
 @login_required
-@permission_required('internship.can_access_internship', raise_exception=True)
+@permission_required('base.can_access_internship', raise_exception=True)
 @redirect_if_not_in_cohort
 def view_place_evaluation_form(request, cohort_id, period_name):
-    cohort = mdl_internship.cohort.Cohort.objects.get(pk=cohort_id)
+    cohort = InternshipAPIService.get_cohort_detail(cohort_name=cohort_id, person=request.user.person)
     affectations = InternshipAPIService.get_person_affectations(cohort=cohort, person=request.user.person)
     evaluated_affectation = next(
         affectation for affectation in affectations if affectation['period']['name'] == period_name
