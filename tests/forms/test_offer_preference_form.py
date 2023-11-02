@@ -24,7 +24,6 @@
 #
 ##############################################################################
 import uuid
-from unittest import skip
 
 from django.forms import formset_factory
 from django.test import TestCase
@@ -68,7 +67,6 @@ class TestOfferPreferenceFormset(TestCase):
         formset = self.FormsetOfferPreference(data)
         self.assertFalse(formset.is_valid())
 
-    @skip
     def test_valid_formset(self):
         data = {
             'form-TOTAL_FORMS': '2',

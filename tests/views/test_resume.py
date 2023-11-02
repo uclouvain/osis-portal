@@ -25,7 +25,6 @@
 ##############################################################################
 import uuid
 from collections import namedtuple
-from unittest import skip
 
 import mock
 from django.contrib.auth.models import Permission
@@ -56,10 +55,9 @@ class TestResumeUrl(TestCase):
     def setUpTestData(cls):
         cls.student = StudentFactory()
         cls.user = cls.student.person.user
-        perm = Permission.objects.get(codename="can_access_internship", content_type__model='internshipoffer')
+        perm = Permission.objects.get(codename="can_access_internship")
         cls.user.user_permissions.add(perm)
 
-    @skip
     def test_can_access_student_resume(self):
         url = reverse("student_resume", kwargs={'cohort_id': "cohort"})
         response = self.client.get(url)

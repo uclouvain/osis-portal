@@ -25,6 +25,7 @@
 #
 ############################################################################
 from django.template.defaulttags import register
+from django.utils.dateparse import parse_date
 from django.utils.datetime_safe import date
 from django.utils.timezone import now
 
@@ -37,3 +38,16 @@ def is_past(period):
 @register.filter
 def str_to_iso_date(str_date):
     return date.fromisoformat(str_date)
+
+
+@register.filter
+def enrollment_active(cohort):
+    today = date.today()
+    return True \
+        if parse_date(cohort.subscription_start_date) <= today <= parse_date(cohort.subscription_end_date) else False
+
+
+@register.filter()
+def publication_active(cohort):
+    today = date.today()
+    return True if parse_date(cohort.publication_start_date) <= today else False

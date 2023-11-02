@@ -61,7 +61,9 @@ class TestAPIClient(TestCase):
 class MockAPI(InternshipApi):
     @classmethod
     def masters_get(*args, **kwargs):
-        return {'count': 1, 'results': [MasterGet(uuid=str(uuid.uuid4()), civility="DR", person=Person(last_name="name"))]}
+        return {
+            'count': 1, 'results': [MasterGet(uuid=str(uuid.uuid4()), civility="DR", person=Person(last_name="name"))]
+        }
 
     @classmethod
     def masters_post(*args, **kwargs):
