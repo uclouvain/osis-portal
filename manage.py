@@ -29,7 +29,6 @@ import os
 import sys
 
 import dotenv
-from opentelemetry.instrumentation.urllib import URLLibInstrumentor
 
 from frontoffice.settings import opentelemetry
 from opentelemetry import trace
