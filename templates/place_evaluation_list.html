@@ -66,6 +66,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                {% if publication_allowed %}
                     {% for affectation in affectations %}
                         <tr class="evaluation-row">
                             <td class="visible-xs">
@@ -102,6 +103,7 @@
                               </td>
                             </tr>
                     {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
         </div>

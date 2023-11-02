@@ -24,6 +24,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
@@ -42,7 +44,12 @@ from internship.services.internship import InternshipAPIService
 def view_place_evaluations_list(request, cohort_id):
     cohort = InternshipAPIService.get_cohort_detail(cohort_name=cohort_id, person=request.user.person)
     affectations = InternshipAPIService.get_person_affectations(cohort=cohort, person=request.user.person)
-    return layout.render(request, "place_evaluation_list.html", {'cohort': cohort, 'affectations': affectations})
+    publication_allowed = cohort.publication_start_date <= datetime.date.today()
+    return layout.render(request, "place_evaluation_list.html", {
+        'cohort': cohort,
+        'affectations': affectations,
+        'publication_allowed': publication_allowed
+    })
 
 
 @login_required
