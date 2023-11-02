@@ -25,14 +25,24 @@
 ##############################################################################
 import random
 import uuid
+from datetime import date
 
 from django.test import TestCase, override_settings
 from osis_internship_sdk.api.internship_api import InternshipApi
+from osis_internship_sdk.model.choice_get import ChoiceGet
+from osis_internship_sdk.model.choice_paging import ChoicePaging
+from osis_internship_sdk.model.internship_get import InternshipGet
+from osis_internship_sdk.model.internship_paging import InternshipPaging
+from osis_internship_sdk.model.offer_get import OfferGet
+from osis_internship_sdk.model.offer_paging import OfferPaging
+from osis_internship_sdk.model.organization_paging import OrganizationPaging
+from osis_internship_sdk.model.person import Person
 from osis_internship_sdk.model.person_affectation_get import PersonAffectationGet
 from osis_internship_sdk.model.place_evaluation_get import PlaceEvaluationGet
 from osis_internship_sdk.model.place_evaluation_item_get import PlaceEvaluationItemGet
 from osis_internship_sdk.model.score_list_get import ScoreListGet
 from osis_internship_sdk.model.student import Student
+from osis_internship_sdk.model.student_paging import StudentPaging
 from osis_internship_sdk.models import MasterGet, AllocationGet, PeriodGet, SpecialtyGet, OrganizationGet, \
     StudentAffectationGet, CohortGet, ScoreGet
 
@@ -51,7 +61,9 @@ class TestAPIClient(TestCase):
 class MockAPI(InternshipApi):
     @classmethod
     def masters_get(*args, **kwargs):
-        return {'count': 1, 'results': [MasterGet(uuid=str(uuid.uuid4()))]}
+        return {
+            'count': 1, 'results': [MasterGet(uuid=str(uuid.uuid4()), civility="DR", person=Person(last_name="name"))]
+        }
 
     @classmethod
     def masters_post(*args, **kwargs):
@@ -65,6 +77,7 @@ class MockAPI(InternshipApi):
             organization=OrganizationGet(uuid=str(uuid.uuid4()), reference=''),
             specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=parent_specialty),
             role=ChoiceRole.MASTER.name,
+            master=MasterGet(uuid=str(uuid.uuid4()), civility="DR", person=Person(last_name="name"))
         )]}
 
     @classmethod
@@ -77,7 +90,9 @@ class MockAPI(InternshipApi):
 
     @classmethod
     def organizations_uuid_get(*args, **kwargs):
-        return OrganizationGet(uuid=str(uuid.uuid4()), reference='')
+        return OrganizationGet(
+            uuid=str(uuid.uuid4()), reference='', cohort=CohortGet(uuid=str(uuid.uuid4()), name='cohort')
+        )
 
     @classmethod
     def students_affectations_specialty_organization_get(*args, **kwargs):
@@ -94,7 +109,7 @@ class MockAPI(InternshipApi):
         return StudentAffectationGet(
             student=Student(uuid=str(uuid.uuid4()), last_name='', first_name=''),
             period=PeriodGet(uuid=str(uuid.uuid4()), name='P1'),
-            score=ScoreListGet(uuid=str(uuid.uuid4())),
+            score=ScoreListGet(uuid=str(uuid.uuid4()), validated=True, comments={}),
         )
 
     @classmethod
@@ -115,11 +130,17 @@ class MockAPI(InternshipApi):
 
     @classmethod
     def masters_allocations_post(*args, **kwargs):
-        return AllocationGet(uuid=str(uuid.uuid4()), role=ChoiceRole.DELEGATE.name)
+        return AllocationGet(
+            uuid=str(uuid.uuid4()), role=ChoiceRole.DELEGATE.name,
+            master=MasterGet(uuid=str(uuid.uuid4()), civility="DR", person=Person(last_name="name"))
+        )
 
     @classmethod
     def masters_allocations_uuid_delete(*args, **kwargs):
-        return AllocationGet(uuid=str(uuid.uuid4()), role=ChoiceRole.DELEGATE.name), 200, {}
+        return AllocationGet(
+            uuid=str(uuid.uuid4()), role=ChoiceRole.DELEGATE.name,
+            master=MasterGet(uuid=str(uuid.uuid4()), civility="DR", person=Person(last_name="name"))
+        ), 200, {}
 
     @classmethod
     def scores_affectation_uuid_validate_post(*args, **kwargs):
@@ -138,6 +159,7 @@ class MockAPI(InternshipApi):
             organization=OrganizationGet(uuid=str(uuid.uuid4()), reference=''),
             specialty=SpecialtyGet(uuid=str(uuid.uuid4()), acronym='', parent=None),
             role=ChoiceRole.MASTER.name,
+            master=MasterGet(uuid=str(uuid.uuid4()), civility="DR", person=Person(last_name="name"))
         )]}
 
     @classmethod
@@ -165,3 +187,27 @@ class MockAPI(InternshipApi):
     @classmethod
     def place_evaluation_affectation_uuid_get(*args, **kwargs):
         return PlaceEvaluationGet(evaluation={})
+
+    @classmethod
+    def students_get(*args, **kwargs):
+        return StudentPaging(count=1.0)
+
+    @classmethod
+    def organizations_get(*args, **kwargs):
+        return OrganizationPaging(count=1.0, next="", previous="", results=[OrganizationGet(city="Test")])
+
+    @classmethod
+    def cohorts_name_get(*args, **kwargs):
+        return CohortGet(name="cohort", publication_start_date=str(date.today()))
+
+    @classmethod
+    def internships_get(*args, **kwargs):
+        return InternshipPaging(count=1.0, next="", previous="", results=[InternshipGet(name="Test")])
+
+    @classmethod
+    def choices_get(*args, **kwargs):
+        return ChoicePaging(count=1.0, next="", previous="", results=[ChoiceGet(uuid=str(uuid.uuid4()), choice=1)])
+
+    @classmethod
+    def offers_get(*args, **kwargs):
+        return OfferPaging(count=1.0, next="", previous="", results=[OfferGet(uuid=str(uuid.uuid4()))])

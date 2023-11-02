@@ -35,7 +35,6 @@ from osis_internship_sdk.models import ScoreGet
 from base.views import layout
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master, \
     redirect_if_not_master_with_matching_allocation
-from internship.models.period import Period
 from internship.models.score_encoding_utils import DEFAULT_PERIODS, APDS, COMMENTS_FIELDS, MIN_APDS, MAX_APDS, \
     AVAILABLE_GRADES, APDS_DESCRIPTIONS
 from internship.services.internship import InternshipAPIService
@@ -93,8 +92,7 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
             if affectation.score and not affectation.score.validated or not affectation.score
         ]
     )
-
-    periods = Period.objects.filter(cohort__uuid=specialty.cohort.uuid).order_by('date_start')
+    periods = InternshipAPIService.get_periods(person=request.user.person, cohort_name=organization.cohort.name)
 
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 

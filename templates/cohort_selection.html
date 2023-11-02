@@ -1,6 +1,7 @@
 {% extends "dashboard_layout.html" %}
 {% load static %}
 {% load i18n %}
+{% load period %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -38,13 +39,13 @@
 
     <div class="list-group">
         {% for cohort in cohorts|dictsortreversed:"subscription_start_date" %}
-            <a href="{% url 'internship_student_home' cohort_id=cohort.id %}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{ cohort }}</h4>
-                {% if cohort.enrollment_active %}
-                    <p class="list-group-item-text">{% trans 'Enrollments from' %} {{ cohort.subscription_start_date }} {% trans 'to' %} {{ cohort.subscription_end_date }}.</p>
+            <a href="{% url 'internship_student_home' cohort_id=cohort.name %}" class="list-group-item">
+                <h4 class="list-group-item-heading">{{ cohort.name }}</h4>
+                {% if cohort|enrollment_active %}
+                    <p class="list-group-item-text">{% trans 'Enrollments from' %} {{ cohort.subscription_start_date|str_to_iso_date }} {% trans 'to' %} {{ cohort.subscription_end_date|str_to_iso_date }}.</p>
                 {% endif %}
-                {% if cohort.publication_active %}
-                    <p class="list-group-item-text">{% trans 'Affectations are available from' %} {{ cohort.publication_start_date }}</p>
+                {% if cohort|publication_active %}
+                    <p class="list-group-item-text">{% trans 'Affectations are available from' %} {{ cohort.publication_start_date|str_to_iso_date }}</p>
                 {% endif %}
             </a>
         {% endfor %}

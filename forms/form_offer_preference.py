@@ -35,7 +35,7 @@ class OfferPreferenceForm(forms.Form):
         ('3', _('Third choice')),
         ('4', _('Fourth choice'))
     )
-    offer = forms.IntegerField()
+    offer = forms.UUIDField()
     preference = forms.ChoiceField(choices=PREFERENCE_CHOICES, required=True)
 
 

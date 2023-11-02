@@ -39,8 +39,8 @@
 
 {% block breadcrumb %}
     <li><a href="{% url 'internship' %}">{{ cohort.name }}</a></li>
-    <li><a href="{% url 'internship_student_home' cohort_id=cohort.id %}">{% trans 'Internships' %}</a></li>
-    <li><a href="{% url 'place_evaluation_list' cohort_id=cohort.id %}">{% trans 'Internship place evaluation' %}</a></li>
+    <li><a href="{% url 'internship_student_home' cohort_id=cohort.name %}">{% trans 'Internships' %}</a></li>
+    <li><a href="{% url 'place_evaluation_list' cohort_id=cohort.name %}">{% trans 'Internship place evaluation' %}</a></li>
     <li class="active">{{ affectation.period.name }} - {{ affectation.speciality.name }} - {{ affectation.organization.name }}</li>
 {% endblock %}
 
@@ -112,7 +112,7 @@
                         {% if items %}
                             <div class="col-md-12">
                                 <input type="submit" class="btn btn-primary"/>
-                                <a class="btn btn-default" href="{% url 'place_evaluation_list' cohort_id=cohort.id %}">
+                                <a class="btn btn-default" href="{% url 'place_evaluation_list' cohort_id=cohort.name %}">
                                     {% trans 'Cancel' %}
                                 </a>
                             </div>

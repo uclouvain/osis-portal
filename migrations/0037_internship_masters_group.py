@@ -11,7 +11,7 @@ def add_init_internship_masters_group(apps, schema_editor):
     internship_masters_group, created = Group.objects.get_or_create(name='internship_masters')
     if created:
         # Add permissions to access internship
-        access_internships_perm = Permission.objects.get(codename='can_access_internship')
+        access_internships_perm = Permission.objects.get(codename='can_access_internship', content_type__model='internshipoffer')
         internship_masters_group.permissions.add(access_internships_perm)
 
 
@@ -22,5 +22,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_init_internship_masters_group),
+        # migrations.RunPython(add_init_internship_masters_group),
     ]
