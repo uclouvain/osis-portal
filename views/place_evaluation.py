@@ -24,6 +24,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
@@ -34,6 +36,7 @@ from osis_internship_sdk.exceptions import ForbiddenException
 from base.views import layout
 from internship.decorators.cohort_view_decorators import redirect_if_not_in_cohort
 from internship.services.internship import InternshipAPIService
+from internship.templatetags.period import str_to_iso_date
 
 
 @login_required
@@ -42,7 +45,12 @@ from internship.services.internship import InternshipAPIService
 def view_place_evaluations_list(request, cohort_id):
     cohort = InternshipAPIService.get_cohort_detail(cohort_name=cohort_id, person=request.user.person)
     affectations = InternshipAPIService.get_person_affectations(cohort=cohort, person=request.user.person)
-    return layout.render(request, "place_evaluation_list.html", {'cohort': cohort, 'affectations': affectations})
+    publication_allowed = str_to_iso_date(cohort.publication_start_date) <= datetime.date.today()
+    return layout.render(request, "place_evaluation_list.html", {
+        'cohort': cohort,
+        'affectations': affectations,
+        'publication_allowed': publication_allowed
+    })
 
 
 @login_required

@@ -224,6 +224,14 @@ class InternshipAPIService:
             return e.body, e.status, e.headers
 
     @classmethod
+    def get_periods(cls, person, cohort_name):
+        return get_paginated_results(
+            InternshipAPIClient().periods_get(
+                cohort_name=cohort_name, **utils.build_mandatory_auth_headers(person)
+            )
+        )
+
+    @classmethod
     def get_person_affectations(cls, cohort, person):
         return get_paginated_results(
             InternshipAPIClient().person_affectations_cohort_person_uuid_get(
