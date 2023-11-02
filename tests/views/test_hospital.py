@@ -49,7 +49,7 @@ class TestHospitalUrl(TestCase):
         cls.user = UserFactory()
         cls.student = StudentFactory(registration_id="45451298", person__user=cls.user)
 
-        perm = Permission.objects.get(codename="can_access_internship")
+        perm = Permission.objects.get(codename="can_access_internship", content_type__model='internshipoffer')
         cls.student.person.user.user_permissions.add(perm)
 
     def test_can_access_hospital_list(self):
