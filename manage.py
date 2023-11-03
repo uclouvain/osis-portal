@@ -30,6 +30,13 @@ import sys
 
 import dotenv
 
+from frontoffice.settings import opentelemetry
+from opentelemetry import trace
+from opentelemetry.instrumentation.django import DjangoInstrumentor
+from opentelemetry.instrumentation.urllib3 import URLLib3Instrumentor
+from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
+
+
 if __name__ == "__main__":
     if 'test' in sys.argv:
         os.environ.setdefault('TESTING', 'True')
@@ -44,6 +51,17 @@ if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", SETTINGS_FILE)
 
     from django.core.management import execute_from_command_line
+
+    if bool(os.environ.get('OTEL_ENABLED', False)):
+        opentelemetry.initialize()
+        DjangoInstrumentor().instrument(tracer_provider=trace.get_tracer_provider())
+        Psycopg2Instrumentor().instrument(
+            tracer_provider=trace.get_tracer_provider(),
+            skip_dep_check=True,  # We use psycopg2-binary so we must skip dep check
+            enable_commenter=True,
+            commenter_options={},
+        )
+        URLLib3Instrumentor().instrument(tracer_provider=trace.get_tracer_provider(), skip_dep_check=True)
 
     try:
         execute_from_command_line(sys.argv)
