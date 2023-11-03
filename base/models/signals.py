@@ -106,9 +106,9 @@ def _add_person_to_group(person):
         if InternshipAPIService.get_internship_student_information_list_by_person(person=person):
             _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
         else:
-            students_group = Group.objects.get(name=GROUP_STUDENTS)
-            if students_group in person.user.groups.all():
-                person.user.groups.remove(students_group)
+            internship_students_group = Group.objects.get(name=GROUP_STUDENTS_INTERNSHIP)
+            if internship_students_group in person.user.groups.all():
+                person.user.groups.remove(internship_students_group)
         # check master exists through api client
         if InternshipAPIService.get_master(person):
             _assign_group(person, GROUP_MASTERS_INTERNSHIP)
