@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import datetime
+
 from django.conf import settings
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import Group
@@ -30,6 +32,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
 from django.utils import translation
+
 
 from base import models as mdl
 from base.business import student as student_bsn
@@ -101,6 +104,13 @@ def _add_person_to_group(person):
     # Only if internship app is installed
     if 'internship' in settings.INSTALLED_APPS:
         from internship.services.internship import InternshipAPIService
+        # check internship student exists through api client
+        if InternshipAPIService.get_internship_student_information_list_by_person(person=person):
+            _assign_group(person, GROUP_STUDENTS_INTERNSHIP)
+        else:
+            internship_students_group = Group.objects.get(name=GROUP_STUDENTS_INTERNSHIP)
+            if internship_students_group in person.user.groups.all():
+                person.user.groups.remove(internship_students_group)
         # check master exists through api client
         if InternshipAPIService.get_master(person):
             _assign_group(person, GROUP_MASTERS_INTERNSHIP)
@@ -122,24 +132,36 @@ def _assign_group(person, group_name):
 
 
 def _create_update_person(user, person, user_infos):
+    user_birthdate = datetime.datetime.strptime(
+        user_infos.get('USER_BIRTHDATE'),
+        "%d/%m/%Y"
+    ).date() if user_infos.get('USER_BIRTHDATE') else None
+
     if not person:
         person = mdl.person.find_by_user(user)
     if not person:
-        person = mdl.person.Person(user=user,
-                                   global_id=user_infos.get('USER_FGS'),
-                                   first_name=user_infos.get('USER_FIRST_NAME'),
-                                   last_name=user_infos.get('USER_LAST_NAME'),
-                                   email=user_infos.get('USER_EMAIL'),
-                                   external_id=settings.PERSON_EXTERNAL_ID_PATTERN.format(
-                                       global_id=user_infos.get('USER_FGS')))
+        person = mdl.person.Person(
+            user=user,
+            global_id=user_infos.get('USER_FGS'),
+            first_name=user_infos.get('USER_FIRST_NAME'),
+            last_name=user_infos.get('USER_LAST_NAME'),
+            email=user_infos.get('USER_EMAIL'),
+            external_id=settings.PERSON_EXTERNAL_ID_PATTERN.format(global_id=user_infos.get('USER_FGS')),
+            birth_date=user_birthdate,
+        )
         person.save()
         person_created.send(sender=None, person=person)
     else:
-        updated, person = _update_person_if_necessary(person, user, user_infos.get('USER_FGS'))
+        updated, person = _update_person_if_necessary(
+            person,
+            user,
+            user_infos.get('USER_FGS'),
+            user_birthdate
+        )
     return person
 
 
-def _update_person_if_necessary(person, user, global_id):
+def _update_person_if_necessary(person, user, global_id, birth_date=None):
     updated = False
     if user:
         if user != person.user:
@@ -154,6 +176,9 @@ def _update_person_if_necessary(person, user, global_id):
         if user.email and person.email != user.email:
             person.email = user.email
             updated = True
+    if birth_date:
+        person.birth_date = birth_date
+        updated = True
     if global_id and person.global_id != global_id:
         person.global_id = global_id
         updated = True
