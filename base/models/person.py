@@ -62,6 +62,7 @@ class Person(SerializableModel):
     phone = models.CharField(max_length=30, blank=True, default='')
     phone_mobile = models.CharField(max_length=30, blank=True, default='')
     language = models.CharField(max_length=30, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
+    birth_date = models.DateField(blank=True, null=True)
 
     def username(self):
         return None if self.user is None else self.user.username

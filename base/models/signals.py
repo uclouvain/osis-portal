@@ -131,6 +131,11 @@ def _assign_group(person, group_name):
 
 
 def _create_update_person(user, person, user_infos):
+    user_birthdate = datetime.datetime.strptime(
+        user_infos.get('USER_BIRTHDATE'),
+        "%d/%m/%Y"
+    ).date() if user_infos.get('USER_BIRTHDATE') else None
+
     if not person:
         person = mdl.person.find_by_user(user)
     if not person:
@@ -141,19 +146,21 @@ def _create_update_person(user, person, user_infos):
             last_name=user_infos.get('USER_LAST_NAME'),
             email=user_infos.get('USER_EMAIL'),
             external_id=settings.PERSON_EXTERNAL_ID_PATTERN.format(global_id=user_infos.get('USER_FGS')),
-            birth_date=datetime.datetime.strptime(
-                user_infos.get('USER_BIRTHDATE'),
-                "%d/%m/%Y"
-            ).date() if user_infos.get('USER_BIRTHDATE') else None,
+            birth_date=user_birthdate,
         )
         person.save()
         person_created.send(sender=None, person=person)
     else:
-        updated, person = _update_person_if_necessary(person, user, user_infos.get('USER_FGS'))
+        updated, person = _update_person_if_necessary(
+            person,
+            user,
+            user_infos.get('USER_FGS'),
+            user_birthdate
+        )
     return person
 
 
-def _update_person_if_necessary(person, user, global_id):
+def _update_person_if_necessary(person, user, global_id, birth_date=None):
     updated = False
     if user:
         if user != person.user:
@@ -168,6 +175,9 @@ def _update_person_if_necessary(person, user, global_id):
         if user.email and person.email != user.email:
             person.email = user.email
             updated = True
+    if birth_date:
+        person.birth_date = birth_date
+        updated = True
     if global_id and person.global_id != global_id:
         person.global_id = global_id
         updated = True
