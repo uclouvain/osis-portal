@@ -7,7 +7,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2022 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,7 @@
 {% block style %}
     <link rel="stylesheet" href="{% static 'inscription_aux_cours/css/inscription_aux_cours.css' %}">
     <link rel="stylesheet" href="{% static 'inscription_aux_cours/css/spinner.css' %}">
-    <script src="{% static 'js/htmx-1.8.6.js' %}" defer></script>
-    <script src="{% static 'js/htmx-osis.js' %}" defer></script>
+    {% include "dependencies/htmx.html" %}
     <script src="{% static 'inscription_aux_cours/js/inscription_aux_cours.js' %}" defer></script>
     <script src="{% static 'inscription_aux_cours/js/spinner.js' %}" defer></script>
 {% endblock %}
