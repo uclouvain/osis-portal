@@ -52,6 +52,7 @@
     </div>
     <form method="post" action='{% url "inscription-aux-cours:enregistrer-proposition-programme-annuel" programme.code %}'>
         {% csrf_token %}
+        {{ form.media }}
         {{ form.annee  }}
     <div
         class="panel panel-default panel-formulaires-inscription-cours"
@@ -93,6 +94,7 @@
 
             {% if formulaire_hors_programme.code_mini_formation.field.choices %}
             <div  id="form-hors-formulaire">
+                    {{ formulaire_hors_programme.media }}
                     {{ formulaire_hors_programme.annee  }}
 
                     <p>

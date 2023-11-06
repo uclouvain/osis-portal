@@ -8,7 +8,7 @@
 * The core business involves the administration of students, teachers,
 * courses, programs and so on.
 *
-* Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
+* Copyright (C) 2015-2018 Université catholique de Louvain (http://www.uclouvain.be)
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -40,20 +40,14 @@
     <link rel="icon" href="{% static 'img/favicon.ico' %}"/>
     <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
     <link rel="stylesheet" href="{% static 'fontawesome-free-6.1.1-web/css/all.min.css' %}">
-    {% if 'osis_notification' in installed_apps %}
-        <link rel="stylesheet" href="{% static 'osis_notification/osis-notification.css' %}" />
-    {% endif %}
-    {% if 'osis_document' in installed_apps %}
-        <link rel="stylesheet" href="{% static 'osis_document/osis-document.css' %}" />
-    {% endif %}
-
-    {% include 'dependencies/jquery.html' %}
-    {% include 'dependencies/autocomplete_light.html' %}
+  {% if 'osis_notification' in installed_apps %}
+    <link rel="stylesheet" href="{% static 'osis_notification/osis-notification.css' %}" />
+  {% endif %}
+    <script src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    {% include 'dependencies/datatable.html' %}
-
     {% block style %}
     {% endblock %}
     {% analytical_head_bottom %}
@@ -169,6 +163,7 @@
 
 
     <script src="{% static 'js/osis-portal.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
 
     {# Vue, Vue i18n and vue packages #}
@@ -177,9 +172,6 @@
     <script src="{% static 'js/vue-i18n.min.js' %}"></script>
     {% if 'osis_notification' in installed_apps %}
         <script type="text/javascript" src="{% static 'osis_notification/osis-notification.umd.min.js' %}"></script>
-    {% endif %}
-    {% if 'osis_document' in installed_apps %}
-        <script type="text/javascript" src="{% static 'osis_document/osis-document.umd.min.js' %}"></script>
     {% endif %}
 
     <script src="{% statici18n LANGUAGE_CODE %}"></script>

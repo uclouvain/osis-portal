@@ -1,0 +1,236 @@
+body {
+    padding-top: 120px;
+    font-family: 'Armata', sans-serif;
+}
+
+.navbar-brand {
+    margin: 5px 0 5px;
+    padding: 0;
+    height: 50px;
+}
+.navbar-brand>img {
+    padding: 0;
+    height: 100%;
+    width: auto;
+}
+
+.caption {
+    font-size: small;
+    font-style: italic;
+}
+
+.description {
+    color:grey;
+    font-style: italic;
+    font-weight: normal;
+}
+
+.error {
+    color:red;
+}
+
+.navbar {
+    min-height:50px !important
+}
+
+.navbar-nav > li > a {
+    padding-top:20px !important;
+    padding-bottom:20px !important;
+}
+
+.not-active {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
+}
+
+.validated {
+    color: green;
+}
+
+.not-validated {
+    color: orange;
+}
+
+.dashboard-grid{
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-auto-flow: column;
+}
+
+.dashboard-grid .grid-item {
+    cursor: pointer;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 0.5rem;
+    padding: 20px 30px;
+    display: grid;
+    column-gap: 20px;
+    row-gap: 10px;
+    grid-template-columns: 0.5fr 4fr;
+    grid-template-rows: 0fr 1fr;
+    grid-template-areas:
+      "icon title"
+      "description description";
+    transition: background-color 0.4s;
+}
+
+.grid-item a {
+    text-decoration: none;
+    color: #6699FF;
+}
+
+.dashboard-admission .dashboard-grid {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.dashboard-grid .grid-item:hover {
+    background-color: #f5f5f5;
+}
+
+.dashboard-tutor, .dashboard-student {
+    padding-top: 30px;
+}
+
+.dashboard-tutor .dashboard-fixed-placement{
+    grid-template-areas:
+      "courses exams submodules"
+      "courses exams submodules"
+      "courses exams submodules";
+}
+
+.dashboard-student .dashboard-fixed-placement{
+    grid-template-areas:
+      "first second third"
+      "first second third"
+      "first second third";
+}
+
+.dashboard-grid .media-heading, .dashboard-grid i{
+    align-self: center;
+}
+
+.dashboard-grid .grid-item i {
+    font-size: 400%;
+    color: #6699FF;
+    padding-bottom: 10px;
+}
+
+.dashboard-faculty-administration{
+    grid-auto-flow: row;
+}
+
+.dashboard-faculty-administration .grid-item{
+    grid-area: auto;
+}
+
+.grid-item .icon {
+    grid-area: icon;
+}
+
+.grid-item .media-heading {
+    grid-area: title;
+}
+
+.grid-item .description {
+    grid-area: description;
+}
+
+@media screen and (max-width: 991px) {
+    .dashboard-grid {
+        display: flex !important;
+        flex-direction: column;
+    }
+
+    .dashboard-grid .grid-item i {
+        font-size: min(10vw, 400%);
+    }
+
+    .dashboard-grid .grid-item .media-heading {
+        font-size: min(5vw, 18px);
+    }
+}
+
+span.dashboard-vpn-warning{
+    color: #f0ad4e;
+    font-weight: bold;
+}
+
+span.dashboard-vpn-warning a{
+    color: #f0ad4e;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+span.dashboard-vpn-warning a:hover{
+    text-shadow: 0px 0px 1px #f0ad4e;
+}
+
+.tooltip-wrapper {
+  display: inline-block;
+}
+.tooltip-wrapper [disabled] {
+  pointer-events: none;
+}
+
+tbody tr.class_year {
+    background-color: #ecfcfc !important;
+}
+
+/* Import badge class bootstrap 4 */
+.badge-primary {
+    color: #fff;
+    background-color: #007bff;
+}
+
+.badge-secondary {
+    color: #fff;
+    background-color: #6c757d;
+}
+
+.badge-success {
+    color: #fff;
+    background-color: #28a745;
+}
+
+.badge-danger {
+    color: #fff;
+    background-color: #dc3545;
+}
+
+.badge.danger-color {
+    background-color: #d9534f;
+}
+
+.badge-warning {
+    color: #212529;
+    background-color: #ffc107;
+}
+
+.badge.warning-color{
+    background-color: #f0ad4e;
+}
+
+.badge-info {
+    color: #fff;
+    background-color: #17a2b8;
+}
+
+.badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.badge-dark {
+    color: #fff;
+    background-color: #343a40;
+}
+
+.d-inline-block {
+    display: inline-block ! important;
+}

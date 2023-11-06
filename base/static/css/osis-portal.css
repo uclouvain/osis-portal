@@ -23,240 +23,14 @@
 * OSIS Custom layout
 */
 
-body {
-    padding-top: 120px;
-    font-family: "Armata",sans-serif
-}
 
-.navbar-brand {
-    margin: 5px 0 5px;
-    padding: 0;
-    height: 50px
-}
+/* Indication Status QA - DEV */
 
-.navbar-brand>img {
-    padding: 0;
-    height: 100%;
-    width: auto
-}
-
-.caption {
-    font-size: small;
-    font-style: italic
-}
-
-.description {
-    color: gray;
-    font-style: italic;
-    font-weight: 400
-}
-
-.error {
-    color: red
-}
-
-.navbar {
-    min-height: 50px!important
-}
-
-.navbar-nav>li>a {
-    padding-top: 20px!important;
-    padding-bottom: 20px!important
-}
-
-.not-active {
-    pointer-events: none;
-    cursor: default;
-    opacity: .6
-}
-
-.validated {
-    color: green
-}
-
-.not-validated {
-    color: orange
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-gap: 20px;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(3,1fr);
-    grid-auto-flow: column
-}
-
-.dashboard-grid .grid-item {
-    cursor: pointer;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: .5rem;
-    padding: 20px 30px;
-    display: grid;
-    column-gap: 20px;
-    row-gap: 10px;
-    grid-template-columns: .5fr 4fr;
-    grid-template-rows: 0fr 1fr;
-    grid-template-areas: "icon title""description description";
-    transition: background-color .4s
-}
-
-.grid-item a {
-    text-decoration: none;
-    color: #69f
-}
-
-.dashboard-admission .dashboard-grid {
-    display: grid;
-    grid-gap: 20px;
-    grid-template-columns: repeat(3,1fr)
-}
-
-.dashboard-grid .grid-item:hover {
-    background-color: #f5f5f5
-}
-
-.dashboard-tutor,.dashboard-student {
-    padding-top: 30px
-}
-
-.dashboard-tutor .dashboard-fixed-placement {
-    grid-template-areas: "courses exams submodules""courses exams submodules""courses exams submodules"
-}
-
-.dashboard-student .dashboard-fixed-placement {
-    grid-template-areas: "first second third""first second third""first second third"
-}
-
-.dashboard-grid .media-heading,.dashboard-grid i {
-    align-self: center
-}
-
-.dashboard-grid .grid-item i {
-    font-size: 400%;
-    color: #69f;
-    padding-bottom: 10px
-}
-
-.dashboard-faculty-administration {
-    grid-auto-flow: row
-}
-
-.dashboard-faculty-administration .grid-item {
-    grid-area: auto
-}
-
-.grid-item .icon {
-    grid-area: icon
-}
-
-.grid-item .media-heading {
-    grid-area: title
-}
-
-.grid-item .description {
-    grid-area: description
-}
-
-@media screen and (max-width:991px) {
-    .dashboard-grid {
-        display: flex!important;
-        flex-direction: column
-    }
-
-    .dashboard-grid .grid-item i {
-        font-size: min(10vw,400%)
-    }
-
-    .dashboard-grid .grid-item .media-heading {
-        font-size: min(5vw,18px)
-    }
-}
-
-span.dashboard-vpn-warning {
-    color: #f0ad4e;
-    font-weight: 700
-}
-
-span.dashboard-vpn-warning a {
-    color: #f0ad4e;
-    font-weight: 700;
-    text-decoration: underline
-}
-
-span.dashboard-vpn-warning a:hover {
-    text-shadow: 0 0 1px #f0ad4e
-}
-
-.tooltip-wrapper {
-    display: inline-block
-}
-
-.tooltip-wrapper [disabled] {
-    pointer-events: none
-}
-
-tbody tr.class_year {
-    background-color: #ecfcfc!important
-}
-
-.badge-primary {
-    color: #fff;
-    background-color: #007bff
-}
-
-.badge-secondary {
-    color: #fff;
-    background-color: #6c757d
-}
-
-.badge-success {
-    color: #fff;
-    background-color: #28a745
-}
-
-.badge-danger {
-    color: #fff;
-    background-color: #dc3545
-}
-
-.badge.danger-color {
-    background-color: #d9534f
-}
-
-.badge-warning {
-    color: #212529;
-    background-color: #ffc107
-}
-
-.badge.warning-color {
-    background-color: #f0ad4e
-}
-
-.badge-info {
-    color: #fff;
-    background-color: #17a2b8
-}
-
-.badge-light {
-    color: #212529;
-    background-color: #f8f9fa
-}
-
-.badge-dark {
-    color: #fff;
-    background-color: #343a40
-}
-
-.d-inline-block {
-    display: inline-block!important
-}
-
-.qamode {
-    background-image: url(../img/qamode.png);
+.qamode
+{
+    background-image:url("../img/qamode.png");
     background-repeat: repeat;
-    background-position: center
+    background-position:center;
 }
 
 .qagreen {
@@ -271,14 +45,15 @@ tbody tr.class_year {
     margin-right: 20px;
     margin-top: -10px;
     marbin-bottom: 10px;
-    -webkit-clip-path: polygon(75%0,100% 50%,75% 100%,0 100%,0 50%,0 0);
-    clip-path: polygon(75%0,100% 50%,75% 100%,0 100%,0 50%,0 0)
+    -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 50%, 0% 0%);
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 50%, 0% 0%);
 }
 
-.devmode {
-    background-image: url(../img/devmode.png);
+.devmode
+{
+    background-image:url("../img/devmode.png");
     background-repeat: repeat;
-    background-position: center
+    background-position:center;
 }
 
 .devorange {
@@ -293,14 +68,15 @@ tbody tr.class_year {
     margin-right: 20px;
     margin-top: -10px;
     marbin-bottom: 10px;
-    -webkit-clip-path: polygon(75%0,100% 50%,75% 100%,0 100%,0 50%,0 0);
-    clip-path: polygon(75%0,100% 50%,75% 100%,0 100%,0 50%,0 0)
+    -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 50%, 0% 0%);
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 50%, 0% 0%);
 }
 
-.localmode {
-    background-image: url(../img/localmode.png);
+.localmode
+{
+    background-image:url("../img/localmode.png");
     background-repeat: repeat;
-    background-position: center
+    background-position:center;
 }
 
 .localred {
@@ -316,137 +92,142 @@ tbody tr.class_year {
     margin-right: 20px;
     margin-top: -10px;
     marbin-bottom: 10px;
-    -webkit-clip-path: polygon(75%0,100% 50%,75% 100%,0 100%,0 50%,0 0);
-    clip-path: polygon(75%0,100% 50%,75% 100%,0 100%,0 50%,0 0)
+    -webkit-clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 50%, 0% 0%);
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 0 50%, 0% 0%);
 }
 
 .font-italic {
-    font-style: italic
+    font-style: italic;
 }
 
-.line-through {
-    text-decoration: line-through
-}
+.line-through{ text-decoration: line-through; }
 
+/* reposition autocomplete selected content */
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 15px!important;
-    padding-left: 0!important
+    line-height: 15px !important;
+    padding-left: 0 !important;
 }
 
-.no-padding {
-    padding: 0!important;
-    margin: 0!important
+.no-padding{
+   padding: 0 !important;
+   margin: 0 !important;
 }
 
-@media (min-width:992px) {
-    .pull-md-right {
-        float: right
+@media (min-width: 992px) {
+    .pull-md-right{
+        float: right;
     }
 }
-
-.active-sort-icon {
-    opacity: .6;
-    font-weight: bolder
+.active-sort-icon{
+    opacity: 0.6;
+    font-weight: bolder;
 }
 
-.inactive-sort-icon {
-    opacity: .2;
-    font-weight: bolder
+.inactive-sort-icon{
+    opacity: 0.2;
+    font-weight: bolder;
 }
 
-.ordering-label {
+.ordering-label{
     cursor: pointer;
-    white-space: nowrap
+    white-space: nowrap;
 }
 
-.limit-selector {
+.limit-selector{
     display: inline-block;
-    width: auto
+    width: auto;
 }
 
-.pagination-table-header {
+.pagination-table-header{
     display: flex;
-    width: 100%
+    width: 100%;
 }
 
-.pagination-table-header>.count {
+.pagination-table-header > .count {
     flex: 1;
     justify-content: flex-start;
-    text-align: left
+    text-align: left;
 }
 
-.pagination-table-header>.pagination {
+.pagination-table-header > .pagination {
     flex: 2;
     justify-content: center;
-    text-align: center
+    text-align: center;
 }
 
-.pagination-table-header>.selector {
+.pagination-table-header > .selector {
     flex: 1;
     justify-content: flex-end;
-    text-align: right
+    text-align: right;
 }
 
+
+
 .pagination-table-header .pagination {
-    margin: 0!important
+    margin: 0 !important;
 }
 
 a.disabled {
-    pointer-events: auto;
-    color: gray
+  pointer-events: auto;
+  color: grey;
 }
 
 a.disabled:active {
-    pointer-events: none
+  pointer-events: none;
 }
 
 .btn-clear {
-    background: 0 0;
-    border: 0
+    background: none;
+    border: none;
 }
-
-table.dataTable thead .sorting:after,table.dataTable thead .sorting_asc:after,table.dataTable thead .sorting_desc:after,table.dataTable thead .sorting_asc_disabled:after,table.dataTable thead .sorting_desc_disabled:after {
-    color: #337ab7!important;
-    opacity: 1!important
+/* dataTables CSS modification */
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+    color: #337ab7 !important;
+    opacity: 1 !important;
 }
 
 table.dataTable thead th.sorting:after {
-    color: #337ab7!important;
-    opacity: 1!important
+    color: #337ab7 !important;
+    opacity: 1 !important;
+}
+table thead .glyphicon-sort,
+table thead .glyphicon-sort-by-attributes,
+table thead .glyphicon-sort-by-attributes-alt{
+    color: #337ab7 !important;
+    opacity: 1 !important;
 }
 
-table thead .glyphicon-sort,table thead .glyphicon-sort-by-attributes,table thead .glyphicon-sort-by-attributes-alt {
-    color: #337ab7!important;
-    opacity: 1!important
-}
-
-.legend-title {
+.legend-title{
     text-decoration: underline;
-    font-weight: 700;
-    padding-top: 20px
+    font-weight: bold;
+    padding-top: 20px;
 }
 
-.legend-item {
-    display: flex
+.legend-item{
+    display:flex;
 }
 
-.legend-peps .legend-label {
-    min-width: 140px
+.legend-peps .legend-label{
+    min-width: 140px;
 }
 
-.legend-exam .legend-label {
-    min-width: 40px
+.legend-exam .legend-label{
+    min-width: 40px;
 }
 
-.legend-description {
-    display: inline
+.legend-description{
+    display: inline;
 }
 
-.peps-tooltip-content {
-    text-align: left;
-    padding: 10px
+.peps-tooltip-content{
+    text-align:left;
+    padding: 10px;
 }
 
-.peps-tooltip-content ul {
-    padding-left: 20px
+.peps-tooltip-content ul{
+    padding-left: 20px;
 }
