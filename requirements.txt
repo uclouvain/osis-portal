@@ -45,7 +45,7 @@ git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.13
 git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.05
 
 # Modules transverses
-git+https://github.com/uclouvain/osis-document.git@0.9.7#egg=osis_document
+git+https://github.com/uclouvain/osis-document.git@0.9.8#egg=osis_document
 git+https://github.com/uclouvain/osis-signature.git@0.1#egg=osis_signature
 git+https://github.com/uclouvain/osis-notification.git@0.1#egg=osis_notification
 git+https://github.com/uclouvain/osis-async.git@0.5#egg=osis_async
