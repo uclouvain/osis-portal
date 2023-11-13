@@ -31,7 +31,7 @@ import mock
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
 from osis_learning_unit_enrollment_sdk.model.enrollment import Enrollment
 from rest_framework import status
