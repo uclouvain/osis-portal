@@ -33,13 +33,14 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch.dispatcher import receiver, Signal
 from django.utils import translation
 
+
 from base import models as mdl
 from base.business import student as student_bsn
 from base.models.person import Person
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
 
-person_created = Signal()
+person_created = Signal(providing_args=['person'])
 
 GROUP_STUDENTS = "students"
 GROUP_STUDENTS_INTERNSHIP = "internship_students"

@@ -31,7 +31,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from mock import patch
 from rest_framework import status
 
@@ -43,6 +43,7 @@ from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
 from performance.tests.factories.student_performance import StudentPerformanceFactory
 from performance.views import main
+
 
 MULTIPLE_STUDENT_ERROR = _(
     "A problem was detected with your registration : 2 registration id's are "
