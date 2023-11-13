@@ -61,7 +61,7 @@ if __name__ == "__main__":
             enable_commenter=True,
             commenter_options={},
         )
-        URLLib3Instrumentor().instrument(tracer_provider=trace.get_tracer_provider())
+        URLLib3Instrumentor().instrument(tracer_provider=trace.get_tracer_provider(), skip_dep_check=True)
 
     try:
         execute_from_command_line(sys.argv)
