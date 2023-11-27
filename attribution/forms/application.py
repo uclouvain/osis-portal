@@ -28,7 +28,7 @@ from decimal import Decimal
 
 from django import forms
 from django.core.validators import MinValueValidator
-from django.utils.translation import ugettext_lazy as _, pgettext
+from django.utils.translation import gettext_lazy as _, pgettext
 
 from base.forms.base_forms import BootstrapForm
 from base.models.entity_version import search, SAINT_LOUIS_FACULTY_ACRONYMS
