@@ -35,11 +35,12 @@ OPTIONAL_APPS = (
     'attestation',
     'assessments',
     'continuing_education',
-    'admission',
+    # 'admission',
     'osis_document',
     'osis_notification',
     'inscription_aux_cours',
     'learning_unit',
+
 )
 
 OPTIONAL_MIDDLEWARES = ()
