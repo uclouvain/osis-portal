@@ -28,7 +28,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
 
@@ -62,6 +62,7 @@ class Person(SerializableModel):
     phone = models.CharField(max_length=30, blank=True, default='')
     phone_mobile = models.CharField(max_length=30, blank=True, default='')
     language = models.CharField(max_length=30, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE)
+    birth_date = models.DateField(blank=True, null=True)
 
     def username(self):
         return None if self.user is None else self.user.username

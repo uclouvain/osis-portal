@@ -32,7 +32,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from mock import patch
 from osis_reference_sdk.model.academic_calendar import AcademicCalendar
 from osis_reference_sdk.model.paginated_academic_calendars import PaginatedAcademicCalendars

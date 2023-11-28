@@ -27,12 +27,11 @@ import datetime
 
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from attribution.tests.views.online_application.common import OnlineApplicationContextTestMixin
 from base.templatetags.academic_year_display import display_as_academic_year
 from base.tests.factories.person import PersonFactory
-from base.tests.factories.tutor import TutorFactory
 
 
 class TestOutsideEncodingPeriodView(OnlineApplicationContextTestMixin, TestCase):
