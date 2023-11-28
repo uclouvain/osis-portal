@@ -93,7 +93,9 @@
                             <ul class="dropdown-menu">
                                 {% for lang in LANGUAGES%}
                                     {% if lang.0 != LANGUAGE_CODE%}
+                                        {% block lang %}
                                         <li><a href="{% url 'profile_lang' lang.0 %}">{{ lang.0 }}</a></li>
+                                        {% endblock %}
                                     {% endif %}
                                 {% endfor %}
                             </ul>
