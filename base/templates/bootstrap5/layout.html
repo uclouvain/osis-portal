@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+
+{% load static i18n statici18n analytical %}
+
+{% block bootstrap_style %}
+	<link rel="stylesheet" href="{% static 'css/bootstrap5/bootstrap.min.css' %}">
+{% endblock bootstrap_style %}
+
+{% block custom_style %}
+	<link rel="stylesheet" href="{% static 'css/bootstrap5/osis-portal.css' %}">
+{% endblock custom_style %}
+
+{% block style %}{% endblock style %}
+
+{% block datatable_dependencies %}{% include 'bootstrap5/dependencies/datatable.html' %}{% endblock datatable_dependencies %}
+
+{% block body %}
+	<body hx-ext="multi-swap"
+			{% if environment == 'DEV' %} class="flex-column devmode h-100"
+			{% elif environment == 'LOCAL' %} class="localmode d-flex flex-column h-100"
+			{% elif environment == 'QA' %} class="qamode d-flex flex-column h-100"
+			{% elif environment == 'TEST' %} class="testmode d-flex flex-column h-100"
+			{% endif %}>
+
+	{% block header %}
+		<header class="page-header">
+			{% block layout_navbar_top %}
+				{% include 'bootstrap5/blocks/navbar_top.html' %}
+			{% endblock layout_navbar_top %}
+		</header>
+	{% endblock header %}
+
+	{% block badge_environment %}
+		{% if environment == 'DEV' %}
+			<div class="position-relative"><span
+					class="badge bg-warning position-fixed fs-7 fst-italic lh-base">DEV</span></div>
+		{% elif environment == 'LOCAL' %}
+			<div class="position-relative"><span
+					class="badge bg-danger position-fixed fs-7 fst-italic lh-base">Local</span></div>
+		{% elif environment == 'QA' %}
+			<div class="position-relative"><span
+					class="badge bg-success position-fixed fs-7 fst-italic lh-base">QA</span></div>
+		{% elif environment == 'TEST' %}
+			<div class="position-relative"><span
+					class="badge bg-primary position-fixed fs-7 fst-italic lh-base">Test</span></div>
+		{% endif %}
+	{% endblock badge_environment %}
+
+	{% block main %}
+		<div class="d-flex flex-grow-1">
+			{% block main_container %}
+				<div class="container-fluid px-5 mx-5">
+
+					{% block breadcrumbarea %}
+						{% block breadcrumb %}{% endblock %}
+					{% endblock breadcrumbarea %}
+
+					{% block content %}{% endblock %}
+
+					{% block modal %}
+						{{ block.super }} {# FIXME: Créer un composant bootstrap 5 pour modal #}
+					{% endblock %}
+
+				</div>
+			{% endblock main_container %}
+		</div>
+	{% endblock main %}
+
+	{% block footer %}
+		{% include 'bootstrap5/blocks/footer.html' %}
+	{% endblock footer %}
+
+	{% block bootstrap_script %}
+		<script src="{% static 'js/bootstrap5/bootstrap.bundle.min.js' %}"></script>
+		<script src="{% static 'js/bootstrap5/tooltip.js' %}"></script>
+	{% endblock bootstrap_script %}
+
+	{% block custom_script %}{% endblock custom_script %}
+
+	{% block script %}{% endblock script %}
+	</body>
+{% endblock body %}
+
+
