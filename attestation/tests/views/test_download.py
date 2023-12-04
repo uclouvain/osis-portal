@@ -30,7 +30,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.exceptions import MultipleObjectsReturned
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from mock import patch
 from rest_framework import status
 
