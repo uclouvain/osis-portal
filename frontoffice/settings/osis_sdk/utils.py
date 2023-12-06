@@ -26,7 +26,7 @@
 import json
 from enum import Enum
 from functools import wraps
-from typing import Set
+from typing import Set, Union
 
 import requests
 from django.conf import settings
@@ -94,7 +94,7 @@ def api_exception_handler(api_exception_cls):
 
 
 class ApiBusinessException(Exception):
-    def __init__(self, status_code: int, detail: str):
+    def __init__(self, status_code: Union[int, str], detail: str):
         self.status_code = status_code
         self.detail = detail
         super(ApiBusinessException, self).__init__()
@@ -119,7 +119,14 @@ class ApiExceptionHandler:
 
             body_json = json.loads(api_exception.body)
             for key, exceptions in body_json.items():
-                api_business_exceptions |= {ApiBusinessException(**exception) for exception in exceptions}
+                for exception in exceptions:
+                    if isinstance(exception, dict):
+                        api_business_exceptions.add(ApiBusinessException(**exception))
+                    else:
+                        api_business_exceptions.add(ApiBusinessException(
+                            status_code=str(exception),
+                            detail=str(exception),
+                        ))
             raise MultipleApiBusinessException(exceptions=api_business_exceptions)
         elif api_exception.status == HttpResponseForbidden.status_code:
             try:
