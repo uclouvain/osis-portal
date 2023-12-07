@@ -28,6 +28,15 @@ from types import SimpleNamespace
 from django.test import SimpleTestCase
 
 from base.utils.api_utils import api_paginated_response, gather_all_api_paginated_results
+from frontoffice.settings.osis_sdk.utils import ApiExceptionHandler, MultipleApiBusinessException, ApiBusinessException
+
+
+class ApiExceptionMock(Exception):
+
+    def __init__(self, status=None, reason=None, body=None):
+        self.status = status
+        self.reason = reason
+        self.body = body
 
 
 class SDKUtilsTestCase(SimpleTestCase):
@@ -52,3 +61,16 @@ class SDKUtilsTestCase(SimpleTestCase):
         paginated_response = gather_all_api_paginated_results(get_api_response)()
         self.assertEqual(get_api_response.counter, 2)
         self.assertEqual(len(paginated_response.results), paginated_response.count)
+
+    def test_api_exception_handler_should_handle_both_dict_and_str_exceptions(self):
+        api_exception = ApiExceptionMock(
+            status=400,
+            body='{"field": [{"status_code": 12, "detail": "foo"}], "field2": ["foobar"]}'
+        )
+
+        with self.assertRaises(MultipleApiBusinessException) as cm:
+            ApiExceptionHandler().handle(api_exception)
+
+        exceptions = cm.exception.exceptions
+        self.assertIn(ApiBusinessException(status_code=12, detail="foo"), exceptions)
+        self.assertIn(ApiBusinessException(status_code="foobar", detail="foobar"), exceptions)
