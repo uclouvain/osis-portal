@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import base64
 import json
 from enum import Enum
 from functools import wraps
@@ -70,11 +71,21 @@ def build_mandatory_auth_headers(person):
     """
     return {
         'accept_language': person.language or settings.LANGUAGE_CODE,
-        'x_user_first_name': person.first_name or '',
-        'x_user_last_name':  person.last_name or '',
+        'x_user_first_name': convert_str_to_base64_str(person.first_name) if person.first_name else '',
+        'x_user_last_name':  convert_str_to_base64_str(person.last_name) if person.last_name else '',
         'x_user_email': person.user.email or '',
         'x_user_global_id': person.global_id,
     }
+
+
+def convert_str_to_base64_str(s: str) -> str:
+    """
+    This utility allow to convert an str to a base64 represtention of this str (Allow to bypass char issues)
+    but need to be decode on the server-side !
+    """
+    return base64.b64encode(
+        bytes(s, 'utf-8')
+    ).decode('utf-8')
 
 
 def convert_api_enum(api_enum_cls) -> Enum:
