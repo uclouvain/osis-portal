@@ -1,4 +1,6 @@
 {% extends "inscription_evaluation/layout.html" %}
+{% load academic_year_display %}
+{% load static i18n %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -23,3 +25,89 @@
     * at the root of the source code of this program.  If not,
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
+
+{% block breadcrumb %}
+    <li>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</li>
+    <li class="active">{% trans 'Course choice' context 'inscription-evaluation' %}</li>
+{% endblock %}
+
+{% block page_header %}
+    <div class="page-header">
+        <h2>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</h2>
+    </div>
+{% endblock %}
+
+{% block page_body %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>{% trans 'Last name' context 'inscription-evaluation' %}, {% trans 'First name' context 'inscription-evaluation' %}</label>
+                    <br>
+                    {{ etudiant.nom }}, {{ etudiant.prenom }}
+                </div>
+                <div class="col-md-6">
+                    <label>{% trans 'Noma' context 'inscription-evaluation' %}</label>
+                    <br>
+                    {{ etudiant.noma }}
+                </div>
+            </div>
+            <br>
+            {% if formations %}
+                <div class="alert alert-info" style="display:inline-block;">
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                    {% trans "You can view all assessment registration statements in the 'My annual program and my marks' summary." %}
+                </div>
+                <div class="alert alert-info" style="display:inline-block;">
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                    {% trans 'Click on the code of the course (acronym) for which you want to register for assessments.' %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning" style="display:inline-block;">
+                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
+                    {% blocktrans with annee_academique=periode_inscription.annee|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }} academic year.{% endblocktrans %}
+                </div>
+            {% endif %}
+            <div class="row">
+                {% if formations %}
+                    <table id="table_exam_enrollment_offer_choice" class="table table-striped table-hover">
+                        <tr>
+                            <th>{% trans 'Year' context 'inscription-evaluation' %}</th>
+                            <th>{% trans 'Acronym' context 'inscription-evaluation' %}</th>
+                            <th>{% trans 'Course' context 'inscription-evaluation' %}</th>
+                            <th></th>
+                        </tr>
+                        {% for formation in formations %}
+                            <tr>
+                                <td>{{ periode_inscription.annee|display_as_academic_year }}</td>
+                                <td>
+                                    <a>
+                                        {{ formation.sigle }}
+                                    </a>
+                                </td>
+                                <td>{{ formation.intitule }}</td>
+                                <td>
+                                    {% if formation.peut_inscrire_aux_evaluations %}
+                                        <i class="fa-solid fa-lock-open fa-info"></i>
+                                        {% if periode_inscription.numero_session == 1 %}
+                                            <em>{% blocktrans with date_fermeture=periode_inscription.date_fermeture %}Registration for online assessments for the January session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                        {% elif periode_inscription.numero_session == 2 %}
+                                            <em>{% blocktrans with date_fermeture=periode_inscription.date_fermeture %}Registration for online assessments for the June session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                        {% elif periode_inscription.numero_session == 3 %}
+                                            <em>{% blocktrans with date_fermeture=periode_inscription.date_fermeture %}Registration for online assessments for the September session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="fa-solid fa-lock fa-info"></i>
+                                        {% for raison in formation.raisons_peut_pas_inscrire %}
+                                            <em>{{ raison|safe }} </em>
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

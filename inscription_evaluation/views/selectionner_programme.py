@@ -23,8 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
+from base.models.person import Person
+from inscription_evaluation.services.mes_programmes import MesProgrammesService
 
 
 class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -34,7 +38,53 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
 
     name = 'selectionner-programme'
 
+    @cached_property
+    def person(self) -> 'Person':
+        return Person.objects.get(user=self.request.user)
+
+    @cached_property
+    def etudiant(self):
+        # return self.mes_programmes.etudiant
+        return {
+            "noma": "12345678",
+            "nom": "Smith",
+            "prenom": "Charles",
+        }
+
+    @cached_property
+    def periode_inscription(self):
+        # return self.mes_programmes.periode_inscription
+        return {
+            "annee": 2023,
+            "numero_session": 1,
+            "date_ouverture": "2023-12-11",
+            "date_fermeture": "2023-12-11"
+        }
+
+    @cached_property
+    def formations(self):
+        # return self.mes_programmes.formations
+        return [
+            {
+              "code_programme": "LDROI100B",
+              "sigle": "DROI1BA",
+              "intitule": "Bachelier en droit",
+              "peut_inscrire_aux_evaluations": False,
+              "raisons_peut_pas_inscrire": [
+                "L'inscription aux évaluations en ligne n'est pas ouverte pour cette formation."
+              ]
+            }
+        ]
+
+    @cached_property
+    def mes_programmes(self):
+        # return MesProgrammesService().recuperer(self.person)
+        return None
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
+            'etudiant': self.etudiant,
+            'periode_inscription': self.periode_inscription,
+            'formations': self.formations,
         }

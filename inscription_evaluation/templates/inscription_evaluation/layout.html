@@ -24,9 +24,10 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-{% block title %}{% trans 'My exams enrollment' %}{% endblock title %}
+{% block title %}{% trans 'My exams enrollment' context 'inscription-evaluation' %}{% endblock title %}
 
 {% block style %}
+    <link rel="stylesheet" href="{% static 'inscription_evaluation/css/selectionner_programme.css' %}">
 {% endblock %}
 
 {% block breadcrumb_area %}

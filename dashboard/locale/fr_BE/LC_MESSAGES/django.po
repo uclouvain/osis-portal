@@ -98,7 +98,7 @@ msgstr "Gérer mes fiches descriptives"
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
 
-msgctxt "inscription_evaluation"
+msgctxt "inscription-evaluation"
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux évaluations"
 
@@ -217,3 +217,7 @@ msgstr "Mon programme annuel et mes notes"
 
 msgid "outside UCLouvain"
 msgstr "en dehors du réseau de l'UCLouvain"
+
+#~ msgctxt "inscription_evaluation"
+#~ msgid "Manage my exam registration"
+#~ msgstr "Gérer mon inscription aux évaluations"

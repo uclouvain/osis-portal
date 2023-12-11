@@ -227,7 +227,7 @@ class Home(LoginRequiredMixin, TemplateView):
                         'inscription-evaluation:selectionner-programme'
                     ) if 'inscription_evaluation' in settings.INSTALLED_APPS else "#",
                     icon='fa fa-book',
-                    description=pgettext('inscription_evaluation', 'Manage my exam registration'),
+                    description=pgettext('inscription-evaluation', 'Manage my exam registration'),
                     VPN=False,
                     app='inscription_evaluation',
                     has_perm=self.request.user.has_perm('base.is_student')

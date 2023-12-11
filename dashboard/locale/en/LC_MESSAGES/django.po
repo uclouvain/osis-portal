@@ -92,7 +92,7 @@ msgstr ""
 msgid "Manage my exam registration"
 msgstr ""
 
-msgctxt "inscription_evaluation"
+msgctxt "inscription-evaluation"
 msgid "Manage my exam registration"
 msgstr ""
 
