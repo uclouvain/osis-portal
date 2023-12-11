@@ -32,7 +32,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
 from django.views.generic import TemplateView
 
 from attribution.services.application import ApplicationService
@@ -219,7 +219,19 @@ class Home(LoginRequiredMixin, TemplateView):
                             self.request.user.has_perm('base.is_student')
                             and self.request.user.groups.filter(name='internship_students').exists()
                     )
-                )
+                ),
+                Tile(
+                    column='first',
+                    title=_('My exams enrollment'),
+                    url=reverse(
+                        'inscription-evaluation:selectionner-programme'
+                    ) if 'inscription_evaluation' in settings.INSTALLED_APPS else "#",
+                    icon='fa fa-book',
+                    description=pgettext('inscription_evaluation', 'Manage my exam registration'),
+                    VPN=False,
+                    app='inscription_evaluation',
+                    has_perm=self.request.user.has_perm('base.is_student')
+                ),
             ]
         )
 

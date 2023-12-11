@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -72,6 +72,8 @@ if 'inscription_aux_cours' in settings.INSTALLED_APPS:
     urlpatterns += (url(r'^inscription_aux_cours/', include('inscription_aux_cours.urls')),)
 if 'learning_unit' in settings.INSTALLED_APPS:
     urlpatterns += (url(r'^learning_unit/', include('learning_unit.urls')),)
+if 'inscription_evaluation' in settings.INSTALLED_APPS:
+    urlpatterns += (url(r'^inscription_evaluation/', include('inscription_evaluation.urls')),)
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'
