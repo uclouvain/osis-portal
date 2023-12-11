@@ -23,10 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import base64
 import json
 from enum import Enum
 from functools import wraps
-from typing import Set
+from typing import Set, Union
 
 import requests
 from django.conf import settings
@@ -70,11 +71,21 @@ def build_mandatory_auth_headers(person):
     """
     return {
         'accept_language': person.language or settings.LANGUAGE_CODE,
-        'x_user_first_name': person.first_name or '',
-        'x_user_last_name':  person.last_name or '',
+        'x_user_first_name': convert_str_to_base64_str(person.first_name) if person.first_name else '',
+        'x_user_last_name':  convert_str_to_base64_str(person.last_name) if person.last_name else '',
         'x_user_email': person.user.email or '',
         'x_user_global_id': person.global_id,
     }
+
+
+def convert_str_to_base64_str(s: str) -> str:
+    """
+    This utility allow to convert an str to a base64 represtention of this str (Allow to bypass char issues)
+    but need to be decode on the server-side !
+    """
+    return base64.b64encode(
+        bytes(s, 'utf-8')
+    ).decode('utf-8')
 
 
 def convert_api_enum(api_enum_cls) -> Enum:
@@ -94,7 +105,7 @@ def api_exception_handler(api_exception_cls):
 
 
 class ApiBusinessException(Exception):
-    def __init__(self, status_code: int, detail: str):
+    def __init__(self, status_code: Union[int, str], detail: str):
         self.status_code = status_code
         self.detail = detail
         super(ApiBusinessException, self).__init__()
@@ -119,7 +130,14 @@ class ApiExceptionHandler:
 
             body_json = json.loads(api_exception.body)
             for key, exceptions in body_json.items():
-                api_business_exceptions |= {ApiBusinessException(**exception) for exception in exceptions}
+                for exception in exceptions:
+                    if isinstance(exception, dict):
+                        api_business_exceptions.add(ApiBusinessException(**exception))
+                    else:
+                        api_business_exceptions.add(ApiBusinessException(
+                            status_code=str(exception),
+                            detail=str(exception),
+                        ))
             raise MultipleApiBusinessException(exceptions=api_business_exceptions)
         elif api_exception.status == HttpResponseForbidden.status_code:
             try:
