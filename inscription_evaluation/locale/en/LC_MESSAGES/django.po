@@ -69,6 +69,10 @@ msgid "Credits for the course unit are acquired"
 msgstr ""
 
 msgctxt "inscription-evaluation"
+msgid "Evaluation registration summary"
+msgstr ""
+
+msgctxt "inscription-evaluation"
 msgid "Final note"
 msgstr ""
 
@@ -86,6 +90,10 @@ msgid "Jan"
 msgstr ""
 
 msgctxt "inscription-evaluation"
+msgid "January"
+msgstr ""
+
+msgctxt "inscription-evaluation"
 msgid "June"
 msgstr ""
 
@@ -95,6 +103,9 @@ msgstr ""
 
 msgctxt "inscription-evaluation"
 msgid "Legend"
+msgstr ""
+
+msgid "Modify my proposal"
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -149,6 +160,13 @@ msgctxt "inscription-evaluation"
 msgid "Sept"
 msgstr ""
 
+msgctxt "inscription-evaluation"
+msgid "September"
+msgstr ""
+
+msgid "Submit my exams enrollment"
+msgstr ""
+
 msgid ""
 "The size of your screen does not allow optimal navigation within the form. "
 "If possible, please use a larger screen for easier navigation."
@@ -166,6 +184,42 @@ msgstr ""
 msgid ""
 "You are not registered for any course for the %(annee_academique)s academic "
 "year."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are not registered for any of the %(nombre_evaluation)s evaluation "
+"organized for the January session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are not registered for any of the %(nombre_evaluation)s evaluation "
+"organized for the June session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are not registered for any of the %(nombre_evaluation)s evaluation "
+"organized for the September session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"evaluation organized for the January session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"evaluation organized for the June session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"evaluation organized for the September session."
 msgstr ""
 
 msgid "You are registered for all the evaluations ticked below."
@@ -191,4 +245,9 @@ msgstr ""
 
 msgctxt "inscription-evaluation"
 msgid "Your faculty contact"
+msgstr ""
+
+msgid ""
+"Your registrations are saved, but you can modify them as long as you have "
+"not submitted them."
 msgstr ""

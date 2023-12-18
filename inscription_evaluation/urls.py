@@ -25,8 +25,11 @@
 ##############################################################################
 from django.urls import path, include
 
+from inscription_evaluation.views.demande_inscription import EnregistrerDemandeInscriptionView
 from inscription_evaluation.views.formulaire_inscription import FormulaireInscriptionView
+from inscription_evaluation.views.recapitulatif import RecapitulatifView
 from inscription_evaluation.views.selectionner_programme import SelectionnerProgrammeView
+from inscription_evaluation.views.soumettre_demande_inscription import SoumettreDemandeInscriptionView
 
 app_name = 'inscription-evaluation'
 urlpatterns = [
@@ -36,6 +39,17 @@ urlpatterns = [
         include(
             [
                 path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),
+                path(
+                    'enregistrer_proposition_inscriptions_evaluations/',
+                    EnregistrerDemandeInscriptionView.as_view(),
+                    name=EnregistrerDemandeInscriptionView.name,
+                ),
+                path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
+                path(
+                    'soumettre_demande/',
+                    SoumettreDemandeInscriptionView.as_view(),
+                    name=SoumettreDemandeInscriptionView.name
+                ),
             ]
         ),
     ),

@@ -44,6 +44,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             "annee": 2023,
             "numero_session": 3
         }
+
     @cached_property
     def etudiant(self):
 #         return self.formulaire.etudiant
@@ -52,6 +53,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             "nom": "Smith",
             "prenom": "Charles"
         }
+
     @cached_property
     def formation(self):
 #         return self.formulaire.formation
@@ -60,6 +62,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             "sigle": "DROI1BA",
             "intitule": "Bachelier en droit"
         }
+
     @cached_property
     def contact_faculte(self):
 #         return self.formulaire.contact_faculte
@@ -69,6 +72,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             "en_tete": "Secrétariat du 1er cycle ESPO",
             "email": "christine.vandiest@uclouvain.be"
         }
+
     @cached_property
     def inscriptions(self):
 #         return self.formulaire.inscriptions
