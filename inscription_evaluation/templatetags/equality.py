@@ -23,20 +23,11 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path, include
+from django import template
 
-from inscription_evaluation.views.formulaire_inscription import FormulaireInscriptionView
-from inscription_evaluation.views.selectionner_programme import SelectionnerProgrammeView
+register = template.Library()
 
-app_name = 'inscription-evaluation'
-urlpatterns = [
-    path('',SelectionnerProgrammeView.as_view(), name=SelectionnerProgrammeView.name),
-    path(
-        '<str:code_programme>/',
-        include(
-            [
-                path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),
-            ]
-        ),
-    ),
-]
+
+@register.filter
+def equal(value, other):
+    return value == other

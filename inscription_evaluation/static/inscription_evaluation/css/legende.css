@@ -1,0 +1,7 @@
+[aria-expanded="false"] .expanded {
+  display: none;
+}
+
+[aria-expanded="true"] .unexpanded {
+  display: none;
+}

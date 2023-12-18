@@ -43,6 +43,11 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         return Person.objects.get(user=self.request.user)
 
     @cached_property
+    def annee(self):
+        # return self.mes_programmes.annee_de_travail
+        return 2023
+
+    @cached_property
     def etudiant(self):
         # return self.mes_programmes.etudiant
         return {
@@ -52,27 +57,37 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         }
 
     @cached_property
-    def periode_inscription(self):
-        # return self.mes_programmes.periode_inscription
-        return {
-            "annee": 2023,
-            "numero_session": 1,
-            "date_ouverture": "2023-12-11",
-            "date_fermeture": "2023-12-11"
-        }
-
-    @cached_property
     def formations(self):
         # return self.mes_programmes.formations
         return [
             {
-              "code_programme": "LDROI100B",
-              "sigle": "DROI1BA",
-              "intitule": "Bachelier en droit",
-              "peut_inscrire_aux_evaluations": False,
-              "raisons_peut_pas_inscrire": [
-                "L'inscription aux évaluations en ligne n'est pas ouverte pour cette formation."
+                "code_programme": "LDROI100B",
+                "sigle": "DROI1BA",
+                "intitule": "Bachelier en droit",
+                "periode_inscription": {
+                    "annee": 2023,
+                    "numero_session": 1,
+                    "date_ouverture": "2023-12-11",
+                    "date_fermeture": "2023-12-11",
+                },
+                "peut_inscrire_aux_evaluations": False,
+                "raisons_peut_pas_inscrire": [
+                    "L'inscription aux évaluations en ligne n'est pas ouverte pour cette formation."
               ]
+            },
+            {
+                "code_programme": "LECGE100B",
+                "sigle": "ECGE1BA",
+                "intitule": "Bachelier en sciences économiques et de gestion",
+                "periode_inscription": {
+                    "annee": 2023,
+                    "numero_session": 1,
+                    "date_ouverture": "2023-12-11",
+                    "date_fermeture": "2023-12-11",
+                },
+                "peut_inscrire_aux_evaluations": True,
+                "raisons_peut_pas_inscrire": [
+                ]
             }
         ]
 
@@ -84,7 +99,7 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
+            'annee': self.annee,
             'etudiant': self.etudiant,
-            'periode_inscription': self.periode_inscription,
             'formations': self.formations,
         }

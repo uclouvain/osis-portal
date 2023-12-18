@@ -1,7 +1,6 @@
 {% extends "inscription_evaluation/layout.html" %}
 {% load academic_year_display %}
 {% load static i18n %}
-
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -25,6 +24,10 @@
     * at the root of the source code of this program.  If not,
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'inscription_evaluation/css/selectionner_programme.css' %}">
+{% endblock %}
 
 {% block breadcrumb %}
     <li>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</li>
@@ -56,16 +59,16 @@
             {% if formations %}
                 <div class="alert alert-info" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans "You can view all assessment registration statements in the 'My annual program and my marks' summary." %}
+                    {% trans "You can view all evaluation registration statements in the 'My annual program and my marks' summary." %}
                 </div>
                 <div class="alert alert-info" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans 'Click on the code of the course (acronym) for which you want to register for assessments.' %}
+                    {% trans 'Click on the code of the course (acronym) for which you want to register for evaluations.' %}
                 </div>
             {% else %}
                 <div class="alert alert-warning" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% blocktrans with annee_academique=periode_inscription.annee|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }} academic year.{% endblocktrans %}
+                    {% blocktrans with annee_academique=annee|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }} academic year.{% endblocktrans %}
                 </div>
             {% endif %}
             <div class="row">
@@ -79,9 +82,9 @@
                         </tr>
                         {% for formation in formations %}
                             <tr>
-                                <td>{{ periode_inscription.annee|display_as_academic_year }}</td>
+                                <td>{{ formation.periode_inscription.annee|display_as_academic_year }}</td>
                                 <td>
-                                    <a>
+                                    <a href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">
                                         {{ formation.sigle }}
                                     </a>
                                 </td>
@@ -89,17 +92,17 @@
                                 <td>
                                     {% if formation.peut_inscrire_aux_evaluations %}
                                         <i class="fa-solid fa-lock-open fa-info"></i>
-                                        {% if periode_inscription.numero_session == 1 %}
-                                            <em>{% blocktrans with date_fermeture=periode_inscription.date_fermeture %}Registration for online assessments for the January session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
-                                        {% elif periode_inscription.numero_session == 2 %}
-                                            <em>{% blocktrans with date_fermeture=periode_inscription.date_fermeture %}Registration for online assessments for the June session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
-                                        {% elif periode_inscription.numero_session == 3 %}
-                                            <em>{% blocktrans with date_fermeture=periode_inscription.date_fermeture %}Registration for online assessments for the September session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                        {% if formation.periode_inscription.numero_session == 1 %}
+                                            <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the January session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                        {% elif formation.periode_inscription.numero_session == 2 %}
+                                            <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the June session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                        {% elif formation.periode_inscription.numero_session == 3 %}
+                                            <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the September session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
                                         {% endif %}
                                     {% else %}
                                         <i class="fa-solid fa-lock fa-info"></i>
                                         {% for raison in formation.raisons_peut_pas_inscrire %}
-                                            <em>{{ raison|safe }} </em>
+                                            <em>{{ raison|safe }}</em>
                                         {% endfor %}
                                     {% endif %}
                                 </td>

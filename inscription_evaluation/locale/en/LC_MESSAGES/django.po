@@ -17,12 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgctxt "inscription-evaluation"
+msgid "Academic year"
+msgstr ""
+
+msgctxt "inscription-evaluation"
 msgid "Acronym"
 msgstr ""
 
 msgid ""
 "Click on the code of the course (acronym) for which you want to register for "
-"assessments."
+"evaluations."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Code"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Complement"
+msgstr ""
+
+msgid "Counts toward the degree"
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -33,12 +48,53 @@ msgctxt "inscription-evaluation"
 msgid "Course choice"
 msgstr ""
 
+msgid "Course unit of the complementary module"
+msgstr ""
+
+msgid "Course unit that counts toward the degree (block 2 or 3)"
+msgstr ""
+
+msgid "Course unit that does not count towards the degree"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Credited"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Credits"
+msgstr ""
+
+msgid "Credits for the course unit are acquired"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Final note"
+msgstr ""
+
 msgctxt "inscription-evaluation"
 msgid "First name"
 msgstr ""
 
+msgid ""
+"If this is suitable for you, please continue and submit your evaluation "
+"registration."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Jan"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "June"
+msgstr ""
+
 msgctxt "inscription-evaluation"
 msgid "Last name"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Legend"
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -49,22 +105,57 @@ msgctxt "inscription-evaluation"
 msgid "Noma"
 msgstr ""
 
+msgid "Non-degree course units"
+msgstr ""
+
+msgid "Note resulting from exemption test"
+msgstr ""
+
+msgid "Re-registered for a evaluation"
+msgstr ""
+
+msgid "Registered for a evaluation"
+msgstr ""
+
+msgid "Registered for a partial evaluation"
+msgstr ""
+
 #, python-format
 msgid ""
-"Registration for online assessments for the January session is open until "
+"Registration for online evaluations for the January session is open until "
 "%(date_fermeture)s for this course."
 msgstr ""
 
 #, python-format
 msgid ""
-"Registration for online assessments for the June session is open until "
+"Registration for online evaluations for the June session is open until "
 "%(date_fermeture)s for this course."
 msgstr ""
 
 #, python-format
 msgid ""
-"Registration for online assessments for the September session is open until "
+"Registration for online evaluations for the September session is open until "
 "%(date_fermeture)s for this course."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Return to initial screen"
+msgstr ""
+
+msgid "Save and continue to the summary of registrations"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Sept"
+msgstr ""
+
+msgid ""
+"The size of your screen does not allow optimal navigation within the form. "
+"If possible, please use a larger screen for easier navigation."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Title"
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -77,7 +168,27 @@ msgid ""
 "year."
 msgstr ""
 
+msgid "You are registered for all the evaluations ticked below."
+msgstr ""
+
 msgid ""
-"You can view all assessment registration statements in the 'My annual "
+"You can modify your evaluation entries as long as you have not submitted."
+msgstr ""
+
+msgid ""
+"You can view all evaluation registration statements in the 'My annual "
 "program and my marks' summary."
+msgstr ""
+
+msgid "You cannot register for any evaluation for the January session."
+msgstr ""
+
+msgid "You cannot register for any evaluation for the June session."
+msgstr ""
+
+msgid "You cannot register for any evaluation for the September session."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Your faculty contact"
 msgstr ""

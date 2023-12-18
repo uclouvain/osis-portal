@@ -1,0 +1,75 @@
+{% load i18n static %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'inscription_evaluation/css/legende.css' %}">
+{% endblock %}
+
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="legende">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseLegende" aria-expanded="false" aria-controls="collapseLegende">
+            <i class="fa-solid fa-chevron-down unexpanded"></i> <i class="fa-solid fa-chevron-up expanded"></i> {% trans 'Legend' context 'inscription-evaluation' %}
+        </a>
+    </div>
+     <div id="collapseLegende" class="panel-collapse collapse" role="tabpanel" aria-labelledby="legende">
+        <div class="panel-body">
+            <table class="table table-condensed table-borderless">
+                <tbody>
+                    <tr>
+                        <td>{% trans 'Counts toward the degree' %}</td>
+                        <td>{% trans 'Course unit that counts toward the degree (block 2 or 3)' %}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Complement' context 'inscription-evaluation' %}</td>
+                        <td>{% trans 'Course unit of the complementary module' %}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans 'Non-degree course units' %}</td>
+                        <td>{% trans 'Course unit that does not count towards the degree' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Part</td>
+                        <td>{% trans 'Registered for a partial evaluation' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Insc</td>
+                        <td>{% trans 'Registered for a evaluation' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Réinsc</td>
+                        <td>{% trans 'Re-registered for a evaluation' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Test</td>
+                        <td>{% trans 'Note resulting from exemption test' %}</td>
+                    </tr>
+                    <tr>
+                        <td>Créd.</td>
+                        <td>{% trans 'Credits for the course unit are acquired' %}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

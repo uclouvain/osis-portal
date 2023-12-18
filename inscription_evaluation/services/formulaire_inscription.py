@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,20 +23,15 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path, include
+from functools import partial
+from base.models.person import Person
+from base.services.utils import call_api
 
-from inscription_evaluation.views.formulaire_inscription import FormulaireInscriptionView
-from inscription_evaluation.views.selectionner_programme import SelectionnerProgrammeView
+class FormulaireInscriptionService:
 
-app_name = 'inscription-evaluation'
-urlpatterns = [
-    path('',SelectionnerProgrammeView.as_view(), name=SelectionnerProgrammeView.name),
-    path(
-        '<str:code_programme>/',
-        include(
-            [
-                path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),
-            ]
-        ),
-    ),
-]
+    @staticmethod
+    def recuperer(person: 'Person', code_programme: str):
+        return _formulaire_api_call(person,'formulaire', code_programme=code_programme)
+
+# TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
+_formulaire_api_call = partial(call_api, None, None, None)

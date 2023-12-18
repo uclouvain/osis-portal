@@ -1,5 +1,5 @@
-{% extends "layout.html" %}
 {% load static i18n %}
+
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -23,35 +23,11 @@
     * at the root of the source code of this program.  If not,
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
-{% block title %}{% trans 'My exams enrollment' context 'inscription-evaluation' %}{% endblock title %}
 
-{% block style %}
-    <link rel="stylesheet" href="{% static 'inscription_evaluation/css/common.css' %}">
-{% endblock %}
-
-{% block breadcrumb_area %}
-    <ol class="breadcrumb">
-        <li>
-            <a href="{% url 'dashboard_home' %}" id="lnk_home_osis">
-                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-            </a>
-        </li>
-        {% block breadcrumb %}
-        {% endblock %}
-    </ol>
-{% endblock %}
-
-{% block content %}
-    {% block page_header %} {% endblock %}
-
-    <div id="template-messages-container">
-        {% include "template_messages.html" %}
+{% if contact_faculte %}
+    <div class="center">
+        <p class="bg-info">
+            <b>{% trans "Your faculty contact" context 'inscription-evaluation' %}: </b> {{ contact_faculte.en_tete }} - {{ contact_faculte.email }}
+        </p>
     </div>
-
-    {% block page_body %} {% endblock %}
-
-
-    <div id="overlay">
-        <div id="loader"></div>
-    </div>
-{% endblock %}
+{% endif %}

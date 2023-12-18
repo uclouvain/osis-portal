@@ -17,15 +17,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgctxt "inscription-evaluation"
+msgid "Academic year"
+msgstr "Année académique"
+
+msgctxt "inscription-evaluation"
 msgid "Acronym"
 msgstr "Sigle"
 
 msgid ""
 "Click on the code of the course (acronym) for which you want to register for "
-"assessments."
+"evaluations."
 msgstr ""
 " Cliquez sur le sigle de la formation pour laquelle vous désirez vous "
 "inscrire aux évaluations. "
+
+msgctxt "inscription-evaluation"
+msgid "Code"
+msgstr "Code"
+
+msgctxt "inscription-evaluation"
+msgid "Complement"
+msgstr "Complément"
+
+msgid "Counts toward the degree"
+msgstr "Poursuite de cycle"
 
 msgctxt "inscription-evaluation"
 msgid "Course"
@@ -35,13 +50,57 @@ msgctxt "inscription-evaluation"
 msgid "Course choice"
 msgstr "Choix de la formation"
 
+msgid "Course unit of the complementary module"
+msgstr "Unité d'enseignement du module complémentaire"
+
+msgid "Course unit that counts toward the degree (block 2 or 3)"
+msgstr "Unité d'enseignement de la poursuite de cycle (bloc 2 ou 3)"
+
+msgid "Course unit that does not count towards the degree"
+msgstr ""
+"Unité d'enseignement qui ne compte pas pour la progression dans le cycle"
+
+msgctxt "inscription-evaluation"
+msgid "Credited"
+msgstr "Crédité"
+
+msgctxt "inscription-evaluation"
+msgid "Credits"
+msgstr "Crédits"
+
+msgid "Credits for the course unit are acquired"
+msgstr "Les crédits de l'unité d'enseignement sont acquis"
+
+msgctxt "inscription-evaluation"
+msgid "Final note"
+msgstr "Note finale"
+
 msgctxt "inscription-evaluation"
 msgid "First name"
 msgstr "Prénom"
 
+msgid ""
+"If this is suitable for you, please continue and submit your evaluation "
+"registration."
+msgstr ""
+"Si cela vous convient, veuillez poursuivre et soumettre votre inscription "
+"aux évaluations."
+
+msgctxt "inscription-evaluation"
+msgid "Jan"
+msgstr "Jan"
+
+msgctxt "inscription-evaluation"
+msgid "June"
+msgstr "Juin"
+
 msgctxt "inscription-evaluation"
 msgid "Last name"
 msgstr "Nom"
+
+msgctxt "inscription-evaluation"
+msgid "Legend"
+msgstr "Légende"
 
 msgctxt "inscription-evaluation"
 msgid "My exams enrollment"
@@ -51,9 +110,24 @@ msgctxt "inscription-evaluation"
 msgid "Noma"
 msgstr "Noma"
 
+msgid "Non-degree course units"
+msgstr "Hors Progression"
+
+msgid "Note resulting from exemption test"
+msgstr "Note résultant d'un test dispensatoire"
+
+msgid "Re-registered for a evaluation"
+msgstr "Réinscrit.e à une évaluation"
+
+msgid "Registered for a evaluation"
+msgstr "Inscrit.e à une évaluation"
+
+msgid "Registered for a partial evaluation"
+msgstr "Inscrit.e à une évaluation partielle"
+
 #, python-format
 msgid ""
-"Registration for online assessments for the January session is open until "
+"Registration for online evaluations for the January session is open until "
 "%(date_fermeture)s for this course."
 msgstr ""
 "L'inscription aux évaluations en ligne pour la session de janvier est "
@@ -61,7 +135,7 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Registration for online assessments for the June session is open until "
+"Registration for online evaluations for the June session is open until "
 "%(date_fermeture)s for this course."
 msgstr ""
 "L'inscription aux évaluations en ligne pour la session de juin est "
@@ -69,11 +143,34 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Registration for online assessments for the September session is open until "
+"Registration for online evaluations for the September session is open until "
 "%(date_fermeture)s for this course."
 msgstr ""
 "L'inscription aux évaluations en ligne pour la session de septembre est "
 "accessible jusqu'au %(date_fermeture)s pour cette formation."
+
+msgctxt "inscription-evaluation"
+msgid "Return to initial screen"
+msgstr "Retour à l'écran initial"
+
+msgid "Save and continue to the summary of registrations"
+msgstr "Enregistrer et poursuivre vers le récapitulatif des inscriptions"
+
+msgctxt "inscription-evaluation"
+msgid "Sept"
+msgstr "Sept"
+
+msgid ""
+"The size of your screen does not allow optimal navigation within the form. "
+"If possible, please use a larger screen for easier navigation."
+msgstr ""
+"La taille de votre écran ne permet pas une navigation optimale au sein du "
+"formulaire. Veuillez utiliser, si possible, un écran plus grand pour une "
+"navigation plus aisée."
+
+msgctxt "inscription-evaluation"
+msgid "Title"
+msgstr "Intitulé"
 
 msgctxt "inscription-evaluation"
 msgid "Year"
@@ -87,9 +184,35 @@ msgstr ""
 "Vous n'êtes inscrit.e à aucune formation pour l'année académique "
 "%(annee_academique)s."
 
+msgid "You are registered for all the evaluations ticked below."
+msgstr "Vous êtes inscrit.e à toutes les évaluations cochées ci-dessous."
+
 msgid ""
-"You can view all assessment registration statements in the 'My annual "
+"You can modify your evaluation entries as long as you have not submitted."
+msgstr ""
+"Vous pouvez modifier vos inscriptions aux évaluations tant que vous n'avez "
+"pas soumis."
+
+msgid ""
+"You can view all evaluation registration statements in the 'My annual "
 "program and my marks' summary."
 msgstr ""
 "Vous pouvez consulter l'ensemble des états d'inscriptions aux évaluations "
 "dans le récapitulatifs 'Mon programme annuel et mes notes'."
+
+msgid "You cannot register for any evaluation for the January session."
+msgstr ""
+"Vous ne pouvez vous inscrire à aucune évaluation pour la session de janvier."
+
+msgid "You cannot register for any evaluation for the June session."
+msgstr ""
+"Vous ne pouvez vous inscrire à aucune évaluation pour la session de juin."
+
+msgid "You cannot register for any evaluation for the September session."
+msgstr ""
+"Vous ne pouvez vous inscrire à aucune évaluation pour la session de "
+"septembre."
+
+msgctxt "inscription-evaluation"
+msgid "Your faculty contact"
+msgstr "Votre contact en faculté"
