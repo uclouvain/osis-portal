@@ -31,7 +31,11 @@ class RecapitulatifService:
 
     @staticmethod
     def recuperer(person: 'Person', code_programme: str):
-        return _recapitulatif_api_call(person,'recapitulatif', code_programme=code_programme)
+        return _recapitulatif_api_call(person,'get_recapitulatif', code_programme=code_programme)
+
+    @staticmethod
+    def soumettre(person: 'Person', code_programme: str):
+        return _recapitulatif_api_call(person,'soumettre_formulaire', code_programme=code_programme)
 
 # TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
 _recapitulatif_api_call = partial(call_api, None, None, None)

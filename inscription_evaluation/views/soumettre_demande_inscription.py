@@ -28,8 +28,12 @@ from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_GET
 from django.views.generic import View
+from django.utils.translation import gettext_lazy as _
 
+from continuing_education.views.common import display_error_messages, display_success_messages
+from inscription_evaluation.services.recapitulatif import RecapitulatifService
 from inscription_evaluation.views.common import InscriptionEvaluationViewMixin
+from base.services.utils import ServiceException
 
 
 @method_decorator(require_GET, name='dispatch')
@@ -40,4 +44,24 @@ class SoumettreDemandeInscriptionView(LoginRequiredMixin, InscriptionEvaluationV
     template_name = "inscription_evaluation/blocks/soumettre_demande_inscription.html"
 
     def get(self, request, *args, **kwargs):
+        try:
+            # self.soumettre_demande()
+            display_success_messages(
+                request,
+                self.get_success_message(),
+            )
+        except ServiceException as e:
+            display_error_messages(request, e.messages)
         return redirect('inscription-evaluation:recapitulatif', code_programme=self.code_programme)
+
+    def get_success_message(self):
+        return _(
+            "Evaluation registration form has been successfully submitted. "
+            "A confirmation email will be sent to %(email)s."
+        ) % {'email': self.request.user.person.email}
+
+    def soumettre_demande(self):
+        RecapitulatifService().soumettre(
+            self.person,
+            code_programme=self.code_programme,
+        )
