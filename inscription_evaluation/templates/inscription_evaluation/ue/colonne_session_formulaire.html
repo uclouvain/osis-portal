@@ -35,13 +35,13 @@
     {% endif %}
     <td {% if session_est_egal_a_session_de_travail %}colspan="2"{% endif %}>
         {% if inscription_evaluation %}
-            {% if session_est_egal_a_session_de_travail %} <input type="checkbox" checked>{% endif %}
+            {% if session_est_egal_a_session_de_travail %} <input type="checkbox" checked name="ue_a_desinscrire" value="{{ code_ue }}">{% endif %}
             {% if inscription_evaluation.type_inscription == 'INSCRIPTION_PARTIELLE' %}
-                <span class="{% if session_est_egal_a_session_de_travail %}badge info-color{% endif %}">Part</span>
+                <span class="{% if session_est_egal_a_session_de_travail %}badge info-color{% endif %}">{{ inscription_evaluation.type_inscription_txt }}</span>
             {% elif inscription_evaluation.type_inscription == 'PREMIERE_INSCRIPTION' %}
-                <span class="{% if session_est_egal_a_session_de_travail %}badge primary-color{% endif %}">Insc</span>
+                <span class="{% if session_est_egal_a_session_de_travail %}badge primary-color{% endif %}">{{ inscription_evaluation.type_inscription_txt }}</span>
             {% elif inscription_evaluation.type_inscription == 'REINSCRIPTION' %}
-                <span class="{% if session_est_egal_a_session_de_travail %}badge mauve-color{% endif %}">Reinsc</span>
+                <span class="{% if session_est_egal_a_session_de_travail %}badge mauve-color{% endif %}">{{ inscription_evaluation.type_inscription_txt }}</span>
             {% endif %}
         {% else %}
             {% if session_est_egal_a_session_de_travail and peut_inscrire %}
@@ -52,3 +52,7 @@
         {% endif %}
     </td>
 {% endwith %}
+
+<script>
+
+</script>

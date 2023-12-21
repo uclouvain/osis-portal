@@ -47,11 +47,11 @@
                     <div style="display: flex; align-items: center; margin-right: 1%;"><i class="fa fa-info-circle" style="font-size:200%;" aria-hidden="true"></i></div>
                     <div>
                         {% if session_de_travail.numero_session == 1 %}
-                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation=nombre_evaluation %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation }} evaluation organized for the January session.{% endblocktrans %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=nombre_evaluation_organisee %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
                         {% elif session_de_travail.numero_session == 2 %}
-                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation=nombre_evaluation %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation }} evaluation organized for the June session.{% endblocktrans %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=nombre_evaluation_organisee %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the June session.{% endblocktrans %}
                         {% else %}
-                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation=nombre_evaluation %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation }} evaluation organized for the September session.{% endblocktrans %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=nombre_evaluation_organisee %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
                         {% endif %}
                         <br>
                         {% trans "Your registrations are saved, but you can modify them as long as you have not submitted them." %}
@@ -94,11 +94,11 @@
                 <div class="alert alert-warning" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
                     {% if session_de_travail.numero_session == 1 %}
-                        {% blocktrans with nombre_evaluation=nombre_evaluation %}You are not registered for any of the {{ nombre_evaluation }} evaluation organized for the January session.{% endblocktrans %}
+                        {% blocktrans with nombre_evaluation_organisee=nombre_evaluation_organisee %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
                     {% elif session_de_travail.numero_session == 2 %}
-                        {% blocktrans with nombre_evaluation=nombre_evaluation %}You are not registered for any of the {{ nombre_evaluation }} evaluation organized for the June session.{% endblocktrans %}
+                        {% blocktrans with nombre_evaluation_organisee=nombre_evaluation_organisee %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the June session.{% endblocktrans %}
                     {% else %}
-                        {% blocktrans with nombre_evaluation=nombre_evaluation %}You are not registered for any of the {{ nombre_evaluation }} evaluation organized for the September session.{% endblocktrans %}
+                        {% blocktrans with nombre_evaluation_organisee=nombre_evaluation_organisee %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
                     {% endif %}
                 </div>
             {% endif %}
@@ -108,7 +108,7 @@
             <div class="center">
                 <div>
                     <a class="btn btn-default btn-wrap btn-block-xs" href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">
-                        <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my proposal" %}
+                        <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my registrations" %}
                     </a>
                 </div>
 

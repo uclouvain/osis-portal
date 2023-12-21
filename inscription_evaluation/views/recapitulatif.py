@@ -92,8 +92,9 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
         return None
 
     @cached_property
-    def nombre_evaluation(self) -> int:
+    def nombre_evaluation_organisee(self) -> int:
         # TODO: récupérer le nombre d'évaluation organisée pour cet.te étudiant.e
+        # return self.recapitulatif.nombre_evaluation_organisee
         return 8
 
     def get_context_data(self, **kwargs):
@@ -104,5 +105,5 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
             'contact_faculte': self.contact_faculte,
             'formation': self.formation,
             'inscriptions': self.inscriptions,
-            'nombre_evaluation': self.nombre_evaluation,
+            'nombre_evaluation_organisee': self.nombre_evaluation_organisee,
         }

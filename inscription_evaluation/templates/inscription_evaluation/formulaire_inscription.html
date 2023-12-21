@@ -87,9 +87,9 @@
                             <th class="col-md-1">{% trans 'Code' context 'inscription-evaluation' %}</th>
                             <th class="col-md-5">{% trans 'Title' context 'inscription-evaluation' %}</th>
                             <th class="col-md-1" colspan="2">{% trans 'Credits' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-1" colspan="2">{% trans 'Jan' context 'inscription-evaluation' %}</th>
+                            <th class="col-md-1" colspan="2">{% trans 'January' context 'inscription-evaluation' %}</th>
                             <th class="col-md-1" colspan="2">{% trans 'June' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-1" colspan="2">{% trans 'Sept' context 'inscription-evaluation' %}</th>
+                            <th class="col-md-1" colspan="2">{% trans 'September' context 'inscription-evaluation' %}</th>
                             <th class="col-md-1">{% trans 'Final note' context 'inscription-evaluation' %}</th>
                             <th class="col-md-1">{% trans 'Credited' context 'inscription-evaluation' %}</th>
                         </thead>
@@ -104,9 +104,9 @@
                                     <td>
                                         {% if inscription.etat_txt %}{{ inscription.etat_txt }}{% endif %}
                                     </td>
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 peut_inscrire=inscription.peut_inscrire_evaluation %}
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 peut_inscrire=inscription.peut_inscrire_evaluation %}
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 peut_inscrire=inscription.peut_inscrire_evaluation %}
+                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 peut_inscrire=inscription.peut_inscrire_evaluation code_ue=inscription.unite_enseignement.code type_inscription_possible=inscription.type_inscription_possible type_inscription_possible_txt=inscription.type_inscription_possible_txt %}
+                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 peut_inscrire=inscription.peut_inscrire_evaluation code_ue=inscription.unite_enseignement.code type_inscription_possible=inscription.type_inscription_possible type_inscription_possible_txt=inscription.type_inscription_possible_txt %}
+                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 peut_inscrire=inscription.peut_inscrire_evaluation code_ue=inscription.unite_enseignement.code type_inscription_possible=inscription.type_inscription_possible type_inscription_possible_txt=inscription.type_inscription_possible_txt %}
                                     <td>{{ inscription.note_finale|default:'-' }}</td>
                                     <td>{{ inscription.credite|default:'-' }}</td>
                                 </tr>

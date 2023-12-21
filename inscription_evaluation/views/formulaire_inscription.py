@@ -85,16 +85,21 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             "credits_inscrits": "3.5",
             "etat_txt": "Hors progression",
             "peut_inscrire_evaluation": False,
+            "type_inscription_possible": None,
+            "type_inscription_possible_txt": None,
             "evaluation_session_1": {
                 "type_inscription": "PREMIERE_INSCRIPTION",
+                "type_inscription_txt": "Insc",
                 "note": "15.0"
             },
             "evaluation_session_2": {
                 "type_inscription": "PREMIERE_INSCRIPTION",
+                "type_inscription_txt": "Insc",
                 "note": "15.0"
             },
             "evaluation_session_3": {
                 "type_inscription": "PREMIERE_INSCRIPTION",
+                "type_inscription_txt": "Insc",
                 "note": "15.0"
             },
             "note_finale": "15.0",
@@ -108,16 +113,21 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             "credits_inscrits": "5",
             "etat_txt": "Hors progression",
             "peut_inscrire_evaluation": False,
+            "type_inscription_possible": None,
+            "type_inscription_possible_txt": None,
             "evaluation_session_1": {
                 "type_inscription": "INSCRIPTION_PARTIELLE",
+                "type_inscription_txt": "Part",
                 "note": "8.0"
             },
             "evaluation_session_2": {
                 "type_inscription": "PREMIERE_INSCRIPTION",
+                "type_inscription_txt": "Insc",
                 "note": "9.0"
             },
             "evaluation_session_3": {
                 "type_inscription": "REINSCRIPTION",
+                "type_inscription_txt": "Reinsc",
                 "note": ""
             },
             "note_finale": "",
@@ -130,9 +140,12 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             },
             "credits_inscrits": "5",
             "etat_txt": "",
-            "peut_inscrire_evaluation": False,
+            "peut_inscrire_evaluation": True,
+            "type_inscription_possible": "PREMIERE_INSCRIPTION",
+            "type_inscription_possible_txt": "Insc",
             "evaluation_session_1": {
                 "type_inscription": "INSCRIPTION_PARTIELLE",
+                "type_inscription_txt": "Part",
                 "note": "8.0"
             },
             "evaluation_session_2": None,
@@ -148,8 +161,11 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             "credits_inscrits": "5",
             "etat_txt": "",
             "peut_inscrire_evaluation": True,
+            "type_inscription_possible": "PREMIERE_INSCRIPTION",
+            "type_inscription_possible_txt": "Insc",
             "evaluation_session_1": {
                 "type_inscription": "INSCRIPTION_PARTIELLE",
+                "type_inscription_txt": "Part",
                 "note": "8.0"
             },
             "evaluation_session_2": None,

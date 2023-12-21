@@ -92,10 +92,6 @@ msgid ""
 msgstr ""
 
 msgctxt "inscription-evaluation"
-msgid "Jan"
-msgstr ""
-
-msgctxt "inscription-evaluation"
 msgid "January"
 msgstr ""
 
@@ -111,7 +107,7 @@ msgctxt "inscription-evaluation"
 msgid "Legend"
 msgstr ""
 
-msgid "Modify my proposal"
+msgid "Modify my registrations"
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -126,6 +122,11 @@ msgid "Non-degree course units"
 msgstr ""
 
 msgid "Note resulting from exemption test"
+msgstr ""
+
+msgid ""
+"Please correct any errors in your form to save it and continue to the "
+"summary of your evaluation application."
 msgstr ""
 
 msgid "Re-registered for a evaluation"
@@ -163,10 +164,6 @@ msgid "Save and continue to the summary of registrations"
 msgstr ""
 
 msgctxt "inscription-evaluation"
-msgid "Sept"
-msgstr ""
-
-msgctxt "inscription-evaluation"
 msgid "September"
 msgstr ""
 
@@ -194,38 +191,39 @@ msgstr ""
 
 #, python-format
 msgid ""
-"You are not registered for any of the %(nombre_evaluation)s evaluation "
-"organized for the January session."
-msgstr ""
-
-#, python-format
-msgid ""
-"You are not registered for any of the %(nombre_evaluation)s evaluation "
-"organized for the June session."
-msgstr ""
-
-#, python-format
-msgid ""
-"You are not registered for any of the %(nombre_evaluation)s evaluation "
-"organized for the September session."
-msgstr ""
-
-#, python-format
-msgid ""
-"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the January session."
 msgstr ""
 
 #, python-format
 msgid ""
-"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the June session."
 msgstr ""
 
 #, python-format
 msgid ""
-"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the September session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the January session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the June session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the September "
+"session."
 msgstr ""
 
 msgid "You are registered for all the evaluations ticked below."
@@ -256,4 +254,7 @@ msgstr ""
 msgid ""
 "Your registrations are saved, but you can modify them as long as you have "
 "not submitted them."
+msgstr ""
+
+msgid "Your request to register for evaluations has not been saved."
 msgstr ""

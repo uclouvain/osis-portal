@@ -99,10 +99,6 @@ msgstr ""
 "aux évaluations."
 
 msgctxt "inscription-evaluation"
-msgid "Jan"
-msgstr "Jan"
-
-msgctxt "inscription-evaluation"
 msgid "January"
 msgstr "Janvier"
 
@@ -118,8 +114,8 @@ msgctxt "inscription-evaluation"
 msgid "Legend"
 msgstr "Légende"
 
-msgid "Modify my proposal"
-msgstr ""
+msgid "Modify my registrations"
+msgstr "Modifier mes inscriptions"
 
 msgctxt "inscription-evaluation"
 msgid "My exams enrollment"
@@ -134,6 +130,14 @@ msgstr "Hors Progression"
 
 msgid "Note resulting from exemption test"
 msgstr "Note résultant d'un test dispensatoire"
+
+msgid ""
+"Please correct any errors in your form to save it and continue to the "
+"summary of your evaluation application."
+msgstr ""
+"Veuillez corriger les erreurs dans votre formulaire pour l'enregistrer et "
+"poursuivre vers le récapitulatif de votre demande d'inscription aux "
+"évaluations."
 
 msgid "Re-registered for a evaluation"
 msgstr "Réinscrit.e à une évaluation"
@@ -176,10 +180,6 @@ msgid "Save and continue to the summary of registrations"
 msgstr "Enregistrer et poursuivre vers le récapitulatif des inscriptions"
 
 msgctxt "inscription-evaluation"
-msgid "Sept"
-msgstr "Sept"
-
-msgctxt "inscription-evaluation"
 msgid "September"
 msgstr "Septembre"
 
@@ -212,51 +212,58 @@ msgstr ""
 
 #, python-format
 msgid ""
-"You are not registered for any of the %(nombre_evaluation)s evaluation "
-"organized for the January session."
-msgstr ""
-"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) %(nombre_evaluation)s "
-"évaluations organisée(s) à la session de janvier. "
-
-#, python-format
-msgid ""
-"You are not registered for any of the %(nombre_evaluation)s evaluation "
-"organized for the June session."
-msgstr ""
-"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) %(nombre_evaluation)s "
-"évaluations organisée(s) à la session de juin. "
-
-#, python-format
-msgid ""
-"You are not registered for any of the %(nombre_evaluation)s evaluation "
-"organized for the September session."
-msgstr ""
-"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) %(nombre_evaluation)s "
-"évaluations organisée(s) à la session de septembre. "
-
-#, python-format
-msgid ""
-"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the January session."
 msgstr ""
-"Vous êtes inscrit.e à %(nombre_inscription)s évaluation(s) sur le(s) "
-"%(nombre_evaluation)s évaluations organisée(s) à la session de janvier. "
+"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) "
+"%(nombre_evaluation_organisee)s évaluations organisée(s) à la session de "
+"janvier. "
 
 #, python-format
 msgid ""
-"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the June session."
 msgstr ""
-"Vous êtes inscrit.e à %(nombre_inscription)s évaluation(s) sur le(s) "
-"%(nombre_evaluation)s évaluations organisée(s) à la session de juin. "
+"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) "
+"%(nombre_evaluation_organisee)s évaluations organisée(s) à la session de "
+"juin. "
 
 #, python-format
 msgid ""
-"You are registered for %(nombre_inscription)s of the %(nombre_evaluation)s "
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the September session."
 msgstr ""
+"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) "
+"%(nombre_evaluation_organisee)s évaluations organisée(s) à la session de "
+"septembre. "
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the January session."
+msgstr ""
 "Vous êtes inscrit.e à %(nombre_inscription)s évaluation(s) sur le(s) "
-"%(nombre_evaluation)s évaluations organisée(s) à la session de septembre. "
+"%(nombre_evaluation_organisee)s évaluations organisée(s) à la session de "
+"janvier. "
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the June session."
+msgstr ""
+"Vous êtes inscrit.e à %(nombre_inscription)s évaluation(s) sur le(s) "
+"%(nombre_evaluation_organisee)s évaluations organisée(s) à la session de "
+"juin. "
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the September "
+"session."
+msgstr ""
+"Vous êtes inscrit.e à %(nombre_inscription)s évaluation(s) sur le(s) "
+"%(nombre_evaluation_organisee)s évaluations organisée(s) à la session de "
+"septembre. "
 
 msgid "You are registered for all the evaluations ticked below."
 msgstr "Vous êtes inscrit.e à toutes les évaluations cochées ci-dessous."
@@ -297,3 +304,6 @@ msgid ""
 msgstr ""
 "Vos inscriptions sont enregistrées mais vous pouvez les modifier tant que "
 "vous ne les avez pas soumises."
+
+msgid "Your request to register for evaluations has not been saved."
+msgstr "Votre demande d'inscription aux évaluations n'a pas été enregistrée."
