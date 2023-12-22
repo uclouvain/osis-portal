@@ -23,7 +23,7 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 <div>
-    <a href="{% url 'inscription-evaluation:soumettre-demande-inscription' code_programme %}"
+    <a href="{% url 'inscription-evaluation:soumettre-demande-inscription' code_programme %}?sigle_formation={{ formation.sigle }}"
        class="btn btn-primary btn-wrap btn-block-xs"
     >
         <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my exams enrollment' %}

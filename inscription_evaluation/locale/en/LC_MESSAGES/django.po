@@ -70,8 +70,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Evaluation registration form has been successfully submitted. A confirmation "
-"email will be sent to %(email)s."
+"Evaluation registration form for %(sigle_formation)s has been successfully "
+"submitted. A confirmation email will be sent to %(email)s."
 msgstr ""
 
 msgctxt "inscription-evaluation"

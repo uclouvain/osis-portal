@@ -114,13 +114,13 @@
 
                 <br>
 
-                {% include "inscription_evaluation/blocks/soumettre_demande_inscription.html" %}
+                {% include "inscription_evaluation/blocks/soumettre_demande_inscription.html" with code_programme=formation.code_programme %}
 
             </div>
 
             <br>
 
-            {% include "inscription_evaluation/blocks/contact.html" with code_programme=formation.code_programme%}
+            {% include "inscription_evaluation/blocks/contact.html" with code_programme=formation.code_programme %}
 
         </div>
     </div>

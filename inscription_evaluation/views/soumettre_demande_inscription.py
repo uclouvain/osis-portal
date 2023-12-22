@@ -52,13 +52,13 @@ class SoumettreDemandeInscriptionView(LoginRequiredMixin, InscriptionEvaluationV
             )
         except ServiceException as e:
             display_error_messages(request, e.messages)
-        return redirect('inscription-evaluation:recapitulatif', code_programme=self.code_programme)
+        return redirect('inscription-evaluation:selectionner-programme')
 
     def get_success_message(self):
         return _(
-            "Evaluation registration form has been successfully submitted. "
+            "Evaluation registration form for %(sigle_formation)s has been successfully submitted. "
             "A confirmation email will be sent to %(email)s."
-        ) % {'email': self.request.user.person.email}
+        ) % {'email': self.request.user.person.email, 'sigle_formation': self.request.GET.get('sigle_formation')}
 
     def soumettre_demande(self):
         RecapitulatifService().soumettre(
