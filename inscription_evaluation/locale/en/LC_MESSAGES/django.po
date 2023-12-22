@@ -79,6 +79,10 @@ msgid "Evaluation registration summary"
 msgstr ""
 
 msgctxt "inscription-evaluation"
+msgid "Faculty contact"
+msgstr ""
+
+msgctxt "inscription-evaluation"
 msgid "Final note"
 msgstr ""
 

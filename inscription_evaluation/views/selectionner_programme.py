@@ -73,7 +73,13 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
                 "peut_inscrire_aux_evaluations": False,
                 "raisons_peut_pas_inscrire": [
                     "L'inscription aux évaluations en ligne n'est pas ouverte pour cette formation."
-              ]
+                ],
+                "contact_faculte":{
+                    "sigle_formation": "string",
+                    "pour_premiere_annee": True,
+                    "en_tete": "Secrétariat du 1er cycle ESPO",
+                    "email": "christine.vandiest@uclouvain.be"
+                }
             },
             {
                 "code_programme": "LECGE100B",
@@ -87,7 +93,13 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
                 },
                 "peut_inscrire_aux_evaluations": True,
                 "raisons_peut_pas_inscrire": [
-                ]
+                ],
+                "contact_faculte":{
+                    "sigle_formation": "string",
+                    "pour_premiere_annee": True,
+                    "en_tete": "Secrétariat du 1er cycle ESPO",
+                    "email": "christine.vandiest@uclouvain.be"
+                }
             }
         ]
 

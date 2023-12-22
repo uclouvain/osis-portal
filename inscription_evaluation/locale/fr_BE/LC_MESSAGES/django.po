@@ -76,12 +76,16 @@ msgid ""
 "Evaluation registration form for %(sigle_formation)s has been successfully "
 "submitted. A confirmation email will be sent to %(email)s."
 msgstr ""
-"Formulaire d'inscription aux évaluations pour %(sigle_formation)s soumis avec "
-"succès. Un mail de confirmation est envoyé à l'adresse %(email)s."
+"Formulaire d'inscription aux évaluations pour %(sigle_formation)s soumis "
+"avec succès. Un mail de confirmation est envoyé à l'adresse %(email)s."
 
 msgctxt "inscription-evaluation"
 msgid "Evaluation registration summary"
 msgstr "Récapitulatif d'inscription aux évaluations"
+
+msgctxt "inscription-evaluation"
+msgid "Faculty contact"
+msgstr "Contact en faculté"
 
 msgctxt "inscription-evaluation"
 msgid "Final note"
