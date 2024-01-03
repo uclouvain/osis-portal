@@ -1,4 +1,3 @@
-{% load equality %}
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -22,26 +21,13 @@
     * at the root of the source code of this program.  If not,
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
-
-{% with session_est_egal_a_session_de_travail=session_de_travail.numero_session|equal:numero_session %}
-    {% if not session_est_egal_a_session_de_travail %}
-        <td>
-            {% if inscription_evaluation.note  %}
-                <span>{{ inscription_evaluation.note }}</span>
-            {% else %}
-                <span> - </span>
-            {% endif %}
-        </td>
-    {% endif %}
-    <td {% if session_est_egal_a_session_de_travail %}colspan="2"{% endif %}>
-        {% if inscription_evaluation %}
-            {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=inscription_evaluation.type_inscription type_inscription_txt=inscription_evaluation.type_inscription_txt %}
-        {% else %}
-            {% if session_est_egal_a_session_de_travail and peut_inscrire %}
-                {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=type_inscription_possible type_inscription_txt=type_inscription_possible_txt  %}
-            {% else %}
-                <span>-</span>
-            {% endif %}
-        {% endif %}
-    </td>
-{% endwith %}
+{% if session_est_egal_a_session_de_travail %}
+    <input id="checkbox-{{ code_ue }}" type="checkbox" {% if inscription_evaluation %}checked{% endif %} onchange="$(this).next('span').toggle();">
+{% endif %}
+{% if type_inscription == 'INSCRIPTION_PARTIELLE' %}
+    <span id="{{ code_ue }}" {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge info-color{% endif %}">{{ type_inscription_txt }}</span>
+{% elif type_inscription == 'PREMIERE_INSCRIPTION' %}
+    <span id="{{ code_ue }}" {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge primary-color{% endif %}">{{ type_inscription_txt }}</span>
+{% elif type_inscription == 'REINSCRIPTION' %}
+    <span id="{{ code_ue }}" {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge mauve-color{% endif %}">{{ type_inscription_txt }}</span>
+{% endif %}

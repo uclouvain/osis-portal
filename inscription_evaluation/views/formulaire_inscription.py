@@ -161,8 +161,8 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             "credits_inscrits": "5",
             "etat_txt": "",
             "peut_inscrire_evaluation": True,
-            "type_inscription_possible": "PREMIERE_INSCRIPTION",
-            "type_inscription_possible_txt": "Insc",
+            "type_inscription_possible": "REINSCRIPTION",
+            "type_inscription_possible_txt": "Reinsc",
             "evaluation_session_1": {
                 "type_inscription": "INSCRIPTION_PARTIELLE",
                 "type_inscription_txt": "Part",

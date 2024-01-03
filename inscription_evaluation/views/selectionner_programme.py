@@ -43,9 +43,12 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         return Person.objects.get(user=self.request.user)
 
     @cached_property
-    def annee(self):
-        # return self.mes_programmes.annee_de_travail
-        return 2023
+    def session_de_travail(self):
+        # return self.mes_programmes.session_de_travail
+        return {
+            "annee": 2023,
+            "numero_session": 3
+        }
 
     @cached_property
     def etudiant(self):
@@ -66,7 +69,6 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
                 "intitule": "Bachelier en droit",
                 "periode_inscription": {
                     "annee": 2023,
-                    "numero_session": 1,
                     "date_ouverture": "2023-12-11",
                     "date_fermeture": "2023-12-11",
                 },
@@ -87,7 +89,6 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
                 "intitule": "Bachelier en sciences économiques et de gestion",
                 "periode_inscription": {
                     "annee": 2023,
-                    "numero_session": 1,
                     "date_ouverture": "2023-12-11",
                     "date_fermeture": "2023-12-11",
                 },
@@ -111,7 +112,7 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
-            'annee': self.annee,
+            'session_de_travail': self.session_de_travail,
             'etudiant': self.etudiant,
             'formations': self.formations,
         }
