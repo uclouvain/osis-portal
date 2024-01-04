@@ -107,7 +107,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
         },
         {
             "unite_enseignement": {
-                "code": "LDROI1002",
+                "code": "LDROI1002-A",
                 "intitule": "Introduction au droit civil: partie 2"
             },
             "credits_inscrits": "5",

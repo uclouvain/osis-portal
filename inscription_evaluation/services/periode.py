@@ -23,38 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from functools import partial
+import datetime
 from typing import List
 
+from osis_reference_sdk.model.academic_calendar import AcademicCalendar
+
 from base.models.person import Person
-from base.services.utils import call_api
+from reference.services.academic_calendar import AcademicCalendarService
+
+REFERENCE_INSCRIPTION_AUX_EVALUATIONS = 'BASCULEMENT_INSCRIPTION_EVALUATION'
 
 
-class FormulaireInscriptionService:
-
-    @staticmethod
-    def recuperer(person: 'Person', code_programme: str):
-        return _formulaire_api_call(person,'get_formulaire_inscription', code_programme=code_programme)
-
-    @staticmethod
-    def soumettre(
-        person: 'Person',
-        code_programme: str,
-        demandes_inscriptions: List[str],
-        demandes_desinscriptions: List[str],
-    ):
-        # TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
-        # cmd = ChoixInscriptionsEtudiant(
-        #     demandes_inscription=demandes_inscriptions,
-        #     demandes_desinscription=demandes_desinscriptions
-        # )
-        # return _formulaire_api_call(
-        #     person,
-        #     'enregistrer_formulaire',
-        #     code_programme=code_programme,
-        #     choix_inscriptions_etudiant=cmd,
-        # )
-        return None
-
-# TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
-_formulaire_api_call = partial(call_api, None, None, None)
+class PeriodeInscriptionAuxEvaluationsService:
+    @classmethod
+    def get_annee(cls, person: 'Person') -> int:
+        calendriers = AcademicCalendarService.get_academic_calendar_list(
+            person,
+            reference=REFERENCE_INSCRIPTION_AUX_EVALUATIONS
+        )['results']  # type: List[AcademicCalendar]
+        today = datetime.date.today()
+        return next(
+            calendrier for calendrier in calendriers
+            if calendrier.start_date <= today <= calendrier.end_date
+        ).data_year

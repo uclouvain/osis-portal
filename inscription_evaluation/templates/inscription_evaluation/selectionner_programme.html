@@ -44,12 +44,12 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label>{% trans 'Last name' context 'inscription-evaluation' %}, {% trans 'First name' context 'inscription-evaluation' %}</label>
                     <br>
                     {{ etudiant.nom }}, {{ etudiant.prenom }}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <label>{% trans 'Noma' context 'inscription-evaluation' %}</label>
                     <br>
                     {{ etudiant.noma }}
@@ -68,7 +68,7 @@
             {% else %}
                 <div class="alert alert-warning" style="display:inline-block;">
                     <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% blocktrans with annee_academique=session_de_travail.annee|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }} academic year.{% endblocktrans %}
+                    {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }} academic year.{% endblocktrans %}
                 </div>
             {% endif %}
             <div class="row">
@@ -100,11 +100,11 @@
                                 <td>
                                     {% if formation.peut_inscrire_aux_evaluations %}
                                         <i class="fa-solid fa-lock-open fa-info"></i>
-                                        {% if session_de_travail.numero_session == 1 %}
+                                        {% if formation.periode_inscription.numero_session == 1 %}
                                             <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the January session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
-                                        {% elif session_de_travail.numero_session == 2 %}
+                                        {% elif formation.periode_inscription.numero_session == 2 %}
                                             <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the June session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
-                                        {% elif session_de_travail.numero_session == 3 %}
+                                        {% elif formation.periode_inscription.numero_session == 3 %}
                                             <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the September session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
                                         {% endif %}
                                     {% else %}

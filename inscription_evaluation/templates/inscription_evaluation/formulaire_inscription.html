@@ -58,8 +58,8 @@
 
                 {% include "inscription_evaluation/blocks/legende.html" %}
 
-                <div class="alert alert-info" style="display:flex;">
-                    <div style="display: flex; align-items: center; margin-right: 1%;"><i class="fa fa-info-circle" style="font-size:250%;" aria-hidden="true"></i></div>
+                <div class="alert alert-info" style="display: flex; align-items: center; max-width: 740px;">
+                    <div style="display: flex; align-items: center; margin-right: 2%;"><i class="fa fa-info-circle" style="font-size:250%;" aria-hidden="true"></i></div>
                     <div>
                         {% trans "You are registered for all the evaluations ticked below." %}<br>
                         {% trans "If this is suitable for you, please continue and submit your evaluation registration." %}<br>
@@ -84,24 +84,24 @@
                 {% if inscriptions %}
                     <table class="table table-formulaire-inscription table-hover table-bordered">
                         <thead>
-                            <th class="col-md-1">{% trans 'Code' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-5">{% trans 'Title' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-1" colspan="2">{% trans 'Credits' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-1" colspan="2">{% trans 'January' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-1" colspan="2">{% trans 'June' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-1" colspan="2">{% trans 'September' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-1">{% trans 'Final note' context 'inscription-evaluation' %}</th>
-                            <th class="col-md-1">{% trans 'Credited' context 'inscription-evaluation' %}</th>
+                            <th style="width: 8%">{% trans 'Code' context 'inscription-evaluation' %}</th>
+                            <th style="width: 32%">{% trans 'Title' context 'inscription-evaluation' %}</th>
+                            <th style="width: 11%" colspan="2">{% trans 'Credits' context 'inscription-evaluation' %}</th>
+                            <th style="width: 11%" colspan="2">{% trans 'January' context 'inscription-evaluation' %}</th>
+                            <th style="width: 11%" colspan="2">{% trans 'June' context 'inscription-evaluation' %}</th>
+                            <th style="width: 11%" colspan="2">{% trans 'September' context 'inscription-evaluation' %}</th>
+                            <th style="width: 8%">{% trans 'Final note' context 'inscription-evaluation' %}</th>
+                            <th style="width: 8%">{% trans 'Credited' context 'inscription-evaluation' %}</th>
                         </thead>
                         <tbody>
                             {% for inscription in inscriptions %}
                                 <tr>
                                     <td>{{ inscription.unite_enseignement.code }}</td>
                                     <td>{{ inscription.unite_enseignement.intitule }}</td>
-                                    <td>
+                                    <td style="width: 5%">
                                         {{ inscription.credits_inscrits }}
                                     </td>
-                                    <td>
+                                    <td style="width: 5%">
                                         {% if inscription.etat_txt %}{{ inscription.etat_txt }}{% endif %}
                                     </td>
                                     {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 peut_inscrire=inscription.peut_inscrire_evaluation code_ue=inscription.unite_enseignement.code type_inscription_possible=inscription.type_inscription_possible type_inscription_possible_txt=inscription.type_inscription_possible_txt %}
