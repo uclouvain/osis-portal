@@ -22,12 +22,12 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% if session_est_egal_a_session_de_travail %}
-    <input id="checkbox-{{ code_ue }}" type="checkbox" {% if inscription_evaluation %}checked{% endif %} onchange="$(this).next('span').toggle();">
+    <input id="{{ code_ue }}" type="checkbox" {% if inscription_evaluation %}checked{% endif %} onchange="$(this).next('span').toggle();">
 {% endif %}
 {% if type_inscription == 'INSCRIPTION_PARTIELLE' %}
-    <span id="{{ code_ue }}" {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge info-color{% endif %}">{{ type_inscription_txt }}</span>
+    <span {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge info-color{% endif %}">{{ type_inscription_txt }}</span>
 {% elif type_inscription == 'PREMIERE_INSCRIPTION' %}
-    <span id="{{ code_ue }}" {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge primary-color{% endif %}">{{ type_inscription_txt }}</span>
+    <span {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge primary-color{% endif %}">{{ type_inscription_txt }}</span>
 {% elif type_inscription == 'REINSCRIPTION' %}
-    <span id="{{ code_ue }}" {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge mauve-color{% endif %}">{{ type_inscription_txt }}</span>
+    <span {% if not inscription_evaluation %}style="display: none;"{% endif %} class="{% if session_est_egal_a_session_de_travail %}badge mauve-color{% endif %}">{{ type_inscription_txt }}</span>
 {% endif %}

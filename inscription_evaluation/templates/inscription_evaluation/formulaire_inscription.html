@@ -137,4 +137,39 @@
             </div>
         </div>
     </form>
+
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(event) {
+                var demandesInscriptions = [];
+                var demandesDesinscriptions = [];
+
+                $('input[type="checkbox"]').each(function() {
+                    var codeUE = $(this).attr('id');
+                    var etatInitial = $(this).prop('defaultChecked');
+                    var etatActuel = $(this).prop('checked');
+
+                    if (etatInitial !== etatActuel) {
+                        if (etatActuel) {
+                            demandesInscriptions.push(codeUE);
+                        } else {
+                            demandesDesinscriptions.push(codeUE);
+                        }
+                    }
+                });
+
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'demandes_inscriptions',
+                    value: JSON.stringify(demandesInscriptions)
+                }).appendTo($(this));
+
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'demandes_desinscriptions',
+                    value: JSON.stringify(demandesDesinscriptions)
+                }).appendTo($(this));
+            });
+        });
+    </script>
 {% endblock %}

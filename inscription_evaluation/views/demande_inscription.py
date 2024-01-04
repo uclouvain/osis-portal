@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
 from typing import List
 
 from django.utils.decorators import method_decorator
@@ -48,8 +49,8 @@ class EnregistrerDemandeInscriptionView(LoginRequiredMixin, InscriptionEvaluatio
             FormulaireInscriptionService.soumettre(
                 person=self.person,
                 code_programme=self.code_programme,
-                demandes_inscriptions=None,
-                demandes_desinscriptions=None,
+                demandes_inscriptions=json.loads(self.request.POST.get('demandes_inscriptions')),
+                demandes_desinscriptions=json.loads(self.request.POST.get('demandes_desinscriptions')),
             )
         except ServiceException as e:
             erreurs = e.messages
