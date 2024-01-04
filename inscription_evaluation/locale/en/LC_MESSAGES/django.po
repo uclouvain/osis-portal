@@ -234,7 +234,8 @@ msgid "You are registered for all the evaluations ticked below."
 msgstr ""
 
 msgid ""
-"You can modify your evaluation entries as long as you have not submitted."
+"You can modify your evaluation entries as long as you have not submitted "
+"them."
 msgstr ""
 
 msgid ""
