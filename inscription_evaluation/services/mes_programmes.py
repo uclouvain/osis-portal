@@ -27,11 +27,13 @@ from functools import partial
 from base.models.person import Person
 from base.services.utils import call_api
 
+
 class MesProgrammesService:
 
     @staticmethod
     def recuperer(person: 'Person'):
-        return _mes_programmes_api_call(person,'liste_inscriptions_programmes')
+        return _mes_programmes_api_call(person, 'liste_inscriptions_programmes')
+
 
 # TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
 _mes_programmes_api_call = partial(call_api, None, None, None)

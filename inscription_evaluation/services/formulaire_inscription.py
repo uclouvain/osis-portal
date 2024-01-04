@@ -34,7 +34,7 @@ class FormulaireInscriptionService:
 
     @staticmethod
     def recuperer(person: 'Person', code_programme: str):
-        return _formulaire_api_call(person,'get_formulaire_inscription', code_programme=code_programme)
+        return _formulaire_api_call(person, 'get_formulaire_inscription', code_programme=code_programme)
 
     @staticmethod
     def soumettre(
@@ -55,6 +55,7 @@ class FormulaireInscriptionService:
         #     choix_inscriptions_etudiant=cmd,
         # )
         return None
+
 
 # TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
 _formulaire_api_call = partial(call_api, None, None, None)

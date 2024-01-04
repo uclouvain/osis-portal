@@ -47,7 +47,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
 
     @cached_property
     def etudiant(self):
-#         return self.formulaire.etudiant
+        # return self.formulaire.etudiant
         return {
             "noma": "12345678",
             "nom": "Smith",
@@ -56,7 +56,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
 
     @cached_property
     def formation(self):
-#         return self.formulaire.formation
+        # return self.formulaire.formation
         return {
             "code_programme": "LDROI100B",
             "sigle": "DROI1BA",
@@ -65,7 +65,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
 
     @cached_property
     def contact_faculte(self):
-#         return self.formulaire.contact_faculte
+        # return self.formulaire.contact_faculte
         return {
             "sigle_formation": "string",
             "pour_premiere_annee": True,
@@ -75,105 +75,105 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
 
     @cached_property
     def inscriptions(self):
-#         return self.formulaire.inscriptions
+        # return self.formulaire.inscriptions
         return [
-        {
-            "unite_enseignement": {
-                "code": "LDROI1001",
-                "intitule": "Introduction au droit civil"
+            {
+                "unite_enseignement": {
+                    "code": "LDROI1001",
+                    "intitule": "Introduction au droit civil"
+                },
+                "credits_inscrits": "3.5",
+                "etat_txt": "Hors progression",
+                "peut_inscrire_evaluation": False,
+                "type_inscription_possible": None,
+                "type_inscription_possible_txt": None,
+                "evaluation_session_1": {
+                    "type_inscription": "PREMIERE_INSCRIPTION",
+                    "type_inscription_txt": "Insc",
+                    "note": "15.0"
+                },
+                "evaluation_session_2": {
+                    "type_inscription": "PREMIERE_INSCRIPTION",
+                    "type_inscription_txt": "Insc",
+                    "note": "15.0"
+                },
+                "evaluation_session_3": {
+                    "type_inscription": "PREMIERE_INSCRIPTION",
+                    "type_inscription_txt": "Insc",
+                    "note": "15.0"
+                },
+                "note_finale": "15.0",
+                "credite": "Oui"
             },
-            "credits_inscrits": "3.5",
-            "etat_txt": "Hors progression",
-            "peut_inscrire_evaluation": False,
-            "type_inscription_possible": None,
-            "type_inscription_possible_txt": None,
-            "evaluation_session_1": {
-                "type_inscription": "PREMIERE_INSCRIPTION",
-                "type_inscription_txt": "Insc",
-                "note": "15.0"
+            {
+                "unite_enseignement": {
+                    "code": "LDROI1002-A",
+                    "intitule": "Introduction au droit civil: partie 2"
+                },
+                "credits_inscrits": "5",
+                "etat_txt": "Hors progression",
+                "peut_inscrire_evaluation": False,
+                "type_inscription_possible": None,
+                "type_inscription_possible_txt": None,
+                "evaluation_session_1": {
+                    "type_inscription": "INSCRIPTION_PARTIELLE",
+                    "type_inscription_txt": "Part",
+                    "note": "8.0"
+                },
+                "evaluation_session_2": {
+                    "type_inscription": "PREMIERE_INSCRIPTION",
+                    "type_inscription_txt": "Insc",
+                    "note": "9.0"
+                },
+                "evaluation_session_3": {
+                    "type_inscription": "REINSCRIPTION",
+                    "type_inscription_txt": "Reinsc",
+                    "note": ""
+                },
+                "note_finale": "",
+                "credite": ""
             },
-            "evaluation_session_2": {
-                "type_inscription": "PREMIERE_INSCRIPTION",
-                "type_inscription_txt": "Insc",
-                "note": "15.0"
+            {
+                "unite_enseignement": {
+                    "code": "LDROI1003",
+                    "intitule": "Introduction au droit civil: partie 3"
+                },
+                "credits_inscrits": "5",
+                "etat_txt": "",
+                "peut_inscrire_evaluation": True,
+                "type_inscription_possible": "PREMIERE_INSCRIPTION",
+                "type_inscription_possible_txt": "Insc",
+                "evaluation_session_1": {
+                    "type_inscription": "INSCRIPTION_PARTIELLE",
+                    "type_inscription_txt": "Part",
+                    "note": "8.0"
+                },
+                "evaluation_session_2": None,
+                "evaluation_session_3": None,
+                "note_finale": "",
+                "credite": ""
             },
-            "evaluation_session_3": {
-                "type_inscription": "PREMIERE_INSCRIPTION",
-                "type_inscription_txt": "Insc",
-                "note": "15.0"
-            },
-            "note_finale": "15.0",
-            "credite": "Oui"
-        },
-        {
-            "unite_enseignement": {
-                "code": "LDROI1002-A",
-                "intitule": "Introduction au droit civil: partie 2"
-            },
-            "credits_inscrits": "5",
-            "etat_txt": "Hors progression",
-            "peut_inscrire_evaluation": False,
-            "type_inscription_possible": None,
-            "type_inscription_possible_txt": None,
-            "evaluation_session_1": {
-                "type_inscription": "INSCRIPTION_PARTIELLE",
-                "type_inscription_txt": "Part",
-                "note": "8.0"
-            },
-            "evaluation_session_2": {
-                "type_inscription": "PREMIERE_INSCRIPTION",
-                "type_inscription_txt": "Insc",
-                "note": "9.0"
-            },
-            "evaluation_session_3": {
-                "type_inscription": "REINSCRIPTION",
-                "type_inscription_txt": "Reinsc",
-                "note": ""
-            },
-            "note_finale": "",
-            "credite": ""
-        },
-        {
-            "unite_enseignement": {
-                "code": "LDROI1003",
-                "intitule": "Introduction au droit civil: partie 3"
-            },
-            "credits_inscrits": "5",
-            "etat_txt": "",
-            "peut_inscrire_evaluation": True,
-            "type_inscription_possible": "PREMIERE_INSCRIPTION",
-            "type_inscription_possible_txt": "Insc",
-            "evaluation_session_1": {
-                "type_inscription": "INSCRIPTION_PARTIELLE",
-                "type_inscription_txt": "Part",
-                "note": "8.0"
-            },
-            "evaluation_session_2": None,
-            "evaluation_session_3": None,
-            "note_finale": "",
-            "credite": ""
-        },
-        {
-            "unite_enseignement": {
-                "code": "LDROI1004",
-                "intitule": "Introduction au droit civil: partie 4"
-            },
-            "credits_inscrits": "5",
-            "etat_txt": "",
-            "peut_inscrire_evaluation": True,
-            "type_inscription_possible": "REINSCRIPTION",
-            "type_inscription_possible_txt": "Reinsc",
-            "evaluation_session_1": {
-                "type_inscription": "INSCRIPTION_PARTIELLE",
-                "type_inscription_txt": "Part",
-                "note": "8.0"
-            },
-            "evaluation_session_2": None,
-            "evaluation_session_3": None,
-            "note_finale": "",
-            "credite": ""
-        }
-    ]
+            {
+                "unite_enseignement": {
+                    "code": "LDROI1004",
+                    "intitule": "Introduction au droit civil: partie 4"
+                },
+                "credits_inscrits": "5",
+                "etat_txt": "",
+                "peut_inscrire_evaluation": True,
+                "type_inscription_possible": "REINSCRIPTION",
+                "type_inscription_possible_txt": "Reinsc",
+                "evaluation_session_1": {
+                    "type_inscription": "INSCRIPTION_PARTIELLE",
+                    "type_inscription_txt": "Part",
+                    "note": "8.0"
+                },
+                "evaluation_session_2": None,
+                "evaluation_session_3": None,
+                "note_finale": "",
+                "credite": ""
+            }
+        ]
 
     @cached_property
     def peut_s_inscrire_a_minimum_une_evaluation(self):

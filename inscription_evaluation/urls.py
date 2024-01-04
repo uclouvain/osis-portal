@@ -33,7 +33,7 @@ from inscription_evaluation.views.soumettre_demande_inscription import Soumettre
 
 app_name = 'inscription-evaluation'
 urlpatterns = [
-    path('',SelectionnerProgrammeView.as_view(), name=SelectionnerProgrammeView.name),
+    path('', SelectionnerProgrammeView.as_view(), name=SelectionnerProgrammeView.name),
     path(
         '<str:code_programme>/',
         include(

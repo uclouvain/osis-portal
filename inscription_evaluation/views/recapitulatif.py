@@ -84,7 +84,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
               "type_inscription": "PREMIERE_INSCRIPTION",
               "type_inscription_txt": "Insc"
             }
-      ]
+        ]
 
     @cached_property
     def recapitulatif(self):
