@@ -180,6 +180,11 @@
                         {% endif %}
                     </div>
                 {% endif %}
+                {% if allegement150 and not reorientation %}
+                    <div class="row container-fluid text-left">
+                        <p><small>{% trans "In accordance with article 46 of the RGEE, this light program is supplemented by specific remediation activities " %}</small></p>
+                    </div>
+                {% endif %}
                 <div class="row container-fluid text-left">
                     <small class="text-warning">* {% trans 'Attention : From June 2009, the score is expressed to a maximum of 20.' %}</small>
                 </div>
