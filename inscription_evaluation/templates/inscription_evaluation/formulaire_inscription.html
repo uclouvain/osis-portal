@@ -48,7 +48,7 @@
         </p>
     </div>
 
-    <form method="post" action='{% url "inscription-evaluation:enregistrer-proposition-inscriptions" formation.code_programme %}'>
+    <form method="post">
         {% csrf_token %}
         <div class="panel panel-default panel-formulaires-inscription">
             <div class="panel-body">
@@ -104,9 +104,9 @@
                                     <td style="width: 5%">
                                         {% if inscription.etat_txt %}{{ inscription.etat_txt }}{% endif %}
                                     </td>
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 peut_inscrire=inscription.peut_inscrire_evaluation code_ue=inscription.unite_enseignement.code type_inscription_possible=inscription.type_inscription_possible type_inscription_possible_txt=inscription.type_inscription_possible_txt %}
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 peut_inscrire=inscription.peut_inscrire_evaluation code_ue=inscription.unite_enseignement.code type_inscription_possible=inscription.type_inscription_possible type_inscription_possible_txt=inscription.type_inscription_possible_txt %}
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 peut_inscrire=inscription.peut_inscrire_evaluation code_ue=inscription.unite_enseignement.code type_inscription_possible=inscription.type_inscription_possible type_inscription_possible_txt=inscription.type_inscription_possible_txt %}
+                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 inscription=inscription %}
+                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 inscription=inscription %}
+                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 inscription=inscription %}
                                     <td>{{ inscription.note_finale|default:'-' }}</td>
                                     <td>{{ inscription.credite|default:'-' }}</td>
                                 </tr>

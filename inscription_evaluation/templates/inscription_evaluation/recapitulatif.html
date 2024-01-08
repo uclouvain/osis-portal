@@ -114,7 +114,14 @@
 
                 <br>
 
-                {% include "inscription_evaluation/blocks/soumettre_demande_inscription.html" with code_programme=formation.code_programme %}
+                <div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-wrap btn-block-xs">
+                            <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my exams enrollment' %}
+                        </button>
+                    </form>
+                </div>
 
             </div>
 

@@ -26,9 +26,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.utils.functional import cached_property
+from django.utils.translation import gettext_lazy as _
+from django.shortcuts import redirect
 
 from inscription_evaluation.services.recapitulatif import RecapitulatifService
 from inscription_evaluation.views.common import InscriptionEvaluationViewMixin
+from continuing_education.views.common import display_error_messages, display_success_messages
+from inscription_evaluation.services.recapitulatif import RecapitulatifService
+from base.services.utils import ServiceException
 
 
 class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, TemplateView):
@@ -106,3 +111,26 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
             'inscriptions': self.inscriptions,
             'total_evaluations_organisees': self.total_evaluations_organisees,
         }
+
+    def post(self, request, *args, **kwargs):
+        try:
+            # self.soumettre_demande()
+            display_success_messages(
+                request,
+                self.get_success_message(),
+            )
+        except ServiceException as e:
+            display_error_messages(request, e.messages)
+        return redirect('inscription-evaluation:selectionner-programme')
+
+    def get_success_message(self):
+        return _(
+            "Evaluation registration form for %(sigle_formation)s has been successfully submitted. "
+            "A confirmation email will be sent to %(email)s."
+        ) % {'email': self.request.user.person.email, 'sigle_formation': self.formation.get('sigle')}
+
+    def soumettre_demande(self):
+        RecapitulatifService().soumettre(
+            self.person,
+            code_programme=self.code_programme,
+        )

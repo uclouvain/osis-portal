@@ -23,10 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+import json
+from typing import List
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.utils.functional import cached_property
-
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
+from base.services.utils import ServiceException
 from inscription_evaluation.services.formulaire_inscription import FormulaireInscriptionService
 from inscription_evaluation.views.common import InscriptionEvaluationViewMixin
 
@@ -194,3 +200,36 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             'inscriptions': self.inscriptions,
             'peut_s_inscrire_a_minimum_une_evaluation': self.peut_s_inscrire_a_minimum_une_evaluation,
         }
+
+    def post(self, request, *args, **kwargs):
+        erreurs = []
+        try:
+            FormulaireInscriptionService.soumettre(
+                person=self.person,
+                code_programme=self.code_programme,
+                demandes_inscriptions=json.loads(self.request.POST.get('demandes_inscriptions')),
+                demandes_desinscriptions=json.loads(self.request.POST.get('demandes_desinscriptions')),
+            )
+        except ServiceException as e:
+            erreurs = e.messages
+        self.afficher_erreurs(erreurs)
+        if erreurs:
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                str(_("Your request to register for evaluations has not been saved.")),
+            )
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                str(_(
+                    "Please correct any errors in your form to save it and continue "
+                    "to the summary of your evaluation application."
+                )),
+            )
+            return redirect('inscription-evaluation:formulaire-inscription', **self.kwargs)
+        return redirect('inscription-evaluation:recapitulatif', **self.kwargs)
+
+    def afficher_erreurs(self, erreurs: List[str]) -> None:
+        for erreur in erreurs:
+            messages.add_message(self.request, messages.ERROR, erreur)

@@ -37,8 +37,8 @@
         {% if inscription_evaluation %}
             {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=inscription_evaluation.type_inscription type_inscription_txt=inscription_evaluation.type_inscription_txt %}
         {% else %}
-            {% if session_est_egal_a_session_de_travail and peut_inscrire %}
-                {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=type_inscription_possible type_inscription_txt=type_inscription_possible_txt  %}
+            {% if session_est_egal_a_session_de_travail and inscription.peut_inscrire_evaluation %}
+                {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=inscription.type_inscription_possible type_inscription_txt=inscription.type_inscription_possible_txt  %}
             {% else %}
                 <span>-</span>
             {% endif %}
