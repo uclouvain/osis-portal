@@ -1,0 +1,265 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-19 17:23+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "inscription-evaluation"
+msgid "Academic year"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Acronym"
+msgstr ""
+
+msgid ""
+"Click on the code of the course (acronym) for which you want to register for "
+"evaluations."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Code"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Complement"
+msgstr ""
+
+msgid "Counts toward the degree"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Course"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Course choice"
+msgstr ""
+
+msgid "Course unit of the complementary module"
+msgstr ""
+
+msgid "Course unit that counts toward the degree (block 2 or 3)"
+msgstr ""
+
+msgid "Course unit that does not count towards the degree"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Credited"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Credits"
+msgstr ""
+
+msgid "Credits for the course unit are acquired"
+msgstr ""
+
+#, python-format
+msgid ""
+"Evaluation registration form for %(sigle_formation)s has been successfully "
+"submitted. A confirmation email will be sent to %(email)s."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Evaluation registration summary"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Faculty contact"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Final note"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "First name"
+msgstr ""
+
+msgid ""
+"If this is suitable for you, please continue and submit your evaluation "
+"registration."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "January"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "June"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Last name"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Legend"
+msgstr ""
+
+msgid "Modify my registrations"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "My exams enrollment"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Noma"
+msgstr ""
+
+msgid "Non-degree course units"
+msgstr ""
+
+msgid "Note resulting from exemption test"
+msgstr ""
+
+msgid ""
+"Please correct any errors in your form to save it and continue to the "
+"summary of your evaluation application."
+msgstr ""
+
+msgid "Re-registered for a evaluation"
+msgstr ""
+
+msgid "Registered for a evaluation"
+msgstr ""
+
+msgid "Registered for a partial evaluation"
+msgstr ""
+
+#, python-format
+msgid ""
+"Registration for online evaluations for the January session is open until "
+"%(date_fermeture)s for this course."
+msgstr ""
+
+#, python-format
+msgid ""
+"Registration for online evaluations for the June session is open until "
+"%(date_fermeture)s for this course."
+msgstr ""
+
+#, python-format
+msgid ""
+"Registration for online evaluations for the September session is open until "
+"%(date_fermeture)s for this course."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Return to initial screen"
+msgstr ""
+
+msgid "Save and continue to the summary of registrations"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "September"
+msgstr ""
+
+msgid "Submit my exams enrollment"
+msgstr ""
+
+msgid ""
+"The size of your screen does not allow optimal navigation within the form. "
+"If possible, please use a larger screen for easier navigation."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Title"
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Year"
+msgstr ""
+
+#, python-format
+msgid ""
+"You are not registered for any course for the %(annee_academique)s academic "
+"year."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
+"evaluation organized for the January session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
+"evaluation organized for the June session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are not registered for any of the %(nombre_evaluation_organisee)s "
+"evaluation organized for the September session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the January session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the June session."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are registered for %(nombre_inscription)s of the "
+"%(nombre_evaluation_organisee)s evaluation organized for the September "
+"session."
+msgstr ""
+
+msgid "You are registered for all the evaluations ticked below."
+msgstr ""
+
+msgid ""
+"You can modify your evaluation entries as long as you have not submitted "
+"them."
+msgstr ""
+
+msgid ""
+"You can view all evaluation registration statements in the 'My annual "
+"program and my marks' summary."
+msgstr ""
+
+msgid "You cannot register for any evaluation for the January session."
+msgstr ""
+
+msgid "You cannot register for any evaluation for the June session."
+msgstr ""
+
+msgid "You cannot register for any evaluation for the September session."
+msgstr ""
+
+msgctxt "inscription-evaluation"
+msgid "Your faculty contact"
+msgstr ""
+
+msgid ""
+"Your registrations are saved, but you can modify them as long as you have "
+"not submitted them."
+msgstr ""
+
+msgid "Your request to register for evaluations has not been saved."
+msgstr ""

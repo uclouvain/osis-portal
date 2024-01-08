@@ -92,6 +92,10 @@ msgstr ""
 msgid "Manage my exam registration"
 msgstr ""
 
+msgctxt "inscription-evaluation"
+msgid "Manage my exam registration"
+msgstr ""
+
 msgid "Middle name(s)"
 msgstr ""
 
@@ -111,6 +115,9 @@ msgid "My attestations"
 msgstr ""
 
 msgid "My description fiche"
+msgstr ""
+
+msgid "My exams enrollment"
 msgstr ""
 
 msgid "My personal data"

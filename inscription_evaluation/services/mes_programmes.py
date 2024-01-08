@@ -23,42 +23,17 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from .base import *
+from functools import partial
+from base.models.person import Person
+from base.services.utils import call_api
 
-OPTIONAL_APPS = (
-    'dashboard',
-    'performance',
-    'attribution',
-    'dissertation',
-    'internship',
-    'exam_enrollment',
-    'attestation',
-    'assessments',
-    'continuing_education',
-    'admission',
-    'osis_document',
-    'osis_notification',
-    'inscription_aux_cours',
-    'learning_unit',
-    'inscription_evaluation',
-)
 
-OPTIONAL_MIDDLEWARES = ()
-OPTIONAL_INTERNAL_IPS = ()
+class MesProgrammesService:
 
-if DEBUG:
-    AUTH_PASSWORD_VALIDATORS = {}
+    @staticmethod
+    def recuperer(person: 'Person'):
+        return _mes_programmes_api_call(person, 'liste_inscriptions_programmes')
 
-if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true" and DEBUG:
-    OPTIONAL_APPS += ('debug_toolbar', 'django_extensions')
-    OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-    OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': 'osis_common.middlewares.toolbar.show_toolbar',
-        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-3.7.1.min.js"),
-    }
 
-INSTALLED_APPS += OPTIONAL_APPS
-APPS_TO_TEST += OPTIONAL_APPS
-MIDDLEWARE += OPTIONAL_MIDDLEWARES
-INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
+# TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
+_mes_programmes_api_call = partial(call_api, None, None, None)

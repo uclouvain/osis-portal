@@ -23,42 +23,39 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from .base import *
+from functools import partial
+from typing import List
 
-OPTIONAL_APPS = (
-    'dashboard',
-    'performance',
-    'attribution',
-    'dissertation',
-    'internship',
-    'exam_enrollment',
-    'attestation',
-    'assessments',
-    'continuing_education',
-    'admission',
-    'osis_document',
-    'osis_notification',
-    'inscription_aux_cours',
-    'learning_unit',
-    'inscription_evaluation',
-)
+from base.models.person import Person
+from base.services.utils import call_api
 
-OPTIONAL_MIDDLEWARES = ()
-OPTIONAL_INTERNAL_IPS = ()
 
-if DEBUG:
-    AUTH_PASSWORD_VALIDATORS = {}
+class FormulaireInscriptionService:
 
-if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true" and DEBUG:
-    OPTIONAL_APPS += ('debug_toolbar', 'django_extensions')
-    OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-    OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': 'osis_common.middlewares.toolbar.show_toolbar',
-        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-3.7.1.min.js"),
-    }
+    @staticmethod
+    def recuperer(person: 'Person', code_programme: str):
+        return _formulaire_api_call(person, 'get_formulaire_inscription', code_programme=code_programme)
 
-INSTALLED_APPS += OPTIONAL_APPS
-APPS_TO_TEST += OPTIONAL_APPS
-MIDDLEWARE += OPTIONAL_MIDDLEWARES
-INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
+    @staticmethod
+    def soumettre(
+        person: 'Person',
+        code_programme: str,
+        demandes_inscriptions: List[str],
+        demandes_desinscriptions: List[str],
+    ):
+        # TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
+        # cmd = ChoixInscriptionsEtudiant(
+        #     demandes_inscription=demandes_inscriptions,
+        #     demandes_desinscription=demandes_desinscriptions
+        # )
+        # return _formulaire_api_call(
+        #     person,
+        #     'enregistrer_formulaire',
+        #     code_programme=code_programme,
+        #     choix_inscriptions_etudiant=cmd,
+        # )
+        return None
+
+
+# TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
+_formulaire_api_call = partial(call_api, None, None, None)

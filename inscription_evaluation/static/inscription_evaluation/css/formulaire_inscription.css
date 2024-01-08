@@ -1,0 +1,25 @@
+@media (min-width: 1200px){
+    .container {
+        width: max(1170px, 80vw);
+    }
+}
+
+@media (min-width: 992px){
+    .container {
+        width: max(970px, 80vw);
+    }
+}
+
+@media (min-width: 768px){
+    .container {
+        width: max(750px, 90vw);
+    }
+}
+
+thead {
+    background-color: #f5f5f5;;
+}
+
+.table-formulaire-inscription tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
