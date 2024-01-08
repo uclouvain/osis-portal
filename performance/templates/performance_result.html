@@ -180,8 +180,8 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                {% if allegement150 and allegment150|lower == 'oui' %}
-                    {% if reorientation and reorientation|lower == 'non' %}
+                {% if allegement150 and reorientation %}
+                    {% if allegment150|lower == 'oui' and reorientation|lower == 'non' %}
                         <div class="row container-fluid text-left">
                             <p><small>{% trans "In accordance with article 46 of the RGEE, this light program is supplemented by specific remediation activities " %}</small></p>
                         </div>
