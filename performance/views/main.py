@@ -109,6 +109,7 @@ def __get_performance_data(stud_perf, stud):
         "on_site_exams_info": on_site_exams_info,
         "covid_period": _get_covid_period(stud, stud_perf),
         "activiteAideReussite": _get_activite_aide_reussite(stud, stud_perf),
+        "allegement_150_en_remediation": _get_allegement_150_en_remediation(stud_perf),
     }
 
 
@@ -259,3 +260,12 @@ def _get_covid_period(student: Student, stud_perf: StudentPerformance) -> bool:
 def _get_activite_aide_reussite(student: Student, stud_perf: StudentPerformance) -> str:
     if student:
         return stud_perf.data.get('activiteAideReussite')
+
+
+def _get_allegement_150_en_remediation(stud_perf: StudentPerformance) -> bool:
+    if stud_perf:
+        allegement150 = stud_perf.data.get('allegement150', 'NON')
+        reorientation = stud_perf.data.get('reorientation', 'NON')
+        if allegement150.upper() == 'OUI' and reorientation.upper() == 'NON':
+            return True
+    return False
