@@ -1,6 +1,5 @@
 {% extends "dashboard_layout.html" %}
 {% load static i18n %}
-{% load performance_extras %}
 
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
@@ -165,12 +164,6 @@
                     </tr>
                 </table>
 
-                {% if results|has_reduced_150_dp %}
-                    <p>
-                        <small>{% trans 'In accordance with Article 150 of the decree Paysage, this reduced programme is complemented by specific remediation activities.' %}</small>
-                    </p>
-                {% endif %}
-
                 {% if activiteAideReussite %}
                     <div class="row container-fluid text-left">
                         {% if activiteAideReussite == "OUI" %}
@@ -178,6 +171,11 @@
                         {% elif activiteAideReussite == "NON" %}
                             <p><small>{% trans "In accordance with article 39 §1 of the RGEE, I have been informed that I can complete my enrollment with success support activities. I have decided not to complete my enrollment <ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' target='_blank'>with activities to help me succeed</a></ins>." %}</small></p>
                         {% endif %}
+                    </div>
+                {% endif %}
+                {% if allegement_150_en_remediation %}
+                    <div class="row container-fluid text-left">
+                        <p><small>{% trans "In accordance with article 46 of the RGEE, this light program is supplemented by specific remediation activities " %}</small></p>
                     </div>
                 {% endif %}
                 <div class="row container-fluid text-left">
