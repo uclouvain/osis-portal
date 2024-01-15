@@ -132,6 +132,13 @@ msgstr ""
 "<ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' "
 "target='_blank'>d'activités d'aide à la réussite</a></ins>."
 
+msgid ""
+"In accordance with article 46 of the RGEE, this light program is "
+"supplemented by specific remediation activities "
+msgstr ""
+"Conformément à l'article 46 du RGEE, ce programme allégé est "
+"complété par des activités spécifiques de remédiation."
+
 msgid "Inscr."
 msgstr "Inscr."
 
