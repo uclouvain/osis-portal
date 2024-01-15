@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2021 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -84,7 +84,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('Read my teaching charge and access to lists and emails of students'),
                     VPN=False,
                     app='attribution',
-                    has_perm=self.request.user.has_perm('base.is_tutor')
+                    has_perm=self.request.user.has_perm('base.is_tutor'),
                 ),
                 Tile(
                     column='courses',
@@ -94,7 +94,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('Manage my description fiche'),
                     VPN=True,
                     app='attribution',
-                    has_perm=self.request.user.has_perm('base.is_tutor')
+                    has_perm=self.request.user.has_perm('base.is_tutor'),
                 ),
                 Tile(
                     column='exams',
@@ -104,7 +104,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('Download lists of students enrolled to exams for online scores encoding (Excel)'),
                     VPN=False,
                     app='attribution',
-                    has_perm=self.request.user.has_perm('base.is_tutor')
+                    has_perm=self.request.user.has_perm('base.is_tutor'),
                 ),
                 Tile(
                     column='exams',
@@ -114,7 +114,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('Scores encoding of my students'),
                     VPN=True,
                     app='score_encoding',
-                    has_perm=self.request.user.has_perm('base.is_tutor')
+                    has_perm=self.request.user.has_perm('base.is_tutor'),
                 ),
                 Tile(
                     column='submodules',
@@ -125,7 +125,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     VPN=True,
                     app='dissertation',
                     # TODO: use dissertation API to check if user is an adviser
-                    has_perm=hasattr(self.request.user, 'person') and hasattr(self.request.user.person, 'adviser')
+                    has_perm=hasattr(self.request.user, 'person') and hasattr(self.request.user.person, 'adviser'),
                 ),
                 Tile(
                     column='submodules',
@@ -135,9 +135,9 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_("This process controls internships assessment"),
                     VPN=False,
                     app='internship',
-                    has_perm=self.request.user.has_perm('base.is_internship_master')
+                    has_perm=self.request.user.has_perm('base.is_internship_master'),
                 ),
-            ]
+            ],
         )
 
     def get_student_grid_tiles(self) -> 'GridTiles':
@@ -153,7 +153,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('This process shows personal data'),
                     VPN=False,
                     app='base',
-                    has_perm=self.request.user.has_perm('base.is_student')
+                    has_perm=self.request.user.has_perm('base.is_student'),
                 ),
                 Tile(
                     column='first',
@@ -163,19 +163,21 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('This process controls my attestations'),
                     VPN=False,
                     app='attestation',
-                    has_perm=self.request.user.has_perm('base.is_student')
+                    has_perm=self.request.user.has_perm('base.is_student'),
                 ),
                 Tile(
                     column='second',
                     title=_('My annual programme'),
-                    url=reverse(
-                        'inscription-aux-cours:selectionner-formation'
-                    ) if 'inscription_aux_cours' in settings.INSTALLED_APPS else "#",
+                    url=(
+                        reverse('inscription-aux-cours:selectionner-formation')
+                        if 'inscription_aux_cours' in settings.INSTALLED_APPS
+                        else "#"
+                    ),
                     icon='far fa-rectangle-list',
                     description=_('Manage my annual programme proposal'),
                     VPN=False,
                     app='inscription_aux_cours',
-                    has_perm=self.request.user.has_perm('base.is_student')
+                    has_perm=self.request.user.has_perm('base.is_student'),
                 ),
                 Tile(
                     column='second',
@@ -185,7 +187,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('View my annual program and exam marks'),
                     VPN=False,
                     app='performance',
-                    has_perm=self.request.user.has_perm('base.is_student')
+                    has_perm=self.request.user.has_perm('base.is_student'),
                 ),
                 Tile(
                     column='third',
@@ -195,7 +197,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('Manage my exam registration'),
                     VPN=False,
                     app='exam_enrollment',
-                    has_perm=self.request.user.has_perm('base.is_student')
+                    has_perm=self.request.user.has_perm('base.is_student'),
                 ),
                 Tile(
                     column='third',
@@ -205,7 +207,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     description=_('Request an attendance mark (0/20)'),
                     VPN=False,
                     app='assessments',
-                    has_perm=self.request.user.has_perm('base.is_student')
+                    has_perm=self.request.user.has_perm('base.is_student'),
                 ),
                 Tile(
                     column='third',
@@ -216,19 +218,36 @@ class Home(LoginRequiredMixin, TemplateView):
                     VPN=False,
                     app='internship',
                     has_perm=(
-                            self.request.user.has_perm('base.is_student')
-                            and self.request.user.groups.filter(name='internship_students').exists()
-                    )
-                )
-            ]
+                        self.request.user.has_perm('base.is_student')
+                        and self.request.user.groups.filter(name='internship_students').exists()
+                    ),
+                ),
+                Tile(
+                    column='second',
+                    title=_('My mobility'),
+                    url=settings.MOBILITE_URL,
+                    icon='fa-solid fa-person-walking-luggage',
+                    description=(
+                        _('Manage my mobility trips')
+                        + '<br><span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true">'
+                        '</span><span class="dashboard-vpn-warning">'
+                        + _('for academic year 2024-25 only')
+                        + '</span>'
+                    ),
+                    VPN=False,
+                    app='base',
+                    has_perm=True,
+                ),
+            ],
         )
 
 
 def show_multiple_registration_id_error(request):
-    msg = _("A problem was detected with your registration : 2 registration id's are linked to your user.</br> Please "
-            "contact <a href=\"{registration_department_url}\" "
-            "target=\"_blank\">the Registration department</a>. Thank you.") \
-        .format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
+    msg = _(
+        "A problem was detected with your registration : 2 registration id's are linked to your user.</br> Please "
+        "contact <a href=\"{registration_department_url}\" "
+        "target=\"_blank\">the Registration department</a>. Thank you."
+    ).format(registration_department_url=settings.REGISTRATION_ADMINISTRATION_URL)
     messages.add_message(request, messages.ERROR, msg)
     return redirect(reverse('dashboard_home'))
 

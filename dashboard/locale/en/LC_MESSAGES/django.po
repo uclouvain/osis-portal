@@ -92,6 +92,9 @@ msgstr ""
 msgid "Manage my exam registration"
 msgstr ""
 
+msgid "Manage my mobility trips"
+msgstr ""
+
 msgid "Middle name(s)"
 msgstr ""
 
@@ -111,6 +114,9 @@ msgid "My attestations"
 msgstr ""
 
 msgid "My description fiche"
+msgstr ""
+
+msgid "My mobility"
 msgstr ""
 
 msgid "My personal data"
@@ -195,6 +201,9 @@ msgid "VPN access"
 msgstr ""
 
 msgid "View my annual program and exam marks"
+msgstr ""
+
+msgid "for academic year 2024-25 only"
 msgstr ""
 
 msgid "my annual program and my marks"
