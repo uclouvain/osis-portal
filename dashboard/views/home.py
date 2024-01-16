@@ -236,7 +236,7 @@ class Home(LoginRequiredMixin, TemplateView):
                     ),
                     VPN=False,
                     app='base',
-                    has_perm=True,
+                    has_perm=self.request.user.has_perm('base.is_student'),
                 ),
             ],
         )
