@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,28 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from functools import partial
-from base.models.person import Person
-from base.services.utils import call_api
+import logging
+
 import osis_inscription_evaluation_sdk
-from osis_inscription_evaluation_sdk.api import recapitulatif_api
-from osis_inscription_evaluation_sdk.model.recapitulatif import Recapitulatif
-from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
+from django.conf import settings
 
-class RecapitulatifService:
-
-    @staticmethod
-    def recuperer(person: 'Person', code_programme: str) -> 'Recapitulatif':
-        return _recapitulatif_api_call(person, 'get_recapitulatif', code_programme=code_programme)
-
-    @staticmethod
-    def soumettre(person: 'Person', code_programme: str):
-        return _recapitulatif_api_call(person, 'soumettre_formulaire', code_programme=code_programme)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-_recapitulatif_api_call = partial(
-    call_api,
-    inscription_evaluation_sdk,
-    osis_inscription_evaluation_sdk,
-    recapitulatif_api.RecapitulatifApi
-)
+def build_configuration() -> osis_inscription_evaluation_sdk.Configuration:
+    """
+    Return SDK configuration of exam_enrollment
+    """
+    if not settings.OSIS_INSCRIPTION_EVALUATION_SDK_HOST:
+        logger.debug("'OSIS_INSCRIPTION_EVALUATION_SDK_HOST' setting must be set in configuration")
+
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
+
+    return osis_inscription_evaluation_sdk.Configuration(
+        host=settings.OSIS_INSCRIPTION_EVALUATION_SDK_HOST,
+        api_key_prefix={'Token': settings.OSIS_INSCRIPTION_EVALUATION_SDK_API_KEY_PREFIX},
+        api_key={'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY},
+    )

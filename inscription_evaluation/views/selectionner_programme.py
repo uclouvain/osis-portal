@@ -27,6 +27,10 @@ from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
+from osis_inscription_evaluation_sdk.model.mes_formations import MesFormations
+from osis_inscription_evaluation_sdk.model.etudiant import Etudiant
+from osis_inscription_evaluation_sdk.model.inscription_formation import InscriptionFormation
+
 from base.models.person import Person
 from inscription_evaluation.services.mes_programmes import MesProgrammesService
 from inscription_evaluation.services.periode import PeriodeInscriptionAuxEvaluationsService
@@ -48,65 +52,16 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         return PeriodeInscriptionAuxEvaluationsService().get_annee(self.person)
 
     @cached_property
-    def etudiant(self):
-        # return self.mes_programmes.etudiant
-        return {
-            "noma": "12345678",
-            "nom": "Smith",
-            "prenom": "Charles",
-        }
+    def etudiant(self) -> 'Etudiant':
+        return self.mes_programmes.etudiant
 
     @cached_property
-    def formations(self):
-        # return self.mes_programmes.formations
-        return [
-            {
-                "code_programme": "LDROI100B",
-                "sigle": "DROI1BA",
-                "intitule": "Bachelier en droit",
-                "periode_inscription": {
-                    "annee": 2023,
-                    "numero_session": 3,
-                    "date_ouverture": "2023-12-11",
-                    "date_fermeture": "2023-12-11",
-                },
-                "peut_inscrire_aux_evaluations": False,
-                "raisons_peut_pas_inscrire": [
-                    "L'inscription aux évaluations en ligne n'est pas ouverte pour cette formation."
-                ],
-                "contact_faculte":{
-                    "sigle_formation": "string",
-                    "pour_premiere_annee": True,
-                    "en_tete": "Secrétariat du 1er cycle ESPO",
-                    "email": "christine.vandiest@uclouvain.be"
-                }
-            },
-            {
-                "code_programme": "LECGE100B",
-                "sigle": "ECGE1BA",
-                "intitule": "Bachelier en sciences économiques et de gestion",
-                "periode_inscription": {
-                    "annee": 2023,
-                    "numero_session": 3,
-                    "date_ouverture": "2023-12-11",
-                    "date_fermeture": "2023-12-11",
-                },
-                "peut_inscrire_aux_evaluations": True,
-                "raisons_peut_pas_inscrire": [
-                ],
-                "contact_faculte":{
-                    "sigle_formation": "string",
-                    "pour_premiere_annee": True,
-                    "en_tete": "Secrétariat du 1er cycle ESPO",
-                    "email": "christine.vandiest@uclouvain.be"
-                }
-            }
-        ]
+    def formations(self) -> 'InscriptionFormation':
+        return self.mes_programmes.formations
 
     @cached_property
-    def mes_programmes(self):
-        # return MesProgrammesService().recuperer(self.person)
-        return None
+    def mes_programmes(self) -> 'MesFormations':
+        return MesProgrammesService().recuperer(self.person)
 
     def get_context_data(self, **kwargs):
         return {
