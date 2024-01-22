@@ -9,7 +9,7 @@
     * The core business involves the administration of students, teachers,
     * courses, programs and so on.
     *
-    * Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+    * Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
     *
     * This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
@@ -48,17 +48,17 @@
                             </a>
                         </h4>
                         <div class="description">
-                            <p>{{ tile.description }}</p>
+                            <p>{{ tile.description|safe }}</p>
                             {% if tile.VPN %}
                                 <p>
                                     <span class="dashboard-vpn-warning fa fa-exclamation-triangle" aria-hidden="true"></span>
                                     {% if osis_vpn_help_url %}
                                         <span class="dashboard-vpn-warning">
-                                            {% trans 'This requires a ' %} <a href="{{ osis_vpn_help_url }}" target="_blank">{% trans 'VPN access' %} </a> {% trans 'outside UCLouvain' %}
+                                            {% trans "This requires a " %} <a href="{{ osis_vpn_help_url }}" target="_blank">{% trans "VPN access" %} </a> {% trans "outside UCLouvain" %}
                                         </span>
                                     {% else %}
                                         <span class="dashboard-vpn-warning">
-                                            {% trans 'This requires a VPN access outside UCLouvain' %}
+                                            {% trans "This requires a VPN access outside UCLouvain" %}
                                         </span>
                                     {% endif %}
                                 </p>
@@ -72,14 +72,13 @@
 
     {% endfor %}
 
-    {% switch 'admission' %}
-        {% if 'admission' in installed_apps and request.user.person %}
-            {% include 'admission_dashboard.html' %}
+    {% switch "admission" %}
+        {% if "admission" in installed_apps and request.user.person %}
+            {% include "admission_dashboard.html" %}
         {% endif %}
     {% endswitch %}
 
-
-{% endblock %}
+{% endblock content %}
 
 {% block script %}
 
@@ -87,32 +86,32 @@
 
         const MIN_SIZE_FOR_GRID_AREAS = 3;
 
-        for(let role of ['tutor', 'student']){
+        for(let role of ["tutor", "student"]){
             initDashboardAutoPlacement(role);
         }
 
         function initDashboardAutoPlacement(role){
             const dashboardGrid = document.querySelector(`.dashboard-${role} .dashboard-grid`);
             if(dashboardGrid){
-                if(dashboardGrid.querySelectorAll('.grid-item').length > MIN_SIZE_FOR_GRID_AREAS){
-                    dashboardGrid.classList.add('dashboard-fixed-placement');
+                if(dashboardGrid.querySelectorAll(".grid-item").length > MIN_SIZE_FOR_GRID_AREAS){
+                    dashboardGrid.classList.add("dashboard-fixed-placement");
                 } else {
-                    dashboardGrid.querySelectorAll('.grid-item').forEach(el => el.style.gridArea = 'auto');
-                    dashboardGrid.style.gridTemplateRows = '1fr';
+                    dashboardGrid.querySelectorAll(".grid-item").forEach(el => el.style.gridArea = "auto");
+                    dashboardGrid.style.gridTemplateRows = "1fr";
                 }
             }
         }
 
-        // propagate click on grid-item to sibling 'a' element (propagation event priority is given to a:hover)
-        document.querySelectorAll('.grid-item').forEach(el => el.addEventListener('click', () => {
-            const aHover = el.querySelector('a:hover');
+        // propagate click on grid-item to sibling "a" element (propagation event priority is given to a:hover)
+        document.querySelectorAll(".grid-item").forEach(el => el.addEventListener("click", () => {
+            const aHover = el.querySelector("a:hover");
             if(aHover) {
                 aHover.click()
             } else {
-                el.querySelector('a').click();
+                el.querySelector("a").click();
             }
         }));
 
     </script>
 
-{% endblock %}
+{% endblock script %}
