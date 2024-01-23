@@ -31,7 +31,7 @@ from django.core.validators import MinValueValidator
 from django.utils.translation import gettext_lazy as _, pgettext
 
 from base.forms.base_forms import BootstrapForm
-from base.models.entity_version import search, SAINT_LOUIS_FACULTY_ACRONYMS
+from base.models.entity_version import search
 
 MAXIMUM_REMARK_LENGTH = 250
 
@@ -95,9 +95,7 @@ class ApplicationForm(BootstrapForm):
 
 class VacantAttributionFilterForm(BootstrapForm):
     faculty = forms.ModelChoiceField(
-        queryset=search(entity_type="FACULTY", date=datetime.date.today()).exclude(
-            acronym__in=SAINT_LOUIS_FACULTY_ACRONYMS
-        ),
+        queryset=search(entity_type="FACULTY", date=datetime.date.today()),
         widget=forms.Select(),
         empty_label=pgettext("plural", "All"),
         required=False,
