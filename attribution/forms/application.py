@@ -95,9 +95,7 @@ class ApplicationForm(BootstrapForm):
 
 class VacantAttributionFilterForm(BootstrapForm):
     faculty = forms.ModelChoiceField(
-        queryset=search(entity_type="FACULTY", date=datetime.date.today()).exclude(
-            acronym__in=SAINT_LOUIS_FACULTY_ACRONYMS
-        ),
+        queryset=search(entity_type="FACULTY", date=datetime.date.today()),
         widget=forms.Select(),
         empty_label=pgettext("plural", "All"),
         required=False,
