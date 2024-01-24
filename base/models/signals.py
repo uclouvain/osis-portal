@@ -24,6 +24,7 @@
 #
 ##############################################################################
 import datetime
+import re
 
 from django.conf import settings
 from django.contrib.auth import user_logged_in
@@ -131,10 +132,11 @@ def _assign_group(person, group_name):
 
 
 def _create_update_person(user, person, user_infos):
+    pattern = re.compile("[0-9]{2}/[0-9]{2}/[0-9]{4}")
     user_birthdate = datetime.datetime.strptime(
         user_infos.get('USER_BIRTHDATE'),
         "%d/%m/%Y"
-    ).date() if user_infos.get('USER_BIRTHDATE') else None
+    ).date() if user_infos.get('USER_BIRTHDATE') and pattern.match(user_infos.get('USER_BIRTHDATE')) else None
 
     if not person:
         person = mdl.person.find_by_user(user)
