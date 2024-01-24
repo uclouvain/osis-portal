@@ -297,10 +297,3 @@ msgstr "examens écrits sur Gradescope, dans une salle UCLouvain"
 
 msgid "written exams with Moodle, in a room at UCLouvain"
 msgstr "examens écrits sur Moodle, dans une salle UCLouvain"
-
-#~ msgid ""
-#~ "In accordance with Article 150 of the decree Paysage, this reduced "
-#~ "programme is complemented by specific remediation activities."
-#~ msgstr ""
-#~ "Conformément à l'article 150 du Décret Paysage, ce programme allégé est "
-#~ "complété par des activités spécifiques de remédiation."

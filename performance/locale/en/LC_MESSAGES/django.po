@@ -93,11 +93,6 @@ msgstr ""
 msgid "If this information is not correct, please contact your faculty"
 msgstr ""
 
-#, fuzzy
-#| msgid ""
-#| "In accordance with article 39 §1 of the RGEE, I complete my enrollment "
-#| "<ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' "
-#| "target='_blank'>with activities to help me succeed</a></ins>."
 msgid ""
 "In accordance with article 39 1 of the RGEE, I complete my enrollment "
 "<ins><a href='https://uclouvain.be/aar-dispositifs-facultaires' "
