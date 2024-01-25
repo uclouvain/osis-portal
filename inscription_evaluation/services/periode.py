@@ -23,42 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from .base import *
+import datetime
+from typing import List
 
-OPTIONAL_APPS = (
-    'dashboard',
-    'performance',
-    'attribution',
-    'dissertation',
-    'internship',
-    'exam_enrollment',
-    'attestation',
-    'assessments',
-    'continuing_education',
-    'admission',
-    'osis_document',
-    'osis_notification',
-    'inscription_aux_cours',
-    'learning_unit',
-    'inscription_evaluation',
-)
+from osis_reference_sdk.model.academic_calendar import AcademicCalendar
 
-OPTIONAL_MIDDLEWARES = ()
-OPTIONAL_INTERNAL_IPS = ()
+from base.models.person import Person
+from reference.services.academic_calendar import AcademicCalendarService
 
-if DEBUG:
-    AUTH_PASSWORD_VALIDATORS = {}
+REFERENCE_INSCRIPTION_AUX_EVALUATIONS = 'BASCULEMENT_INSCRIPTION_EVALUATION'
 
-if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true" and DEBUG:
-    OPTIONAL_APPS += ('debug_toolbar', 'django_extensions')
-    OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-    OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': 'osis_common.middlewares.toolbar.show_toolbar',
-        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-3.7.1.min.js"),
-    }
 
-INSTALLED_APPS += OPTIONAL_APPS
-APPS_TO_TEST += OPTIONAL_APPS
-MIDDLEWARE += OPTIONAL_MIDDLEWARES
-INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
+class PeriodeInscriptionAuxEvaluationsService:
+    @classmethod
+    def get_annee(cls, person: 'Person') -> int:
+        calendriers = AcademicCalendarService.get_academic_calendar_list(
+            person,
+            reference=REFERENCE_INSCRIPTION_AUX_EVALUATIONS
+        )['results']  # type: List[AcademicCalendar]
+        today = datetime.date.today()
+        return next(
+            calendrier for calendrier in calendriers
+            if calendrier.start_date <= today <= calendrier.end_date
+        ).data_year

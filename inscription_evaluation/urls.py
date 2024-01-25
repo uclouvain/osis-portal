@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,42 +23,22 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from .base import *
+from django.urls import path, include
 
-OPTIONAL_APPS = (
-    'dashboard',
-    'performance',
-    'attribution',
-    'dissertation',
-    'internship',
-    'exam_enrollment',
-    'attestation',
-    'assessments',
-    'continuing_education',
-    'admission',
-    'osis_document',
-    'osis_notification',
-    'inscription_aux_cours',
-    'learning_unit',
-    'inscription_evaluation',
-)
+from inscription_evaluation.views.formulaire_inscription import FormulaireInscriptionView
+from inscription_evaluation.views.recapitulatif import RecapitulatifView
+from inscription_evaluation.views.selectionner_programme import SelectionnerProgrammeView
 
-OPTIONAL_MIDDLEWARES = ()
-OPTIONAL_INTERNAL_IPS = ()
-
-if DEBUG:
-    AUTH_PASSWORD_VALIDATORS = {}
-
-if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true" and DEBUG:
-    OPTIONAL_APPS += ('debug_toolbar', 'django_extensions')
-    OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-    OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': 'osis_common.middlewares.toolbar.show_toolbar',
-        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-3.7.1.min.js"),
-    }
-
-INSTALLED_APPS += OPTIONAL_APPS
-APPS_TO_TEST += OPTIONAL_APPS
-MIDDLEWARE += OPTIONAL_MIDDLEWARES
-INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
+app_name = 'inscription-evaluation'
+urlpatterns = [
+    path('', SelectionnerProgrammeView.as_view(), name=SelectionnerProgrammeView.name),
+    path(
+        '<str:code_programme>/',
+        include(
+            [
+                path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),
+                path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
+            ]
+        ),
+    ),
+]

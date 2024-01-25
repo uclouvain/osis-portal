@@ -98,6 +98,10 @@ msgstr "Gérer mes fiches descriptives"
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
 
+msgctxt "inscription-evaluation"
+msgid "Manage my exam registration"
+msgstr "Gérer mon inscription aux évaluations"
+
 msgid "Manage my mobility trips"
 msgstr "Gérer mes séjours de mobilité"
 
@@ -121,6 +125,9 @@ msgstr "Mes attestations"
 
 msgid "My description fiche"
 msgstr "Mes fiches descriptives"
+
+msgid "My exams enrollment"
+msgstr "Mon inscription aux évaluations"
 
 msgid "My mobility"
 msgstr "Ma mobilité"
