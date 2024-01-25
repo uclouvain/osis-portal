@@ -530,3 +530,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 OSIS_NOTIFICATION_BASE_URL = os.environ.get('OSIS_NOTIFICATION_BASE_URL', 'http://localhost:8000/osis_notification/')
 
 WAFFLE_CREATE_MISSING_SWITCHES = True
+
+# MOBILITE
+MOBILITE_URL = os.environ.get('MOBILITE_URL', '')
