@@ -31,6 +31,7 @@ from osis_inscription_evaluation_sdk.api import mes_programmes_api
 from osis_inscription_evaluation_sdk.model.mes_formations import MesFormations
 from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
 
+
 class MesProgrammesService:
 
     @staticmethod

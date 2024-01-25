@@ -31,6 +31,7 @@ from osis_inscription_evaluation_sdk.api import recapitulatif_api
 from osis_inscription_evaluation_sdk.model.recapitulatif import Recapitulatif
 from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
 
+
 class RecapitulatifService:
 
     @staticmethod
