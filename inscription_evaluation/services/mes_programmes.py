@@ -26,14 +26,21 @@
 from functools import partial
 from base.models.person import Person
 from base.services.utils import call_api
-
+import osis_inscription_evaluation_sdk
+from osis_inscription_evaluation_sdk.api import mes_programmes_api
+from osis_inscription_evaluation_sdk.model.mes_formations import MesFormations
+from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
 
 class MesProgrammesService:
 
     @staticmethod
-    def recuperer(person: 'Person'):
+    def recuperer(person: 'Person') -> 'MesFormations':
         return _mes_programmes_api_call(person, 'liste_inscriptions_programmes')
 
 
-# TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
-_mes_programmes_api_call = partial(call_api, None, None, None)
+_mes_programmes_api_call = partial(
+    call_api,
+    inscription_evaluation_sdk,
+    osis_inscription_evaluation_sdk,
+    mes_programmes_api.MesProgrammesApi
+)

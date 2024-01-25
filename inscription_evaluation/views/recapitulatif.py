@@ -23,13 +23,18 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from typing import Dict, List
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import redirect
 
-from inscription_evaluation.services.recapitulatif import RecapitulatifService
+from osis_inscription_evaluation_sdk.model.session_de_travail import SessionDeTravail
+from osis_inscription_evaluation_sdk.model.etudiant import Etudiant
+from osis_inscription_evaluation_sdk.model.contact_faculte import ContactFaculte
+from osis_inscription_evaluation_sdk.model.formation import Formation
 from inscription_evaluation.views.common import InscriptionEvaluationViewMixin
 from continuing_education.views.common import display_error_messages, display_success_messages
 from inscription_evaluation.services.recapitulatif import RecapitulatifService
@@ -42,64 +47,32 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
     template_name = "inscription_evaluation/recapitulatif.html"
 
     @cached_property
-    def session_de_travail(self):
-        # return self.recapitulatif.session_de_travail
-        return {
-            "annee": 2023,
-            "numero_session": 3
-        }
+    def session_de_travail(self) -> 'SessionDeTravail':
+        return self.recapitulatif.session_de_travail
 
     @cached_property
-    def etudiant(self):
-        # return self.recapitulatif.etudiant
-        return {
-            "noma": "12345678",
-            "nom": "Smith",
-            "prenom": "Charles"
-        }
+    def etudiant(self) -> 'Etudiant':
+        return self.recapitulatif.etudiant
 
     @cached_property
-    def formation(self):
-        # return self.recapitulatif.formation
-        return {
-            "code_programme": "LDROI100B",
-            "sigle": "DROI1BA",
-            "intitule": "Bachelier en droit"
-        }
+    def formation(self) -> 'Formation':
+        return self.recapitulatif.formation
 
     @cached_property
-    def contact_faculte(self):
-        # return self.recapitulatif.contact_faculte
-        return {
-            "sigle_formation": "string",
-            "pour_premiere_annee": True,
-            "en_tete": "Secrétariat du 1er cycle ESPO",
-            "email": "christine.vandiest@uclouvain.be"
-        }
+    def contact_faculte(self) -> 'ContactFaculte':
+        return self.recapitulatif.contact_faculte
 
     @cached_property
-    def inscriptions(self):
-        # return self.recapitulatif.inscriptions
-        return [
-            {
-              "unite_enseignement": {
-                "code": "LDROI1001",
-                "intitule": "Introduction au droit civil"
-              },
-              "type_inscription": "PREMIERE_INSCRIPTION",
-              "type_inscription_txt": "Insc"
-            }
-        ]
-
-    @cached_property
-    def recapitulatif(self):
-        # return RecapitulatifService.recuperer(self.person, self.code_programme)
-        return None
+    def inscriptions(self) -> List[Dict]:
+        return self.recapitulatif.inscriptions
 
     @cached_property
     def total_evaluations_organisees(self) -> int:
-        # return self.recapitulatif.total_evaluations_organisees
-        return 8
+        return self.recapitulatif.total_evaluations_organisees
+
+    @cached_property
+    def recapitulatif(self) -> 'Recapitulatif':
+        return RecapitulatifService.recuperer(self.person, self.code_programme)
 
     def get_context_data(self, **kwargs):
         return {

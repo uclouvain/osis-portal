@@ -28,12 +28,18 @@ from typing import List
 
 from base.models.person import Person
 from base.services.utils import call_api
+import osis_inscription_evaluation_sdk
+from osis_inscription_evaluation_sdk.api import formulaire_api
+from osis_inscription_evaluation_sdk.model.mon_formulaire_inscription_evaluations import \
+    MonFormulaireInscriptionEvaluations
+from osis_inscription_evaluation_sdk.model.choix_inscriptions_etudiant import ChoixInscriptionsEtudiant
+from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
 
 
 class FormulaireInscriptionService:
 
     @staticmethod
-    def recuperer(person: 'Person', code_programme: str):
+    def recuperer(person: 'Person', code_programme: str) -> 'MonFormulaireInscriptionEvaluations':
         return _formulaire_api_call(person, 'get_formulaire_inscription', code_programme=code_programme)
 
     @staticmethod
@@ -43,19 +49,21 @@ class FormulaireInscriptionService:
         demandes_inscriptions: List[str],
         demandes_desinscriptions: List[str],
     ):
-        # TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
-        # cmd = ChoixInscriptionsEtudiant(
-        #     demandes_inscription=demandes_inscriptions,
-        #     demandes_desinscription=demandes_desinscriptions
-        # )
-        # return _formulaire_api_call(
-        #     person,
-        #     'enregistrer_formulaire',
-        #     code_programme=code_programme,
-        #     choix_inscriptions_etudiant=cmd,
-        # )
-        return None
+        cmd = ChoixInscriptionsEtudiant(
+            demandes_inscription=demandes_inscriptions,
+            demandes_desinscription=demandes_desinscriptions
+        )
+        return _formulaire_api_call(
+            person,
+            'enregistrer_formulaire',
+            code_programme=code_programme,
+            choix_inscriptions_etudiant=cmd,
+        )
 
 
-# TODO: appeler l'API d'inscription aux évaluations une fois qu'elle sera disponible
-_formulaire_api_call = partial(call_api, None, None, None)
+_formulaire_api_call = partial(
+    call_api,
+    inscription_evaluation_sdk,
+    osis_inscription_evaluation_sdk,
+    formulaire_api.FormulaireApi
+)
