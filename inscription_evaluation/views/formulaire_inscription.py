@@ -24,8 +24,13 @@
 #
 ##############################################################################
 import json
-from typing import List
+from typing import List, Dict
 
+from osis_inscription_evaluation_sdk.model.mon_formulaire_inscription_evaluations import \
+    MonFormulaireInscriptionEvaluations
+from osis_inscription_evaluation_sdk.model.session_de_travail import SessionDeTravail
+from osis_inscription_evaluation_sdk.model.etudiant import Etudiant
+from osis_inscription_evaluation_sdk.model.contact_faculte import ContactFaculte
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.utils.functional import cached_property
@@ -44,151 +49,32 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
     template_name = "inscription_evaluation/formulaire_inscription.html"
 
     @cached_property
-    def session_de_travail(self):
-        # return self.formulaire.session_de_travail
-        return {
-            "annee": 2023,
-            "numero_session": 3
-        }
+    def session_de_travail(self) -> 'SessionDeTravail':
+        return self.formulaire.session_de_travail
 
     @cached_property
-    def etudiant(self):
-        # return self.formulaire.etudiant
-        return {
-            "noma": "12345678",
-            "nom": "Smith",
-            "prenom": "Charles"
-        }
+    def etudiant(self) -> 'Etudiant':
+        return self.formulaire.etudiant
 
     @cached_property
-    def formation(self):
-        # return self.formulaire.formation
-        return {
-            "code_programme": "LDROI100B",
-            "sigle": "DROI1BA",
-            "intitule": "Bachelier en droit"
-        }
+    def formation(self) -> 'Formation':
+        return self.formulaire.formation
 
     @cached_property
-    def contact_faculte(self):
-        # return self.formulaire.contact_faculte
-        return {
-            "sigle_formation": "string",
-            "pour_premiere_annee": True,
-            "en_tete": "Secrétariat du 1er cycle ESPO",
-            "email": "christine.vandiest@uclouvain.be"
-        }
+    def contact_faculte(self) -> 'ContactFaculte':
+        return self.formulaire.contact_faculte
 
     @cached_property
-    def inscriptions(self):
-        # return self.formulaire.inscriptions
-        return [
-            {
-                "unite_enseignement": {
-                    "code": "LDROI1001",
-                    "intitule": "Introduction au droit civil"
-                },
-                "credits_inscrits": "3.5",
-                "etat_txt": "Hors progression",
-                "peut_inscrire_evaluation": False,
-                "type_inscription_possible": None,
-                "type_inscription_possible_txt": None,
-                "evaluation_session_1": {
-                    "type_inscription": "PREMIERE_INSCRIPTION",
-                    "type_inscription_txt": "Insc",
-                    "note": "15.0"
-                },
-                "evaluation_session_2": {
-                    "type_inscription": "PREMIERE_INSCRIPTION",
-                    "type_inscription_txt": "Insc",
-                    "note": "15.0"
-                },
-                "evaluation_session_3": {
-                    "type_inscription": "PREMIERE_INSCRIPTION",
-                    "type_inscription_txt": "Insc",
-                    "note": "15.0"
-                },
-                "note_finale": "15.0",
-                "credite": "Oui"
-            },
-            {
-                "unite_enseignement": {
-                    "code": "LDROI1002-A",
-                    "intitule": "Introduction au droit civil: partie 2"
-                },
-                "credits_inscrits": "5",
-                "etat_txt": "Hors progression",
-                "peut_inscrire_evaluation": False,
-                "type_inscription_possible": None,
-                "type_inscription_possible_txt": None,
-                "evaluation_session_1": {
-                    "type_inscription": "INSCRIPTION_PARTIELLE",
-                    "type_inscription_txt": "Part",
-                    "note": "8.0"
-                },
-                "evaluation_session_2": {
-                    "type_inscription": "PREMIERE_INSCRIPTION",
-                    "type_inscription_txt": "Insc",
-                    "note": "9.0"
-                },
-                "evaluation_session_3": {
-                    "type_inscription": "REINSCRIPTION",
-                    "type_inscription_txt": "Reinsc",
-                    "note": ""
-                },
-                "note_finale": "",
-                "credite": ""
-            },
-            {
-                "unite_enseignement": {
-                    "code": "LDROI1003",
-                    "intitule": "Introduction au droit civil: partie 3"
-                },
-                "credits_inscrits": "5",
-                "etat_txt": "",
-                "peut_inscrire_evaluation": True,
-                "type_inscription_possible": "PREMIERE_INSCRIPTION",
-                "type_inscription_possible_txt": "Insc",
-                "evaluation_session_1": {
-                    "type_inscription": "INSCRIPTION_PARTIELLE",
-                    "type_inscription_txt": "Part",
-                    "note": "8.0"
-                },
-                "evaluation_session_2": None,
-                "evaluation_session_3": None,
-                "note_finale": "",
-                "credite": ""
-            },
-            {
-                "unite_enseignement": {
-                    "code": "LDROI1004",
-                    "intitule": "Introduction au droit civil: partie 4"
-                },
-                "credits_inscrits": "5",
-                "etat_txt": "",
-                "peut_inscrire_evaluation": True,
-                "type_inscription_possible": "REINSCRIPTION",
-                "type_inscription_possible_txt": "Reinsc",
-                "evaluation_session_1": {
-                    "type_inscription": "INSCRIPTION_PARTIELLE",
-                    "type_inscription_txt": "Part",
-                    "note": "8.0"
-                },
-                "evaluation_session_2": None,
-                "evaluation_session_3": None,
-                "note_finale": "",
-                "credite": ""
-            }
-        ]
+    def inscriptions(self) -> List[Dict]:
+        return self.formulaire.inscriptions
 
     @cached_property
-    def peut_s_inscrire_a_minimum_une_evaluation(self):
+    def peut_s_inscrire_a_minimum_une_evaluation(self) -> bool:
         return any(inscription['peut_inscrire_evaluation'] for inscription in self.inscriptions)
 
     @cached_property
-    def formulaire(self):
-        # return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
-        return None
+    def formulaire(self) -> 'MonFormulaireInscriptionEvaluations':
+        return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
 
     def get_context_data(self, **kwargs):
         return {
