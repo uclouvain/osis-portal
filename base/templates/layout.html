@@ -28,168 +28,148 @@
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
 
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-    {% analytical_head_top %}
-    <meta charset="utf-8">
-    <title>{% block title %}Dashboard{% endblock %}</title>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-    <link rel="icon" href="{% static 'img/favicon.ico' %}"/>
-    <link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
-    <link rel="stylesheet" href="{% static 'fontawesome-free-6.1.1-web/css/all.min.css' %}">
-    {% if 'osis_notification' in installed_apps %}
-        <link rel="stylesheet" href="{% static 'osis_notification/osis-notification.css' %}" />
-    {% endif %}
-    {% if 'osis_document' in installed_apps %}
-        <link rel="stylesheet" href="{% static 'osis_document/osis-document.css' %}" />
-    {% endif %}
+<html lang="{{ LANGUAGE_CODE }}" class="h-100">
 
-    {% include 'dependencies/jquery.html' %}
-    {% include 'dependencies/autocomplete_light.html' %}
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    {% include 'dependencies/datatable.html' %}
+{% block head %}
+	<head>
+		{% analytical_head_top %}
+		<meta charset="utf-8">
+		<title>{% block title %}Dashboard{% endblock %}</title>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+		<meta name="viewport"
+		      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<link rel="icon" href="{% static 'img/favicon.ico' %}"/>
 
-    {% block style %}
-    {% endblock %}
-    {% analytical_head_bottom %}
-</head>
-<body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %} class="localmode" {% elif environment == 'QA' %} class="qamode" {% endif %}>
-    {% analytical_body_top %}
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+		<link rel="stylesheet" href="{% static 'css/armata.css' %}" type='text/css'>
+		<link rel="stylesheet" href="{% static 'fontawesome-free-6.1.1-web/css/all.min.css' %}">
 
-                <a class="navbar-brand" {% if 'dashboard' in installed_apps %}
-                                            href="{% url 'dashboard_home' %}"
-                                        {% else %}
-                                            href="#"
-                                        {% endif %} id="lnk_home">
-                <img src="{% static 'img/logo_header.jpg' %}"></a>
-            </div>
+		{% if 'osis_notification' in installed_apps %}
+			<link rel="stylesheet" href="{% static 'osis_notification/osis-notification.css' %}"/>
+		{% endif %}
+		{% if 'osis_document' in installed_apps %}
+			<link rel="stylesheet" href="{% static 'osis_document/osis-document.css' %}"/>
+		{% endif %}
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    {% if request.user.is_authenticated %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-haspopup="true"
-                               aria-expanded="false"
-                               id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
-                                    class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                {% for lang in LANGUAGES%}
-                                    {% if lang.0 != LANGUAGE_CODE%}
-                                        {% block lang %}
-                                        <li><a href="{% url 'profile_lang' lang.0 %}">{{ lang.0 }}</a></li>
-                                        {% endblock %}
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                               aria-expanded="false" id="bt_user">
-                                <i class="fa fa-user fa-lg" aria-hidden="true"></i>
-                                {{ request.user.first_name }}</a>
-                            <ul class="dropdown-menu">
-                                {% if perms.base.is_administrator %}
-                                    <li><a href="{% url 'data' %}" role="button" id="bt_data">
-                                        <i class="fa fa-database" aria-hidden="true"></i>
-                                        {% trans 'Data' %}</a></li>
-                                {% endif %}
-                                {% if 'dashboard' in installed_apps %}
-                                    {% include 'dashboard_admin_menu.html' %}
-                                {% endif %}
-                                {% if logout_button %}
-                                <li><a href="{% url 'logout' %}" id="lnk_logout">
-                                    <i class="fa fa-power-off" aria-hidden="true"></i>
-                                    Logout</a></li>
-                                {% endif %}
-                            </ul>
-                        </li>
-                      {% if 'osis_notification' in installed_apps %}
-                        {% include 'osis_notification/notification_viewer.html' %}
-                      {% endif %}
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-    </nav>
-    {% if environment == 'DEV' %}
-        <div class="devorange">DEV</div>
-    {% elif environment == 'LOCAL'%}
-        <div class="localred">LOCAL</div>
-    {% elif environment == 'QA'%}
-        <div class="qagreen">QA</div>
-    {% endif %}
-    {% if subject %}
-        <div class="container">
-            <div class="alert alert-danger hide_print" role="alert"><b>{{ subject|safe }}</b><br>{{ notice|safe }}</div>
-        </div>
-    {% endif %}
-    <div class="container">
+		{% block jquery_dependencies %}{% include 'dependencies/jquery.html' %}{% endblock jquery_dependencies %}
+		{% block autocomplete_dependencies %}
+			{% include 'dependencies/autocomplete_light.html' %}{% endblock autocomplete_dependencies %}
+		{% block datatable_dependencies %}
+			{% include 'dependencies/datatable.html' %}{% endblock datatable_dependencies %}
 
-        {% if request.user.is_authenticated %}
-            {% block breadcrumb_area %}
-            {% endblock %}
-        {% endif %}
+		{% block bootstrap_style %}
+			<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+		{% endblock bootstrap_style %}
 
-        {% block content %}
-        {% endblock %}
+		{% block custom_style %}
+			<link rel="stylesheet" href="{% static 'css/osis-portal.css' %}">
+		{% endblock custom_style %}
 
-        <div class="modal fade" id="form-ajax-modal" role="dialog">
-            <div class="modal-dialog" id="modal_dialog_id">
-                <div class="modal-content" id="form-modal-ajax-content">
-                    {# loading ajax requests #}
-                </div>
-            </div>
-        </div>
-        <br>
-        <br>
-    </div>
-    <hr>
+		{% block style %}{% endblock style %}
 
-    <div class="container">
-      {% block footer %}
-        <p class="navbar-text pull-left"></p>
-        <p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> {% now "Y" %} <a
-                href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de Louvain</a></p>
-      {% endblock %}
-    </div>
+		{% analytical_head_bottom %}
+	</head>
+{% endblock head %}
 
+{% block body %}
+	<body {% if environment == 'DEV' %} class="devmode" {% elif environment == 'LOCAL' %}
+	                                    class="localmode" {% elif environment == 'QA' %} class="qamode" {% endif %}>
 
-    <script src="{% static 'js/osis-portal.js' %}"></script>
-    <script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+	{% block badge_environment %}
+		{% if environment == 'DEV' %}
+			<div class="devorange">DEV</div>
+		{% elif environment == 'LOCAL' %}
+			<div class="localred">LOCAL</div>
+		{% elif environment == 'QA' %}
+			<div class="qagreen">QA</div>
+		{% elif environment == 'TEST' %}
+			<div class="testblue">TEST</div>
+		{% endif %}
+	{% endblock badge_environment %}
 
-    {# Vue, Vue i18n and vue packages #}
-    {# We use 'vue.runtime.global.prod.js' https://github.com/vuejs/core/tree/main/packages/vue#which-dist-file-to-use #}
-    <script src="{% static 'js/vue.min.js' %}"></script>
-    <script src="{% static 'js/vue-i18n.min.js' %}"></script>
-    {% if 'osis_notification' in installed_apps %}
-        <script type="text/javascript" src="{% static 'osis_notification/osis-notification.umd.min.js' %}"></script>
-    {% endif %}
-    {% if 'osis_document' in installed_apps %}
-        <script type="text/javascript" src="{% static 'osis_document/osis-document.umd.min.js' %}"></script>
-    {% endif %}
+	{% analytical_body_top %}
 
-    <script src="{% statici18n LANGUAGE_CODE %}"></script>
-    <script type="text/javascript" src="{% static "js/modal_form_submit.js" %}"></script>
-    {% block script %}
-        <script type="text/javascript">
+	{% block header %}
+		<header>
+			{% block layout_navbar_top %}
+				{% include "blocks/navbar_top.html" %}
+			{% endblock %}
+		</header>
+	{% endblock header %}
+
+	{% block subject %}
+		{% if subject %}
+			<div class="container-fluid p0-50">
+				<div id="notice-header" class="alert alert-danger" role="alert">
+					<strong>{{ subject|safe }}</strong><br>{{ notice|safe }}</div>
+			</div>
+		{% endif %}
+	{% endblock subject %}
+
+	{% block main %}
+		<main id="main">
+			{% block main_container %}
+				<div class="container">
+
+					{% if request.user.is_authenticated %}
+						{% block breadcrumb_area %}
+						{% endblock %}
+					{% endif %}
+
+					{% block content %}{% endblock %}
+
+					{% block modal %}
+						<div class="modal fade" id="form-ajax-modal" role="dialog">
+							<div class="modal-dialog" id="modal_dialog_id">
+								<div class="modal-content" id="form-modal-ajax-content">
+									{# loading ajax requests #}
+								</div>
+							</div>
+						</div>
+					{% endblock %}
+					<br>
+					<br>
+				</div>
+				<hr>
+			{% endblock main_container %}
+		</main>
+	{% endblock main %}
+
+	{% block footer %}
+		<footer>
+			<div class="container">
+
+				<p class="navbar-text pull-left"></p>
+				<p class="navbar-text pull-right"><span class="glyphicon glyphicon-copyright-mark"></span> {% now "Y" %}
+					<a
+							href="http://www.uclouvain.be" target="_blank" id="lnk_ucl">Université catholique de
+						Louvain</a></p>
+			</div>
+		</footer>
+	{% endblock footer %}
+
+	<script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+
+	{# Vue, Vue i18n and vue packages #}
+	{# We use 'vue.runtime.global.prod.js' https://github.com/vuejs/core/tree/main/packages/vue#which-dist-file-to-use #}
+	<script src="{% static 'js/vue.min.js' %}"></script>
+	<script src="{% static 'js/vue-i18n.min.js' %}"></script>
+	{% if 'osis_notification' in installed_apps %}
+		<script type="text/javascript" src="{% static 'osis_notification/osis-notification.umd.min.js' %}"></script>
+	{% endif %}
+	{% if 'osis_document' in installed_apps %}
+		<script type="text/javascript" src="{% static 'osis_document/osis-document.umd.min.js' %}"></script>
+	{% endif %}
+
+	{% block bootstrap_script %}
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	{% endblock bootstrap_script %}
+
+	{% block custom_script %}
+		<script src="{% static 'js/osis-portal.js' %}"></script>
+		<script src="{% statici18n LANGUAGE_CODE %}"></script>
+		<script type="text/javascript" src="{% static "js/modal_form_submit.js" %}"></script>
+		<script type="text/javascript">
             // To avoid cut and paste on the email fields
             $(document).ready(function () {
                 $('#id_email_new').bind('paste', function (e) {
@@ -208,8 +188,12 @@
                     e.preventDefault();
                 });
             });
-        </script>
-    {% endblock %}
-    {% analytical_body_bottom %}
-</body>
+		</script>
+	{% endblock custom_script %}
+
+	{% block script %}{% endblock %}
+
+	{% analytical_body_bottom %}
+	</body>
+{% endblock body %}
 </html>
