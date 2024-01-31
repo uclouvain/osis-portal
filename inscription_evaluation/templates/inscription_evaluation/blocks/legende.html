@@ -26,50 +26,51 @@
     <link rel="stylesheet" href="{% static 'inscription_evaluation/css/legende.css' %}">
 {% endblock %}
 
-<div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="legende">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseLegende" aria-expanded="false" aria-controls="collapseLegende">
+<div class="card p-3 bg-light mb-3">
+    <div class="card-heading" role="tab" id="legende">
+        <a role="button" data-bs-toggle="collapse" data-parent="#legende" href="#collapseLegende" aria-expanded="false" aria-controls="collapseLegende">
             <i class="fa-solid fa-chevron-down unexpanded"></i> <i class="fa-solid fa-chevron-up expanded"></i> {% trans 'Legend' context 'inscription-evaluation' %}
         </a>
     </div>
-     <div id="collapseLegende" class="panel-collapse collapse" role="tabpanel" aria-labelledby="legende">
-        <div class="panel-body">
-            <table class="table table-condensed table-borderless">
-                <tbody>
-                    <tr>
-                        <td>{% trans 'Counts toward the degree' %}</td>
-                        <td>{% trans 'Course unit that counts toward the degree (block 2 or 3)' %}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans 'Complement' context 'inscription-evaluation' %}</td>
-                        <td>{% trans 'Course unit of the complementary module' %}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans 'Non-degree course units' %}</td>
-                        <td>{% trans 'Course unit that does not count towards the degree' %}</td>
-                    </tr>
-                    <tr>
-                        <td>Part</td>
-                        <td>{% trans 'Registered for a partial evaluation' %}</td>
-                    </tr>
-                    <tr>
-                        <td>Insc</td>
-                        <td>{% trans 'Registered for a evaluation' %}</td>
-                    </tr>
-                    <tr>
-                        <td>Réinsc</td>
-                        <td>{% trans 'Re-registered for a evaluation' %}</td>
-                    </tr>
-                    <tr>
-                        <td>Test</td>
-                        <td>{% trans 'Note resulting from exemption test' %}</td>
-                    </tr>
-                    <tr>
-                        <td>Créd.</td>
-                        <td>{% trans 'Credits for the course unit are acquired' %}</td>
-                    </tr>
-                </tbody>
-            </table>
+     <div id="collapseLegende" class="collapse mt-3" role="tabpanel" aria-labelledby="legende">
+        <div class="d-xl-grid" style="grid-template-columns: repeat(2, 1fr); grid-auto-rows:  minmax(30px, auto);">
+            <div class="d-flex gap-3 mb-xs-1 mb-sm-2">
+                <span class="text-end fw-bold">Part</span>
+                <span class="text-nowrap">{% trans 'Registered for a partial evaluation' %}</span>
+            </div>
+            <div class="d-flex gap-3 mb-xs-1 mb-sm-2">
+                <span class="text-end fw-bold">Insc</span>
+                <span class="text-nowrap">{% trans 'Registered for a evaluation' %}</span>
+            </div>
+            <div class="d-flex gap-3 mb-xs-1 mb-sm-2">
+                <span class="text-end fw-bold">Réinsc</span>
+                <span class="text-nowrap">{% trans 'Re-registered for a evaluation' %}</span>
+            </div>
+            <div class="d-flex gap-3 mb-xs-1 mb-sm-2">
+                <span class="text-end fw-bold">Test</span>
+                <span class="text-nowrap">{% trans 'Note resulting from exemption test' %}</span>
+            </div>
+            <div class="d-flex gap-3 mb-xs-1 mb-sm-2">
+                <span class="text-end fw-bold">Créd.</span>
+                <span class="text-nowrap">{% trans 'Credits for the course unit are acquired' %}</span>
+            </div>
+            <div class="d-flex gap-3 mb-xs-1 mb-sm-2">
+                <span class="text-end fw-bold">Test.</span>
+                <span class="text-nowrap">{% trans 'Credits for the course unit are acquired' %}</span>
+            </div>
+            <hr style="grid-column: 1/3;"/>
+            <div class="d-md-block d-lg-flex gap-3 mb-xs-1 mb-sm-2 flex-wrap" style="grid-column: 1/3;">
+                <span class="text-end fw-bold">{% trans 'Counts toward the degree' %}</span>
+                <span class="text-wrap">{% trans 'Course unit that counts toward the degree (block 2 or 3)' %}</span>
+            </div>
+            <div class="d-md-block d-lg-flex gap-3 mb-xs-1 mb-sm-2 flex-wrap" style="grid-column: 1/3;">
+                <span class="text-end fw-bold">{% trans 'Non-degree course units' %}</span>
+                <span class="text-wrap">{% trans 'Course unit that does not count towards the degree' %}</span>
+            </div>
+            <div class="d-md-block d-lg-flex gap-3 mb-xs-1 mb-sm-2 flex-wrap" style="grid-column: 1/3;">
+                <span class="text-end fw-bold">{% trans 'Complement' context 'inscription-evaluation' %}</span>
+                <span class="text-wrap">{% trans 'Course unit of the complementary module' %}</span>
+            </div>
         </div>
     </div>
 </div>

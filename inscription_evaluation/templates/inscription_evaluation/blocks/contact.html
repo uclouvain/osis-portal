@@ -26,8 +26,8 @@
 
 {% if contact_faculte %}
     <div class="center">
-        <p class="bg-info">
+        <div class="alert alert-info">
             <b>{% trans "Your faculty contact" context 'inscription-evaluation' %}: </b> {{ contact_faculte.en_tete }} - {{ contact_faculte.email }}
-        </p>
+        </div>
     </div>
 {% endif %}

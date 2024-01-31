@@ -25,9 +25,9 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block breadcrumb %}
-    <li><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
-    <li><a href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">{% trans 'My exams enrollment' context 'inscription-evaluation' %}</a></li>
-    <li class="active">{% trans 'Evaluation registration summary' context 'inscription-evaluation' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">{{ formation.sigle }}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Evaluation registration summary' context 'inscription-evaluation' %}</li>
 {% endblock %}
 
 {% block page_header %}
@@ -37,14 +37,13 @@
 {% endblock %}
 
 {% block page_body %}
-    <div class="panel panel-default panel-formulaires-inscription">
-        <div class="panel-body">
+    <div class="card panel-formulaires-inscription">
+        <div class="card-body">
             {% include "inscription_evaluation/blocks/header_formation.html" %}
 
-            <br>
             {% if inscriptions %}
-                <div class="alert alert-info" style="display: flex; align-items: center; max-width: 850px;">
-                    <div style="display: flex; align-items: center; margin-right: 1%;"><i class="fa fa-info-circle" style="font-size:200%;" aria-hidden="true"></i></div>
+                <div class="alert alert-primary d-flex gap-3 align-items-center">
+                    <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                     <div>
                         {% if session_de_travail.numero_session == 1 %}
                             {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
@@ -91,39 +90,33 @@
                     </tbody>
                 </table>
             {% else %}
-                <div class="alert alert-warning" style="display:inline-block;">
-                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% if session_de_travail.numero_session == 1 %}
-                        {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
-                    {% elif session_de_travail.numero_session == 2 %}
-                        {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the June session.{% endblocktrans %}
-                    {% else %}
-                        {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
-                    {% endif %}
+                <div class="alert alert-warning gap-3 align-items-center d-flex">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <div>
+                        {% if session_de_travail.numero_session == 1 %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
+                        {% elif session_de_travail.numero_session == 2 %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the June session.{% endblocktrans %}
+                        {% else %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
+                        {% endif %}
+                    </div>
                 </div>
             {% endif %}
 
-            <br>
+            <form method="post">
+            {% csrf_token %}
 
-            <div class="center">
-                <div>
-                    <a class="btn btn-default btn-wrap btn-block-xs" href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">
+                <div class="d-grid gap-2 col-md-5 mx-auto">
+                    <a class="btn btn-light border border-dark-subtle" href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">
                         <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my registrations" %}
                     </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my exams enrollment' %}
+                    </button>
                 </div>
 
-                <br>
-
-                <div>
-                    <form method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary btn-wrap btn-block-xs">
-                            <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my exams enrollment' %}
-                        </button>
-                    </form>
-                </div>
-
-            </div>
+            </form>
 
             <br>
 
