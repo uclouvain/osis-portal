@@ -21,6 +21,7 @@ diff-cover==7.7.0  # Useful for diff-quality
 django-waffle==3.0.0 # Version 4.0.0 drops Python3.7 support
 tblib==2.0.0
 django-htmx==1.15.0  # Version 1.16.0 drops Python3.7 support
+django-sass==1.1.0
 
 # OpenTelemetry
 opentelemetry-api==1.15.0
