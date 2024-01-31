@@ -1,3 +1,4 @@
+
 {% comment "License" %}
  * OSIS stands for Open Student Information System. It's an application
  * designed to manage the core business of higher education institutions,
@@ -5,7 +6,7 @@
  * The core business involves the administration of students, teachers,
  * courses, programs and so on.
  *
- * Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
+ * Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,13 +23,9 @@
  * see http://www.gnu.org/licenses/.
 {% endcomment %}
 
-<footer class="bg-light flex-shrink-0 py-3 mt-3">
-	<div class="container text-muted d-flex justify-content-between align-items-center">
-		<div class="navbar-text pull-left"></div>
-		<div>
-			<span><i class="far fa-copyright"></i></span> {% now "Y" %}
-			<a id="lnk_ucl" href="http://www.uclouvain.be" target="_blank">
-				Université catholique de Louvain</a>
-		</div>
-	</div>
-</footer>
+<li class="breadcrumb-item">
+	<a href="{% url 'home' %}" id="lnk_home_osis">
+		<span><i class="fas fa-home" aria-hidden="true"></i></span>
+	</a>
+</li>
+

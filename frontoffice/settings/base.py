@@ -73,6 +73,7 @@ INSTALLED_APPS = (
     'hijack.contrib.admin',
     'waffle',
     'django_htmx',
+    'django_sass',
 )
 
 # Tests settings
