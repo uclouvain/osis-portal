@@ -3,11 +3,10 @@
 {% load static i18n statici18n analytical %}
 
 {% block bootstrap_style %}
-	<link rel="stylesheet" href="{% static 'css/bootstrap5/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/bootstrap5/bootstrap-osis.min.css' %}">
 {% endblock bootstrap_style %}
 
 {% block custom_style %}
-	<link rel="stylesheet" href="{% static 'css/bootstrap5/osis-portal.css' %}">
 {% endblock custom_style %}
 
 {% block style %}{% endblock style %}
@@ -23,7 +22,7 @@
 			{% endif %}>
 
 	{% block header %}
-		<header class="page-header">
+		<header>
 			{% block layout_navbar_top %}
 				{% include 'bootstrap5/blocks/navbar_top.html' %}
 			{% endblock layout_navbar_top %}
@@ -33,26 +32,33 @@
 	{% block badge_environment %}
 		{% if environment == 'DEV' %}
 			<div class="position-relative"><span
-					class="badge bg-warning position-fixed fs-7 fst-italic lh-base">DEV</span></div>
+					class="badge bg-warning fs-7 fst-italic lh-base">DEV</span></div>
 		{% elif environment == 'LOCAL' %}
 			<div class="position-relative"><span
-					class="badge bg-danger position-fixed fs-7 fst-italic lh-base">Local</span></div>
+					class="badge bg-danger fs-7 fst-italic lh-base">Local</span></div>
 		{% elif environment == 'QA' %}
 			<div class="position-relative"><span
-					class="badge bg-success position-fixed fs-7 fst-italic lh-base">QA</span></div>
+					class="badge bg-success fs-7 fst-italic lh-base">QA</span></div>
 		{% elif environment == 'TEST' %}
 			<div class="position-relative"><span
-					class="badge bg-primary position-fixed fs-7 fst-italic lh-base">Test</span></div>
+					class="badge bg-primary fs-7 fst-italic lh-base">Test</span></div>
 		{% endif %}
 	{% endblock badge_environment %}
+
+    {% block subject %}
+        {{ block.super }}
+    {% endblock subject %}
 
 	{% block main %}
 		<div class="d-flex flex-grow-1">
 			{% block main_container %}
-				<div class="container-fluid px-5 mx-5">
+				<div class="container">
 
 					{% block breadcrumbarea %}
-						{% block breadcrumb %}{% endblock %}
+						<ol class="breadcrumb py-2 px-3">
+							{% include 'bootstrap5/blocks/breadcrumb.html' %}
+							{% block breadcrumb %}{% endblock %}
+						</ol>
 					{% endblock breadcrumbarea %}
 
 					{% block content %}{% endblock %}
@@ -80,5 +86,3 @@
 	{% block script %}{% endblock script %}
 	</body>
 {% endblock body %}
-
-
