@@ -98,6 +98,9 @@ msgstr "Gérer mes fiches descriptives"
 msgid "Manage my exam registration"
 msgstr "Gérer mon inscription aux examens"
 
+msgid "Manage my mobility trips"
+msgstr "Gérer mes séjours de mobilité"
+
 msgid "Middle name(s)"
 msgstr "Prénom(s) suivant(s)"
 
@@ -118,6 +121,9 @@ msgstr "Mes attestations"
 
 msgid "My description fiche"
 msgstr "Mes fiches descriptives"
+
+msgid "My mobility"
+msgstr "Ma mobilité"
 
 msgid "My personal data"
 msgstr "Mes données personnelles"
@@ -204,6 +210,9 @@ msgstr "accès VPN"
 
 msgid "View my annual program and exam marks"
 msgstr "Voir mon programme annuel et mes notes d'examen"
+
+msgid "for academic year 2024-25 only"
+msgstr "uniquement pour l'année académique 2024-25"
 
 msgid "my annual program and my marks"
 msgstr "Mon programme annuel et mes notes"
