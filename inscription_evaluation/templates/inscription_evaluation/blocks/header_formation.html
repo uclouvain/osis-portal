@@ -23,20 +23,17 @@
     * at the root of the source code of this program.  If not,
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
-<div class="row">
+<div class="row mb-4">
     <div class="col-md-3">
-        <label>{% trans 'Last name' context 'inscription-evaluation' %}, {% trans 'First name' context 'inscription-evaluation' %}</label>
-        <br>
-        {{ etudiant.nom }}, {{ etudiant.prenom }}
+        <label class="fw-bold">{% trans 'Last name' context 'inscription-evaluation' %}, {% trans 'First name' context 'inscription-evaluation' %}</label>
+        <div>{{ etudiant.nom }}, {{ etudiant.prenom }}</div>
     </div>
     <div class="col-md-3">
-        <label>{% trans 'Academic year' context 'inscription-evaluation' %}</label>
-        <br>
-        {{ session_de_travail.annee|display_as_academic_year }}
+        <label class="fw-bold">{% trans 'Academic year' context 'inscription-evaluation' %}</label>
+        <div>{{ session_de_travail.annee|display_as_academic_year }}</div>
     </div>
     <div class="col-md-6">
-        <label>{% trans 'Course' context 'inscription-evaluation' %}</label>
-        <br>
-        {{ formation.sigle }} - {{ formation.intitule }}
+        <label class="fw-bold">{% trans 'Course' context 'inscription-evaluation' %}</label>
+        <div>{{ formation.sigle }} - {{ formation.intitule }}</div>
     </div>
 </div>

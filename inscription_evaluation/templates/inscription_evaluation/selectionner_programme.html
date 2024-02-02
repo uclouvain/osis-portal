@@ -30,8 +30,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <li>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</li>
-    <li class="active">{% trans 'Course choice' context 'inscription-evaluation' %}</li>
+    <li class="breadcrumb-item active">{% trans 'Course choice' context 'inscription-evaluation' %}</li>
 {% endblock %}
 
 {% block page_header %}
@@ -41,34 +40,38 @@
 {% endblock %}
 
 {% block page_body %}
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
-                    <label>{% trans 'Last name' context 'inscription-evaluation' %}, {% trans 'First name' context 'inscription-evaluation' %}</label>
-                    <br>
-                    {{ etudiant.nom }}, {{ etudiant.prenom }}
+                    <label class="fw-bold">
+                        {% trans 'Last name' context 'inscription-evaluation' %}, {% trans 'First name' context 'inscription-evaluation' %}
+                    </label>
+                    <div>{{ etudiant.nom }}, {{ etudiant.prenom }}</div>
                 </div>
                 <div class="col-md-3">
-                    <label>{% trans 'Noma' context 'inscription-evaluation' %}</label>
-                    <br>
-                    {{ etudiant.noma }}
+                    <label class="fw-bold">
+                        {% trans 'Noma' context 'inscription-evaluation' %}
+                    </label>
+                    <div>{{ etudiant.noma }}</div>
                 </div>
             </div>
             <br>
             {% if formations %}
-                <div class="alert alert-info" style="display:inline-block;">
-                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans "You can view all evaluation registration statements in the 'My annual program and my marks' summary." %}
-                </div>
-                <div class="alert alert-info" style="display:inline-block;">
-                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% trans 'Click on the code of the course (acronym) for which you want to register for evaluations.' %}
+                <div class="alert alert-primary d-flex gap-3 align-items-center">
+                    <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                    <div>
+                        {% trans "You can view all evaluation registration statements in the 'My annual program and my marks' summary." %}
+                        <br/>
+                        {% trans 'Click on the code of the course (acronym) for which you want to register for evaluations.' %}
+                    </div>
                 </div>
             {% else %}
-                <div class="alert alert-warning" style="display:inline-block;">
-                    <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                    {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }} academic year.{% endblocktrans %}
+                <div class="alert alert-warning d-flex gap-3 align-items-center">
+                    <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
+                    <div>
+                        {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }} academic year.{% endblocktrans %}
+                    </div>
                 </div>
             {% endif %}
             <div class="row">

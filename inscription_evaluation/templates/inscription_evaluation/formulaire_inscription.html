@@ -30,8 +30,8 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
-    <li class="active">{% trans 'My exams enrollment' context 'inscription-evaluation' %}</li>
+    <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
+    <li class="breadcrumb-item active">{{ formation.sigle }}</li>
 {% endblock %}
 
 {% block page_header %}
@@ -41,25 +41,30 @@
 {% endblock %}
 
 {% block page_body %}
-    <div class="alert alert-warning visible-xs visible-sm" role="alert">
-        <p>
-            <i class="fa fa-exclamation-circle"></i>
+
+    <div class="alert alert-warning gap-3 align-items-center d-none d-xs-flex d-sm-flex d-md-none">
+        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+        <div>
             {% trans "The size of your screen does not allow optimal navigation within the form. If possible, please use a larger screen for easier navigation." %}
-        </p>
+        </div>
     </div>
 
     <form method="post">
         {% csrf_token %}
-        <div class="panel panel-default panel-formulaires-inscription">
-            <div class="panel-body">
+        <div class="card panel-formulaires-inscription">
+            <div class="card-body">
                 {% include "inscription_evaluation/blocks/header_formation.html" %}
-
-                <br>
-
                 {% include "inscription_evaluation/blocks/legende.html" %}
 
-                <div class="alert alert-info" style="display: flex; align-items: center; max-width: 740px;">
-                    <div style="display: flex; align-items: center; margin-right: 2%;"><i class="fa fa-info-circle" style="font-size:250%;" aria-hidden="true"></i></div>
+                <div class="alert alert-warning gap-3 align-items-center d-none d-xs-flex d-sm-flex d-md-none">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <div>
+                        {% trans "The size of your screen does not allow optimal navigation within the form. If possible, please use a larger screen for easier navigation." %}
+                    </div>
+                </div>
+
+                <div class="alert alert-primary d-flex gap-3 align-items-center">
+                    <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                     <div>
                         {% trans "You are registered for all the evaluations ticked below." %}<br>
                         {% trans "If this is suitable for you, please continue and submit your evaluation registration." %}<br>
@@ -68,17 +73,20 @@
                 </div>
 
                 {% if not peut_s_inscrire_a_minimum_une_evaluation %}
-                    <div class="alert alert-warning" style="display:inline-block;">
-                        <i class="fa fa-info-circle" style="font-size:120%" aria-hidden="true"></i>
-                        {% if session_de_travail.numero_session == 1 %}
-                            {% trans 'You cannot register for any evaluation for the January session.' %}
-                        {% elif session_de_travail.numero_session == 2 %}
-                            {% trans 'You cannot register for any evaluation for the June session.' %}
-                        {% else %}
-                            {% trans 'You cannot register for any evaluation for the September session.' %}
-                        {% endif %}
+
+                    <div class="alert alert-warning gap-3 align-items-center d-flex">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <div>
+                            {% if session_de_travail.numero_session == 1 %}
+                                {% trans 'You cannot register for any evaluation for the January session.' %}
+                            {% elif session_de_travail.numero_session == 2 %}
+                                {% trans 'You cannot register for any evaluation for the June session.' %}
+                            {% else %}
+                                {% trans 'You cannot register for any evaluation for the September session.' %}
+                            {% endif %}
+                        </div>
                     </div>
-                    <br>
+
                 {% endif %}
 
                 {% if inscriptions %}
@@ -116,21 +124,14 @@
                     <br>
                 {% endif %}
 
-                <div class="center">
-                    <a href="{% url 'inscription-evaluation:selectionner-programme' %}" class="btn btn-default">
+                <div class="d-grid gap-2 col-md-6 mx-auto mb-5">
+                    <a href="{% url 'inscription-evaluation:selectionner-programme' %}" class="btn btn-light border border-dark-subtle">
                         {% trans "Return to initial screen" context 'inscription-evaluation' %}
                     </a>
-                </div>
-
-                <br>
-
-                <div class="center">
                     <button type="submit" class="btn btn-primary btn-wrap btn-block-xs slow-loading">
                         <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to the summary of registrations' %}
                     </button>
                 </div>
-
-                <br>
 
                 {% include "inscription_evaluation/blocks/contact.html" %}
 

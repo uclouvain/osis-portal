@@ -34,6 +34,7 @@
         </td>
     {% endif %}
     <td {% if session_est_egal_a_session_de_travail %}colspan="2"{% endif %}>
+        <div class="d-flex">
         {% if inscription_evaluation %}
             {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=inscription_evaluation.type_inscription type_inscription_txt=inscription_evaluation.type_inscription_txt %}
         {% else %}
@@ -43,5 +44,6 @@
                 <span>-</span>
             {% endif %}
         {% endif %}
+        </div>
     </td>
 {% endwith %}
