@@ -1,0 +1,99 @@
+{% load static i18n statici18n %}
+
+{% comment "License" %}
+	* OSIS stands for Open Student Information System. It's an application
+	* designed to manage the core business of higher education institutions,
+	* such as universities, faculties, institutes and professional schools.
+	* The core business involves the administration of students, teachers,
+	* courses, programs and so on.
+	*
+	* Copyright (C) 2015-2023 Université catholique de Louvain (http://www.uclouvain.be)
+	*
+	* This program is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published by
+	* the Free Software Foundation, either version 3 of the License, or
+	* (at your option) any later version.
+	*
+	* This program is distributed in the hope that it will be useful,
+	* but WITHOUT ANY WARRANTY; without even the implied warranty of
+	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	* GNU General Public License for more details.
+	*
+	* A copy of this license - GNU General Public License - is available
+	* at the root of the source code of this program.  If not,
+	* see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+<nav class="navbar navbar-expand-md bg-light fixed-top">
+	<div class="container-fluid mx-5">
+		<a class="navbar-brand p-0"
+				{% if 'dashboard' in installed_apps %}
+           href="{% url 'dashboard_home' %}"
+				{% else %}
+           href="#"
+				{% endif %} id="lnk_home">
+			<img src="{% static 'img/logo_header.jpg' %}">
+		</a>
+
+		<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navcol-1">
+			<span class="visually-hidden">Toggle navigation</span>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div id="navcol-1" class="collapse navbar-collapse justify-content-end">
+			<ul class="navbar-nav">
+				{% if request.user.is_authenticated %}
+					<li class="nav-item dropdown">
+						<a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" role="button"
+						   aria-haspopup="true"
+						   aria-expanded="false"
+						   id="lnk_my_dropdow_language">{{ LANGUAGE_CODE }}<span
+								class="caret"></span></a>
+
+						<div class="dropdown-menu dropdown-menu-end">
+							{% for lang in LANGUAGES %}
+								{% if lang.0 != LANGUAGE_CODE %}
+									{% block lang %}
+										<a class="dropdown-item" href="{% url 'profile_lang' lang.0 %}">{{ lang.0 }}</a>
+									{% endblock %}
+								{% endif %}
+							{% endfor %}
+						</div>
+					</li>
+
+					<li class="nav-item dropdown">
+						<a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" role="button"
+						   aria-haspopup="true"
+						   aria-expanded="false" id="bt_user">
+							<i class="fa fa-user fa-lg" aria-hidden="true"></i>
+							{{ request.user.first_name }}
+						</a>
+
+						<div class="dropdown-menu dropdown-menu-end">
+							{% if perms.base.is_administrator %}
+								<a class="dropdown-item" href="{% url 'data' %}" role="button" id="bt_data">
+									<i class="fa fa-database" aria-hidden="true"></i>
+									{% trans 'Data' %}</a>
+							{% endif %}
+
+							{% if 'dashboard' in installed_apps %}
+								{% include 'bootstrap5/dashboard_admin_menu.html' %}
+							{% endif %}
+
+							{% if logout_button %}
+								<a class="dropdown-item" href="{% url 'logout' %}" id="lnk_logout">
+									<i class="fa fa-power-off" aria-hidden="true"></i>
+									Logout
+								</a>
+							{% endif %}
+						</div>
+					</li>
+
+					{% if 'osis_notification' in installed_apps %}
+						{% include 'osis_notification/notification_viewer.html' %}
+					{% endif %}
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>
