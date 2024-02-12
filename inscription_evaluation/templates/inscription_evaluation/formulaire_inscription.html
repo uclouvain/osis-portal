@@ -54,42 +54,42 @@
         <div class="card panel-formulaires-inscription">
             <div class="card-body">
                 {% include "inscription_evaluation/blocks/header_formation.html" %}
-                {% include "inscription_evaluation/blocks/legende.html" %}
+                {% if inscriptions %}
+                    {% include "inscription_evaluation/blocks/legende.html" %}
 
-                <div class="alert alert-warning gap-3 align-items-center d-none d-xs-flex d-sm-flex d-md-none">
-                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
-                    <div>
-                        {% trans "The size of your screen does not allow optimal navigation within the form. If possible, please use a larger screen for easier navigation." %}
-                    </div>
-                </div>
-
-                <div class="alert alert-primary d-flex gap-3 align-items-center">
-                    <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
-                    <div>
-                        {% trans "You are registered for all the evaluations ticked below." %}<br>
-                        {% trans "If this is suitable for you, please continue and submit your evaluation registration." %}<br>
-                        {% trans "You can modify your evaluation entries as long as you have not submitted them." %}
-                    </div>
-                </div>
-
-                {% if not peut_s_inscrire_a_minimum_une_evaluation %}
-
-                    <div class="alert alert-warning gap-3 align-items-center d-flex">
+                    <div class="alert alert-warning gap-3 align-items-center d-none d-xs-flex d-sm-flex d-md-none">
                         <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
                         <div>
-                            {% if session_de_travail.numero_session == 1 %}
-                                {% trans 'You cannot register for any evaluation for the January session.' %}
-                            {% elif session_de_travail.numero_session == 2 %}
-                                {% trans 'You cannot register for any evaluation for the June session.' %}
-                            {% else %}
-                                {% trans 'You cannot register for any evaluation for the September session.' %}
-                            {% endif %}
+                            {% trans "The size of your screen does not allow optimal navigation within the form. If possible, please use a larger screen for easier navigation." %}
                         </div>
                     </div>
 
-                {% endif %}
+                    <div class="alert alert-primary d-flex gap-3 align-items-center">
+                        <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                        <div>
+                            {% trans "You are registered for all the evaluations ticked below." %}<br>
+                            {% trans "If this is suitable for you, please continue and submit your evaluation registration." %}<br>
+                            {% trans "You can modify your evaluation entries as long as you have not submitted them." %}
+                        </div>
+                    </div>
 
-                {% if inscriptions %}
+                    {% if not peut_s_inscrire_a_minimum_une_evaluation %}
+
+                        <div class="alert alert-warning gap-3 align-items-center d-flex">
+                            <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                            <div>
+                                {% if session_de_travail.numero_session == 1 %}
+                                    {% trans 'You cannot register for any evaluation for the January session.' %}
+                                {% elif session_de_travail.numero_session == 2 %}
+                                    {% trans 'You cannot register for any evaluation for the June session.' %}
+                                {% else %}
+                                    {% trans 'You cannot register for any evaluation for the September session.' %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    {% endif %}
+
                     <table class="table table-formulaire-inscription table-hover table-bordered">
                         <thead>
                             <th style="width: 8%">{% trans 'Code' context 'inscription-evaluation' %}</th>
@@ -122,15 +122,24 @@
                         </tbody>
                     </table>
                     <br>
+                {% else %}
+                    <div class="alert alert-warning gap-3 align-items-center d-flex">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <div>
+                            {% trans "No learning unit enrollment found for this training." %}
+                        </div>
+                    </div>
                 {% endif %}
 
                 <div class="d-grid gap-2 col-md-6 mx-auto mb-5">
                     <a href="{% url 'inscription-evaluation:selectionner-programme' %}" class="btn btn-light border border-dark-subtle">
                         {% trans "Return to initial screen" context 'inscription-evaluation' %}
                     </a>
-                    <button type="submit" class="btn btn-primary btn-wrap btn-block-xs slow-loading">
-                        <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to the summary of registrations' %}
-                    </button>
+                    {% if inscriptions %}
+                        <button type="submit" class="btn btn-primary btn-wrap btn-block-xs slow-loading">
+                            <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to the summary of registrations' %}
+                        </button>
+                    {% endif %}
                 </div>
 
                 {% include "inscription_evaluation/blocks/contact.html" %}
