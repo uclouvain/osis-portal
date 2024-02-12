@@ -125,6 +125,9 @@ msgctxt "inscription-evaluation"
 msgid "My exams enrollment"
 msgstr "Mon inscription aux évaluations"
 
+msgid "No learning unit enrollment found for this training."
+msgstr "Aucune inscription aux unités d'enseignement pour cette formation."
+
 msgctxt "inscription-evaluation"
 msgid "Noma"
 msgstr "Noma"
