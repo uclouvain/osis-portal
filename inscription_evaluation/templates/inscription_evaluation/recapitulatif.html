@@ -45,6 +45,7 @@
                 <div class="alert alert-primary d-flex gap-3 align-items-center">
                     <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                     <div>
+                        <b>
                         {% if session_de_travail.numero_session == 1 %}
                             {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
                         {% elif session_de_travail.numero_session == 2 %}
@@ -52,6 +53,7 @@
                         {% else %}
                             {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
                         {% endif %}
+                        </b>
                         <br>
                         {% trans "Your registrations are saved, but you can modify them as long as you have not submitted them." %}
                     </div>
@@ -77,11 +79,11 @@
                                 <td>{{ inscription.unite_enseignement.code }}</td>
                                 <td>{{ inscription.unite_enseignement.intitule }}</td>
                                 <td>
-                                     {% if inscription.type_inscription == 'INSCRIPTION_PARTIELLE' %}
+                                     {% if inscription.type_inscription.value == 'INSCRIPTION_PARTIELLE' %}
                                         <span class="badge info-color">{{ inscription.type_inscription_txt }}</span>
-                                    {% elif inscription.type_inscription == 'PREMIERE_INSCRIPTION' %}
+                                    {% elif inscription.type_inscription.value == 'PREMIERE_INSCRIPTION' %}
                                         <span class="badge primary-color">{{ inscription.type_inscription_txt }}</span>
-                                    {% elif inscription.type_inscription == 'REINSCRIPTION' %}
+                                    {% elif inscription.type_inscription.value == 'REINSCRIPTION' %}
                                         <span class="badge mauve-color">{{ inscription.type_inscription_txt }}</span>
                                     {% endif %}
                                 </td>
