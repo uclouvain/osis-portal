@@ -23,6 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -69,4 +70,5 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
             'annee_academique': self.annee_academique,
             'etudiant': self.etudiant,
             'formations': self.formations,
+            'mon_pae_et_mes_notes_url': reverse('performance_home'),
         }

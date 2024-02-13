@@ -61,7 +61,7 @@
                 <div class="alert alert-primary d-flex gap-3 align-items-center">
                     <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                     <div>
-                        {% trans "You can view all evaluation registration statements in the 'My annual program and my marks' summary." %}
+                        {% blocktrans with mon_pae_et_mes_notes_url=mon_pae_et_mes_notes_url %}You can view all evaluation registration statements in the <a href="{{ mon_pae_et_mes_notes_url }}">'My annual program and my marks'</a> summary.{% endblocktrans %}
                         <br/>
                         {% trans 'Click on the code of the course (acronym) for which you want to register for evaluations.' %}
                     </div>
