@@ -282,12 +282,15 @@ msgstr ""
 "Vous pouvez modifier vos inscriptions aux évaluations tant que vous n'avez "
 "pas soumis."
 
+#, python-format
 msgid ""
-"You can view all evaluation registration statements in the 'My annual "
-"program and my marks' summary."
+"You can view all evaluation registration statements in the <a href="
+"\"%(mon_pae_et_mes_notes_url)s\">'My annual program and my marks'</a> "
+"summary."
 msgstr ""
 "Vous pouvez consulter l'ensemble des états d'inscriptions aux évaluations "
-"dans le récapitulatifs 'Mon programme annuel et mes notes'."
+"dans le récapitulatif <a href=\"%(mon_pae_et_mes_notes_url)s\">'Mon "
+"programme annuel et mes notes'</a>."
 
 msgid "You cannot register for any evaluation for the January session."
 msgstr ""

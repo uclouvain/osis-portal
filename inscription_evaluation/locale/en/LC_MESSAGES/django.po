@@ -241,9 +241,11 @@ msgid ""
 "them."
 msgstr ""
 
+#, python-format
 msgid ""
-"You can view all evaluation registration statements in the 'My annual "
-"program and my marks' summary."
+"You can view all evaluation registration statements in the <a href="
+"\"%(mon_pae_et_mes_notes_url)s\">'My annual program and my marks'</a> "
+"summary."
 msgstr ""
 
 msgid "You cannot register for any evaluation for the January session."
