@@ -1,4 +1,4 @@
-{% load equality %}
+{% load equality affichage_note_justification %}
 {% comment "License" %}
     * OSIS stands for Open Student Information System. It's an application
     * designed to manage the core business of higher education institutions,
@@ -26,8 +26,8 @@
 {% with session_est_egal_a_session_de_travail=session_de_travail.numero_session|equal:numero_session %}
     {% if not session_est_egal_a_session_de_travail %}
         <td>
-            {% if inscription_evaluation.note  %}
-                <span>{{ inscription_evaluation.note }}</span>
+            {% if inscription_evaluation.note %}
+                <span>{{ inscription_evaluation.note|affichage_note_etudiant }}</span>
             {% else %}
                 <span> - </span>
             {% endif %}

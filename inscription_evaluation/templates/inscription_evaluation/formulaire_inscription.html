@@ -67,8 +67,10 @@
                     <div class="alert alert-primary d-flex gap-3 align-items-center">
                         <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                         <div>
-                            {% trans "You are registered for all the evaluations ticked below." %}<br>
-                            {% trans "If this is suitable for you, please continue and submit your evaluation registration." %}<br>
+                            <b>
+                                {% trans "You are registered for all the evaluations ticked below." %}<br>
+                                {% trans "If this is suitable for you, please continue and submit your evaluation registration." %}<br>
+                            </b>
                             {% trans "You can modify your evaluation entries as long as you have not submitted them." %}
                         </div>
                     </div>
@@ -115,8 +117,8 @@
                                     {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 inscription=inscription %}
                                     {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 inscription=inscription %}
                                     {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 inscription=inscription %}
-                                    <td>{{ inscription.note_finale|default:'-' }}</td>
-                                    <td>{{ inscription.credite|default:'-' }}</td>
+                                    <td>{{ inscription.note_finale|default:'?' }}</td>
+                                    <td>{% if inscription.credite %}Créd.{% else %}-{% endif %}</td>
                                 </tr>
                             {%  endfor %}
                         </tbody>
