@@ -83,7 +83,7 @@
                                         <span class="badge info-color">{{ inscription.type_inscription_txt }}</span>
                                     {% elif inscription.type_inscription.value == 'PREMIERE_INSCRIPTION' %}
                                         <span class="badge primary-color">{{ inscription.type_inscription_txt }}</span>
-                                    {% elif inscription.type_inscription.value == 'REINSCRIPTION' %}
+                                    {% elif inscription.type_inscription.value == 'REINSCRIPTION' or inscription.type_inscription.value == 'DEUXIEME_REINSCRIPTION' %}
                                         <span class="badge mauve-color">{{ inscription.type_inscription_txt }}</span>
                                     {% endif %}
                                 </td>
