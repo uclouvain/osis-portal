@@ -1,4 +1,5 @@
 {% extends "inscription_evaluation/layout.html" %}
+{% load affichage_note_justification %}
 {% load academic_year_display %}
 {% load static i18n %}
 {% comment "License" %}
@@ -117,7 +118,7 @@
                                     {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 inscription=inscription %}
                                     {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 inscription=inscription %}
                                     {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 inscription=inscription %}
-                                    <td>{{ inscription.note_finale|default:'?' }}</td>
+                                    <td>{{ inscription.note_finale|affichage_note_etudiant|default:'?' }}</td>
                                     <td>{% if inscription.credite %}Créd.{% else %}-{% endif %}</td>
                                 </tr>
                             {%  endfor %}
