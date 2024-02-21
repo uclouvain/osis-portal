@@ -23,42 +23,25 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from .base import *
+from functools import partial
+from base.models.person import Person
+from base.services.utils import call_api
+import osis_inscription_evaluation_sdk
+from osis_inscription_evaluation_sdk.api import mes_programmes_api
+from osis_inscription_evaluation_sdk.model.mes_formations import MesFormations
+from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
 
-OPTIONAL_APPS = (
-    'dashboard',
-    'performance',
-    'attribution',
-    'dissertation',
-    'internship',
-    'exam_enrollment',
-    'attestation',
-    'assessments',
-    'continuing_education',
-    'admission',
-    'osis_document',
-    'osis_notification',
-    'inscription_aux_cours',
-    'learning_unit',
-    'inscription_evaluation',
+
+class MesProgrammesService:
+
+    @staticmethod
+    def recuperer(person: 'Person') -> 'MesFormations':
+        return _mes_programmes_api_call(person, 'liste_inscriptions_programmes')
+
+
+_mes_programmes_api_call = partial(
+    call_api,
+    inscription_evaluation_sdk,
+    osis_inscription_evaluation_sdk,
+    mes_programmes_api.MesProgrammesApi
 )
-
-OPTIONAL_MIDDLEWARES = ()
-OPTIONAL_INTERNAL_IPS = ()
-
-if DEBUG:
-    AUTH_PASSWORD_VALIDATORS = {}
-
-if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true" and DEBUG:
-    OPTIONAL_APPS += ('debug_toolbar', 'django_extensions')
-    OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-    OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': 'osis_common.middlewares.toolbar.show_toolbar',
-        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-3.7.1.min.js"),
-    }
-
-INSTALLED_APPS += OPTIONAL_APPS
-APPS_TO_TEST += OPTIONAL_APPS
-MIDDLEWARE += OPTIONAL_MIDDLEWARES
-INTERNAL_IPS += OPTIONAL_INTERNAL_IPS

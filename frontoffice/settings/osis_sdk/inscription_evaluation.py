@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,42 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from .base import *
+import logging
 
-OPTIONAL_APPS = (
-    'dashboard',
-    'performance',
-    'attribution',
-    'dissertation',
-    'internship',
-    'exam_enrollment',
-    'attestation',
-    'assessments',
-    'continuing_education',
-    'admission',
-    'osis_document',
-    'osis_notification',
-    'inscription_aux_cours',
-    'learning_unit',
-    'inscription_evaluation',
-)
+import osis_inscription_evaluation_sdk
+from django.conf import settings
 
-OPTIONAL_MIDDLEWARES = ()
-OPTIONAL_INTERNAL_IPS = ()
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
-if DEBUG:
-    AUTH_PASSWORD_VALIDATORS = {}
 
-if os.environ.get("ENABLE_DEBUG_TOOLBAR", "False").lower() == "true" and DEBUG:
-    OPTIONAL_APPS += ('debug_toolbar', 'django_extensions')
-    OPTIONAL_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-    OPTIONAL_INTERNAL_IPS += ('127.0.0.1',)
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': 'osis_common.middlewares.toolbar.show_toolbar',
-        'JQUERY_URL': os.path.join(STATIC_URL, "js/jquery-3.7.1.min.js"),
-    }
+def build_configuration() -> osis_inscription_evaluation_sdk.Configuration:
+    """
+    Return SDK configuration of exam_enrollment
+    """
+    if not settings.OSIS_INSCRIPTION_EVALUATION_SDK_HOST:
+        logger.debug("'OSIS_INSCRIPTION_EVALUATION_SDK_HOST' setting must be set in configuration")
 
-INSTALLED_APPS += OPTIONAL_APPS
-APPS_TO_TEST += OPTIONAL_APPS
-MIDDLEWARE += OPTIONAL_MIDDLEWARES
-INTERNAL_IPS += OPTIONAL_INTERNAL_IPS
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
+
+    return osis_inscription_evaluation_sdk.Configuration(
+        host=settings.OSIS_INSCRIPTION_EVALUATION_SDK_HOST,
+        api_key_prefix={'Token': settings.OSIS_INSCRIPTION_EVALUATION_SDK_API_KEY_PREFIX},
+        api_key={'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY},
+    )
