@@ -55,7 +55,7 @@
         <div class="card panel-formulaires-inscription">
             <div class="card-body">
                 {% include "inscription_evaluation/blocks/header_formation.html" %}
-                {% if inscriptions %}
+                {% if a_des_inscriptions %}
                     {% include "inscription_evaluation/blocks/legende.html" %}
 
                     <div class="alert alert-warning gap-3 align-items-center d-none d-xs-flex d-sm-flex d-md-none">
@@ -105,22 +105,39 @@
                             <th style="width: 8%">{% trans 'Credited' context 'inscription-evaluation' %}</th>
                         </thead>
                         <tbody>
-                            {% for inscription in inscriptions %}
-                                <tr>
-                                    <td>{{ inscription.unite_enseignement.code }}</td>
-                                    <td>{{ inscription.unite_enseignement.intitule }}</td>
-                                    <td style="width: 5%">
-                                        {{ inscription.credits_inscrits }}
-                                    </td>
-                                    <td style="width: 5%">
-                                        {% if inscription.etat_txt %}{{ inscription.etat_txt }}{% endif %}
-                                    </td>
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 inscription=inscription %}
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 inscription=inscription %}
-                                    {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 inscription=inscription %}
-                                    <td>{{ inscription.note_finale|affichage_note_etudiant|default:'?' }}</td>
-                                    <td>{% if inscription.credite %}Créd.{% else %}-{% endif %}</td>
-                                </tr>
+                            {% for contexte, inscr_evals in map_insc_eval_par_contexte.items %}
+                                {% if contexte %}
+                                    <tr>
+                                        <td class="background-grey" colspan="12" style="font-weight: bold;">{{ contexte }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% for inscription in inscr_evals %}
+                                    <tr>
+                                        <td>{{ inscription.unite_enseignement.code }}</td>
+                                        <td>{{ inscription.unite_enseignement.intitule }}</td>
+                                        <td style="width: 5%">
+                                            {{ inscription.credits_inscrits }}
+                                        </td>
+                                        <td style="width: 5%">
+                                            {% if inscription.etat_txt %}{{ inscription.etat_txt }}{% endif %}
+                                        </td>
+                                        {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 inscription=inscription %}
+                                        {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 inscription=inscription %}
+                                        {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 inscription=inscription %}
+                                        <td>
+                                           {% if inscription.note_finale.note and inscription.note_finale.session_txt %}
+                                                <div class="d-flex justify-content-around">
+                                                    <span>{{ inscription.note_finale.note|affichage_note_etudiant }}</span><span>{{ inscription.note_finale.session_txt }}</span>
+                                                </div>
+                                           {% else %}
+                                                <div class="d-flex justify-content-center">
+                                                    <span>?</span>
+                                                </div>
+                                           {% endif %}
+                                        </td>
+                                        <td>{% if inscription.credite %}Créd.{% else %}-{% endif %}</td>
+                                    </tr>
+                                {%  endfor %}
                             {%  endfor %}
                         </tbody>
                     </table>
@@ -138,7 +155,7 @@
                     <a href="{% url 'inscription-evaluation:selectionner-programme' %}" class="btn btn-light border border-dark-subtle">
                         {% trans "Return to initial screen" context 'inscription-evaluation' %}
                     </a>
-                    {% if inscriptions %}
+                    {% if a_des_inscriptions %}
                         <button type="submit" class="btn btn-primary btn-wrap btn-block-xs slow-loading">
                             <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to the summary of registrations' %}
                         </button>

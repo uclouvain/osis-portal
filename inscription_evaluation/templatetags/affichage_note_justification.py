@@ -35,4 +35,4 @@ def affichage_note_etudiant(note: str):
         'S': 'Abs.',
         'A': 'Abs.',
         'T': 'Trich.',
-    }.get(note[:1], note)
+    }.get(note, note)
