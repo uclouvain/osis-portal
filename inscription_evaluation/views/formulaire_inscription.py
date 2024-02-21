@@ -26,6 +26,7 @@
 import json
 from typing import List, Dict
 
+from osis_inscription_evaluation_sdk.model.formation import Formation
 from osis_inscription_evaluation_sdk.model.mon_formulaire_inscription_evaluations import \
     MonFormulaireInscriptionEvaluations
 from osis_inscription_evaluation_sdk.model.session_de_travail import SessionDeTravail
@@ -76,6 +77,13 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
     def formulaire(self) -> 'MonFormulaireInscriptionEvaluations':
         return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
 
+    @cached_property
+    def group_inscriptions_by_contexte_inscription(self) -> Dict[str, List[Dict]]:
+        result = {}
+        for insc in self.inscriptions:
+            result.setdefault(insc['contexte_inscription'], []).append(insc)
+        return result
+
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
@@ -83,7 +91,8 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             'etudiant': self.etudiant,
             'formation': self.formation,
             'contact_faculte': self.contact_faculte,
-            'inscriptions': self.inscriptions,
+            'a_des_inscriptions': bool(self.inscriptions),
+            'map_insc_eval_par_contexte': self.group_inscriptions_by_contexte_inscription,
             'peut_s_inscrire_a_minimum_une_evaluation': self.peut_s_inscrire_a_minimum_une_evaluation,
         }
 
