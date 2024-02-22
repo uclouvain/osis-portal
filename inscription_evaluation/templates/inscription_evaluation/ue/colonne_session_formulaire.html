@@ -26,7 +26,9 @@
 {% with session_est_egal_a_session_de_travail=session_de_travail.numero_session|equal:numero_session %}
     {% if not session_est_egal_a_session_de_travail %}
         <td>
-            {% if inscription_evaluation.note %}
+            {% if inscription.a_un_test_dispensatoire and numero_session == 1 %}
+                <span>{{ inscription.note_test_dispensatoire }}</span>
+            {% elif inscription_evaluation.note %}
                 <span>{{ inscription_evaluation.note|affichage_note_etudiant }}</span>
             {% else %}
                 <span> - </span>
@@ -35,7 +37,9 @@
     {% endif %}
     <td {% if session_est_egal_a_session_de_travail %}colspan="2"{% endif %}>
         <div class="d-flex">
-        {% if inscription_evaluation %}
+        {% if inscription.a_un_test_dispensatoire and numero_session == 1 %}
+            <span>Test</span>
+        {% elif inscription_evaluation %}
             {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=inscription_evaluation.type_inscription type_inscription_txt=inscription_evaluation.type_inscription_txt %}
         {% else %}
             {% if session_est_egal_a_session_de_travail and inscription.peut_inscrire_evaluation %}
