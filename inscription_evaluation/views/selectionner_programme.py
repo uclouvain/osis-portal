@@ -23,16 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.http import Http404
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.utils.translation import gettext_lazy as _
+
 
 from osis_inscription_evaluation_sdk.model.mes_formations import MesFormations
 from osis_inscription_evaluation_sdk.model.etudiant import Etudiant
 from osis_inscription_evaluation_sdk.model.inscription_formation import InscriptionFormation
 
 from base.models.person import Person
+from continuing_education.views.common import display_error_messages
 from inscription_evaluation.services.mes_programmes import MesProgrammesService
 from inscription_evaluation.services.periode import PeriodeInscriptionAuxEvaluationsService
 
@@ -62,7 +67,22 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
 
     @cached_property
     def mes_programmes(self) -> 'MesFormations':
-        return MesProgrammesService().recuperer(self.person)
+        try:
+            return MesProgrammesService().recuperer(self.person)
+        except Http404:
+            message = _("You are not registered for any course for the {annee_academique} academic year.").format(
+                annee_academique=self.annee_academique
+            )
+            display_error_messages(
+                self.request,
+                messages_to_display=message
+            )
+            return None
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.mes_programmes is None:
+            return redirect(reverse("dashboard_home"))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         return {

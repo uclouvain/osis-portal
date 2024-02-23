@@ -196,6 +196,12 @@ msgid ""
 "year."
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"You are not registered for any course for the {annee_academique} academic "
+"year."
+msgstr ""
+
 #, python-format
 msgid ""
 "You are not registered for any of the %(nombre_evaluation_organisee)s "
@@ -243,8 +249,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"You can view all evaluation registration statements in the <a href="
-"\"%(mon_pae_et_mes_notes_url)s\">'My annual program and my marks'</a> "
+"You can view all evaluation registration statements in the <a "
+"href=\"%(mon_pae_et_mes_notes_url)s\">'My annual program and my marks'</a> "
 "summary."
 msgstr ""
 
