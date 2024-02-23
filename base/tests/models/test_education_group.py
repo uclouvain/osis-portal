@@ -27,8 +27,6 @@ import datetime
 
 from django.test import TestCase
 
-from base.models import education_group
-from base.models.enums import offer_enrollment_state
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group import EducationGroupFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
@@ -48,34 +46,22 @@ class EducationGroupTest(TestCase):
         self.curent_academic_year = AcademicYearFactory(
             year=a_year,
             start_date=datetime.datetime(a_year, now.month, 1),
-            end_date=datetime.datetime(a_year + 1, now.month, 28)
+            end_date=datetime.datetime(a_year + 1, now.month, 28),
         )
         self.education_group_year1 = EducationGroupYearFactory(
-            education_group= self.education_group,
-            academic_year=self.academic_year
+            education_group=self.education_group, academic_year=self.academic_year
         )
         self.education_group_year2 = EducationGroupYearFactory(
-            education_group= self.education_group,
-            academic_year=self.academic_year2
+            education_group=self.education_group, academic_year=self.academic_year2
         )
         self.education_group_year_current = EducationGroupYearFactory(
-            education_group=self.education_group2,
-            academic_year=self.curent_academic_year
+            education_group=self.education_group2, academic_year=self.curent_academic_year
         )
         self.student = StudentFactory()
         self.OfferEnrollment = OfferEnrollmentFactory(
-            student=self.student,
-            education_group_year=self.education_group_year_current,
-            date_enrollment=now
+            student=self.student, education_group_year=self.education_group_year_current, date_enrollment=now
         )
 
     def test_most_recent_acronym(self):
         self.assertEqual(self.education_group.most_recent_acronym, self.education_group_year2.acronym)
         self.assertEqual(self.education_group3.most_recent_acronym, None)
-
-    def test_find_by_student_and_enrollment_states(self):
-        self.assertCountEqual(education_group.find_by_student_and_enrollment_states(
-            self.student,
-            [offer_enrollment_state.SUBSCRIBED, offer_enrollment_state.PROVISORY]),
-            [self.education_group2])
-

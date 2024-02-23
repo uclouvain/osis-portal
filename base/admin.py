@@ -28,32 +28,20 @@ from django.contrib import admin
 from base.models import *
 from base.models import education_group, education_group_type, education_group_year
 
-admin.site.register(academic_year.AcademicYear,
-                    academic_year.AcademicYearAdmin)
+admin.site.register(academic_year.AcademicYear, academic_year.AcademicYearAdmin)
 
-admin.site.register(education_group.EducationGroup,
-                    education_group.EducationGroupAdmin)
+admin.site.register(education_group.EducationGroup, education_group.EducationGroupAdmin)
 
-admin.site.register(education_group_type.EducationGroupType,
-                    education_group_type.EducationGroupTypeAdmin)
+admin.site.register(education_group_type.EducationGroupType, education_group_type.EducationGroupTypeAdmin)
 
-admin.site.register(education_group_year.EducationGroupYear,
-                    education_group_year.EducationGroupYearAdmin)
+admin.site.register(education_group_year.EducationGroupYear, education_group_year.EducationGroupYearAdmin)
 
-admin.site.register(entity.Entity,
-                    entity.EntityAdmin)
+admin.site.register(entity.Entity, entity.EntityAdmin)
 
-admin.site.register(entity_version.EntityVersion,
-                    entity_version.EntityVersionAdmin)
+admin.site.register(entity_version.EntityVersion, entity_version.EntityVersionAdmin)
 
-admin.site.register(offer_enrollment.OfferEnrollment,
-                    offer_enrollment.OfferEnrollmentAdmin)
+admin.site.register(person.Person, person.PersonAdmin)
 
-admin.site.register(person.Person,
-                    person.PersonAdmin)
+admin.site.register(student.Student, student.StudentAdmin)
 
-admin.site.register(student.Student,
-                    student.StudentAdmin)
-
-admin.site.register(tutor.Tutor,
-                    tutor.TutorAdmin)
+admin.site.register(tutor.Tutor, tutor.TutorAdmin)
