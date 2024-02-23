@@ -125,9 +125,12 @@
                                         {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 inscription=inscription %}
                                         {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 inscription=inscription %}
                                         <td>
-                                           {% if inscription.note_finale.note and inscription.note_finale.session_txt %}
+                                           {% if inscription.note_finale.note %}
                                                 <div class="d-flex justify-content-around">
-                                                    <span>{{ inscription.note_finale.note|affichage_note_etudiant }}</span><span>{{ inscription.note_finale.session_txt }}</span>
+                                                    <span>{{ inscription.note_finale.note|affichage_note_etudiant }}</span>
+                                                    {% if inscription.note_finale.session_txt %}
+                                                        <span>{{ inscription.note_finale.session_txt }}</span>
+                                                    {% endif %}
                                                 </div>
                                            {% else %}
                                                 <div class="d-flex justify-content-center">

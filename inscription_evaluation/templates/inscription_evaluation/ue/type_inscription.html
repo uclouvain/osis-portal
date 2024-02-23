@@ -24,11 +24,10 @@
 {% if session_est_egal_a_session_de_travail %}
     <input id="{{ inscription.unite_enseignement.code }}" type="checkbox" {% if inscription_evaluation %}checked{% endif %} onchange="$(this).next('span').toggle();">
 {% endif %}
-{# TODO class d-none ne fonctionne pas avec .toggle() #}
 {% if type_inscription.value == 'INSCRIPTION_PARTIELLE' %}
-    <span class="{% if not inscription_evaluation %}d-none {% endif %}{% if session_est_egal_a_session_de_travail %}badge info-color{% endif %}">{{ type_inscription_txt }}</span>
+    <span style="{% if not inscription_evaluation %}display: none;{% endif %}" class="{% if session_est_egal_a_session_de_travail %}badge info-color{% endif %}">{{ type_inscription_txt }}</span>
 {% elif type_inscription.value == 'PREMIERE_INSCRIPTION' %}
-    <span class="{% if not inscription_evaluation %}d-none {% endif %}{% if session_est_egal_a_session_de_travail %}badge primary-color{% endif %}">{{ type_inscription_txt }}</span>
+    <span style="{% if not inscription_evaluation %}display: none;{% endif %}" class="{% if session_est_egal_a_session_de_travail %}badge primary-color{% endif %}">{{ type_inscription_txt }}</span>
 {% elif type_inscription.value == 'REINSCRIPTION' or type_inscription.value == 'DEUXIEME_REINSCRIPTION' %}
-    <span class="{% if not inscription_evaluation %}d-none {% endif %}{% if session_est_egal_a_session_de_travail %}badge mauve-color{% endif %}">{{ type_inscription_txt }}</span>
+    <span style="{% if not inscription_evaluation %}display: none;{% endif %}" class="{% if session_est_egal_a_session_de_travail %}badge mauve-color{% endif %}">{{ type_inscription_txt }}</span>
 {% endif %}
