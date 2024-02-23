@@ -77,7 +77,6 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
                 self.request,
                 messages_to_display=message
             )
-            return None
 
     def dispatch(self, request, *args, **kwargs):
         if self.mes_programmes is None:
