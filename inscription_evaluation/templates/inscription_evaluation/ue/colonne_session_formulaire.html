@@ -1,0 +1,53 @@
+{% load equality affichage_note_justification %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+
+{% with session_est_egal_a_session_de_travail=session_de_travail.numero_session|equal:numero_session %}
+    {% if not session_est_egal_a_session_de_travail %}
+        <td>
+            {% if inscription.a_un_test_dispensatoire and numero_session == 1 %}
+                <span>{{ inscription.note_test_dispensatoire }}</span>
+            {% elif inscription_evaluation.note %}
+                <span>{{ inscription_evaluation.note|affichage_note_etudiant }}</span>
+            {% else %}
+                <span> - </span>
+            {% endif %}
+        </td>
+    {% endif %}
+    <td {% if session_est_egal_a_session_de_travail %}colspan="2"{% endif %}>
+        <div class="d-flex">
+        {% if inscription.a_un_test_dispensatoire and numero_session == 1 %}
+            <span>Test</span>
+        {% elif inscription_evaluation %}
+            {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=inscription_evaluation.type_inscription type_inscription_txt=inscription_evaluation.type_inscription_txt %}
+        {% else %}
+            {% if session_est_egal_a_session_de_travail and inscription.peut_inscrire_evaluation %}
+                {% include 'inscription_evaluation/ue/type_inscription.html' with type_inscription=inscription.type_inscription_possible type_inscription_txt=inscription.type_inscription_possible_txt  %}
+            {% else %}
+                <span>-</span>
+            {% endif %}
+        {% endif %}
+        </div>
+    </td>
+{% endwith %}

@@ -1,0 +1,129 @@
+{% extends "inscription_evaluation/layout.html" %}
+{% load academic_year_display %}
+{% load static i18n %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">{{ formation.sigle }}</a></li>
+    <li class="breadcrumb-item active">{% trans 'Evaluation registration summary' context 'inscription-evaluation' %}</li>
+{% endblock %}
+
+{% block page_header %}
+    <div class="page-header">
+        <h2>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</h2>
+    </div>
+{% endblock %}
+
+{% block page_body %}
+    <div class="card panel-formulaires-inscription">
+        <div class="card-body">
+            {% include "inscription_evaluation/blocks/header_formation.html" %}
+
+            {% if inscriptions %}
+                <div class="alert alert-primary d-flex gap-3 align-items-center">
+                    <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                    <div>
+                        <b>
+                        {% if session_de_travail.numero_session == 1 %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
+                        {% elif session_de_travail.numero_session == 2 %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the June session.{% endblocktrans %}
+                        {% else %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
+                        {% endif %}
+                        </b>
+                        <br>
+                        {% trans "Your registrations are saved, but you can modify them as long as you have not submitted them." %}
+                    </div>
+                </div>
+
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <th class="col-md-2">{% trans 'Code' context 'inscription-evaluation' %}</th>
+                        <th class="col-md-8">{% trans 'Title' context 'inscription-evaluation' %}</th>
+                        <th class="col-md-2">
+                             {% if session_de_travail.numero_session == 1 %}
+                                 {% trans 'January' context 'inscription-evaluation' %}
+                             {% elif session_de_travail.numero_session == 2 %}
+                                 {% trans 'June' context 'inscription-evaluation' %}
+                             {% else %}
+                                 {% trans 'September' context 'inscription-evaluation' %}
+                             {% endif %}
+                        </th>
+                    </thead>
+                    <tbody>
+                        {% for inscription in inscriptions %}
+                            <tr>
+                                <td>{{ inscription.unite_enseignement.code }}</td>
+                                <td>{{ inscription.unite_enseignement.intitule }}</td>
+                                <td>
+                                     {% if inscription.type_inscription.value == 'INSCRIPTION_PARTIELLE' %}
+                                        <span class="badge info-color">{{ inscription.type_inscription_txt }}</span>
+                                    {% elif inscription.type_inscription.value == 'PREMIERE_INSCRIPTION' %}
+                                        <span class="badge primary-color">{{ inscription.type_inscription_txt }}</span>
+                                    {% elif inscription.type_inscription.value == 'REINSCRIPTION' or inscription.type_inscription.value == 'DEUXIEME_REINSCRIPTION' %}
+                                        <span class="badge mauve-color">{{ inscription.type_inscription_txt }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-warning gap-3 align-items-center d-flex">
+                    <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                    <div>
+                        {% if session_de_travail.numero_session == 1 %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
+                        {% elif session_de_travail.numero_session == 2 %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the June session.{% endblocktrans %}
+                        {% else %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <form method="post">
+            {% csrf_token %}
+
+                <div class="d-grid gap-2 col-md-5 mx-auto">
+                    <a class="btn btn-light border border-dark-subtle" href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">
+                        <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my registrations" %}
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my exams enrollment' %}
+                    </button>
+                </div>
+
+            </form>
+
+            <br>
+
+            {% include "inscription_evaluation/blocks/contact.html" with code_programme=formation.code_programme %}
+
+        </div>
+    </div>
+{% endblock %}

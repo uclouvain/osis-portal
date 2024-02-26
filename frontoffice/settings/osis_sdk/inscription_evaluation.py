@@ -6,7 +6,7 @@
 #    The core business involves the administration of students, teachers,
 #    courses, programs and so on.
 #
-#    Copyright (C) 2015-2016 Université catholique de Louvain (http://www.uclouvain.be)
+#    Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -23,23 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.db import models
+import logging
 
-from osis_common.models.serializable_model import SerializableModel, SerializableModelAdmin
+import osis_inscription_evaluation_sdk
+from django.conf import settings
 
-
-class LanguageAdmin(SerializableModelAdmin):
-    list_display = ('code', 'name', 'recognized')
-    ordering = ('code',)
-    search_fields = ['code', 'name']
-    fieldsets = ((None, {'fields': ('code', 'name', 'recognized')}),)
+logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 
-class Language(SerializableModel):
-    external_id = models.CharField(max_length=100, blank=True, null=True)
-    code = models.CharField(max_length=4, unique=True)
-    name = models.CharField(max_length=80, unique=True)
-    recognized = models.BooleanField(default=False)
+def build_configuration() -> osis_inscription_evaluation_sdk.Configuration:
+    """
+    Return SDK configuration of exam_enrollment
+    """
+    if not settings.OSIS_INSCRIPTION_EVALUATION_SDK_HOST:
+        logger.debug("'OSIS_INSCRIPTION_EVALUATION_SDK_HOST' setting must be set in configuration")
 
-    def __str__(self):
-        return self.name
+    if not settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY:
+        logger.debug("'REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY' setting must be set in configuration")
+
+    return osis_inscription_evaluation_sdk.Configuration(
+        host=settings.OSIS_INSCRIPTION_EVALUATION_SDK_HOST,
+        api_key_prefix={'Token': settings.OSIS_INSCRIPTION_EVALUATION_SDK_API_KEY_PREFIX},
+        api_key={'Token': settings.REST_FRAMEWORK_ESB_AUTHENTICATION_SECRET_KEY},
+    )

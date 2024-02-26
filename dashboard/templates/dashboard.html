@@ -72,6 +72,8 @@
 
     {% endfor %}
 
+    <br>
+
     {% switch "admission" %}
         {% if "admission" in installed_apps and request.user.person %}
             {% include "admission_dashboard.html" %}
