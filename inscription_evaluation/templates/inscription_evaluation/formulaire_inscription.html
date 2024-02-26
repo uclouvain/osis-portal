@@ -1,0 +1,208 @@
+{% extends "inscription_evaluation/layout.html" %}
+{% load affichage_note_justification %}
+{% load academic_year_display %}
+{% load static i18n %}
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'inscription_evaluation/css/formulaire_inscription.css' %}">
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
+    <li class="breadcrumb-item active">{{ formation.sigle }}</li>
+{% endblock %}
+
+{% block page_header %}
+    <div class="page-header">
+        <h2>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</h2>
+    </div>
+{% endblock %}
+
+{% block page_body %}
+
+    <div class="alert alert-warning gap-3 align-items-center d-none d-xs-flex d-sm-flex d-md-none">
+        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+        <div>
+            {% trans "The size of your screen does not allow optimal navigation within the form. If possible, please use a larger screen for easier navigation." %}
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="card panel-formulaires-inscription">
+            <div class="card-body">
+                {% include "inscription_evaluation/blocks/header_formation.html" %}
+                {% if a_des_inscriptions %}
+                    {% include "inscription_evaluation/blocks/legende.html" %}
+
+                    <div class="alert alert-warning gap-3 align-items-center d-none d-xs-flex d-sm-flex d-md-none">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <div>
+                            {% trans "The size of your screen does not allow optimal navigation within the form. If possible, please use a larger screen for easier navigation." %}
+                        </div>
+                    </div>
+
+                    <div class="alert alert-primary d-flex gap-3 align-items-center">
+                        <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
+                        <div>
+                            <b>
+                                {% trans "You are registered for all the evaluations ticked below." %}<br>
+                                {% trans "If this is suitable for you, please continue and submit your evaluation registration." %}<br>
+                            </b>
+                            {% trans "You can modify your evaluation entries as long as you have not submitted them." %}
+                        </div>
+                    </div>
+
+                    {% if not peut_s_inscrire_a_minimum_une_evaluation %}
+
+                        <div class="alert alert-warning gap-3 align-items-center d-flex">
+                            <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                            <div>
+                                {% if session_de_travail.numero_session == 1 %}
+                                    {% trans 'You cannot register for any evaluation for the January session.' %}
+                                {% elif session_de_travail.numero_session == 2 %}
+                                    {% trans 'You cannot register for any evaluation for the June session.' %}
+                                {% else %}
+                                    {% trans 'You cannot register for any evaluation for the September session.' %}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                    <table class="table table-formulaire-inscription table-hover table-bordered">
+                        <thead>
+                            <th style="width: 8%">{% trans 'Code' context 'inscription-evaluation' %}</th>
+                            <th style="width: 32%">{% trans 'Title' context 'inscription-evaluation' %}</th>
+                            <th style="width: 11%" colspan="2">{% trans 'Credits' context 'inscription-evaluation' %}</th>
+                            <th style="width: 11%" colspan="2">{% trans 'January' context 'inscription-evaluation' %}</th>
+                            <th style="width: 11%" colspan="2">{% trans 'June' context 'inscription-evaluation' %}</th>
+                            <th style="width: 11%" colspan="2">{% trans 'September' context 'inscription-evaluation' %}</th>
+                            <th style="width: 8%">{% trans 'Final note' context 'inscription-evaluation' %}</th>
+                            <th style="width: 8%">{% trans 'Credited' context 'inscription-evaluation' %}</th>
+                        </thead>
+                        <tbody>
+                            {% for contexte, inscr_evals in map_insc_eval_par_contexte.items %}
+                                {% if contexte %}
+                                    <tr>
+                                        <td class="background-grey" colspan="12" style="font-weight: bold;">{{ contexte }}</td>
+                                    </tr>
+                                {% endif %}
+                                {% for inscription in inscr_evals %}
+                                    <tr>
+                                        <td>{{ inscription.unite_enseignement.code }}</td>
+                                        <td>{{ inscription.unite_enseignement.intitule }}</td>
+                                        <td style="width: 5%">
+                                            {{ inscription.credits_inscrits }}
+                                        </td>
+                                        <td style="width: 5%">
+                                            {% if inscription.etat_txt %}{{ inscription.etat_txt }}{% endif %}
+                                        </td>
+                                        {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 inscription=inscription %}
+                                        {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 inscription=inscription %}
+                                        {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 inscription=inscription %}
+                                        <td>
+                                           {% if inscription.note_finale.note %}
+                                                <div class="d-flex justify-content-around">
+                                                    <span>{{ inscription.note_finale.note|affichage_note_etudiant }}</span>
+                                                    {% if inscription.note_finale.session_txt %}
+                                                        <span>{{ inscription.note_finale.session_txt }}</span>
+                                                    {% endif %}
+                                                </div>
+                                           {% else %}
+                                                <div class="d-flex justify-content-center">
+                                                    <span>?</span>
+                                                </div>
+                                           {% endif %}
+                                        </td>
+                                        <td>{% if inscription.credite %}Créd.{% else %}-{% endif %}</td>
+                                    </tr>
+                                {%  endfor %}
+                            {%  endfor %}
+                        </tbody>
+                    </table>
+                    <br>
+                {% else %}
+                    <div class="alert alert-warning gap-3 align-items-center d-flex">
+                        <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                        <div>
+                            {% trans "No learning unit enrollment found for this training." %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="d-grid gap-2 col-md-6 mx-auto mb-5">
+                    <a href="{% url 'inscription-evaluation:selectionner-programme' %}" class="btn btn-light border border-dark-subtle">
+                        {% trans "Return to initial screen" context 'inscription-evaluation' %}
+                    </a>
+                    {% if a_des_inscriptions %}
+                        <button type="submit" class="btn btn-primary btn-wrap btn-block-xs slow-loading">
+                            <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to the summary of registrations' %}
+                        </button>
+                    {% endif %}
+                </div>
+
+                {% include "inscription_evaluation/blocks/contact.html" %}
+
+            </div>
+        </div>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(event) {
+                var demandesInscriptions = [];
+                var demandesDesinscriptions = [];
+
+                $('input[type="checkbox"]').each(function() {
+                    var codeUE = $(this).attr('id');
+                    var etatInitial = $(this).prop('defaultChecked');
+                    var etatActuel = $(this).prop('checked');
+
+                    if (etatInitial !== etatActuel) {
+                        if (etatActuel) {
+                            demandesInscriptions.push(codeUE);
+                        } else {
+                            demandesDesinscriptions.push(codeUE);
+                        }
+                    }
+                });
+
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'demandes_inscriptions',
+                    value: JSON.stringify(demandesInscriptions)
+                }).appendTo($(this));
+
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'demandes_desinscriptions',
+                    value: JSON.stringify(demandesDesinscriptions)
+                }).appendTo($(this));
+            });
+        });
+    </script>
+{% endblock %}
