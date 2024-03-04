@@ -82,7 +82,9 @@ class MockAPI(InternshipApi):
 
     @classmethod
     def periods_get(*args, **kwargs):
-        return {'count': 1, 'results': [PeriodGet(uuid=str(uuid.uuid4()), name='P1')]}
+        return {'count': 1, 'results': [
+            PeriodGet(uuid=str(uuid.uuid4()), name='P1', date_end='2023-01-31', date_start='2023-01-01')
+        ]}
 
     @classmethod
     def specialties_uuid_get(*args, **kwargs):
@@ -99,7 +101,7 @@ class MockAPI(InternshipApi):
         affectation = StudentAffectationGet(
             uuid=str(uuid.uuid4()),
             student=Student(uuid=str(uuid.uuid4()), last_name='', first_name=''),
-            period=PeriodGet(uuid=str(uuid.uuid4()), name='P1'),
+            period=PeriodGet(uuid=str(uuid.uuid4()), name='P1', date_end='2023-01-31', date_start='2023-01-01'),
             score=ScoreListGet(uuid=str(uuid.uuid4()), validated=False)
         )
         return {'count': 1, 'results': [affectation], 'next': 'next_url', 'previous': 'previous_url'}
@@ -108,7 +110,7 @@ class MockAPI(InternshipApi):
     def students_affectations_affectation_uuid_get(*args, **kwargs):
         return StudentAffectationGet(
             student=Student(uuid=str(uuid.uuid4()), last_name='', first_name=''),
-            period=PeriodGet(uuid=str(uuid.uuid4()), name='P1'),
+            period=PeriodGet(uuid=str(uuid.uuid4()), name='P1', date_end='2023-01-31', date_start='2023-01-01'),
             score=ScoreListGet(uuid=str(uuid.uuid4()), validated=True, comments={}),
         )
 
