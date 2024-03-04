@@ -93,6 +93,8 @@ def view_score_encoding_sheet(request, specialty_uuid, organization_uuid):
         ]
     )
     periods = InternshipAPIService.get_periods(person=request.user.person, cohort_name=organization.cohort.name)
+    if periods:
+        periods = sorted(periods, key=lambda p: p.date_end)
 
     return layout.render(request, "internship_score_encoding_sheet.html", locals())
 
