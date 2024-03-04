@@ -1,4 +1,4 @@
-Django==3.2.23
+Django==3.2.24
 django-bootstrap3==23.2  # Version 23.3 drops Python3.7 support
 django-localflavor==4.0 # Version 4.1 drops Python3.7 support
 django-statici18n==2.4.0
@@ -44,6 +44,7 @@ git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.4.0
 git+https://github.com/uclouvain/osis-exam-enrollment-sdk.git@build-1.0
 git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.13
 git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.05
+git+https://github.com/uclouvain/osis-inscription-evaluation-sdk.git@wip-build-1.4
 
 # Modules transverses
 git+https://github.com/uclouvain/osis-document.git@0.10.3#egg=osis_document

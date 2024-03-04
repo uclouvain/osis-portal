@@ -29,6 +29,3 @@ from reference.models import *
 
 admin.site.register(country.Country,
                     country.CountryAdmin)
-
-admin.site.register(language.Language,
-                    language.LanguageAdmin)

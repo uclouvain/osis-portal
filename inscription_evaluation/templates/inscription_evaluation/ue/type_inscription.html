@@ -1,0 +1,33 @@
+{% comment "License" %}
+    * OSIS stands for Open Student Information System. It's an application
+    * designed to manage the core business of higher education institutions,
+    * such as universities, faculties, institutes and professional schools.
+    * The core business involves the administration of students, teachers,
+    * courses, programs and so on.
+    *
+    * Copyright (C) 2015-2024 Université catholique de Louvain (http://www.uclouvain.be)
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * A copy of this license - GNU General Public License - is available
+    * at the root of the source code of this program.  If not,
+    * see http://www.gnu.org/licenses/.
+{% endcomment %}
+{% if session_est_egal_a_session_de_travail %}
+    <input id="{{ inscription.unite_enseignement.code }}" type="checkbox" {% if inscription_evaluation %}checked{% endif %} onchange="$(this).next('span').toggle();">
+{% endif %}
+{% if type_inscription.value == 'INSCRIPTION_PARTIELLE' %}
+    <span style="{% if not inscription_evaluation %}display: none;{% endif %}" class="{% if session_est_egal_a_session_de_travail %}badge info-color{% endif %}">{{ type_inscription_txt }}</span>
+{% elif type_inscription.value == 'PREMIERE_INSCRIPTION' %}
+    <span style="{% if not inscription_evaluation %}display: none;{% endif %}" class="{% if session_est_egal_a_session_de_travail %}badge primary-color{% endif %}">{{ type_inscription_txt }}</span>
+{% elif type_inscription.value == 'REINSCRIPTION' or type_inscription.value == 'DEUXIEME_REINSCRIPTION' %}
+    <span style="{% if not inscription_evaluation %}display: none;{% endif %}" class="{% if session_est_egal_a_session_de_travail %}badge mauve-color{% endif %}">{{ type_inscription_txt }}</span>
+{% endif %}

@@ -1,0 +1,19 @@
+.center {
+    margin: auto;
+    text-align: center;
+}
+
+.badge.primary-color {
+    background-color:#337ab7;
+}
+
+.badge.info-color {
+    background-color:#269abc;
+}
+
+.badge.mauve-color {
+    background-color: #6812ad;
+}
+input{
+    margin-right: 5% !important;
+}
