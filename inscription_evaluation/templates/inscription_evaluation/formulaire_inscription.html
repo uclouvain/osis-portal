@@ -95,14 +95,13 @@
 
                     <table class="table table-formulaire-inscription table-hover table-bordered">
                         <thead>
-                            <th style="width: 8%">{% trans 'Code' context 'inscription-evaluation' %}</th>
-                            <th style="width: 32%">{% trans 'Title' context 'inscription-evaluation' %}</th>
-                            <th style="width: 11%" colspan="2">{% trans 'Credits' context 'inscription-evaluation' %}</th>
-                            <th style="width: 11%" colspan="2">{% trans 'January' context 'inscription-evaluation' %}</th>
-                            <th style="width: 11%" colspan="2">{% trans 'June' context 'inscription-evaluation' %}</th>
-                            <th style="width: 11%" colspan="2">{% trans 'September' context 'inscription-evaluation' %}</th>
-                            <th style="width: 8%">{% trans 'Final note' context 'inscription-evaluation' %}</th>
-                            <th style="width: 8%">{% trans 'Credited' context 'inscription-evaluation' %}</th>
+                            <th style="width: 10%">{% trans 'Code' context 'inscription-evaluation' %}</th>
+                            <th style="width: 35%">{% trans 'Title' context 'inscription-evaluation' %}</th>
+                            <th style="width: 12%" colspan="2">{% trans 'Credits' context 'inscription-evaluation' %}</th>
+                            <th style="width: 12%" colspan="2">{% trans 'January' context 'inscription-evaluation' %}</th>
+                            <th style="width: 12%" colspan="2">{% trans 'June' context 'inscription-evaluation' %}</th>
+                            <th style="width: 12%" colspan="2">{% trans 'September' context 'inscription-evaluation' %}</th>
+                            <th style="width: 7%">{% trans 'Credited' context 'inscription-evaluation' %}</th>
                         </thead>
                         <tbody>
                             {% for contexte, inscr_evals in map_insc_eval_par_contexte.items %}
@@ -124,20 +123,6 @@
                                         {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=1 inscription_evaluation=inscription.evaluation_session_1 inscription=inscription %}
                                         {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=2 inscription_evaluation=inscription.evaluation_session_2 inscription=inscription %}
                                         {% include 'inscription_evaluation/ue/colonne_session_formulaire.html' with numero_session=3 inscription_evaluation=inscription.evaluation_session_3 inscription=inscription %}
-                                        <td>
-                                           {% if inscription.note_finale.note %}
-                                                <div class="d-flex justify-content-around">
-                                                    <span>{{ inscription.note_finale.note|affichage_note_etudiant }}</span>
-                                                    {% if inscription.note_finale.session_txt %}
-                                                        <span>{{ inscription.note_finale.session_txt }}</span>
-                                                    {% endif %}
-                                                </div>
-                                           {% else %}
-                                                <div class="d-flex justify-content-center">
-                                                    <span>?</span>
-                                                </div>
-                                           {% endif %}
-                                        </td>
                                         <td>{% if inscription.credite %}Créd.{% else %}-{% endif %}</td>
                                     </tr>
                                 {%  endfor %}
