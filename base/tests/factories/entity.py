@@ -26,9 +26,10 @@
 from datetime import datetime
 
 import factory
+from factory.django import DjangoModelFactory
 
 
-class EntityFactory(factory.DjangoModelFactory):
+class EntityFactory(DjangoModelFactory):
     class Meta:
         model = 'base.Entity'
 

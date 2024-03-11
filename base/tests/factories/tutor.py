@@ -24,12 +24,13 @@
 #
 ##############################################################################
 import factory.fuzzy
+from factory.django import DjangoModelFactory
 
 from base.tests.factories.group import TutorGroupFactory
 from base.tests.factories.person import PersonFactory
 
 
-class TutorFactory(factory.DjangoModelFactory):
+class TutorFactory(DjangoModelFactory):
     class Meta:
         model = 'base.Tutor'
         exclude = ('group',)
