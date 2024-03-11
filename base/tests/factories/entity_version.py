@@ -26,12 +26,13 @@
 import datetime
 
 import factory
+from factory.django import DjangoModelFactory
 
 from base.models.enums.entity_type import ENTITY_TYPES
 from base.tests.factories.entity import EntityFactory
 
 
-class EntityVersionFactory(factory.DjangoModelFactory):
+class EntityVersionFactory(DjangoModelFactory):
     class Meta:
         model = 'base.EntityVersion'
 
