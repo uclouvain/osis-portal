@@ -87,7 +87,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
 
     def post(self, request, *args, **kwargs):
         try:
-            # self.soumettre_demande()
+            self.soumettre_demande()
             display_success_messages(
                 request,
                 self.get_success_message(),
