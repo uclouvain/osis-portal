@@ -43,6 +43,14 @@ class FormulaireInscriptionService:
         return _formulaire_api_call(person, 'get_formulaire_inscription', code_programme=code_programme)
 
     @staticmethod
+    def marquer_comme_lu(person: 'Person', code_programme: str):
+        return _formulaire_api_call(
+            person,
+            "marquer_formulaire_inscription_eval_comme_lu",
+            code_programme=code_programme,
+        )
+
+    @staticmethod
     def soumettre(
         person: 'Person',
         code_programme: str,
