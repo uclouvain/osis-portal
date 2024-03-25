@@ -29,6 +29,7 @@ import random
 import factory
 import factory.fuzzy
 from django.conf import settings
+from factory.django import DjangoModelFactory
 from unidecode import unidecode
 
 from base import models as mdl
@@ -37,7 +38,7 @@ from base.tests.factories.user import UserFactory
 
 def generate_person_email(person, domain=None):
     if domain is None:
-        domain = factory.Faker('domain_name').generate({})
+        domain = factory.Faker('domain_name').evaluate(None, None, {'locale': None})
     return '{0}.{1}@{2}'.format(unidecode(person.first_name), person.last_name.replace(' ', ''), domain).lower()
 
 
@@ -47,7 +48,7 @@ def generate_global_id() -> str:
     return "".join([first_digit] + other_digits)
 
 
-class PersonFactory(factory.DjangoModelFactory):
+class PersonFactory(DjangoModelFactory):
     class Meta:
         model = 'base.Person'
 

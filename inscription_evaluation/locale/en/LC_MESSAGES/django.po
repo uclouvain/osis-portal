@@ -16,12 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Absent excused"
+msgstr ""
+
 msgctxt "inscription-evaluation"
 msgid "Academic year"
 msgstr ""
 
 msgctxt "inscription-evaluation"
 msgid "Acronym"
+msgstr ""
+
+msgid "Cheating"
 msgstr ""
 
 msgid ""
@@ -80,10 +86,6 @@ msgstr ""
 
 msgctxt "inscription-evaluation"
 msgid "Faculty contact"
-msgstr ""
-
-msgctxt "inscription-evaluation"
-msgid "Final note"
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -184,6 +186,9 @@ msgstr ""
 
 msgctxt "inscription-evaluation"
 msgid "Title"
+msgstr ""
+
+msgid "Unexcused absence"
 msgstr ""
 
 msgctxt "inscription-evaluation"

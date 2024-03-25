@@ -26,17 +26,17 @@
 from datetime import datetime
 
 import factory
+from factory.django import DjangoModelFactory
 
 from osis_common.utils.datetime import get_tzinfo
 
 
 def generate_email(user, domain=None):
-    domain = domain or factory.Faker('domain_name').generate({})
+    domain = domain or factory.Faker('domain_name').evaluate(None, None, {'locale': None})
     return '{0.first_name}.{0.last_name}@{1}'.format(user, domain).lower()
 
 
-class UserFactory(factory.DjangoModelFactory):
-
+class UserFactory(DjangoModelFactory):
     class Meta:
         model = 'auth.User'
         django_get_or_create = ('username',)
@@ -53,7 +53,6 @@ class UserFactory(factory.DjangoModelFactory):
 
     last_login = factory.LazyAttribute(lambda _o: datetime(2000, 1, 1, tzinfo=get_tzinfo()))
     date_joined = factory.LazyAttribute(lambda _o: datetime(1999, 1, 1, tzinfo=get_tzinfo()))
-
 
 
 class SuperUserFactory(UserFactory):
