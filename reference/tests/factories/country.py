@@ -24,9 +24,10 @@
 #
 ##############################################################################
 import factory
+from factory.django import DjangoModelFactory
 
 
-class CountryFactory(factory.DjangoModelFactory):
+class CountryFactory(DjangoModelFactory):
     class Meta:
         model = 'reference.Country'
         django_get_or_create = ('iso_code',)

@@ -24,17 +24,6 @@
 {% endcomment %}
 
 {% with session_est_egal_a_session_de_travail=session_de_travail.numero_session|equal:numero_session %}
-    {% if not session_est_egal_a_session_de_travail %}
-        <td>
-            {% if inscription.a_un_test_dispensatoire and numero_session == 1 %}
-                <span>{{ inscription.note_test_dispensatoire }}</span>
-            {% elif inscription_evaluation.note %}
-                <span>{{ inscription_evaluation.note|affichage_note_etudiant }}</span>
-            {% else %}
-                <span> - </span>
-            {% endif %}
-        </td>
-    {% endif %}
     <td {% if session_est_egal_a_session_de_travail %}colspan="2"{% endif %}>
         <div class="d-flex">
         {% if inscription.a_un_test_dispensatoire and numero_session == 1 %}
@@ -50,4 +39,15 @@
         {% endif %}
         </div>
     </td>
+    {% if not session_est_egal_a_session_de_travail %}
+        <td>
+            {% if inscription.a_un_test_dispensatoire and numero_session == 1 %}
+                <span>{{ inscription.note_test_dispensatoire }}</span>
+            {% elif inscription_evaluation.note %}
+                <span>{{ inscription_evaluation.note|affichage_note_etudiant }}</span>
+            {% else %}
+                <span> - </span>
+            {% endif %}
+        </td>
+    {% endif %}
 {% endwith %}

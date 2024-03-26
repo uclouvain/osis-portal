@@ -16,6 +16,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Absent excused"
+msgstr "Absence excusée"
+
 msgctxt "inscription-evaluation"
 msgid "Academic year"
 msgstr "Année académique"
@@ -23,6 +26,9 @@ msgstr "Année académique"
 msgctxt "inscription-evaluation"
 msgid "Acronym"
 msgstr "Sigle"
+
+msgid "Cheating"
+msgstr "Tricherie"
 
 msgid ""
 "Click on the code of the course (acronym) for which you want to register for "
@@ -86,10 +92,6 @@ msgstr "Récapitulatif d'inscription aux évaluations"
 msgctxt "inscription-evaluation"
 msgid "Faculty contact"
 msgstr "Contact en faculté"
-
-msgctxt "inscription-evaluation"
-msgid "Final note"
-msgstr "Note finale"
 
 msgctxt "inscription-evaluation"
 msgid "First name"
@@ -204,6 +206,9 @@ msgstr ""
 msgctxt "inscription-evaluation"
 msgid "Title"
 msgstr "Intitulé"
+
+msgid "Unexcused absence"
+msgstr "Absence non excusée"
 
 msgctxt "inscription-evaluation"
 msgid "Year"

@@ -24,11 +24,12 @@
 #
 ##############################################################################
 import factory.fuzzy
+from factory.django import DjangoModelFactory
 
 from base.tests.factories.student import StudentFactory
 
 
-class ExamEnrollmentRequestFactory(factory.DjangoModelFactory):
+class ExamEnrollmentRequestFactory(DjangoModelFactory):
     class Meta:
         model = 'exam_enrollment.ExamEnrollmentRequest'
 

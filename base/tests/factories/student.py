@@ -26,15 +26,16 @@
 import string
 
 import factory.fuzzy
+from factory.django import DjangoModelFactory
 
-from base.tests.factories.group import GroupFactory, StudentGroupFactory
+from base.tests.factories.group import StudentGroupFactory
 from base.tests.factories.person import PersonFactory
 
 
-class StudentFactory(factory.DjangoModelFactory):
+class StudentFactory(DjangoModelFactory):
     class Meta:
         model = 'base.Student'
-        exclude = ('group', )
+        exclude = ('group',)
 
     registration_id = factory.fuzzy.FuzzyText(length=10, chars=string.digits)
     person = factory.SubFactory(PersonFactory)
