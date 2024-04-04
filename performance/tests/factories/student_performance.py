@@ -29,6 +29,7 @@ import operator
 import string
 
 import factory.fuzzy
+from factory.django import DjangoModelFactory
 
 from performance.models.enums import offer_registration_state as registration_state, session_month
 
@@ -39,7 +40,7 @@ def load_sample_student_performance():
         return json.load(file_sample)
 
 
-class StudentPerformanceFactory(factory.DjangoModelFactory):
+class StudentPerformanceFactory(DjangoModelFactory):
     class Meta:
         model = 'performance.StudentPerformance'
 

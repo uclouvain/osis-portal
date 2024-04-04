@@ -32,7 +32,7 @@ register = template.Library()
 def affichage_note_etudiant(note: str):
     return {
         'M': 'Exc.',
-        'S': 'Abs.',
-        'A': 'Abs.',
+        'S': 'Non exc.',
+        'A': 'Non exc.',
         'T': 'Trich.',
     }.get(note, note)

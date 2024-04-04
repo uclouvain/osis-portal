@@ -75,7 +75,9 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
 
     @cached_property
     def formulaire(self) -> 'MonFormulaireInscriptionEvaluations':
-        return FormulaireInscriptionService().recuperer(self.person, self.code_programme)
+        formulaire = FormulaireInscriptionService().recuperer(self.person, self.code_programme)
+        FormulaireInscriptionService().marquer_comme_lu(self.person, self.code_programme)
+        return formulaire
 
     @cached_property
     def group_inscriptions_by_contexte_inscription(self) -> Dict[str, List[Dict]]:
