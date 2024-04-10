@@ -39,21 +39,21 @@ from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_
 class FormulaireInscriptionService:
 
     @staticmethod
-    def recuperer(person: 'Person', code_programme: str) -> 'MonFormulaireInscriptionEvaluations':
-        return _formulaire_api_call(person, 'get_formulaire_inscription', code_programme=code_programme)
+    def recuperer(person: 'Person', sigle_formation: str) -> 'MonFormulaireInscriptionEvaluations':
+        return _formulaire_api_call(person, 'get_formulaire_inscription', sigle_formation=sigle_formation)
 
     @staticmethod
-    def marquer_comme_lu(person: 'Person', code_programme: str):
+    def marquer_comme_lu(person: 'Person', sigle_formation: str):
         return _formulaire_api_call(
             person,
             "marquer_formulaire_inscription_eval_comme_lu",
-            code_programme=code_programme,
+            sigle_formation=sigle_formation,
         )
 
     @staticmethod
     def soumettre(
         person: 'Person',
-        code_programme: str,
+        sigle_formation: str,
         demandes_inscriptions: List[str],
         demandes_desinscriptions: List[str],
     ):
@@ -64,7 +64,7 @@ class FormulaireInscriptionService:
         return _formulaire_api_call(
             person,
             'enregistrer_formulaire',
-            code_programme=code_programme,
+            sigle_formation=sigle_formation,
             choix_inscriptions_etudiant=cmd,
         )
 

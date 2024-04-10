@@ -89,7 +89,7 @@
                                 <td>{{ formation.periode_inscription.annee|display_as_academic_year }}</td>
                                 <td>
                                     {% if formation.peut_inscrire_aux_evaluations %}
-                                        <a href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">
+                                        <a href="{% url 'inscription-evaluation:formulaire-inscription' formation.sigle %}">
                                             {{ formation.sigle }}
                                         </a>
                                     {% else %}

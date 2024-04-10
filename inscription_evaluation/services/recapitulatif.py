@@ -35,12 +35,12 @@ from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_
 class RecapitulatifService:
 
     @staticmethod
-    def recuperer(person: 'Person', code_programme: str) -> 'Recapitulatif':
-        return _recapitulatif_api_call(person, 'get_recapitulatif', code_programme=code_programme)
+    def recuperer(person: 'Person', sigle_formation: str) -> 'Recapitulatif':
+        return _recapitulatif_api_call(person, 'get_recapitulatif', sigle_formation=sigle_formation)
 
     @staticmethod
-    def soumettre(person: 'Person', code_programme: str):
-        return _recapitulatif_api_call(person, 'soumettre_formulaire', code_programme=code_programme)
+    def soumettre(person: 'Person', sigle_formation: str):
+        return _recapitulatif_api_call(person, 'soumettre_formulaire', sigle_formation=sigle_formation)
 
 
 _recapitulatif_api_call = partial(
