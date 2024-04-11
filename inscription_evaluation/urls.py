@@ -33,7 +33,7 @@ app_name = 'inscription-evaluation'
 urlpatterns = [
     path('', SelectionnerProgrammeView.as_view(), name=SelectionnerProgrammeView.name),
     path(
-        '<str:code_programme>/',
+        '<str:sigle_formation>/',
         include(
             [
                 path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),
