@@ -25,6 +25,7 @@
 ##############################################################################
 from functools import partial
 from typing import List
+from base.utils.converters import AcronymConverter
 
 from base.models.person import Person
 from base.services.utils import call_api
@@ -40,14 +41,18 @@ class FormulaireInscriptionService:
 
     @staticmethod
     def recuperer(person: 'Person', sigle_formation: str) -> 'MonFormulaireInscriptionEvaluations':
-        return _formulaire_api_call(person, 'get_formulaire_inscription', sigle_formation=sigle_formation)
+        return _formulaire_api_call(
+            person,
+            'get_formulaire_inscription',
+            sigle_formation=AcronymConverter().to_url(sigle_formation)
+        )
 
     @staticmethod
     def marquer_comme_lu(person: 'Person', sigle_formation: str):
         return _formulaire_api_call(
             person,
             "marquer_formulaire_inscription_eval_comme_lu",
-            sigle_formation=sigle_formation,
+            sigle_formation=AcronymConverter().to_url(sigle_formation),
         )
 
     @staticmethod
