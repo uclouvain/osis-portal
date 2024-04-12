@@ -29,18 +29,26 @@ from base.services.utils import call_api
 import osis_inscription_evaluation_sdk
 from osis_inscription_evaluation_sdk.api import recapitulatif_api
 from osis_inscription_evaluation_sdk.model.recapitulatif import Recapitulatif
+
+from base.utils.converters import AcronymConverter
 from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
 
 
 class RecapitulatifService:
 
     @staticmethod
-    def recuperer(person: 'Person', code_programme: str) -> 'Recapitulatif':
-        return _recapitulatif_api_call(person, 'get_recapitulatif', code_programme=code_programme)
+    def recuperer(person: 'Person', sigle_formation: str) -> 'Recapitulatif':
+        return _recapitulatif_api_call(
+            person, 'get_recapitulatif',
+            sigle_formation=AcronymConverter().to_url(sigle_formation)
+        )
 
     @staticmethod
-    def soumettre(person: 'Person', code_programme: str):
-        return _recapitulatif_api_call(person, 'soumettre_formulaire', code_programme=code_programme)
+    def soumettre(person: 'Person', sigle_formation: str):
+        return _recapitulatif_api_call(
+            person, 'soumettre_formulaire',
+            sigle_formation=AcronymConverter().to_url(sigle_formation)
+        )
 
 
 _recapitulatif_api_call = partial(

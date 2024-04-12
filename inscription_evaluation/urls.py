@@ -24,16 +24,21 @@
 #
 ##############################################################################
 from django.urls import path, include
+from django.urls.converters import register_converter
 
+from base.utils.converters import AcronymConverter
 from inscription_evaluation.views.formulaire_inscription import FormulaireInscriptionView
 from inscription_evaluation.views.recapitulatif import RecapitulatifView
 from inscription_evaluation.views.selectionner_programme import SelectionnerProgrammeView
 
 app_name = 'inscription-evaluation'
+
+register_converter(AcronymConverter, 'sigle_formation')
+
 urlpatterns = [
     path('', SelectionnerProgrammeView.as_view(), name=SelectionnerProgrammeView.name),
     path(
-        '<str:code_programme>/',
+        '<sigle_formation:sigle_formation>/',
         include(
             [
                 path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),

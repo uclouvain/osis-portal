@@ -36,5 +36,5 @@ class InscriptionEvaluationViewMixin:
         return Person.objects.get(user=self.request.user)
 
     @property
-    def code_programme(self) -> str:
-        return self.kwargs['code_programme']
+    def sigle_formation(self) -> str:
+        return self.kwargs['sigle_formation'].replace('11BA', '1BA')
