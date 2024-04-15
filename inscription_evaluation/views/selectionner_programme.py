@@ -23,23 +23,21 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.views.generic import TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.utils.translation import gettext_lazy as _
-
-
-from osis_inscription_evaluation_sdk.model.mes_formations import MesFormations
+from django.views.generic import TemplateView
 from osis_inscription_evaluation_sdk.model.etudiant import Etudiant
 from osis_inscription_evaluation_sdk.model.inscription_formation import InscriptionFormation
+from osis_inscription_evaluation_sdk.model.mes_formations import MesFormations
 
 from base.models.person import Person
 from continuing_education.views.common import display_error_messages
+from inscription_evaluation.services.annee_academique import AcademicYearService
 from inscription_evaluation.services.mes_programmes import MesProgrammesService
-from inscription_evaluation.services.periode import PeriodeInscriptionAuxEvaluationsService
 
 
 class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -55,7 +53,7 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
 
     @cached_property
     def annee_academique(self) -> 'int':
-        return PeriodeInscriptionAuxEvaluationsService().get_annee(self.person)
+        return AcademicYearService().get_current_academic_year(self.person)
 
     @cached_property
     def etudiant(self) -> 'Etudiant':
