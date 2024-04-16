@@ -26,7 +26,7 @@
 {% endcomment %}
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
-    <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">{{ formation.sigle }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:formulaire-inscription' formation.sigle %}">{{ formation.sigle }}</a></li>
     <li class="breadcrumb-item active">{% trans 'Evaluation registration summary' context 'inscription-evaluation' %}</li>
 {% endblock %}
 
@@ -110,7 +110,7 @@
             {% csrf_token %}
 
                 <div class="d-grid gap-2 col-md-5 mx-auto">
-                    <a class="btn {% if inscriptions %}btn-light border border-dark-subtle{% else %}btn-primary{% endif %}" href="{% url 'inscription-evaluation:formulaire-inscription' formation.code_programme %}">
+                    <a class="btn {% if inscriptions %}btn-light border border-dark-subtle{% else %}btn-primary{% endif %}" href="{% url 'inscription-evaluation:formulaire-inscription' formation.sigle %}">
                         <i class="fa-solid fa-cart-shopping"></i> {% trans "Modify my registrations" %}
                     </a>
                     <button type="submit" class="btn {% if inscriptions %}btn-primary{% else %}btn-light border border-dark-subtle{% endif %}">
