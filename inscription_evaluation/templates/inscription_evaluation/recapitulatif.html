@@ -59,38 +59,40 @@
                     </div>
                 </div>
 
-                <table class="table table-hover table-bordered">
-                    <thead>
-                        <th class="col-md-2">{% trans 'Code' context 'inscription-evaluation' %}</th>
-                        <th class="col-md-8">{% trans 'Title' context 'inscription-evaluation' %}</th>
-                        <th class="col-md-2">
-                             {% if session_de_travail.numero_session == 1 %}
-                                 {% trans 'January' context 'inscription-evaluation' %}
-                             {% elif session_de_travail.numero_session == 2 %}
-                                 {% trans 'June' context 'inscription-evaluation' %}
-                             {% else %}
-                                 {% trans 'September' context 'inscription-evaluation' %}
-                             {% endif %}
-                        </th>
-                    </thead>
-                    <tbody>
-                        {% for inscription in inscriptions %}
-                            <tr>
-                                <td>{{ inscription.unite_enseignement.code }}</td>
-                                <td>{{ inscription.unite_enseignement.intitule }}</td>
-                                <td>
-                                     {% if inscription.type_inscription.value == 'INSCRIPTION_PARTIELLE' %}
-                                        <span class="badge info-color">{{ inscription.type_inscription_txt }}</span>
-                                    {% elif inscription.type_inscription.value == 'PREMIERE_INSCRIPTION' %}
-                                        <span class="badge primary-color">{{ inscription.type_inscription_txt }}</span>
-                                    {% elif inscription.type_inscription.value == 'REINSCRIPTION' or inscription.type_inscription.value == 'DEUXIEME_REINSCRIPTION' %}
-                                        <span class="badge mauve-color">{{ inscription.type_inscription_txt }}</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <th class="col-md-2">{% trans 'Code' context 'inscription-evaluation' %}</th>
+                            <th class="col-md-8">{% trans 'Title' context 'inscription-evaluation' %}</th>
+                            <th class="col-md-2">
+                                 {% if session_de_travail.numero_session == 1 %}
+                                     {% trans 'January' context 'inscription-evaluation' %}
+                                 {% elif session_de_travail.numero_session == 2 %}
+                                     {% trans 'June' context 'inscription-evaluation' %}
+                                 {% else %}
+                                     {% trans 'September' context 'inscription-evaluation' %}
+                                 {% endif %}
+                            </th>
+                        </thead>
+                        <tbody>
+                            {% for inscription in inscriptions %}
+                                <tr>
+                                    <td>{{ inscription.unite_enseignement.code }}</td>
+                                    <td>{{ inscription.unite_enseignement.intitule }}</td>
+                                    <td>
+                                         {% if inscription.type_inscription.value == 'INSCRIPTION_PARTIELLE' %}
+                                            <span class="badge info-color">{{ inscription.type_inscription_txt }}</span>
+                                        {% elif inscription.type_inscription.value == 'PREMIERE_INSCRIPTION' %}
+                                            <span class="badge primary-color">{{ inscription.type_inscription_txt }}</span>
+                                        {% elif inscription.type_inscription.value == 'REINSCRIPTION' or inscription.type_inscription.value == 'DEUXIEME_REINSCRIPTION' %}
+                                            <span class="badge mauve-color">{{ inscription.type_inscription_txt }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% else %}
                 <div class="alert alert-warning gap-3 align-items-center d-flex">
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
