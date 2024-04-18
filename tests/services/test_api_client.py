@@ -215,3 +215,7 @@ class MockAPI(InternshipApi):
     @classmethod
     def offers_get(*args, **kwargs):
         return OfferPaging(count=1.0, next="", previous="", results=[OfferGet(uuid=str(uuid.uuid4()))])
+
+    @classmethod
+    def internships_uuid_get(*args, **kwargs):
+        return InternshipGet(uuid=str(uuid.uuid4()), name="Test", periods=[], apds=[])
