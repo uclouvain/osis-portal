@@ -54,6 +54,13 @@
         {% trans 'You will find hereunder internships that have been assigned to you and for which score encoding is open' %}
     </div>
 
+    <div class="alert alert-warning">
+        <span class="glyphicon glyphicon-warning-sign" style="margin-right: 5px;"></span>
+        {% blocktranslate with url=professional_malfunction_url%}
+        If a professional dysfunction is observed in a student's behavior, please <a href='{{ url }}'>complete this form</a> and submit it to the Internship Administration.
+        {% endblocktranslate %}
+    </div>
+
 
     <div class="row">
         {% for allocation in allocations %}
