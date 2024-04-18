@@ -102,7 +102,8 @@ class MockAPI(InternshipApi):
             uuid=str(uuid.uuid4()),
             student=Student(uuid=str(uuid.uuid4()), last_name='', first_name=''),
             period=PeriodGet(uuid=str(uuid.uuid4()), name='P1', date_end='2023-01-31', date_start='2023-01-01'),
-            score=ScoreListGet(uuid=str(uuid.uuid4()), validated=False)
+            score=ScoreListGet(uuid=str(uuid.uuid4()), validated=False),
+            internship_uuid=str(uuid.uuid4()),
         )
         return {'count': 1, 'results': [affectation], 'next': 'next_url', 'previous': 'previous_url'}
 
@@ -112,6 +113,7 @@ class MockAPI(InternshipApi):
             student=Student(uuid=str(uuid.uuid4()), last_name='', first_name=''),
             period=PeriodGet(uuid=str(uuid.uuid4()), name='P1', date_end='2023-01-31', date_start='2023-01-01'),
             score=ScoreListGet(uuid=str(uuid.uuid4()), validated=True, comments={}),
+            internship_uuid=str(uuid.uuid4()),
         )
 
     @classmethod
