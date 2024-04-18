@@ -29,15 +29,20 @@
 {% block style %}
     {# Move to static #}
     <style>
-        .form-group-lg.required .control-label:after {
-           content:"*";
-           color:red;
+        .form-group-lg.required .control-label:after, .form-group.required .control-label:after {
+            display:inline-block;
+            content:"*";
+            color:red;
         }
 
         #apd-container {
             display: flex;
             flex-wrap: wrap;
             flex-direction: column;
+        }
+
+        #apd-container label {
+            text-wrap: nowrap;
         }
 
         @media screen and (min-width: 992px) {
@@ -114,14 +119,17 @@
                 <label>{% trans 'Targeted EPA' %}</label>
                 <div class="form-group">
                     {% for apd in apds %}
-                    <div class="checkbox">
-                    {% with apd|only_number as apd_number %}
-                      <label for="{{ apd }}" style="text-align: right; width: 30px;">
-                          <span data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" class="apd-label-text">{{ apd | only_number}}</span>
-                      </label>
-                    {% endwith %}
-                      <input class="apd-checkbox" type="checkbox" id="{{ apd }}" name="obj-{{ apd }}" value="obj-{{ apd }}" {% if score and apd|only_number in score.objectives.apds %}checked{% endif %}>
-                    </div>
+                        {% with apd|only_number as apd_number %}
+                            <div class="checkbox">
+                              <label for="{{ apd }}" style="text-align: right; width: 30px;">
+                                  <span data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" class="apd-label-text">{{ apd | only_number}}</span>
+                              </label>
+                              <input class="apd-checkbox" type="checkbox" id="{{ apd }}" name="obj-{{ apd }}" value="obj-{{ apd }}"
+                                     {% if score and apd|only_number in score.objectives.apds %} checked {% endif %}
+                                     {% if apd_number|add:0 in internship.apds %} checked disabled data-toggle="tooltip" title="{% trans "This APD is required" %}" {% endif %}
+                              >
+                            </div>
+                        {% endwith %}
                     {% endfor %}
                 </div>
             </div>
@@ -132,9 +140,9 @@
         <div class="row">
             <div id="apd-container">
             {% for apd in apds %}
-                <div class="raw-item" id="raw">
-                    {% with apd|only_number as apd_number %}
-                    <label data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" for="{{ apd }}" class="col-xs-2 col-sm-4 text-center" style="text-decoration: underline; text-decoration-style: dotted;
+                {% with apd|only_number as apd_number %}
+                <div class="raw-item form-group {% if apd_number|add:0 in internship.apds %}required{% endif %}" id="raw">
+                    <label data-toggle="tooltip" title="{{ apds_descriptions|get_item:apd_number }}" for="{{ apd }}" class="control-label col-xs-2 col-sm-4 text-center" style="text-decoration: underline; text-decoration-style: dotted;
      line-height:2.5; cursor: help;">APD {{ apd_number }}</label>
                     {% endwith %}
                     <div class="col-xs-8">
@@ -259,4 +267,3 @@
         }
     </script>
 {% endblock %}
-

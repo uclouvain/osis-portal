@@ -27,7 +27,7 @@ from django.utils.translation import gettext as _
 
 APD_NUMBER = 15
 MIN_APDS = 5
-MAX_APDS = 9
+MAX_APDS = 8
 
 APDS = ['apd_{}'.format(index) for index in range(1, APD_NUMBER + 1)]
 

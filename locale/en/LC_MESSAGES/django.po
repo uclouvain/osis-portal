@@ -44,6 +44,10 @@ msgstr ""
 msgid "An error occurred during score update"
 msgstr ""
 
+msgid ""
+"An evaluation for the following EPAs is required: {mandatory_apds.join(', ')}"
+msgstr ""
+
 msgid "Appreciate medical emergency"
 msgstr ""
 
@@ -409,6 +413,9 @@ msgid "The two password fields didn't match."
 msgstr ""
 
 msgid "Third choice"
+msgstr ""
+
+msgid "This APD is required"
 msgstr ""
 
 msgid "This action will delete "
