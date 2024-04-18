@@ -110,6 +110,8 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
     specialty = InternshipAPIService.get_specialty(request.user.person, specialty_uuid)
     organization = InternshipAPIService.get_organization(request.user.person, organization_uuid)
 
+    internship = InternshipAPIService.get_internship(request.user.person, affectation.internship_uuid)
+
     apds = APDS
     apds_descriptions = APDS_DESCRIPTIONS
     comments_fields = COMMENTS_FIELDS
@@ -117,7 +119,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
 
     if request.POST:
         score = _build_score_to_update(request.POST, score)
-        if not _validate_score(request) or not _required_response(request):
+        if not _validate_score(request, internship) or not _required_response(request):
             return layout.render(request, "internship_score_encoding_form.html", locals())
         if InternshipAPIService.update_score(request.user.person, affectation_uuid, score):
             _show_success_update_msg(request, period, student)
@@ -158,6 +160,15 @@ def _show_invalid_update_msg(request):
     )
 
 
+def _show_required_apd_msg(request, mandatory_apds):
+    mandatory_apds_string = ', '.join([str(apd) for apd in mandatory_apds])
+    messages.add_message(
+        request,
+        messages.ERROR,
+        _(f"An evaluation for the following EPAs is required: {mandatory_apds_string}")
+    )
+
+
 def _show_required_response_msg(request):
     messages.add_message(
         request,
@@ -188,11 +199,21 @@ def _build_objectives(post_data):
     return {'apds': [only_number(apd) for apd in apds_objectives if apd]}
 
 
-def _validate_score(request):
-    apds_data = [request.POST.get(apd) for apd in APDS if request.POST.get(apd)]
+def _validate_score(request, internship):
+    mandatory_apds = internship.apds
+    apds_data = [apd for apd in APDS if request.POST.get(apd)]
+
+    # number of evaluated apds should be between min and max
     if not MIN_APDS <= len(apds_data) <= MAX_APDS:
         _show_invalid_update_msg(request)
         return False
+
+    # mandatory apds should be evaluated
+    for apd in mandatory_apds:
+        if f"apd_{apd}" not in apds_data:
+            _show_required_apd_msg(request, mandatory_apds)
+            return False
+
     return True
 
 
