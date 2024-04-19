@@ -17,6 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#, python-format
+msgid ""
+"\n"
+"        If a professional dysfunction is observed in a student's behavior, "
+"please complete  <a href='%(url)s'>this form</a> with your team and submit "
+"it to the Internship Administration.\n"
+"        "
+msgstr ""
+
 msgid ""
 "Access to internship is only authorized to students and internship masters"
 msgstr ""
@@ -42,6 +51,11 @@ msgid ""
 msgstr ""
 
 msgid "An error occurred during score update"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"An evaluation for the following EPAs is required: {mandatory_apds_string}"
 msgstr ""
 
 msgid "Appreciate medical emergency"
@@ -409,6 +423,9 @@ msgid "The two password fields didn't match."
 msgstr ""
 
 msgid "Third choice"
+msgstr ""
+
+msgid "This APD is required"
 msgstr ""
 
 msgid "This action will delete "

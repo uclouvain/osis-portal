@@ -17,6 +17,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid ""
+"\n"
+"        If a professional dysfunction is observed in a student's behavior, "
+"please <a href='%(url)s'>complete this form</a> and submit "
+"it to the Internship Administration.\n"
+"        "
+msgstr ""
+"\n"
+"        En cas de dysfonctionnement professionnel constaté chez un·e stagiaire, "
+"merci de <a href='%(url)s'>compléter ce formulaire</a> et "
+"de le transmettre à l'Administration des stages."
+
+msgid ""
 "Access to internship is only authorized to students and internship masters"
 msgstr ""
 "L'accès aux stages est seulement autorisé aux étudiants-stagiaires et aux "
@@ -47,6 +59,12 @@ msgstr ""
 
 msgid "An error occurred during score update"
 msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
+
+#, python-brace-format
+msgid ""
+"An evaluation for the following EPAs is required: {}"
+msgstr ""
+"Une évaluation pour les APDs suivantes est requise: {}"
 
 msgid "Appreciate medical emergency"
 msgstr "Reconnaitre l’urgence médicale"
@@ -432,6 +450,9 @@ msgstr "Les mots de passes sont différents"
 
 msgid "Third choice"
 msgstr "Troisième choix"
+
+msgid "This APD is required"
+msgstr "Cette APD est requise"
 
 msgid "This action will delete "
 msgstr "Cette action supprimera "
