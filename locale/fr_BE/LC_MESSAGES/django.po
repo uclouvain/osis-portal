@@ -429,7 +429,7 @@ msgid "Take a history (anamnesis)"
 msgstr "Prendre l'anamnèse"
 
 msgid "Targeted EPA"
-msgstr "APDs ciblés"
+msgstr "APDs ciblées"
 
 msgid "The activation failed"
 msgstr "L'activation a échoué"
