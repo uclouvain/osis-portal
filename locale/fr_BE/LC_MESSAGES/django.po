@@ -62,9 +62,9 @@ msgstr "Une erreur est survenue durant la mise à jour de l'évaluation"
 
 #, python-brace-format
 msgid ""
-"An evaluation for the following EPAs is required: {mandatory_apds_string}"
+"An evaluation for the following EPAs is required: {}"
 msgstr ""
-"Une évaluation pour les APDs suivantes est requise: {mandatory_apds_string}"
+"Une évaluation pour les APDs suivantes est requise: {}"
 
 msgid "Appreciate medical emergency"
 msgstr "Reconnaitre l’urgence médicale"

@@ -167,7 +167,7 @@ def _show_required_apd_msg(request, mandatory_apds):
     messages.add_message(
         request,
         messages.ERROR,
-        _(f"An evaluation for the following EPAs is required: {mandatory_apds_string}")
+        _("An evaluation for the following EPAs is required: {}").format(mandatory_apds_string)
     )
 
 
