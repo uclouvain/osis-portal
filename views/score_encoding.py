@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -59,6 +59,8 @@ def view_score_encoding(request):
         )
         allocation.__dict__['total_amount'] = stats['total_count']
         allocation.__dict__['amount_encoded'] = stats['validated_count']
+
+    professional_malfunction_url = settings.OSIS_INTERNSHIP_PROFESSIONAL_MALFUNCTION_URL
     return layout.render(request, "internship_score_encoding.html", locals())
 
 
