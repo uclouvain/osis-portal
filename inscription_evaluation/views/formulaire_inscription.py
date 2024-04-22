@@ -75,8 +75,8 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
 
     @cached_property
     def formulaire(self) -> 'MonFormulaireInscriptionEvaluations':
-        formulaire = FormulaireInscriptionService().recuperer(self.person, self.code_programme)
-        FormulaireInscriptionService().marquer_comme_lu(self.person, self.code_programme)
+        formulaire = FormulaireInscriptionService().recuperer(self.person, self.sigle_formation)
+        FormulaireInscriptionService().marquer_comme_lu(self.person, self.sigle_formation)
         return formulaire
 
     @cached_property
@@ -103,7 +103,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
         try:
             FormulaireInscriptionService.soumettre(
                 person=self.person,
-                code_programme=self.code_programme,
+                sigle_formation=self.sigle_formation,
                 demandes_inscriptions=json.loads(self.request.POST.get('demandes_inscriptions')),
                 demandes_desinscriptions=json.loads(self.request.POST.get('demandes_desinscriptions')),
             )
