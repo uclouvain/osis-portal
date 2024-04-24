@@ -218,4 +218,6 @@ class MockAPI(InternshipApi):
 
     @classmethod
     def internships_uuid_get(*args, **kwargs):
-        return InternshipGet(uuid=str(uuid.uuid4()), name="Test", periods=[], apds=[])
+        return InternshipGet(
+            uuid=str(uuid.uuid4()), name="Test", periods=[], apds=[], cohort=CohortGet(parent_cohort=None)
+        )
