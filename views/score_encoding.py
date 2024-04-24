@@ -36,7 +36,7 @@ from base.views import layout
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master, \
     redirect_if_not_master_with_matching_allocation
 from internship.models.score_encoding_utils import DEFAULT_PERIODS, APDS, COMMENTS_FIELDS, MIN_APDS, MAX_APDS, \
-    AVAILABLE_GRADES, APDS_DESCRIPTIONS
+    AVAILABLE_GRADES, APDS_DESCRIPTIONS, MAX_APDS_NEW
 from internship.services.internship import InternshipAPIService
 from internship.templatetags.selection_tags import only_number
 
@@ -154,11 +154,11 @@ def _show_success_update_msg(request, period, student):
     )
 
 
-def _show_invalid_update_msg(request):
+def _show_invalid_update_msg(request, min_apds, max_apds):
     messages.add_message(
         request,
         messages.ERROR,
-        _("You must evaluate minimum {} and maximum {} EPAs").format(MIN_APDS, MAX_APDS)
+        _("You must evaluate minimum {} and maximum {} EPAs").format(min_apds, max_apds)
     )
 
 
@@ -203,11 +203,14 @@ def _build_objectives(post_data):
 
 def _validate_score(request, internship):
     mandatory_apds = internship.apds
+
+    max_apds = MAX_APDS if internship.cohort.parent_cohort is None else MAX_APDS_NEW
+
     apds_data = [apd for apd in APDS if request.POST.get(apd)]
 
     # number of evaluated apds should be between min and max
-    if not MIN_APDS <= len(apds_data) <= MAX_APDS:
-        _show_invalid_update_msg(request)
+    if not MIN_APDS <= len(apds_data) <= max_apds:
+        _show_invalid_update_msg(request, MIN_APDS, max_apds)
         return False
 
     # mandatory apds should be evaluated
