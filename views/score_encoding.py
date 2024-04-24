@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ############################################################################
-
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -36,7 +36,7 @@ from base.views import layout
 from internship.decorators.score_encoding_view_decorators import redirect_if_not_master, \
     redirect_if_not_master_with_matching_allocation
 from internship.models.score_encoding_utils import DEFAULT_PERIODS, APDS, COMMENTS_FIELDS, MIN_APDS, MAX_APDS, \
-    AVAILABLE_GRADES, APDS_DESCRIPTIONS
+    AVAILABLE_GRADES, APDS_DESCRIPTIONS, MAX_APDS_NEW
 from internship.services.internship import InternshipAPIService
 from internship.templatetags.selection_tags import only_number
 
@@ -59,6 +59,8 @@ def view_score_encoding(request):
         )
         allocation.__dict__['total_amount'] = stats['total_count']
         allocation.__dict__['amount_encoded'] = stats['validated_count']
+
+    professional_malfunction_url = settings.OSIS_INTERNSHIP_PROFESSIONAL_MALFUNCTION_URL
     return layout.render(request, "internship_score_encoding.html", locals())
 
 
@@ -110,6 +112,8 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
     specialty = InternshipAPIService.get_specialty(request.user.person, specialty_uuid)
     organization = InternshipAPIService.get_organization(request.user.person, organization_uuid)
 
+    internship = InternshipAPIService.get_internship(request.user.person, affectation.internship_uuid)
+
     apds = APDS
     apds_descriptions = APDS_DESCRIPTIONS
     comments_fields = COMMENTS_FIELDS
@@ -117,7 +121,7 @@ def view_score_encoding_form(request, specialty_uuid, organization_uuid, affecta
 
     if request.POST:
         score = _build_score_to_update(request.POST, score)
-        if not _validate_score(request) or not _required_response(request):
+        if not _validate_score(request, internship) or not _required_response(request):
             return layout.render(request, "internship_score_encoding_form.html", locals())
         if InternshipAPIService.update_score(request.user.person, affectation_uuid, score):
             _show_success_update_msg(request, period, student)
@@ -150,11 +154,20 @@ def _show_success_update_msg(request, period, student):
     )
 
 
-def _show_invalid_update_msg(request):
+def _show_invalid_update_msg(request, min_apds, max_apds):
     messages.add_message(
         request,
         messages.ERROR,
-        _("You must evaluate minimum {} and maximum {} EPAs").format(MIN_APDS, MAX_APDS)
+        _("You must evaluate minimum {} and maximum {} EPAs").format(min_apds, max_apds)
+    )
+
+
+def _show_required_apd_msg(request, mandatory_apds):
+    mandatory_apds_string = ', '.join([str(apd) for apd in mandatory_apds])
+    messages.add_message(
+        request,
+        messages.ERROR,
+        _("An evaluation for the following EPAs is required: {}").format(mandatory_apds_string)
     )
 
 
@@ -188,11 +201,24 @@ def _build_objectives(post_data):
     return {'apds': [only_number(apd) for apd in apds_objectives if apd]}
 
 
-def _validate_score(request):
-    apds_data = [request.POST.get(apd) for apd in APDS if request.POST.get(apd)]
-    if not MIN_APDS <= len(apds_data) <= MAX_APDS:
-        _show_invalid_update_msg(request)
+def _validate_score(request, internship):
+    mandatory_apds = internship.apds
+
+    max_apds = MAX_APDS if internship.cohort.parent_cohort is None else MAX_APDS_NEW
+
+    apds_data = [apd for apd in APDS if request.POST.get(apd)]
+
+    # number of evaluated apds should be between min and max
+    if not MIN_APDS <= len(apds_data) <= max_apds:
+        _show_invalid_update_msg(request, MIN_APDS, max_apds)
         return False
+
+    # mandatory apds should be evaluated
+    for apd in mandatory_apds:
+        if f"apd_{apd}" not in apds_data:
+            _show_required_apd_msg(request, mandatory_apds)
+            return False
+
     return True
 
 
