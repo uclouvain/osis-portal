@@ -21,8 +21,8 @@ msgstr ""
 msgid ""
 "\n"
 "        If a professional dysfunction is observed in a student's behavior, "
-"please complete  <a href='%(url)s'>this form</a> with your team and submit "
-"it to the Internship Administration.\n"
+"please <a href=\"%(url)s\">complete this form</a> and submit it to the "
+"Internship Administration.\n"
 "        "
 msgstr ""
 
@@ -53,9 +53,7 @@ msgstr ""
 msgid "An error occurred during score update"
 msgstr ""
 
-#, python-brace-format
-msgid ""
-"An evaluation for the following EPAs is required: {mandatory_apds_string}"
+msgid "An evaluation for the following EPAs is required: {}"
 msgstr ""
 
 msgid "Appreciate medical emergency"
