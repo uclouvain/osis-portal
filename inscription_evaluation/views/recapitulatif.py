@@ -30,6 +30,7 @@ from django.views.generic import TemplateView
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import redirect
+from osis_inscription_evaluation_sdk.model.recapitulatif import Recapitulatif
 
 from osis_inscription_evaluation_sdk.model.session_de_travail import SessionDeTravail
 from osis_inscription_evaluation_sdk.model.etudiant import Etudiant
@@ -72,7 +73,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
 
     @cached_property
     def recapitulatif(self) -> 'Recapitulatif':
-        return RecapitulatifService.recuperer(self.person, self.code_programme)
+        return RecapitulatifService.recuperer(self.person, self.sigle_formation)
 
     def get_context_data(self, **kwargs):
         return {
@@ -105,5 +106,5 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
     def soumettre_demande(self):
         RecapitulatifService().soumettre(
             self.person,
-            code_programme=self.code_programme,
+            sigle_formation=self.sigle_formation,
         )
