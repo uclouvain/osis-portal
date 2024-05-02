@@ -31,8 +31,8 @@ import traceback
 from django.conf import settings
 from django.db import connection
 from django.db.utils import OperationalError as DjangoOperationalError, InterfaceError as DjangoInterfaceError
-from django.utils.datetime_safe import datetime as safe_datetime
-from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as  PsycopInterfaceError
+from django.utils import timezone
+from psycopg2._psycopg import OperationalError as PsycopOperationalError, InterfaceError as PsycopInterfaceError
 
 from base.models import academic_year as mdl_academic_year
 from frontoffice.queue.queue_listener import PerformanceClient
@@ -197,7 +197,7 @@ def fetch_json_data(registration_id, academic_year, acronym):
 
 
 def get_expiration_date(academic_year, consumed):
-    now = safe_datetime.now()
+    now = timezone.now()
     current_academic_year = mdl_academic_year.current_academic_year()
     current_year = current_academic_year.year if current_academic_year else None
     timedelta = get_time_delta(academic_year, consumed, current_year)
@@ -217,7 +217,7 @@ def get_time_delta(academic_year, consumed, current_year):
 
 
 def get_creation_date():
-    today = safe_datetime.now()
+    today = timezone.now()
     return today
 
 
@@ -235,7 +235,7 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     from performance.models.student_performance import update_or_create
     expiration_date = json_data.pop("expirationDate", None)
     if expiration_date:
-        update_date = datetime.datetime.fromtimestamp(expiration_date / 1e3)
+        update_date = datetime.datetime.fromtimestamp(expiration_date / 1e3, tz=timezone.utc)
     else:
         update_date = default_update_date
     authorized = json_data.pop("authorized", False)
@@ -301,5 +301,5 @@ def update_expiration_date(registration_id, academic_year, acronym, new_exp_date
 
     for performance in performances_to_update:
         if new_exp_date and new_exp_date != 'null':
-            performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3)
+            performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3, tz=timezone.utc)
             performance.save()
