@@ -61,7 +61,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'analytical',
     'osis_common',
-    'rest_framework',
     'localflavor',
     'statici18n',
     'ckeditor',
@@ -364,12 +363,6 @@ CKEDITOR_CONFIGS = {
             {'name': 'about', 'items': ['About']},
         ],
     },
-}
-
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly']
 }
 
 # HIJACK

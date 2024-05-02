@@ -36,7 +36,6 @@ from django.utils.translation import gettext_lazy as _
 from mock import patch
 from osis_reference_sdk.model.academic_calendar import AcademicCalendar
 from osis_reference_sdk.model.paginated_academic_calendars import PaginatedAcademicCalendars
-from rest_framework import status
 
 import attestation.views.home
 from attestation.views.home import _check_display_warning_invoice_not_available_yet
@@ -95,7 +94,7 @@ class HomeTest(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "access_denied.html")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
 
     def test_with_multiple_students_assigned_same_person(self):
         StudentFactory(person=self.person)
@@ -117,7 +116,7 @@ class HomeTest(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'attestation_home_student.html')
 
         self.assertEqual(response.context['student'], a_student)
@@ -133,7 +132,7 @@ class HomeTest(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTrue(mock_fetch_json_attestation_statuses.called)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'attestation_home_student.html')
 
         self.assertEqual(response.context['student'], a_student)
@@ -156,7 +155,7 @@ class HomeTest(TestCase):
         self.mocked_discriminate_user.return_value = None
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'attestation_home_student.html')
 
         self.assertFalse(response.context['attestations'])
