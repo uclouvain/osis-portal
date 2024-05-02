@@ -25,12 +25,12 @@ tblib==2.0.0  # Useful to get better stacktrace with parallel tests - Version 3 
 django-hijack==3.4.5
 
 # OpenTelemetry
-opentelemetry-api==1.15.0
-opentelemetry-sdk==1.15.0
+opentelemetry-api==1.15.0  # Version 1.16 drops Python3.7 support
+opentelemetry-sdk==1.15.0  # Version 1.16 drops Python3.7 support
 opentelemetry-instrumentation-django==0.36b0
 opentelemetry-instrumentation-psycopg2==0.36b0
 opentelemetry-instrumentation-urllib3==0.36b0
-opentelemetry-exporter-otlp==1.15.0
+opentelemetry-exporter-otlp==1.15.0  # Version 1.16 drops Python3.7 support
 
 # SDKs
 git+https://github.com/uclouvain/osis-attribution-sdk.git@wip-build-1.21
