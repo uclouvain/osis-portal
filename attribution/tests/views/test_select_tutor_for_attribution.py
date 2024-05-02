@@ -26,7 +26,6 @@
 from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework import status
 
 from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.person import PersonFactory
@@ -48,19 +47,19 @@ class TestSelectTutorForAttribution(TestCase):
         self.client.force_login(PersonFactory().user)
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_is_faculty_manager(self):
         response = self.client.get(self.url, follow=True)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admin/attribution_administration.html')
 
     def test_select_tutor_for_attribution(self):
         AcademicYearFactory(current=True)
         tutor = TutorFactory()
         response = self.client.post(self.url, data={'global_id': tutor.person.global_id})
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, 302)
         expected_url = reverse('tutor_charge_admin', kwargs={'global_id': tutor.person.global_id})
         self.assertRedirects(response, expected_url)

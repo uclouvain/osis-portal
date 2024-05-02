@@ -33,7 +33,6 @@ import requests
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
-from rest_framework import status
 
 DEFAULT_API_LIMIT = 25
 
@@ -50,7 +49,7 @@ def get_user_token(person, force_user_creation=False):
             'force_user_creation': force_user_creation,
         }
     )
-    if response.status_code == status.HTTP_200_OK:
+    if response.status_code == 200:
         return response.json()['token']
     return ""
 

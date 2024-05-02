@@ -30,7 +30,6 @@ from django.contrib.auth.models import User, Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from rest_framework import status
 
 from base.tests.factories.person import PersonFactory
 from base.tests.models import test_academic_year, test_student, test_person
@@ -80,7 +79,7 @@ class OfferChoiceTest(TestCase):
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_choose_offer_no_offer_redirect_to_dashboard(self):
@@ -98,7 +97,7 @@ class OfferChoiceTest(TestCase):
         response = self.client.get(self.url)
 
         self.assertTemplateUsed(response, 'offer_choice.html')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
 
         self.assertEqual(response.context['student'], self.student)
         self.assertEqual(response.context['programs'], [self.offer_enrollment_row])

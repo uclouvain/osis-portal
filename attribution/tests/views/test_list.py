@@ -34,7 +34,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from osis_attribution_sdk.model.attribution import Attribution
 from osis_learning_unit_enrollment_sdk.model.enrollment import Enrollment
-from rest_framework import status
 
 from attribution.tests.factories.enrollment import EnrollmentDictFactory
 from attribution.views.list import LEARNING_UNIT_ACRONYM_ID
@@ -89,7 +88,7 @@ class StudentsListTest(TestCase):
         self.client.force_login(a_person.user)
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
@@ -97,7 +96,7 @@ class StudentsListTest(TestCase):
         mock_get_attributions_list.return_value = []
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
@@ -117,7 +116,7 @@ class StudentsListTest(TestCase):
         ]
 
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
@@ -152,7 +151,7 @@ class StudentsListTest(TestCase):
             'learning_unit_year': lu_year
         })
         response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'students_list.html')
 
         self.assertEqual(response.context['global_id'], self.tutor.person.global_id)
@@ -192,18 +191,18 @@ class ListBuildTest(TestCase):
         self.client.force_login(a_person.user)
         response = self.client.post(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_with_get(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.status_code, 405)
 
     def test_with_empty_post(self):
         response = self.client.post(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
@@ -245,7 +244,7 @@ class ListBuildTest(TestCase):
 
         self.assertTrue(mock_fetch.called)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
@@ -270,7 +269,7 @@ class ListBuildTest(TestCase):
         key = f'{LEARNING_UNIT_ACRONYM_ID}LECON2020'
         response = self.client.post(self.url, data={key: ""})
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list/students_exam.html')
 
         self.assertEqual(response.context['person'], an_other_tutor.person)
@@ -312,7 +311,7 @@ class ListBuildTest(TestCase):
         response = self.client.post(self.url, data={key: ""})
 
         filename = "Liste_Insc_Exam.xls"
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
                          'application/vnd.ms-excel')
@@ -345,13 +344,13 @@ class AdminStudentsListTest(TestCase):
         self.client.force_login(a_person.user)
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_with_no_attributions(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admin/students_list.html')
 
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
@@ -368,7 +367,7 @@ class AdminStudentsListTest(TestCase):
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admin/students_list.html')
 
 
@@ -402,13 +401,13 @@ class AdminListBuildTest(TestCase):
         self.client.force_login(a_person.user)
         response = self.client.post(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_with_get(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.status_code, 405)
 
     @mock.patch("attribution.views.students_list.AttributionService.get_attributions_list")
     @mock.patch("attribution.views.list.AssessmentsService.get_score_responsible_list")
@@ -419,7 +418,7 @@ class AdminListBuildTest(TestCase):
         mock_current_session.return_value = None
         response = self.client.post(self.url, )
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admin/students_exam_list.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
@@ -461,7 +460,7 @@ class AdminListBuildTest(TestCase):
 
         self.assertTrue(mock_fetch.called)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'admin/students_exam_list.html')
 
         self.assertEqual(response.context['person'], self.tutor.person)
@@ -507,7 +506,7 @@ class AdminListBuildTest(TestCase):
         response = self.client.post(self.url, data={key: ""})
 
         filename = "Liste_Insc_Exam.xls"
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue(mock_fetch.called)
         self.assertEqual(response['Content-Type'],
                          'application/vnd.ms-excel')
