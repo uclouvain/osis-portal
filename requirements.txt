@@ -1,27 +1,28 @@
 Django==3.2.25
 django-bootstrap3==23.2  # Version 23.3 drops Python3.7 support
 django-localflavor==4.0 # Version 4.1 drops Python3.7 support
-django-statici18n==2.4.0
-djangorestframework==3.14.0
-mock==5.1.0
-pika==0.12.0
-psycopg2-binary==2.8.6
+django-statici18n==2.5.0
 django-analytical==3.1
-factory-boy==3.3.0
 django-dotenv==1.4.2
+django-registration==3.4
+django-autocomplete-light==3.11.0
+django-waffle==3.0.0 # Version 4.0.0 drops Python3.7 support
+django-htmx==1.15.0  # Version 1.16.0 drops Python3.7 support
+django-sass==1.1.0
 unidecode==1.3.8
 requests==2.31.0
 openpyxl==3.1.2
-django-registration==3.4
-django-autocomplete-light==3.11.0
-django-hijack==3.4.5
-pycodestyle==2.10.0
+pika==0.12.0
+psycopg2-binary==2.8.6
+
+# Testing & quality
+mock==5.1.0
+factory-boy==3.3.0
+pycodestyle==2.10.0  # Version 2.11 drops Python3.7 support
+diff-cover==7.7.0  # Useful for diff-quality - Version >= 7.7.0 drops Python3.7 support
 pylint==2.17.7  # Version 3 drops Python3.7 support
-diff-cover==7.7.0  # Useful for diff-quality
-django-waffle==3.0.0 # Version 4.0.0 drops Python3.7 support
-tblib==2.0.0
-django-htmx==1.15.0  # Version 1.16.0 drops Python3.7 support
-django-sass==1.1.0
+tblib==2.0.0  # Useful to get better stacktrace with parallel tests - Version 3 drops Python3.7 support
+django-hijack==3.4.5
 
 # OpenTelemetry
 opentelemetry-api==1.15.0
@@ -47,9 +48,9 @@ git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.05
 git+https://github.com/uclouvain/osis-inscription-evaluation-sdk.git@wip-build-1.7
 
 # Modules transverses
-git+https://github.com/uclouvain/osis-document.git@0.10.3#egg=osis_document
+git+https://github.com/uclouvain/osis-document.git@0.10.7#egg=osis_document
 git+https://github.com/uclouvain/osis-signature.git@0.1#egg=osis_signature
-git+https://github.com/uclouvain/osis-notification.git@0.1.2#egg=osis_notification
-git+https://github.com/uclouvain/osis-async.git@0.5#egg=osis_async
+git+https://github.com/uclouvain/osis-notification.git@0.1.4#egg=osis_notification
+git+https://github.com/uclouvain/osis-async.git@0.8#egg=osis_async
 
 -r ./osis_common/requirements.txt

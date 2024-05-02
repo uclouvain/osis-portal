@@ -28,7 +28,6 @@ import openpyxl
 from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework import status
 
 from attribution.business import xls_students_by_learning_unit
 from base.tests.factories.person import PersonFactory
@@ -70,7 +69,7 @@ class XlsStudentsByLearningUnitTest(TestCase):
         self.client.force_login(a_person.user)
         response = self.client.post(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, 'access_denied.html')
 
     def test_columns_registration_id_to_text(self):
