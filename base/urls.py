@@ -25,6 +25,7 @@
 ##############################################################################
 from django.conf.urls import url
 
+import osis_common.api.url_v1
 from base.views import my_osis
 from base.views.autocomplete.country import CountryAutocomplete
 from base.views.autocomplete.education_group_year import TrainingAutocomplete
@@ -44,4 +45,5 @@ urlpatterns = [
         TrainingAutocomplete.as_view(),
         name='training-autocomplete',
     ),
+    *osis_common.api.url_v1.urlpatterns
 ]

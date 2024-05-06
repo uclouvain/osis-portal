@@ -30,7 +30,6 @@ import mock
 from django.http import HttpResponseNotAllowed
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework import status
 
 from attribution.tests.views.online_application.common import OnlineApplicationContextTestMixin
 from base.tests.factories.person import PersonFactory
@@ -60,7 +59,7 @@ class TestDeleteApplicationView(OnlineApplicationContextTestMixin, TestCase):
         self.client.logout()
 
         response = self.client.post(self.url, follow=False)
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, 302)
 
     def test_case_calendar_not_opened_assert_redirection_to_outside_encoding_period(self):
         self.calendar.start_date = datetime.date.today() + datetime.timedelta(days=5)

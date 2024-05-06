@@ -35,7 +35,6 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from rest_framework import status
 
 from assessments.services.assessments import AssessmentsService
 
@@ -59,7 +58,7 @@ class ScoreSheetXls(LoginRequiredMixin, PermissionRequiredMixin, View):
         elif isinstance(file, dict):
             error_status = file.get('error_status')
             message = _('Unexpected error')
-            if error_status in [status.HTTP_400_BAD_REQUEST, status.HTTP_401_UNAUTHORIZED] and file.get('error_body'):
+            if error_status in [400, 401] and file.get('error_body'):
                 message = ". ".join(json.loads(file.get('error_body')))
             messages.add_message(request, messages.INFO, message, "alert-info")
         return redirect(reverse('students_list'))

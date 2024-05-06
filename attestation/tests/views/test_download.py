@@ -32,7 +32,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from mock import patch
-from rest_framework import status
 
 from attestation.tests.views.test_home import MULTIPLE_STUDENT_ERROR
 from base.tests.factories.person import PersonFactory
@@ -77,7 +76,7 @@ class DownloadAttestationTest(TestCase):
         response = self.client.get(self.url, follow=True)
         self.mocked_discriminate_user.return_value = None
         self.assertTemplateUsed(response, "access_denied.html")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
 
     def test_with_multiple_students_assigned_same_person(self):
         StudentFactory(person=self.person)
@@ -146,7 +145,7 @@ class DownloadStudentAttestation(TestCase):
         response = self.client.get(self.url, follow=True)
 
         self.assertTemplateUsed(response, "access_denied.html")
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
 
     @patch('attestation.queues.student_attestation.fetch_student_attestation',
            side_effect=lambda global_id, year, attestation_type, username: None)

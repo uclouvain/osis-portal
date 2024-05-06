@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# OSIS stands for Open Student Information System. It's an application
+#    OSIS stands for Open Student Information System. It's an application
 #    designed to manage the core business of higher education institutions,
 #    such as universities, faculties, institutes and professional schools.
 #    The core business involves the administration of students, teachers,
@@ -30,6 +30,7 @@ from unittest.mock import patch
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
+from django.utils import timezone
 
 import performance.tests.models.test_student_performance
 from base.tests.factories.education_group_year import EducationGroupYearFactory
@@ -144,9 +145,9 @@ class TestUpdateExpDate(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.student_performance_1 = performance.tests.models.test_student_performance. \
-            create_student_performance('DROI1BA', '1111111', 2016, datetime.datetime.now())
+            create_student_performance('DROI1BA', '1111111', 2016, timezone.now())
         cls.student_performance_2 = performance.tests.models.test_student_performance. \
-            create_student_performance('DROI1BA', '2222222', 2016, datetime.datetime.now())
+            create_student_performance('DROI1BA', '2222222', 2016, timezone.now())
 
     def test_update_with_registration_id(self):
         queue_stud_perf.update_exp_date_callback(self.get_update_exp_date_json_with_reg_id_as_byte())
