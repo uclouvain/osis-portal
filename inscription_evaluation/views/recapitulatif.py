@@ -101,7 +101,10 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
         return _(
             "Evaluation registration form for %(sigle_formation)s has been successfully submitted. "
             "A confirmation email will be sent to %(email)s."
-        ) % {'email': self.request.user.person.email, 'sigle_formation': self.formation.get('sigle')}
+        ) % {
+            'email': self.request.user.person.email,
+            'sigle_formation': self.formation.get('sigle_complet_version_formation')
+        }
 
     def soumettre_demande(self):
         RecapitulatifService().soumettre(
