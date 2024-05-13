@@ -28,6 +28,7 @@ import json
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
+from django.utils import timezone
 
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from performance import models as mdl_performance
@@ -36,7 +37,7 @@ from performance.models.enums import offer_registration_state
 
 
 def create_student_performance(acronym="SINF2MS/G", registration_id="64641200",
-                               academic_year=2016, update_date=datetime.datetime.now()):
+                               academic_year=2016, update_date=timezone.now()):
     with open("performance/tests/ressources/points.json") as f:
         data = json.load(f)
     a_student_performance = mdl_performance.student_performance. \
@@ -44,7 +45,7 @@ def create_student_performance(acronym="SINF2MS/G", registration_id="64641200",
                            registration_id=registration_id,
                            academic_year=academic_year,
                            update_date=update_date,
-                           creation_date=datetime.datetime.now(),
+                           creation_date=timezone.now(),
                            data=data,
                            offer_registration_state=offer_registration_state.REGISTERED,
                            course_registration_message="L'inscription en ligne sera accessible à partir du 17/10/2019")
@@ -100,8 +101,8 @@ class TestModelStudentPerformance(TestCase):
 
     def test_update_or_create(self):
         fields_value = {
-            "data": self.json_points, "update_date": datetime.date.today(),
-            "creation_date": datetime.date.today()
+            "data": self.json_points, "update_date": timezone.now(),
+            "creation_date": timezone.now()
         }
         stud_perf = mdl_perf.update_or_create(self.student_performance.registration_id,
                                               self.student_performance.academic_year,

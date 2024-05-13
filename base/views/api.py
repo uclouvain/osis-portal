@@ -24,15 +24,14 @@
 #
 ##############################################################################
 import io
+import json
 import logging
 import traceback
 from typing import Set
 
 import requests
 from django.conf import settings
-from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
-from rest_framework.parsers import JSONParser
+from django.core.exceptions import PermissionDenied
 
 REQUEST_HEADER = {'Authorization': f'Token {settings.OSIS_PORTAL_TOKEN}'}
 API_URL = settings.URL_API_BASE_PERSON_ROLES
@@ -44,9 +43,9 @@ def get_user_roles(global_id):
         url=API_URL % {'global_id': global_id},
         headers=REQUEST_HEADER
     )
-    if response.status_code == status.HTTP_404_NOT_FOUND:
+    if response.status_code == 404:
         return None
-    elif response.status_code == status.HTTP_403_FORBIDDEN:
+    elif response.status_code == 403:
         raise PermissionDenied(response.json()['detail'] if response.content else '')
     return transform_response_to_data(response)
 
@@ -67,4 +66,4 @@ def get_managed_programs(global_id) -> Set[str]:
 
 def transform_response_to_data(response):
     stream = io.BytesIO(response.content)
-    return JSONParser().parse(stream)
+    return json.load(stream)
