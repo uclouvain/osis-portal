@@ -29,12 +29,13 @@ from typing import List
 import urllib3.exceptions
 from django.conf import settings
 from django.http import Http404, HttpResponseNotFound
-from rest_framework.settings import api_settings
 
 from base.models.person import Person
 from frontoffice.settings.osis_sdk.utils import build_mandatory_auth_headers
 
 logger = logging.getLogger(settings.DEFAULT_LOGGER)
+
+NON_FIELD_ERRORS_KEY = 'non_field_errors'
 
 
 class ServiceException(Exception):
@@ -45,7 +46,7 @@ class ServiceException(Exception):
     @property
     def messages(self) -> List[str]:
         json_body = json.loads(self.original_exception.body)
-        return list({error['detail'] for error in json_body[api_settings.NON_FIELD_ERRORS_KEY]})
+        return list({error['detail'] for error in json_body[NON_FIELD_ERRORS_KEY]})
 
     @property
     def status(self):

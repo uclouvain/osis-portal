@@ -34,7 +34,6 @@ from osis_attribution_sdk.model.attribution_function_enum import AttributionFunc
 from osis_attribution_sdk.model.attribution_links import AttributionLinks
 from osis_attribution_sdk.model.learning_unit_type_enum import LearningUnitTypeEnum
 from osis_learning_unit_sdk.model.learning_unit import LearningUnit
-from rest_framework import status
 
 from attribution.views import tutor_charge
 from base.models.enums.learning_container_type import COURSE, OTHER_COLLECTIVE
@@ -133,13 +132,13 @@ class TutorChargeViewTest(TestCase):
         self.client.force_login(UserFactory())
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, "access_denied.html")
 
     def test_assert_template_used(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "tutor_charge.html")
 
     def test_assert_context_keys(self):
@@ -238,13 +237,13 @@ class AdminTutorChargeViewTest(TestCase):
         self.client.force_login(self.tutor.person.user)
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, 403)
         self.assertTemplateUsed(response, "access_denied.html")
 
     def test_assert_template_used(self):
         response = self.client.get(self.url)
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "tutor_charge_admin.html")
 
     def test_assert_context_keys(self):

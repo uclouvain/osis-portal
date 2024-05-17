@@ -32,7 +32,7 @@
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
-    <li class="breadcrumb-item active">{{ formation.sigle }}</li>
+    <li class="breadcrumb-item active">{{ formation.sigle_complet_version_formation }}</li>
 {% endblock %}
 
 {% block page_header %}

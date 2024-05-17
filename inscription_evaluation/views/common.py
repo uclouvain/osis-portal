@@ -37,4 +37,4 @@ class InscriptionEvaluationViewMixin:
 
     @property
     def sigle_formation(self) -> str:
-        return self.kwargs['sigle_formation'].replace('11BA', '1BA')
+        return self.kwargs['sigle_formation']

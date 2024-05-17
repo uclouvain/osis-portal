@@ -61,7 +61,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'analytical',
     'osis_common',
-    'rest_framework',
     'localflavor',
     'statici18n',
     'ckeditor',
@@ -366,12 +365,6 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly']
-}
-
 # HIJACK
 HIJACK_LOGIN_REDIRECT_URL = '/'  # Where admins are redirected to after hijacking a user
 HIJACK_ALLOW_GET_REQUESTS = True
@@ -530,6 +523,7 @@ ADMISSION_TOKEN_EXTERNAL = os.environ.get('ADMISSION_TOKEN_EXTERNAL', '')
 # OSIS-DOCUMENT-CONFIGURATION
 OSIS_DOCUMENT_BASE_URL = os.environ.get('OSIS_DOCUMENT_BASE_URL', 'localhost/')
 OSIS_DOCUMENT_API_SHARED_SECRET = os.environ.get('OSIS_DOCUMENT_API_SHARED_SECRET', '')
+OSIS_DOCUMENT_MAX_UPLOAD_SIZE = int(os.environ.get('OSIS_DOCUMENT_MAX_UPLOAD_SIZE', 524288000))
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
@@ -540,4 +534,7 @@ WAFFLE_CREATE_MISSING_SWITCHES = True
 
 # MOBILITE
 MOBILITE_URL = os.environ.get('MOBILITE_URL', '')
+
 OSIS_INTERNSHIP_PROFESSIONAL_MALFUNCTION_URL = os.environ.get('OSIS_INTERNSHIP_PROFESSIONAL_MALFUNCTION_URL', '')
+
+OSIS_HEALTH_SECRET_KEY = os.environ.get("OSIS_HEALTH_SECRET_KEY", "")
