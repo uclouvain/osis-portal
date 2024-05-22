@@ -50,7 +50,7 @@ git+https://github.com/uclouvain/osis-inscription-evaluation-sdk.git@wip-build-1
 # Modules transverses
 git+https://github.com/uclouvain/osis-document.git@0.10.8#egg=osis_document
 git+https://github.com/uclouvain/osis-signature.git@0.1#egg=osis_signature
-git+https://github.com/uclouvain/osis-notification.git@0.1.4#egg=osis_notification
+git+https://github.com/uclouvain/osis-notification.git@0.1.5#egg=osis_notification
 git+https://github.com/uclouvain/osis-async.git@0.8#egg=osis_async
 
 -r ./osis_common/requirements.txt
