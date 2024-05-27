@@ -69,7 +69,7 @@ class FormulaireInscriptionService:
         return _formulaire_api_call(
             person,
             'enregistrer_formulaire',
-            sigle_formation=sigle_formation,
+            sigle_formation=AcronymConverter().to_url(sigle_formation),
             choix_inscriptions_etudiant=cmd,
         )
 

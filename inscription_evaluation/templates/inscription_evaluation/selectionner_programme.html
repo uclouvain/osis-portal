@@ -91,12 +91,12 @@
                                     <td>{{ annee_academique|display_as_academic_year }}</td>
                                     <td>
                                         {% if formation.peut_inscrire_aux_evaluations %}
-                                            <a href="{% url 'inscription-evaluation:formulaire-inscription' formation.sigle %}">
-                                                {{ formation.sigle }}
+                                            <a href="{% url 'inscription-evaluation:formulaire-inscription' formation.sigle_formation %}">
+                                                {{ formation.sigle_complet_version_formation }}
                                             </a>
                                         {% else %}
                                             <div>
-                                                {{ formation.sigle }}
+                                                {{ formation.sigle_complet_version_formation }}
                                             </div>
                                         {% endif %}
                                     </td>
