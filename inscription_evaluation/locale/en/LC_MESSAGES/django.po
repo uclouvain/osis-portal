@@ -23,6 +23,12 @@ msgctxt "inscription-evaluation"
 msgid "Academic year"
 msgstr ""
 
+msgid ""
+"According to the rules for evaluations enrollment, in your situation, there "
+"are no evaluation you can submit for this session. Nevertheless, please "
+"submit your request enrollment for 0 evaluation."
+msgstr ""
+
 msgctxt "inscription-evaluation"
 msgid "Acronym"
 msgstr ""
@@ -136,6 +142,11 @@ msgstr ""
 msgid ""
 "Please correct any errors in your form to save it and continue to the "
 "summary of your evaluation application."
+msgstr ""
+
+msgid ""
+"Please note that this page is updated every 24 hours and may not yet reflect "
+"all the latest changes."
 msgstr ""
 
 msgid "Re-registered for a evaluation"
@@ -257,15 +268,6 @@ msgid ""
 "You can view all evaluation registration statements in the <a "
 "href=\"%(mon_pae_et_mes_notes_url)s\">'My annual program and my marks'</a> "
 "summary."
-msgstr ""
-
-msgid "You cannot register for any evaluation for the January session."
-msgstr ""
-
-msgid "You cannot register for any evaluation for the June session."
-msgstr ""
-
-msgid "You cannot register for any evaluation for the September session."
 msgstr ""
 
 msgctxt "inscription-evaluation"
