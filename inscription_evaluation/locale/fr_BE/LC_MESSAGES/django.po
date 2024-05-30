@@ -251,27 +251,27 @@ msgid ""
 "You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the January session."
 msgstr ""
-"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) "
+"Vous n'êtes inscrit.e à aucune évaluation sur le(s) "
 "%(nombre_evaluation_organisee)s évaluation(s) organisée(s) à la session de "
-"janvier. "
+"janvier."
 
 #, python-format
 msgid ""
 "You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the June session."
 msgstr ""
-"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) "
+"Vous n'êtes inscrit.e à aucune évaluation sur le(s) "
 "%(nombre_evaluation_organisee)s évaluation(s) organisée(s) à la session de "
-"juin. "
+"juin."
 
 #, python-format
 msgid ""
 "You are not registered for any of the %(nombre_evaluation_organisee)s "
 "evaluation organized for the September session."
 msgstr ""
-"Vous n'êtes inscrit.e à aucune évaluation(s) sur le(s) "
+"Vous n'êtes inscrit.e à aucune évaluation sur le(s) "
 "%(nombre_evaluation_organisee)s évaluation(s) organisée(s) à la session de "
-"septembre. "
+"septembre."
 
 #, python-format
 msgid ""
