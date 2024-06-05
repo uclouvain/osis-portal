@@ -62,6 +62,17 @@
                         </div>
                     </div>
 
+                    {% if messages_avertissement %}
+                        <div class="alert alert-warning gap-3 align-items-center d-flex">
+                            <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                            <div>
+                                {% for message in messages_avertissement %}
+                                    {{ message }}<br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
                     {% if not peut_s_inscrire_a_minimum_une_evaluation %}
 
                         <div class="alert alert-warning gap-3 align-items-center d-flex">
