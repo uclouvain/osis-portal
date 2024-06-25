@@ -70,6 +70,10 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
         return self.formulaire.inscriptions
 
     @cached_property
+    def messages_avertissement(self) -> List[str]:
+        return self.formulaire.messages_avertissement
+
+    @cached_property
     def peut_s_inscrire_a_minimum_une_evaluation(self) -> bool:
         return any(inscription['peut_inscrire_evaluation'] for inscription in self.inscriptions)
 
@@ -96,6 +100,7 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             'a_des_inscriptions': bool(self.inscriptions),
             'map_insc_eval_par_contexte': self.group_inscriptions_by_contexte_inscription,
             'peut_s_inscrire_a_minimum_une_evaluation': self.peut_s_inscrire_a_minimum_une_evaluation,
+            'messages_avertissement': self.messages_avertissement,
         }
 
     def post(self, request, *args, **kwargs):
