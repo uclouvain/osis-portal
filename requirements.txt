@@ -1,5 +1,6 @@
 Django==3.2.25
 django-bootstrap3==23.2  # Version 23.3 drops Python3.7 support
+django-bootstrap5==23.3  # Version 23.4 drops Python3.7 support
 django-localflavor==4.0 # Version 4.1 drops Python3.7 support
 django-statici18n==2.5.0
 django-analytical==3.1
