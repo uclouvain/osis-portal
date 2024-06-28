@@ -67,6 +67,7 @@ INSTALLED_APPS = (
     'reference',
     'base',
     'bootstrap3',
+    'django_bootstrap5',
     'django_registration',
     'hijack',
     'hijack.contrib.admin',
