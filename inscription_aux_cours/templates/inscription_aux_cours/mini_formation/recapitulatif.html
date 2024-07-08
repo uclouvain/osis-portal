@@ -57,13 +57,13 @@
             <br>
             <div class="center">
                 <a href="{% url 'inscription-aux-cours:mini-formations-inscriptibles' programme.code %}" class="btn btn-default">
-                    {% trans "Modify my choice of minors or electives" %}
+                    <i class="fa-solid fa-pen"></i> {% trans "Modify my choice of minors or electives" %}
                 </a>
             </div>
             <br>
             <div class="center">
                 <a class="btn btn-primary" href="{% url 'inscription-aux-cours:formulaire-inscription-cours' programme.code %}">
-                    <i class="fa-solid fa-cart-shopping"></i> {% trans 'Continue composing my annual programme' %}
+                    <i class="fa-solid fa-arrow-right"></i> {% trans 'Continue composing my annual programme' %}
                 </a>
             </div>
 

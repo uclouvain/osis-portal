@@ -183,3 +183,56 @@ body {
     margin: 40px 0 20px;
     border-bottom: 1px solid #eee;
 }
+
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+
+  &:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+  }
+}
+
+.card {
+  margin-bottom: 20px;
+
+  .card-heading {
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+  }
+}
+
+.nav-tabs {
+  li {
+
+    a {
+      padding: 10px 15px;
+
+      &:hover,
+      &.active {
+        color: #555;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-bottom-color: transparent;
+      }
+    }
+  }
+}
+
+.card {
+  margin-bottom: 20px;
+
+  .card-heading {
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+  }
+}

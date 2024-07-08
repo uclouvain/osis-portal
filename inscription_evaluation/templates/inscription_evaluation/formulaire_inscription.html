@@ -62,18 +62,23 @@
                         </div>
                     </div>
 
+                    {% if messages_avertissement %}
+                        <div class="alert alert-warning gap-3 align-items-center d-flex">
+                            <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
+                            <div>
+                                {% for message in messages_avertissement %}
+                                    {{ message }}<br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
                     {% if not peut_s_inscrire_a_minimum_une_evaluation %}
 
                         <div class="alert alert-warning gap-3 align-items-center d-flex">
                             <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
                             <div>
-                                {% if session_de_travail.numero_session == 1 %}
-                                    {% trans 'You cannot register for any evaluation for the January session.' %}
-                                {% elif session_de_travail.numero_session == 2 %}
-                                    {% trans 'You cannot register for any evaluation for the June session.' %}
-                                {% else %}
-                                    {% trans 'You cannot register for any evaluation for the September session.' %}
-                                {% endif %}
+                                {% trans 'According to the rules for evaluations enrollment, in your situation, there are no evaluation you can submit for this session. Nevertheless, please submit your request enrollment for 0 evaluation.' %}
                             </div>
                         </div>
 
@@ -133,7 +138,7 @@
                     </a>
                     {% if a_des_inscriptions %}
                         <button type="submit" class="btn btn-primary btn-wrap btn-block-xs slow-loading">
-                            <i class="fa-solid fa-cart-shopping"></i> {% trans 'Save and continue to the summary of registrations' %}
+                            <i class="fa-solid fa-arrow-right"></i> {% trans 'Save and continue to the summary of registrations' %}
                         </button>
                     {% endif %}
                 </div>
