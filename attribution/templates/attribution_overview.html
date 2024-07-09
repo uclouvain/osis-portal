@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -28,22 +28,22 @@
 
 {% block breadcrumb_area %}
     <ol class="breadcrumb">
-        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
-                                                                          aria-hidden="true"></span></a></li>
+        <li class="breadcrumb-item d-inline-block"><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><i class="fas fa-home"
+        aria-hidden="true"></i></a></li>
         {% block breadcrumb %}
-            <li>{% trans 'My applications' %}</li>
+            <li class="breadcrumb-item d-inline-block">{% trans 'My applications' %}</li>
+            <a href="{{ help_button_url }}"
+                target="help" id="lnk_user_manual_section"><i
+                class="fa-solid fa-circle-question float-end text-success fs-4"
+                aria-hidden="true"></i>
+            </a>
         {% endblock %}
-        <a href="{{ help_button_url }}"
-           target="help" id="lnk_user_manual_section"><span
-                class="glyphicon glyphicon-question-sign pull-right"
-                style="font-size: 14pt; color: green"
-                aria-hidden="true"></span></a>
     </ol>
 {% endblock %}
 
 {% block content %}
     <small style="color:black;font-family:Verdana;"
-           class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans 'Application period from' %}
+           class="float-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans 'Application period from' %}
         {{ application_course_calendar.start_date | default_if_none:''|date:"d/m/Y"}} {% trans 'to' %}
         {{ application_course_calendar.end_date | default_if_none:''|date:"d/m/Y" }}</small>
     <h1>{% trans 'My applications' %}</h1>
@@ -51,59 +51,59 @@
 
     {% include "template_messages.html" %}
 
-    <div class="panel panel-default" id="pnl_applications">
-        <div class="panel-heading">
+    <div class="card mb-3" id="pnl_applications">
+        <div class="card-header">
             <div class="row">
-                <div class="col-md-11">
+                <div class="col-lg-11">
                     {% trans 'My applications' %} {{ application_academic_year }}
                 </div>
-                <div class="col-md-1">
+                <div class="col-lg-1">
                     {% if applications %}
                         <form action="{% url 'email_tutor_application_confirmation' %}"
                               method="POST"
                               id="form_email_tutor_application_confirmation">
                             {% csrf_token %}
-                            <button class="btn btn-primary pull-right"
+                            <button class="btn btn-primary float-end"
                                     id="btn_applications_email_confirmation"
                                     type="submit"
                                     title="{% trans 'To receive a confirmation email with the applications' %}">
-                                <span class="glyphicon glyphicon-envelope"></span>
+                                <i class="fa-solid fa-envelope"></i>
                             </button>
                         </form>
                     {% endif %}
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             {% if applications %}
                 {% include "applications_list.html" with applications=applications %}
             {% else %}
-                <div class="alert alert-info" style="margin-top:10px;">{% trans 'No application' %}</div>
+                <div class="alert alert-info mt-2">{% trans 'No application' %}</div>
             {% endif %}
             <br>
             <div class="clearfix">
-                <a id="lnk_submit_attribution_new" class="btn btn-primary pull-left"
+                <a id="lnk_submit_attribution_new" class="btn btn-primary float-start"
                    href="{% url 'search_vacant_courses' %}">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
                     {% trans 'Add a new application' %}
                 </a>
             </div>
         </div>
     </div>
     {% if attributions_about_to_expire %}
-        <div class="panel panel-default" id="pnl_charges_about_to_expire">
-            <div class="panel-heading">{% trans 'My charges now vacant' %}
+        <div class="card mb-3" id="pnl_charges_about_to_expire">
+            <div class="card-header">{% trans 'My charges now vacant' %}
                 ({% trans 'without application' %}) {{ previous_academic_year }}</div>
-            <div class="panel-body">
+            <div class="card-body">
                 {% include "attribution_renewal_list.html" with attributions=attributions_about_to_expire %}
                 <br>
             </div>
         </div>
     {% endif %}
 
-    <div class="panel panel-default" id="pnl_charges">
-        <div class="panel-heading">{% trans 'My charges' %} {{ application_academic_year }}</div>
-        <div class="panel-body">
+    <div class="card mb-3" id="pnl_charges">
+        <div class="card-header">{% trans 'My charges' %} {{ application_academic_year }}</div>
+        <div class="card-body">
             {% if attributions %}
                 {% include "attribution_list.html" with attributions=attributions %}
                 <br>

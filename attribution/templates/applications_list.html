@@ -68,14 +68,14 @@
             <td colspan="2" style="width:130px;">
                 <a class="btn btn-primary" id="lnk_application_edit_{{ application.code }}_{{ application.year }}"
                    href="{% url 'update_application' application.uuid %}">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    <i class="fa-solid fa-pencil" aria-hidden="true"></i>
                 </a>
                 <a class="btn btn-warning"
                    id="lnk_application_delete_{{ application.code }}_{{ application.year }}"
                    href="#"
                    title="{% trans 'Delete the application' %}"
-                   data-toggle="modal" data-target="#modalConfirmApplicationDelete{{application.code}}{{ application.year }}">
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                   data-bs-toggle="modal" data-bs-target="#modalConfirmApplicationDelete{{application.code}}{{ application.year }}">
+                    <i class="fa-solid fa-xmark text-white" aria-hidden="true"></i>
                 </a>
                 {% include 'blocks/modal/application_delete_confirm.html' %}
             </td>
