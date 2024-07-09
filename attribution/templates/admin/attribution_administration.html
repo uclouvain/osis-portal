@@ -27,19 +27,19 @@
 {% endcomment %}
 
 {% block breadcrumb %}
-    <li><a id="lnk_faculty_administration"
+    <li class="breadcrumb-item"><a id="lnk_faculty_administration"
            href="{% url 'faculty_administration' %}">{% trans 'Faculty administration' %}</a></li>
-    <li class="active">{% trans 'Teaching charges administration' %}</li>
+    <li class="breadcrumb-item active">{% trans 'Teaching charges administration' %}</li>
 {% endblock %}
 
 
 {% block content %}
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card">
+        <div class="card-header">
             {% trans 'Attributions' %}
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <form action="{% url 'attribution_admin_select_tutor' %}" name="attribution_administration" method="post">
                 {% csrf_token %}
                 {% if form.errors %}
@@ -54,11 +54,11 @@
                     </div>
                 {% endif %}
                 <div class="row text-center">
-                    <div class="form-group col-md-3 col-md-offset-4">
+                    <div class="form-group col-lg-3 offset-lg-4">
                         <input id="global_id" name="global_id" class="form-control" type="text"
                                placeholder="{% trans 'Global id' %}">
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-lg-1">
                         <button type="submit" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </div>

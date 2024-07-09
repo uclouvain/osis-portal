@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,11 +27,14 @@
 {% endcomment %}
 {% block breadcrumb_area %}
     <ol class="breadcrumb">
-        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
-                                                                          aria-hidden="true"></span></a></li>
+        <li class="breadcrumb-item d-inline-block">
+            <a href="{% url 'dashboard_home' %}" id="lnk_home_osis">
+                <span class="fas fa-home" aria-hidden="true"></span>
+            </a>
+        </li>
 
         {% block breadcrumb %}
-            <li>{% trans 'My teaching charge' %}</li>
+            <li class="breadcrumb-item d-inline-block">{% trans 'My teaching charge' %}</li>
         {% endblock %}
 
     </ol>

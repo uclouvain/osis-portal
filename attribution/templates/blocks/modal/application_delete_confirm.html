@@ -32,21 +32,21 @@
         {% csrf_token %}
         <div class="modal-body">
             {% block modal_header %}
-                <h3>{% blocktrans %}Delete the application{% endblocktrans %}?</h3>
+                <h3 class="modal-title">{% blocktrans %}Delete the application{% endblocktrans %}?</h3>
             {% endblock %}
             <br>
             {% trans "This action will delete the application." %}
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal"
+            <button type="button" class="btn btn-default" data-bs-dismiss="modal"
                     title="{% trans 'Cancel' %}">
-                <span class="glyphicon glyphicon-remove"></span>
+                <i class="fa-solid fa-xmark"></i>
                 {% trans "Cancel" %}
             </button>
             <button type="submit" class="btn btn-danger"
                     title="{% trans 'Delete the application' %}">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                <i class="fa-regular fa-trash-can text-white" aria-hidden="true"></i>
                 {% trans "Delete" %}
             </button>
         </div>

@@ -53,11 +53,11 @@
             </th>
             <th style="vertical-align: top">{% trans 'Code' %}</th>
             <th style="vertical-align: top">{% trans 'Title' %}</th>
-            <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'Vol.1' %}</th>
+            <th style="border-left: 1px solid;vertical-align: top;">{% trans 'Vol.1' %}</th>
             <th style="vertical-align: top">{% trans 'Vol.2' %}</th>
             <th style="vertical-align: top;">{% trans 'Vol.1' %}</th>
             <th style="vertical-align: top">{% trans 'Vol.2' %}</th>
-            <th style="border-left-style: solid;border-left-width:1px;vertical-align: top;">{% trans 'Start' %}</th>
+            <th style="border-left: 1px solid; vertical-align: top;">{% trans 'Start' %}</th>
             <th style="vertical-align: top">{% trans 'End' %}</th>
             <th style="vertical-align: top">{% trans 'Vol.1' %} </th>
             <th style="vertical-align: top">{% trans 'Vol.2' %}</th>
@@ -69,7 +69,7 @@
         {% for attribution_about_to_expire in attributions %}
             <tr>
                 <td class="text-center">
-                    <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                    <div class="tooltip-wrapper text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top"
                          title="{% if attribution_about_to_expire.unavailable_renewal_reason %}
                                    {{ attribution_about_to_expire.unavailable_renewal_reason }}
                                  {% endif %}"
@@ -79,7 +79,7 @@
                                    id="chb_attribution_renew_{{ forloop.counter }}"
                                    name="vacant_course_{{ attribution_about_to_expire.code }}"/>
                         {% else %}
-                            <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                         {% endif %}
                     </div>
                 </td>
@@ -101,16 +101,16 @@
         <tr>
             <td colspan="13">
                  <div id="tooltip_bt_submit_attribution_renew"
-                      class="tooltip-wrapper"
-                      data-toggle="tooltip"
-                      data-placement="right"
+                      class="tooltip-wrapper text-nowrap"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="right"
                       data-title-toggle-disabled="{% trans 'Please choose at least one course' %}"
                       data-title-toggle-enabled="{% trans 'Reproduce identically in the following year' %}">
                      <button id="bt_submit_attribution_renew"
                         class="btn btn-primary"
                         role="button"
                         type="submit">
-                    <span class="glyphicon glyphicon-repeat"></span> {% trans 'Renew' %}</button>
+                    <i class="fa-solid fa-rotate-right"></i> {% trans 'Renew' %}</button>
                  </div>
             </td>
         </tr>

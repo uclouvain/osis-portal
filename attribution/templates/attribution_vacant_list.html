@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 {% load l10n %}
@@ -28,63 +28,68 @@
 {% endcomment %}
 {% block breadcrumb_area %}
 
-    <ol class="breadcrumb">
-        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
-                                                                          aria-hidden="true"></span></a></li>
+    <ol class="breadcrumb d-block">
+        <li class="breadcrumb-item d-inline-block">
+            <a href="{% url 'dashboard_home' %}" id="lnk_home_osis">
+                <i class="fas fa-home"
+                aria-hidden="true"></i>
+            </a>
+        </li>
         {% block breadcrumb %}
             {% if perms.base.is_faculty_administrator %}
-                <li><a href="{% url 'visualize_tutor_applications' global_id=a_person.global_id %}"
+                <li class="breadcrumb-item d-inline-block"><a href="{% url 'visualize_tutor_applications' global_id=a_person.global_id %}"
                        id="lnk_applications">
                     {% trans 'Applications of ' %} {{ a_person.first_name }} {{ a_person.last_name }}
                 </a>
                 </li>
             {% else %}
-                <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'My applications' %}</a>
+                <li class="breadcrumb-item d-inline-block"><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'My applications' %}</a>
                 </li>
             {% endif %}
-            <li>{% trans 'Vacant course search' %}</li>
+            <li class="breadcrumb-item d-inline-block">{% trans 'Vacant course search' %}</li>
+            <a href="{{ help_button_url }}"
+                class="float-end"
+                target="help" id="lnk_user_manual_section"><i
+                class="fa-solid fa-circle-question float-end text-success fs-4"
+                aria-hidden="true"></i>
+            </a>
         {% endblock %}
-        <a href="{{ help_button_url }}"
-           target="help" id="lnk_user_manual_section"><span
-                class="glyphicon glyphicon-question-sign pull-right"
-                style="font-size: 14pt; color: green"
-                aria-hidden="true"></span></a>
     </ol>
+
 {% endblock %}
 
 {% block content %}
 
-    <div class="panel panel-default" id="pnl_charges">
-        <div class="panel-heading">{% trans 'Vacant learning unit' %}</div>
-
-        <div class="panel-body">
-            <div class="row">
+    <div class="card" id="pnl_charges">
+        <div class="card-header">{% trans 'Vacant learning unit' %}</div>
+        <div class="card-body">
                 <!-- Search vacant -->
-                <form method="GET" action="{% url 'search_vacant_courses' %}">
-                    <div class="col-md-8">
+            <form method="GET" action="{% url 'search_vacant_courses' %}">
+                <div class="row">
+                    <div class="col-lg-8">
                         <p class="text-muted">{% trans 'To find a vacant learning unit to candidate to, introduce the code and click on the button' %}</p>
                     </div>
-                    <div class="col-md-2">
-                        <label for="learning_container_acronym_id">{% trans 'Faculty' %}</label>
+                    <div class="col-lg-2">
+                        <label for="learning_container_acronym_id" class="fw-bold">{% trans 'Faculty' %}</label>
                         {{ form.faculty }}
                     </div>
-                    <div class="col-md-2">
-                        <label for="learning_container_acronym_id">{% trans 'Code' %}</label>
+                    <div class="col-lg-2">
+                        <label for="learning_container_acronym_id" class="fw-bold">{% trans 'Code' %}</label>
                         <div class="input-group">
                             {{ form.learning_container_acronym }}
                             <div class="input-group-btn">
                                 <button type="submit" id="bt_submit_search_vacant_courses" class="btn btn-primary"
                                         role="button"
                                         title="{% trans 'Please enter the code of the course to which you would like to apply' %}">
-                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    <i class="fas fa-search" aria-hidden="true"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-lg-12">
                     <span class="error">{{ form.errors.learning_container_acronym }}</span>
                 </div>
             </div>
@@ -134,28 +139,28 @@
                             <td>
                                 {% if vacant_course.tutors %}
                                     {% with tutor_number=forloop.counter0 %}
-                                        <a role="button" data-toggle="collapse"
+                                        <a role="button" data-bs-toggle="collapse"
                                            href=".collapse_teachers{{ tutor_number }}"
                                            aria-expanded="false" aria-controls="collapse_teachers{{ tutor_number }}"
-                                           style="border:0;padding:0;"
+                                           class="border-0 p-0"
                                            onclick="changeOrientation(expandButton{{ tutor_number }})"
                                            title="{% trans 'Display teachers' %}">
-                                            <span id="expandButton{{ tutor_number }}"
-                                                  class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                                            <i id="expandButton{{ tutor_number }}"
+                                                  class="fa-regular fa-square-caret-right" aria-hidden="true"></i>
                                         </a>
                                     {% endwith %}
                                 {% endif %}
                             </td>
                             <td>
-                                <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                <div class="tooltip-wrapper text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top"
                                      title="{% if vacant_course.is_in_team %}
                                                 {% trans 'This course is team-managed. The application to this activity is based on a paper transmission.' %}
                                             {% endif %}">
-                                    <a id="lnk_submit_application_new" class="btn btn-primary pull-right"
+                                    <a id="lnk_submit_application_new" class="btn btn-primary float-end"
                                        href="{% url 'create_application' vacant_course.code %}"
                                        {% if vacant_course.is_in_team %} disabled {% endif %}>
 
-                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                        <i class="fa-solid fa-plus" aria-hidden="true"></i>
                                        {% trans 'New application' %}
                                     </a>
                                 </div>
@@ -184,6 +189,6 @@
 
 {% block script %}
     <script>
-        $('[data-toggle="tooltip"]').tooltip()
+        $('[data-bs-toggle="tooltip"]').tooltip()
     </script>
 {% endblock %}
