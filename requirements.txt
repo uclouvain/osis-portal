@@ -46,7 +46,7 @@ git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.4.0
 git+https://github.com/uclouvain/osis-exam-enrollment-sdk.git@build-1.0
 git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.13
 git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.05
-git+https://github.com/uclouvain/osis-inscription-evaluation-sdk.git@wip-build-1.9
+git+https://github.com/uclouvain/osis-inscription-evaluation-sdk.git@wip-build-1.10
 
 # Modules transverses
 git+https://github.com/uclouvain/osis-document.git@0.10.8#egg=osis_document
