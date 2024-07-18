@@ -37,6 +37,7 @@ from django.views.generic import TemplateView
 from django.utils.functional import cached_property
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils import translation
 from django.utils.translation import gettext_lazy as _
 from base.services.utils import ServiceException
 from inscription_evaluation.services.formulaire_inscription import FormulaireInscriptionService
@@ -86,8 +87,12 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
     @cached_property
     def group_inscriptions_by_contexte_inscription(self) -> Dict[str, List[Dict]]:
         result = {}
+        if translation.get_language() == 'en':
+            key = 'contexte_inscription_en'
+        else:
+            key = 'contexte_inscription_fr'
         for insc in self.inscriptions:
-            result.setdefault(insc['contexte_inscription'], []).append(insc)
+            result.setdefault(insc[key], []).append(insc)
         return result
 
     def get_context_data(self, **kwargs):
