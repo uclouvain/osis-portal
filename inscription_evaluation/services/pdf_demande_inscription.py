@@ -15,7 +15,7 @@
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 #    GNU General Public License for more details.
 #
 #    A copy of this license - GNU General Public License - is available
@@ -23,29 +23,27 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.urls import path, include
-from django.urls.converters import register_converter
+from functools import partial
+import osis_inscription_evaluation_sdk
+from base.models.person import Person
+from base.services.utils import call_api
+from osis_inscription_evaluation_sdk.api import demande_inscription_api
+from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
 
-from base.utils.converters import AcronymConverter
-from inscription_evaluation.views.fichiers.ma_demande_inscription import MaDemandeInscriptionView
-from inscription_evaluation.views.formulaire_inscription import FormulaireInscriptionView
-from inscription_evaluation.views.recapitulatif import RecapitulatifView
-from inscription_evaluation.views.selectionner_programme import SelectionnerProgrammeView
 
-app_name = 'inscription-evaluation'
+class PdfPropositionPaeService:
+    @staticmethod
+    def recuperer(person: 'Person', sigle_formation: str):
+        return _pdf_demande_inscription_api_call(
+            person,
+            "ma_demande_inscription",
+            sigle_formation=sigle_formation,
+        )
 
-register_converter(AcronymConverter, 'sigle_formation')
 
-urlpatterns = [
-    path('', SelectionnerProgrammeView.as_view(), name=SelectionnerProgrammeView.name),
-    path(
-        '<sigle_formation:sigle_formation>/',
-        include(
-            [
-                path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),
-                path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
-                path('ma_demande_inscription/', MaDemandeInscriptionView.as_view(), name=MaDemandeInscriptionView.name),
-            ]
-        ),
-    ),
-]
+_pdf_demande_inscription_api_call = partial(
+    call_api,
+    inscription_evaluation_sdk,
+    osis_inscription_evaluation_sdk,
+    demande_inscription_api.DemandeInscriptionApi,
+)
