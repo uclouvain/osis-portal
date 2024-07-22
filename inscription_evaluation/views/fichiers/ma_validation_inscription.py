@@ -23,27 +23,30 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from functools import partial
-import osis_inscription_evaluation_sdk
-from base.models.person import Person
-from base.services.utils import call_api
-from osis_inscription_evaluation_sdk.api import demande_inscription_api
-from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
+from django.utils.functional import cached_property
+
+from django.views.generic import TemplateView
+from django.urls import reverse
+from continuing_education.views.common import display_error_messages
+from base.services.utils import ServiceException
+from django.shortcuts import redirect
+
+from inscription_evaluation.services.pdf_validation_inscription import PdfValidationInscriptionService
+from inscription_evaluation.views.common import InscriptionEvaluationViewMixin
 
 
-class PdfDemandeInscriptionService:
-    @staticmethod
-    def recuperer(person: 'Person', sigle_formation: str):
-        return _pdf_demande_inscription_api_call(
-            person,
-            "ma_demande_inscription",
-            sigle_formation=sigle_formation,
-        )
+class MaValidationInscriptionView(TemplateView, InscriptionEvaluationViewMixin):
+    name = "ma-validation-inscription"
 
+    def get(self, request, *args, **kwargs):
+        try:
+            if self.ma_validation_inscription.get('links'):
+                return redirect(self.ma_validation_inscription['links']['download'])
+        except ServiceException as e:
+            display_error_messages(request, e.messages)
+        display_error_messages(self.request, self.ma_validation_inscription['message'])
+        return redirect(reverse("dashboard_home"))
 
-_pdf_demande_inscription_api_call = partial(
-    call_api,
-    inscription_evaluation_sdk,
-    osis_inscription_evaluation_sdk,
-    demande_inscription_api.DemandeInscriptionApi,
-)
+    @cached_property
+    def ma_validation_inscription(self):
+        return PdfValidationInscriptionService().recuperer(self.person, sigle_formation=self.sigle_formation)

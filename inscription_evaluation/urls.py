@@ -28,6 +28,7 @@ from django.urls.converters import register_converter
 
 from base.utils.converters import AcronymConverter
 from inscription_evaluation.views.fichiers.ma_demande_inscription import MaDemandeInscriptionView
+from inscription_evaluation.views.fichiers.ma_validation_inscription import MaValidationInscriptionView
 from inscription_evaluation.views.formulaire_inscription import FormulaireInscriptionView
 from inscription_evaluation.views.recapitulatif import RecapitulatifView
 from inscription_evaluation.views.selectionner_programme import SelectionnerProgrammeView
@@ -45,6 +46,11 @@ urlpatterns = [
                 path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),
                 path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
                 path('ma_demande_inscription/', MaDemandeInscriptionView.as_view(), name=MaDemandeInscriptionView.name),
+                path(
+                    'ma_validation_inscription/',
+                    MaValidationInscriptionView.as_view(),
+                    name=MaValidationInscriptionView.name
+                ),
             ]
         ),
     ),

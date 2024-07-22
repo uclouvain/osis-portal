@@ -31,7 +31,7 @@ from continuing_education.views.common import display_error_messages
 from base.services.utils import ServiceException
 from django.shortcuts import redirect
 
-from inscription_evaluation.services.pdf_demande_inscription import PdfPropositionPaeService
+from inscription_evaluation.services.pdf_demande_inscription import PdfDemandeInscriptionService
 from inscription_evaluation.views.common import InscriptionEvaluationViewMixin
 
 
@@ -49,4 +49,4 @@ class MaDemandeInscriptionView(TemplateView, InscriptionEvaluationViewMixin):
 
     @cached_property
     def ma_demande_inscription(self):
-        return PdfPropositionPaeService().recuperer(self.person, sigle_formation=self.sigle_formation)
+        return PdfDemandeInscriptionService().recuperer(self.person, sigle_formation=self.sigle_formation)
