@@ -33,12 +33,8 @@ from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_
 
 class PdfDemandeInscriptionService:
     @staticmethod
-    def recuperer(person: 'Person', sigle_formation: str):
-        return _pdf_demande_inscription_api_call(
-            person,
-            "ma_demande_inscription",
-            sigle_formation=sigle_formation,
-        )
+    def recuperer(person: 'Person', uuid_fichier):
+        return _pdf_demande_inscription_api_call(person, "ma_demande_inscription", uuid=uuid_fichier)
 
 
 _pdf_demande_inscription_api_call = partial(
