@@ -38,6 +38,10 @@ from inscription_evaluation.views.common import InscriptionEvaluationViewMixin
 class MaValidationInscriptionView(TemplateView, InscriptionEvaluationViewMixin):
     name = "ma-validation-inscription"
 
+    @property
+    def uuid_fichier(self) -> str:
+        return self.kwargs['uuid']
+
     def get(self, request, *args, **kwargs):
         try:
             if self.ma_validation_inscription.get('links'):
@@ -49,4 +53,4 @@ class MaValidationInscriptionView(TemplateView, InscriptionEvaluationViewMixin):
 
     @cached_property
     def ma_validation_inscription(self):
-        return PdfValidationInscriptionService().recuperer(self.person, sigle_formation=self.sigle_formation)
+        return PdfValidationInscriptionService().recuperer(self.person, uuid_fichier=self.uuid_fichier)

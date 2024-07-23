@@ -45,13 +45,17 @@ urlpatterns = [
             [
                 path('formulaire/', FormulaireInscriptionView.as_view(), name=FormulaireInscriptionView.name),
                 path('recapitulatif/', RecapitulatifView.as_view(), name=RecapitulatifView.name),
-                path('ma_demande_inscription/', MaDemandeInscriptionView.as_view(), name=MaDemandeInscriptionView.name),
-                path(
-                    'ma_validation_inscription/',
-                    MaValidationInscriptionView.as_view(),
-                    name=MaValidationInscriptionView.name
-                ),
             ]
         ),
+    ),
+    path(
+        'ma_demande_d_inscription/<str:uuid>/',
+        MaDemandeInscriptionView.as_view(),
+        name=MaDemandeInscriptionView.name
+    ),
+    path(
+        'mon_inscription_validee/<str:uuid>/',
+        MaValidationInscriptionView.as_view(),
+        name=MaValidationInscriptionView.name
     ),
 ]
