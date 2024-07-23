@@ -27,23 +27,23 @@ from functools import partial
 import osis_inscription_evaluation_sdk
 from base.models.person import Person
 from base.services.utils import call_api
-from osis_inscription_evaluation_sdk.api import demande_inscription_api
+from osis_inscription_evaluation_sdk.api import validation_inscription_api
 from frontoffice.settings.osis_sdk import inscription_evaluation as inscription_evaluation_sdk
 
 
-class PdfDemandeInscriptionService:
+class PdfValidationInscriptionService:
     @staticmethod
     def recuperer(person: 'Person', sigle_formation: str):
-        return _pdf_demande_inscription_api_call(
+        return _pdf_validation_inscription_api_call(
             person,
-            "ma_demande_inscription",
+            "ma_validation_inscription",
             sigle_formation=sigle_formation,
         )
 
 
-_pdf_demande_inscription_api_call = partial(
+_pdf_validation_inscription_api_call = partial(
     call_api,
     inscription_evaluation_sdk,
     osis_inscription_evaluation_sdk,
-    demande_inscription_api.DemandeInscriptionApi,
+    validation_inscription_api.ValidationInscriptionApi,
 )
