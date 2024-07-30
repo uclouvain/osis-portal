@@ -106,7 +106,7 @@
                                         <tr>
                                             <td>{{ inscription.unite_enseignement.code }}</td>
                                             <td>
-                                                {% if LANGUAGE_CODE == 'fr-be' or inscription.unite_enseignement.intitule_en is None %}
+                                                {% if LANGUAGE_CODE == 'fr-be' or not inscription.unite_enseignement.intitule_en %}
                                                     {{ inscription.unite_enseignement.intitule_fr }}
                                                 {% else %}
                                                     {{ inscription.unite_enseignement.intitule_en }}
