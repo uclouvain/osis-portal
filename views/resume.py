@@ -85,8 +85,9 @@ def view_student_resume(request, cohort_id):
             specialty=affectation.speciality,
             organization=affectation.organization,
         ).results
-        offer = next(offer for offer in internship_offers)
-        offer.master = _get_internship_masters_repr(request.user.person, affectation)
+        offer = next((offer for offer in internship_offers), None)
+        if offer:
+            offer.master = _get_internship_masters_repr(request.user.person, affectation)
         try:
             offers[affectation.organization.reference].update({affectation.speciality.name: offer})
         except KeyError:
