@@ -36,14 +36,14 @@
 
 <div class="alert alert-info" style="background-color: white">
     <div class="accordion" id="accordionExample">
-        <a role="button" data-toggle="collapse" data-target="#legend" aria-expanded="false"
+        <a role="button" data-bs-toggle="collapse" data-bs-target="#legend" aria-expanded="false"
            aria-controls="tutors_by_course" title="{% trans 'Legend' %}">
-            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> {% trans 'Legend' %}
+            <i class="fa-solid fa-angle-right" aria-hidden="true"></i> {% trans 'Legend' %}
         </a>
         <div class="collapse" id="legend">
             <div class="row">
-                <div class="col-md-5">
-                    <div class="col-md-12">
+                <div class="col-lg-5">
+                    <div class="col-lg-12">
 
                         <p class="legend-title">{% trans 'Exam registration state' %}</p>
 
@@ -83,8 +83,8 @@
                     </div>
 
                 </div>
-                <div class="col-md-7">
-                    <div class="col-md-12">
+                <div class="col-lg-7">
+                    <div class="col-lg-12">
 
                         <p class="legend-title">{% trans 'Specific profile' %}</p>
 
@@ -131,17 +131,16 @@
 
 {% if enrolled_students_count %}
     <div class="row">
-        <div class="col-md-3 col-sm-3 col-xs-12 col-md-push-9 col-sm-push-9">
+        <div class="col-lg-3 col-sm-3 col-xs-12 col-lg-push-9 col-sm-push-9">
             <form method="get" action="{{ produce_xls_url }}">
-                <button class="btn btn-success pull-md-right" id="bt_produce_xls" type="submit"
-                        style="margin-bottom: 10px;"
+                <button class="btn btn-success pull-md-right mb-3" id="bt_produce_xls" type="submit"
                         title="{% trans 'Export the students list in Excel format' %}">
                     {% trans 'Export list (Excel)' %}
-                    <i class="fa fa-table" aria-hidden="true" style="padding-left:10px;"></i>
+                    <i class="fa fa-table pe-2" aria-hidden="true"></i>
                 </button>
             </form>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-12 col-md-pull-3 col-sm-pull-3 col-xs-pull-0">
+        <div class="col-lg-6 col-md-6 col-12 col-lg-pull-3 col-sm-pull-3 col-xs-pull-0">
             {% search %}
         </div>
     </div>
@@ -157,9 +156,9 @@
         </tr>
         <tr>
             <th colspan="6"></th>
-            <th colspan="2" style="text-align: center;">{% trans 'Jan.' %}</th>
-            <th colspan="2" style="text-align: center;">{% trans 'June' %}</th>
-            <th colspan="2" style="text-align: center;">{% trans 'Sept.' %}</th>
+            <th colspan="2" class="text-center">{% trans 'Jan.' %}</th>
+            <th colspan="2" class="text-center">{% trans 'June' %}</th>
+            <th colspan="2" class="text-center">{% trans 'Sept.' %}</th>
             <th></th>
 
         </tr>
@@ -167,22 +166,22 @@
             {% trans "Program" context "attribution" as program_translated_string %}
             <th>{% ordering program_translated_string 'program' %}</th>
             <th title="{% trans 'Learning unit' %}">{% trans 'Learning unit' context "students_list" %}</th>
-            <th><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></th>
+            <th><i class="fa-solid fa-envelope" aria-hidden="true"></i></th>
             <th>{% ordering _('Last name') 'student_full_name' %}</th>
             <th>{% ordering _('Registration id') 'student_registration_id' %}</th>
             <th>
                 {% trans "Type" as type_trans %}
-                {% with type_trans|add:' <span class="label label-warning">PEPS</span>' as label %}
+                {% with type_trans|add:' <span class="badge mb-1 lh-base bg-warning">PEPS</span>' as label %}
                     {% ordering label 'specific_profile' %}
                 {% endwith %}
             </th>
-            <th style="text-align: center;" title={% trans  'State of exam enrollment' %}>{% trans 'State' %}</th>
-            <th style="text-align: center;" title={% trans  'Exam score' %}>{% trans 'Score' %}</th>
-            <th style="text-align: center;" title={% trans  'State of exam enrollment' %}>{% trans 'State' %}</th>
-            <th style="text-align: center;" title={% trans  'Exam score' %}>{% trans 'Score' %}</th>
-            <th style="text-align: center;" title={% trans  'State of exam enrollment' %}>{% trans 'State' %}</th>
-            <th style="text-align: center;" title={% trans  'Exam score' %}>{% trans 'Score' %}</th>
-            <th style="text-align: center;" title={% trans  'Exam score' %}>{% trans 'Last score' %}</th>
+            <th class="text-center" title="{% trans  'State of exam enrollment' %}">{% trans 'State' %}</th>
+            <th class="text-center" title="{% trans  'Exam score' %}">{% trans 'Score' %}</th>
+            <th class="text-center" title="{% trans  'State of exam enrollment' %}">{% trans 'State' %}</th>
+            <th class="text-center" title="{% trans  'Exam score' %}">{% trans 'Score' %}</th>
+            <th class="text-center" title="{% trans  'State of exam enrollment' %}">{% trans 'State' %}</th>
+            <th class="text-center" title="{% trans  'Exam score' %}">{% trans 'Score' %}</th>
+            <th class="text-center" title="{% trans  'Exam score' %}">{% trans 'Last score' %}</th>
         </tr>
         </thead>
         <tbody>
@@ -192,32 +191,31 @@
                     <td>{{ student.program }}</td>
                     <td>{{ student.acronym }}</td>
                     <td>{% if student.email %}
-                        <a href="mailto:{{ student.email }}" data-toggle="tooltip" data-placement="right"
-                           title="{{ student.email }}"><span class="glyphicon glyphicon-envelope"
-                                                             aria-hidden="true"></span></a>
+                        <a href="mailto:{{ student.email }}" data-bs-toggle="tooltip" data-bs-placement="right"
+                           title="{{ student.email }}"><i class="fa-solid fa-envelope" aria-hidden="true"></i></a>
                     {% else %}
-                        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
                     {% endif %}</td>
                     <td>{{ student.name }}</td>
                     <td>{{ student.registration_id | default_if_none:''}}</td>
                     <td>{{ student.student_specific_profile|type_peps | default_if_none:'-'}}
                         {% with student_specific_profile_detail=student.student_specific_profile|arrangements_and_guide:learning_unit_type %}
                             {% if student_specific_profile_detail %}
-                                <span id="arrangements" data-toggle="tooltip" data-placement="right"
+                                <span id="arrangements" data-bs-toggle="tooltip" data-bs-placement="right"
                                       title="{{ student_specific_profile_detail }}"
                                       data-html="true">
-                                    <i class="fa fa-list-ul" style="color: #6699FF;"></i>
+                                    <i class="fa fa-list-ul text-info"></i>
                                 </span>
                             {% endif %}
                         {% endwith %}
                     </td>
-                    <td style="border-left: 1px solid lightgrey;text-align: center;">{{ student.january_status| default_if_none:''}}</td>
-                    <td style="text-align: center;">{{ student.january_note | default_if_none:''}}</td>
-                    <td style="border-left: 1px solid lightgrey;text-align: center;">{{ student.june_status| default_if_none:''}}</td>
-                    <td style="text-align: center;">{{ student.june_note | default_if_none:''}}</td>
-                    <td style="border-left: 1px solid lightgrey;text-align: center;">{{ student.september_status| default_if_none:''}}</td>
-                    <td style="border-right: 1px solid lightgrey;text-align: center;">{{ student.september_note | default_if_none:''}}</td>
-                    <td style="text-align: center;">{{ student.last_note | default_if_none:'-'}}</td>
+                    <td style="border-left: 1px solid lightgrey;" class="text-center">{{ student.january_status| default_if_none:''}}</td>
+                    <td class="text-center">{{ student.january_note | default_if_none:''}}</td>
+                    <td style="border-left: 1px solid lightgrey;" class="text-center">{{ student.june_status| default_if_none:''}}</td>
+                    <td class="text-center">{{ student.june_note | default_if_none:''}}</td>
+                    <td style="border-left: 1px solid lightgrey;" class="text-center">{{ student.september_status| default_if_none:''}}</td>
+                    <td style="border-right: 1px solid lightgrey;"class="text-center">{{ student.september_note | default_if_none:''}}</td>
+                    <td class="text-center">{{ student.last_note | default_if_none:'-'}}</td>
                 </tr>
             {% endfor %}
         {% else %}
@@ -229,7 +227,7 @@
         {% endif %}
         </tbody>
     </table>
-    <div style="text-align: center;">
+    <div class="text-center">
         {% pagination %}
     </div>
 {% endif %}
