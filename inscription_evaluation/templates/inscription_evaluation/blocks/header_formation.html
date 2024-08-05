@@ -34,6 +34,6 @@
     </div>
     <div class="col-md-6">
         <label class="fw-bold">{% trans 'Course' context 'inscription-evaluation' %}</label>
-        <div>{{ formation.sigle_complet_version_formation }} - {{ formation.intitule }}</div>
+        <div>{{ formation.sigle_complet_version_formation }} - {% if LANGUAGE_CODE == 'fr-be' or not formation.intitule_en %}{{ formation.intitule_fr }}{% else %}{{ formation.intitule_en }}{% endif %}</div>
     </div>
 </div>
