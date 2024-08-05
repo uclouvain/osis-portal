@@ -111,6 +111,9 @@ msgstr "Prénom(s) suivant(s)"
 msgid "Mobile number"
 msgstr "Numéro de GSM"
 
+msgid "My annual program and marks"
+msgstr "Mon programme annuel et mes notes"
+
 msgid "My annual programme"
 msgstr "Ma composition de programme annuel"
 
@@ -220,9 +223,6 @@ msgstr "Voir mon programme annuel et mes notes d'examen"
 
 msgid "for academic year 2024-25 only"
 msgstr "uniquement pour l'année académique 2024-25"
-
-msgid "my annual program and my marks"
-msgstr "Mon programme annuel et mes notes"
 
 msgid "outside UCLouvain"
 msgstr "en dehors du réseau de l'UCLouvain"
