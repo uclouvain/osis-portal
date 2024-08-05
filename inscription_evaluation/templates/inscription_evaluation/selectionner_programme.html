@@ -35,7 +35,7 @@
 
 {% block page_header %}
     <div class="page-header">
-        <h2>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</h2>
+        <h2>{% trans 'My exam registrations' context 'inscription-evaluation' %}</h2>
     </div>
 {% endblock %}
 
@@ -62,20 +62,20 @@
                 <div class="alert alert-primary d-flex gap-3 align-items-center">
                     <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                     <div>
-                        {% blocktrans with mon_pae_et_mes_notes_url=mon_pae_et_mes_notes_url %}You can view all evaluation registration statements in the <a href="{{ mon_pae_et_mes_notes_url }}">'My annual program and my marks'</a> summary.{% endblocktrans %}
+                        {% blocktrans with mon_pae_et_mes_notes_url=mon_pae_et_mes_notes_url %}You can view all exam registrations in the <a href="{{ mon_pae_et_mes_notes_url }}">'My annual program and marks'</a> summary.{% endblocktrans %}
                         <br/>
                         {% trans 'Please note that this page is updated every 24 hours and may not yet reflect all the latest changes.' %}
                     </div>
                 </div>
                 <div class="alert alert-primary d-flex gap-3 align-items-center">
                     <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
-                    <div>{% trans 'Click on the code of the course (acronym) for which you want to register for evaluations.' %}</div>
+                    <div>{% trans 'Click on the code of the course for which you want to register for exams.' %}</div>
                 </div>
             {% else %}
                 <div class="alert alert-warning d-flex gap-3 align-items-center">
                     <i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i>
                     <div>
-                        {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not registered for any course for the {{ annee_academique }} academic year.{% endblocktrans %}
+                        {% blocktrans with annee_academique=annee_academique|display_as_academic_year %}You are not enrolled in a course for the {{ annee_academique }} academic year.{% endblocktrans %}
                     </div>
                 </div>
             {% endif %}
@@ -110,11 +110,11 @@
                                         {% if formation.peut_inscrire_aux_evaluations %}
                                             <i class="fa-solid fa-lock-open fa-info"></i>
                                             {% if formation.periode_inscription.numero_session == 1 %}
-                                                <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the January session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                                <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online exams for the January session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
                                             {% elif formation.periode_inscription.numero_session == 2 %}
-                                                <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the June session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                                <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online exams for the June session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
                                             {% elif formation.periode_inscription.numero_session == 3 %}
-                                                <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online evaluations for the September session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
+                                                <em>{% blocktrans with date_fermeture=formation.periode_inscription.date_fermeture %}Registration for online exams for the September session is open until {{ date_fermeture }} for this course.{% endblocktrans %}</em>
                                             {% endif %}
                                         {% else %}
                                             <i class="fa-solid fa-lock fa-info"></i>
