@@ -99,7 +99,7 @@ class RecapitulatifView(LoginRequiredMixin, InscriptionEvaluationViewMixin, Temp
 
     def get_success_message(self):
         return _(
-            "Evaluation registration form for %(sigle_formation)s has been successfully submitted. "
+            "Exam registration form for %(sigle_formation)s has been successfully submitted. "
             "A confirmation email will be sent to %(email)s."
         ) % {
             'email': self.request.user.person.email,

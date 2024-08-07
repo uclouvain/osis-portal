@@ -27,12 +27,12 @@
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:selectionner-programme' %}">{% trans 'Course choice' context 'inscription-evaluation' %}</a></li>
     <li class="breadcrumb-item"><a href="{% url 'inscription-evaluation:formulaire-inscription' formation.sigle_formation %}">{{ formation.sigle_complet_version_formation }}</a></li>
-    <li class="breadcrumb-item active">{% trans 'Evaluation registration summary' context 'inscription-evaluation' %}</li>
+    <li class="breadcrumb-item active">{% trans 'Exam registration summary' context 'inscription-evaluation' %}</li>
 {% endblock %}
 
 {% block page_header %}
     <div class="page-header">
-        <h2>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</h2>
+        <h2>{% trans 'My exam registrations' context 'inscription-evaluation' %}</h2>
     </div>
 {% endblock %}
 
@@ -47,11 +47,11 @@
                     <div>
                         <b>
                         {% if session_de_travail.numero_session == 1 %}
-                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} January session exams.{% endblocktrans %}
                         {% elif session_de_travail.numero_session == 2 %}
-                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the June session.{% endblocktrans %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} June session exams.{% endblocktrans %}
                         {% else %}
-                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
+                            {% blocktrans with nombre_inscription=inscriptions|length nombre_evaluation_organisee=total_evaluations_organisees %}You are registered for {{ nombre_inscription }} of the {{ nombre_evaluation_organisee }} September session exams.{% endblocktrans %}
                         {% endif %}
                         </b>
                         <br>
@@ -104,11 +104,11 @@
                     <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
                     <div>
                         {% if session_de_travail.numero_session == 1 %}
-                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the January session.{% endblocktrans %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} January session exams.{% endblocktrans %}
                         {% elif session_de_travail.numero_session == 2 %}
-                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the June session.{% endblocktrans %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} June session exams.{% endblocktrans %}
                         {% else %}
-                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} evaluation organized for the September session.{% endblocktrans %}
+                            {% blocktrans with nombre_evaluation_organisee=total_evaluations_organisees %}You are not registered for any of the {{ nombre_evaluation_organisee }} September session exams.{% endblocktrans %}
                         {% endif %}
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                         <i class="fa-solid fa-pen"></i> {% trans "Modify my registrations" %}
                     </a>
                     <button type="submit" class="btn {% if inscriptions %}btn-primary{% else %}btn-light border border-dark-subtle{% endif %}">
-                        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my exams enrollment' %}
+                        <i class="fa-solid fa-paper-plane"></i> {% trans 'Submit my exam registrations' %}
                     </button>
                 </div>
 

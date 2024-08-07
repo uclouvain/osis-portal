@@ -124,14 +124,14 @@ class FormulaireInscriptionView(LoginRequiredMixin, InscriptionEvaluationViewMix
             messages.add_message(
                 self.request,
                 messages.ERROR,
-                str(_("Your request to register for evaluations has not been saved.")),
+                str(_("Your exam registration request has not been saved.")),
             )
             messages.add_message(
                 self.request,
                 messages.ERROR,
                 str(_(
-                    "Please correct any errors in your form to save it and continue "
-                    "to the summary of your evaluation application."
+                    "Please correct any errors in your form in order to save it and continue "
+                    "to the summary of your exam registration request."
                 )),
             )
             return redirect('inscription-evaluation:formulaire-inscription', **self.kwargs)
