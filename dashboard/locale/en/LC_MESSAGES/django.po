@@ -105,6 +105,9 @@ msgstr ""
 msgid "Mobile number"
 msgstr ""
 
+msgid "My annual program and marks"
+msgstr ""
+
 msgid "My annual programme"
 msgstr ""
 
@@ -211,9 +214,6 @@ msgid "View my annual program and exam marks"
 msgstr ""
 
 msgid "for academic year 2024-25 only"
-msgstr ""
-
-msgid "my annual program and my marks"
 msgstr ""
 
 msgid "outside UCLouvain"
