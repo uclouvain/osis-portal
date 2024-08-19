@@ -104,7 +104,7 @@
                                             </div>
                                         {% endif %}
                                     </td>
-                                    <td>{{ formation.intitule }}</td>
+                                    <td>{% if LANGUAGE_CODE == 'fr-be' or not formation.intitule_en %}{{ formation.intitule_fr }}{% else %}{{ formation.intitule_en }}{% endif %}</td>
                                     <td>{{ formation.contact_faculte.en_tete }} :<br>{{ formation.contact_faculte.email }}</td>
                                     <td>
                                         {% if formation.peut_inscrire_aux_evaluations %}

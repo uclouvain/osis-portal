@@ -78,7 +78,13 @@
                             {% for inscription in inscriptions %}
                                 <tr>
                                     <td>{{ inscription.unite_enseignement.code }}</td>
-                                    <td>{{ inscription.unite_enseignement.intitule }}</td>
+                                    <td>
+                                        {% if LANGUAGE_CODE == 'fr-be' or not inscription.unite_enseignement.intitule_en %}
+                                            {{ inscription.unite_enseignement.intitule_fr }}
+                                        {% else %}
+                                            {{ inscription.unite_enseignement.intitule_en }}
+                                        {% endif %}
+                                    </td>
                                     <td>
                                          {% if inscription.type_inscription.value == 'INSCRIPTION_PARTIELLE' %}
                                             <span class="badge info-color">{{ inscription.type_inscription_txt }}</span>
