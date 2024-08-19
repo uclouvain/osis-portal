@@ -191,13 +191,15 @@ class Home(LoginRequiredMixin, TemplateView):
                 ),
                 Tile(
                     column='third',
-                    title=_('Exams enrollment'),
-                    url=reverse('exam_enrollment_offer_choice'),
+                    title=_('My exams enrollment'),
+                    url=reverse(
+                        'inscription-evaluation:selectionner-programme'
+                    ) if 'inscription_evaluation' in settings.INSTALLED_APPS else "#",
                     icon='fa fa-book',
-                    description=_('Manage my exam registration'),
+                    description=pgettext('inscription-evaluation', 'Manage my exam registration'),
                     VPN=False,
-                    app='exam_enrollment',
-                    has_perm=self.request.user.has_perm('base.is_student'),
+                    app='inscription_evaluation',
+                    has_perm=self.request.user.has_perm('base.is_student')
                 ),
                 Tile(
                     column='third',
@@ -237,18 +239,6 @@ class Home(LoginRequiredMixin, TemplateView):
                     VPN=False,
                     app='base',
                     has_perm=self.request.user.has_perm('base.is_student'),
-                ),
-                Tile(
-                    column='first',
-                    title=_('My exams enrollment'),
-                    url=reverse(
-                        'inscription-evaluation:selectionner-programme'
-                    ) if 'inscription_evaluation' in settings.INSTALLED_APPS else "#",
-                    icon='fa fa-book',
-                    description=pgettext('inscription-evaluation', 'Manage my exam registration'),
-                    VPN=False,
-                    app='inscription_evaluation',
-                    has_perm=self.request.user.has_perm('base.is_student')
                 ),
             ],
         )
