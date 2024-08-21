@@ -37,7 +37,7 @@
 
 {% block page_header %}
     <div class="page-header">
-        <h2>{% trans 'My exams enrollment' context 'inscription-evaluation' %}</h2>
+        <h2>{% trans 'My exam registrations' context 'inscription-evaluation' %}</h2>
     </div>
 {% endblock %}
 
@@ -55,10 +55,10 @@
                         <i class="fa fa-info-circle fa-2x" aria-hidden="true"></i>
                         <div>
                             <b>
-                                {% trans "You are registered for all the evaluations ticked below." %}<br>
-                                {% trans "If this is suitable for you, please continue and submit your evaluation registration." %}<br>
+                                {% trans "You are registered for all the exams ticked below." %}<br>
+                                {% trans "If this is suitable for you, please continue and submit your exam registration." %}<br>
                             </b>
-                            {% trans "You can modify your evaluation entries as long as you have not submitted them." %}
+                            {% trans "You can modify your exam registrations as long as you have not submitted them." %}
                         </div>
                     </div>
 
@@ -105,7 +105,13 @@
                                     {% for inscription in inscr_evals %}
                                         <tr>
                                             <td>{{ inscription.unite_enseignement.code }}</td>
-                                            <td>{{ inscription.unite_enseignement.intitule }}</td>
+                                            <td>
+                                                {% if LANGUAGE_CODE == 'fr-be' or not inscription.unite_enseignement.intitule_en %}
+                                                    {{ inscription.unite_enseignement.intitule_fr }}
+                                                {% else %}
+                                                    {{ inscription.unite_enseignement.intitule_en }}
+                                                {% endif %}
+                                            </td>
                                             <td style="width: 5%">
                                                 {{ inscription.credits_inscrits }}
                                             </td>
@@ -127,7 +133,7 @@
                     <div class="alert alert-warning gap-3 align-items-center d-flex">
                         <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true"></i>
                         <div>
-                            {% trans "No learning unit enrollment found for this training." %}
+                            {% trans "No course unit registration found for this course " %}
                         </div>
                     </div>
                 {% endif %}
@@ -138,7 +144,7 @@
                     </a>
                     {% if a_des_inscriptions %}
                         <button type="submit" class="btn btn-primary btn-wrap btn-block-xs slow-loading">
-                            <i class="fa-solid fa-arrow-right"></i> {% trans 'Save and continue to the summary of registrations' %}
+                            <i class="fa-solid fa-arrow-right"></i> {% trans 'Save and continue to registration summary' %}
                         </button>
                     {% endif %}
                 </div>

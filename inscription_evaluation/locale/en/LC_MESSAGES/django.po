@@ -16,9 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Absent excused"
-msgstr ""
-
 msgctxt "inscription-evaluation"
 msgid "Academic year"
 msgstr ""
@@ -37,8 +34,7 @@ msgid "Cheating"
 msgstr ""
 
 msgid ""
-"Click on the code of the course (acronym) for which you want to register for "
-"evaluations."
+"Click on the code of the course for which you want to register for exams."
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -46,7 +42,7 @@ msgid "Code"
 msgstr ""
 
 msgctxt "inscription-evaluation"
-msgid "Complement"
+msgid "Complementary module"
 msgstr ""
 
 msgid "Counts toward the degree"
@@ -58,6 +54,9 @@ msgstr ""
 
 msgctxt "inscription-evaluation"
 msgid "Course choice"
+msgstr ""
+
+msgid "Course unit credits have been earned"
 msgstr ""
 
 msgid "Course unit of the complementary module"
@@ -77,17 +76,20 @@ msgctxt "inscription-evaluation"
 msgid "Credits"
 msgstr ""
 
-msgid "Credits for the course unit are acquired"
-msgstr ""
-
 #, python-format
 msgid ""
-"Evaluation registration form for %(sigle_formation)s has been successfully "
+"Exam registration form for %(sigle_formation)s has been successfully "
 "submitted. A confirmation email will be sent to %(email)s."
 msgstr ""
 
 msgctxt "inscription-evaluation"
-msgid "Evaluation registration summary"
+msgid "Exam registration summary"
+msgstr ""
+
+msgid "Excused absence"
+msgstr ""
+
+msgid "Exemption test mark"
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -102,7 +104,7 @@ msgid "First name"
 msgstr ""
 
 msgid ""
-"If this is suitable for you, please continue and submit your evaluation "
+"If this is suitable for you, please continue and submit your exam "
 "registration."
 msgstr ""
 
@@ -126,10 +128,10 @@ msgid "Modify my registrations"
 msgstr ""
 
 msgctxt "inscription-evaluation"
-msgid "My exams enrollment"
+msgid "My exam registrations"
 msgstr ""
 
-msgid "No learning unit enrollment found for this training."
+msgid "No course unit registration found for this course "
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -139,12 +141,9 @@ msgstr ""
 msgid "Non-degree course units"
 msgstr ""
 
-msgid "Note resulting from exemption test"
-msgstr ""
-
 msgid ""
-"Please correct any errors in your form to save it and continue to the "
-"summary of your evaluation application."
+"Please correct any errors in your form in order to save it and continue to "
+"the summary of your exam registration request."
 msgstr ""
 
 msgid ""
@@ -152,30 +151,30 @@ msgid ""
 "all the latest changes."
 msgstr ""
 
-msgid "Re-registered for a evaluation"
+msgid "Re-registered for an exam"
 msgstr ""
 
-msgid "Registered for a evaluation"
+msgid "Registered for a partial exam"
 msgstr ""
 
-msgid "Registered for a partial evaluation"
+msgid "Registered for an exam"
 msgstr ""
 
 #, python-format
 msgid ""
-"Registration for online evaluations for the January session is open until "
+"Registration for online exams for the January session is open until "
 "%(date_fermeture)s for this course."
 msgstr ""
 
 #, python-format
 msgid ""
-"Registration for online evaluations for the June session is open until "
+"Registration for online exams for the June session is open until "
 "%(date_fermeture)s for this course."
 msgstr ""
 
 #, python-format
 msgid ""
-"Registration for online evaluations for the September session is open until "
+"Registration for online exams for the September session is open until "
 "%(date_fermeture)s for this course."
 msgstr ""
 
@@ -183,14 +182,14 @@ msgctxt "inscription-evaluation"
 msgid "Return to initial screen"
 msgstr ""
 
-msgid "Save and continue to the summary of registrations"
+msgid "Save and continue to registration summary"
 msgstr ""
 
 msgctxt "inscription-evaluation"
 msgid "September"
 msgstr ""
 
-msgid "Submit my exams enrollment"
+msgid "Submit my exam registrations"
 msgstr ""
 
 msgid "Successful exam"
@@ -214,66 +213,66 @@ msgstr ""
 
 #, python-format
 msgid ""
-"You are not registered for any course for the %(annee_academique)s academic "
-"year."
+"You are not enrolled in a course for the %(annee_academique)s academic year."
 msgstr ""
 
 #, python-brace-format
 msgid ""
-"You are not registered for any course for the {annee_academique} academic "
-"year."
+"You are not enrolled in a course for the {annee_academique} academic year."
 msgstr ""
 
 #, python-format
 msgid ""
 "You are not registered for any of the %(nombre_evaluation_organisee)s "
-"evaluation organized for the January session."
+"January session exams."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are not registered for any of the %(nombre_evaluation_organisee)s June "
+"session exams."
 msgstr ""
 
 #, python-format
 msgid ""
 "You are not registered for any of the %(nombre_evaluation_organisee)s "
-"evaluation organized for the June session."
-msgstr ""
-
-#, python-format
-msgid ""
-"You are not registered for any of the %(nombre_evaluation_organisee)s "
-"evaluation organized for the September session."
+"September session exams."
 msgstr ""
 
 #, python-format
 msgid ""
 "You are registered for %(nombre_inscription)s of the "
-"%(nombre_evaluation_organisee)s evaluation organized for the January session."
+"%(nombre_evaluation_organisee)s January session exams."
 msgstr ""
 
 #, python-format
 msgid ""
 "You are registered for %(nombre_inscription)s of the "
-"%(nombre_evaluation_organisee)s evaluation organized for the June session."
+"%(nombre_evaluation_organisee)s June session exams."
 msgstr ""
 
 #, python-format
 msgid ""
 "You are registered for %(nombre_inscription)s of the "
-"%(nombre_evaluation_organisee)s evaluation organized for the September "
-"session."
+"%(nombre_evaluation_organisee)s September session exams."
 msgstr ""
 
-msgid "You are registered for all the evaluations ticked below."
+msgid "You are registered for all the exams ticked below."
 msgstr ""
 
 msgid ""
-"You can modify your evaluation entries as long as you have not submitted "
+"You can modify your exam registrations as long as you have not submitted "
 "them."
 msgstr ""
 
 #, python-format
 msgid ""
-"You can view all evaluation registration statements in the <a "
-"href=\"%(mon_pae_et_mes_notes_url)s\">'My annual program and my marks'</a> "
+"You can view all exam registrations in the <a "
+"href=\"%(mon_pae_et_mes_notes_url)s\">'My annual program and marks'</a> "
 "summary."
+msgstr ""
+
+msgid "Your exam registration request has not been saved."
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -283,7 +282,4 @@ msgstr ""
 msgid ""
 "Your registrations are saved, but you can modify them as long as you have "
 "not submitted them."
-msgstr ""
-
-msgid "Your request to register for evaluations has not been saved."
 msgstr ""

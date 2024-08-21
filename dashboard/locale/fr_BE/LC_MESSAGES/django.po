@@ -53,7 +53,7 @@ msgid ""
 "Download lists of students enrolled to exams for online scores encoding "
 "(Excel)"
 msgstr ""
-"Télécharger les listes d'étudiants inscrits aux examens pour l'encodage des "
+"Télécharger les listes d'étudiants inscrits aux évaluations pour l'encodage des "
 "notes en ligne (Excel)"
 
 msgid "Email"
@@ -87,7 +87,7 @@ msgid "Last name"
 msgstr "Nom"
 
 msgid "Lists of students enrolled to my exams"
-msgstr "Listes des étudiants inscrits à mes examens"
+msgstr "Listes des étudiants inscrits à mes évaluations"
 
 msgid "Manage my annual programme proposal"
 msgstr "Composer ma proposition de programme annuel"
@@ -110,6 +110,9 @@ msgstr "Prénom(s) suivant(s)"
 
 msgid "Mobile number"
 msgstr "Numéro de GSM"
+
+msgid "My annual program and marks"
+msgstr "Mon programme annuel et mes notes"
 
 msgid "My annual programme"
 msgstr "Ma composition de programme annuel"
@@ -220,9 +223,6 @@ msgstr "Voir mon programme annuel et mes notes d'examen"
 
 msgid "for academic year 2024-25 only"
 msgstr "uniquement pour l'année académique 2024-25"
-
-msgid "my annual program and my marks"
-msgstr "Mon programme annuel et mes notes"
 
 msgid "outside UCLouvain"
 msgstr "en dehors du réseau de l'UCLouvain"
