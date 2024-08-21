@@ -80,9 +80,6 @@ msgstr ""
 msgid "Credits for the course unit are acquired"
 msgstr ""
 
-msgid "Evaluation failed"
-msgstr ""
-
 #, python-format
 msgid ""
 "Evaluation registration form for %(sigle_formation)s has been successfully "
@@ -93,11 +90,11 @@ msgctxt "inscription-evaluation"
 msgid "Evaluation registration summary"
 msgstr ""
 
-msgid "Evaluation success"
-msgstr ""
-
 msgctxt "inscription-evaluation"
 msgid "Faculty contact"
+msgstr ""
+
+msgid "Failed exam"
 msgstr ""
 
 msgctxt "inscription-evaluation"
@@ -194,6 +191,9 @@ msgid "September"
 msgstr ""
 
 msgid "Submit my exams enrollment"
+msgstr ""
+
+msgid "Successful exam"
 msgstr ""
 
 msgid ""
