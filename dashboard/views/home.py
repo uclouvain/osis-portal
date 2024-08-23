@@ -181,7 +181,7 @@ class Home(LoginRequiredMixin, TemplateView):
                 ),
                 Tile(
                     column='second',
-                    title=_('my annual program and my marks'),
+                    title=_('My annual program and marks'),
                     url=reverse('performance_home'),
                     icon='fa fa-chart-line',
                     description=_('View my annual program and exam marks'),
