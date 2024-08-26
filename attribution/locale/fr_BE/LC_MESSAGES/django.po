@@ -23,7 +23,7 @@ msgid ""
 "'Lists of students enrolled to my exams' are immediately usable for encoding "
 "scores."
 msgstr ""
-"Les 'Listes des étudiants inscrits à mes examens' sont immédiatement "
+"Les 'Listes des étudiants inscrits à mes évaluations' sont immédiatement "
 "utilisables pour l'encodage des notes"
 
 msgid ""
@@ -138,7 +138,7 @@ msgid "End"
 msgstr "Fin"
 
 msgid "Exam registration state"
-msgstr "Etat d'inscription aux examens"
+msgstr "Etat d'inscription aux évaluations"
 
 msgid "Exam score"
 msgstr "Note de l’examen"
@@ -223,16 +223,16 @@ msgid "Legend to help you understanding the xls file"
 msgstr "Légende pour mieux comprendre le fichier xls"
 
 msgid "List of students enrolled to exams of "
-msgstr "Listes des étudiants inscrits aux examens de "
+msgstr "Listes des étudiants inscrits aux évaluations de "
 
 msgid "List of students enrolled to my exams"
-msgstr "Listes des étudiants inscrits à mes examens"
+msgstr "Listes des étudiants inscrits à mes évaluations"
 
 msgid "Lists of students are available by clicking on the symbol"
 msgstr "Les listes des étudiants sont disponibles en cliquant sur le symbole"
 
 msgid "Lists of students enrollments to exams"
-msgstr "Administration des listes des inscriptions des étudiants aux examens"
+msgstr "Administration des listes des inscriptions des étudiants aux évaluations"
 
 msgid "My application"
 msgstr "Ma candidature"
@@ -265,7 +265,7 @@ msgid "No data found"
 msgstr "Aucune donnée trouvée"
 
 msgid "No learning unit with students registered for exams is available"
-msgstr "Pas d'unité d'enseignement avec étudiants inscrits aux examens"
+msgstr "Pas d'unité d'enseignement avec étudiants inscrits aux évaluations"
 
 msgid "No students enrolled"
 msgstr "Aucun étudiant inscrit au cours"
@@ -286,7 +286,7 @@ msgid "Other educational facilities for courses and practical exercices"
 msgstr "Autres aménagements pour les cours et TP"
 
 msgid "Other educational facilities for exam"
-msgstr "Autres aménagements pour les examens"
+msgstr "Autres aménagements pour les évaluations"
 
 msgid "P - Examen partiel"
 msgstr "P - Examen partiel"
@@ -470,7 +470,7 @@ msgid ""
 "at that date"
 msgstr ""
 "La période d'encodage des notes de la session de %(month_session)s sera "
-"ouverte le %(str_date)s. Les 'Listes des étudiants inscrits à mes examens' "
+"ouverte le %(str_date)s. Les 'Listes des étudiants inscrits à mes évaluations' "
 "seront disponibles à cette date"
 
 msgid "This action will delete the application."
@@ -594,7 +594,7 @@ msgid ""
 "no student is enrolled to the exam for this session. The list of students "
 "enrolled to courses is available in"
 msgstr ""
-"aucun·e étudiant·e n’est inscrit·e à l’examen pour cette session. Les listes "
+"aucun·e étudiant·e n’est inscrit·e à l’évaluation pour cette session. Les listes "
 "des étudiant·es inscrit·es aux cours sont disponibles dans"
 
 msgid "no student is enrolled to this course."

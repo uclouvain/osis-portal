@@ -68,7 +68,7 @@ class SelectionnerProgrammeView(LoginRequiredMixin, PermissionRequiredMixin, Tem
         try:
             return MesProgrammesService().recuperer(self.person)
         except Http404:
-            message = _("You are not registered for any course for the {annee_academique} academic year.").format(
+            message = _("You are not enrolled in a course for the {annee_academique} academic year.").format(
                 annee_academique=self.annee_academique
             )
             display_error_messages(
