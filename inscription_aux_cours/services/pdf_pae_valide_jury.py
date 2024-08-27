@@ -34,11 +34,19 @@ from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_a
 
 class PdfPaeValideJuryService:
     @staticmethod
-    def recuperer(person: 'Person', code_programme: str):
+    def recuperer_par_code_programme(person: 'Person', code_programme: str):  # Avant 2024/25
         return _pdf_pae_valide_jury_api_call(
             person,
             "mon_pae_valide_jury",
             code_programme=code_programme,
+        )
+
+    @staticmethod
+    def recuperer_par_uuid(person: 'Person', uuid_fichier: str):  # A partir de 2024/25
+        return _pdf_pae_valide_jury_api_call(
+            person,
+            "mon_pae_valide_jury_par_uuid",
+            uuid=uuid_fichier,
         )
 
 
