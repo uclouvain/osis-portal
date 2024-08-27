@@ -167,6 +167,10 @@ def _update_person_if_necessary(person, user, global_id, birth_date=None):
 
     # In case of temporary user, we don't want to update user data because, OSIS managed it
     if global_id and global_id.startswith('8'):
+        if user and not person.user:
+            person.user = user
+            updated = True
+            super(SerializableModel, person).save()
         return updated, person
 
     if user:
