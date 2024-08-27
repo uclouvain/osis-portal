@@ -112,6 +112,7 @@ def __get_performance_data(stud_perf, stud):
         "activiteAideReussite": _get_activite_aide_reussite(stud, stud_perf),
         "allegement_150_en_remediation": _get_allegement_150_en_remediation(stud_perf),
         "current_academic_year": academic_year.current_academic_year().year == stud_perf.academic_year
+        if stud_perf else False
     }
 
 
