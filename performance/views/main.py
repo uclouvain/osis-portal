@@ -39,6 +39,7 @@ from django.utils.translation import ugettext as _
 import dashboard.views.home
 from base.business import student as student_bsn
 from base.forms.base_forms import RegistrationIdForm
+from base.models import academic_year
 from base.models.student import Student
 from base.views import layout, common
 from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request
@@ -110,6 +111,7 @@ def __get_performance_data(stud_perf, stud):
         "covid_period": _get_covid_period(stud, stud_perf),
         "activiteAideReussite": _get_activite_aide_reussite(stud, stud_perf),
         "allegement_150_en_remediation": _get_allegement_150_en_remediation(stud_perf),
+        "current_academic_year": academic_year.current_academic_year().year == stud_perf.academic_year
     }
 
 
