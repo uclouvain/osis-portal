@@ -52,7 +52,7 @@ class Client:
         self.timed_out = False
         self.channel = self.connection.channel()
 
-        result = self.channel.queue_declare(queue=queue_name, exclusive=True)
+        result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
 
         if hasattr(settings, 'PIKA_NEW') and settings.PIKA_NEW:
