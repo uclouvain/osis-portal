@@ -42,16 +42,18 @@ class Client:
         credentials = pika.PlainCredentials(settings.QUEUES.get('QUEUE_USER'),
                                             settings.QUEUES.get('QUEUE_PASSWORD'))
         if hasattr(settings, 'PIKA_NEW') and settings.PIKA_NEW:
-            self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.QUEUES.get('QUEUE_URL'),
-                                                                                port=settings.QUEUES.get('QUEUE_PORT'),
-                                                                                virtual_host=settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
-                                                                                credentials=credentials,
-                                                                                blocked_connection_timeout=call_timeout))
+            self.connection = pika.BlockingConnection(
+                pika.ConnectionParameters(host=settings.QUEUES.get('QUEUE_URL'),
+                                          port=settings.QUEUES.get('QUEUE_PORT'),
+                                          virtual_host=settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
+                                          credentials=credentials,
+                                          blocked_connection_timeout=call_timeout))
         else:
-            self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.QUEUES.get('QUEUE_URL'),
-                                                                               port=settings.QUEUES.get('QUEUE_PORT'),
-                                                                               virtual_host=settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
-                                                                               credentials=credentials))
+            self.connection = pika.BlockingConnection(
+                pika.ConnectionParameters(host=settings.QUEUES.get('QUEUE_URL'),
+                                          port=settings.QUEUES.get('QUEUE_PORT'),
+                                          virtual_host=settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
+                                          credentials=credentials))
         self.timed_out = False
         if not hasattr(settings, 'PIKA_NEW') or not settings.PIKA_NEW:
             self.connection.add_timeout(call_timeout, self.on_timed_out)
@@ -327,7 +329,7 @@ class ExampleConsumer:
             # Create a new connection
             self._connection = self.connect()
 
-            if not hasattr(settings, 'PIKA_NEW') or not  settings.PIKA_NEW:
+            if not hasattr(settings, 'PIKA_NEW') or not settings.PIKA_NEW:
                 # There is now a new connection, needs a new ioloop to run
                 self._connection.ioloop.start()
 
