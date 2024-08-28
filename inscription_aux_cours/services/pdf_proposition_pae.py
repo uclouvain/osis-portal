@@ -30,10 +30,12 @@ from osis_inscription_cours_sdk.api import proposition_programme_api
 from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
+from osis_common.decorators.deprecated import deprecated
 
 
 class PdfPropositionPaeService:
     @staticmethod
+    @deprecated
     def recuperer_par_code_programme(person: 'Person', code_programme: str):  # Avant 2024/25
         return _pdf_proposition_pae_api_call(
             person,
