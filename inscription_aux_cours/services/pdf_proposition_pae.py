@@ -30,15 +30,25 @@ from osis_inscription_cours_sdk.api import proposition_programme_api
 from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
+from osis_common.decorators.deprecated import deprecated
 
 
 class PdfPropositionPaeService:
     @staticmethod
-    def recuperer(person: 'Person', code_programme: str):
+    @deprecated
+    def recuperer_par_code_programme(person: 'Person', code_programme: str):  # Avant 2024/25
         return _pdf_proposition_pae_api_call(
             person,
             "ma_proposition_de_pae",
             code_programme=code_programme,
+        )
+
+    @staticmethod
+    def recuperer_par_uuid(person: 'Person', uuid_fichier: str):  # A partir de 2024/25
+        return _pdf_proposition_pae_api_call(
+            person,
+            "ma_proposition_de_pae_par_uuid",
+            uuid=uuid_fichier,
         )
 
 
