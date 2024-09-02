@@ -29,7 +29,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item d-inline-block">
             <a href="{% url 'dashboard_home' %}" id="lnk_home_osis">
-                <i class="fa fa-home" aria-hidden="true"></i>
+                <i class="fa-solid fa-home" aria-hidden="true"></i>
             </a>
         </li>
         {% block breadcrumb %}
@@ -44,7 +44,7 @@
     {% if messages %}
         <div class="alert alert-warning" id="div_messages">
             {% for message in messages %}
-                <i class="fa fa-exclamation-triangle"></i> {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+                <i class="fa-solid fa-exclamation-triangle"></i> {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
                 {% if not forloop.last %}
                     <br>
                 {% endif %}
@@ -62,7 +62,7 @@
            {% if not messages_error %}
            <h3>{{current_session.year|display_as_academic_year}} - {% trans 'Session of' %} {{current_session.month_session_name|lower}}</h3>
             <div class="alert alert-info">
-                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
                 <strong>{% trans "NEW" %}</strong> {% trans "'Lists of students enrolled to my exams' are immediately usable for encoding scores." %}
             </div>
             <br>
@@ -127,7 +127,7 @@
             {% endif %}
             <div class="alert alert-info">
                 <p>
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
                     <b>{% trans "One of your courses is not visible in the list?" %}</b>
                 </p>
                 <p>{% trans "Different explanations are possible:" %}</p>
