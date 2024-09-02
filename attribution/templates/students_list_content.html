@@ -125,7 +125,7 @@
 
 {% if has_peps %}
     <div class="alert alert-warning">
-        <i class="fa fa-exclamation-triangle"></i> {% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}
+        <i class="fa-solid fa-exclamation-triangle"></i> {% trans 'Some of the students enrolled to this course have a PEPS status (Program for Students with a Specific Profile)' %}
     </div>
 {% endif %}
 
@@ -136,7 +136,7 @@
                 <button class="btn btn-success pull-md-right mb-3" id="bt_produce_xls" type="submit"
                         title="{% trans 'Export the students list in Excel format' %}">
                     {% trans 'Export list (Excel)' %}
-                    <i class="fa fa-table pe-2" aria-hidden="true"></i>
+                    <i class="fa-solid fa-table pe-2" aria-hidden="true"></i>
                 </button>
             </form>
         </div>
@@ -204,7 +204,7 @@
                                 <span id="arrangements" data-bs-toggle="tooltip" data-bs-placement="right"
                                       title="{{ student_specific_profile_detail }}"
                                       data-html="true">
-                                    <i class="fa fa-list-ul text-info"></i>
+                                    <i class="fa-solid fa-list-ul text-info"></i>
                                 </span>
                             {% endif %}
                         {% endwith %}

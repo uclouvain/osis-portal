@@ -30,8 +30,8 @@
 </h2>
 
 <div class="alert alert-warning">
-    <i class="fa fa-exclamation-triangle"></i> {% trans 'Lists of students are available by clicking on the symbol' %}
-    <span class="fa fa-users text-info" aria-hidden="true"></span>{% trans ' in the column "Students"' %}</span>
+    <i class="fa-solid fa-exclamation-triangle"></i> {% trans 'Lists of students are available by clicking on the symbol' %}
+    <span class="fa-solid fa-users text-info" aria-hidden="true"></span>{% trans ' in the column "Students"' %}</span>
 </div>
 
 <ul class="nav nav-tabs">
@@ -91,11 +91,11 @@
                     {% if attribution.has_classes %}
                         <div class="tooltip-wrapper text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top"
                              title="{% trans 'This learning unit has classes. Students are enrolled at the class level (see below). If you do not see any classes, please contact your faculty so that you can be assigned to the classes you teach.' %}">
-                            <i class="fa fa-users" aria-hidden="true" style="color:gray"></i>
+                            <i class="fa-solid fa-users" aria-hidden="true" style="color:gray"></i>
                         </div>
                     {% else %}
                         <a href="{{ attribution.attribution_students_url }}">
-                            <i class="fa fa-users me-1" aria-hidden="true"></i>
+                            <i class="fa-solid fa-users me-1" aria-hidden="true"></i>
                         </a>
                         {% if attribution.has_peps %}
                             <div class="tooltip-wrapper" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -149,7 +149,7 @@
                         <td></td>
                         <td class="d-flex">
                             <a href="{{ class_repartition.repartition_students_url }}">
-                                <i class="fa fa-users me-1" aria-hidden="true"></i>
+                                <i class="fa-solid fa-users me-1" aria-hidden="true"></i>
                             </a>
                             {% if class_repartition.has_peps %}
                                 <div class="tooltip-wrapper text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top"
