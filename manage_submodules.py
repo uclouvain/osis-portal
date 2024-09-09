@@ -8,7 +8,7 @@ import sys
 from os import path
 
 project_dir = os.getcwd()
-project_branch = subprocess.check_output('git branch --show-current', shell=True).decode(sys.stdout.encoding)
+project_branch = subprocess.check_output('git branch --show-current', shell=True).decode(sys.stdout.encoding).strip()
 default_module_branch = 'dev'
 modules_branches = {}
 modules = {
