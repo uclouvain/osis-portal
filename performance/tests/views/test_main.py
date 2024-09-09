@@ -37,6 +37,8 @@ from mock import patch
 import base.tests.models.test_student
 import performance.tests.models.test_student_performance
 from base.forms.base_forms import RegistrationIdForm
+from base.tests.factories import academic_year
+from base.tests.factories.academic_year import AcademicYearFactory
 from base.tests.factories.education_group_year import EducationGroupYearFactory
 from base.tests.factories.person import PersonFactory
 from base.tests.factories.student import StudentFactory
@@ -86,6 +88,7 @@ class DisplayResultForSpecificStudentPerformanceTest(TestCase):
 
     def setUp(self):
         self.student_performance = StudentPerformanceFactory(registration_id=self.student.registration_id)
+        academic_year.create_current_academic_year()
 
         self.url = reverse('performance_student_result', args=[self.student_performance.pk])
         self.client.force_login(self.student.person.user)
@@ -307,6 +310,7 @@ class VisualizeStudentResult(TestCase):
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)
         cls.a_person = PersonFactory()
+        academic_year.create_current_academic_year()
 
     def setUp(self):
         self.student_performance = StudentPerformanceFactory(acronym='CHIM1BA')
@@ -421,6 +425,7 @@ class ViewPerformanceByAcronymAndYear(TestCase):
         cls.valid_year = 2017
         cls.invalid_year = 2020
         cls.person = PersonFactory()
+        academic_year.create_current_academic_year()
         students_group = Group.objects.create(name="students")
         permission = Permission.objects.get(codename="is_student")
         students_group.permissions.add(permission)

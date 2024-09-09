@@ -23,6 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
+from typing import Optional
+
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -39,6 +41,10 @@ from inscription_aux_cours.views.common import CompositionPAEViewMixin
 class MonPaeValideJuryView(TemplateView, CompositionPAEViewMixin):
     name = "mon-pae-valide-jury"
 
+    @property
+    def uuid_fichier(self) -> Optional[str]:
+        return self.kwargs.get('uuid')
+
     def get(self, request, *args, **kwargs):
         try:
             if self.mon_pae_valide_jury.get('links'):
@@ -52,4 +58,6 @@ class MonPaeValideJuryView(TemplateView, CompositionPAEViewMixin):
 
     @cached_property
     def mon_pae_valide_jury(self):
-        return PdfPaeValideJuryService().recuperer(self.person, code_programme=self.code_programme)
+        if self.uuid_fichier:
+            return PdfPaeValideJuryService().recuperer_par_uuid(self.person, uuid_fichier=self.uuid_fichier)
+        return PdfPaeValideJuryService().recuperer_par_code_programme(self.person, code_programme=self.code_programme)

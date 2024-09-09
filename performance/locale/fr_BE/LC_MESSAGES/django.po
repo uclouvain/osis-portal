@@ -171,6 +171,13 @@ msgstr "Non concerné"
 msgid "Not defined"
 msgstr "Non défini"
 
+msgid ""
+"Please note that this page is updated every 24 hours and may not yet reflect "
+"all the latest changes."
+msgstr ""
+"Attention cette page est mise à jour toutes les 24h et ne reflète peut-être "
+"pas encore toutes les dernières modifications."
+
 msgid "Program"
 msgstr "Formation"
 

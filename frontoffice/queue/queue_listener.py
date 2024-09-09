@@ -50,6 +50,7 @@ class Client:
                                       blocked_connection_timeout=call_timeout))
 
         self.timed_out = False
+
         self.channel = self.connection.channel()
 
         result = self.channel.queue_declare(queue='', exclusive=True)
@@ -145,6 +146,7 @@ def listen_queue_synchronously(queue_name, callback, counter=3):
         channel.basic_consume(on_message_callback=on_message, queue=queue_name)
     else:
         channel.basic_consume(consumer_callback=on_message, queue=queue_name)
+
     logger.debug("Done.")
     try:
         logger.debug("Ready to synchronously consume messages")
@@ -260,6 +262,7 @@ class ExampleConsumer:
         logger.debug(f"Connecting to {self._connection_parameters['queue_url']}")
         credentials = pika.PlainCredentials(self._connection_parameters['queue_user'],
                                             self._connection_parameters['queue_password'])
+
         return pika.SelectConnection(pika.ConnectionParameters(self._connection_parameters['queue_url'],
                                                                self._connection_parameters['queue_port'],
                                                                self._connection_parameters['queue_context_root'],
@@ -436,6 +439,7 @@ class ExampleConsumer:
         """
         logger.debug('Issuing consumer related RPC commands')
         self.add_on_cancel_callback()
+
         if hasattr(settings, 'PIKA_NEW') and settings.PIKA_NEW:
             self._consumer_tag = self._channel.basic_consume(on_message_callback=self.on_message,
                                                              queue=self._connection_parameters['queue_name'])
