@@ -155,6 +155,11 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'async_workers': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     },
 }
 
@@ -254,6 +259,7 @@ MAX_UPLOAD_SIZE = int(os.environ.get('MAX_UPLOAD_SIZE', 5242880))
 DEFAULT_LOGGER = os.environ.get('DEFAULT_LOGGER', 'default')
 SEND_MAIL_LOGGER = os.environ.get('SEND_MAIL_LOGGER', 'send_mail')
 QUEUE_EXCEPTION_LOGGER = os.environ.get('QUEUE_EXCEPTION_LOGGER', 'queue_exception')
+ASYNC_WORKERS_LOGGER = os.environ.get('ASYNC_WORKERS_LOGGER', 'async_workers')
 
 # Email Settings
 # By default Email are saved in the folder defined by EMAIL_FILE_PATH
@@ -536,6 +542,7 @@ WAFFLE_CREATE_MISSING_SWITCHES = True
 # MOBILITE
 MOBILITE_URL = os.environ.get('MOBILITE_URL', '')
 
+# INTERNSHIP
 OSIS_INTERNSHIP_PROFESSIONAL_MALFUNCTION_URL = os.environ.get('OSIS_INTERNSHIP_PROFESSIONAL_MALFUNCTION_URL', '')
 
 OSIS_HEALTH_SECRET_KEY = os.environ.get("OSIS_HEALTH_SECRET_KEY", "")

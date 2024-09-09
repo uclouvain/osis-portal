@@ -23,7 +23,12 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import collections
+try:
+    # python 3.11
+    from collections.abc import Iterable
+except ImportError:
+    # if failed, fall back to python 3.7
+    from collections import Iterable
 
 from django.db import connection
 from django.db import models
@@ -91,7 +96,7 @@ class EntityVersionQuerySet(models.QuerySet):
             date = now()
 
         # Convert the entity in list
-        if not isinstance(entities, collections.Iterable):
+        if not isinstance(entities, Iterable):
             entities = [entities]
 
         # Extract from the list the ids
