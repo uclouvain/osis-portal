@@ -1,5 +1,5 @@
-django-pdb
-django-extensions
-django-debug-toolbar
+-r ./requirements.txt
 
--r requirements.txt
+django-pdb==0.6.2
+django-extensions==3.2.3
+django-debug-toolbar==4.3.0

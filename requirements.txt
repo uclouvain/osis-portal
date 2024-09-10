@@ -13,8 +13,8 @@ django-sass==1.1.0
 unidecode==1.3.8
 requests==2.31.0
 openpyxl==3.1.2
-pika==0.12.0
-psycopg2-binary==2.8.6
+pika==1.3.2
+psycopg2-binary==2.9.9
 
 # Testing & quality
 mock==5.1.0
@@ -55,3 +55,5 @@ git+https://github.com/uclouvain/osis-notification.git@0.1.4#egg=osis_notificati
 git+https://github.com/uclouvain/osis-async.git@0.8#egg=osis_async
 
 -r ./osis_common/requirements.txt
+-r ./admission/requirements.txt
+-r ./dissertation/requirements.txt
