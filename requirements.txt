@@ -57,3 +57,6 @@ git+https://github.com/uclouvain/osis-async.git@0.8#egg=osis_async
 -r ./osis_common/requirements.txt
 -r ./admission/requirements.txt
 -r ./dissertation/requirements.txt
+-r ./continuing_education/requirements.txt
+-r ./internship/requirements.txt
+
