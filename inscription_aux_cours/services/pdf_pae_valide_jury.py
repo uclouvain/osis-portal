@@ -30,15 +30,25 @@ from osis_inscription_cours_sdk.api import pae_valide_jury_api
 from base.models.person import Person
 from base.services.utils import call_api
 from frontoffice.settings.osis_sdk import inscription_aux_cours as inscription_aux_cours_sdk
+from osis_common.decorators.deprecated import deprecated
 
 
 class PdfPaeValideJuryService:
     @staticmethod
-    def recuperer(person: 'Person', code_programme: str):
+    @deprecated
+    def recuperer_par_code_programme(person: 'Person', code_programme: str):  # Avant 2024/25
         return _pdf_pae_valide_jury_api_call(
             person,
             "mon_pae_valide_jury",
             code_programme=code_programme,
+        )
+
+    @staticmethod
+    def recuperer_par_uuid(person: 'Person', uuid_fichier: str):  # A partir de 2024/25
+        return _pdf_pae_valide_jury_api_call(
+            person,
+            "mon_pae_valide_jury_par_uuid",
+            uuid=uuid_fichier,
         )
 
 

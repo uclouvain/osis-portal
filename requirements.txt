@@ -44,7 +44,7 @@ git+https://github.com/uclouvain/osis-reference-sdk.git@wip-build-1.31
 git+https://github.com/uclouvain/osis-organisation-sdk.git@wip-build-1.4
 git+https://github.com/uclouvain/osis-assessments-sdk.git@build-1.4.0
 git+https://github.com/uclouvain/osis-exam-enrollment-sdk.git@build-1.0
-git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.13
+git+https://github.com/uclouvain/osis-inscription-cours-sdk.git@wip-build-1.14
 git+https://github.com/uclouvain/osis-parcours-interne-sdk.git@wip-build-1.05
 git+https://github.com/uclouvain/osis-inscription-evaluation-sdk.git@wip-build-1.11
 
