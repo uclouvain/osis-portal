@@ -96,6 +96,9 @@ msgctxt "inscription-evaluation"
 msgid "Faculty contact"
 msgstr ""
 
+msgid "Failed exam"
+msgstr ""
+
 msgctxt "inscription-evaluation"
 msgid "First name"
 msgstr ""
@@ -187,6 +190,9 @@ msgid "September"
 msgstr ""
 
 msgid "Submit my exam registrations"
+msgstr ""
+
+msgid "Successful exam"
 msgstr ""
 
 msgid ""

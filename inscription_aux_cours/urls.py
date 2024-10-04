@@ -96,4 +96,6 @@ urlpatterns = [
             ]
         ),
     ),
+    path('ma_proposition_de_pae/<str:uuid>/', MaPropositionDePaeView.as_view(), name=MaPropositionDePaeView.name),
+    path('mon_pae_valide_jury/<str:uuid>/', MonPaeValideJuryView.as_view(), name=MonPaeValideJuryView.name),
 ]

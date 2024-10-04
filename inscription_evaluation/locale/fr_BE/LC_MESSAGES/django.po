@@ -104,6 +104,9 @@ msgctxt "inscription-evaluation"
 msgid "Faculty contact"
 msgstr "Contact en faculté"
 
+msgid "Failed exam"
+msgstr "Évaluation non réussie"
+
 msgctxt "inscription-evaluation"
 msgid "First name"
 msgstr "Prénom"
@@ -209,6 +212,9 @@ msgstr "Septembre"
 
 msgid "Submit my exam registrations"
 msgstr "Soumettre mon inscription aux évaluations"
+
+msgid "Successful exam"
+msgstr "Évaluation réussie"
 
 msgid ""
 "The size of your screen does not allow optimal navigation within the form. "

@@ -35,4 +35,6 @@ def affichage_note_etudiant(note: str):
         'S': 'Non exc.',
         'A': 'Non exc.',
         'T': 'Trich.',
+        'E': 'Ech.',
+        'V': 'Val.',
     }.get(note, note)

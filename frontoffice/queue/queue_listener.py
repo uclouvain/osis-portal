@@ -41,19 +41,27 @@ class Client:
         self.paper_sheet_queue = queue_name
         credentials = pika.PlainCredentials(settings.QUEUES.get('QUEUE_USER'),
                                             settings.QUEUES.get('QUEUE_PASSWORD'))
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(settings.QUEUES.get('QUEUE_URL'),
-                                                                            settings.QUEUES.get('QUEUE_PORT'),
-                                                                            settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
-                                                                            credentials))
+
+        self.connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host=settings.QUEUES.get('QUEUE_URL'),
+                                      port=settings.QUEUES.get('QUEUE_PORT'),
+                                      virtual_host=settings.QUEUES.get('QUEUE_CONTEXT_ROOT'),
+                                      credentials=credentials,
+                                      blocked_connection_timeout=call_timeout))
+
         self.timed_out = False
-        self.connection.add_timeout(call_timeout, self.on_timed_out)
+
         self.channel = self.connection.channel()
 
-        result = self.channel.queue_declare(exclusive=True)
+        result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
 
-        self.channel.basic_consume(self.on_response, no_ack=True,
-                                   queue=self.callback_queue)
+        if hasattr(settings, 'PIKA_NEW') and settings.PIKA_NEW:
+            self.channel.basic_consume(on_message_callback=self.on_response,
+                                       queue=self.callback_queue)
+        else:
+            self.channel.basic_consume(consumer_callback=self.on_response, no_ack=True,
+                                       queue=self.callback_queue)
 
     def on_timed_out(self):
         self.timed_out = True
@@ -130,13 +138,15 @@ def listen_queue_synchronously(queue_name, callback, counter=3):
     logger.debug("Declaring queue (if it doesn't exist yet)...")
     channel.queue_declare(queue=queue_name,
                           durable=True,
-                          # exclusive=False,
-                          # auto_delete=False,
                           )
     logger.debug("Queue declared.")
-    # channel.basic_qos(prefetch_count=1)
     logger.debug("Declaring on message callback...")
-    channel.basic_consume(on_message, queue_name)
+
+    if hasattr(settings, 'PIKA_NEW') and settings.PIKA_NEW:
+        channel.basic_consume(on_message_callback=on_message, queue=queue_name)
+    else:
+        channel.basic_consume(consumer_callback=on_message, queue=queue_name)
+
     logger.debug("Done.")
     try:
         logger.debug("Ready to synchronously consume messages")
@@ -252,12 +262,12 @@ class ExampleConsumer:
         logger.debug(f"Connecting to {self._connection_parameters['queue_url']}")
         credentials = pika.PlainCredentials(self._connection_parameters['queue_user'],
                                             self._connection_parameters['queue_password'])
+
         return pika.SelectConnection(pika.ConnectionParameters(self._connection_parameters['queue_url'],
                                                                self._connection_parameters['queue_port'],
                                                                self._connection_parameters['queue_context_root'],
                                                                credentials),
-                                     self.on_connection_open,
-                                     stop_ioloop_on_close=False)
+                                     self.on_connection_open)
 
     def on_connection_open(self, unused_connection):
         """
@@ -310,9 +320,6 @@ class ExampleConsumer:
 
             # Create a new connection
             self._connection = self.connect()
-
-            # There is now a new connection, needs a new ioloop to run
-            self._connection.ioloop.start()
 
     def open_channel(self):
         """
@@ -392,7 +399,7 @@ class ExampleConsumer:
         :param str|unicode queue_name: The name of the queue to declare.
         """
         logger.debug(f'Declaring queue {queue_name}')
-        self._channel.queue_declare(self.on_queue_declareok, queue_name)
+        self._channel.queue_declare(callback=self.on_queue_declareok, queue=queue_name)
 
     def on_queue_declareok(self, method_frame):
         """
@@ -432,8 +439,13 @@ class ExampleConsumer:
         """
         logger.debug('Issuing consumer related RPC commands')
         self.add_on_cancel_callback()
-        self._consumer_tag = self._channel.basic_consume(self.on_message,
-                                                         self._connection_parameters['queue_name'])
+
+        if hasattr(settings, 'PIKA_NEW') and settings.PIKA_NEW:
+            self._consumer_tag = self._channel.basic_consume(on_message_callback=self.on_message,
+                                                             queue=self._connection_parameters['queue_name'])
+        else:
+            self._consumer_tag = self._channel.basic_consume(consumer_callback=self.on_message,
+                                                             queue=self._connection_parameters['queue_name'])
 
     def add_on_cancel_callback(self):
         """
@@ -520,7 +532,8 @@ class ExampleConsumer:
         starting the IOLoop to block and allow the SelectConnection to operate.
         """
         self._connection = self.connect()
-        self._connection.ioloop.start()
+        if not hasattr(settings, 'PIKA_NEW') or not settings.PIKA_NEW:
+            self._connection.ioloop.start()
 
     def stop(self):
         """
