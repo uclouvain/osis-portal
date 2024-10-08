@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,17 +27,17 @@
 {% endcomment %}
 {% block breadcrumb_area %}
     <ol class="breadcrumb">
-        <li>
+        <li class="breadcrumb-item">
             <a id="lnk_faculty_administration" href="{% url 'faculty_administration' %}">
                 {% trans 'Faculties administration' %}
             </a>
         </li>
-        <li>
+        <li class="breadcrumb-item">
             <a id="lnk_lists_of_students_exams_enrollments" href="{% url 'lists_of_students_exams_enrollments' %}">
                 {% trans 'Lists of students enrollments to exams' %}
             </a>
         </li>
-        <li class="active">
+        <li class="breadcrumb-item active">
             {% trans 'List of students enrolled to exams of ' %} {{ person.first_name }} {{ person.last_name }}
         </li>
     </ol>
@@ -49,14 +49,14 @@
         <div class="alert alert-info">{{ msg_error }}</div>
         <br>
     {% endif %}
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-body">
             <div>{% trans 'Choose the learning units you want to consider in the list' %}</div>
             <br>
             <form action="{% url 'lists_of_students_exams_enrollments_create' person.global_id %}" method="post">
                 <div class="row">
                     {% csrf_token %}
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         {% if learning_units %}
                             <table class="table">
                                 <thead>
@@ -81,10 +81,10 @@
                 </div>
                 <br>
                 {% if learning_units %}
-                    <button class="btn btn-success pull-right" id="bt_produce_xls" type="submit"
+                    <button class="btn btn-success float-end" id="bt_produce_xls" type="submit"
                             title="{% trans 'Produce xls' %}" disabled>
                         {% trans 'Produce xls' %}
-                        <i class="fa fa-table" aria-hidden="true" style="padding-left:10px;"></i>
+                        <i class="fa-solid fa-table ps-2" aria-hidden="true"></i>
                     </button>
 
                     <div>

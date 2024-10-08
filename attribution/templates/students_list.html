@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -27,23 +27,23 @@
 {% endcomment %}
 {% block breadcrumb_area %}
     <ol class="breadcrumb">
-        <li>
+        <li class="breadcrumb-item d-inline-block">
             <a href="{% url 'dashboard_home' %}" id="lnk_home_osis">
-                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                <span class="fa-solid fa-home" aria-hidden="true"></span>
             </a>
         </li>
         {% block breadcrumb %}
-            <li>
+            <li class="breadcrumb-item d-inline-block">
                 <a href="{% url 'tutor_charge' %}" id="lnk_home_attribution">
                     {% trans 'My teaching charge' %}
                 </a>
             </li>
-            <li class="active">{% trans 'Students' %}</li>
+            <li class="breadcrumb-item d-inline-block active">{% trans 'Students' %}</li>
         {% endblock %}
     </ol>
 {% endblock %}
 {% block style %}
-    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap5/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 {% block content %}
     {% include 'students_list_content.html' %}
