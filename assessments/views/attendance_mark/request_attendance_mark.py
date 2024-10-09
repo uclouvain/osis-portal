@@ -38,8 +38,7 @@ from assessments.forms.attendance_mark.request_attendance_mark_form import Reque
 from assessments.services import assessments as assessments_services
 from base.models.person import Person
 from base.views.mixin import AjaxTemplateMixin
-from exam_enrollment.services import exam_enrollment as exam_enrollment_service
-from learning_unit.services.learning_unit import LearningUnitService
+from inscription_evaluation.services import exam_enrollment as exam_enrollment_service
 
 
 class RequestAttendanceMarkFormView(AjaxTemplateMixin, LoginRequiredMixin, PermissionRequiredMixin, FormView):

@@ -98,11 +98,3 @@ if hasattr(settings, 'QUEUES') and settings.QUEUES:
             callback=update_exp_date_callback,
             queue_name='PERFORMANCE_UPDATE_EXP_DATE'
         )
-
-    if 'exam_enrollment' in settings.INSTALLED_APPS:
-        from exam_enrollment.views.utils import insert_or_update_document_from_queue
-
-        _listen_to_queue_with_callback(
-            callback=insert_or_update_document_from_queue,
-            queue_name='EXAM_ENROLLMENT_FORM_RESPONSE'
-        )

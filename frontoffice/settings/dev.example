@@ -21,10 +21,6 @@ from .local import *
 #         'ATTRIBUTION': 'attribution',
 #         'ATTESTATION': 'rpc_attestation',
 #         'ATTESTATION_STATUS': 'rpc_attestation_status',
-#         'EXAM_ENROLLMENT_FORM': 'rpc_exam_enrollment_form',
-#         'EXAM_ENROLLMENT_FORM_REQUEST': 'exam_enrollment_form_request',
-#         'EXAM_ENROLLMENT_FORM_RESPONSE': 'exam_enrollment_form_response',
-#         'EXAM_ENROLLMENT_FORM_SUBMISSION': 'exam_enrollment_form_submission',
 #         'SCORE_ENCODING_PDF_REQUEST': 'score_encoding_pdf_request',
 #         'SCORE_ENCODING_PDF_RESPONSE': 'score_encoding_pdf_response',
 #         'ATTRIBUTION_RESPONSE': 'attribution_response',
@@ -33,14 +29,12 @@ from .local import *
 #         'APPLICATION_OSIS_PORTAL': 'application_osis_portal',
 #     },
 #     'QUEUES_TIMEOUT': {
-#         'EXAM_ENROLLMENT_FORM_RESPONSE': get_queue_timeout('EXAM_ENROLLMENT_FORM_RESPONSE_TIMEOUT', 15),
 #         'PAPER_SHEET_TIMEOUT': get_queue_timeout('PAPER_SHEET_TIMEOUT', 60),
 #     },
 #     'RPC_QUEUES_TIMEOUT': {
 #         'STUDENT_PERFORMANCE': get_queue_timeout('STUDENT_PERFORMANCE_TIMEOUT', 15),
 #         'ATTESTATION_STATUS': get_queue_timeout('ATTESTATION_STATUS_TIMEOUT', 10),
 #         'ATTESTATION': get_queue_timeout('ATTESTATION_TIMEOUT', 60),
-#         'EXAM_ENROLLMENT_FORM': get_queue_timeout('EXAM_ENROLLMENT_FORM_TIMEOUT', 15)
 #     }
 # }
 
