@@ -31,7 +31,6 @@ OPTIONAL_APPS = (
     'attribution',
     'dissertation',
     'internship',
-    'exam_enrollment',
     'attestation',
     'assessments',
     'continuing_education',

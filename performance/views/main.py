@@ -42,7 +42,6 @@ from base.forms.base_forms import RegistrationIdForm
 from base.models import academic_year
 from base.models.student import Student
 from base.views import layout, common
-from exam_enrollment.views.utils import get_request_timeout, get_exam_enroll_request
 from performance import models as mdl_performance
 from performance.models.student_performance import StudentPerformance
 
@@ -108,7 +107,7 @@ def __get_performance_data(stud_perf, stud):
         "learning_units_outside_catalog": learning_units_outside_catalog,
         "course_registration_message": course_registration_message,
         "on_site_exams_info": on_site_exams_info,
-        "covid_period": _get_covid_period(stud, stud_perf),
+        "covid_period": False,
         "activiteAideReussite": _get_activite_aide_reussite(stud, stud_perf),
         "allegement_150_en_remediation": _get_allegement_150_en_remediation(stud_perf),
         "current_academic_year": academic_year.current_academic_year().year == stud_perf.academic_year
@@ -242,22 +241,6 @@ def _can_access_performance_administration(request: HttpRequest) -> bool:
     return request.user.has_perm('base.is_faculty_administrator') or (
             not request.user.has_perm('base.is_student') and bool(common.get_managed_programs(request.user))
     )
-
-
-def _get_covid_period(student: Student, stud_perf: StudentPerformance) -> bool:
-    if student:
-        data = stud_perf.data
-        offer = data.get('monAnnee', {}).get('monOffre', {}).get('offre')
-        if offer:
-            request_timeout = get_request_timeout()
-            exam_enroll_request = get_exam_enroll_request(offer.get('sigleComplet'), request_timeout, student)
-            if exam_enroll_request:
-                try:
-                    data = json.loads(exam_enroll_request.document)
-                    return data.get('covid_period')
-                except json.JSONDecodeError:
-                    logger.exception("Json data is not valid")
-    return False
 
 
 def _get_activite_aide_reussite(student: Student, stud_perf: StudentPerformance) -> str:

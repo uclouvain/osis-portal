@@ -25,7 +25,7 @@
 from typing import Optional, List
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.views.generic import TemplateView
@@ -38,7 +38,7 @@ from assessments.services import assessments as assessments_service
 from base.business.student import find_by_user_and_discriminate
 from base.models.student import Student
 from base.services.offer_enrollment import OfferEnrollmentService
-from exam_enrollment.services import exam_enrollment as exam_enrollment_service
+from inscription_evaluation.services import exam_enrollment as exam_enrollment_service
 
 
 class ListExamEnrollments(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):

@@ -33,7 +33,7 @@ logger = logging.getLogger(settings.DEFAULT_LOGGER)
 
 def build_configuration() -> osis_inscription_cours_sdk.Configuration:
     """
-    Return SDK configuration of exam_enrollment
+    Return SDK configuration of learning unit enrollments
     """
     if not settings.OSIS_INSCRIPTION_COURS_SDK_HOST:
         logger.debug("'OSIS_INSCRIPTION_COURS_SDK_HOST' setting must be set in configuration")
