@@ -34,7 +34,7 @@ from django.core.exceptions import PermissionDenied, MultipleObjectsReturned
 from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 import dashboard.views.home
 from base.business import student as student_bsn

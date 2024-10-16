@@ -184,7 +184,7 @@ TEMPLATES = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get("DATABASE_NAME", 'osis_portal_local'),
         'USER': os.environ.get("POSTGRES_USER", 'osis_portal'),
         'PASSWORD': os.environ.get("POSTGRES_PASSWORD", 'osis'),

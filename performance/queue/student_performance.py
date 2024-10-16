@@ -235,7 +235,7 @@ def save(registration_id, academic_year, acronym, json_data, default_update_date
     from performance.models.student_performance import update_or_create
     expiration_date = json_data.pop("expirationDate", None)
     if expiration_date:
-        update_date = datetime.datetime.fromtimestamp(expiration_date / 1e3, tz=timezone.utc)
+        update_date = datetime.datetime.fromtimestamp(expiration_date / 1e3, tz=datetime.timezone.utc)
     else:
         update_date = default_update_date
     authorized = json_data.pop("authorized", False)
@@ -301,5 +301,5 @@ def update_expiration_date(registration_id, academic_year, acronym, new_exp_date
 
     for performance in performances_to_update:
         if new_exp_date and new_exp_date != 'null':
-            performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3, tz=timezone.utc)
+            performance.update_date = datetime.datetime.fromtimestamp(new_exp_date / 1e3, tz=datetime.timezone.utc)
             performance.save()

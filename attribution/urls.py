@@ -23,9 +23,9 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url, include
+from django.urls import include, path, re_path
 
-from attribution.views import tutor_charge, list
+from attribution.views import list
 from attribution.views.home import HomeAttribution
 from attribution.views.online_application.create import CreateApplicationView
 from attribution.views.online_application.delete import DeleteApplicationView
@@ -47,57 +47,57 @@ js_info_dict = {
 
 urlpatterns = [
 
-    url(r'^$', HomeAttribution.as_view(), name='attribution_home'),
-    url(r'^charge/$', TutorChargeView.as_view(), name='tutor_charge'),
-    url(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/', include([
-        url(r'^$', StudentsListView.as_view(), name='student_enrollments_by_learning_unit'),
-        url(r'^(?P<class_code>[0-9A-Za-z-]{1})$', StudentsListView.as_view(),
+    path('', HomeAttribution.as_view(), name='attribution_home'),
+    path('charge/', TutorChargeView.as_view(), name='tutor_charge'),
+    re_path(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/', include([
+        path('', StudentsListView.as_view(), name='student_enrollments_by_learning_unit'),
+        re_path(r'^(?P<class_code>[0-9A-Za-z-]{1})$', StudentsListView.as_view(),
             name='student_enrollments_by_learning_class'),
-        url(r'^xls$', StudentsListXlsView.as_view(), name='produce_xls_students'),
-        url(r'^(?P<class_code>[0-9A-Za-z-]{1})/xls$', StudentsListXlsView.as_view(), name='produce_xls_class_students')
+        path('xls', StudentsListXlsView.as_view(), name='produce_xls_students'),
+        re_path(r'^(?P<class_code>[0-9A-Za-z-]{1})/xls$', StudentsListXlsView.as_view(), name='produce_xls_class_students')
     ])),
-    url(r'^applications/', include([
-        url(r'^$', ApplicationOverviewView.as_view(), name='applications_overview'),
-        url(r'^outside_period/$', OutsidePeriod.as_view(), name='outside_applications_period'),
-        url(r'^search_vacant_courses$', SearchVacantCoursesView.as_view(), name='search_vacant_courses'),
-        url(r'^send_summary$', SendApplicationsSummaryView.as_view(), name='email_tutor_application_confirmation'),
-        url(
+    path('applications/', include([
+        path('', ApplicationOverviewView.as_view(), name='applications_overview'),
+        path('outside_period/', OutsidePeriod.as_view(), name='outside_applications_period'),
+        path('search_vacant_courses', SearchVacantCoursesView.as_view(), name='search_vacant_courses'),
+        path('send_summary', SendApplicationsSummaryView.as_view(), name='email_tutor_application_confirmation'),
+        re_path(
             r'^(?P<vacant_course_code>[0-9A-Za-z-]+)/create$',
             CreateApplicationView.as_view(),
             name='create_application'
         ),
-        url(
-            r'^renew/$',
+        path(
+            'renew/',
             RenewMultipleAttributionsAboutToExpireView.as_view(),
             name='renew_applications',
         ),
-        url(r'^(?P<application_uuid>[0-9A-Za-z-]+)/', include([
-            url(r'^delete$', DeleteApplicationView.as_view(), name='delete_application'),
-            url(r'^update$', UpdateApplicationView.as_view(), name='update_application'),
+        re_path(r'^(?P<application_uuid>[0-9A-Za-z-]+)/', include([
+            path('delete', DeleteApplicationView.as_view(), name='delete_application'),
+            path('update', UpdateApplicationView.as_view(), name='update_application'),
         ]))
     ])),
 
-    url(r'^administration/', include([
-        url(r'^charge/(?P<global_id>[0-9a-z-]+)/$', AdminTutorChargeView.as_view(), name='tutor_charge_admin'),
-        url(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/$',
+    path('administration/', include([
+        re_path(r'^charge/(?P<global_id>[0-9a-z-]+)/$', AdminTutorChargeView.as_view(), name='tutor_charge_admin'),
+        re_path(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/$',
             AdminStudentsListView.as_view(), name='attribution_students_admin'),
-        url(r'^select_tutor/$', SelectTutorForAttribution.as_view(),
+        path('select_tutor/', SelectTutorForAttribution.as_view(),
             name='attribution_admin_select_tutor'),
-        url(r'^students_list/$', list.lists_of_students_exams_enrollments,
+        path('students_list/', list.lists_of_students_exams_enrollments,
             name='lists_of_students_exams_enrollments'),
-        url(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person,
+        re_path(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person,
             name='lists_of_students_exams_enrollments_create'),
 
-        url(r'^applications/', include([
-            url(r'^$', SelectTutor.as_view(),
+        path('applications/', include([
+            path('', SelectTutor.as_view(),
                 name='attribution_applications'),
-            url(
-                r'^(?P<global_id>[0-9]+)/$',
+            path(
+                '<int:global_id>/',
                 ApplicationOverviewAdminView.as_view(),
                 name="visualize_tutor_applications"
             )
         ])),
     ])),
-    url(r'^list/students$', list.students_list, name='students_list'),
-    url(r'^list/students/xls', list.list_build, name='students_list_create'),
+    path('list/students', list.students_list, name='students_list'),
+    re_path(r'^list/students/xls', list.list_build, name='students_list_create'),
 ]

@@ -32,7 +32,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from assessments.services.assessments import AssessmentsService

@@ -29,7 +29,7 @@ from typing import List
 
 from django.conf import settings
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.db.models import Case, When, BooleanField, Value, F, CharField
+from django.db.models import BooleanField, Case, CharField, F, Value, When
 from django.db.models.functions import Concat
 from django.urls import reverse
 from django.utils.functional import cached_property

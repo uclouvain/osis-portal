@@ -23,26 +23,26 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+from django.urls import path, re_path
 
 from performance.views import main
 from performance.views.performance_home import PerformanceHomeStudent, PerformanceHomeAdmin
 
 urlpatterns = [
-    url(r'^$', PerformanceHomeStudent.as_view(), name='performance_home'),
-    url(r'^result/(?P<pk>[0-9]+)/$',
+    path('', PerformanceHomeStudent.as_view(), name='performance_home'),
+    path('result/<int:pk>/',
         main.display_result_for_specific_student_performance, name='performance_student_result'),
-    url(
+    re_path(
         r'^result/(?P<acronym>[0-9A-Za-z_ ]+)/(?P<academic_year>[0-9]{4})/$',
         main.display_results_by_acronym_and_year,
         name='performance_student_by_acronym_and_year'
     ),
-    url(r'^administration/select_student/$', main.select_student, name='performance_administration'),
-    url(
-        r'^administration/student_programs/(?P<registration_id>[0-9]+)/$',
+    path('administration/select_student/', main.select_student, name='performance_administration'),
+    path(
+        'administration/student_programs/<int:registration_id>/',
         PerformanceHomeAdmin.as_view(),
         name='performance_student_programs_admin'
     ),
-    url(r'^administration/student_result/(?P<pk>[0-9]+)/$',
+    path('administration/student_result/<int:pk>/',
         main.visualize_student_result, name='performance_student_result_admin'),
 ]

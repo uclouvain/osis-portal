@@ -49,7 +49,7 @@ class ProfileLangTest(TestCase):
         self.assertRedirects(response, f'/login/?next={self.url}')
 
     def test_change_language(self):
-        response = self.client.get(self.url, HTTP_REFERER='/')
+        response = self.client.get(self.url, headers={"referer": '/'})
         self.person.refresh_from_db()
 
         self.assertRedirects(response, '/')

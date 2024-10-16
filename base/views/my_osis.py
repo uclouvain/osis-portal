@@ -23,7 +23,6 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.utils import translation
@@ -36,4 +35,4 @@ def profile_lang(request, ui_language):
     mdl.person.change_language(request.user, ui_language)
     translation.activate(ui_language)
     request.session[translation.LANGUAGE_SESSION_KEY] = ui_language
-    return redirect(request.META['HTTP_REFERER'])
+    return redirect(request.headers['referer'])

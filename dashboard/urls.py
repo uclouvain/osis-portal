@@ -23,16 +23,16 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+from django.urls import path
 
 from dashboard.views.faculty_administration import FacultyAdministration
 from dashboard.views.home import Home
 from dashboard.views.student.my_personal_information import MyPersonalInformationAdmin, MyPersonalInformation
 
 urlpatterns = [
-    url(r'^$', Home.as_view(), name='dashboard_home'),
-    url('^faculty_administration/$', FacultyAdministration.as_view(), name='faculty_administration'),
-    url('^faculty_administration/student/data/select_student/$', MyPersonalInformationAdmin.as_view(),
+    path('', Home.as_view(), name='dashboard_home'),
+    path('faculty_administration/', FacultyAdministration.as_view(), name='faculty_administration'),
+    path('faculty_administration/student/data/select_student/', MyPersonalInformationAdmin.as_view(),
         name='student_id_data_administration'),
-    url('^student/data/$', MyPersonalInformation.as_view(), name='student_id_data_home'),
+    path('student/data/', MyPersonalInformation.as_view(), name='student_id_data_home'),
 ]
