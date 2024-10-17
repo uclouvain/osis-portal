@@ -37,6 +37,7 @@ from django.utils import translation
 from base import models as mdl
 from base.business import student as student_bsn
 from base.models.person import Person
+from osis_common.middlewares.locale import LANGUAGE_SESSION_KEY
 from osis_common.models.serializable_model import SerializableModel
 from osis_common.models.signals.authentication import user_created_signal, user_updated_signal
 
@@ -53,7 +54,7 @@ def post_login(sender, user, request, **kwargs):
     person = Person.objects.filter(user=user).only('language').first()
     if person and person.language:
         translation.activate(person.language)
-        request.session[translation.LANGUAGE_SESSION_KEY] = person.language
+        request.session[LANGUAGE_SESSION_KEY] = person.language
 
 
 @receiver(user_created_signal)

@@ -52,9 +52,10 @@ urlpatterns = [
     re_path(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/', include([
         path('', StudentsListView.as_view(), name='student_enrollments_by_learning_unit'),
         re_path(r'^(?P<class_code>[0-9A-Za-z-]{1})$', StudentsListView.as_view(),
-            name='student_enrollments_by_learning_class'),
+                name='student_enrollments_by_learning_class'),
         path('xls', StudentsListXlsView.as_view(), name='produce_xls_students'),
-        re_path(r'^(?P<class_code>[0-9A-Za-z-]{1})/xls$', StudentsListXlsView.as_view(), name='produce_xls_class_students')
+        re_path(r'^(?P<class_code>[0-9A-Za-z-]{1})/xls$', StudentsListXlsView.as_view(),
+                name='produce_xls_class_students')
     ])),
     path('applications/', include([
         path('', ApplicationOverviewView.as_view(), name='applications_overview'),
@@ -80,17 +81,14 @@ urlpatterns = [
     path('administration/', include([
         re_path(r'^charge/(?P<global_id>[0-9a-z-]+)/$', AdminTutorChargeView.as_view(), name='tutor_charge_admin'),
         re_path(r'^students/(?P<learning_unit_acronym>[0-9A-Za-z-]+)/(?P<learning_unit_year>[0-9]+)/$',
-            AdminStudentsListView.as_view(), name='attribution_students_admin'),
-        path('select_tutor/', SelectTutorForAttribution.as_view(),
-            name='attribution_admin_select_tutor'),
-        path('students_list/', list.lists_of_students_exams_enrollments,
-            name='lists_of_students_exams_enrollments'),
+                AdminStudentsListView.as_view(), name='attribution_students_admin'),
+        path('select_tutor/', SelectTutorForAttribution.as_view(), name='attribution_admin_select_tutor'),
+        path('students_list/', list.lists_of_students_exams_enrollments, name='lists_of_students_exams_enrollments'),
         re_path(r'^students_list/([0-9a-z-]+)/xls', list.list_build_by_person,
-            name='lists_of_students_exams_enrollments_create'),
+                name='lists_of_students_exams_enrollments_create'),
 
         path('applications/', include([
-            path('', SelectTutor.as_view(),
-                name='attribution_applications'),
+            path('', SelectTutor.as_view(), name='attribution_applications'),
             path(
                 '<int:global_id>/',
                 ApplicationOverviewAdminView.as_view(),
