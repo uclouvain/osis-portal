@@ -25,55 +25,55 @@
 ##############################################################################
 
 from django.conf import settings
-from django.conf.urls import url, include
 from django.contrib import admin
+from django.urls import include, path, re_path
 
 from base.views import common, administration
 
 packages = ("attribution",)
 
 urlpatterns = (
-    url(r'^' + settings.ADMIN_URL, include([
-        url(r'^data/$', administration.data, name='data'),
-        url(r'^data/maintenance$', administration.data_maintenance, name='data_maintenance'),
+    re_path(r'^' + settings.ADMIN_URL, include([
+        path('data/', administration.data, name='data'),
+        path('data/maintenance', administration.data_maintenance, name='data_maintenance'),
     ])),
-    url(r'', include('base.urls')),
-    url(r'^login/$', common.login, name='login'),
-    url(r'^logout/$', common.log_out, name='logout'),
-    url(r'^logged_out/$', common.logged_out, name='logged_out'),
-    url(r'^' + settings.ADMIN_URL, admin.site.urls),
-    url(r'^403/$', common.access_denied, name="error_403"),
-    url(r'^hijack/', include('hijack.urls', namespace='hijack')),
+    path('', include('base.urls')),
+    path('login/', common.login, name='login'),
+    path('logout/', common.log_out, name='logout'),
+    path('logged_out/', common.logged_out, name='logged_out'),
+    re_path(r'^' + settings.ADMIN_URL, admin.site.urls),
+    path('403/', common.access_denied, name="error_403"),
+    path('hijack/', include('hijack.urls', namespace='hijack')),
 )
 
 if 'dashboard' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^dashboard/', include('dashboard.urls')),)
+    urlpatterns += (path('dashboard/', include('dashboard.urls')),)
 if 'performance' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^exammarks/', include('performance.urls')),)
+    urlpatterns += (path('exammarks/', include('performance.urls')),)
 if 'dissertation' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^dissertation/', include('dissertation.urls')),)
+    urlpatterns += (path('dissertation/', include('dissertation.urls')),)
 if 'attribution' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^attribution/', include('attribution.urls')),)
+    urlpatterns += (path('attribution/', include('attribution.urls')),)
 if 'internship' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^internship/', include('internship.urls')),)
+    urlpatterns += (path('internship/', include('internship.urls')),)
 if 'exam_enrollment' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^exam_enrollment/', include('exam_enrollment.urls')),)
+    urlpatterns += (path('exam_enrollment/', include('exam_enrollment.urls')),)
 if 'attestation' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^attestation/', include('attestation.urls')),)
+    urlpatterns = urlpatterns + (path('attestation/', include('attestation.urls')),)
 if 'assessments' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^assessments/', include('assessments.urls')),)
+    urlpatterns = urlpatterns + (path('assessments/', include('assessments.urls')),)
 if 'continuing_education' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^continuing_education/', include('continuing_education.urls')),)
+    urlpatterns = urlpatterns + (path('continuing_education/', include('continuing_education.urls')),)
 if 'admission' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^admission/', include('admission.urls')),)
+    urlpatterns = urlpatterns + (path('admission/', include('admission.urls')),)
 if 'osis_notification' in settings.INSTALLED_APPS:
-    urlpatterns = urlpatterns + (url(r'^osis_notification/', include('osis_notification.urls')),)
+    urlpatterns = urlpatterns + (path('osis_notification/', include('osis_notification.urls')),)
 if 'inscription_aux_cours' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^inscription_aux_cours/', include('inscription_aux_cours.urls')),)
+    urlpatterns += (path('inscription_aux_cours/', include('inscription_aux_cours.urls')),)
 if 'learning_unit' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^learning_unit/', include('learning_unit.urls')),)
+    urlpatterns += (path('learning_unit/', include('learning_unit.urls')),)
 if 'inscription_evaluation' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^inscription_evaluation/', include('inscription_evaluation.urls')),)
+    urlpatterns += (path('inscription_evaluation/', include('inscription_evaluation.urls')),)
 
 handler404 = 'base.views.common.page_not_found'
 handler403 = 'base.views.common.access_denied'
@@ -86,7 +86,7 @@ admin.site.index_title = 'Louvain'
 if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar
 
-    urlpatterns += (url(r'^__debug__/', include(debug_toolbar.urls)),)
+    urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
 
 if settings.DEBUG and 'silk' in settings.INSTALLED_APPS:
-    urlpatterns += (url(r'^silk/', include('silk.urls', namespace='silk')),)
+    urlpatterns += (path('silk/', include('silk.urls', namespace='silk')),)

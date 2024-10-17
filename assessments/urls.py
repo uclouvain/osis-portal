@@ -23,8 +23,8 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
 from django.urls import path, include, register_converter
+from django.urls import re_path
 
 from base.utils.converters import AcronymConverter
 from .views.attendance_mark.learning_units import ListExamEnrollments
@@ -36,7 +36,7 @@ from .views.score_encoding import ScoreSheetXls
 register_converter(AcronymConverter, 'acronym')
 
 urlpatterns = [
-    url(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z_-]+)/',
+    re_path(r'^scores_encoding/xls/(?P<learning_unit_code>[0-9A-Za-z_-]+)/',
         ScoreSheetXls.as_view(),
         name=ScoreSheetXls.name,
         ),

@@ -23,7 +23,7 @@
 #    see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-from django.conf.urls import url
+from django.urls import path, re_path
 
 import osis_common.api.url_v1
 from base.views import my_osis
@@ -32,16 +32,16 @@ from base.views.autocomplete.education_group_year import TrainingAutocomplete
 from dashboard.views.home import Home
 
 urlpatterns = [
-    url(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
-    url(r'^$', Home.as_view(), name='home'),
+    re_path(r'^my_osis/profile/lang/([A-Za-z-]+)/$', my_osis.profile_lang, name='profile_lang'),
+    path('', Home.as_view(), name='home'),
     # TODO :: to remove shibboleth
-    url(
-        r'^continuing_education/country-autocomplete/$',
+    path(
+        'continuing_education/country-autocomplete/',
         CountryAutocomplete.as_view(),
         name='country-autocomplete',
     ),
-    url(
-        r'^training-autocomplete/$',
+    path(
+        'training-autocomplete/',
         TrainingAutocomplete.as_view(),
         name='training-autocomplete',
     ),
