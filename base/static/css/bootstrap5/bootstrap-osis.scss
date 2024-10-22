@@ -239,7 +239,7 @@ body {
 }
 
 .error {
-  color: red;
+  color: var(--bs-danger);
 }
 
 .not-active {
@@ -249,9 +249,9 @@ body {
 }
 
 .validated {
-  color: green
+  color: var(--bs-success);
 }
 
 .not-validated {
-  color: orange
+  color: var(--bs-warning);
 }
