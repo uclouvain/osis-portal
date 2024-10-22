@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 
 {% load static %}
 {% load i18n %}
@@ -27,40 +27,42 @@
     * see http://www.gnu.org/licenses/.
 {% endcomment %}
 {% block breadcrumb_area %}
-    <ol class="breadcrumb">
-        <li>
+    <ol class="breadcrumb d-block">
+        <li class="breadcrumb-item d-inline-block">
             <a href="{% url 'dashboard_home' %}" id="lnk_home_osis">
-                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                <span class="fa-solid fa-home" aria-hidden="true"></span>
             </a>
         </li>
 
         {% block breadcrumb %}
             {% if perms.base.is_faculty_administrator %}
-                <li><a href="{% url 'visualize_tutor_applications' global_id=a_person.global_id %}"
+                <li class="breadcrumb-item d-inline-block"><a href="{% url 'visualize_tutor_applications' global_id=a_person.global_id %}"
                        id="lnk_applications">
                     {% trans 'Applications of ' %} {{ a_person.first_name }} {{ a_person.last_name }}
                 </a>
                 </li>
             {% else %}
-                <li><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'My applications' %}</a>
+                <li class="breadcrumb-item d-inline-block"><a href="{% url 'applications_overview' %}" id="lnk_applications">{% trans 'My applications' %}</a>
                 </li>
             {% endif %}
-            <li>{% trans 'My application' %}</li>
-        {% endblock %}
+            <li class="breadcrumb-item d-inline-block">{% trans 'My application' %}</li>
 
-        <a href="{{ help_button_url }}" target="help" id="lnk_user_manual_section">
-            <span class="glyphicon glyphicon-question-sign pull-right"
-                  style="font-size: 14pt; color: green" aria-hidden="true">
-            </span>
-        </a>
+            <a href="{{ help_button_url }}"
+                class="float-end"
+                target="help" id="lnk_user_manual_section"><i
+                class="fa-solid fa-circle-question float-end text-success fs-4"
+                aria-hidden="true"></i>
+            </a>
+
+        {% endblock %}
     </ol>
 {% endblock %}
 {% block content %}
    {% include "template_messages.html" %}
 
-    <div class="panel panel-default" id="pnl_application_form">
-        <div class="panel-heading">{% trans 'Application' %}</div>
-        <div class="panel-body">
+    <div class="card" id="pnl_application_form">
+        <div class="card-header">{% trans 'Application' %}</div>
+        <div class="card-body">
             <form method="POST" class="form" role="form" action="{{ save_url }}" >
                 {% csrf_token %}
 
@@ -75,12 +77,12 @@
                 {% endif %}
 
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <label>{% trans 'Code' %}</label>
                         <br>
                         {{ form.vacant_course.code }}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6">
                         <label>{% trans 'Title' %}</label>
                         <br>
                         {{ form.vacant_course.title }}
@@ -88,14 +90,14 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <label>{% trans 'Vol.1 vacant' %}</label>
                         <br>
                         <span name="max_charge_lecturing">
                             {{ form.vacant_course.lecturing_volume_available }}
                         </span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <label>{% trans 'Vol.2 vacant' %}</label>
                         <br>
                         <span name="max_charge_practical">
@@ -105,7 +107,7 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <label>{% trans 'Vol.1 applied' %}</label>
                         <br>
                         {{ form.charge_lecturing_asked }}
@@ -113,7 +115,7 @@
                             <span class="error">{{ form.charge_lecturing_asked.errors|striptags }}</span>
                         {% endif %}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <label>{% trans 'Vol.2 applied' %}</label>
                         <br>
                         {{ form.charge_practical_asked }}
@@ -124,7 +126,7 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-lg-12">
                         <label>{% trans 'Pedagogy proposal' %}</label>
                         <br>
                         {{ form.course_summary }}
@@ -132,7 +134,7 @@
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-lg-12">
                         <label>{% trans 'Remark' %}</label>
                         <br>
                         {{ form.remark }}
@@ -142,10 +144,10 @@
                     </div>
                 </div>
                 <br>
-                <div class="row pull-right">
-                    <div class="col-md-12">
+                <div class="row float-end">
+                    <div class="col-lg-12">
                         <button class="btn btn-primary" id="bt_submit" type="submit" title="{% trans 'Submit' %}">
-                            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+                            <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
                             {% trans 'Submit' %}
                         </button>
 

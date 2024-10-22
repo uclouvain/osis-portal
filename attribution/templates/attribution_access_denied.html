@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n %}
 
@@ -28,9 +28,9 @@
 
 {% block breadcrumb_area %}
     <ol class="breadcrumb">
-        <li>
+        <li class="breadcrumb-item d-inline-block">
             <a href="{% url 'dashboard_home' %}" id="lnk_home_osis">
-                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                <span class="fa-solid fa-home" aria-hidden="true"></span>
             </a>
         </li>
     </ol>

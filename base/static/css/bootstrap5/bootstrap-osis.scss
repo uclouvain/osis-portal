@@ -64,6 +64,7 @@ $container-max-widths: (
 $grid-gutter-width: 1.875rem;
 
 @import "scss/bootstrap";
+@import "scss/dashboard";
 
 :root{
   --table-subheader-bg: #{$table-subheader-bg};
@@ -235,4 +236,22 @@ body {
     padding: 10px 15px;
     border-bottom: 1px solid transparent;
   }
+}
+
+.error {
+  color: var(--bs-danger);
+}
+
+.not-active {
+  pointer-events: none;
+  cursor: default;
+  opacity: .6
+}
+
+.validated {
+  color: var(--bs-success);
+}
+
+.not-validated {
+  color: var(--bs-warning);
 }

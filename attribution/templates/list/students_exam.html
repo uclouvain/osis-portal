@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap5/layout.html" %}
 {% load static %}
 {% load i18n academic_year_display %}
 
@@ -27,9 +27,15 @@
 {% endcomment %}
 {% block breadcrumb_area %}
     <ol class="breadcrumb">
-        <li><a href="{% url 'dashboard_home' %}" id="lnk_home_osis"><span class="glyphicon glyphicon-home"
-                                                                          aria-hidden="true"></span></a></li>
-        <li class="active">{% trans 'List of students enrolled to my exams' %}</li>
+        <li class="breadcrumb-item d-inline-block">
+            <a href="{% url 'dashboard_home' %}" id="lnk_home_osis">
+                <i class="fa-solid fa-home" aria-hidden="true"></i>
+            </a>
+        </li>
+        {% block breadcrumb %}
+            <li class="breadcrumb-item d-inline-block active">{% trans 'List of students enrolled to my exams' %}</li>
+        {% endblock %}
+
     </ol>
 {% endblock %}
 {% block content %}
@@ -38,7 +44,7 @@
     {% if messages %}
         <div class="alert alert-warning" id="div_messages">
             {% for message in messages %}
-                <i class="fa fa-exclamation-triangle"></i> {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+                <i class="fa-solid fa-exclamation-triangle"></i> {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
                 {% if not forloop.last %}
                     <br>
                 {% endif %}
@@ -51,30 +57,29 @@
         <br>
     {% endif %}
 
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-body">
            {% if not messages_error %}
            <h3>{{current_session.year|display_as_academic_year}} - {% trans 'Session of' %} {{current_session.month_session_name|lower}}</h3>
             <div class="alert alert-info">
-                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
                 <strong>{% trans "NEW" %}</strong> {% trans "'Lists of students enrolled to my exams' are immediately usable for encoding scores." %}
             </div>
             <br>
             <form method="post" name="form_students_list">
                 <div class="row">
                     {% csrf_token %}
-                    <div class="col-md-12">
+                    <div class="col-lg-12">
                         <table class="table">
                             <thead>
                                 <th width="12%">{% trans 'Code' %}</th>
                                 <th>{% trans 'Title' context 'score sheet export' %}</th>
                                 <th>
                                     {% trans 'Scores responsible' %}
-                                    <div class="tooltip-wrapper" data-toggle="tooltip" data-placement="top"
+                                    <div class="tooltip-wrapper text-nowrap" data-bs-toggle="tooltip" data-bs-placement="top"
                                          title="{% trans 'All tutors can encode scores but only the scores responsible can submit. If the scores responsible is not correct, please contact your faculty.' %}">
-                                        <span class="glyphicon glyphicon-question-sign "
-                                              style="font-size: 14pt; display: inline">
-                                        </span>
+                                        <i class="fa-solid fa-circle-question fs-4 d-inline">
+                                        </i>
                                     </div>
                                     </abbr>
                                 </th>
@@ -86,12 +91,12 @@
                                     <td>{{ learning_unit.code }}</td>
                                     <td>{{ learning_unit.full_title|default_if_none:"" }}</td>
                                 <td>{{ learning_unit.score_responsible|default_if_none:""}}</td>
-                                <td align="center">
+                                <td class="text-center">
                                     <button class="btn-clear"
                                             id="bt_produce_xls_score_encoding_{{ learning_unit.code }}"
                                             type="button">
                                         <a href="{% url 'scores_sheet_xls' learning_unit.code %}"
-                                           title="{% trans 'Excel File' %}" data-toggle="tooltip">
+                                           title="{% trans 'Excel File' %}" data-bs-toggle="tooltip">
                                             <i class="far fa-file-excel" aria-hidden="true" style="font-size: 200%"></i>
                                         </a>
                                     </button>
@@ -122,7 +127,7 @@
             {% endif %}
             <div class="alert alert-info">
                 <p>
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    <i class="fa-solid fa-info-circle" aria-hidden="true"></i>
                     <b>{% trans "One of your courses is not visible in the list?" %}</b>
                 </p>
                 <p>{% trans "Different explanations are possible:" %}</p>

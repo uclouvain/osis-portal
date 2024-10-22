@@ -50,7 +50,7 @@
     {% for attribution in attributions %}
         <tr
             {% if attribution.course_is_in_suppression_proposal %}
-                data-toggle="tooltip" data-placement="left"
+                data-bs-toggle="tooltip" data-bs-placement="left"
                 title="{% blocktrans with attribution.academic_year as academic_year %}This course will be discontinued in {{ application_academic_year }} following a program reform.{% endblocktrans %}"
                 style="text-decoration: line-through"
                 class="warning"
@@ -59,7 +59,7 @@
             <td>
                 {{ attribution.code }}
                 {% if attribution.course_is_in_suppression_proposal %}
-                    <span class="fa fa-warning" aria-hidden="true"></span>
+                    <i class="fa-solid fa-warning" aria-hidden="true"></i>
                 {% endif %}
             </td>
             <td>{{ attribution.title }}</td>
@@ -76,13 +76,13 @@
 
                 {% if attribution.tutors %}
                     {% with tutor_number=forloop.counter0 %}
-                        <a role="button" data-toggle="collapse" href=".collapse_teachers{{ tutor_number }}"
+                        <a role="button" data-bs-toggle="collapse" href=".collapse_teachers{{ tutor_number }}"
                            aria-expanded="false" aria-controls="collapse_teachers{{ tutor_number }}"
-                           style="border:0;padding:0;"
+                           class="border-0 p-0"
                            onclick="changeOrientation(expandButton{{ tutor_number }})"
                            title="{% trans 'Display teachers' %}">
-                            <span id="expandButton{{ teacher_number }}" class="glyphicon glyphicon-expand"
-                                  aria-hidden="true"></span>
+                            <i id="expandButton{{ teacher_number }}" class="fa-regular fa-square-caret-right"
+                                  aria-hidden="true"></i>
                         </a>
                     {% endwith %}
                 {% endif %}
@@ -100,7 +100,7 @@
     {% endfor %}
     <tfoot>
     <tr>
-        <td colspan="6"><label class="pull-right">{% trans 'Total' %}</label></td>
+        <td colspan="6"><label class="float-end">{% trans 'Total' %}</label></td>
         <td>{{ tot_lecturing|default_if_none:'0,0' }}</td>
         <td>{{ tot_practical|default_if_none:'0,0' }}</td>
         <td colspan="4"></td>
